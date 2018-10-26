@@ -1,0 +1,44 @@
+{
+  "name": "dycbackend",
+  "version": "1.0.0",
+  "description": "Backend for the DYC",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "nodemon",
+    "dev": "npx eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ionitamihnea/dycbackend.git"
+  },
+  "author": "Ionita Mihnea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ionitamihnea/dycbackend/issues"
+  },
+  "homepage": "https://github.com/Ionitamihnea/dycbackend#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "helmet": "^3.14.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.3.7",
+    "nodemailer": "^4.6.8",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "nodemon": "^1.18.5"
+  }
+}
