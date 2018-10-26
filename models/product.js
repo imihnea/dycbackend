@@ -6,8 +6,8 @@ const ProductSchema = new mongoose.Schema({
   category: String,
   description: String,
   price: Number,
-  available: String,
-  date: { type: Date, default: Date.now },
+  available: { type: String, default: 'Yes' },
+  createdAt: { type: Date, default: Date.now },
   author: {
     id: {
       type: mongoose.Schema.Types.ObjectId,

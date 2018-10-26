@@ -3,7 +3,7 @@ const product = require('../models/product');
 module.exports = {
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
-      next();
+      return next();
     }
     req.flash('error', 'You must be signed in to do that!');
     res.redirect('/login');

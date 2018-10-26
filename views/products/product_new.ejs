@@ -1,0 +1,42 @@
+<% include ../partials/header %>
+<a href="/">
+<button class="btn">Back</button>
+</a>
+<div class="row">        
+    <h1>Create a New Product</h1>
+            <form action="/categories/products" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Burrito">
+                </div>
+                <div class="form-group">
+                    <label for="image">Image Url</label>
+                    <input class="form-control" type="text" name="image" id="image" title="Only images from i.imgur.com allowed." placeholder="https://imgur.com/..." required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" type="text" name="category" id="category" placeholder="Breakfast" required>
+                        <option>Breakfast</option>
+                        <option>Brunch</option>
+                        <option>Lunch</option>
+                        <option>Supper</option>
+                        <option>Dinner</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cost">Average Cost</label>
+                    <input class="form-control" type="number" name="cost" id="cost" placeholder="9.99$" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input class="form-control" type="text" name="description" id="description" placeholder="The perfect product to eat at work.">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                </div>
+            </form>
+            <a href="/categories/products">Go Back</a>
+        </div>
+    </div>
+
+<% include ../partials/footer %>

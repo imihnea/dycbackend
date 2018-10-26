@@ -8,6 +8,8 @@ const passport = require('passport');
 
 const User = require('../models/user');
 
+const Product = require('../models/product');
+
 // index route
 
 router.get('/', (req, res) => {
@@ -25,7 +27,7 @@ router.post('/register', (req, res) => {
   User.register(newUser, req.body.password, (err) => {
     if (err) {
       req.flash('error', `${err.message}`);
-      res.render('index/register', { error: err.message });
+      return res.render('index/register', { error: err.message });
     }
     passport.authenticate('local')(req, res, () => {
       req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
@@ -44,7 +46,7 @@ router.post('/login', passport.authenticate('local',
   {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: 'Something went wrong, please try again.',
+    failureFlash: true,
     successFlash: 'Welcome to Deal Your Crypto!',
   }), () => {
 });
@@ -54,6 +56,21 @@ router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success', 'See you later!');
   res.redirect('back');
+});
+
+// categories route
+
+router.get('/', (req, res) => {
+  // Get all categories from DB
+  Product.find({}, (err, allCategories) => {
+    if (err) {
+      req.flash('error', err.message);
+    } else if (req.xhr) {
+      res.json(allCategories);
+    } else {
+      res.render('index/categories', { categories: allCategories, page: 'categories' });
+    }
+  });
 });
 
 // contact page

@@ -1,0 +1,12 @@
+<% include ../partials/header %>
+<a href="/">
+<button class="btn">Back</button>
+</a>
+
+<div class="row text-center flex-wrap">
+        <% products.forEach(function(product){ %>
+            <%= product.name %>
+        <% }); %>
+</div>
+
+<% include ../partials/footer %>

@@ -76,7 +76,7 @@ app.use((req, res, next) => {
 // refactored routes
 
 app.use('/', indexRoutes);
-app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes/atms
+app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes
 app.use('/dashboard', dashboardRoutes);
 
 // error 404 page

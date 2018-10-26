@@ -1,18 +1,5 @@
 <% include partials/header %>
 
-    <div class="container">
-        <% if(error && error.length > 0) { %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
-        <% if(success && success.length > 0) { %>
-            <div class="alert alert-success" role="alert">
-                <%= success %>
-            </div>
-        <% } %>
-    </div>
-
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/login">Login</a></li>
@@ -25,8 +12,6 @@
         <li><a href="/dashboard/products">Dashboard products</a></li>
     </ul>
 
-    <ul>
-        <li></li>
-    </ul>
+
 
 <% include partials/footer %>
