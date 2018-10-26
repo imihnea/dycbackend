@@ -16,35 +16,35 @@ router.get('/', (req, res) => {
 
 // show register form
 router.get('/register', (req, res) => {
-  res.render('register', { page: 'register' });
+  res.render('index/register', { page: 'register' });
 });
 
 //  handle sign up logic
 router.post('/register', (req, res) => {
-  const newUser = new User({ username: req.body.username });
+  const newUser = new User({ email: req.body.email, username: req.body.username });
   User.register(newUser, req.body.password, (err) => {
     if (err) {
       req.flash('error', `${err.message}`);
-      res.render('register', { error: err.message });
+      res.render('index/register', { error: err.message });
     }
     passport.authenticate('local')(req, res, () => {
       req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
-      res.redirect('back');
+      res.redirect('/');
     });
   });
 });
 
 //  show login form
 router.get('/login', (req, res) => {
-  res.render('login', { page: 'login' });
+  res.render('index/login', { page: 'login' });
 });
 
 //  handling login logic
 router.post('/login', passport.authenticate('local',
   {
-    successRedirect: 'back',
+    successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true,
+    failureFlash: 'Something went wrong, please try again.',
     successFlash: 'Welcome to Deal Your Crypto!',
   }), () => {
 });
@@ -59,7 +59,7 @@ router.get('/logout', (req, res) => {
 // contact page
 
 router.get('/contact', (req, res) => {
-  res.render('contact');
+  res.render('index/contact');
 });
 
 router.post('/contact/send', (req, res) => {
