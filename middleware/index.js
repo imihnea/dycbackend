@@ -12,13 +12,13 @@ module.exports = {
     product.findById(req.params.id, (err, foundproduct) => {
       if (err || !foundproduct) {
         req.flash('error', 'Sorry, that product does not exist!');
-        res.redirect('categories/products');
+        res.redirect('/categories/products');
       } else if (foundproduct.author.id.equals(req.user._id)) {
         req.product = foundproduct;
         next();
       } else {
         req.flash('error', 'You don\'t have permission to do that!');
-        res.redirect(`categories/products/${req.params._id}`);
+        res.redirect(`/categories/products/${req.params.id}`);
       }
     });
   },

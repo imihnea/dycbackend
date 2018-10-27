@@ -6,6 +6,7 @@ const ProductSchema = new mongoose.Schema({
   category: String,
   description: String,
   price: Number,
+  accepted: Array,
   available: { type: String, default: 'Yes' },
   createdAt: { type: Date, default: Date.now },
   author: {

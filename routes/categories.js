@@ -38,6 +38,7 @@ router.post('/products', isLoggedIn, (req, res) => {
   const image = req.body.image;
   const desc = req.body.description;
   const category = req.body.category;
+  const accepted = req.body.accepted;
   const author = {
     id: req.user._id,
     username: req.user.username,
@@ -50,13 +51,15 @@ router.post('/products', isLoggedIn, (req, res) => {
     description: desc,
     price: price,
     author: author,
+    accepted: accepted,
   };
     // Create a new product and save to DB
   product.create(newproduct, (err) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-    // redirect back to products page
+      req.flash('success', 'Successfully added a new product!');
+      // redirect back to products page
       res.redirect('/categories/products');
     }
   });
@@ -82,19 +85,26 @@ router.get('/products/:id', (req, res) => {
 
 // EDIT - shows edit form for a product
 router.get('/products/:id/edit', isLoggedIn, checkUserproduct, (req, res) => {
-// render edit template with that product
-  res.render('products/product_edit', { product: req.product });
+  product.findById(req.params.id, (err, foundproduct) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('/categories/products');
+    } else {
+    // render edit template with that product
+      res.render('products/product_edit', { product: foundproduct });
+    }
+  });
 });
 
 // PUT - updates product in the database
 router.put('/products/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findByIdAndUpdate(req.params.id, req.body.atm, (err) => {
+  product.findByIdAndUpdate(req.params.id, req.body.product, (err) => {
     if (err) {
-      req.flash('error', 'Error editing ATM!');
-      res.redirect('/products');
+      req.flash('error', 'Error editing product!');
+      res.redirect('/categories/products');
     } else {
-      req.flash('success', 'Successfully edited ATM!');
-      res.redirect('/products');
+      req.flash('success', 'Successfully edited product!');
+      res.redirect(`/categories/products/${product._id}`);
     }
   });
 });
@@ -105,10 +115,10 @@ router.delete('/products/:id', isLoggedIn, checkUserproduct, (req, res) => {
   product.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       req.flash('error', err.message);
-      res.redirect('/products');
+      res.redirect('/categories/products');
     } else {
       req.flash('success', 'Successfully deleted product!');
-      res.redirect('/products');
+      res.redirect('/categories/products');
     }
   });
 });

@@ -4,9 +4,14 @@
 </a>
 
 <div class="row text-center flex-wrap">
+    <ul>
         <% products.forEach(function(product){ %>
-            <%= product.name %>
+            <li> <%= product.name %> </li>
+            <li><a class="btn btn-warning" href="/categories/products/<%= product._id %>/edit">Edit</a><li>
+            <li><form action="/categories/products/<%= product._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button></form></li>
         <% }); %>
+    </ul>
 </div>
 
 <% include ../partials/footer %>
