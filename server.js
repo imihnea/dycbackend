@@ -1,5 +1,7 @@
 const express = require('express');
 
+const path = require('path');
+
 const compression = require('compression');
 
 const app = express();
@@ -51,7 +53,7 @@ app.use(require('express-session')({
   saveUninitialized: false,
 }));
 
-app.use(express.static(`${__dirname}/dist`));
+app.use('/dist', express.static(path.join(__dirname, '/dist')));
 app.use(methodOverride('_method'));
 
 app.locals.moment = require('moment');

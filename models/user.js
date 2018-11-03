@@ -7,7 +7,7 @@ function toLower(str) {
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, set: toLower },
-  username: String,
+  username: { type: String, set: toLower },
   password: String,
 });
 

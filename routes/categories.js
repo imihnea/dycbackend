@@ -109,7 +109,7 @@ router.put('/products/:id', isLoggedIn, checkUserproduct, (req, res) => {
   });
 });
 
-// DELETE - deletes product from database - maybe add "are you sure" prompt.
+// DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 
 router.delete('/products/:id', isLoggedIn, checkUserproduct, (req, res) => {
   product.findByIdAndRemove(req.params.id, (err) => {
