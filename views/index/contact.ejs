@@ -1,5 +1,47 @@
 <% include ../partials/header %>
-<a href="/">
-<button class="btn">Back</button>
-</a>
+
+<div class="container content">
+        <div class="columns toptitle">
+            <div class="column">
+                <h1>Contact Us</h1>
+                <p>What can we help you with?</p>
+            </div>
+        </div>
+        
+        <div class="columns">
+            <div class="column" >
+                <form action="/contact/send" method="POST">
+                    <input class="input smmargin" name="name" placeholder="Name" type="text" required />
+                    <input class="input smmargin" name="email" placeholder="Email" type="email" required />
+                    <div class="select smmargin">
+                            <select name="Topic">
+                                <option value="" disabled selected>Topic</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                            </select>
+                    </div>
+                    <textarea class="textarea smmargin" placeholder="Message"></textarea>
+                    <div class="control smmargin">
+                        <button class="button is-primary">Send</button>
+                    </div>
+                    
+                </form>       
+            </div>
+            <div class="column">
+                    <div class="separator"></div>
+                </div>
+                <div class="column">
+                        <h2>Check our FAQ out</h2>
+                        <p><button class="button">Topic 1</button></p>
+                        <p><button class="button">Topic 2</button></p>
+                        <p><button class="button">Topic 3</button></p>
+                        <p><button class="button">Topic 4</button></p>
+                        <p><button class="button">Topic 5</button></p>
+                </div>
+        </div>
+</div>
+
 <% include ../partials/footer %>
