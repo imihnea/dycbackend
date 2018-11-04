@@ -1,14 +1,37 @@
 <% include ../partials/header %>
 
-<a href="/">
-<button class="btn">Back</button>
-</a>
-
-<form action="/login" method="POST">
-    <h1>Login</h1>
-    <input name="username" placeholder="Username" type="text" required />
-    <input name="password" placeholder="Password" type="password" required />
-    <button>Login</button>
-</form>
+<div class="container content">
+    <div class="columns toptitle">
+        <div class="column">
+            <h1>Welcome to Deal Your Crypto</h1>
+            <p>Sign in or <a href="/register">Register</a></p>
+        </div>
+    </div>
+    
+    <div class="columns">
+        <div class="column" >
+            <form action="/login" method="POST">
+                <input class="input smmargin" name="username" placeholder="Username" type="text" required />
+                <input class="input smmargin" name="password" placeholder="Password" type="password" required />
+                <div class="control smmargin">
+                    <button class="button is-primary">Login</button>
+                </div>
+            </form>
+            <a href="#" >Reset Password</a>
+            
+        </div>
+        <div class="column">
+            <div class="separator"></div>
+        </div>
+        <div class="column">
+                <div class="control smmargin">
+                    <button class="button is-primary">Sign in with Google</button>
+                </div>
+                <div class="control smmargin">
+                    <button class="button is-primary">Sign in with Facebook</button>
+                </div>
+        </div>
+    </div>
+</div>
 
 <% include ../partials/footer %>

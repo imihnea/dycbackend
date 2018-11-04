@@ -1,3 +1,42 @@
-body {
-    background: white;
+.navi{
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: 0.5px 0.5px 5px black;
+}
+
+.search{
+    margin-left: 7vw;
+}
+
+a.dropdown-item{
+    text-align: center !important;
+}   
+
+div.content{
+    padding-top: 2vh;
+}
+
+.separator {
+    width: 1px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #ddd;
+}
+
+div.toptitle{
+    text-align: center;
+}
+
+.smmargin{
+    margin-top: 1.5vh;
+}
+
+.control{
+    text-align: center !important;
+}
+
+div.column{
+    text-align: center !important;
 }
