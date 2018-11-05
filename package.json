@@ -1,7 +1,7 @@
 {
   "name": "dycbackend",
-  "version": "1.0.0",
-  "description": "Backend for the DYC",
+  "version": "1.0.1",
+  "description": "Backend for the DYC with Bulma frontend",
   "main": "server.js",
   "directories": {
     "test": "tests"
@@ -9,14 +9,14 @@
   "scripts": {
     "css-build": "node-sass --omit-source-map-url dist/scss/bulma.scss dist/css/bulma.css",
     "css-watch": "npm run css-build -- --watch",
-    "start": "nodemon",
-    "dev": "npx eslint ./"
+    "start": "node server.js",
+    "dev": "nodemon"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ionitamihnea/dycbackend.git"
   },
-  "author": "Ionita Mihnea",
+  "author": "Ionita Mihnea & Popa Nicolae-Adrian",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Ionitamihnea/dycbackend/issues"
