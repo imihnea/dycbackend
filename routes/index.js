@@ -10,6 +10,8 @@ const User = require('../models/user');
 
 const Product = require('../models/product');
 
+
+
 // index route
 
 router.get('/', (req, res) => {
@@ -73,6 +75,8 @@ router.get('/', (req, res) => {
   });
 });
 
+
+
 // contact page
 
 router.get('/contact', (req, res) => {
@@ -124,6 +128,14 @@ router.post('/contact/send', (req, res) => {
       res.redirect('/contact');
     });
   });
+});
+
+router.get('/dashboard', (req, res) => {
+  res.render('dashboard/dashboard', { page: 'dashboard' });
+});
+
+router.get('/dashboard/addresses', (req, res) => {
+  res.render('dashboard/dashboard_addr', { page: 'addresses' });
 });
 
 module.exports = router;

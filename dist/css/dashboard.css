@@ -1,0 +1,28 @@
+ul{
+    list-style: none !important;
+}
+
+.sidebar{
+    padding-left: 1vw;
+    /* TODO: Breakpoints */
+    margin-top: 8vh !important;
+}
+
+.panel-heading{
+    margin-bottom: 0 !important;
+}
+
+.address{
+    display: flex;
+}
+
+.adrlabel{
+    width: 11%;
+    /* TODO: Breakpoints */
+    margin-top: 0.75vh;
+}
+
+.adradr{
+    width: 80%;
+    margin-left: 1vw;
+}

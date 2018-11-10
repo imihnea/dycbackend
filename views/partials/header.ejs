@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <% if(error && error.length > 0) { %>
+    <!--<% if(error && error.length > 0) { %>
         <div class="alert alert-danger" role="alert">
             <%= error %>
         </div>
@@ -21,136 +21,36 @@
         <div class="alert alert-success" role="alert">
             <%= success %>
         </div>
-    <% } %>
+    <% } %>-->
 
-    <nav class="level navi">
+    <nav class="level navi navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <img src="../../dist/img/rollo.png" width="100px" height="30px">
+            </a>
 
-        <div class="level-left">
-            <p class="level-item"><a href="/">Home</a></p>
-            <div class="dropdown categ">
-                <div class="dropdown-trigger">
-                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span>Categories</span>
-                    <span class="icon is-small">
-                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                    </button>
-                </div>
-                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                    <div class="dropdown-content">
-                        <div class="columns">
-
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-                            
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-                            
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-
-                            <div class="column">
-                                    <a href="#" class="dropdown-item">
-                                        <strong>Dropdown item</strong>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item" >
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                            </div>
-
-                        </div>      
-                        <div class="columns">
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="level-left">
+                <!--<p class="level-item"><a href="/">Home</a></p>-->
+                <div class="dropdown categ">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Categories</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <div class="columns">
+    
                                 <div class="column">
                                         <a href="#" class="dropdown-item">
                                             <strong>Dropdown item</strong>
@@ -186,7 +86,7 @@
                                             Dropdown item
                                         </a>
                                 </div>
-        
+    
                                 <div class="column">
                                         <a href="#" class="dropdown-item">
                                             <strong>Dropdown item</strong>
@@ -204,48 +104,161 @@
                                             Dropdown item
                                         </a>
                                 </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                        <a href="#" class="dropdown-item">
+                                            <strong>Dropdown item</strong>
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item" >
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                </div>
+                                
+                                <div class="column">
+                                        <a href="#" class="dropdown-item">
+                                            <strong>Dropdown item</strong>
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item" >
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                </div>
+    
+                                <div class="column">
+                                        <a href="#" class="dropdown-item">
+                                            <strong>Dropdown item</strong>
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item" >
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                        <a href="#" class="dropdown-item">
+                                            Dropdown item
+                                        </a>
+                                </div>
+    
+                            </div>      
+                            <div class="columns">
+                                    <div class="column">
+                                            <a href="#" class="dropdown-item">
+                                                <strong>Dropdown item</strong>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item" >
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                    </div>
+                                    
+                                    <div class="column">
+                                            <a href="#" class="dropdown-item">
+                                                <strong>Dropdown item</strong>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item" >
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                    </div>
+            
+                                    <div class="column">
+                                            <a href="#" class="dropdown-item">
+                                                <strong>Dropdown item</strong>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item" >
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                Dropdown item
+                                            </a>
+                                    </div>
+            
+                            </div>                                               
+                        </div>
+                    </div>
+                </div>
+                <div class="level-item search">
+                    <div class="field has-addons">
+                        <p class="control">
+                            <input class="input" type="text" placeholder="Look for anything">
+                        </p>
+                        <div class="select ">
+                            <select>
+                                <option value="" disabled selected>Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                                <option value="">Category</option>
+                            </select> 
+                        </div>
+                        <p class="control">
+                            <button class="button">
+                            Search
+                            </button>
+                        </p>
+                        
+                    </div>
+                </div>
+            </div>
+    
+            <div class="level-right navbar-end">
+                <p class="level-item"><a href="/login">Login</a></p>
+                <p class="level-item"><a href="/register">Register</a></p>
+                <p class="level-item"><a href="/contact">Contact</a></p>
+            </div>
+        </div>
         
-                        </div>                                               
-                    </div>
-                </div>
-            </div>
-            <div class="level-item search">
-                <div class="field has-addons">
-                    <p class="control">
-                        <input class="input" type="text" placeholder="Look for anything">
-                    </p>
-                    <div class="select ">
-                        <select>
-                            <option value="" disabled selected>Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                            <option value="">Category</option>
-                        </select> 
-                    </div>
-                    <p class="control">
-                        <button class="button">
-                        Search
-                        </button>
-                    </p>
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="level-right">
-            <p class="level-item"><a href="/login">Login</a></p>
-            <p class="level-item"><a href="/register">Register</a></p>
-            <p class="level-item"><a href="/contact">Contact</a></p>
-        </div>
         
 
     </nav>

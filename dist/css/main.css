@@ -1,21 +1,33 @@
 .navi{
     padding-top: 1vh;
     padding-bottom: 1vh;
+    padding-left: 2%;
+    padding-right: 2%;
+    box-shadow: 0.1px 0.1px 1px black;
+}
+
+.level-left{
     padding-left: 1vw;
-    padding-right: 1vw;
-    box-shadow: 0.5px 0.5px 5px black;
 }
 
 .search{
-    margin-left: 7vw;
+    width: 70%;
 }
+
+.dropdown.categ{
+    margin-left: 1vw;
+    width: 30%;
+}
+
 
 a.dropdown-item{
     text-align: center !important;
 }   
 
 div.content{
-    padding-top: 2vh;
+    box-shadow: 0.1px 0.1px 1px black;
+    padding: 1%;
+    margin-bottom: 0% !important;
 }
 
 .separator {
