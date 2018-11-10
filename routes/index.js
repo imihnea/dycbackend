@@ -138,4 +138,8 @@ router.get('/dashboard/addresses', (req, res) => {
   res.render('dashboard/dashboard_addr', { page: 'addresses' });
 });
 
+router.get('/dashboard/new', (req, res) => {
+  res.render('dashboard/dashboard_new', { page: 'new' });
+});
+
 module.exports = router;

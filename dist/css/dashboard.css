@@ -1,15 +1,16 @@
-ul{
-    list-style: none !important;
-}
-
 .sidebar{
     padding-left: 1vw;
     /* TODO: Breakpoints */
-    margin-top: 8vh !important;
+    margin-top: 3vh !important;
 }
 
 .panel-heading{
     margin-bottom: 0 !important;
+}
+
+.adrcol{
+    padding-top: 3vh;
+    padding-bottom: 3vh;
 }
 
 .address{
@@ -25,4 +26,11 @@ ul{
 .adradr{
     width: 80%;
     margin-left: 1vw;
+}
+
+.filencat{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
