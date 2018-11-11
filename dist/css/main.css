@@ -24,6 +24,7 @@ a.dropdown-item{
     text-align: center !important;
 }   
 
+/* Make .columns margin-left and right disappear for <= 768px */
 div.content{
     box-shadow: 0.1px 0.1px 1px black;
     padding: 1%;

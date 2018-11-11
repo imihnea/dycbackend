@@ -34,3 +34,27 @@
     margin-top: 1vh;
     margin-bottom: 1vh;
 }
+
+.tableimg{
+    background-size: cover;
+    background-position: center;
+    width: 20%;
+}
+
+th, td{
+    text-align: center !important;
+}
+
+ul{
+    list-style: none !important;
+}
+
+ul.currencies{
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+.view_curr{
+    display: flex;
+    justify-content: space-evenly;
+}

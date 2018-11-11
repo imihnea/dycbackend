@@ -142,4 +142,24 @@ router.get('/dashboard/new', (req, res) => {
   res.render('dashboard/dashboard_new', { page: 'new' });
 });
 
+router.get('/dashboard/open', (req, res) => {
+  res.render('dashboard/dashboard_open', { page: 'open' });
+});
+
+router.get('/dashboard/closed', (req, res) => {
+  res.render('dashboard/dashboard_closed', { page: 'closed' });
+});
+
+router.get('/dashboard/purchases', (req, res) => {
+  res.render('dashboard/dashboard_purchases', { page: 'purchases' });
+});
+
+router.get('/dashboard/edit', (req, res) => {
+  res.render('dashboard/dashboard_edit', { page: 'edit' });
+});
+
+router.get('/dashboard/view', (req, res) => {
+  res.render('dashboard/dashboard_view', { page: 'view' });
+});
+
 module.exports = router;
