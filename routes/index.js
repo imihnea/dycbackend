@@ -130,6 +130,22 @@ router.post('/contact/send', (req, res) => {
   });
 });
 
+router.get('/faq', (req, res) => {
+  res.render('faq', { page: 'faq' });
+});
+
+router.get('/gdpr', (req, res) => {
+  res.render('gdpr', { page: 'gdpr' });
+});
+
+router.get('/terms-of-service', (req, res) => {
+  res.render('terms-of-service', { page: 'terms-of-service' });
+});
+
+router.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', { page: 'privacy-policy' });
+});
+
 router.get('/dashboard', (req, res) => {
   res.render('dashboard/dashboard', { page: 'dashboard' });
 });
