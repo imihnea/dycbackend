@@ -13,6 +13,46 @@ router.get('/', isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard');
 });
 
+// Show all addresses for withdraw
+router.get('/addresses', isLoggedIn, (req, res) => {
+  res.render('dashboard/dashboard_addr');
+});
+
+// Show all open offers
+router.get('/open', isLoggedIn, (req, res) => {
+  product.find({ available: true, 'author.id': req.user._id }, (err, allproducts) => {
+    if (err) {
+      req.flash('error', err.message);
+    } else {
+      res.render('dashboard/dashboard_open', { products: allproducts });
+    }
+  });
+});
+
+// Show all closed offers
+router.get('/closed', isLoggedIn, (req, res) => {
+  product.find({ available: false, 'author.id': req.user._id }, (err, allproducts) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('/dashboard');
+    } else {
+      res.render('dashboard/dashboard_closed', { products: allproducts });
+    }
+  });
+});
+
+// Show all purchases
+router.get('/purchases', isLoggedIn, (req, res) => {
+  product.find({ buyer: req.user._id }, (err, allproducts) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('/dashboard');
+    } else {
+      res.render('dashboard/dashboard_purchases', { products: allproducts });
+    }
+  });
+});
+
 // NEW - show form to create new product
 router.get('/new', isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard_new');
@@ -100,44 +140,6 @@ router.delete('/:id', isLoggedIn, checkUserproduct, (req, res) => {
     } else {
       req.flash('success', 'Successfully deleted product!');
       res.redirect('/dashboard/open');
-    }
-  });
-});
-
-// Show all addresses for withdraw
-router.get('/addresses', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_addr');
-});
-
-// Show all open offers
-router.get('/open', isLoggedIn, (req, res) => {
-  product.find({ available: true, 'author.id': req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      res.render('dashboard/dashboard_open', { products: allproducts });
-    }
-  });
-});
-
-// Show all closed offers
-router.get('/closed', isLoggedIn, (req, res) => {
-  product.find({ available: false, 'author.id': req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      res.render('dashboard/dashboard_closed', { products: allproducts });
-    }
-  });
-});
-
-// Show all purchases
-router.get('/purchases', isLoggedIn, (req, res) => {
-  product.find({ buyer: req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      res.render('dashboard/dashboard_purchases', { products: allproducts });
     }
   });
 });
