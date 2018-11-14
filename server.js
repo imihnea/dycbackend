@@ -8,6 +8,10 @@ const app = express();
 
 const bodyParser = require('body-parser');
 
+const expressValidator = require('express-validator');
+
+app.use(expressValidator());
+
 const mongoose = require('mongoose');
 
 const passport = require('passport');
@@ -47,8 +51,10 @@ mongoose.set('useFindAndModify', false); // disables warnings
 mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
+const SECRET = process.env.SECRET || 'monkaomega';
+
 app.use(require('express-session')({
-  secret: 'this is a spoopy secret used to decode session',
+  secret: SECRET,
   resave: false,
   saveUninitialized: false,
 }));
@@ -87,6 +93,6 @@ app.get('*', (req, res) => {
   res.send('Error 404');
 });
 
-app.listen(8080);
-
-console.log('Server started');
+app.listen(process.env.PORT || 8080, process.env.IP, () => {
+  console.log('Server started');
+});

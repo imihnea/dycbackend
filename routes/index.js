@@ -78,6 +78,11 @@ router.get('/contact', (req, res) => {
   res.render('index/contact');
 });
 
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
+
 router.post('/contact/send', (req, res) => {
   const output = `
   <h1>You have a new contact request</h1>
@@ -94,11 +99,11 @@ router.post('/contact/send', (req, res) => {
   nodemailer.createTestAccount(() => {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
+      host: EMAIL_HOST,
+      port: EMAIL_PORT,
       auth: {
-        user: 'k4nsyiavbcbmtcxx@ethereal.email',
-        pass: 'Mx2qnJcNKM5mp4nrG3',
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
       },
     });
 
