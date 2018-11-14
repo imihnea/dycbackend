@@ -10,8 +10,6 @@ const User = require('../models/user');
 
 const Product = require('../models/product');
 
-
-
 // index route
 
 router.get('/', (req, res) => {
@@ -20,7 +18,7 @@ router.get('/', (req, res) => {
 
 // show register form
 router.get('/register', (req, res) => {
-  res.render('index/register', { page: 'register' });
+  res.render('index/register');
 });
 
 //  handle sign up logic
@@ -49,7 +47,6 @@ router.post('/login', passport.authenticate('local',
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true,
-    successFlash: 'Welcome to Deal Your Crypto!',
   }), () => {
 });
 
@@ -70,12 +67,10 @@ router.get('/', (req, res) => {
     } else if (req.xhr) {
       res.json(allCategories);
     } else {
-      res.render('index/categories', { categories: allCategories, page: 'categories' });
+      res.render('index/categories', { categories: allCategories });
     }
   });
 });
-
-
 
 // contact page
 
@@ -131,51 +126,19 @@ router.post('/contact/send', (req, res) => {
 });
 
 router.get('/faq', (req, res) => {
-  res.render('faq', { page: 'faq' });
+  res.render('faq');
 });
 
 router.get('/gdpr', (req, res) => {
-  res.render('gdpr', { page: 'gdpr' });
+  res.render('gdpr');
 });
 
 router.get('/terms-of-service', (req, res) => {
-  res.render('terms-of-service', { page: 'terms-of-service' });
+  res.render('terms-of-service');
 });
 
 router.get('/privacy-policy', (req, res) => {
-  res.render('privacy-policy', { page: 'privacy-policy' });
-});
-
-router.get('/dashboard', (req, res) => {
-  res.render('dashboard/dashboard', { page: 'dashboard' });
-});
-
-router.get('/dashboard/addresses', (req, res) => {
-  res.render('dashboard/dashboard_addr', { page: 'addresses' });
-});
-
-router.get('/dashboard/new', (req, res) => {
-  res.render('dashboard/dashboard_new', { page: 'new' });
-});
-
-router.get('/dashboard/open', (req, res) => {
-  res.render('dashboard/dashboard_open', { page: 'open' });
-});
-
-router.get('/dashboard/closed', (req, res) => {
-  res.render('dashboard/dashboard_closed', { page: 'closed' });
-});
-
-router.get('/dashboard/purchases', (req, res) => {
-  res.render('dashboard/dashboard_purchases', { page: 'purchases' });
-});
-
-router.get('/dashboard/edit', (req, res) => {
-  res.render('dashboard/dashboard_edit', { page: 'edit' });
-});
-
-router.get('/dashboard/view', (req, res) => {
-  res.render('dashboard/dashboard_view', { page: 'view' });
+  res.render('privacy-policy');
 });
 
 module.exports = router;
