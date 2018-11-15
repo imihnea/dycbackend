@@ -12,6 +12,10 @@ Frontend:
     
     Replace partials in views/dashboard files with the code from the partials
     
+    Add script to burger menu in the header
+    
+    Add script to make Login and Register buttons appear only when not logged in; replace them with Dashboard when logged
+    
     Category pages
     
     Product page
