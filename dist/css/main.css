@@ -1,3 +1,4 @@
+/* Header */
 .navi{
     padding-top: 1vh;
     padding-bottom: 1vh;
@@ -31,17 +32,6 @@ div.content{
     margin-bottom: 0% !important;
 }
 
-.separator {
-    width: 1px;
-    height: 100%;
-    margin: 0 auto;
-    background-color: #ddd;
-}
-
-div.toptitle{
-    text-align: center;
-}
-
 .smmargin{
     margin-top: 1.5vh;
 }
@@ -52,59 +42,4 @@ div.toptitle{
 
 div.column{
     text-align: center !important;
-}
-
-div.featured{
-    margin-top: 2vh;
-}
-
-div.latest{
-
-}
-
-div.latprod-title{
-    /*TODO: Add breakpoint for lg+*/
-    height: 8.4vh;
-}
-
-figure.featimg{
-    /* TODO: Add breakpoints */
-    width: 100%; 
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
-
-figure.latestimg{
-    width: 50%;
-    margin-left: 3% !important;
-    margin-right: 0 !important;
-    margin-top: 3%;
-    margin-bottom: 0 !important;
-
-}
-
-div.featured-item{
-    padding: 2%;
-    margin: 2%;
-    box-shadow: 0.1px 0.5px 0.5px black;
-}
-
-div.firstcol{
-    margin-top: 1vh;
-}
-
-div.featrow{
-    display: flex;
-}
-
-div.latest-item{
-    display: flex;
-    padding: 2%;
-    margin: 2%;
-    box-shadow: 0.1px 0.5px 0.5px black;
-}
-
-div.latest-details{
-    margin: auto;
-    width: 50%;
 }

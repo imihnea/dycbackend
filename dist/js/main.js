@@ -6,4 +6,10 @@ document.addEventListener("DOMContentLoaded", function() {
     dropdown.classList.toggle('is-active');
     });
 
+    var burger = document.querySelector('.navbar-burger');
+    burger.addEventListener('click', function(event) {
+    event.stopPropagation();
+    burger.classList.toggle('is-active');
+    });
+
 });
