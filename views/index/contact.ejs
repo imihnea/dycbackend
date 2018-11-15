@@ -11,23 +11,43 @@
         <div class="columns">
             <div class="column" >
                 <form action="/contact/send" method="POST">
-                    <input class="input smmargin" name="name" placeholder="Name" type="text" required />
-                    <input class="input smmargin" name="email" placeholder="Email" type="email" required />
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
+                            <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        </div>
+                        <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
+                            <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        </div>
+                    <label class="label">Topic</label>
                     <div class="select smmargin">
-                            <select name="Topic">
-                                <option value="" disabled selected>Topic</option>
-                                <option value="">Category</option>
-                                <option value="">Category</option>
-                                <option value="">Category</option>
-                                <option value="">Category</option>
-                                <option value="">Category</option>
+                            <select name="topic">
+                                <option value="General">General</option>
+                                <option value="Payments">Payments</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Bugs">Bugs</option>
+                                <option value="Suggestions">Suggestions</option>
                             </select>
                     </div>
-                    <textarea class="textarea smmargin" placeholder="Message"></textarea>
+                    <div class="field">
+                            <label class="label">Message</label>
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                            </div>
+                          </div>
                     <div class="control smmargin">
-                        <button class="button is-primary">Send</button>
+                        <button class="button is-primary is-large is-fullwidth">Send</button>
                     </div>
-                    
                 </form>       
             </div>
             <div class="column">

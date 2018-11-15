@@ -36,8 +36,7 @@ Backend:
     
     Register => Add recaptcha to avoid spam
     
-    Contact => Add topic to req.body
-            => Add recaptcha to avoid spam
+    Contact => Add recaptcha to avoid spam
     
     Dashboard => Add balance route
               => Settings

@@ -85,11 +85,12 @@ const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 router.post('/contact/send', (req, res) => {
   const output = `
-  <h1>You have a new contact request</h1>
+  <h1>Contact Request - Deal Your Crypto</h1>
   <h3>Contact Details</h3>
   <ul>
     <li>Name: ${req.body.name}</li>
     <li>Email: ${req.body.email}</li>
+    <li>Topic: ${req.body.topic}</li>
   </ul>
   <h3>Message</h3>
   <p>${req.body.message}</p>
