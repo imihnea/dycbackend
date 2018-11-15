@@ -15,17 +15,25 @@ Frontend:
 
 
 Backend:
+
     Category dropdown => Routes for each category
+    
     Search bar => Routes and logic for search via category and all
+    
     Featured products => Query by featured parameter
+    
     Latest products => Query descending by date
+    
     Login => Remember me checkbox working
           => Reset password
           => Google Auth
           => Facebook Auth
+    
     Register => Add recaptcha to avoid spam
+    
     Contact => Add topic to req.body
             => Add recaptcha to avoid spam
+    
     Dashboard => Add balance route
               => Settings
                  => Change password
