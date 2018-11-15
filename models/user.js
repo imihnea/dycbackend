@@ -6,7 +6,7 @@ function toLower(str) {
 }
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, set: toLower },
+  email: { type: String, set: toLower, unique: true },
   username: { type: String, set: toLower },
   password: String,
   btcadr: { type: String, default: '' },

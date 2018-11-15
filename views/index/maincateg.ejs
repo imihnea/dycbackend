@@ -1,0 +1,25 @@
+<% include ../partials/header %>
+<div class="notification">
+    <button class="button is-link is-large" onclick="javascript:history.back()">TAKE ME BACK</button>
+</div>
+
+<div class="container">
+        <div class="notification">
+            <ul>
+                <li>
+                <a href="/categories/<%= main %>/<%= subfirst %>"><%= subfirst %></a>
+                </li>
+                <li>
+                <a href="/categories/<%= main %>/<%= subsecond %>"><%= subsecond %></a>
+                </li>
+                <li>
+                <a href="/categories/<%= main %>/<%= subthird %>"><%= subthird %></a>
+                </li>
+                <li>
+                <a href="/categories/<%= main %>/<%= subfourth %>"><%= subfourth %></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<% include ../partials/footer %>

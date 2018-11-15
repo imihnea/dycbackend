@@ -6,7 +6,6 @@ Frontend:
 
 
 Backend:
-    Category dropdown => Routes for each category
     Search bar => Routes and logic for search via category and all
     Featured products => Query by featured parameter
     Latest products => Query descending by date
@@ -31,3 +30,4 @@ Backend:
                  => Query purchased by author
 
       Validation where input!!!
+    Categories => Add more in future
