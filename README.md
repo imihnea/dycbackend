@@ -3,9 +3,13 @@ Deal Your Crypto Project with Bulma CSS Framework on Frontend. To be remade in R
 Tasks to be done:
 
 Frontend:
+
     Solve TODOs in comments
+    
     Break main.css into separate files
+    
     Copy dashboard partials locally
+    
     Replace partials in views/dashboard files with the code from the partials
 
 
