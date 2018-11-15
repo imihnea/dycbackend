@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 function toLower(str) {
@@ -6,9 +7,16 @@ function toLower(str) {
 }
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, set: toLower, unique: true },
-  username: { type: String, set: toLower },
+  name: { type: String, default: '' },
+  email: {
+    type: String,
+    set: toLower,
+    unique: true,
+    default: '',
+  },
+  username: { type: String, set: toLower, default: '' },
   password: String,
+  facebookId: { type: String, default: '' },
   btcadr: { type: String, default: '' },
   bchadr: { type: String, default: '' },
   ethadr: { type: String, default: '' },
@@ -16,6 +24,7 @@ const UserSchema = new mongoose.Schema({
   dashadr: { type: String, default: '' },
 });
 
+UserSchema.plugin(findOrCreate);
 UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('User', UserSchema);

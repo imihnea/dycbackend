@@ -50,11 +50,21 @@ router.post('/login', passport.authenticate('local',
   }), () => {
 });
 
+router.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
 // logout route
 router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success', 'See you later!');
-  res.redirect('back');
+  res.redirect('/');
 });
 
 // categories route
