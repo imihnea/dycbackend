@@ -2,6 +2,8 @@ const express = require('express');
 
 const product = require('../models/product');
 
+const user = require('../models/user');
+
 const router = express.Router();
 
 const middleware = require('../middleware');
@@ -15,7 +17,59 @@ router.get('/', isLoggedIn, (req, res) => {
 
 // Show all addresses for withdraw
 router.get('/addresses', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_addr');
+  res.render('dashboard/dashboard_addr', { user: req.user });
+});
+
+router.post('/addresses', isLoggedIn, (req, res) => {
+  const query = { _id: req.user._id };
+  const name = req.body.btcadr || req.body.bchadr || req.body.ethadr
+                               || req.body.ltcadr || req.body.dashadr;
+  if (name === req.body.btcadr) {
+    user.findByIdAndUpdate(query, { btcadr: name }, (err) => {
+      if (err) {
+        req.flash('error', err.message);
+      } else {
+        req.flash('success', 'Successfully updated address!');
+        res.redirect('/dashboard/addresses');
+      }
+    });
+  } else if (name === req.body.bchadr) {
+    user.findByIdAndUpdate(query, { bchadr: name }, (err) => {
+      if (err) {
+        req.flash('error', err.message);
+      } else {
+        req.flash('success', 'Successfully updated address!');
+        res.redirect('/dashboard/addresses');
+      }
+    });
+  } else if (name === req.body.ethadr) {
+    user.findByIdAndUpdate(query, { ethadr: name }, (err) => {
+      if (err) {
+        req.flash('error', err.message);
+      } else {
+        req.flash('success', 'Successfully updated address!');
+        res.redirect('/dashboard/addresses');
+      }
+    });
+  } else if (name === req.body.ltcadr) {
+    user.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
+      if (err) {
+        req.flash('error', err.message);
+      } else {
+        req.flash('success', 'Successfully updated address!');
+        res.redirect('/dashboard/addresses');
+      }
+    });
+  } else if (name === req.body.dashadr) {
+    user.findByIdAndUpdate(query, { dashadr: name }, (err) => {
+      if (err) {
+        req.flash('error', err.message);
+      } else {
+        req.flash('success', 'Successfully updated address!');
+        res.redirect('/dashboard/addresses');
+      }
+    });
+  }
 });
 
 // Show all open offers

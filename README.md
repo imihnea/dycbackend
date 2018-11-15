@@ -21,8 +21,6 @@ Backend:
               => Settings
                  => Change password
                  => Change Email
-              => Addresses
-                 => Register the address for each currency and assign it to user
               => New deal
                  => Post req, pictures logic
               => Open deals
@@ -31,3 +29,5 @@ Backend:
                  => Query author closed deals
               => Purchases
                  => Query purchased by author
+
+      Validation where input!!!

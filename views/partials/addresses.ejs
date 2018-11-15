@@ -3,7 +3,7 @@
         <h2>Bitcoin</h2>
         <div class="address">
             <label class="label adrlabel">Top-up Address</label>
-            <input class="input smmargin adradr" placeholder="BTC ADDR" disabled />
+            <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
         </div>
         
         <form action="/dashboard/addresses" method="POST">
@@ -22,7 +22,7 @@
         <h2>Bitcoin Cash</h2>
         <div class="address">
             <label class="label adrlabel">Top-up Address</label>
-            <input class="input smmargin adradr" placeholder="BCH ADDR" disabled />
+            <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
         </div>
         
         <form action="/dashboard/addresses" method="POST">
@@ -41,7 +41,7 @@
         <h2>Ethereum</h2>
         <div class="address">
             <label class="label adrlabel">Top-up Address</label>
-            <input class="input smmargin adradr" placeholder="ETH ADDR" disabled />
+            <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
         </div>
 
         <form action="/dashboard/addresses" method="POST">
@@ -60,7 +60,7 @@
         <h2>Litecoin</h2>
         <div class="address">
             <label class="label adrlabel">Top-up Address</label>
-            <input class="input smmargin adradr" placeholder="LTC ADDR" disabled />
+            <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
         </div>
 
         <form action="/dashboard/addresses" method="POST">
@@ -79,7 +79,7 @@
         <h2>Dash</h2>
         <div class="address">
             <label class="label adrlabel">Top-up Address</label>
-            <input class="input smmargin adradr" placeholder="DASH ADDR" disabled />
+            <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
         </div>
 
         <form action="/dashboard/addresses" method="POST">
