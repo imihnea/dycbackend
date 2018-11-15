@@ -6,18 +6,12 @@ Frontend:
 
     Solve TODOs in comments
     
-    Break main.css into separate files
-    
-    Copy dashboard partials locally
-    
-    Replace partials in views/dashboard files with the code from the partials
-    
-    Add script to burger menu in the header
-    
-    Add script to make Login and Register buttons appear only when not logged in; replace them with Dashboard when logged
+    Add menu triggered by burger in header
     
     Category pages
     
+    Search result page
+
     Product page
 
 

@@ -1,0 +1,11 @@
+/* Login & Register*/
+div.toptitle{
+    text-align: center;
+}
+
+.separator {
+    width: 1px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #ddd;
+}
