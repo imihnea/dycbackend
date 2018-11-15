@@ -11,6 +11,10 @@ Frontend:
     Copy dashboard partials locally
     
     Replace partials in views/dashboard files with the code from the partials
+    
+    Category pages
+    
+    Product page
 
 
 
