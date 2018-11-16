@@ -7,21 +7,20 @@ function toLower(str) {
 }
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, default: '' },
+  name: String,
   email: {
     type: String,
     set: toLower,
     unique: true,
-    default: '',
   },
-  username: { type: String, set: toLower, default: '' },
+  username: { type: String, set: toLower },
   password: String,
-  facebookId: { type: String, default: '' },
-  btcadr: { type: String, default: '' },
-  bchadr: { type: String, default: '' },
-  ethadr: { type: String, default: '' },
-  ltcadr: { type: String, default: '' },
-  dashadr: { type: String, default: '' },
+  facebookId: String,
+  btcadr: String,
+  bchadr: String,
+  ethadr: String,
+  ltcadr: String,
+  dashadr: String,
 });
 
 UserSchema.plugin(findOrCreate);
