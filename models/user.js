@@ -11,11 +11,11 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     set: toLower,
-    unique: true,
   },
   username: { type: String, set: toLower },
   password: String,
   facebookId: String,
+  googleId: String,
   btcadr: String,
   bchadr: String,
   ethadr: String,

@@ -60,6 +60,16 @@ router.get('/auth/facebook/callback',
     res.redirect('/');
   });
 
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+
+
+router.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.redirect('/');
+  });
+
 // logout route
 router.get('/logout', (req, res) => {
   req.logout();

@@ -25,8 +25,6 @@ Backend:
     
     Login => Remember me checkbox working
           => Reset password
-          => Google Auth
-          => Facebook Auth
     
     Register => Add recaptcha to avoid spam
     
