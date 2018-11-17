@@ -5,8 +5,8 @@ Tasks to be done:
 Frontend:
 
     Solve TODOs in comments
-    
-    Add menu triggered by burger in header
+
+    Make truncation work
     
     Category pages
     

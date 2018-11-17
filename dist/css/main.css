@@ -20,6 +20,26 @@
     width: 30%;
 }
 
+@media screen and (max-width: 768px){
+    .field.has-addons{
+        display: block !important;
+    }
+
+    .dropdown.categ{
+        display: none;
+    }
+
+    .search{
+        width: 100%;
+    }
+
+    #navbarMenu{
+        box-shadow: none;
+    }
+
+    /* Make media queries for search input and select */
+}
+
 
 a.dropdown-item{
     text-align: center !important;
