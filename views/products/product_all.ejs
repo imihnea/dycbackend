@@ -1,9 +1,92 @@
 <% include ../partials/header %>
-<div class="notification">
-    <button class="button is-link is-large" onclick="javascript:history.back()">TAKE ME BACK</button>
+<script src="../../dist/js/maincateg.js"></script>
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
+
+<div class="hero-body">
+    <div class="container ">
+        <div class="columns">
+            <div class="column is-one-fifth menu content">
+                <div class="categ_menu">
+                    <p class="menu-label">
+                        Categories
+                    </p>
+                    <button class="button is-link" onclick="javascript:history.back()">Back</button>
+                </div>
+
+                <ul class="menu-list">
+                    <li>
+                    <a href="/categories/Collectibles-Art">Collectibles And Art</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Home-Garden">Home and Garden</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Sporting-Goods">Sporting Goods</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Electronics">Electronics</a>
+                    </li>
+                    <li>
+                    <a href="/categories/AutoParts-Accessories">Auto Parts and Accessories</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Toys-Hobbies">Toys and Hobbies</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Fashion">Fashion</a>
+                    </li>
+                    <li>
+                    <a href="/categories/MusicalInstruments-Gear">Musical Instruments and Gear</a>
+                    </li>
+                    <li>
+                    <a href="/categories/Other">Other</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column content">
+                <% products.forEach(function(product){ %>
+                    <div class="columns">
+                        <div class="column is-one-quarter">
+                                <img src="<%= product.image %>">
+                        </div>
+                        <div class="column prod_info is-half">
+                            <p class="title is-5"><%= product.name %></p>
+                            <p class="subtitle is-6"><%= product.description %></p>
+                            <p class="subtitle is-6">$<%= product.price %><br/><sub>Shipping: TBD</sub></p>
+                            <a href="/categories/products/<%= product._id %>/view"><button class="button is-primary">Buy</button></a>
+                        </div>
+                        <div class="column prod_info">
+                            <p><% if (product.accepted[0]){ %>
+                                BTC<br/>
+                            <% } %>
+                            <% if (product.accepted[1]){ %>
+                                BCH<br/>
+                            <% } %>
+                            <% if (product.accepted[2]){ %>
+                                ETH<br/>
+                            <% } %>
+                            <% if (product.accepted[3]){ %>
+                                LTC<br/>
+                            <% } %>
+                            <% if (product.accepted[4]){ %>
+                                DASH
+                            <% } %></p>
+                        </div>
+                        
+                    </div>
+                    <hr>                    
+                <% }); %>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row text-center flex-wrap">
+<% include ../partials/footer %>
+
+
+
+<!--<div class="row text-center flex-wrap">
     <ul>
         <% products.forEach(function(product){ %>
             <li> <%= product.name %> </li>
@@ -12,6 +95,4 @@
             <button class="btn btn-danger">Delete</button></form></li>
         <% }); %>
     </ul>
-</div>
-
-<% include ../partials/footer %>
+</div>-->

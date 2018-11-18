@@ -1,0 +1,27 @@
+.menu-list, .menu-label{
+    text-align: left !important;
+}
+
+ul{
+    list-style: none !important;
+}
+
+.categ_title{
+    text-align: left !important;
+    padding-left: 2vw;
+}
+
+.media-content{
+    text-align: center !important;
+}
+
+.categ_menu{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.column.card{
+    max-width: 250px;
+    margin: 1%;
+}

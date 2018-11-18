@@ -4,19 +4,29 @@ Tasks to be done:
 
 Frontend:
 
-    Solve TODOs in comments
+    High Priority:
 
-    Make truncation work
-    
-    Category pages
-    
-    Search result page
+        Category pages ( redesign sidebar )
 
-    Product page
+        Product page
 
+        Search result page
+
+        Top-up interface
+
+    Low Priority:
+
+        Make slideshow buttons work properly
+
+        Make everything responsive (see comments in css files)
+
+        Make truncation work
+
+        Change crypto text to icons
 
 
 Backend:
+
    High Priority (Sprint):
 
       Dashboard => Add balance route
@@ -41,4 +51,4 @@ Backend:
       Validation where input!!!
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
-      Contact => Add recaptcha to avoid spam
+      Contact => Add recaptcha to avoid spam                        
