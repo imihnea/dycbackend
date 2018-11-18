@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    var dropdown = document.querySelector('.dropdown');
-    dropdown.addEventListener('click', function(event) {
-    event.stopPropagation();
-    dropdown.classList.toggle('is-active');
+    // Get all dropdown elements
+    var dropdown = document.querySelectorAll('.dropdown');
+    // Create an array with them
+    dropdownItems = [].slice.call(dropdown);
+    dropdownItems.forEach(function(item, id){
+        // Iterate through each element, toggling the class
+        item.addEventListener('click', function(event){
+            event.stopPropagation();
+            item.classList.toggle('is-active');
+        })
     });
     
     

@@ -20,6 +20,16 @@
     width: 30%;
 }
 
+.dropdown-item{
+    text-align: center;
+}
+
+.currency{
+    display: flex !important;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 @media screen and (max-width: 768px){
     .field.has-addons{
         display: block !important;
@@ -44,7 +54,9 @@
 a.dropdown-item{
     text-align: center !important;
 }   
+/* Header Ends */
 
+/* Content Begins */
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
     box-shadow: 0.1px 0.1px 1px black;
@@ -63,3 +75,9 @@ div.content{
 div.column{
     text-align: center !important;
 }
+
+/* Content Ends */
+
+/* Footer Begins */
+
+/* Footer Ends */

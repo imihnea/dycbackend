@@ -245,6 +245,50 @@
                     <p class="level-item"><a href="/login">Login</a></p>
                     <p class="level-item"><a href="/register">Register</a></p>
                 <% } else { %>
+                    <div class=" level-item dropdown categ">
+                        <div class="dropdown-trigger">
+                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span>Balance</span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                               
+                                <div class="currency dropdown-item">
+                                    <p class="curr_text" id="btc_curr">0.000000000</p>
+                                    <span class="tag is-warning curr_img">BTC</span>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="currency dropdown-item">
+                                    <p class="curr_text" id="bch_curr">0.000000000</p>
+                                    <span class="tag is-success curr_img">BCH</span>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="currency dropdown-item">
+                                    <p class="curr_text" id="eth_curr">0.000000000</p>
+                                    <span class="tag is-dark curr_img">ETH</span>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="currency dropdown-item">
+                                    <p class="curr_text" id="ltc_curr">0.000000000</p>
+                                    <span class="tag is-light curr_img">LTC</span>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="currency dropdown-item">
+                                    <p class="curr_text" id="dash_curr">0.000000000</p>
+                                    <span class="tag is-info curr_img">DASH</span>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/addresses">Top-up</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
                     <p class="level-item"><a href="/dashboard">Dashboard</a></p>
                     <p class="level-item"><a href="/logout">Logout</a></p>
                 <% } %>
