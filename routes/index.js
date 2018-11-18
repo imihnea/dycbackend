@@ -8,12 +8,21 @@ const passport = require('passport');
 
 const User = require('../models/user');
 
+const product = require('../models/product');
+
 const Product = require('../models/product');
 
 // index route
 
 router.get('/', (req, res) => {
-  res.render('index', { currentUser: req.user });
+  // Get all products from DB
+  product.find({ featured: true }, (err, allproducts) => {
+    if (err) {
+      req.flash('error', err.message);
+    } else {
+      res.render('index', { currentUser: req.user, products: allproducts });
+    }
+  });
 });
 
 // show register form

@@ -7,7 +7,7 @@ const ProductSchema = new mongoose.Schema({
   description: String,
   price: Number,
   accepted: Array,
-  featured: { type: Boolean, default: false },
+  featured: Boolean,
   available: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   buyer: String,

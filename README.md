@@ -17,31 +17,28 @@ Frontend:
 
 
 Backend:
-    Search bar => Routes and logic for search via category and all
-    
-    Featured products => Query by featured parameter
-    
-    Latest products => Query descending by date
-    
-    Login => Remember me checkbox working
-          => Reset password
-    
-    Register => Add recaptcha to avoid spam
-    
-    Contact => Add recaptcha to avoid spam
-    
-    Dashboard => Add balance route
-              => Settings
-                 => Change password
-                 => Change Email
-              => New deal
-                 => Post req, pictures logic
-              => Open deals
-                 => Query author deals
-              => Closed Deals
-                 => Query author closed deals
-              => Purchases
-                 => Query purchased by author
+   High Priority (Sprint):
+
+      Dashboard => Add balance route
+               => New deal
+                  => Post req, pictures logic
+      Search bar => Routes and logic for search via category and all
+
+   Low Priority (Walk):
+
+      Login => Remember me checkbox working
+            => Reset password
+      
+      Dashboard 
+               => Settings
+                  => Change password
+                  => Change Email
+               => Closed Deals
+                  => Sold, expired, deactivated status
+               => Purchases
+                  => Query purchased by author
 
       Validation where input!!!
-    Categories => Add more in future
+      Categories => Add more in future
+      Register => Add recaptcha to avoid spam
+      Contact => Add recaptcha to avoid spam
