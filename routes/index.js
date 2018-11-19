@@ -60,7 +60,7 @@ router.post('/login', passport.authenticate('local',
 });
 
 router.get('/auth/facebook',
-  passport.authenticate('facebook'));
+  passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));
 
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),

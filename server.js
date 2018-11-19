@@ -83,11 +83,14 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: 'http://localhost:8080/auth/facebook/callback',
+  profileFields: ['id', 'displayName', 'email']
 },
 function(accessToken, refreshToken, profile, cb) {
   User.findOrCreate(
     { 
       name: profile.displayName,
+      username: profile.displayName,
+      email: profile.emails[0].value,
       facebookId: profile.id 
     }, 
     (err, User) => {
@@ -104,6 +107,7 @@ function(accessToken, refreshToken, profile, done) {
   User.findOrCreate(
     { 
       name: profile.name.familyName + ' ' + profile.name.givenName,
+      username: profile.name.familyName + ' ' + profile.name.givenName,
       googleId: profile.id 
     },
     (err, user) => {
