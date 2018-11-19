@@ -29,6 +29,9 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 const methodOverride = require('method-override');
+// configure dotenv
+
+require('dotenv').config();
 
 const User = require('./models/user');
 
@@ -74,16 +77,11 @@ app.set('view engine', 'ejs');
 app.use(passport.initialize());
 app.use(passport.session());
 
-const FACEBOOK_APP_ID = '702016036846557';
-const FACEBOOK_APP_SECRET = '359eb95d2910fc0decb8a70ed836546d';
-const GOOGLE_CLIENT_ID = '551267659253-5nf5g2k503demcjocdo69421o6gh378g.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = 'NaN3-WzeZLTjsELF7q_nHr_-';
-
 passport.use(new LocalStrategy(User.authenticate()));
 /* eslint-disable */
 passport.use(new FacebookStrategy({
-  clientID: FACEBOOK_APP_ID,
-  clientSecret: FACEBOOK_APP_SECRET,
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: 'http://localhost:8080/auth/facebook/callback',
 },
 function(accessToken, refreshToken, profile, cb) {
@@ -98,8 +96,8 @@ function(accessToken, refreshToken, profile, cb) {
 }
 ));
 passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: 'http://localhost:8080/auth/google/callback',
 },
 function(accessToken, refreshToken, profile, done) {

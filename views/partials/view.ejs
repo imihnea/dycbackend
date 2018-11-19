@@ -1,6 +1,6 @@
 <div class="column">
 
-    <img src="../../dist/img/blanc.jpg">
+    <img src="<%= product.image %>">
     
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <tbody>
@@ -9,7 +9,7 @@
                     Name
                 </th>
                 <td id="viewname">
-                    Kappa
+                   <%= product.name %>
                 </td>
             </tr>
             <tr>
@@ -17,7 +17,7 @@
                     Description
                 </th>
                 <td id="viewdesc">
-                        It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. Trump Ipsum is calling for a total and complete shutdown of Muslim text entering your website.
+                    <%= product.description %>
                 </td>
             </tr>
             <tr>
@@ -25,7 +25,7 @@
                     Price ($)
                 </th>
                 <td id="viewprice">
-                    100
+                    <%= product.price %>
                 </td>
             </tr>
             <tr>
@@ -33,7 +33,7 @@
                     Currency
                 </th>
                 <td id="viewcurrency">
-                    BTC
+                    <%= product.accepted %>
                 </td>
             </tr>
             <tr>

@@ -1,4 +1,9 @@
+/* eslint-disable no-param-reassign */
 const express = require('express');
+
+const multer = require('multer');
+
+const cloudinary = require('cloudinary');
 
 const product = require('../models/product');
 
@@ -112,36 +117,72 @@ router.get('/new', isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard_new');
 });
 
+// Set Storage Engine
+const storage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const imageFilter = (req, file, cb) => {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+cloudinary.config({
+  cloud_name: 'dyc',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const upload = multer({
+  storage: storage,
+  fileFilter: imageFilter,
+});
+
 // CREATE - add new product to DB
-router.post('/', isLoggedIn, (req, res) => {
+router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
   // get data from form and add to products array
-  const name = req.body.name;
-  const image = req.body.image;
-  const desc = req.body.description;
-  const category = req.body.category;
-  const accepted = req.body.accepted;
-  const author = {
-    id: req.user._id,
-    username: req.user.username,
-  };
-  const price = req.body.price;
-  const newproduct = {
-    name: name,
-    image: image,
-    category: category,
-    description: desc,
-    price: price,
-    author: author,
-    accepted: accepted,
-  };
-    // Create a new product and save to DB
-  product.create(newproduct, (err) => {
+  cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
+    const name = req.body.name;
+    req.body.image = result.secure_url;
+    req.body.imageId = result.public_id;
+    const description = req.body.description;
+    const category = req.body.category;
+    const accepted = req.body.accepted;
+    const author = {
+      id: req.user._id,
+      username: req.user.username,
+    };
+    const price = req.body.price;
+    const newproduct = {
+      name: name,
+      image: req.body.image,
+      imageId: req.body.imageId,
+      category: category,
+      description: description,
+      price: price,
+      author: author,
+      accepted: accepted,
+    };
     if (err) {
       req.flash('error', err.message);
+    } else if (req.file === undefined) {
+      req.flash('error', err.message);
     } else {
-      req.flash('success', 'Successfully added a new product!');
-      // redirect back to products page
-      res.redirect('/dashboard/open');
+      // Create a new product and save to DB
+      product.create(newproduct, (error) => {
+        if (error) {
+          req.flash('error', error.message);
+        } else {
+          req.flash('success', 'Successfully added a new product!');
+          // redirect back to products page
+          res.redirect('/dashboard/open');
+        }
+      });
     }
   });
 });
@@ -173,27 +214,52 @@ router.get('/:id/edit', isLoggedIn, checkUserproduct, (req, res) => {
 });
 
 // PUT - updates product in the database
-router.put('/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findByIdAndUpdate(req.params.id, req.body.product, (err) => {
+router.put('/:id', upload.single('image'), (req, res) => {
+  product.findById(req.params.id, async (err, Product) => {
     if (err) {
-      req.flash('error', 'Error editing product!');
-      res.redirect(`/dashboard/${product._id}`);
+      req.flash('error', err.message);
+      res.redirect('back');
     } else {
-      req.flash('success', 'Successfully edited product!');
-      res.redirect(`/dashboard/${product._id}`);
+      if (req.file) {
+        try {
+          await cloudinary.v2.uploader.destroy(Product.imageId);
+          const result = await cloudinary.v2.uploader.upload(req.file.path);
+          Product.imageId = result.public_id;
+          Product.image = result.secure_url;
+        } catch (error) {
+          req.flash('error', error.message);
+          return res.redirect('back');
+        }
+      }
+      Product.name = req.body.name;
+      Product.description = req.body.description;
+      Product.category = req.body.category;
+      Product.accepted = req.body.accepted;
+      Product.price = req.body.price;
+      Product.save();
+      req.flash('success', 'Successfully Updated!');
+      res.redirect(`/dashboard/${Product._id}`);
     }
   });
 });
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
-router.delete('/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findByIdAndRemove(req.params.id, (err) => {
+router.delete('/:id', (req, res) => {
+  product.findById(req.params.id, async (err, Product) => {
     if (err) {
       req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    try {
+      await cloudinary.v2.uploader.destroy(Product.imageId);
+      Product.remove();
+      req.flash('success', 'Product deleted successfully!');
       res.redirect('/dashboard/open');
-    } else {
-      req.flash('success', 'Successfully deleted product!');
-      res.redirect('/dashboard/open');
+    } catch (error) {
+      if (error) {
+        req.flash('error', error.message);
+        return res.redirect('back');
+      }
     }
   });
 });

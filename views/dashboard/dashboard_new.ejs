@@ -4,22 +4,22 @@
     <div class="columns">
         <% include ../partials/sidebar %>
 
-        <div class="column" >
-            <form action="/dashboard" method="POST">
+        <div class="column">
+            <form action="/dashboard" method="POST" enctype="multipart/form-data">
                 <input class="input smmargin" name="name" placeholder="Name" type="text" required />
                 
                 <div class="filencat">
                     <div class="select">
-                        <select>
-                            <option disabled selected>Category</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
+                        <select type="text" name="category">
+                            <option selected>All Categories</option>
+                            <option>Category 1</option>
+                            <option>Category 2</option>
                         </select>
                     </div>
         
                     <div class="file has-name">
                         <label class="file-label">
-                            <input class="file-input" type="file" name="resume">
+                            <input class="file-input" type="file" name="image" accept="image/*">
                                 <span class="file-cta">
                                     <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -29,7 +29,7 @@
                                     </span>
                                 </span>
                                 <span class="file-name">
-                                Add accepted extensions
+                                .jpeg .jpg .png
                                 </span>
                         </label>
                     </div>
@@ -39,23 +39,23 @@
                 <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required />
                 <h4 style="margin-top: 1vh;">Accepted currencies</h4>
                 <label class="checkbox">
-                    <input name="btc" type="checkbox">
+                    <input name="accepted" type="checkbox" value="BTC">
                         BTC
                 </label>
                 <label class="checkbox">
-                    <input name="bch" type="checkbox">
+                    <input name="accepted" type="checkbox" value="BCH">
                         BCH
                 </label>
                 <label class="checkbox">
-                    <input name="eth" type="checkbox">
+                    <input name="accepted" type="checkbox" value="ETH">
                         ETH
                 </label>
                 <label class="checkbox">
-                    <input name="ltc" type="checkbox">
+                    <input name="accepted" type="checkbox" value="LTC">
                         LTC
                 </label>
                 <label class="checkbox">
-                    <input name="dash" type="checkbox">
+                    <input name="accepted" type="checkbox" value="DASH">
                         DASH
                 </label>
                 <div class="control smmargin">
