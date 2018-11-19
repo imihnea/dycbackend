@@ -108,6 +108,7 @@ function(accessToken, refreshToken, profile, done) {
     { 
       name: profile.name.familyName + ' ' + profile.name.givenName,
       username: profile.name.familyName + ' ' + profile.name.givenName,
+      email: profile.emails[0].value,
       googleId: profile.id 
     },
     (err, user) => {
