@@ -30,6 +30,10 @@
     justify-content: space-evenly;
 }
 
+.curr_img{
+    max-width: 25px;
+}
+
 @media screen and (max-width: 768px){
     .field.has-addons{
         display: block !important;

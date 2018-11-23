@@ -22,8 +22,6 @@ Frontend:
 
         Make truncation work
 
-        Change crypto text to icons
-
 
 Backend:
 

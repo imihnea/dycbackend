@@ -58,3 +58,15 @@ ul.currencies{
     display: flex;
     justify-content: space-evenly;
 }
+
+.adr_img{
+    max-width: 75px;
+}
+
+.values{
+    margin-top: 2vh;
+}
+
+.topup{
+    margin-top: .75vh;
+}
