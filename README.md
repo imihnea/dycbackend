@@ -6,13 +6,16 @@ Frontend:
 
     High Priority:
 
-        Category pages ( redesign sidebar )
+        Category pages ( redesign sidebar - toggle-able menu for categories, back button + filters for subcategories )
 
-        Product page
+        Product page => Create page
+                     => Image gallery
 
         Search result page
 
         Top-up interface
+        
+        Buy featured (tokens maybe?)
 
     Low Priority:
 
@@ -41,11 +44,18 @@ Backend:
                => Settings
                   => Change password
                   => Change Email
+               => New Deals
+                  => Test multiple file input
                => Closed Deals
                   => Sold, expired, deactivated status
                => Purchases
                   => Query purchased by author
-
+      
+      Products
+               => Add currency used to buy
+      Index 
+               => Get products from the database
+        
       Validation where input!!!
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
