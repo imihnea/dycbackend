@@ -1,0 +1,50 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="hero-body">
+    <div class="container content">
+        <div class="columns">
+            <% include ../partials/sidebar %>
+
+            <div class="column" >
+                    <h2>You have <%= user.feature_tokens %> DYC-Coins</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h3>Get DYC-Coins</h3>
+                        <form action="/dashboard/tokens" method="POST">
+                            <input class="input" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" required>
+                            <div class="sel_curr" >
+                                <label class="label">Buy with</label>
+                                <select class="select" name="buy_with">
+                                    <option value="btc">Bitcoin</option>
+                                    <option value="bch">Bitcoin Cash</option>
+                                    <option value="eth">Ethereum</option>
+                                    <option value="ltc">Litecoin</option>
+                                    <option value="dash">DASH</option>
+                                </select>
+                            </div>
+                                
+                            
+                            <button class="button is-primary">Buy</button>
+                        </form>
+                    </div>
+
+                    <div class="column">
+                        <h3>What are DYC-Coins?</h3>
+                        <p>DYC-Coin is our own currency, used to promote deals on the marketplace</p>
+                        <h3>How can I promote my deal?</h3>
+                        <p>You can do so when creating the deal or afterwards, from the edit page.</p>
+                        <h3>Are there multiple levels of promotion?</h3>
+                        <p>Yes, we offer subcategory promotion, front-page promotion and front-page slider promotion</p>
+                        <h3>How much does a DYC-Coin cost?</h3>
+                        <p>DYC-Coins cost x $ each.</p>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    
+</div>
+
+<% include ../partials/footer %>

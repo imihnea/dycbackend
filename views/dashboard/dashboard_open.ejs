@@ -1,55 +1,57 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="container content">
-    <div class="columns">
-        <% include ../partials/sidebar %>
 
-        <div class="column" >
-    
-            <div style="overflow-x: auto">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <!-- Maybe make the image disappar on mobiles -->
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price ($)</th>
-                        <th>Currencies</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <% products.forEach(function(product){ %>
-                <tbody>
-                    <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
-                        <!-- count here instead of imageId -->
-                        <th id="dealid"><%= product.imageId %></th>
-                        <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
-                        <td><%= product.name %></td>
-                        <td><%= product.price %></td>
-                        <td>
-                            <ul class="currencies">
-                                <li><%= product.accepted %></li>
-                            </ul>
-                        </td>
-                        <!-- Must make this work with IDs, maybe make script that takes the id
-                             Would limit the nr of deals seen to just a few though -->
-                        <td><a class="button is-warning" href="/dashboard/<%= product._id %>/edit">Edit</a></td>
-                        <td><form action="/dashboard/<%= product._id %>?_method=DELETE" onsubmit="return confirm('Really delete that product?');" method="POST">
-                        <button class="button is-danger">Delete</button>
-                        </form>
-                    </tr>
-                </tbody>
-                <% }); %>
-            </table>
-        </div>
+<div class="hero-body">
+    <div class="container content">
+        <div class="columns">
+            <% include ../partials/sidebar %>
+
+            <div class="column" >
+        
+                <div style="overflow-x: auto">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <!-- Maybe make the image disappar on mobiles -->
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price ($)</th>
+                            <th>Currencies</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <% products.forEach(function(product){ %>
+                    <tbody>
+                        <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
+                            <!-- count here instead of imageId -->
+                            <th id="dealid"><%= product.imageId %></th>
+                            <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
+                            <td><%= product.name %></td>
+                            <td><%= product.price %></td>
+                            <td>
+                                <ul class="currencies">
+                                    <li><%= product.accepted %></li>
+                                </ul>
+                            </td>
+                            <!-- Must make this work with IDs, maybe make script that takes the id
+                                Would limit the nr of deals seen to just a few though -->
+                            <td><a class="button is-warning" href="/dashboard/<%= product._id %>/edit">Edit</a></td>
+                            <td><form action="/dashboard/<%= product._id %>?_method=DELETE" onsubmit="return confirm('Really delete that product?');" method="POST">
+                            <button class="button is-danger">Delete</button>
+                            </form>
+                        </tr>
+                    </tbody>
+                    <% }); %>
+                </table>
+            </div>
+                
+            </div>
             
         </div>
-        
     </div>
-</div>
     
-
+</div>
 
 <% include ../partials/footer %>

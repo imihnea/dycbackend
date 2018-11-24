@@ -1,50 +1,52 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="container content">
-    <div class="columns">
-        <% include ../partials/sidebar %>
 
-        <div class="column" >
-    
-            <div style="overflow-x: auto">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <!-- Maybe make the image disappar on mobiles  -->
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price ($)</th>
-                        <th>Currency</th>
-                        <th>View</th>
-                    </tr>
-                </thead>
+<div class="hero-body">
+    <div class="container content">
+        <div class="columns">
+            <% include ../partials/sidebar %>
+
+            <div class="column" >
         
-                <% products.forEach(function(product){ %>
-                    <tbody>
-                        <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
-                            <!-- count here instead of imageId -->
-                            <th id="dealid"><%= product.imageId %></th>
-                            <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
-                            <td><%= product.name %></td>
-                            <td><%= product.price %></td>
-                            <td>
-                                <ul class="currencies">
-                                    <li><%= product.accepted %></li>
-                                </ul>
-                            </td>
-                            <td><a class="button is-warning" href="/dashboard/<%= product._id %>/view">View</a></td>
+                <div style="overflow-x: auto">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <!-- Maybe make the image disappar on mobiles  -->
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price ($)</th>
+                            <th>Currency</th>
+                            <th>View</th>
                         </tr>
-                    </tbody>
-               <% }); %>
-            </table>
-        </div>
+                    </thead>
+            
+                    <% products.forEach(function(product){ %>
+                        <tbody>
+                            <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
+                                <!-- count here instead of imageId -->
+                                <th id="dealid"><%= product.imageId %></th>
+                                <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
+                                <td><%= product.name %></td>
+                                <td><%= product.price %></td>
+                                <td>
+                                    <ul class="currencies">
+                                        <li><%= product.accepted %></li>
+                                    </ul>
+                                </td>
+                                <td><a class="button is-warning" href="/dashboard/<%= product._id %>/view">View</a></td>
+                            </tr>
+                        </tbody>
+                <% }); %>
+                </table>
+            </div>
+                
+            </div>
             
         </div>
-        
     </div>
-</div>
     
-
+</div>
 
 <% include ../partials/footer %>

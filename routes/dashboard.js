@@ -77,6 +77,26 @@ router.post('/addresses', isLoggedIn, (req, res) => {
   }
 });
 
+// Dashboard tokens route; gets current number of tokens
+router.get('/tokens', isLoggedIn, (req, res) => {
+  res.render('dashboard/dashboard_tokens', { user: req.user });
+});
+
+// Buy tokens route
+router.post('/tokens', isLoggedIn, (req, res) => {
+  const query = { _id: req.user._id };
+  // TODO: Decrease user currency
+  user.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr }}, (err) => {
+    if (err) {
+      req.flash('error', err.message);
+    } else {
+      req.flash('success', 'Successfully purchased DYC-Coins!');
+      res.redirect('/dashboard/tokens');
+    }
+  });
+  
+});
+
 // Show all open offers
 router.get('/open', isLoggedIn, (req, res) => {
   product.find({ available: true, 'author.id': req.user._id }, (err, allproducts) => {
@@ -133,7 +153,7 @@ const imageFilter = (req, file, cb) => {
 };
 
 cloudinary.config({
-  cloud_name: 'dyc',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
@@ -263,5 +283,7 @@ router.delete('/:id', (req, res) => {
     }
   });
 });
+
+
 
 module.exports = router;

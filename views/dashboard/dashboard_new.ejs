@@ -1,75 +1,76 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="container content">
-    <div class="columns">
-        <% include ../partials/sidebar %>
+<div class="hero-body">
+    <div class="container content">
+        <div class="columns">
+            <% include ../partials/sidebar %>
 
-        <div class="column">
-            <form action="/dashboard" method="POST" enctype="multipart/form-data">
-                <input class="input smmargin" name="name" placeholder="Name" type="text" required />
-                
-                <div class="filencat">
-                    <div class="select">
-                        <select type="text" name="category">
-                            <option selected>All Categories</option>
-                            <option>Category 1</option>
-                            <option>Category 2</option>
-                        </select>
-                    </div>
-        
-                    <div class="file has-name">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="image" accept="image/*">
-                                <span class="file-cta">
-                                    <span class="file-icon">
-                                        <i class="fas fa-upload"></i>
+            <div class="column">
+                <form action="/dashboard" method="POST" enctype="multipart/form-data">
+                    <input class="input smmargin" name="name" placeholder="Name" type="text" required />
+                    
+                    <div class="filencat">
+                        <div class="select">
+                            <select type="text" name="category">
+                                <option selected>All Categories</option>
+                                <option>Category 1</option>
+                                <option>Category 2</option>
+                            </select>
+                        </div>
+            
+                        <div class="file has-name">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="image" accept="image/*">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                            <i class="fas fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Choose a file…
+                                        </span>
                                     </span>
-                                    <span class="file-label">
-                                        Choose a file…
+                                    <span class="file-name">
+                                    .jpeg .jpg .png
                                     </span>
-                                </span>
-                                <span class="file-name">
-                                .jpeg .jpg .png
-                                </span>
-                        </label>
+                            </label>
+                        </div>
                     </div>
-                </div>
-                
-                <textarea name="description" class="textarea" placeholder="Description"></textarea>
-                <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required />
-                <h4 style="margin-top: 1vh;">Accepted currencies</h4>
-                <label class="checkbox">
-                    <input name="accepted" type="checkbox" value="BTC">
-                        BTC
-                </label>
-                <label class="checkbox">
-                    <input name="accepted" type="checkbox" value="BCH">
-                        BCH
-                </label>
-                <label class="checkbox">
-                    <input name="accepted" type="checkbox" value="ETH">
-                        ETH
-                </label>
-                <label class="checkbox">
-                    <input name="accepted" type="checkbox" value="LTC">
-                        LTC
-                </label>
-                <label class="checkbox">
-                    <input name="accepted" type="checkbox" value="DASH">
-                        DASH
-                </label>
-                <div class="control smmargin">
-                    <button class="button is-primary">Create</button>
-                </div>
-                
-            </form>
-                
-                
+                    
+                    <textarea name="description" class="textarea" placeholder="Description"></textarea>
+                    <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required />
+                    <h4 style="margin-top: 1vh;">Accepted currencies</h4>
+                    <label class="checkbox">
+                        <input name="accepted" type="checkbox" value="BTC">
+                            BTC
+                    </label>
+                    <label class="checkbox">
+                        <input name="accepted" type="checkbox" value="BCH">
+                            BCH
+                    </label>
+                    <label class="checkbox">
+                        <input name="accepted" type="checkbox" value="ETH">
+                            ETH
+                    </label>
+                    <label class="checkbox">
+                        <input name="accepted" type="checkbox" value="LTC">
+                            LTC
+                    </label>
+                    <label class="checkbox">
+                        <input name="accepted" type="checkbox" value="DASH">
+                            DASH
+                    </label>
+                    <div class="control smmargin">
+                        <button class="button is-primary">Create</button>
+                    </div>
+                    
+                </form>
+                    
+                    
+            </div>
+            
         </div>
-        
     </div>
-</div>
     
-
+</div>
 
 <% include ../partials/footer %>

@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema({
   ethadr: String,
   ltcadr: String,
   dashadr: String,
+  feature_tokens: { type: Number, default: 0 },
 });
 
 UserSchema.plugin(findOrCreate);
