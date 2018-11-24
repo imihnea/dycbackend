@@ -15,7 +15,7 @@ Frontend:
 
         Top-up interface
         
-        Buy featured (tokens maybe?)
+        New deals => Multiple file input
 
     Low Priority:
 
