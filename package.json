@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Ionitamihnea/dycbackend#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.13.2",
     "compression": "^1.7.3",
@@ -51,7 +52,6 @@
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "node-sass": "^4.9.4",
-    "nodemon": "^1.18.5"
+    "node-sass": "^4.9.4"
   }
 }

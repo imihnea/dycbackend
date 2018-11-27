@@ -1,0 +1,20 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">
+        
+        <div class="columns toptitle">
+            <div class="column">
+                <h1>Forgot Password</h1>
+                <form action="/forgot" method="POST">
+                    <input class="input smmargin" name="email" placeholder="Email" type="email" required />
+                    <div class="control smmargin">
+                        <button class="button is-primary">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>

@@ -39,6 +39,7 @@ Backend:
 
       Login => Remember me checkbox working
             => Reset password
+            => Link accounts facebook,gmail etc to original
       
       Dashboard 
                => Settings

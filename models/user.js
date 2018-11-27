@@ -14,6 +14,8 @@ const UserSchema = new mongoose.Schema({
   },
   username: { type: String, set: toLower },
   password: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   facebookId: String,
   googleId: String,
   btcadr: String,

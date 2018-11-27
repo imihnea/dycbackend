@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">
+        
+        <div class="columns toptitle">
+            <div class="column">
+                <h1>Reset Your Password</h1>
+                <form action="/reset/<%= token %>" method="POST">
+                    <input class="input smmargin" name="password" placeholder="New password" type="password" required autofocus />
+                    <input class="input smmargin" name="confirm" placeholder="Confirm Password" type="password" required />
+                    <div class="control smmargin">
+                        <button class="button is-primary">Update Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>

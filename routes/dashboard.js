@@ -255,7 +255,7 @@ router.get('/:id/edit', isLoggedIn, checkUserproduct, (req, res) => {
 });
 
 // PUT - updates product in the database
-router.put('/:id', upload.single('image'), (req, res) => {
+router.put('/:id', upload.single('image'), checkUserproduct, (req, res) => {
   product.findById(req.params.id, async (err, Product) => {
     if (err) {
       req.flash('error', err.message);
@@ -285,7 +285,7 @@ router.put('/:id', upload.single('image'), (req, res) => {
 });
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkUserproduct, (req, res) => {
   product.findById(req.params.id, async (err, Product) => {
     if (err) {
       req.flash('error', err.message);
