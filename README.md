@@ -51,8 +51,8 @@ Backend:
                => Purchases
                   => Query purchased by author
       
-      Products
-               => Add currency used to buy
+      Featured
+               => Make featured types modular maybe? (separate collection with all featured types, make the new deal table get that data, etc.)
       Index 
                => Get products from the database
         
