@@ -85,7 +85,7 @@ router.get('/tokens', isLoggedIn, (req, res) => {
 // Buy tokens route
 router.post('/tokens', isLoggedIn, (req, res) => {
   const query = { _id: req.user._id };
-  user.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr }}, (err) => {
+  user.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr } }, (err) => {
     if (err) {
       req.flash('error', err.message);
     } else {
@@ -93,7 +93,6 @@ router.post('/tokens', isLoggedIn, (req, res) => {
       res.redirect('/dashboard/tokens');
     }
   });
-  
 });
 
 // Show all open offers
@@ -133,7 +132,7 @@ router.get('/purchases', isLoggedIn, (req, res) => {
 
 // NEW - show form to create new product
 router.get('/new', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_new', { user: req.user});
+  res.render('dashboard/dashboard_new', { user: req.user });
 });
 
 // Set Storage Engine
@@ -196,23 +195,23 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
       // Decrease feature_tokens and add featured status
       const query = req.user._id;
       console.log(req.body);
-      var feat_cost = 0;
-      if (req.body.feat_1){
-        feat_cost += parseInt(req.body.feat_1,10);
+      let featCost = 0;
+      if (req.body.feat_1) {
+        featCost += parseInt(req.body.feat_1, 10);
         newproduct.feat_1 = true;
       }
-      if (req.body.feat_2){
-        feat_cost += parseInt(req.body.feat_2,10);
+      if (req.body.feat_2) {
+        featCost += parseInt(req.body.feat_2, 10);
         newproduct.feat_2 = true;
       }
-      if (req.body.feat_3){
-        feat_cost += parseInt(req.body.feat_3,10);
+      if (req.body.feat_3) {
+        featCost += parseInt(req.body.feat_3, 10);
         newproduct.feat_3 = true;
       }
-      feat_cost *= -1;
-      user.findByIdAndUpdate(query, {$inc: { feature_tokens: feat_cost }}, (err) => {
-        if (err){
-          req.flash('error', err.message);
+      featCost *= -1;
+      user.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (error) => {
+        if (error) {
+          req.flash('error', error.message);
         }
       });
       // Create a new product and save to DB
@@ -225,7 +224,6 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
           res.redirect('/dashboard/open');
         }
       });
-      
     }
   });
 });
@@ -306,7 +304,6 @@ router.delete('/:id', (req, res) => {
     }
   });
 });
-
 
 
 module.exports = router;
