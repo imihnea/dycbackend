@@ -9,31 +9,26 @@
             <div class="column">
                 <div class="chpw">
                     <h2>Change Password</h2>
-                    <form action="/chgpw" method="POST">
-                        <input class="input smmargin" name="curr_password" placeholder="Current Password" type="password" required />
-                        <input class="input smmargin" name="new_password" placeholder="New Password" type="password" required />
-                        <input class="input smmargin" name="rep_password" placeholder="Repeat New Password" type="password" required />
+                    <form action="/forgot" method="POST">
+                        <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
                         <div class="control smmargin">
-                            <button class="button is-primary">Change Password</button>
+                            <button class="button is-primary">Click here to change your Password</button>
                         </div>
                     </form>
                 </div>
                 <hr />
                 <div class="chemail">
                     <h2>Change Email Address</h2>
-                    <form action="/chgemail" method="POST">
-                        <input class="input smmargin" name="new_email" placeholder="New Email Address" type="email" required />
-                        <input class="input smmargin" name="password" placeholder="Password" type="password" required />
-                        <div class="control smmargin">
-                            <button class="button is-primary">Change Email</button>
-                        </div>
-                    </form>
-                </div>
-                    
-        </div>
+                        <form action="/forgotemail" method="POST">
+                            <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
+                            <div class="control smmargin">
+                                <button class="button is-primary">Click here to change your Email</button>
+                            </div>
+                        </form>
+                </div> 
+            </div>
         </div>
     </div>
-    
 </div>
 
 <% include ../partials/footer %>

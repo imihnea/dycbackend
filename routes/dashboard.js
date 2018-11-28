@@ -7,7 +7,7 @@ const cloudinary = require('cloudinary');
 
 const product = require('../models/product');
 
-const user = require('../models/user');
+const User = require('../models/user');
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ const { isLoggedIn, checkUserproduct } = middleware; // destructuring assignment
 
 // Dashboard index route
 router.get('/', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard');
+  res.render('dashboard/dashboard', { user: req.user });
 });
 
 // Show all addresses for withdraw
@@ -30,7 +30,7 @@ router.post('/addresses', isLoggedIn, (req, res) => {
   const name = req.body.btcadr || req.body.bchadr || req.body.ethadr
                                || req.body.ltcadr || req.body.dashadr;
   if (name === req.body.btcadr) {
-    user.findByIdAndUpdate(query, { btcadr: name }, (err) => {
+    User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
       if (err) {
         req.flash('error', err.message);
       } else {
@@ -39,7 +39,7 @@ router.post('/addresses', isLoggedIn, (req, res) => {
       }
     });
   } else if (name === req.body.bchadr) {
-    user.findByIdAndUpdate(query, { bchadr: name }, (err) => {
+    User.findByIdAndUpdate(query, { bchadr: name }, (err) => {
       if (err) {
         req.flash('error', err.message);
       } else {
@@ -48,7 +48,7 @@ router.post('/addresses', isLoggedIn, (req, res) => {
       }
     });
   } else if (name === req.body.ethadr) {
-    user.findByIdAndUpdate(query, { ethadr: name }, (err) => {
+    User.findByIdAndUpdate(query, { ethadr: name }, (err) => {
       if (err) {
         req.flash('error', err.message);
       } else {
@@ -57,7 +57,7 @@ router.post('/addresses', isLoggedIn, (req, res) => {
       }
     });
   } else if (name === req.body.ltcadr) {
-    user.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
+    User.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
       if (err) {
         req.flash('error', err.message);
       } else {
@@ -66,7 +66,7 @@ router.post('/addresses', isLoggedIn, (req, res) => {
       }
     });
   } else if (name === req.body.dashadr) {
-    user.findByIdAndUpdate(query, { dashadr: name }, (err) => {
+    User.findByIdAndUpdate(query, { dashadr: name }, (err) => {
       if (err) {
         req.flash('error', err.message);
       } else {
@@ -85,7 +85,7 @@ router.get('/tokens', isLoggedIn, (req, res) => {
 // Buy tokens route
 router.post('/tokens', isLoggedIn, (req, res) => {
   const query = { _id: req.user._id };
-  user.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr } }, (err) => {
+  User.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr } }, (err) => {
     if (err) {
       req.flash('error', err.message);
     } else {
@@ -166,7 +166,6 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
   // get data from form and add to products array
   cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
     const name = req.body.name;
-    console.log(err);
     req.body.image = result.secure_url;
     req.body.imageId = result.public_id;
     const description = req.body.description;
@@ -194,7 +193,6 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
     } else {
       // Decrease feature_tokens and add featured status
       const query = req.user._id;
-      console.log(req.body);
       let featCost = 0;
       if (req.body.feat_1) {
         featCost += parseInt(req.body.feat_1, 10);
@@ -209,7 +207,7 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
         newproduct.feat_3 = true;
       }
       featCost *= -1;
-      user.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (error) => {
+      User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (error) => {
         if (error) {
           req.flash('error', error.message);
         }

@@ -89,7 +89,7 @@ router.post('/forgot', (req, res, next) => {
     },
   ], (err) => {
     if (err) return next(err);
-    res.redirect('/forgot');
+    res.redirect('back');
   });
 });
 
@@ -278,24 +278,145 @@ router.post('/contact/send', (req, res) => {
 
     // setup email data with unicode symbols
     const mailOptions = {
-      from: "'Deal Your Crypto' <k4nsyiavbcbmtcxx@ethereal.email>", // sender address
+      from: `${req.body.name} <${req.body.email}>`, // sender address
       to: 'support@dyc.com', // list of receivers
       subject: 'Deal Your Crypto - Contact Request', // Subject line
       html: output, // html body
     };
 
     // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
       if (error) {
         req.flash('error', `${error.message}`);
         res.render('back', { error: error.message });
       }
-      console.log('Message sent: %s', info.messageId);
-      // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
       req.flash('success', 'Successfully sent a mail! We will get back to you as soon as possible!');
       res.redirect('/contact');
     });
+  });
+});
+
+// Reset email
+router.post('/forgotemail', (req, res, next) => {
+  async.waterfall([
+    (done) => {
+      crypto.randomBytes(20, (err, buf) => {
+        const token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    (token, done) => {
+      User.findOne({ email: req.body.email }, (err, user) => {
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.');
+          return res.redirect('/dashboard');
+        }
+
+        user.resetEmailToken = token;
+        user.resetEmailExpires = Date.now() + 3600000; // 1 hour
+
+        user.save((error) => {
+          done(error, token, user);
+        });
+      });
+    },
+    (token, user, done) => {
+      const smtpTransport = nodemailer.createTransport({
+        host: EMAIL_HOST,
+        port: EMAIL_PORT,
+        auth: {
+          user: EMAIL_USER,
+          pass: EMAIL_API_KEY,
+        },
+      });
+      const mailOptions = {
+        to: user.email,
+        from: 'support@dyc.com',
+        subject: 'Deal Your Crypto Change Email Request',
+        text: `${'You are receiving this because you (or someone else) have requested to change the email for your account.\n\n'
+          + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
+          + 'http://'}${req.headers.host}/resetemail/${token}\n\n`
+          + 'If you did not request this, please ignore this email and your email will remain unchanged.\n',
+      };
+      smtpTransport.sendMail(mailOptions, (err) => {
+        req.flash('success', `An e-mail has been sent to ${user.email} with further instructions.`);
+        done(err, 'done');
+      });
+    },
+  ], (err) => {
+    if (err) return next(err);
+    res.redirect('back');
+  });
+});
+
+router.get('/resetemail/:token', (req, res) => {
+  User.findOne(
+    {
+      resetEmailToken: req.params.token,
+      resetEmailExpires: { $gt: Date.now() },
+    }, (err, user) => {
+      if (!user) {
+        req.flash('error', 'Email reset token is invalid or has expired.');
+        return res.redirect('/resetemail');
+      }
+      res.render('index/resetemail', { token: req.params.token });
+    },
+  );
+});
+
+router.post('/resetemail/:token', (req, res) => {
+  async.waterfall([
+    (done) => {
+      User.findOne(
+        {
+          resetEmailToken: req.params.token,
+          resetEmailExpires: { $gt: Date.now() },
+        }, (err, user) => {
+          if (!user) {
+            req.flash('error', 'Email reset token is invalid or has expired.');
+            return res.redirect('back');
+          }
+          if (req.body.email === req.body.confirm) {
+            User.findByIdAndUpdate(req.user._id, { email: req.body.email }, () => {
+              user.resetEmailToken = undefined;
+              user.resetEmailExpires = undefined;
+
+              user.save(() => {
+                req.logIn(user, (error) => {
+                  done(error, user);
+                });
+              });
+            });
+          } else {
+            req.flash('error', 'Emails do not match.');
+            return res.redirect('back');
+          }
+        },
+      );
+    },
+    (user, done) => {
+      const smtpTransport = nodemailer.createTransport({
+        host: EMAIL_HOST,
+        port: EMAIL_PORT,
+        auth: {
+          user: EMAIL_USER,
+          pass: EMAIL_API_KEY,
+        },
+      });
+      const mailOptions = {
+        to: user.email,
+        from: 'support@dyc.com',
+        subject: 'Your email has been changed',
+        text: `${'Hello,\n\n'
+          + 'This is a confirmation that the email for your account '}${user.email} has just been changed.\n`,
+      };
+      smtpTransport.sendMail(mailOptions, (err) => {
+        req.flash('success', 'Success! Your email has been changed.');
+        done(err);
+      });
+    },
+  ], () => {
+    res.redirect('/');
   });
 });
 

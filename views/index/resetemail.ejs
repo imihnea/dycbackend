@@ -6,12 +6,12 @@
         
         <div class="columns toptitle">
             <div class="column">
-                <h1>Reset Your Password</h1>
+                <h1>Change Your Email</h1>
                 <form action="/resetemail/<%= token %>" method="POST">
-                    <input class="input smmargin" name="password" placeholder="New password" type="password" required autofocus />
-                    <input class="input smmargin" name="confirm" placeholder="Confirm Password" type="password" required />
+                    <input class="input smmargin" name="email" placeholder="New email" type="email" required autofocus />
+                    <input class="input smmargin" name="confirm" placeholder="Confirm email" type="email" required />
                     <div class="control smmargin">
-                        <button class="button is-primary">Update Password</button>
+                        <button class="button is-primary">Update Email</button>
                     </div>
                 </form>
             </div>
