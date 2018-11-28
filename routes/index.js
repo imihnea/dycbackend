@@ -189,14 +189,18 @@ router.get('/login', (req, res) => {
   res.render('index/login', { page: 'login' });
 });
 
-//  handling login logic
+//  handling login logic - test this in prod
 router.post('/login', passport.authenticate('local',
   {
-    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true,
-    successFlash: 'Welcome to Deal Your Crypto!',
-  }), () => {
+  }), (req, res) => {
+  if (req.body.remember) {
+    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
+  } else {
+    req.session.cookie.expires = false; // Cookie expires at end of session
+  }
+  res.redirect('/');
 });
 
 router.get('/auth/facebook',
