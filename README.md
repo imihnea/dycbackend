@@ -28,23 +28,18 @@ Frontend:
 
 Backend:
 
-   High Priority (Sprint):
+   High Priority:
 
       Dashboard => Add balance route
-               => New deal
-                  => Post req, pictures logic
       Search bar => Routes and logic for search via category and all
 
-   Low Priority (Walk):
+   Low Priority:
 
-      Login => Remember me checkbox working
-            => Reset password
-            => Link accounts facebook,gmail etc to original
+      Login => Link accounts facebook,gmail etc to original
       
       Dashboard 
                => Settings
-                  => Change password
-                  => Change Email
+                  => New stuff here, maybe avatar, 2FA, connections.
                => New Deals
                   => Test multiple file input
                => Closed Deals
