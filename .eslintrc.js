@@ -5,5 +5,6 @@ module.exports = {
         "no-underscore-dangle": "off",
         "object-shorthand": "off",
         "consistent-return": "off",
+        "linebreak-style": ["error", "windows"]
     }
 };

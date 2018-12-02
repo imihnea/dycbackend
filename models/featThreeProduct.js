@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ProductSchema = new mongoose.Schema({
+const featThreeSchema = new mongoose.Schema({
   name: String,
   image: String,
   imageId: String,
@@ -9,9 +9,8 @@ const ProductSchema = new mongoose.Schema({
   status: String,
   price: Number,
   accepted: Array,
-  // featured: Boolean,
   available: { type: Boolean, default: true },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now(), expires: 30 },
   buyer: String,
   bought_with: String,
   author: {
@@ -23,4 +22,4 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Product', ProductSchema);
+module.exports = mongoose.model('FeatThreeProduct', featThreeSchema);

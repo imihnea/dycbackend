@@ -1,9 +1,17 @@
 /* eslint-disable no-param-reassign */
 const express = require('express');
 
+// const mongoose = require('mongoose');
+
 const multer = require('multer');
 
 const cloudinary = require('cloudinary');
+
+const featOneProduct = require('../models/featOneProduct');
+
+const featTwoProduct = require('../models/featTwoProduct');
+
+const featThreeProduct = require('../models/featThreeProduct');
 
 const product = require('../models/product');
 
@@ -191,32 +199,56 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
     } else if (req.file === undefined) {
       req.flash('error', err.message);
     } else {
-      // Decrease feature_tokens and add featured status
-      const query = req.user._id;
-      let featCost = 0;
-      if (req.body.feat_1) {
-        featCost += parseInt(req.body.feat_1, 10);
-        newproduct.feat_1 = true;
-      }
-      if (req.body.feat_2) {
-        featCost += parseInt(req.body.feat_2, 10);
-        newproduct.feat_2 = true;
-      }
-      if (req.body.feat_3) {
-        featCost += parseInt(req.body.feat_3, 10);
-        newproduct.feat_3 = true;
-      }
-      featCost *= -1;
-      User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (error) => {
-        if (error) {
-          req.flash('error', error.message);
-        }
-      });
       // Create a new product and save to DB
       product.create(newproduct, (error) => {
         if (error) {
           req.flash('error', error.message);
         } else {
+          // Find out what kind of featuring is enabled
+          let featCost = 0;
+          const feat = [];
+          if (req.body.feat_1) {
+            featCost += parseInt(req.body.feat_1, 10);
+            feat[0] = true;
+          }
+          if (req.body.feat_2) {
+            featCost += parseInt(req.body.feat_2, 10);
+            feat[1] = true;
+          }
+          if (req.body.feat_3) {
+            featCost += parseInt(req.body.feat_3, 10);
+            feat[2] = true;
+          }
+          // Decrease feature_tokens and add featured status
+          // TODO: verify if feature_tokens >= featCost
+          featCost *= -1;
+          const query = req.user._id;
+          User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (errr) => {
+            if (errr) {
+              req.flash('error', errr.message);
+            }
+          });
+          if (feat[0] === true) {
+            featOneProduct.create(newproduct, (e) => {
+              if (e) {
+                req.flash('error', e.message);
+              }
+            });
+          }
+          if (feat[1] === true) {
+            featTwoProduct.create(newproduct, (e) => {
+              if (e) {
+                req.flash('error', e.message);
+              }
+            });
+          }
+          if (feat[2] === true) {
+            featThreeProduct.create(newproduct, (e) => {
+              if (e) {
+                req.flash('error', e.message);
+              }
+            });
+          }
           req.flash('success', 'Successfully added a new product!');
           // redirect back to products page
           res.redirect('/dashboard/open');

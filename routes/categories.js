@@ -125,7 +125,14 @@ router.get('/Collectibles-Art/Collectibles', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Collectibles-Art',
+        subfirst: 'Collectibles',
+        subsecond: 'Antiques',
+        subthird: 'SportsMemorabilia',
+        subfourth: 'Art',
+      });
     }
   });
 });
@@ -137,7 +144,14 @@ router.get('/Collectibles-Art/Antiques', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Collectibles-Art',
+        subfirst: 'Collectibles',
+        subsecond: 'Antiques',
+        subthird: 'SportsMemorabilia',
+        subfourth: 'Art',
+      });
     }
   });
 });
@@ -149,7 +163,14 @@ router.get('/Collectibles-Art/SportsMemorabilia', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Collectibles-Art',
+        subfirst: 'Collectibles',
+        subsecond: 'Antiques',
+        subthird: 'SportsMemorabilia',
+        subfourth: 'Art',
+      });
     }
   });
 });
@@ -161,7 +182,14 @@ router.get('/Collectibles-Art/Art', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Collectibles-Art',
+        subfirst: 'Collectibles',
+        subsecond: 'Antiques',
+        subthird: 'SportsMemorabilia',
+        subfourth: 'Art',
+      });
     }
   });
 });
@@ -174,7 +202,14 @@ router.get('/Home-Garden/YardGardenOutdoor', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Home-Garden',
+        subfirst: 'YardGardenOutdoor',
+        subsecond: 'Crafts',
+        subthird: 'HomeImprovement',
+        subfourth: 'PetSupplies',
+      });
     }
   });
 });
@@ -186,7 +221,14 @@ router.get('/Home-Garden/Crafts', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Home-Garden',
+        subfirst: 'YardGardenOutdoor',
+        subsecond: 'Crafts',
+        subthird: 'HomeImprovement',
+        subfourth: 'PetSupplies',
+      });
     }
   });
 });
@@ -198,7 +240,14 @@ router.get('/Home-Garden/HomeImprovement', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Home-Garden',
+        subfirst: 'YardGardenOutdoor',
+        subsecond: 'Crafts',
+        subthird: 'HomeImprovement',
+        subfourth: 'PetSupplies',
+      });
     }
   });
 });
@@ -210,7 +259,14 @@ router.get('/Home-Garden/PetSupplies', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Home-Garden',
+        subfirst: 'YardGardenOutdoor',
+        subsecond: 'Crafts',
+        subthird: 'HomeImprovement',
+        subfourth: 'PetSupplies',
+      });
     }
   });
 });
@@ -223,7 +279,14 @@ router.get('/Sporting-Goods/OutdoorSports', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Sporting-Goods',
+        subfirst: 'OutdoorSports',
+        subsecond: 'TeamSports',
+        subthird: 'ExerciseFitness',
+        subfourth: 'Golf',
+      });
     }
   });
 });
@@ -235,7 +298,14 @@ router.get('/Sporting-Goods/TeamSports', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Sporting-Goods',
+        subfirst: 'OutdoorSports',
+        subsecond: 'TeamSports',
+        subthird: 'ExerciseFitness',
+        subfourth: 'Golf',
+      });
     }
   });
 });
@@ -247,7 +317,14 @@ router.get('/Sporting-Goods/ExerciseFitness', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Sporting-Goods',
+        subfirst: 'OutdoorSports',
+        subsecond: 'TeamSports',
+        subthird: 'ExerciseFitness',
+        subfourth: 'Golf',
+      });
     }
   });
 });
@@ -259,7 +336,14 @@ router.get('/Sporting-Goods/Golf', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Sporting-Goods',
+        subfirst: 'OutdoorSports',
+        subsecond: 'TeamSports',
+        subthird: 'ExerciseFitness',
+        subfourth: 'Golf',
+      });
     }
   });
 });
@@ -272,7 +356,14 @@ router.get('/Electronics/ComputersTablets', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Electronics',
+        subfirst: 'ComputersTablets',
+        subsecond: 'CamerasPhoto',
+        subthird: 'TvAudioSurveillance',
+        subfourth: 'PhonesAndAccessories',
+      });
     }
   });
 });
@@ -284,7 +375,14 @@ router.get('/Electronics/CamerasPhoto', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Electronics',
+        subfirst: 'ComputersTablets',
+        subsecond: 'CamerasPhoto',
+        subthird: 'TvAudioSurveillance',
+        subfourth: 'PhonesAndAccessories',
+      });
     }
   });
 });
@@ -296,7 +394,14 @@ router.get('/Electronics/TvAudioSurveillance', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Electronics',
+        subfirst: 'ComputersTablets',
+        subsecond: 'CamerasPhoto',
+        subthird: 'TvAudioSurveillance',
+        subfourth: 'PhonesAndAccessories',
+      });
     }
   });
 });
@@ -308,7 +413,14 @@ router.get('/Electronics/PhonesAndAccessories', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Electronics',
+        subfirst: 'ComputersTablets',
+        subsecond: 'CamerasPhoto',
+        subthird: 'TvAudioSurveillance',
+        subfourth: 'PhonesAndAccessories',
+      });
     }
   });
 });
@@ -321,7 +433,14 @@ router.get('/AutoParts-Accessories/GpsSecurity', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'AutoParts-Accessories',
+        subfirst: 'GpsSecurity',
+        subsecond: 'RadarLaser',
+        subthird: 'CareDetailing',
+        subfourth: 'Scooter',
+      });
     }
   });
 });
@@ -333,7 +452,14 @@ router.get('/AutoParts-Accessories/RadarLaser', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'AutoParts-Accessories',
+        subfirst: 'GpsSecurity',
+        subsecond: 'RadarLaser',
+        subthird: 'CareDetailing',
+        subfourth: 'Scooter',
+      });
     }
   });
 });
@@ -345,7 +471,14 @@ router.get('/AutoParts-Accessories/CareDetailing', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'AutoParts-Accessories',
+        subfirst: 'GpsSecurity',
+        subsecond: 'RadarLaser',
+        subthird: 'CareDetailing',
+        subfourth: 'Scooter',
+      });
     }
   });
 });
@@ -357,7 +490,14 @@ router.get('/AutoParts-Accessories/Scooter', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'AutoParts-Accessories',
+        subfirst: 'GpsSecurity',
+        subsecond: 'RadarLaser',
+        subthird: 'CareDetailing',
+        subfourth: 'Scooter',
+      });
     }
   });
 });
@@ -370,7 +510,14 @@ router.get('/Toys-Hobbies/RadioControl', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Toys-Hobbies',
+        subfirst: 'RadioControl',
+        subsecond: 'KidsToys',
+        subthird: 'ActionFigures',
+        subfourth: 'DollsBears',
+      });
     }
   });
 });
@@ -382,7 +529,14 @@ router.get('/Toys-Hobbies/KidsToys', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Toys-Hobbies',
+        subfirst: 'RadioControl',
+        subsecond: 'KidsToys',
+        subthird: 'ActionFigures',
+        subfourth: 'DollsBears',
+      });
     }
   });
 });
@@ -394,7 +548,14 @@ router.get('/Toys-Hobbies/ActionFigures', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Toys-Hobbies',
+        subfirst: 'RadioControl',
+        subsecond: 'KidsToys',
+        subthird: 'ActionFigures',
+        subfourth: 'DollsBears',
+      });
     }
   });
 });
@@ -406,7 +567,14 @@ router.get('/Toys-Hobbies/DollsBears', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Toys-Hobbies',
+        subfirst: 'RadioControl',
+        subsecond: 'KidsToys',
+        subthird: 'ActionFigures',
+        subfourth: 'DollsBears',
+      });
     }
   });
 });
@@ -419,7 +587,14 @@ router.get('/Fashion/Women', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Fashion',
+        subfirst: 'Women',
+        subsecond: 'Men',
+        subthird: 'JewelryWatches',
+        subfourth: 'Shoes',
+      });
     }
   });
 });
@@ -431,7 +606,14 @@ router.get('/Fashion/Men', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Fashion',
+        subfirst: 'Women',
+        subsecond: 'Men',
+        subthird: 'JewelryWatches',
+        subfourth: 'Shoes',
+      });
     }
   });
 });
@@ -443,7 +625,14 @@ router.get('/Fashion/JewelryWatches', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Fashion',
+        subfirst: 'Women',
+        subsecond: 'Men',
+        subthird: 'JewelryWatches',
+        subfourth: 'Shoes',
+      });
     }
   });
 });
@@ -455,7 +644,14 @@ router.get('/Fashion/Shoes', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Fashion',
+        subfirst: 'Women',
+        subsecond: 'Men',
+        subthird: 'JewelryWatches',
+        subfourth: 'Shoes',
+      });
     }
   });
 });
@@ -468,7 +664,14 @@ router.get('/MusicalInstruments-Gear/Guitar', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'MusicalInstruments-Gear',
+        subfirst: 'Guitar',
+        subsecond: 'ProAudio',
+        subthird: 'String',
+        subfourth: 'StageLightningEffects',
+      });
     }
   });
 });
@@ -480,7 +683,14 @@ router.get('/MusicalInstruments-Gear/ProAudio', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'MusicalInstruments-Gear',
+        subfirst: 'Guitar',
+        subsecond: 'ProAudio',
+        subthird: 'String',
+        subfourth: 'StageLightningEffects',
+      });
     }
   });
 });
@@ -492,7 +702,14 @@ router.get('/MusicalInstruments-Gear/String', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'MusicalInstruments-Gear',
+        subfirst: 'Guitar',
+        subsecond: 'ProAudio',
+        subthird: 'String',
+        subfourth: 'StageLightningEffects',
+      });
     }
   });
 });
@@ -504,7 +721,14 @@ router.get('/MusicalInstruments-Gear/StageLightningEffects', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'MusicalInstruments-Gear',
+        subfirst: 'Guitar',
+        subsecond: 'ProAudio',
+        subthird: 'String',
+        subfourth: 'StageLightningEffects',
+      });
     }
   });
 });
@@ -517,7 +741,14 @@ router.get('/Other/VideoGamesConsoles', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Other',
+        subfirst: 'VideoGamesConsoles',
+        subsecond: 'HealthBeauty',
+        subthird: 'Baby',
+        subfourth: 'BusinessIndustrial',
+      });
     }
   });
 });
@@ -529,7 +760,14 @@ router.get('/Other/HealthBeauty', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Other',
+        subfirst: 'VideoGamesConsoles',
+        subsecond: 'HealthBeauty',
+        subthird: 'Baby',
+        subfourth: 'BusinessIndustrial',
+      });
     }
   });
 });
@@ -541,7 +779,14 @@ router.get('/Other/Baby', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Other',
+        subfirst: 'VideoGamesConsoles',
+        subsecond: 'HealthBeauty',
+        subthird: 'Baby',
+        subfourth: 'BusinessIndustrial',
+      });
     }
   });
 });
@@ -553,7 +798,14 @@ router.get('/Other/BusinessIndustrial', (req, res) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      res.render('products/product_all', { products: allproducts });
+      res.render('products/product_all', {
+        products: allproducts,
+        main: 'Other',
+        subfirst: 'VideoGamesConsoles',
+        subsecond: 'HealthBeauty',
+        subthird: 'Baby',
+        subfourth: 'BusinessIndustrial',
+      });
     }
   });
 });
