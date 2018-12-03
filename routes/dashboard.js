@@ -341,5 +341,136 @@ router.delete('/:id', checkUserproduct, (req, res) => {
   });
 });
 
+// Subcategory featuring
+router.post('/feature/subcateg/:id', isLoggedIn, checkUserproduct, (req, res) => {
+  product.findById(req.params.id, (err, Product) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('back');
+    } else {
+      const prod = {
+        name: Product.name,
+        image: Product.image,
+        imageId: Product.imageId,
+        category: Product.category,
+        description: Product.description,
+        price: Product.price,
+        author: Product.author,
+        accepted: Product.accepted,
+      };
+      const query = req.user._id;
+      User.findById(query, (errorUser, user) => {
+        if (errorUser) {
+          req.flash('error', errorUser.message);
+        } else if (user.feature_tokens < 5) {
+          req.flash('error', 'Not enough DYC-Coins.');
+          res.redirect('/dashboard/open');
+        } else {
+          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
+            if (errr) {
+              req.flash('error', errr.message);
+            }
+          });
+          featOneProduct.create(prod, (e) => {
+            if (e) {
+              req.flash('error', e.message);
+            } else {
+              req.flash('success', 'The deal has been featured successfully.');
+              res.redirect('/dashboard/open');
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+// Front page featuring
+router.post('/feature/front/:id', isLoggedIn, checkUserproduct, (req, res) => {
+  product.findById(req.params.id, (err, Product) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('back');
+    } else {
+      const prod = {
+        name: Product.name,
+        image: Product.image,
+        imageId: Product.imageId,
+        category: Product.category,
+        description: Product.description,
+        price: Product.price,
+        author: Product.author,
+        accepted: Product.accepted,
+      };
+      const query = req.user._id;
+      User.findById(query, (errorUser, user) => {
+        if (errorUser) {
+          req.flash('error', errorUser.message);
+        } else if (user.feature_tokens < 15) {
+          req.flash('error', 'Not enough DYC-Coins.');
+          res.redirect('/dashboard/open');
+        } else {
+          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
+            if (errr) {
+              req.flash('error', errr.message);
+            }
+          });
+          featTwoProduct.create(prod, (e) => {
+            if (e) {
+              req.flash('error', e.message);
+            } else {
+              req.flash('success', 'The deal has been featured successfully.');
+              res.redirect('/dashboard/open');
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+// Front page slider featuring
+router.post('/feature/slider/:id', isLoggedIn, checkUserproduct, (req, res) => {
+  product.findById(req.params.id, (err, Product) => {
+    if (err) {
+      req.flash('error', err.message);
+      res.redirect('back');
+    } else {
+      const prod = {
+        name: Product.name,
+        image: Product.image,
+        imageId: Product.imageId,
+        category: Product.category,
+        description: Product.description,
+        price: Product.price,
+        author: Product.author,
+        accepted: Product.accepted,
+      };
+      const query = req.user._id;
+      User.findById(query, (errorUser, user) => {
+        if (errorUser) {
+          req.flash('error', errorUser.message);
+        } else if (user.feature_tokens < 20) {
+          req.flash('error', 'Not enough DYC-Coins.');
+          res.redirect('/dashboard/open');
+        } else {
+          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
+            if (errr) {
+              req.flash('error', errr.message);
+            }
+          });
+          featThreeProduct.create(prod, (e) => {
+            if (e) {
+              req.flash('error', e.message);
+            } else {
+              req.flash('success', 'The deal has been featured successfully.');
+              res.redirect('/dashboard/open');
+            }
+          });
+        }
+      });
+    }
+  });
+});
 
 module.exports = router;

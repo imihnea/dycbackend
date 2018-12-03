@@ -54,9 +54,7 @@
                             <option <% if ( product.category == "businessindustrial") { %> selected <% } else { %> <% } %>  value="businessindustrial">Business & Industrial</option>
                     </select>
                 </div>
-    <script>
-        
-    </script>
+
                 <div class="file has-name">
                     <label class="file-label">
                         <input class="file-input" type="file" name="image" accept="image/*">
@@ -143,49 +141,7 @@
                         DASH
                 <% } %>
             </label>
-            <hr />
-            <h4 style="margin-top: 1vh;">Feature your deal</h4>
-            <h5>You have <%= user.feature_tokens %> DYC-Coins</h5>
-            <table class="table is-hoverable is-bordered">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Duration</th>
-                        <th>Cost</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Subcategory feature</td>
-                        <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
-                        <td>14 days</td>
-                        <td>5 DYC-Coins</td>
-                        <td>
-                            <input name="feat_1" type="checkbox" value="5">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Front-page feature</td>
-                        <td>The deal will be shown on the front-page of the website.</td>
-                        <td>7 days</td>
-                        <td>15 DYC-Coins</td>
-                        <td>
-                            <input name="feat_2" type="checkbox" value="15">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Slider feature</td>
-                        <td>The deal will be shown on the front-page slider.</td>
-                        <td>3 days</td>
-                        <td>20 DYC-Coins</td>
-                        <td>
-                            <input name="feat_3" type="checkbox" value="20">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            
             <div class="control smmargin">
                 <button class="button is-primary">Update</button>
             </div>
@@ -193,6 +149,60 @@
             
 
         </form>
-            
+        <hr />
+        <h4 style="margin-top: 1vh;">Feature your deal</h4>
+        <h5>You have <%= user.feature_tokens %> DYC-Coins</h5>
+        <table class="table is-hoverable is-bordered">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Duration</th>
+                    <th>Cost</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Subcategory feature</td>
+                    <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
+                    <td>14 days</td>
+                    <td>5 DYC-Coins</td>
+                    <td>
+                        <form action="/dashboard/feature/subcateg/<%= product._id %>" method="POST">
+                            <div class="control smmargin">
+                                <button class="button is-primary">Feature</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Front-page feature</td>
+                    <td>The deal will be shown on the front-page of the website.</td>
+                    <td>7 days</td>
+                    <td>15 DYC-Coins</td>
+                    <td>
+                        <form action="/dashboard/feature/front/<%= product._id %>" method="POST">
+                            <div class="control smmargin">
+                                <button class="button is-primary">Feature</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Slider feature</td>
+                    <td>The deal will be shown on the front-page slider.</td>
+                    <td>3 days</td>
+                    <td>20 DYC-Coins</td>
+                    <td>
+                        <form action="/dashboard/feature/slider/<%= product._id %>" method="POST">
+                            <div class="control smmargin">
+                                <button class="button is-primary">Feature</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
             
     </div>
