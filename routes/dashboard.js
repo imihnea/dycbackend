@@ -218,7 +218,6 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
             feat[2] = true;
           }
           // Decrease feature_tokens and add featured status
-          // TODO: verify if feature_tokens >= featCost
           featCost *= -1;
           const query = req.user._id;
           User.findById(query, (errorUser, user) => {
@@ -286,7 +285,7 @@ router.get('/:id/edit', isLoggedIn, checkUserproduct, (req, res) => {
       res.redirect('/dashboard/open');
     } else {
       // render edit template with that product
-      res.render('dashboard/dashboard_edit', { product: foundproduct });
+      res.render('dashboard/dashboard_edit', { product: foundproduct, user: req.user });
     }
   });
 });
