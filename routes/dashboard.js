@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 const express = require('express');
 
-// const mongoose = require('mongoose');
-
 const multer = require('multer');
 
 const cloudinary = require('cloudinary');
@@ -223,35 +221,44 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
           // TODO: verify if feature_tokens >= featCost
           featCost *= -1;
           const query = req.user._id;
-          User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (errr) => {
-            if (errr) {
-              req.flash('error', errr.message);
+          User.findById(query, (errorUser, user) => {
+            if (errorUser) {
+              req.flash('error', errorUser.message);
+            } else if (user.feature_tokens < (featCost * -1)) {
+              req.flash('error', 'The deal was created, but you do not have enough DYC-Coins for the selected feature types. You can set them later in the "Open Deals" tab. ');
+              res.redirect('/dashboard/open');
+            } else {
+              User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (errr) => {
+                if (errr) {
+                  req.flash('error', errr.message);
+                }
+              });
+              if (feat[0] === true) {
+                featOneProduct.create(newproduct, (e) => {
+                  if (e) {
+                    req.flash('error', e.message);
+                  }
+                });
+              }
+              if (feat[1] === true) {
+                featTwoProduct.create(newproduct, (e) => {
+                  if (e) {
+                    req.flash('error', e.message);
+                  }
+                });
+              }
+              if (feat[2] === true) {
+                featThreeProduct.create(newproduct, (e) => {
+                  if (e) {
+                    req.flash('error', e.message);
+                  }
+                });
+              }
+              req.flash('success', 'Successfully added a new product!');
+              // redirect back to products page
+              res.redirect('/dashboard/open');
             }
           });
-          if (feat[0] === true) {
-            featOneProduct.create(newproduct, (e) => {
-              if (e) {
-                req.flash('error', e.message);
-              }
-            });
-          }
-          if (feat[1] === true) {
-            featTwoProduct.create(newproduct, (e) => {
-              if (e) {
-                req.flash('error', e.message);
-              }
-            });
-          }
-          if (feat[2] === true) {
-            featThreeProduct.create(newproduct, (e) => {
-              if (e) {
-                req.flash('error', e.message);
-              }
-            });
-          }
-          req.flash('success', 'Successfully added a new product!');
-          // redirect back to products page
-          res.redirect('/dashboard/open');
         }
       });
     }
