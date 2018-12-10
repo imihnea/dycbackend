@@ -39,23 +39,23 @@
                             <p class="title is-5"><%= product.name %></p>
                             <p class="subtitle is-6"><%= product.description %></p>
                             <p class="subtitle is-6">$<%= product.price %><br/><sub>Shipping: TBD</sub></p>
-                            <a href="/categories/products/<%= product._id %>/view"><button class="button is-primary">Buy</button></a>
+                            <a href="/products/<%= product._id %>/view"><button class="button is-primary">View</button></a>
                         </div>
                         <div class="column prod_info">
                             <p><% if (product.accepted[0]){ %>
-                                BTC<br/>
+                                <%= product.accepted[0] %><br/>
                             <% } %>
                             <% if (product.accepted[1]){ %>
-                                BCH<br/>
+                                <%= product.accepted[1] %><br/>
                             <% } %>
                             <% if (product.accepted[2]){ %>
-                                ETH<br/>
+                                <%= product.accepted[2] %><br/>
                             <% } %>
                             <% if (product.accepted[3]){ %>
-                                LTC<br/>
+                                <%= product.accepted[3] %><br/>
                             <% } %>
                             <% if (product.accepted[4]){ %>
-                                DASH
+                                <%= product.accepted[4] %>
                             <% } %></p>
                         </div>
                         

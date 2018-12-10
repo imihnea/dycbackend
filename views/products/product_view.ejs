@@ -1,0 +1,81 @@
+<% include ../partials/header %>
+<script src="../../dist/js/maincateg.js"></script>
+<script src="../../dist/js/products.js"></script>       
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
+
+<div class="hero-body">
+    <div class="container ">
+        <div class="column">
+            <h2><strong><%= product.name %></strong></h2>
+        </div>
+        <hr>
+        
+        <div class="columns">
+            <div class="column is-three-fifths">
+                <img src="<%= product.image %>">
+
+            </div>
+
+            <div class="column">
+                <p><%= product.price %> $</p>
+                <p><sub>Transportation cost: TBD</sub></p>
+                <hr>
+                <form action="/products/<%= product.id %>/buy" method="POST">
+                    <p>Accepted currencies</p>
+                    <% 
+                        product.accepted.forEach(( key ) => {
+                            if (key == 'BTC'){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
+                                    <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="BTC" required>
+                                </label>
+                            <% }
+                            if (key == 'BCH'){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
+                                    <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="BCH">
+                                </label>
+                            <% }
+                            if (key == 'ETH'){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
+                                    <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="ETH">
+                                </label>
+                            <% }
+                            if (key == 'LTC'){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
+                                    <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="LTC">
+                                </label>
+                            <% }
+                            if (key == 'DASH'){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
+                                    <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="DASH">
+                                </label>
+                            <% }
+                        });
+                    %>
+                    <div class="control smmargin">
+                        <button class="button is-primary">Buy</button>
+                    </div>
+                </form>
+                
+
+            </div>  
+        </div>
+        <hr>
+        <div class="column">
+            <h3>Similar products</h3>
+            <!-- Add a few products from the same category -->
+        </div>
+        <hr>
+        <div class="column">
+            <p>Description</p>
+            <%= product.description %>
+        </div> 
+    </div>
+</div> 
+
+<% include ../partials/footer %>

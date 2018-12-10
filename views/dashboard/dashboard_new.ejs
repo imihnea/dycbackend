@@ -1,5 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<script src="../../dist/js/products.js"></script>     
+<link rel="stylesheet" href="../../dist/css/products.css">
 <div class="hero-body">
     <div class="container content">
         <div class="columns">
@@ -84,7 +86,7 @@
                     
                     <hr />
                     <h4 style="margin-top: 1vh;">Accepted currencies</h4>
-                    <label class="checkbox">
+                    <!-- <label class="checkbox">
                         <input name="accepted" type="checkbox" value="BTC">
                             BTC
                     </label>
@@ -103,6 +105,26 @@
                     <label class="checkbox">
                         <input name="accepted" type="checkbox" value="DASH">
                             DASH
+                    </label> -->
+                    <label class="img-check ">
+                        <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="new_cccy gray" id="btcimg">
+                        <input id="btc-check" type="checkbox" name="accepted" class="curr_checkbox" value="BTC">
+                    </label>
+                    <label class="img-check ">
+                        <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                        <input id="bch-check" type="checkbox" name="accepted"  class="curr_checkbox" value="BCH">
+                    </label>
+                    <label class="img-check ">
+                        <img src="../../dist/img/ethereum.png" alt="ethereum" class="new_cccy gray" id="ethimg">
+                        <input id="eth-check" type="checkbox" name="accepted"  class="curr_checkbox" value="ETH">
+                    </label>
+                    <label class="img-check ">
+                        <img src="../../dist/img/litecoin.png" alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                        <input id="ltc-check" type="checkbox" name="accepted"  class="curr_checkbox" value="LTC">
+                    </label>
+                    <label class="img-check ">
+                        <img src="../../dist/img/dash.png" alt="DASH" class="new_cccy gray" id="dashimg">
+                        <input id="dash-check" type="checkbox" name="accepted"  class="curr_checkbox" value="DASH">
                     </label>
                     <hr />
                     <h4 style="margin-top: 1vh;">Feature your deal</h4>
