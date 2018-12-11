@@ -1,0 +1,148 @@
+* {box-sizing: border-box}
+body {font-family: Verdana, sans-serif; margin:0}
+.mySlides {display: none}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+    max-width: 67vw;
+    max-height: 47vh;
+    position: relative;
+    margin: auto;
+}
+
+.prev{
+    left: -5vw !important;
+}
+
+.next{
+    right: -5vw !important;
+}
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: rgba(194, 211, 47, 0.705);
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+    background-color: rgba(133, 33, 33, 0.8);
+}
+
+
+/* The dots/bullets/indicators */
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
+}
+
+.slider{
+    max-height: 45vh;
+}
+
+.slider-name{
+    max-width: 45vw;
+    max-height: 16vh;
+}
+
+.slider-currencies{
+    
+}
+
+.slider-image{
+    height: 45vh;
+    padding-top:1vh; 
+    width: 35vw;
+}
+
+.slider-separator{
+    margin-top: 9vh;
+}
+
+.slider-slides{
+    text-align:center; 
+    padding-top: 4vh;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 785px){
+    .slider-image{
+        height: auto !important;
+        padding-top: 2vh;
+        width: auto;
+    }
+
+    .slider-name{
+        max-width: max-content;
+        max-height: 16vh;
+    }
+
+    .slider-imgs{
+        width: 30px;
+    }
+
+    .slider-separator{
+        margin-top: 2vh;
+    }
+
+    .slider-slides{
+        margin-top: 6vh;
+    }
+
+    .title{
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (min-width: 1921px){
+    .slider-image{
+        width: 25vw;
+    }
+}

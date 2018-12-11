@@ -6,10 +6,9 @@ Frontend:
 
     High Priority:
 
-        Category pages ( redesign sidebar - toggle-able menu for categories, back button + filters for subcategories )
+        Category pages ( filters for subcategories )
 
-        Product page => Create page
-                     => Image gallery
+        Product page => Image gallery
 
         Search result page
 
@@ -18,8 +17,6 @@ Frontend:
         New deals => Multiple file input
 
     Low Priority:
-
-        Make slideshow buttons work properly
 
         Make everything responsive (see comments in css files)
 

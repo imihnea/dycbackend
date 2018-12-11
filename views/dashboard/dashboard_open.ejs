@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-
+<link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
 <div class="hero-body">
     <div class="container content">
         <div class="columns">
@@ -16,27 +16,74 @@
                             <th>ID</th>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Price ($)</th>
-                            <th>Currencies</th>
+                            <th>Price</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
+                    
                     <% products.forEach(function(product){ %>
+                        <% 
+                        let currencies = [0, 0, 0, 0, 0];
+                        product.accepted.forEach(( key ) => {
+                            if (key == 'BTC'){
+                                currencies[0] = 1;
+                            }
+                            if (key == 'BCH'){
+                                currencies[1] = 1;
+                            }
+                            if (key == 'ETH'){
+                                currencies[2] = 1;
+                            }
+                            if (key == 'LTC'){
+                                currencies[3] = 1;
+                            }
+                            if (key == 'DASH'){
+                                currencies[4] = 1;
+                            }
+                        });
+                        %>
                     <tbody>
                         <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
                             <!-- count here instead of imageId -->
                             <th id="dealid"><%= product.imageId %></th>
                             <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
                             <td><%= product.name %></td>
-                            <td><%= product.price %></td>
-                            <td>
-                                <ul class="currencies">
-                                    <li><%= product.accepted %></li>
-                                </ul>
+                            <td><% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                                        <div class="prices">
+                                            <p class="price_text"> <%= product.price[0] %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
+                                <% } 
+                                    if ((product.price[1] != 0) && (currencies[1] == 1)) {
+                                %>
+                                        <div class="prices">
+                                            <p class="price_text"> <%= product.price[1] %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                        </div>
+                                <% } 
+                                    if ((product.price[2] != 0) && (currencies[2] == 1)) {
+                                %>
+                                        <div class="prices">
+                                            <p class="price_text"> <%= product.price[2] %></p>
+                                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                        </div>
+                                <% } 
+                                    if ((product.price[3] != 0) && (currencies[3] == 1)) {
+                                %>
+                                        <div class="prices">
+                                            <p class="price_text"> <%= product.price[3] %></p>
+                                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                        </div>
+                                <% } 
+                                    if ((product.price[4] != 0) && (currencies[4] == 1)) {
+                                %>
+                                        <div class="prices">
+                                            <p class="price_text"> <%= product.price[4] %></p>
+                                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                        </div>
+                                <% } %>
                             </td>
-                            <!-- Must make this work with IDs, maybe make script that takes the id
-                                Would limit the nr of deals seen to just a few though -->
                             <td><a class="button is-warning" href="/dashboard/<%= product._id %>/edit">Edit</a></td>
                             <td><form action="/dashboard/<%= product._id %>?_method=DELETE" onsubmit="return confirm('Really delete that product?');" method="POST">
                             <button class="button is-danger">Delete</button>

@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<script src="../../dist/js/products.js"></script>     
+<script src="../../dist/js/dashboard_new.js"></script>
 <link rel="stylesheet" href="../../dist/css/products.css">
 <div class="hero-body">
     <div class="container content">
@@ -82,50 +82,35 @@
                     </div>
                     
                     <textarea name="description" class="textarea" placeholder="Description"></textarea>
-                    <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required />
+                    <!-- <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required /> -->
                     
                     <hr />
                     <h4 style="margin-top: 1vh;">Accepted currencies</h4>
-                    <!-- <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="BTC">
-                            BTC
-                    </label>
-                    <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="BCH">
-                            BCH
-                    </label>
-                    <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="ETH">
-                            ETH
-                    </label>
-                    <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="LTC">
-                            LTC
-                    </label>
-                    <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="DASH">
-                            DASH
-                    </label> -->
                     <label class="img-check ">
-                        <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="new_cccy gray" id="btcimg">
+                        <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy gray" id="btcimg">
                         <input id="btc-check" type="checkbox" name="accepted" class="curr_checkbox" value="BTC">
                     </label>
                     <label class="img-check ">
-                        <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                        <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy gray" id="bchimg">
                         <input id="bch-check" type="checkbox" name="accepted"  class="curr_checkbox" value="BCH">
                     </label>
                     <label class="img-check ">
-                        <img src="../../dist/img/ethereum.png" alt="ethereum" class="new_cccy gray" id="ethimg">
+                        <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy gray" id="ethimg">
                         <input id="eth-check" type="checkbox" name="accepted"  class="curr_checkbox" value="ETH">
                     </label>
                     <label class="img-check ">
-                        <img src="../../dist/img/litecoin.png" alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                        <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy gray" id="ltcimg">
                         <input id="ltc-check" type="checkbox" name="accepted"  class="curr_checkbox" value="LTC">
                     </label>
                     <label class="img-check ">
-                        <img src="../../dist/img/dash.png" alt="DASH" class="new_cccy gray" id="dashimg">
+                        <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy gray" id="dashimg">
                         <input id="dash-check" type="checkbox" name="accepted"  class="curr_checkbox" value="DASH">
                     </label>
+                    <input class="currency-input input smmargin" id="btc-price" name="btc_price" placeholder="Price (BTC)" type="number" step=any />
+                    <input class="currency-input input smmargin" id="bch-price"  name="bch_price" placeholder="Price (BCH)" type="number" step=any />
+                    <input class="currency-input input smmargin" id="eth-price"  name="eth_price" placeholder="Price (ETH)" type="number" step=any />
+                    <input class="currency-input input smmargin" id="ltc-price"  name="ltc_price" placeholder="Price (LTC)" type="number" step=any />
+                    <input class="currency-input input smmargin" id="dash-price"  name="dash_price" placeholder="Price (DASH)" type="number" step=any />
                     <hr />
                     <h4 style="margin-top: 1vh;">Feature your deal</h4>
                     <h5>You have <%= user.feature_tokens %> DYC-Coins</h5>

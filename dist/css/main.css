@@ -88,6 +88,15 @@ div.column{
     text-align: center !important;
 }
 
+.prices{
+    display: flex;
+    justify-content: space-between;
+}
+
+.price_img{
+    width: 30px;
+}
+
 /* Content Ends */
 
 /* Footer Begins */

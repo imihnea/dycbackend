@@ -1,132 +1,67 @@
-<style>
-        * {box-sizing: border-box}
-        body {font-family: Verdana, sans-serif; margin:0}
-        .mySlides {display: none}
-        img {vertical-align: middle;}
-        
-        /* Slideshow container */
-        .slideshow-container {
-          max-width: 67vw;
-          max-height: 47vh;
-          position: relative;
-          margin: auto;
-        }
-        
-        .prev{
-            left: -5vw !important;
-        }
-
-        .next{
-            right: -5vw !important;
-        }
-        /* Next & previous buttons */
-        .prev, .next {
-          cursor: pointer;
-          position: absolute;
-          top: 50%;
-          width: auto;
-          padding: 16px;
-          margin-top: -22px;
-          color: rgba(194, 211, 47, 0.705);
-          font-weight: bold;
-          font-size: 18px;
-          transition: 0.6s ease;
-          border-radius: 0 3px 3px 0;
-        }
-        
-        /* Position the "next button" to the right */
-        .next {
-          right: 0;
-          border-radius: 3px 0 0 3px;
-        }
-        
-        /* On hover, add a black background color with a little bit see-through */
-        .prev:hover, .next:hover {
-          background-color: rgba(133, 33, 33, 0.8);
-        }
-        
-        
-        /* The dots/bullets/indicators */
-        .dot {
-          cursor: pointer;
-          height: 15px;
-          width: 15px;
-          margin: 0 2px;
-          background-color: #bbb;
-          border-radius: 50%;
-          display: inline-block;
-          transition: background-color 0.6s ease;
-        }
-        
-        .active, .dot:hover {
-          background-color: #717171;
-        }
-        
-        /* Fading animation */
-        .fade {
-          -webkit-animation-name: fade;
-          -webkit-animation-duration: 1.5s;
-          animation-name: fade;
-          animation-duration: 1.5s;
-        }
-        
-        @-webkit-keyframes fade {
-          from {opacity: .4} 
-          to {opacity: 1}
-        }
-        
-        @keyframes fade {
-          from {opacity: .4} 
-          to {opacity: 1}
-        }
-        
-        /* On smaller screens, decrease text size */
-        @media only screen and (max-width: 300px) {
-          .prev, .next,.text {font-size: 11px}
-        }
-        </style>
+<link rel="stylesheet" href="../../dist/css/slideshow.css">
 
 <div class="slideshow-container" style="text-align: center;">
 
-    <div class="mySlides fade">
+    <!-- <div class="mySlides fade">
         <div class="columns">
             <div class="column" style="background-image: url('../../dist/img/blanc.jpg'); background-size: cover; background-position: center;">
             </div>
             <div class="column">
                 <p class="title">Name</p>
-                <p class="subtitle description">Be careful, or I will spill the beans on your placeholder text. I will write some great placeholder text – and nobody writes better placeholder text than me, believe me – and I’ll write it very inexpensively. I will write some great, great text on your website’s Southern border, and I will make Google pay for that text. Mark my words. It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. The best taco bowls are made in Trump Tower Grill. I love Hispanics! He’s not a word hero. He’s a word hero because he was captured. I like text that wasn’t captured. Lorem Ipsum better hope that there are no "tapes" of our conversations before he starts leaking to the press!</p>
-                <p>Price</p>
-                <p>Currencies</p>
+                <hr />
+                <p class="title">Currencies</p>
+                <img src="../../dist/img/bitcoin.png" alt="Bitcoin" id="btcimg">
+                <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                <img src="../../dist/img/ethereum.png" alt="ethereum" class="new_cccy gray" id="ethimg">
+                <img src="../../dist/img/litecoin.png" alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                <img src="../../dist/img/dash.png" alt="DASH" class="new_cccy gray" id="dashimg">
+                <hr />
+                <a href="#"><button class="button is-primary">View</button></a>
             </div>
         </div>
         
-    </div>
+    </div> -->
     
     <div class="mySlides fade">
+        <div class="columns slider">
+            <a href="#">
+                <div class="slider-image"><img src="../../dist/img/blanc.jpg" style="height: 100%; width:100%; object-fit: contain;"></div></a>
+                <a href="#"><div class="column">
+                    <div class="slider-name">
+                        <p class="title slidetext">asdfadsfad fads fd fds fasd fads fdsafds 34 321 4213 4123 12341234 124321 4123 41234123412412 34123 4123 4123 4123 4123 4123 41234 123 41234 </p>
+                    </div>
+                    <hr class="slider-separator" /> 
+                    <div class="slider-currencies">
+                        <p class="title">Sells for</p>
+                        <img src="../../dist/img/bitcoin.png" class="slider-imgs" alt="Bitcoin" id="btcimg">
+                        <img src="../../dist/img/bitcoincash.png" class="slider-imgs"  alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                        <img src="../../dist/img/ethereum.png" class="slider-imgs"  alt="ethereum" class="new_cccy gray" id="ethimg">
+                        <img src="../../dist/img/litecoin.png" class="slider-imgs"  alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                        <img src="../../dist/img/dash.png" class="slider-imgs"  alt="DASH" class="new_cccy gray" id="dashimg">
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- <div class="mySlides fade">
         <div class="columns">
             <div class="column" style="background-image: url('../../dist/img/blanc.jpg'); background-size: cover; background-position: center;">
             </div>
             <div class="column">
                 <p class="title">Name</p>
-                <p class="subtitle description">Be careful, or I will spill the beans on your placeholder text. I will write some great placeholder text – and nobody writes better placeholder text than me, believe me – and I’ll write it very inexpensively. I will write some great, great text on your website’s Southern border, and I will make Google pay for that text. Mark my words. It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. The best taco bowls are made in Trump Tower Grill. I love Hispanics! He’s not a word hero. He’s a word hero because he was captured. I like text that wasn’t captured. Lorem Ipsum better hope that there are no "tapes" of our conversations before he starts leaking to the press!</p>
-                <p>Price</p>
-                <p>Currencies</p>
+                <hr />
+                <p class="title">Currencies</p>
+                <img src="../../dist/img/bitcoin.png" alt="Bitcoin" id="btcimg">
+                <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                <img src="../../dist/img/ethereum.png" alt="ethereum" class="new_cccy gray" id="ethimg">
+                <img src="../../dist/img/litecoin.png" alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                <img src="../../dist/img/dash.png" alt="DASH" class="new_cccy gray" id="dashimg">
+                <hr />
+                <a href="#"><button class="button is-primary">View</button></a>
             </div>
         </div>
-    </div>
-    
-    <div class="mySlides fade">
-        <div class="columns">
-            <div class="column" style="background-image: url('../../dist/img/blanc.jpg'); background-size: cover; background-position: center;">
-            </div>
-            <div class="column">
-                <p class="title">Name</p>
-                <p class="subtitle description">Be careful, or I will spill the beans on your placeholder text. I will write some great placeholder text – and nobody writes better placeholder text than me, believe me – and I’ll write it very inexpensively. I will write some great, great text on your website’s Southern border, and I will make Google pay for that text. Mark my words. It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. The best taco bowls are made in Trump Tower Grill. I love Hispanics! He’s not a word hero. He’s a word hero because he was captured. I like text that wasn’t captured. Lorem Ipsum better hope that there are no "tapes" of our conversations before he starts leaking to the press!</p>
-                <p>Price</p>
-                <p>Currencies</p>
-            </div>
-        </div>
-    </div>
+    </div> -->
     <!-- Buttons not working yet -->
     <!-- <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
     <a class="next" onclick="plusSlides(1)">&#10095;</a> -->
@@ -134,7 +69,7 @@
 </div>
     <br>
     
-<div style="text-align:center">
+<div class="slider-slides">
     <span class="dot" onclick="currentSlide(1)"></span> 
     <span class="dot" onclick="currentSlide(2)"></span> 
     <span class="dot" onclick="currentSlide(3)"></span> 

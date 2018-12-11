@@ -31,32 +31,72 @@
             </div>
             <div class="column content">
                 <% products.forEach(function(product){ %>
+                    <% 
+                        let currencies = [0, 0, 0, 0, 0];
+                        product.accepted.forEach(( key ) => {
+                            if (key == 'BTC'){
+                                currencies[0] = 1;
+                            }
+                            if (key == 'BCH'){
+                                currencies[1] = 1;
+                            }
+                            if (key == 'ETH'){
+                                currencies[2] = 1;
+                            }
+                            if (key == 'LTC'){
+                                currencies[3] = 1;
+                            }
+                            if (key == 'DASH'){
+                                currencies[4] = 1;
+                            }
+                        });
+                    %>
+
                     <div class="columns">
                         <div class="column is-one-quarter">
                                 <img src="<%= product.image %>">
                         </div>
                         <div class="column prod_info is-half">
                             <p class="title is-5"><%= product.name %></p>
-                            <p class="subtitle is-6"><%= product.description %></p>
-                            <p class="subtitle is-6">$<%= product.price %><br/><sub>Shipping: TBD</sub></p>
+                            <!-- <p class="subtitle is-6"><%= product.description %></p> -->
+                            <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
                             <a href="/products/<%= product._id %>/view"><button class="button is-primary">View</button></a>
                         </div>
                         <div class="column prod_info">
-                            <p><% if (product.accepted[0]){ %>
-                                <%= product.accepted[0] %><br/>
+                            <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                                <div class="prices">
+                                    <p class="price_text"> <%= product.price[0] %></p>
+                                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                </div>
+                            <% } 
+                                if ((product.price[1] != 0) && (currencies[1] == 1)) {
+                            %>
+                                <div class="prices">
+                                    <p class="price_text"> <%= product.price[1] %></p>
+                                    <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                </div>
+                            <% } 
+                                if ((product.price[2] != 0) && (currencies[2] == 1)) {
+                            %>
+                                <div class="prices">
+                                    <p class="price_text"> <%= product.price[2] %></p>
+                                    <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                </div>
+                            <% } 
+                                if ((product.price[3] != 0) && (currencies[3] == 1)) {
+                            %>
+                                <div class="prices">
+                                    <p class="price_text"> <%= product.price[3] %></p>
+                                    <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                </div>
+                            <% } 
+                                if ((product.price[4] != 0) && (currencies[4] == 1)) {
+                            %>
+                                <div class="prices">
+                                    <p class="price_text"> <%= product.price[4] %></p>
+                                    <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                </div>
                             <% } %>
-                            <% if (product.accepted[1]){ %>
-                                <%= product.accepted[1] %><br/>
-                            <% } %>
-                            <% if (product.accepted[2]){ %>
-                                <%= product.accepted[2] %><br/>
-                            <% } %>
-                            <% if (product.accepted[3]){ %>
-                                <%= product.accepted[3] %><br/>
-                            <% } %>
-                            <% if (product.accepted[4]){ %>
-                                <%= product.accepted[4] %>
-                            <% } %></p>
                         </div>
                         
                     </div>

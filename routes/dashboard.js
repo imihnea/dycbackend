@@ -181,7 +181,12 @@ router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
       id: req.user._id,
       username: req.user.username,
     };
-    const price = req.body.price;
+    const price = [];
+    price[0] = req.body.btc_price;
+    price[1] = req.body.bch_price;
+    price[2] = req.body.eth_price;
+    price[3] = req.body.ltc_price;
+    price[4] = req.body.dash_price;
     const newproduct = {
       name: name,
       image: req.body.image,
@@ -312,10 +317,27 @@ router.put('/:id', upload.single('image'), checkUserproduct, (req, res) => {
       Product.description = req.body.description;
       Product.category = req.body.category;
       Product.accepted = req.body.accepted;
-      Product.price = req.body.price;
-      Product.save();
-      req.flash('success', 'Successfully Updated!');
-      res.redirect(`/dashboard/${Product._id}`);
+      const price = [];
+      price[0] = req.body.btc_price;
+      price[1] = req.body.bch_price;
+      price[2] = req.body.eth_price;
+      price[3] = req.body.ltc_price;
+      price[4] = req.body.dash_price;
+      for (let i = 0; i < 5; i += 1) {
+        if (price[i] > 0) {
+          Product.price[i] = price[i];
+        }
+      }
+      Product.markModified('price');
+      Product.save((er) => {
+        if (er) {
+          req.flash('error', er.message);
+          res.redirect('/dashboard/open');
+        } else {
+          req.flash('success', 'Successfully Updated!');
+          res.redirect(`/dashboard/${Product._id}`);
+        }
+      });
     }
   });
 });

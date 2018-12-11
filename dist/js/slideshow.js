@@ -1,13 +1,26 @@
-function truncateText(selector, maxLength) {
-  const element = document.querySelector(selector);
-  let truncated = element.innerText;
+document.addEventListener('DOMContentLoaded', () => {
+  const element = document.querySelectorAll('.slidetext');
+  const elementItems = [].slice.call(element);
+  let truncated;
+  let i = 0;
+  elementItems.forEach((item) => {
+    truncated = item.textContent;
+    if (truncated.length > 97) {
+      truncated = truncated.substr(0, 97);
+      truncated += '...';
+    }
+    elementItems[i].textContent = truncated;
+    i += 1;
+  });
+  // let truncated = element.innerText;
 
-  if (truncated.length > maxLength) {
-    truncated = truncated.substr(0, maxLength);
-    truncated += '...';
-  }
-  return truncated;
-}
+  // if (truncated.length > 30) {
+  //   truncated = truncated.substr(0, 30);
+  //   truncated += '...';
+  // }
+  // return truncated;
+});
+
 
 // Non-automated slider; will use on product page
 // document.querySelector('p').innerText = truncateText('p', 500);

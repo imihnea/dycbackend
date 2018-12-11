@@ -12,13 +12,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  const newCurrency = document.querySelectorAll('.new_cccy');
-  const newCurrencies = [].slice.call(newCurrency);
-  newCurrencies.forEach((item) => {
-    item.addEventListener('click', (event) => {
-      event.stopPropagation();
-      item.classList.toggle('gray');
-    });
-  });
 });
