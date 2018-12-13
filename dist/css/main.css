@@ -18,6 +18,10 @@ html{
     width: 70%;
 }
 
+.searchbar{
+    width: 37vw;    
+}
+
 .dropdown.categ{
     margin-left: 1vw;
     width: 30%;
@@ -35,6 +39,7 @@ html{
 
 .curr_img{
     max-width: 25px;
+    max-height: 25px;
 }
 
 @media screen and (max-width: 768px){
@@ -71,7 +76,7 @@ body{
 }
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
-    box-shadow: 0.1px 0.1px 1px black;
+    /* box-shadow: 0.1px 0.1px 1px black; */
     padding: 1%;
     margin-bottom: 0% !important;
 }
