@@ -1,13 +1,34 @@
 <% include partials/header %>
 
     <link rel="stylesheet" href="../dist/css/index.css">  
-      
-    <div class="hero-body">
-    <div class="container is-fluid content">
-        <% include partials/slideshow %>
-        <br>
-        <hr />
-        <br>
+    <link rel="stylesheet" href="../../dist/css/slideshow.css">
+
+    <div class="mySlides fade">
+        <div class="columns slider">
+            <a href="categories/Collectibles-Art">
+                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1544706496/collection2.png" style="height: 100%; width:100%; object-fit: contain;"></div></a>
+        </div>
+    </div>
+    <div class="mySlides fade">
+        <div class="columns slider">
+            <a href="categories/MusicalInstruments-Gear">
+                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1544708926/music.png" style="height: 100%; width:100%; object-fit: contain;"></div></a>
+        </div>
+    </div>
+    <div class="mySlides fade">
+        <div class="columns slider">
+            <a href="categories/Sporting-Goods">
+                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1544709501/sport.png" style="height: 100%; width:100%; object-fit: contain;"></div></a>
+        </div>
+    </div>
+    <div class="slider-slides">
+        <span class="dot" onclick="currentSlide(1)"></span> 
+        <span class="dot" onclick="currentSlide(2)"></span> 
+        <span class="dot" onclick="currentSlide(3)"></span> 
+    </div>
+
+    <div class="hero-body hero-content">
+    <div class="content">
         <div class="container columns">
             <div class="column">
                 <h1>Featured Products</h1>
@@ -209,5 +230,5 @@
         </div>
     </div>
 </div>
-
+<script src="../../dist/js/slideshow.js"></script>
 <% include partials/footer %>

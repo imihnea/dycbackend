@@ -5,6 +5,9 @@
     margin: auto;
 }
 
+.hero-content{
+    padding: 1rem 1.5rem !important;
+}
 div.featured{
     margin-top: 2vh;
 }

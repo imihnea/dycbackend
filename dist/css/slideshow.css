@@ -29,7 +29,8 @@ img {vertical-align: middle;}
     color: rgba(194, 211, 47, 0.705);
     font-weight: bold;
     font-size: 18px;
-    transition: 0.6s ease;
+    /* transition: 0.6s ease; */
+    animation: slide 1s;
     border-radius: 0 3px 3px 0;
 }
 
@@ -47,14 +48,24 @@ img {vertical-align: middle;}
 
 /* The dots/bullets/indicators */
 .dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
+    /* cursor: pointer; */
+    /* height: 15px;
+    width: 15px; */
+    /* margin: 0 2px; */
+    /* background-color: #bbb; */
+    /* border-radius: 50%; */
     display: inline-block;
-    transition: background-color 0.6s ease;
+    /* transition: background-color 0.6s ease-in; */
+    animation: slide 1s;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    text-indent: -999px;
+    cursor: pointer;
+    background-color: #000 \9;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid #fff;
+    border-radius: 10px;
 }
 
 .active, .dot:hover {
@@ -85,12 +96,12 @@ img {vertical-align: middle;}
 }
 
 .slider{
-    max-height: 45vh;
+    /* max-height: 45vh; */
 }
 
 .slider-name{
-    max-width: 45vw;
-    max-height: 16vh;
+    /* max-width: 45vw;
+    max-height: 16vh; */
 }
 
 .slider-currencies{
@@ -98,9 +109,9 @@ img {vertical-align: middle;}
 }
 
 .slider-image{
-    height: 45vh;
+    /* height: 45vh;
     padding-top:1vh; 
-    width: 35vw;
+    width: 35vw; */
 }
 
 .slider-separator{
@@ -109,7 +120,9 @@ img {vertical-align: middle;}
 
 .slider-slides{
     text-align:center; 
-    padding-top: 4vh;
+    margin-top: -4vh;
+    z-index: 1;
+    position: relative;
 }
 
 @media only screen and (min-width: 320px) and (max-width: 785px){
