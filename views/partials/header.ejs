@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Deal Your Crypto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -29,7 +30,7 @@
             <div class="level-left">
                 <div class="dropdown categ">
                     <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <button class="button dd-btn" aria-haspopup="true" aria-controls="dropdown-menu">
                         <span>Categories</span>
                         <span class="icon is-small">
                             <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -212,10 +213,10 @@
                 <div class="level-item search">
                     <div class="field has-addons">
                         <p class="control searchbar">
-                            <input class="input" type="text" placeholder="Look for anything">
+                            <input class="input search-input" type="text" placeholder="Look for anything">
                         </p>
                         <div class="select ">
-                            <select>
+                            <select class="search-select">
                                 <option value=""selected>All categories</option>
                                 <option value="" disabled>--------------------------------</option>
                                 <option value="">Collectibles & Art</option>
@@ -230,7 +231,7 @@
                             </select> 
                         </div>
                         <p class="control">
-                            <button class="button">
+                            <button class="button src-btn">
                             Search
                             </button>
                         </p>

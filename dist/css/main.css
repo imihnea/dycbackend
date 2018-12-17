@@ -1,6 +1,36 @@
 html{
     height:100%;
 }
+html, body{
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+input[type='text'], select, .dd-btn, .src-btn{
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    rgb(138, 96, 54) !important;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    rgb(138, 96, 54) !important;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    rgb(138, 96, 54) !important;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    rgb(138, 96, 54) !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color:    rgb(138, 96, 54) !important;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+    color:    rgb(138, 96, 54) !important;
+}
+
 /* Header */
 .navi{
     padding-top: 1vh;
@@ -8,14 +38,51 @@ html{
     padding-left: 2%;
     padding-right: 2%;
     box-shadow: 0.1px 0.1px 1px black;
+    border-bottom-style: solid;
+    border-width: 0.5px;
 }
 
 .level-left{
     padding-left: 1vw;
 }
 
+input, select, .src-btn, .dd-btn{
+    background-color: darkgrey !important;
+}
 .search{
     width: 70%;
+}
+
+.select{
+   
+}
+
+.select select:not([multiple]) {
+    padding-right: 0!important;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+    right: 3em !important;
+    border-color: black !important;
+}
+
+.search-input{
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.search-select{
+    border-radius: 0 !important;
+}
+
+.src-btn{
+    margin-left: -2vw;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.navbar{
+    background-color: black !important;
 }
 
 .searchbar{
@@ -73,6 +140,7 @@ a.dropdown-item{
 body{
     min-height: 100%;
     position: relative;
+    background-color: black;
 }
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
@@ -83,6 +151,11 @@ div.content{
 
 .smmargin{
     margin-top: 1.5vh;
+}
+
+.input, .textarea, select, .src-btn, .dd-btn{
+    border-style: hidden !important;
+    color: black !important;
 }
 
 .control{
@@ -102,6 +175,9 @@ div.column{
     width: 30px;
 }
 
+.button.is-primary{
+    background-color: orange !important;
+}
 /* Content Ends */
 
 /* Footer Begins */
@@ -109,12 +185,20 @@ div.column{
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 107px;
+    height: 128px;
+    border-top-style: solid;
+    border-width: 0.5px;
+    padding-top: 1vh;
 }
 
 body::after {
     content: '';
     display: block;
-    height: 107px;
+    height: 128px;
+}
+
+.copyright{
+    text-align: center; 
+    padding-top: 1vh;
 }
 /* Footer Ends */
