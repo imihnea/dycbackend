@@ -20,8 +20,6 @@ Frontend:
 
         Make everything responsive (see comments in css files)
 
-        Make truncation work
-
 
 Backend:
 

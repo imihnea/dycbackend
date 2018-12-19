@@ -46,7 +46,7 @@ input[type='text'], select, .dd-btn, .src-btn{
     padding-left: 1vw;
 }
 
-input, select, .src-btn, .dd-btn{
+input, select, .dd-btn{
     background-color: darkgrey !important;
 }
 .search{
@@ -79,6 +79,7 @@ input, select, .src-btn, .dd-btn{
     margin-left: -2vw;
     border-bottom-left-radius: 0 !important;
     border-top-left-radius: 0 !important;
+    background-color: orange !important;
 }
 
 .navbar{

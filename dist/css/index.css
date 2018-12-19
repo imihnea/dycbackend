@@ -36,13 +36,14 @@ figure.latestimg{
 
 .feat_card{
     margin: 10px;
+    padding: 0 !important;
 }
 
-.column{
-    padding: 0 !important;
+/* .column{
+
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-}
+} */
 
 .card{
     border-radius: 5px;

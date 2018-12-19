@@ -4,8 +4,27 @@
     margin-top: 3vh !important;
 }
 
+.panel-block{
+    color: orange !important;
+}
 .panel-heading{
     margin-bottom: 0 !important;
+    background-color: orange !important;
+    color: white;
+}
+
+.panel-heading, .panel-block {
+    border-bottom-color: orange !important;
+    border-left-color: orange !important;
+    border-right-color: orange !important;
+}
+
+.panel-heading:first-child{
+    border-top-color: orange !important;
+}
+
+.dashboard-right{
+    padding-top: 4vh;
 }
 
 .adrcol{
@@ -79,4 +98,48 @@ ul.currencies{
 
 .currency-input{
     display: none;
+}
+
+summary{
+    outline: none;
+}
+
+summary:hover{
+    cursor: pointer;
+    
+}
+
+.detail{
+    border-style: double;
+    border-width: 0px;
+    border-top-width: 1px;
+    padding: 5px 10px 5px 10px;
+}
+
+.feature-div{
+    padding-top: 5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 5vw;
+    border-style: double;
+    margin-top: 3vh;
+    border-radius: 10px;
+    border-color: orange;
+    color: orange;
+}
+
+.tokens-faq{
+    padding-top: 5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 5vw;
+    color: orange;
+}
+
+details{
+    border-style: double;   
+    border-radius: 10px;
+    border-color: orange;
+    color: orange;
+    margin-top: 1vh;
 }

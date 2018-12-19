@@ -1,50 +1,100 @@
 <% include ../partials/header %>
-<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="hero-body">
-    <div class="container content">
+<link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
+<link rel="stylesheet" href="../../dist/css/products.css">
+<script src="../../dist/js/tokens.js"></script>
+<div class="columns">
+    <% include ../partials/sidebar %>
+
+    <div class="column" >
         <div class="columns">
-            <% include ../partials/sidebar %>
-
-            <div class="column" >
-                    <h2>You have <%= user.feature_tokens %> DYC-Coins</h2>
-                <div class="columns">
-                    <div class="column">
-                        <h3>Get DYC-Coins</h3>
-                        <form action="/dashboard/tokens" method="POST">
-                            <input class="input" type="number" name="tokens_nr" placeholder="Number of tokens"
-                                min="0" max="500" required>
-                            <div class="sel_curr" >
-                                <label class="label">Buy with</label>
-                                <select class="select" name="buy_with">
-                                    <option value="btc">Bitcoin</option>
-                                    <option value="bch">Bitcoin Cash</option>
-                                    <option value="eth">Ethereum</option>
-                                    <option value="ltc">Litecoin</option>
-                                    <option value="dash">DASH</option>
-                                </select>
-                            </div>
-                                
+            <div class="column">
+                <form action="/dashboard/tokens" method="POST" style="display: flex;">
+                    <div class="feature-div">
+                        <h2>You have <%= user.feature_tokens %> DYC-Coins</h2>
+                        <div class="sel_curr" style="padding-top: 3vh;">
                             
-                            <button class="button is-primary">Buy</button>
-                        </form>
+                            <label class="img-check ">
+                                <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="token-currency" id="btcimg">
+                                <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="BTC" checked required>
+                            </label>
+                            <label class="img-check ">
+                                <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="token-currency gray" id="bchimg">
+                                <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="BCH">
+                            </label>
+                            <label class="img-check ">
+                                <img src="../../dist/img/ethereum.png" alt="ethereum" class="token-currency gray" id="ethimg">
+                                <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="ETH">
+                            </label>
+                            <label class="img-check ">
+                                <img src="../../dist/img/litecoin.png" alt="Litecoin" class="token-currency gray" id="ltcimg">
+                                <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="LTC">
+                            </label>
+                            <label class="img-check ">
+                                <img src="../../dist/img/dash.png" alt="DASH" class="token-currency gray" id="dashimg">
+                                <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="DASH">
+                            </label>
+                        </div>
+                        <div id="btc-fields" class="fields">
+                            <p style="padding-top: 3vh;">Price per token: XXXXXX BTC</p>
+                            <input class="input input-tokens" id="btc-tokens" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" required style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: XXXXX BTC</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                        <div id="bch-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: XXXXXX BCH</p>
+                            <input class="input input-tokens" id="bch-tokens" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: XXXXX BCH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                        <div id="eth-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: XXXXXX ETH</p>
+                            <input class="input input-tokens" id="eth-tokens" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: XXXXX ETH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                        <div id="ltc-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: XXXXXX LTC</p>
+                            <input class="input input-tokens" id="ltc-tokens" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: XXXXX LTC</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                        <div id="dash-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: XXXXXX DASH</p>
+                            <input class="input input-tokens" id="dash-tokens" type="number" name="tokens_nr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: XXXXX DASH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                        
                     </div>
-
-                    <div class="column">
-                        <h3>What are DYC-Coins?</h3>
-                        <p>DYC-Coin is our own currency, used to promote deals on the marketplace</p>
-                        <h3>How can I promote my deal?</h3>
-                        <p>You can do so when creating the deal or afterwards, from the edit page.</p>
-                        <h3>Are there multiple levels of promotion?</h3>
-                        <p>Yes, we offer subcategory promotion, front-page promotion and front-page slider promotion</p>
-                        <h3>How much does a DYC-Coin cost?</h3>
-                        <p>DYC-Coins cost x $ each.</p>
-                    </div>
-                </div>
+                </form>
             </div>
-        
-        </div>
+            <div class="column tokens-faq">
+                <details class="det" style="margin-top: 0vh;">
+                    <summary>
+                            What is a feature token?
+                    </summary>
+                    <p class="detail">The feature token is a type of currency used to promote deals on the marketplace</p>
+                </details>
+                <details>
+                        <summary>
+                                How can I promote my deal?
+                        </summary>
+                        <p class="detail">You can do so when creating the deal or afterwards, from the edit page.</p>
+                </details>
+                <details>
+                    <summary>
+                            Are there multiple levels of promotion?
+                    </summary>
+                    <p class="detail">Yes, we offer subcategory promotion and front-page promotion</p>
+                </details>
+            </div>
+        </div>     
     </div>
-    
 </div>
 
 <% include ../partials/footer %>

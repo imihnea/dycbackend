@@ -13,7 +13,6 @@
                     <!-- Maybe make the image disappar on mobiles  -->
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Image</th>
                             <th>Name</th>
                             <th>Price ($)</th>
@@ -26,7 +25,6 @@
                         <tbody>
                             <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
                                 <!-- count here instead of imageId -->
-                                <th id="dealid"><%= product.imageId %></th>
                                 <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
                                 <td><%= product.name %></td>
                                 <td><%= product.price %></td>

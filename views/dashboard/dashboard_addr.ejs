@@ -1,285 +1,140 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-
-<div class="hero-body">
-    <div class="container content">
-        <div class="columns">
-            <% include ../partials/sidebar %>
-
-            <div class="column adrcol">
-                <div class="adr">
-                    <div class="currency">
-                        <!--<h2>Bitcoin</h2>--> 
-                        <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
-                    </div>
-                    
-                    <!--<div class="address">
-                        <label class="label adrlabel">Top-up<br/>  Address</label>
-                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
-                    </div>-->
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
-                            </div>
-
-
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New <br/> Address</label>
-                                    <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
-                                </div>
-                                <button class="button is-primary">Change Address</button>
-                            </form>    
-                        </div>
-                        <div class="column values">
-                            <table class="table is-bordered is-hoverable">
-                                <tbody>
-                                    <tr>
-                                        <th>Value</th>
-                                        <td id="btc_curr">0.00000</td>
-                                    </tr>
-                                    <tr>
-                                        <th>USD Value</th>
-                                        <td id="btc_usd">0.00</td>
-                                    </tr>
-                                </tbody>
-                                
-                            </table>
-
-                            <button class="button is-primary topup">Top-up</button>
-                                
-                        </div>
-                        
-                    </div>
-                    
-
-                    <!--<div class="control smmargin">
-                        <button class="button is-primary">Generate Top-up Address</button>
-                    </div>-->
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <!--<h2>Bitcoin Cash</h2>-->
-                        <img src="../../dist/img/bitcoincash.png" class="adr_img"  alt="Bitcoin Cash">
-                    </div>
-                    
-                    <!--<div class="address">
-                        <label class="label adrlabel">Top-up<br/> Address</label>
-                        <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
-                    </div>-->
-                    <div class="columns">
-                        <div class="column">              
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
-                            </div>
-        
-        
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="bchadr" placeholder="Bitcoin Cash Address" type="text" required />       
-                                </div>
-                    
-                            <button class="button is-primary">Change Address</button>
-
-                                
-                            </form>
-                        </div>
-                        <div class="column values">
-                            <table class="table is-bordered is-hoverable">
-                                <tbody>
-                                    <tr>
-                                        <th>Value</th>
-                                        <td id="bch_curr">0.00000</td>
-                                    </tr>
-                                    <tr>
-                                        <th>USD Value</th>
-                                        <td id="bch_usd">0.00</td>
-                                    </tr>
-                                </tbody>
-                                
-                            </table>
-
-                            <button class="button is-primary topup">Top-up</button>
-                                
-                        </div>
-                    <!--<div class="control smmargin"> 
-                        <button class="button is-primary">Generate Top-up Address</button>
-                    </div>-->
-                    </div>
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <!-- <h2>Ethereum</h2> -->
-                        <img src="../../dist/img/ethereum.png"  class="adr_img" alt="Ethereum">
-                    </div>
-                    
-                    <!--<div class="address">
-                        <label class="label adrlabel">Top-up<br/> Address</label>
-                        <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
-                    </div>-->
-                <div class="columns">
-                    <div class="column">
+<div class="columns">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right adrcol">
+        <div class="adr">
+            <div class="currency"> 
+                <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
+            </div>
+            <div class="columns">
+                <div class="column">
                     <div class="address">
                         <label class="label adrlabel">Current<br/>  Address</label>
-                        <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
+                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
+                    </div>
+                    <form action="/dashboard/addresses" method="POST">
+                        <div class="address">
+                            <label class="label adrlabel">New <br/> Address</label>
+                            <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                         </div>
-            
-            
-                        <form action="/dashboard/addresses" method="POST">
-                            <div class="address">
-                                <label class="label adrlabel">New<br/> Address</label>
-                                <input class="input smmargin adradr" name="ethadr" placeholder="Ethereum Address" type="text" required />       
-                            </div>
-                
-                            <button class="button is-primary">Change Address</button>
-                                
-                        </form> 
+                        <button class="button is-primary">Change Address</button>
+                    </form>    
+                    <div class="address">
+                        <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
+                        <input class="input smmargin adradr" name="btc_value" placeholder="0.000000000" type="number" step="any" disabled />
                     </div>
-                    <div class="column values">
-                        <table class="table is-bordered is-hoverable">
-                            <tbody>
-                                <tr>
-                                    <th>Value</th>
-                                    <td id="eth_curr">0.00000</td>
-                                </tr>
-                                <tr>
-                                    <th>USD Value</th>
-                                    <td id="eth_usd">0.00</td>
-                                </tr>
-                            </tbody>
-                            
-                        </table>
-
-                        <button class="button is-primary topup">Top-up</button>
-                            
-                    </div>
-
-                </div>        
-                    
-                    <!--<div class="control smmargin"> 
-                        <button class="button is-primary">Generate Top-up Address</button>
-                    </div>-->
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <!--  <h2>Litecoin</h2> -->
-                        <img src="../../dist/img/litecoin.png" class="adr_img"  alt="Litecoin">
-                    </div>
-                
-                    <!--<div class="address">
-                        <label class="label adrlabel">Top-up<br/> Address</label>
-                        <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
-                    </div>-->
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
-                            </div>
-                
-                
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="ltcadr" placeholder="Litecoin Address" type="text" required />       
-                                </div>
-                    
-                                <button class="button is-primary">Change Address</button>
-                                
-                            </form>
-                        </div>
-
-                        <div class="column values">
-                            <table class="table is-bordered is-hoverable">
-                                <tbody>
-                                    <tr>
-                                        <th>Value</th>
-                                        <td id="ltc_curr">0.00000</td>
-                                    </tr>
-                                    <tr>
-                                        <th>USD Value</th>
-                                        <td id="ltc_usd">0.00</td>
-                                    </tr>
-                                </tbody>
-                                
-                            </table>
-        
-                            <button class="button is-primary topup">Top-up</button>
-                                
-                        </div>
-                    </div>
-                    
-                    <!--<div class="control smmargin"> 
-                        <button class="button is-primary">Generate Top-up Address</button>
-                    </div>-->
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <!--<h2>Dash</h2> -->
-                        <img src="../../dist/img/dash.png"  class="adr_img" alt="DASH">
-                    </div>
-                    
-                    <!--<div class="address">
-                        <label class="label adrlabel">Top-up<br/> Address</label>
-                        <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
-                    </div>-->
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
-                            </div>
-                
-                
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="dashadr" placeholder="DASH Address" type="text" required />       
-                                </div>
-                    
-                            <button class="button is-primary">Change Address</button>
-                                
-                            </form>
-                        </div>
-                        <div class="column">
-                            <div class="column values">
-                                <table class="table is-bordered is-hoverable">
-                                    <tbody>
-                                        <tr>
-                                            <th>Value</th>
-                                            <td id="dash_curr">0.00000</td>
-                                        </tr>
-                                        <tr>
-                                            <th>USD Value</th>
-                                            <td id="dash_usd">0.00</td>
-                                        </tr>
-                                    </tbody>
-                                    
-                                </table>
-            
-                                <button class="button is-primary topup">Top-up</button>
-                                    
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!--<div class="control smmargin">  
-                        <button class="button is-primary">Generate Top-up Address</button>
-                    </div>-->
+                    <button class="button is-primary" style="margin-top:1vh;">Top-up</button>
                 </div>
             </div>
         </div>
-    </div>
-        
-    
+        <hr />
+        <div class="adr">
+            <div class="currency">
+                <img src="../../dist/img/bitcoincash.png" class="adr_img"  alt="Bitcoin Cash">
+            </div>
+            <div class="columns">
+                <div class="column">              
+                    <div class="address">
+                        <label class="label adrlabel">Current<br/>  Address</label>
+                        <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
+                    </div>
+                    <form action="/dashboard/addresses" method="POST">
+                        <div class="address">
+                            <label class="label adrlabel">New<br/> Address</label>
+                            <input class="input smmargin adradr" name="bchadr" placeholder="Bitcoin Cash Address" type="text" required />       
+                        </div>
+            
+                    <button class="button is-primary">Change Address</button>          
+                    </form>
+                    <div class="address">
+                        <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
+                        <input class="input smmargin adradr" name="bch_value" placeholder="0.000000000" type="number" step="any" disabled />
+                    </div>
+                    <button class="button is-primary" style="margin-top:1vh;">Top-up</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="adr">
+            <div class="currency">
+                <img src="../../dist/img/ethereum.png"  class="adr_img" alt="Ethereum">
+            </div>
+            <div class="columns">
+                <div class="column">
+                <div class="address">
+                    <label class="label adrlabel">Current<br/>  Address</label>
+                    <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
+                    </div>
+                    <form action="/dashboard/addresses" method="POST">
+                        <div class="address">
+                            <label class="label adrlabel">New<br/> Address</label>
+                            <input class="input smmargin adradr" name="ethadr" placeholder="Ethereum Address" type="text" required />       
+                        </div>
+                        <button class="button is-primary">Change Address</button>         
+                    </form> 
+                    <div class="address">
+                        <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
+                        <input class="input smmargin adradr" name="eth_value" placeholder="0.000000000" type="number" step="any" disabled />
+                    </div>
+                    <button class="button is-primary" style="margin-top:1vh;">Top-up</button>
+                </div>
+            </div>        
+        </div>
+        <hr />
+        <div class="adr">
+            <div class="currency">
+                <img src="../../dist/img/litecoin.png" class="adr_img"  alt="Litecoin">
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="address">
+                        <label class="label adrlabel">Current<br/>  Address</label>
+                        <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
+                    </div>
+                    <form action="/dashboard/addresses" method="POST">
+                        <div class="address">
+                            <label class="label adrlabel">New<br/> Address</label>
+                            <input class="input smmargin adradr" name="ltcadr" placeholder="Litecoin Address" type="text" required />       
+                        </div>
+            
+                        <button class="button is-primary">Change Address</button>            
+                    </form>
+                    <div class="address">
+                        <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
+                        <input class="input smmargin adradr" name="ltc_value" placeholder="0.000000000" type="number" step="any" disabled />
+                    </div>
+                    <button class="button is-primary" style="margin-top:1vh;">Top-up</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="adr">
+            <div class="currency">
+                <img src="../../dist/img/dash.png"  class="adr_img" alt="DASH">
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="address">
+                        <label class="label adrlabel">Current<br/>  Address</label>
+                        <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
+                    </div>     
+                    <form action="/dashboard/addresses" method="POST">
+                        <div class="address">
+                            <label class="label adrlabel">New<br/> Address</label>
+                            <input class="input smmargin adradr" name="dashadr" placeholder="DASH Address" type="text" required />       
+                        </div>
+                    <button class="button is-primary">Change Address</button>
+                    </form>
+                    <div class="address">
+                        <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
+                        <input class="input smmargin adradr" name="dash_value" placeholder="0.000000000" type="number" step="any" disabled />
+                    </div>
+                    <button class="button is-primary" style="margin-top:1vh;">Top-up</button>
+                </div>
+            </div>
+        </div>
+    </div>   
 </div>
 
 <% include ../partials/footer %>

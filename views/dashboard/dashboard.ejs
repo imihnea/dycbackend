@@ -1,33 +1,30 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="columns" style="color: white;">
+    
+        <% include ../partials/sidebar %>
+   
 
-<div class="hero-body">
-    <div class="container content">
-        <div class="columns">
-            <% include ../partials/sidebar %>
-
-            <div class="column">
-                <div class="chpw">
-                    <h2>Change Password</h2>
-                    <form action="/forgot" method="POST">
-                        <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
-                        <div class="control smmargin">
-                            <button class="button is-primary">Click here to change your Password</button>
-                        </div>
-                    </form>
+    <div class="column dashboard-right">
+        <div class="chpw">
+            <h2>Change Password</h2>
+            <form action="/forgot" method="POST">
+                <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
+                <div class="control smmargin">
+                    <button class="button is-primary">Click here to change your Password</button>
                 </div>
-                <hr />
-                <div class="chemail">
-                    <h2>Change Email Address</h2>
-                        <form action="/forgotemail" method="POST">
-                            <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
-                            <div class="control smmargin">
-                                <button class="button is-primary">Click here to change your Email</button>
-                            </div>
-                        </form>
-                </div> 
-            </div>
+            </form>
         </div>
+        <hr />
+        <div class="chemail">
+            <h2>Change Email Address</h2>
+                <form action="/forgotemail" method="POST">
+                    <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
+                    <div class="control smmargin">
+                        <button class="button is-primary">Click here to change your Email</button>
+                    </div>
+                </form>
+        </div> 
     </div>
 </div>
 
