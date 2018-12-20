@@ -47,7 +47,9 @@ input[type='text'], select, .dd-btn, .src-btn{
 }
 
 input, select, .dd-btn{
-    background-color: darkgrey !important;
+    border-style: double !important;
+    color: orange !important;
+    border-color: orange !important;
 }
 .search{
     width: 70%;
@@ -63,7 +65,7 @@ input, select, .dd-btn{
 
 .select:not(.is-multiple):not(.is-loading)::after {
     right: 3em !important;
-    border-color: black !important;
+    border-color: orange !important;
 }
 
 .search-input{
@@ -73,6 +75,7 @@ input, select, .dd-btn{
 
 .search-select{
     border-radius: 0 !important;
+    border-right-style: none !important;
 }
 
 .src-btn{
@@ -80,6 +83,15 @@ input, select, .dd-btn{
     border-bottom-left-radius: 0 !important;
     border-top-left-radius: 0 !important;
     background-color: orange !important;
+    color: black !important;
+    border-style: double !important;
+    border-color: orange !important;
+}
+
+.balance-btn{
+    background-color: transparent !important;
+    color: orange !important;
+    border-color: orange !important;
 }
 
 .navbar{
@@ -154,9 +166,11 @@ div.content{
     margin-top: 1.5vh;
 }
 
-.input, .textarea, select, .src-btn, .dd-btn{
-    border-style: hidden !important;
-    color: black !important;
+.input, .textarea, select, .dd-btn{
+    background-color: transparent !important;
+    border-style: double !important;
+    color: orange !important;
+    border-color: orange !important;
 }
 
 .control{
@@ -170,6 +184,14 @@ div.column{
 .prices{
     display: flex;
     justify-content: space-between;
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange;
+    margin-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-top: 1vh;
+    color: orange;
 }
 
 .price_img{
@@ -178,6 +200,23 @@ div.column{
 
 .button.is-primary{
     background-color: orange !important;
+}
+
+.title{
+    color: orange !important;
+}
+
+.subtitle{
+    color: #c36a1b;
+}
+
+.view-btn{
+    background-color: #65ff00 !important;
+    border-color: transparent;
+}
+
+.view-btn:hover{
+    border-color: transparent;
 }
 /* Content Ends */
 

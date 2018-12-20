@@ -143,3 +143,49 @@ details{
     color: orange;
     margin-top: 1vh;
 }
+
+.is-primary{
+    color: black !important;
+}
+
+.label{
+    color: orange !important;
+}
+
+.new-text{
+    color: orange;
+    font-size: 24px;
+}
+
+.token-text{
+    color: orange;
+    margin-bottom: 3vh;
+}
+
+.new-table{
+    background-color: transparent;
+    color: orange;
+    position: relative;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid orange !important;
+}
+
+th{
+    color: orange !important;
+}
+
+hr{
+    background-color: orange;
+}
+
+.column.prod_info{
+    text-align: left !important;
+}
+
+.open-img{
+    width: 200px;
+    height: 100%;
+}

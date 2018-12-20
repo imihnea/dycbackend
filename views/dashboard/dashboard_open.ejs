@@ -2,101 +2,88 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
 <div class="hero-body">
-    <div class="container content">
         <div class="columns">
             <% include ../partials/sidebar %>
-
             <div class="column" >
-        
-                <div style="overflow-x: auto">
-                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                    <!-- Maybe make the image disappar on mobiles -->
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    
+                <div style="overflow-x: hidden;">
                     <% products.forEach(function(product){ %>
                         <% 
-                        let currencies = [0, 0, 0, 0, 0];
-                        product.accepted.forEach(( key ) => {
-                            if (key == 'BTC'){
-                                currencies[0] = 1;
-                            }
-                            if (key == 'BCH'){
-                                currencies[1] = 1;
-                            }
-                            if (key == 'ETH'){
-                                currencies[2] = 1;
-                            }
-                            if (key == 'LTC'){
-                                currencies[3] = 1;
-                            }
-                            if (key == 'DASH'){
-                                currencies[4] = 1;
-                            }
-                        });
+                            let currencies = [0, 0, 0, 0, 0];
+                            product.accepted.forEach(( key ) => {
+                                if (key == 'BTC'){
+                                    currencies[0] = 1;
+                                }
+                                if (key == 'BCH'){
+                                    currencies[1] = 1;
+                                }
+                                if (key == 'ETH'){
+                                    currencies[2] = 1;
+                                }
+                                if (key == 'LTC'){
+                                    currencies[3] = 1;
+                                }
+                                if (key == 'DASH'){
+                                    currencies[4] = 1;
+                                }
+                            });
                         %>
-                    <tbody>
-                        <tr onclick="document.location = '/dashboard/<%= product._id %>';" style="cursor: pointer;">
-                            <!-- count here instead of imageId -->
-                            <th class="tableimg" height="100" style="background-image: url('<%= product.image %>')"></th>
-                            <td><%= product.name %></td>
-                            <td><% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
-                                        <div class="prices">
-                                            <p class="price_text"> <%= product.price[0] %></p>
-                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                        </div>
+                        <div class="columns">
+                            <div class="column is-one-quarter">
+                                    <img src="<%= product.image %>" class="open-img">
+                            </div>
+                            <div class="column prod_info is-half">
+                                <p class="title is-5"><%= product.name %></p>
+                                <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
+                                <div style="display: flex;">
+                                    <a href="/products/<%= product._id %>/view"><button class="button view-btn">View</button></a>
+                                    <a class="button is-warning" href="/dashboard/<%= product._id %>/edit" style="margin-left: 1vw;">Edit</a>
+                                    <form action="/dashboard/<%= product._id %>?_method=DELETE" onsubmit="return confirm('Really delete that product?');" method="POST" style="margin-left: 1vw;">
+                                        <button class="button is-danger">Delete</button>
+                                    </form>
+                                </div>   
+                            </div>
+                            <div class="column prod_info">
+                                <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                                    <div class="prices">
+                                        <p class="price_text"> <%= product.price[0] %></p>
+                                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                    </div>
                                 <% } 
                                     if ((product.price[1] != 0) && (currencies[1] == 1)) {
                                 %>
-                                        <div class="prices">
-                                            <p class="price_text"> <%= product.price[1] %></p>
-                                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                                        </div>
+                                    <div class="prices">
+                                        <p class="price_text"> <%= product.price[1] %></p>
+                                        <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                    </div>
                                 <% } 
                                     if ((product.price[2] != 0) && (currencies[2] == 1)) {
                                 %>
-                                        <div class="prices">
-                                            <p class="price_text"> <%= product.price[2] %></p>
-                                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                                        </div>
+                                    <div class="prices">
+                                        <p class="price_text"> <%= product.price[2] %></p>
+                                        <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                    </div>
                                 <% } 
                                     if ((product.price[3] != 0) && (currencies[3] == 1)) {
                                 %>
-                                        <div class="prices">
-                                            <p class="price_text"> <%= product.price[3] %></p>
-                                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                                        </div>
+                                    <div class="prices">
+                                        <p class="price_text"> <%= product.price[3] %></p>
+                                        <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                    </div>
                                 <% } 
                                     if ((product.price[4] != 0) && (currencies[4] == 1)) {
                                 %>
-                                        <div class="prices">
-                                            <p class="price_text"> <%= product.price[4] %></p>
-                                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                                        </div>
+                                    <div class="prices">
+                                        <p class="price_text"> <%= product.price[4] %></p>
+                                        <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                    </div>
                                 <% } %>
-                            </td>
-                            <td><a class="button is-warning" href="/dashboard/<%= product._id %>/edit">Edit</a></td>
-                            <td><form action="/dashboard/<%= product._id %>?_method=DELETE" onsubmit="return confirm('Really delete that product?');" method="POST">
-                            <button class="button is-danger">Delete</button>
-                            </form>
-                        </tr>
-                    </tbody>
-                    <% }); %>
-                </table>
-            </div>
-                
-            </div>
-            
+                            </div>
+                        </div>
+                        <hr>                    
+                    <% }); %>         
+            </div>        
+            </div> 
         </div>
-    </div>
-    
 </div>
 
 <% include ../partials/footer %>

@@ -3,13 +3,14 @@
 <script src="../../dist/js/dashboard_new.js"></script>
 <link rel="stylesheet" href="../../dist/css/products.css">
 <div class="hero-body">
-    <div class="container content">
-        <div class="columns">
+    <div class="columns">
+
+    
             <% include ../partials/sidebar %>
 
             <div class="column">
                 <form action="/dashboard" method="POST" enctype="multipart/form-data">
-                    <input class="input smmargin" name="name" placeholder="Name" type="text" required />
+                    <input class="input" name="name" placeholder="Name" type="text" required />
                     
                     <div class="filencat">
                         <div class="select">
@@ -85,7 +86,7 @@
                     <!-- <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required /> -->
                     
                     <hr />
-                    <h4 style="margin-top: 1vh;">Accepted currencies</h4>
+                    <h4 class="new-text" style="margin-bottom: 3vh;">Accepted currencies</h4>
                     <label class="img-check ">
                         <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy gray" id="btcimg">
                         <input id="btc-check" type="checkbox" name="accepted" class="curr_checkbox" value="BTC">
@@ -112,9 +113,9 @@
                     <input class="currency-input input smmargin" id="ltc-price"  name="ltc_price" placeholder="Price (LTC)" type="number" step=any />
                     <input class="currency-input input smmargin" id="dash-price"  name="dash_price" placeholder="Price (DASH)" type="number" step=any />
                     <hr />
-                    <h4 style="margin-top: 1vh;">Feature your deal</h4>
-                    <h5>You have <%= user.feature_tokens %> DYC-Coins</h5>
-                    <table class="table is-hoverable is-bordered">
+                    <h4 class="new-text">Feature your deal</h4>
+                    <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
+                    <table class="table is-hoverable is-bordered new-table">
                         <thead>
                             <tr>
                                 <th>Type</th>
@@ -129,7 +130,7 @@
                                 <td>Subcategory feature</td>
                                 <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
                                 <td>14 days</td>
-                                <td>5 DYC-Coins</td>
+                                <td>5 tokens</td>
                                 <td>
                                     <input name="feat_1" type="checkbox" value="5">
                                 </td>
@@ -138,18 +139,9 @@
                                 <td>Front-page feature</td>
                                 <td>The deal will be shown on the front-page of the website.</td>
                                 <td>7 days</td>
-                                <td>15 DYC-Coins</td>
+                                <td>15 tokens</td>
                                 <td>
                                     <input name="feat_2" type="checkbox" value="15">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Slider feature</td>
-                                <td>The deal will be shown on the front-page slider.</td>
-                                <td>3 days</td>
-                                <td>20 DYC-Coins</td>
-                                <td>
-                                    <input name="feat_3" type="checkbox" value="20">
                                 </td>
                             </tr>
                         </tbody>
@@ -165,7 +157,6 @@
             </div>
             
         </div>
-    </div>
     
 </div>
 
