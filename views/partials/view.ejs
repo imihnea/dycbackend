@@ -1,6 +1,7 @@
 <div class="column">
-
-    <img src="<%= product.image %>">
+    <% for (var image of product.images ){ %>
+    <img src="<%= image.url %>">
+    <% } %>
     
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <tbody>

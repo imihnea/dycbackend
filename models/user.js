@@ -2,17 +2,20 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
 
+const Schema = mongoose.Schema;
+
 function toLower(str) {
   return str.toLowerCase();
 }
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: String,
   email: {
     type: String,
     set: toLower,
   },
   username: { type: String, set: toLower },
+  avatar: String,
   password: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,

@@ -7,11 +7,11 @@
 
             <div class="column">
                 <form action="/dashboard" method="POST" enctype="multipart/form-data">
-                    <input class="input smmargin" name="name" placeholder="Name" type="text" required />
+                    <input class="input smmargin" name="product[name]" placeholder="Name" type="text" required />
                     
                     <div class="filencat">
                         <div class="select">
-                            <select type="text" name="category">
+                            <select type="text" name="product[category]" required>
                                 <option disabled selected>Categories</option>
                                 <option disabled>Collectibles & Art</option>
                                 <option value="collectibles">Collectibles</option>
@@ -63,7 +63,7 @@
             
                         <div class="file has-name">
                             <label class="file-label">
-                                <input class="file-input" type="file" name="image" accept="image/*">
+                                <input class="file-input" type="file" id="file" name="images" accept="images/*" multiple onchange="javascript:updateList()" />
                                     <span class="file-cta">
                                         <span class="file-icon">
                                             <i class="fas fa-upload"></i>
@@ -76,32 +76,33 @@
                                     .jpeg .jpg .png
                                     </span>
                             </label>
+                            <div id="fileList"></div>
                         </div>
                     </div>
                     
-                    <textarea name="description" class="textarea" placeholder="Description"></textarea>
-                    <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required />
+                    <textarea name="product[description]" class="textarea" placeholder="Description"></textarea>
+                    <input class="input smmargin" name="product[price]" placeholder="Price ($)" type="number" required />
                     
                     <hr />
                     <h4 style="margin-top: 1vh;">Accepted currencies</h4>
                     <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="BTC">
+                        <input name="product[accepted]" type="checkbox" value="BTC">
                             BTC
                     </label>
                     <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="BCH">
+                        <input name="product[accepted]" type="checkbox" value="BCH">
                             BCH
                     </label>
                     <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="ETH">
+                        <input name="product[accepted]" type="checkbox" value="ETH">
                             ETH
                     </label>
                     <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="LTC">
+                        <input name="product[accepted]" type="checkbox" value="LTC">
                             LTC
                     </label>
                     <label class="checkbox">
-                        <input name="accepted" type="checkbox" value="DASH">
+                        <input name="product[accepted]" type="checkbox" value="DASH">
                             DASH
                     </label>
                     <hr />
@@ -124,7 +125,7 @@
                                 <td>14 days</td>
                                 <td>5 DYC-Coins</td>
                                 <td>
-                                    <input name="feat_1" type="checkbox" value="5">
+                                    <input name="product[feat_1]" type="checkbox" value="5">
                                 </td>
                             </tr>
                             <tr>
@@ -133,7 +134,7 @@
                                 <td>7 days</td>
                                 <td>15 DYC-Coins</td>
                                 <td>
-                                    <input name="feat_2" type="checkbox" value="15">
+                                    <input name="product[feat_2]" type="checkbox" value="15">
                                 </td>
                             </tr>
                             <tr>
@@ -142,7 +143,7 @@
                                 <td>3 days</td>
                                 <td>20 DYC-Coins</td>
                                 <td>
-                                    <input name="feat_3" type="checkbox" value="20">
+                                    <input name="product[feat_3]" type="checkbox" value="20">
                                 </td>
                             </tr>
                         </tbody>
@@ -161,5 +162,18 @@
     </div>
     
 </div>
+
+<script>
+updateList = function() {
+  var input = document.getElementById('file');
+  var output = document.getElementById('fileList');
+
+  output.innerHTML = '<ul>';
+  for (var i = 0; i < input.files.length; ++i) {
+    output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+  }
+  output.innerHTML += '</ul>';
+}
+</script>
 
 <% include ../partials/footer %>

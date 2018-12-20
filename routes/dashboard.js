@@ -5,21 +5,37 @@ const multer = require('multer');
 
 const cloudinary = require('cloudinary');
 
-const featOneProduct = require('../models/featOneProduct');
-
-const featTwoProduct = require('../models/featTwoProduct');
-
-const featThreeProduct = require('../models/featThreeProduct');
-
 const product = require('../models/product');
 
 const User = require('../models/user');
 
 const router = express.Router();
 
-const middleware = require('../middleware');
+const { productCreate, productIndex, productDestroy } = require('../controllers/dashboard');
 
-const { isLoggedIn, checkUserproduct } = middleware; // destructuring assignment
+const middleware = require('../middleware/index');
+
+const { isLoggedIn, checkUserproduct, asyncErrorHandler } = middleware; // destructuring assignment
+
+// Set Storage Engine
+const storage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const imageFilter = (req, file, cb) => {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: imageFilter,
+});
 
 // Dashboard index route
 router.get('/', isLoggedIn, (req, res) => {
@@ -102,15 +118,7 @@ router.post('/tokens', isLoggedIn, (req, res) => {
 });
 
 // Show all open offers
-router.get('/open', isLoggedIn, (req, res) => {
-  product.find({ available: true, 'author.id': req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      res.render('dashboard/dashboard_open', { products: allproducts });
-    }
-  });
-});
+router.get('/open', isLoggedIn, asyncErrorHandler(productIndex));
 
 // Show all closed offers
 router.get('/closed', isLoggedIn, (req, res) => {
@@ -141,128 +149,8 @@ router.get('/new', isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard_new', { user: req.user });
 });
 
-// Set Storage Engine
-const storage = multer.diskStorage({
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
-  },
-});
-
-const imageFilter = (req, file, cb) => {
-  // accept image files only
-  if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
-    return cb(new Error('Only image files are allowed!'), false);
-  }
-  cb(null, true);
-};
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const upload = multer({
-  storage: storage,
-  fileFilter: imageFilter,
-});
-
 // CREATE - add new product to DB
-router.post('/', isLoggedIn, upload.single('image'), (req, res) => {
-  // get data from form and add to products array
-  cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
-    const name = req.body.name;
-    req.body.image = result.secure_url;
-    req.body.imageId = result.public_id;
-    const description = req.body.description;
-    const category = req.body.category;
-    const accepted = req.body.accepted;
-    const author = {
-      id: req.user._id,
-      username: req.user.username,
-    };
-    const price = req.body.price;
-    const newproduct = {
-      name: name,
-      image: req.body.image,
-      imageId: req.body.imageId,
-      category: category,
-      description: description,
-      price: price,
-      author: author,
-      accepted: accepted,
-    };
-    if (err) {
-      req.flash('error', err.message);
-    } else if (req.file === undefined) {
-      req.flash('error', err.message);
-    } else {
-      // Create a new product and save to DB
-      product.create(newproduct, (error) => {
-        if (error) {
-          req.flash('error', error.message);
-        } else {
-          // Find out what kind of featuring is enabled
-          let featCost = 0;
-          const feat = [];
-          if (req.body.feat_1) {
-            featCost += parseInt(req.body.feat_1, 10);
-            feat[0] = true;
-          }
-          if (req.body.feat_2) {
-            featCost += parseInt(req.body.feat_2, 10);
-            feat[1] = true;
-          }
-          if (req.body.feat_3) {
-            featCost += parseInt(req.body.feat_3, 10);
-            feat[2] = true;
-          }
-          // Decrease feature_tokens and add featured status
-          featCost *= -1;
-          const query = req.user._id;
-          User.findById(query, (errorUser, user) => {
-            if (errorUser) {
-              req.flash('error', errorUser.message);
-            } else if (user.feature_tokens < (featCost * -1)) {
-              req.flash('error', 'The deal was created, but you do not have enough DYC-Coins for the selected feature types. You can set them later in the "Open Deals" tab. ');
-              res.redirect('/dashboard/open');
-            } else {
-              User.findByIdAndUpdate(query, { $inc: { feature_tokens: featCost } }, (errr) => {
-                if (errr) {
-                  req.flash('error', errr.message);
-                }
-              });
-              if (feat[0] === true) {
-                featOneProduct.create(newproduct, (e) => {
-                  if (e) {
-                    req.flash('error', e.message);
-                  }
-                });
-              }
-              if (feat[1] === true) {
-                featTwoProduct.create(newproduct, (e) => {
-                  if (e) {
-                    req.flash('error', e.message);
-                  }
-                });
-              }
-              if (feat[2] === true) {
-                featThreeProduct.create(newproduct, (e) => {
-                  if (e) {
-                    req.flash('error', e.message);
-                  }
-                });
-              }
-              req.flash('success', 'Successfully added a new product!');
-              // redirect back to products page
-              res.redirect('/dashboard/open');
-            }
-          });
-        }
-      });
-    }
-  });
-});
+router.post('/', isLoggedIn, upload.array('images', 5), asyncErrorHandler(productCreate));
 
 // SHOW - shows more info about one product
 router.get('/:id', isLoggedIn, (req, res) => {
@@ -321,156 +209,6 @@ router.put('/:id', upload.single('image'), checkUserproduct, (req, res) => {
 });
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
-router.delete('/:id', checkUserproduct, (req, res) => {
-  product.findById(req.params.id, async (err, Product) => {
-    if (err) {
-      req.flash('error', err.message);
-      return res.redirect('back');
-    }
-    try {
-      await cloudinary.v2.uploader.destroy(Product.imageId);
-      Product.remove();
-      req.flash('success', 'Product deleted successfully!');
-      res.redirect('/dashboard/open');
-    } catch (error) {
-      if (error) {
-        req.flash('error', error.message);
-        return res.redirect('back');
-      }
-    }
-  });
-});
-
-// Subcategory featuring
-router.post('/feature/subcateg/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findById(req.params.id, (err, Product) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('back');
-    } else {
-      const prod = {
-        name: Product.name,
-        image: Product.image,
-        imageId: Product.imageId,
-        category: Product.category,
-        description: Product.description,
-        price: Product.price,
-        author: Product.author,
-        accepted: Product.accepted,
-      };
-      const query = req.user._id;
-      User.findById(query, (errorUser, user) => {
-        if (errorUser) {
-          req.flash('error', errorUser.message);
-        } else if (user.feature_tokens < 5) {
-          req.flash('error', 'Not enough DYC-Coins.');
-          res.redirect('/dashboard/open');
-        } else {
-          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
-            if (errr) {
-              req.flash('error', errr.message);
-            }
-          });
-          featOneProduct.create(prod, (e) => {
-            if (e) {
-              req.flash('error', e.message);
-            } else {
-              req.flash('success', 'The deal has been featured successfully.');
-              res.redirect('/dashboard/open');
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-// Front page featuring
-router.post('/feature/front/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findById(req.params.id, (err, Product) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('back');
-    } else {
-      const prod = {
-        name: Product.name,
-        image: Product.image,
-        imageId: Product.imageId,
-        category: Product.category,
-        description: Product.description,
-        price: Product.price,
-        author: Product.author,
-        accepted: Product.accepted,
-      };
-      const query = req.user._id;
-      User.findById(query, (errorUser, user) => {
-        if (errorUser) {
-          req.flash('error', errorUser.message);
-        } else if (user.feature_tokens < 15) {
-          req.flash('error', 'Not enough DYC-Coins.');
-          res.redirect('/dashboard/open');
-        } else {
-          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
-            if (errr) {
-              req.flash('error', errr.message);
-            }
-          });
-          featTwoProduct.create(prod, (e) => {
-            if (e) {
-              req.flash('error', e.message);
-            } else {
-              req.flash('success', 'The deal has been featured successfully.');
-              res.redirect('/dashboard/open');
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-// Front page slider featuring
-router.post('/feature/slider/:id', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findById(req.params.id, (err, Product) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('back');
-    } else {
-      const prod = {
-        name: Product.name,
-        image: Product.image,
-        imageId: Product.imageId,
-        category: Product.category,
-        description: Product.description,
-        price: Product.price,
-        author: Product.author,
-        accepted: Product.accepted,
-      };
-      const query = req.user._id;
-      User.findById(query, (errorUser, user) => {
-        if (errorUser) {
-          req.flash('error', errorUser.message);
-        } else if (user.feature_tokens < 20) {
-          req.flash('error', 'Not enough DYC-Coins.');
-          res.redirect('/dashboard/open');
-        } else {
-          User.findByIdAndUpdate(query, { $inc: { feature_tokens: -5 } }, (errr) => {
-            if (errr) {
-              req.flash('error', errr.message);
-            }
-          });
-          featThreeProduct.create(prod, (e) => {
-            if (e) {
-              req.flash('error', e.message);
-            } else {
-              req.flash('success', 'The deal has been featured successfully.');
-              res.redirect('/dashboard/open');
-            }
-          });
-        }
-      });
-    }
-  });
-});
+router.delete('/:id', asyncErrorHandler(productDestroy));
 
 module.exports = router;

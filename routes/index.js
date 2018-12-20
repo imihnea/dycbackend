@@ -17,6 +17,16 @@ const product = require('../models/product');
 
 const Product = require('../models/product');
 
+const {
+  postRegister,
+  postLogin,
+  getLogout,
+} = require('../controllers/index');
+
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
+
 // const featOneProduct = require('../models/featOneProduct');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
@@ -171,38 +181,15 @@ router.get('/register', (req, res) => {
 });
 
 //  handle sign up logic
-router.post('/register', (req, res) => {
-  const newUser = new User({ email: req.body.email, username: req.body.username });
-  User.register(newUser, req.body.password, (err) => {
-    if (err) {
-      req.flash('error', `${err.message}`);
-      return res.render('index/register', { error: err.message });
-    }
-    passport.authenticate('local')(req, res, () => {
-      req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
-      res.redirect('/');
-    });
-  });
-});
+router.post('/register', asyncErrorHandler(postRegister));
 
 //  show login form
 router.get('/login', (req, res) => {
-  res.render('index/login', { page: 'login' });
+  res.render('index/login');
 });
 
-//  handling login logic - test this in prod
-router.post('/login', passport.authenticate('local',
-  {
-    failureRedirect: '/login',
-    failureFlash: true,
-  }), (req, res) => {
-  if (req.body.remember) {
-    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
-  } else {
-    req.session.cookie.expires = false; // Cookie expires at end of session
-  }
-  res.redirect('/');
-});
+//  POST login logic - test this in prod
+router.post('/login', postLogin);
 
 router.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));
@@ -224,12 +211,8 @@ router.get('/auth/google/callback',
     res.redirect('/');
   });
 
-// logout route
-router.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success', 'See you later!');
-  res.redirect('/');
-});
+// GET logout route
+router.get('/logout', getLogout);
 
 // categories route
 
