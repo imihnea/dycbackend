@@ -28,7 +28,7 @@
         </div>
         <div class="navbar-menu" id="navbarMenu">
             <div class="level-left">
-                <div class="dropdown categ">
+                <div class="dropdown categ is-hoverable">
                     <div class="dropdown-trigger">
                         <button class="button dd-btn" aria-haspopup="true" aria-controls="dropdown-menu">
                         <span>Categories</span>
@@ -38,174 +38,197 @@
                         </button>
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
+                        <div class="dropdown-content categories">
                             <div class="columns">
     
                                 <div class="column">
-                                        <a href="/categories/Collectibles-Art" class="dropdown-item">
-                                            <strong>Collectibles & Art</strong>
-                                        </a>
-                                        <a href="/categories/Collectibles-Art/Collectibles" class="dropdown-item">
-                                            Collectibles
-                                        </a>
-                                        <a href="/categories/Collectibles-Art/Antiques" class="dropdown-item" >
-                                            Antiques
-                                        </a>
-                                        <a href="/categories/Collectibles-Art/SportsMemorabilia" class="dropdown-item">
-                                            Sports memorabilia
-                                        </a>
-                                        <a href="/categories/Collectibles-Art/Art" class="dropdown-item">
-                                            Art
-                                        </a>
+                                    <a href="/categories/Collectibles-Art" class="dropdown-item main-categ" id="collectibles-main">
+                                        <strong>Collectibles & Art</strong>
+                                    </a>
+                                    <a href="/categories/Home-Garden" class="dropdown-item main-categ">
+                                        <strong>Home & Garden</strong>
+                                    </a>
+                                    <a href="/categories/Sporting-Goods" class="dropdown-item main-categ">
+                                        <strong>Sporting goods</strong>
+                                    </a>
+                                    <a href="/categories/AutoParts-Accessories" class="dropdown-item main-categ">
+                                        <strong>Auto Parts & Accessories</strong>
+                                    </a>
+                                    <a href="/categories/Toys-Hobbies" class="dropdown-item main-categ">
+                                        <strong>Toys & Hobbies</strong>
+                                    </a>
+                                    <a href="/categories/Fashion" class="dropdown-item main-categ">
+                                        <strong>Fashion</strong>
+                                    </a>
+                                    <a href="/categories/MusicalInstruments-Gear" class="dropdown-item main-categ">
+                                        <strong>Musical instruments & gear</strong>
+                                    </a>
+                                    <a href="/categories/Other" class="dropdown-item main-categ">
+                                        <strong>Other categories</strong>
+                                    </a>
                                 </div>
-                                
-                                <div class="column">
-                                        <a href="/categories/Home-Garden" class="dropdown-item">
-                                            <strong>Home & Garden</strong>
-                                        </a>
-                                        <a href="/categories/Home-Garden/YardGardenOutdoor" class="dropdown-item">
-                                            Yard, garden & outdoor
-                                        </a>
-                                        <a href="/categories/Home-Garden/Crafts" class="dropdown-item" >
-                                            Crafts
-                                        </a>
-                                        <a href="/categories/Home-Garden/HomeImprovement" class="dropdown-item">
-                                            Home improvement
-                                        </a>
-                                        <a href="/categories/Home-Garden/PetSupplies" class="dropdown-item">
-                                            Pet supplies
-                                        </a>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Collectibles-Art" class="dropdown-item">
+                                        <strong>Collectibles & Art</strong>
+                                    </a>
+                                    <a href="/categories/Collectibles-Art/Collectibles" class="dropdown-item">
+                                        Collectibles
+                                    </a>
+                                    <a href="/categories/Collectibles-Art/Antiques" class="dropdown-item" >
+                                        Antiques
+                                    </a>
+                                    <a href="/categories/Collectibles-Art/SportsMemorabilia" class="dropdown-item">
+                                        Sports memorabilia
+                                    </a>
+                                    <a href="/categories/Collectibles-Art/Art" class="dropdown-item">
+                                        Art
+                                    </a>
                                 </div>
-    
-                                <div class="column">
-                                        <a href="/categories/Sporting-Goods" class="dropdown-item">
-                                            <strong>Sporting goods</strong>
-                                        </a>
-                                        <a href="/categories/Sporting-Goods/OutdoorSports" class="dropdown-item">
-                                            Outdoor sports
-                                        </a>
-                                        <a href="/categories/Sporting-Goods/TeamSports" class="dropdown-item" >
-                                            Team sports
-                                        </a>
-                                        <a href="/categories/Sporting-Goods/ExerciseFitness" class="dropdown-item">
-                                            Exercise & fitness
-                                        </a>
-                                        <a href="/categories/Sporting-Goods/Golf" class="dropdown-item">
-                                            Golf
-                                        </a>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Home-Garden" class="dropdown-item">
+                                        <strong>Home & Garden</strong>
+                                    </a>
+                                    <a href="/categories/Home-Garden/YardGardenOutdoor" class="dropdown-item">
+                                        Yard, garden & outdoor
+                                    </a>
+                                    <a href="/categories/Home-Garden/Crafts" class="dropdown-item" >
+                                        Crafts
+                                    </a>
+                                    <a href="/categories/Home-Garden/HomeImprovement" class="dropdown-item">
+                                        Home improvement
+                                    </a>
+                                    <a href="/categories/Home-Garden/PetSupplies" class="dropdown-item">
+                                        Pet supplies
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column">
-                                        <a href="/categories/Electronics" class="dropdown-item">
-                                            <strong>Electronics</strong>
-                                        </a>
-                                        <a href="/categories/Electronics/ComputersTablets" class="dropdown-item">
-                                            Computers & tablets
-                                        </a>
-                                        <a href="/categories/Electronics/CamerasPhoto" class="dropdown-item" >
-                                            Cameras & photo
-                                        </a>
-                                        <a href="/categories/Electronics/TvAudioSurveillance" class="dropdown-item">
-                                            TV, audio & surveillance
-                                        </a>
-                                        <a href="/categories/Electronics/PhonesAndAccessories" class="dropdown-item">
-                                            Cell phones & accessories
-                                        </a>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Sporting-Goods" class="dropdown-item">
+                                        <strong>Sporting goods</strong>
+                                    </a>
+                                    <a href="/categories/Sporting-Goods/OutdoorSports" class="dropdown-item">
+                                        Outdoor sports
+                                    </a>
+                                    <a href="/categories/Sporting-Goods/TeamSports" class="dropdown-item" >
+                                        Team sports
+                                    </a>
+                                    <a href="/categories/Sporting-Goods/ExerciseFitness" class="dropdown-item">
+                                        Exercise & fitness
+                                    </a>
+                                    <a href="/categories/Sporting-Goods/Golf" class="dropdown-item">
+                                        Golf
+                                    </a>
                                 </div>
-                                
-                                <div class="column">
-                                        <a href="/categories/AutoParts-Accessories" class="dropdown-item">
-                                            <strong>Auto Parts & Accessories</strong>
-                                        </a>
-                                        <a href="/categories/AutoParts-Accessories/GpsSecurity" class="dropdown-item">
-                                            GPS & Security Devices
-                                        </a>
-                                        <a href="/categories/AutoParts-Accessories/RadarLaser" class="dropdown-item" >
-                                            Radar & Laser Detectors
-                                        </a>
-                                        <a href="/categories/AutoParts-Accessories/CareDetailing" class="dropdown-item">
-                                            Care & Detailing
-                                        </a>
-                                        <a href="/categories/AutoParts-Accessories/Scooter" class="dropdown-item">
-                                            Scooter Parts & Accessories
-                                        </a>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Electronics" class="dropdown-item">
+                                        <strong>Electronics</strong>
+                                    </a>
+                                    <a href="/categories/Electronics/ComputersTablets" class="dropdown-item">
+                                        Computers & tablets
+                                    </a>
+                                    <a href="/categories/Electronics/CamerasPhoto" class="dropdown-item" >
+                                        Cameras & photo
+                                    </a>
+                                    <a href="/categories/Electronics/TvAudioSurveillance" class="dropdown-item">
+                                        TV, audio & surveillance
+                                    </a>
+                                    <a href="/categories/Electronics/PhonesAndAccessories" class="dropdown-item">
+                                        Cell phones & accessories
+                                    </a>
                                 </div>
-    
-                                <div class="column">
-                                        <a href="/categories/Toys-Hobbies" class="dropdown-item">
-                                            <strong>Toys & Hobbies</strong>
-                                        </a>
-                                        <a href="/categories/Toys-Hobbies/RadioControl" class="dropdown-item">
-                                            Radio control
-                                        </a>
-                                        <a href="/categories/Toys-Hobbies/KidsToys" class="dropdown-item" >
-                                            Kids toys
-                                        </a>
-                                        <a href="/categories/Toys-Hobbies/ActionFigures" class="dropdown-item">
-                                            Action figures
-                                        </a>
-                                        <a href="/categories/Toys-Hobbies/DollsBears" class="dropdown-item">
-                                            Dolls & bears
-                                        </a>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/AutoParts-Accessories" class="dropdown-item">
+                                        <strong>Auto Parts & Accessories</strong>
+                                    </a>
+                                    <a href="/categories/AutoParts-Accessories/GpsSecurity" class="dropdown-item">
+                                        GPS & Security Devices
+                                    </a>
+                                    <a href="/categories/AutoParts-Accessories/RadarLaser" class="dropdown-item" >
+                                        Radar & Laser Detectors
+                                    </a>
+                                    <a href="/categories/AutoParts-Accessories/CareDetailing" class="dropdown-item">
+                                        Care & Detailing
+                                    </a>
+                                    <a href="/categories/AutoParts-Accessories/Scooter" class="dropdown-item">
+                                        Scooter Parts & Accessories
+                                    </a>
                                 </div>
-    
-                            </div>      
-                            <div class="columns">
-                                    <div class="column">
-                                            <a href="/categories/Fashion" class="dropdown-item">
-                                                <strong>Fashion</strong>
-                                            </a>
-                                            <a href="/categories/Fashion/Women" class="dropdown-item">
-                                                Women
-                                            </a>
-                                            <a href="/categories/Fashion/Men" class="dropdown-item" >
-                                                Men
-                                            </a>
-                                            <a href="/categories/Fashion/JewelryWatches" class="dropdown-item">
-                                                Jewelry & Watches
-                                            </a>
-                                            <a href="/categories/Fashion/Shoes" class="dropdown-item">
-                                                Shoes
-                                            </a>
-                                    </div>
-                                    
-                                    <div class="column">
-                                            <a href="/categories/MusicalInstruments-Gear" class="dropdown-item">
-                                                <strong>Musical instruments & gear</strong>
-                                            </a>
-                                            <a href="/categories/MusicalInstruments-Gear/Guitar" class="dropdown-item">
-                                                Guitar
-                                            </a>
-                                            <a href="/categories/MusicalInstruments-Gear/ProAudio" class="dropdown-item" >
-                                                Pro audio equipment
-                                            </a>
-                                            <a href="/categories/MusicalInstruments-Gear/String" class="dropdown-item">
-                                                String
-                                            </a>
-                                            <a href="/categories/MusicalInstruments-Gear/StageLightningEffects" class="dropdown-item">
-                                                Stage lightning & effects
-                                            </a>
-                                    </div>
-            
-                                    <div class="column">
-                                            <a href="/categories/Other" class="dropdown-item">
-                                                <strong>Other categories</strong>
-                                            </a>
-                                            <a href="/categories/Other/VideoGamesConsoles" class="dropdown-item">
-                                                Video games & consoles
-                                            </a>
-                                            <a href="/categories/Other/HealthBeauty" class="dropdown-item" >
-                                                Health & beauty
-                                            </a>
-                                            <a href="/categories/Other/Baby" class="dropdown-item">
-                                                Baby
-                                            </a>
-                                            <a href="/categories/Other/BusinessIndustrial" class="dropdown-item">
-                                                Business & industrial
-                                            </a>
-                                    </div>
-            
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Toys-Hobbies" class="dropdown-item">
+                                        <strong>Toys & Hobbies</strong>
+                                    </a>
+                                    <a href="/categories/Toys-Hobbies/RadioControl" class="dropdown-item">
+                                        Radio control
+                                    </a>
+                                    <a href="/categories/Toys-Hobbies/KidsToys" class="dropdown-item" >
+                                        Kids toys
+                                    </a>
+                                    <a href="/categories/Toys-Hobbies/ActionFigures" class="dropdown-item">
+                                        Action figures
+                                    </a>
+                                    <a href="/categories/Toys-Hobbies/DollsBears" class="dropdown-item">
+                                        Dolls & bears
+                                    </a>
+                                </div>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Fashion" class="dropdown-item">
+                                        <strong>Fashion</strong>
+                                    </a>
+                                    <a href="/categories/Fashion/Women" class="dropdown-item">
+                                        Women
+                                    </a>
+                                    <a href="/categories/Fashion/Men" class="dropdown-item" >
+                                        Men
+                                    </a>
+                                    <a href="/categories/Fashion/JewelryWatches" class="dropdown-item">
+                                        Jewelry & Watches
+                                    </a>
+                                    <a href="/categories/Fashion/Shoes" class="dropdown-item">
+                                        Shoes
+                                    </a>
+                                </div>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/MusicalInstruments-Gear" class="dropdown-item">
+                                        <strong>Musical instruments & gear</strong>
+                                    </a>
+                                    <a href="/categories/MusicalInstruments-Gear/Guitar" class="dropdown-item">
+                                        Guitar
+                                    </a>
+                                    <a href="/categories/MusicalInstruments-Gear/ProAudio" class="dropdown-item" >
+                                        Pro audio equipment
+                                    </a>
+                                    <a href="/categories/MusicalInstruments-Gear/String" class="dropdown-item">
+                                        String
+                                    </a>
+                                    <a href="/categories/MusicalInstruments-Gear/StageLightningEffects" class="dropdown-item">
+                                        Stage lightning & effects
+                                    </a>
+                                </div>
+
+                                <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
+                                    <a href="/categories/Other" class="dropdown-item">
+                                        <strong>Other categories</strong>
+                                    </a>
+                                    <a href="/categories/Other/VideoGamesConsoles" class="dropdown-item">
+                                        Video games & consoles
+                                    </a>
+                                    <a href="/categories/Other/HealthBeauty" class="dropdown-item" >
+                                        Health & beauty
+                                    </a>
+                                    <a href="/categories/Other/Baby" class="dropdown-item">
+                                        Baby
+                                    </a>
+                                    <a href="/categories/Other/BusinessIndustrial" class="dropdown-item">
+                                        Business & industrial
+                                    </a>
+                                </div>
                             </div>                                               
                         </div>
                     </div>
@@ -242,8 +265,8 @@
     
             <div class="level-right navbar-end">
                 <% if(!currentUser){ %>
-                    <p class="level-item"><a href="/login">Login</a></p>
-                    <p class="level-item"><a href="/register">Register</a></p>
+                    <p class="level-item"><a href="/login" class="header-link">Login</a></p>
+                    <p class="level-item"><a href="/register" class="header-link">Register</a></p>
                 <% } else { %>
                     <div class=" level-item dropdown categ is-hoverable">
                         <div class="dropdown-trigger">
@@ -255,7 +278,7 @@
                             </button>
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <div class="dropdown-content">
+                            <div class="dropdown-content currencies">
                                <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                 <div class="currency dropdown-item">
                                     <p class="curr_text" id="btc_curr">0.00000</p>
@@ -283,9 +306,8 @@
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="dropdown-item">
-                                    <a href="/dashboard/addresses">Top-up</a>
+                                    <a href="/dashboard/addresses" class="header-link">Top-up</a>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -296,9 +318,6 @@
                 <p class="level-item"><a href="/contact" class="header-link">Contact</a></p>
             </div>
         </div>
-        
-        
-
     </nav>
 </div>
 <% if(error && error.length > 0) { %>

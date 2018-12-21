@@ -111,10 +111,39 @@ input, select, .dd-btn{
     text-align: center;
 }
 
+.main-categ{
+    text-align: left !important;
+    color: orange !important;
+}
+
+.sec-categ{
+    margin-left: -2vw;
+}
+
+.sec-categ a{
+    color: orange !important;
+}
+
+.categories{
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange !important;
+    background-color: black !important;
+}
+
+
 .currency{
     display: flex !important;
     align-items: center;
     justify-content: space-evenly;
+    color: orange !important;
+}
+
+.currencies{
+    background-color: black !important;
+    border-style: double;
+    border-radius: 10px !important;
+    border-color: orange !important;
 }
 
 .curr_img{
@@ -141,11 +170,7 @@ input, select, .dd-btn{
 
     /* Make media queries for search input and select */
 }
-
-
-a.dropdown-item{
-    text-align: center !important;
-}   
+ 
 /* Header Ends */
 
 /* Content Begins */
