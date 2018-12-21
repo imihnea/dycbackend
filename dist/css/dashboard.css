@@ -189,3 +189,11 @@ hr{
     width: 200px;
     height: 100%;
 }
+
+.panel-block:hover{
+    background-color: #402504 !important;
+}
+
+.active-page{
+    background-color: #402504 !important;
+}

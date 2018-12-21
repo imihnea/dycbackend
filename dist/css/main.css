@@ -55,10 +55,6 @@ input, select, .dd-btn{
     width: 70%;
 }
 
-.select{
-   
-}
-
 .select select:not([multiple]) {
     padding-right: 0!important;
 }
@@ -96,6 +92,10 @@ input, select, .dd-btn{
 
 .navbar{
     background-color: black !important;
+}
+
+.header-link{
+    color: orange;
 }
 
 .searchbar{
@@ -237,8 +237,21 @@ body::after {
     height: 128px;
 }
 
+.tabs a {
+    color: orange !important;
+    border-bottom-color: #4a4a4a !important;
+}
+
+.tabs a:hover{
+    border-bottom-color: white !important;
+    background-color: #3b3737 !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
 .copyright{
     text-align: center; 
     padding-top: 1vh;
+    color: orange;
 }
 /* Footer Ends */
