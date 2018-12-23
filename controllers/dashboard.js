@@ -52,9 +52,7 @@ module.exports = {
       },
     });
     const floorRating = product.calculateAvgRating();
-    // the following line is not covered in a lecture
-    const mapBoxToken = process.env.MAPBOX_TOKEN;
-    res.render('posts/show', { product, mapBoxToken, floorRating });
+    res.render('posts/show', { product, floorRating });
   },
   // Products Edit
   async productEdit(req, res) {
