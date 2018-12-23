@@ -142,7 +142,6 @@ module.exports = {
               user.setPassword(req.body.password, () => {
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
-  
                 user.save(() => {
                   req.logIn(user, (error) => {
                     done(error, user);
@@ -208,7 +207,6 @@ module.exports = {
           pass: EMAIL_API_KEY,
         },
       });
-  
       // setup email data with unicode symbols
       const mailOptions = {
         from: `${req.body.name} <${req.body.email}>`, // sender address
@@ -216,7 +214,6 @@ module.exports = {
         subject: 'Deal Your Crypto - Contact Request', // Subject line
         html: output, // html body
       };
-  
       // send mail with defined transport object
       transporter.sendMail(mailOptions, (error) => {
         if (error) {
@@ -242,10 +239,8 @@ module.exports = {
             req.flash('error', 'No account with that email address exists.');
             return res.redirect('/dashboard');
           }
-  
           user.resetEmailToken = token;
           user.resetEmailExpires = Date.now() + 3600000; // 1 hour
-  
           user.save((error) => {
             done(error, token, user);
           });
@@ -309,7 +304,6 @@ module.exports = {
               User.findByIdAndUpdate(req.user._id, { email: req.body.email }, () => {
                 user.resetEmailToken = undefined;
                 user.resetEmailExpires = undefined;
-  
                 user.save(() => {
                   req.logIn(user, (error) => {
                     done(error, user);
