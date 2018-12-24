@@ -223,6 +223,24 @@ div.column{
     color: orange;
 }
 
+.sub_name{
+    color: orange !important;
+}
+
+.sub_name:hover{
+    background-color: #402504 !important
+}
+
+.menu-categ{
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange;
+}
+
+.menu-label{
+    color: orange !important;
+}
+
 .price_img{
     width: 30px;
 }

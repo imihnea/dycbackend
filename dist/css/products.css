@@ -36,24 +36,6 @@ input[type=checkbox].curr_checkbox{
     width: 15%;
 }
 
-.menu-label{
-    color: orange !important;
-}
-
-.menu-categ{
-    border-style: double;
-    border-radius: 10px;
-    border-color: orange;
-}
-
-.sub_name{
-    color: orange !important;
-}
-
-.sub_name:hover{
-    background-color: #402504 !important
-}
-
 .curr-filter{
     display: flex;
     align-items: baseline;
