@@ -12,13 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elementItems[i].textContent = truncated;
     i += 1;
   });
-  // let truncated = element.innerText;
-
-  // if (truncated.length > 30) {
-  //   truncated = truncated.substr(0, 30);
-  //   truncated += '...';
-  // }
-  // return truncated;
 });
 
 

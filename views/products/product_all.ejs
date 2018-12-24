@@ -4,16 +4,14 @@
 <link rel="stylesheet" href="../../dist/css/products.css">
 
 <div class="hero-body">
-    <div class="container ">
+    
         <div class="columns">
-            <div class="column is-one-fifth menu content">
-                <div class="categ_menu">
-                    <p class="menu-label">
-                        Categories
-                    </p>
-                    <button class="button is-link" onclick="javascript:history.back()">Back</button>
+            <div class="column is-one-fifth menu menu-categ">
+                <div class="categ_menu" id="maincateg">
+                    <!-- <a class="sub_name menu-label" href="/categories/<%= main %>/"><%= main %></a> -->
+                    <!-- Make script to modify this text according to the main categ -->
                 </div>
-
+                
                 <ul class="menu-list">
                     <li>
                     <a class="sub_name" href="/categories/<%= main %>/<%= subfirst %>"><%= subfirst %></a>
@@ -28,6 +26,304 @@
                     <a class="sub_name" href="/categories/<%= main %>/<%= subfourth %>"><%= subfourth %></a>
                     </li>
                 </ul>
+                <hr style="background-color: orange;">
+
+                <div class="categ_menu">
+                    <p class="menu-label">
+                        Filters
+                    </p>
+                </div>
+
+                <form>
+                    <ul class="filter-list">
+                            <% 
+                                switch(categ) {
+                                    case('Collectibles'): { %>
+                                       <p>Add Filters</p> 
+                                       <%
+                                        break;
+                                    }
+                                    case('Antiques'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('SportsMemorabilia'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('Art'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('YardGardenOutdoor'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('Crafts'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('HomeImprovement'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('PetSupplies'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('OutdoorSports'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('TeamSports'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('ExerciseFitness'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('Golf'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('ComputersTablets'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('CamerasPhoto'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('TvAudioSurveillance'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('PhonesAndAccessories'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('GpsSecurity'): { %>
+                                    <p>Add Filters</p> 
+                                    <%
+                                     break;
+                                    }
+                                    case('RadarLaser'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('CareDetailing'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Scooter'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('RadioControl'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('KidsToys'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('ActionFigures'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('DollsBears'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Women'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Men'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('JewelryWatches'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Shoes'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Guitar'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('ProAudio'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('String'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('StageLightningEffects'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('VideoGamesConsoles'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('HealthBeauty'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('Baby'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    case('BusinessIndustrial'): { %>
+                                        <p>Add Filters</p> 
+                                        <%
+                                         break;
+                                    }
+                                    default: { %>
+                                        <p>default</p>
+                                        <p> <%= categ %></p>
+                                        <% break;
+                                    }
+                                }
+                            
+                            
+                            %>
+                        <li>
+                            <details>
+                                <ul class="menu-list">
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="radio" name="product[accepted]" value="BTC" id="filter-btc">
+                                            <label for="filter-btc" class="curr-label">BTC</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="radio" name="product[accepted]" value="BCH" id="filter-bch">
+                                            <label for="filter-bch" class="curr-label">BCH</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="radio" name="product[accepted]" value="ETH" id="filter-eth">
+                                            <label for="filter-eth" class="curr-label">ETH</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="radio" name="product[accepted]" value="LTC" id="filter-ltc">
+                                            <label for="filter-ltc" class="curr-label">LTC</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="radio" name="product[accepted]" value="DASH" id="filter-dash">
+                                            <label for="filter-dash" class="curr-label">DASH</label>
+                                        </a>
+                                    </div>
+                                </ul>
+                                <summary class="filter-summary">Currency</summary> 
+                            </details>
+                        </li>
+                        <li>
+                            <details>
+                                <ul class="menu-list">
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="checkbox" name="condition[0]" value="New" id="filter-new">
+                                            <label for="filter-new" class="curr-label">Brand New</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="checkbox" name="condition[1]" value="LNew" id="filter-lnew">
+                                            <label for="filter-lnew" class="curr-label">Like New</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="checkbox" name="condition[2]" value="Used" id="filter-used">
+                                            <label for="filter-used" class="curr-label">Used</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="checkbox" name="condition[3]" value="Non" id="filter-non">
+                                            <label for="filter-non" class="curr-label">Not Specified</label>
+                                        </a>
+                                    </div>
+                                </ul>
+                                <summary class="filter-summary">Condition</summary> 
+                            </details>
+                        </li>
+                        <li>
+                            <details>
+                                <ul class="menu-list">
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="number" class="filter-input" name="price[0]" id="filter-min" step="any">
+                                            <label for="filter-min" class="curr-label">Min</label>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a href="#" class="curr-filter">
+                                            <input type="number" class="filter-input" name="price[1]" id="filter-max" step="any">
+                                            <label for="filter-max" class="curr-label">Max</label>
+                                        </a>
+                                    </div>
+                                </ul>
+                                <summary class="filter-summary">Price</summary> 
+                            </details>
+                        </li>
+                        <li>
+                            <a href="#" class="curr-filter" style="justify-content: center; margin-bottom: 1vh; margin-top: 0.5vh;">
+                                <input type="checkbox" class="filter-input" name="shipping" id="filter-free-ship">
+                                <label for="filter-ship" class="curr-label">Free Shipping</label>
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <button class="button is-primary">Filter</button>
+                </form>
             </div>
             <div class="column content">
                 <% products.forEach(function(product){ %>
@@ -51,16 +347,16 @@
                             }
                         });
                     %>
-
                     <div class="columns">
                         <div class="column is-one-quarter">
-                                <img src="<%= product.image %>">
+                                <img src="<%= product.image %>" class="open-img">
                         </div>
                         <div class="column prod_info is-half">
                             <p class="title is-5"><%= product.name %></p>
-                            <!-- <p class="subtitle is-6"><%= product.description %></p> -->
                             <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
-                            <a href="/products/<%= product._id %>/view"><button class="button is-primary">View</button></a>
+                            <div style="display: flex;">
+                                <a href="/products/<%= product._id %>/view"><button class="button view-btn">View</button></a>
+                            </div>   
                         </div>
                         <div class="column prod_info">
                             <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
@@ -98,26 +394,13 @@
                                 </div>
                             <% } %>
                         </div>
-                        
                     </div>
-                    <hr>                    
-                <% }); %>
+                    <hr style="background-color: orange !important;">                    
+                <% }); %>         
             </div>
         </div>
-    </div>
+   
 </div>
 
 <% include ../partials/footer %>
-
-
-
-<!--<div class="row text-center flex-wrap">
-    <ul>
-        <% products.forEach(function(product){ %>
-            <li> <%= product.name %> </li>
-            <li><a class="btn btn-warning" href="/categories/products/<%= product._id %>/edit">Edit</a><li>
-            <li><form action="/categories/products/<%= product._id %>?_method=DELETE" method="POST">
-            <button class="btn btn-danger">Delete</button></form></li>
-        <% }); %>
-    </ul>
-</div>-->
+<script src="../../dist/js/categname.js"></script>

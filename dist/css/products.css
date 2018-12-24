@@ -35,3 +35,61 @@ input[type=checkbox].curr_checkbox{
 .cccy{
     width: 15%;
 }
+
+.menu-label{
+    color: orange !important;
+}
+
+.menu-categ{
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange;
+}
+
+.sub_name{
+    color: orange !important;
+}
+
+.sub_name:hover{
+    background-color: #402504 !important
+}
+
+.curr-filter{
+    display: flex;
+    align-items: baseline;
+    color: orange !important;
+}
+
+.curr-filter:hover{
+    background-color: transparent !important;
+}
+
+.curr-label{
+    left: 0.5vw;
+    position: relative;
+    top: -0.1vh;
+}
+
+.filter-list{
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+.filter-summary{
+    color: orange;
+    text-align: left;
+    margin-left: 1vw;
+    outline: none;
+    cursor: pointer;
+}
+
+.menu-item:hover{
+    background-color: #402504!important;
+}
+
+.filter-input{
+    background-color: transparent;
+    border-radius: 5px;
+    outline: none;
+    padding-left: 5px;
+}

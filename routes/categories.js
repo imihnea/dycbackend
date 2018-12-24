@@ -132,6 +132,7 @@ router.get('/Collectibles-Art/Collectibles', (req, res) => {
         subsecond: 'Antiques',
         subthird: 'SportsMemorabilia',
         subfourth: 'Art',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -151,6 +152,7 @@ router.get('/Collectibles-Art/Antiques', (req, res) => {
         subsecond: 'Antiques',
         subthird: 'SportsMemorabilia',
         subfourth: 'Art',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -170,6 +172,7 @@ router.get('/Collectibles-Art/SportsMemorabilia', (req, res) => {
         subsecond: 'Antiques',
         subthird: 'SportsMemorabilia',
         subfourth: 'Art',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -189,6 +192,7 @@ router.get('/Collectibles-Art/Art', (req, res) => {
         subsecond: 'Antiques',
         subthird: 'SportsMemorabilia',
         subfourth: 'Art',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -209,6 +213,7 @@ router.get('/Home-Garden/YardGardenOutdoor', (req, res) => {
         subsecond: 'Crafts',
         subthird: 'HomeImprovement',
         subfourth: 'PetSupplies',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -228,6 +233,7 @@ router.get('/Home-Garden/Crafts', (req, res) => {
         subsecond: 'Crafts',
         subthird: 'HomeImprovement',
         subfourth: 'PetSupplies',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -247,6 +253,7 @@ router.get('/Home-Garden/HomeImprovement', (req, res) => {
         subsecond: 'Crafts',
         subthird: 'HomeImprovement',
         subfourth: 'PetSupplies',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -266,6 +273,7 @@ router.get('/Home-Garden/PetSupplies', (req, res) => {
         subsecond: 'Crafts',
         subthird: 'HomeImprovement',
         subfourth: 'PetSupplies',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -286,6 +294,7 @@ router.get('/Sporting-Goods/OutdoorSports', (req, res) => {
         subsecond: 'TeamSports',
         subthird: 'ExerciseFitness',
         subfourth: 'Golf',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -305,6 +314,7 @@ router.get('/Sporting-Goods/TeamSports', (req, res) => {
         subsecond: 'TeamSports',
         subthird: 'ExerciseFitness',
         subfourth: 'Golf',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -324,6 +334,7 @@ router.get('/Sporting-Goods/ExerciseFitness', (req, res) => {
         subsecond: 'TeamSports',
         subthird: 'ExerciseFitness',
         subfourth: 'Golf',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -343,6 +354,7 @@ router.get('/Sporting-Goods/Golf', (req, res) => {
         subsecond: 'TeamSports',
         subthird: 'ExerciseFitness',
         subfourth: 'Golf',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -363,6 +375,7 @@ router.get('/Electronics/ComputersTablets', (req, res) => {
         subsecond: 'CamerasPhoto',
         subthird: 'TvAudioSurveillance',
         subfourth: 'PhonesAndAccessories',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -382,6 +395,7 @@ router.get('/Electronics/CamerasPhoto', (req, res) => {
         subsecond: 'CamerasPhoto',
         subthird: 'TvAudioSurveillance',
         subfourth: 'PhonesAndAccessories',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -401,6 +415,7 @@ router.get('/Electronics/TvAudioSurveillance', (req, res) => {
         subsecond: 'CamerasPhoto',
         subthird: 'TvAudioSurveillance',
         subfourth: 'PhonesAndAccessories',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -420,6 +435,7 @@ router.get('/Electronics/PhonesAndAccessories', (req, res) => {
         subsecond: 'CamerasPhoto',
         subthird: 'TvAudioSurveillance',
         subfourth: 'PhonesAndAccessories',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -440,6 +456,7 @@ router.get('/AutoParts-Accessories/GpsSecurity', (req, res) => {
         subsecond: 'RadarLaser',
         subthird: 'CareDetailing',
         subfourth: 'Scooter',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -459,6 +476,7 @@ router.get('/AutoParts-Accessories/RadarLaser', (req, res) => {
         subsecond: 'RadarLaser',
         subthird: 'CareDetailing',
         subfourth: 'Scooter',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -478,6 +496,7 @@ router.get('/AutoParts-Accessories/CareDetailing', (req, res) => {
         subsecond: 'RadarLaser',
         subthird: 'CareDetailing',
         subfourth: 'Scooter',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -497,6 +516,7 @@ router.get('/AutoParts-Accessories/Scooter', (req, res) => {
         subsecond: 'RadarLaser',
         subthird: 'CareDetailing',
         subfourth: 'Scooter',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -517,6 +537,7 @@ router.get('/Toys-Hobbies/RadioControl', (req, res) => {
         subsecond: 'KidsToys',
         subthird: 'ActionFigures',
         subfourth: 'DollsBears',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -536,6 +557,7 @@ router.get('/Toys-Hobbies/KidsToys', (req, res) => {
         subsecond: 'KidsToys',
         subthird: 'ActionFigures',
         subfourth: 'DollsBears',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -555,6 +577,7 @@ router.get('/Toys-Hobbies/ActionFigures', (req, res) => {
         subsecond: 'KidsToys',
         subthird: 'ActionFigures',
         subfourth: 'DollsBears',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -574,6 +597,7 @@ router.get('/Toys-Hobbies/DollsBears', (req, res) => {
         subsecond: 'KidsToys',
         subthird: 'ActionFigures',
         subfourth: 'DollsBears',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -594,6 +618,7 @@ router.get('/Fashion/Women', (req, res) => {
         subsecond: 'Men',
         subthird: 'JewelryWatches',
         subfourth: 'Shoes',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -613,6 +638,7 @@ router.get('/Fashion/Men', (req, res) => {
         subsecond: 'Men',
         subthird: 'JewelryWatches',
         subfourth: 'Shoes',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -632,6 +658,7 @@ router.get('/Fashion/JewelryWatches', (req, res) => {
         subsecond: 'Men',
         subthird: 'JewelryWatches',
         subfourth: 'Shoes',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -651,6 +678,7 @@ router.get('/Fashion/Shoes', (req, res) => {
         subsecond: 'Men',
         subthird: 'JewelryWatches',
         subfourth: 'Shoes',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -671,6 +699,7 @@ router.get('/MusicalInstruments-Gear/Guitar', (req, res) => {
         subsecond: 'ProAudio',
         subthird: 'String',
         subfourth: 'StageLightningEffects',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -690,6 +719,7 @@ router.get('/MusicalInstruments-Gear/ProAudio', (req, res) => {
         subsecond: 'ProAudio',
         subthird: 'String',
         subfourth: 'StageLightningEffects',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -709,6 +739,7 @@ router.get('/MusicalInstruments-Gear/String', (req, res) => {
         subsecond: 'ProAudio',
         subthird: 'String',
         subfourth: 'StageLightningEffects',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -728,6 +759,7 @@ router.get('/MusicalInstruments-Gear/StageLightningEffects', (req, res) => {
         subsecond: 'ProAudio',
         subthird: 'String',
         subfourth: 'StageLightningEffects',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -748,6 +780,7 @@ router.get('/Other/VideoGamesConsoles', (req, res) => {
         subsecond: 'HealthBeauty',
         subthird: 'Baby',
         subfourth: 'BusinessIndustrial',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -767,6 +800,7 @@ router.get('/Other/HealthBeauty', (req, res) => {
         subsecond: 'HealthBeauty',
         subthird: 'Baby',
         subfourth: 'BusinessIndustrial',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -786,6 +820,7 @@ router.get('/Other/Baby', (req, res) => {
         subsecond: 'HealthBeauty',
         subthird: 'Baby',
         subfourth: 'BusinessIndustrial',
+        categ: req.url.split('/')[2],
       });
     }
   });
@@ -805,6 +840,7 @@ router.get('/Other/BusinessIndustrial', (req, res) => {
         subsecond: 'HealthBeauty',
         subthird: 'Baby',
         subfourth: 'BusinessIndustrial',
+        categ: req.url.split('/')[2],
       });
     }
   });

@@ -6,5 +6,8 @@ module.exports = {
         "object-shorthand": "off",
         "consistent-return": "off",
         "linebreak-style": ["error", "windows"]
+    },
+    "env": {
+        "browser": true,
     }
 };

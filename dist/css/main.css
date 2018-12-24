@@ -111,6 +111,10 @@ input, select, .dd-btn{
     text-align: center;
 }
 
+.dropdown-item:hover{
+    background-color: #402504 !important;
+}
+
 .main-categ{
     text-align: left !important;
     color: orange !important;
@@ -232,12 +236,17 @@ div.column{
 }
 
 .subtitle{
-    color: #c36a1b;
+    color: #c36a1b !important;
+}
+
+.open-img{
+    width: 200px;
+    height: 100%;
 }
 
 .view-btn{
-    background-color: #65ff00 !important;
-    border-color: transparent;
+    background-color: orange !important;
+    border-color: transparent !important;
 }
 
 .view-btn:hover{
