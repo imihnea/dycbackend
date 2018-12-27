@@ -64,6 +64,10 @@ input, select, .dd-btn{
     border-color: orange !important;
 }
 
+.cont-select:not(.is-multiple):not(.is-loading)::after {
+    right: 1em !important;
+} 
+
 .search-input{
     border-bottom-right-radius: 0 !important;
     border-top-right-radius: 0 !important;

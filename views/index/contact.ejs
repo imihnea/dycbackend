@@ -6,35 +6,29 @@
     <div class="container content">
             <div class="columns toptitle">
                 <div class="column">
-                    <h1>Contact Us</h1>
-                    <p>What can we help you with?</p>
+                    <h1 class="title">Contact Us</h1>
+                    <p style="color: orange !important;">What can we help you with?</p>
                 </div>
             </div>
             
             <div class="columns">
-                <div class="column" >
-                    <form action="/contact/send" method="POST">
-                        <div class="field">
-                            <label class="label">Name</label>
-                            <div class="control has-icons-left has-icons-right">
-                                <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
-                                <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                                </span>
-                            </div>
-                            </div>
-                            <div class="field">
-                            <label class="label">Email</label>
-                            <div class="control has-icons-left has-icons-right">
-                                <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
-                                <span class="icon is-small is-left">
-                                <i class="fas fa-envelope"></i>
-                                </span>
-                            </div>
-                            </div>
-                        <label class="label">Topic</label>
-                        <div class="select smmargin">
-                                <select name="topic">
+                <div class="column"></div>
+                <div class="column is-three-fifths" >
+                    <form action="/contact/send" method="POST">                          
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
+                            <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
+                            <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <div class="field select cont-select smmargin">
+                                <select name="topic" style="width: 100vw;">
                                     <option value="General">General</option>
                                     <option value="Payments">Payments</option>
                                     <option value="Delivery">Delivery</option>
@@ -42,8 +36,7 @@
                                     <option value="Suggestions">Suggestions</option>
                                 </select>
                         </div>
-                        <div class="field">
-                                <label class="label">Message</label>
+                        <div class="field" style="margin-top: 3px;">
                                 <div class="control">
                                     <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                 </div>
@@ -51,19 +44,10 @@
                         <div class="control smmargin">
                             <button class="button is-primary is-large is-fullwidth">Send</button>
                         </div>
-                    </form>       
+                    </form>
+                    <p class="smmargin" style="color: orange !important;">Make sure to check our FAQ out <a href="/faq">here</a>.</p>
                 </div>
-                <div class="column">
-                        <div class="separator"></div>
-                    </div>
-                    <div class="column">
-                            <h2>Check our FAQ out</h2>
-                            <p><button class="button">Topic 1</button></p>
-                            <p><button class="button">Topic 2</button></p>
-                            <p><button class="button">Topic 3</button></p>
-                            <p><button class="button">Topic 4</button></p>
-                            <p><button class="button">Topic 5</button></p>
-                    </div>
+                <div class="column"></div>
             </div>
     </div>
 </div>
