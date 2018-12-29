@@ -54,3 +54,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// Truncating - unused yet, going to use it for product names
+// document.addEventListener('DOMContentLoaded', () => {
+//   const element = document.querySelectorAll('.slidetext');
+//   const elementItems = [].slice.call(element);
+//   let truncated;
+//   let i = 0;
+//   elementItems.forEach((item) => {
+//     truncated = item.textContent;
+//     if (truncated.length > 97) {
+//       truncated = truncated.substr(0, 97);
+//       truncated += '...';
+//     }
+//     elementItems[i].textContent = truncated;
+//     i += 1;
+//   });
+// });
