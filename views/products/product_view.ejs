@@ -3,21 +3,63 @@
 <script src="../../dist/js/products.js"></script>       
 <link rel="stylesheet" href="../../dist/css/categories.css">
 <link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="../../dist/css/product_view.css">
+<script src="../../dist/js/product_view.js"></script>
 
 <div class="hero-body">
     <div class="container ">
         <div class="column">
-            <h2><strong><%= product.name %></strong></h2>
+            <h1 class="title"><strong><%= product.name %></strong></h2>
         </div>
         <hr>
         
         <div class="columns">
+            <div class="column ">
+                <div class="thumbnails">
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id1" checked="checked"/>
+                        <label for="id1">
+                            <img class="thumbnail" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483879/lhr9p0camrjdn19kamg4.png"/>
+                        </label>
+                    </div>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id2"/>
+                        <label for="id2">
+                            <img class="thumbnail" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099789/15420913_1835521656663535_4196514548894520166_n.png"/>
+                        </label>
+                    </div>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id3"/>
+                        <label for="id3">
+                            <img class="thumbnail" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099809/lucipog.png"/>
+                        </label>
+                    </div>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id4"/>
+                        <label for="id4">
+                            <img class="thumbnail" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483879/lhr9p0camrjdn19kamg4.png"/>
+                        </label>
+                    </div>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id5"/>
+                        <label for="id5">
+                            <img class="thumbnail" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099789/15420913_1835521656663535_4196514548894520166_n.png"/>
+                        </label>
+                    </div>                 
+                </div>
+            </div>
             <div class="column is-three-fifths">
-                <img src="<%= product.image %>">
-
+                <div class="slider">
+                    <img class="mainImg " src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483879/lhr9p0camrjdn19kamg4.png"/>
+                    <img class="mainImg hiddenImg" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099789/15420913_1835521656663535_4196514548894520166_n.png"/>
+                    <img class="mainImg hiddenImg" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099809/lucipog.png"/>
+                    <img class="mainImg hiddenImg" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483879/lhr9p0camrjdn19kamg4.png"/>
+                    <img class="mainImg hiddenImg" src="https://res.cloudinary.com/dxbujmytn/image/upload/v1546099789/15420913_1835521656663535_4196514548894520166_n.png"/>
+                </div>
             </div>
 
-            <div class="column">
+            <div class="column is-one-quarter">
+                <p class="productUserText">Sold by: <a class="productUserLink" href="#">AAAAAAAA  <span style="color: green !important;">x/5 <i class="fas fa-star"></i></span></a></p>
                 <% 
                     let currencies = [0, 0, 0, 0, 0];
                     product.accepted.forEach(( key ) => {
@@ -42,7 +84,6 @@
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                         <p class="price_text"> <%= product.price[0] %></p>
-                        <!-- <input class="input smmargin" name="btc_price" value="<%= product.price[0] %> BTC" disabled /> -->
                     </div>
                 <% } 
                     if ((product.price[1] != 0) && (currencies[1] == 1)) {
@@ -73,10 +114,11 @@
                         <p class="price_text"> <%= product.price[4] %></p>
                     </div>
                 <% } %>
-                <p><sub>Transportation cost: TBD</sub></p>
-                <hr>
+                <p style="color: orange !important;"><sub>Transportation cost: TBD</sub></p>
+                <br>
+               
                 <form action="/products/<%= product.id %>/buy" method="POST">
-                    <p>Accepted currencies</p>
+                    
                     <% 
                         product.accepted.forEach(( key ) => {
                             if (key == 'BTC'){ %>
@@ -113,23 +155,138 @@
                     %>
                     <div class="control smmargin">
                         <button class="button is-primary">Buy</button>
+                        
                     </div>
                 </form>
-                
+                <a class="productContactLink" href="#"><button class="button is-primary">Contact</button></a>
 
             </div>  
         </div>
         <hr>
         <div class="column">
-            <h3>Similar products</h3>
-            <!-- Add a few products from the same category -->
-        </div>
-        <hr>
-        <div class="column">
-            <p>Description</p>
-            <%= product.description %>
+            <p class="productSubTitleText">Description</p>
+            <br>
+            <p class="productDescriptionText" ><%= product.description %></p>
         </div> 
-    </div>
+        <hr>
+        <p class="productSubTitleText">Similar products</p>
+        <div class="column">    
+            <!-- Add a few products from the same category -->
+            <div class="columns firstcol">
+                <div class="column card feat_card">
+                    <div class="card-image">
+                        <figure class="image featimg">
+                            <img src="../../dist/img/blanc.jpg">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                            </div>
+                        </div>
+                        <div class="accepted_currencies">
+                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                        </div>
+                        <a href="#"><button class="button is-primary view_details">View Details</button></a>
+                    </div>                        
+                </div>
+                <div class="column card feat_card">
+                    <div class="card-image">
+                        <figure class="image featimg">
+                            <img src="../../dist/img/blanc.jpg">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                            </div>
+                        </div>
+                        <div class="accepted_currencies">
+                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                        </div>
+                        <a href="#"><button class="button is-primary view_details">View Details</button></a>
+                    </div>                        
+                </div>
+                <div class="column card feat_card">
+                    <div class="card-image">
+                        <figure class="image featimg">
+                            <img src="../../dist/img/blanc.jpg">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                            </div>
+                        </div>
+                        <div class="accepted_currencies">
+                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                        </div>
+                        <a href="#"><button class="button is-primary view_details">View Details</button></a>
+
+                    </div>                        
+                </div>
+                <div class="column card feat_card">
+                    <div class="card-image">
+                        <figure class="image featimg">
+                            <img src="../../dist/img/blanc.jpg">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                            </div>
+                        </div>
+                        <div class="accepted_currencies">
+                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                        </div>
+                        <a href="#"><button class="button is-primary view_details">View Details</button></a>
+                    </div>                        
+                </div>
+                <div class="column card feat_card">
+                    <div class="card-image">
+                        <figure class="image featimg">
+                            <img src="../../dist/img/blanc.jpg">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                            </div>
+                        </div>
+                        <div class="accepted_currencies">
+                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                        </div>
+                        <a href="#"><button class="button is-primary view_details">View Details</button></a>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+    </div>    
 </div> 
 
 <% include ../partials/footer %>

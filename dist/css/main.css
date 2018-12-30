@@ -227,6 +227,10 @@ div.column{
     color: orange;
 }
 
+hr{
+    background-color: orange !important;
+}
+
 .sub_name{
     color: orange !important;
 }
@@ -251,6 +255,7 @@ div.column{
 
 .button.is-primary{
     background-color: orange !important;
+    color: black !important;
 }
 
 .title{

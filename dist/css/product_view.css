@@ -1,0 +1,88 @@
+.slider{
+	position: relative;
+}
+
+.slider>img{
+	position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+	top: 0;
+	max-width: 50vw;
+    max-height: 39vh;
+}
+
+.hiddenImg{
+	visibility: hidden;
+}
+
+.thumbnail{
+	width: 50px;
+	height: 50px;
+}
+
+.thumbnails input[name='slide_switch'] {
+	display: none;
+}
+
+.thumbnails label {
+	/* margin: 18px 0 0 18px; */
+	border: 2px solid orange;
+	border-radius: 5px;
+	float: left;
+	transition: all 0.5s;
+	opacity: 0.6;
+}
+
+.thumbnails label img{
+	display: block;
+}
+
+.thumbnails input[name='slide_switch']:checked+label {
+	border-color: orange;
+	opacity: 1;
+}
+
+.thumbnails input[name='slide_switch'] ~ img {
+	opacity: 0;
+	transform: scale(1);
+}
+
+.thumbnails input[name='slide_switch']:checked+label+img {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.card{
+	background-color: transparent !important;
+	border-style: double !important;
+    border-radius: 5px !important;
+    border-color: orange !important;
+}
+
+.productSubTitleText{
+	color: orange !important;
+	text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2vh;
+}
+
+.productDescriptionText{
+	color: orange !important;
+	text-align: left;
+}
+
+.productUserText{
+	margin-bottom: 2vh;
+	color: orange !important;
+}
+
+.productUserLink{
+	color: darkseagreen !important;
+}
+
+.productContactLink{
+	position: relative;
+	top: 1vh;
+}
