@@ -4,16 +4,12 @@
 <link rel="stylesheet" href="../../dist/css/products.css">
 <div class="hero-body">
     <div class="columns">
-
-    
             <% include ../partials/sidebar %>
-
             <div class="column">
                 <form action="/dashboard" method="POST" enctype="multipart/form-data">
                     <input class="input" name="name" placeholder="Name" type="text" required />
-                    
                     <div class="filencat">
-                        <div class="select">
+                        <div class="select cont-select">
                             <select type="text" name="category">
                                 <option disabled selected>Categories</option>
                                 <option disabled>Collectibles & Art</option>
@@ -63,7 +59,6 @@
                                 <option value="businessindustrial">Business & Industrial</option>
                             </select>
                         </div>
-            
                         <div class="file has-name">
                             <label class="file-label">
                                 <input class="file-input" type="file" name="image" accept="image/*">
@@ -81,10 +76,7 @@
                             </label>
                         </div>
                     </div>
-                    
-                    <textarea name="description" class="textarea" placeholder="Description"></textarea>
-                    <!-- <input class="input smmargin" name="price" placeholder="Price ($)" type="number" required /> -->
-                    
+                    <textarea name="description" class="textarea" placeholder="Description"></textarea>                    
                     <hr />
                     <h4 class="new-text" style="margin-bottom: 3vh;">Accepted currencies</h4>
                     <label class="img-check ">
@@ -146,18 +138,11 @@
                             </tr>
                         </tbody>
                     </table>
-
                     <div class="control smmargin">
                         <button class="button is-primary">Create</button>
                     </div>
-                    
-                </form>
-                    
-                
+                </form>                
             </div>
-            
         </div>
-    
 </div>
-
 <% include ../partials/footer %>

@@ -66,7 +66,11 @@ input, select, .dd-btn{
 
 .cont-select:not(.is-multiple):not(.is-loading)::after {
     right: 1em !important;
-} 
+}
+
+.dash-select:not(.is-multiple):not(.is-loading)::after {
+    right: 2em !important;
+}
 
 .search-input{
     border-bottom-right-radius: 0 !important;
