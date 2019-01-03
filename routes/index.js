@@ -229,6 +229,18 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
+// profile route
+
+router.get('/profile/:id/view/', (req, res) => {
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      req.flash('error', err.message);
+    } else {
+      res.render('index/profile', { user: user });
+    }
+  });
+});
+
 // categories route
 
 router.get('/', (req, res) => {

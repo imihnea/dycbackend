@@ -283,6 +283,39 @@ hr{
 .view-btn:hover{
     border-color: transparent;
 }
+
+.firstcol{
+    justify-content: center;
+}
+
+.card:hover{
+    background-color: #c3691b52;
+}
+
+.card{
+    max-height: 281px !important;
+    max-width: 250px !important;
+}
+
+.card-content{
+    padding-top: 0 !important;
+}
+
+.featimgs{
+    max-width: 160px;
+}
+
+.deals{
+    border-style: double;
+    border-color: orange;
+    padding: 20px;
+    border-top-style: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-top: -1.5vh;
+    margin-left: -12px;
+    margin-right: -12px;
+}
 /* Content Ends */
 
 /* Footer Begins */
