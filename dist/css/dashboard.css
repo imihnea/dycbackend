@@ -199,3 +199,53 @@ hr{
 .active-page{
     background-color: #402504 !important;
 }
+
+.messageItem{
+    /* background-color: transparent !important; */
+    border-style: double;
+    border-radius: 5px;
+    border-color: orange;
+}
+
+.messageItem:hover{
+    background-color: #402504;
+}
+
+.modal-card-head{
+    background-color: black !important;
+    color: orange !important;
+    border: 1px solid orange;
+}
+
+.modal-card-title{
+    color: orange !important;
+}
+
+.delete::before, .modal-close::before, .delete::after, .modal-close::after{
+    background-color: orange !important;
+}
+
+.modal-card-body{
+    border-left: 1px solid orange;
+    border-right: 1px solid orange;
+    border-bottom: 1px solid orange;
+    background-color: black !important;
+}
+
+.modal-card-foot{
+    background-color: black !important;
+    border-top: 0;
+    border-left: 1px solid orange;
+    border-right: 1px solid orange;
+    border-bottom: 1px solid orange;
+}
+
+.modal-section-title{
+    text-align: left; 
+    border-bottom: 1px solid orange;
+}
+
+.modal-form{
+    display: flex; 
+    justify-content: space-evenly;
+}

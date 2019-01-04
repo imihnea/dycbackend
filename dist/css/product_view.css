@@ -54,13 +54,13 @@
 	transform: scale(1);
 }
 
-.card{
+/* .card{
 	background-color: transparent !important;
 	border-style: double !important;
     border-radius: 5px !important;
     border-color: orange !important;
 }
-
+*/
 .productSubTitleText{
 	color: orange !important;
 	text-align: center;
@@ -73,7 +73,7 @@
 	text-align: left;
 }
 
-.productUserText{
+/*.productUserText{
 	margin-bottom: 2vh;
 	color: orange !important;
 }
@@ -85,4 +85,4 @@
 .productContactLink{
 	position: relative;
 	top: 1vh;
-}
+} */

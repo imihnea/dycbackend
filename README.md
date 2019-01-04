@@ -6,15 +6,13 @@ Frontend:
 
     High Priority:
 
-        Category pages ( filters for subcategories )
-
-        Product page => Image gallery
-
         Search result page
-
-        Top-up interface
         
         New deals => Multiple file input
+
+        Ongoing purchase interface
+
+        Finished deal => review interface
 
     Low Priority:
 

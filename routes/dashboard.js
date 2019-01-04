@@ -83,6 +83,11 @@ router.post('/addresses', isLoggedIn, (req, res) => {
   }
 });
 
+// Messages route
+router.get('/messages', isLoggedIn, (req, res) => {
+  res.render('dashboard/dashboard_messages', { user: req.user });
+});
+
 // Dashboard tokens route; gets current number of tokens
 router.get('/tokens', isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard_tokens', { user: req.user });
