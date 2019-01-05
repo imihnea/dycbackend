@@ -7,8 +7,6 @@ Frontend:
     High Priority:
 
         Search result page
-        
-        New deals => Multiple file input
 
         Ongoing purchase interface
 
