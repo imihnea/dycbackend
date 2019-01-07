@@ -1,0 +1,52 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="columns" style="color: orange;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+            <div class="columns">
+                <div class="column"></div>
+                <div class="column is-four-fifths">
+                    <div>
+                        <div class="level toplevel">
+                            <div class="level-left">
+                                    <a><p class="title is-4">Contact Name</p></a>
+                            </div>
+                            <div class="level-right" style="padding-right: 1vw;">
+                                    <a><p class="title is-4">Product Page</p></a>
+                            </div>
+                        </div>
+
+                        <div class="midlevel">
+                            <div class="level">
+                                    <div class="level-left leftlv">
+                                            <div class="recmsg">
+                                                    <p >Hello, I want more information about X</p>
+                                                    <time>19:03</time>
+                                            </div>
+                                                    
+                                    </div>
+                            </div>
+                            <div class="level" style="display: block;">
+                                    <div class="level-right">
+                                            <div class="sentmsg">
+                                                    <p >Hello, X is in very good condition</p>
+                                                    <time>19:03</time>
+                                            </div>
+                                    </div>      
+                            </div>
+                        </div>
+                        <div class="bottomlv">
+                            <form action="" class="msgbox">
+                                    <textarea class="textarea has-fixed-size" rows="2" cols="10"></textarea>
+                                    <button class="button is-primary">Send</button>
+                            </form>
+                        </div>
+                </div>
+            </div>
+
+            <div class="column"></div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

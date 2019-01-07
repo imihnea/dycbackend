@@ -12,6 +12,8 @@ Frontend:
 
         Finished deal => review interface
 
+        Messaging interface
+
     Low Priority:
 
         Make everything responsive (see comments in css files)

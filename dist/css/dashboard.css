@@ -303,3 +303,75 @@ hr{
     visibility: hidden;
     display: none;
 }
+
+time{
+    font-size: 0.7rem;
+    color: #ccc;
+    margin-top: 3px;
+    float: right;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.toplevel{
+    border-style: double;
+    border-radius: 5px;
+    padding: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.midlevel{
+    border-style: double;
+    border-radius: 5px;
+    padding: 2rem;
+    margin-top: -1.7rem;
+    border-top: 0;
+    height: 58vh;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.leftlv{
+    padding-left: 0 !important;
+}
+
+.bottomlv{
+    border-style: double;
+    padding: 2.5rem;
+    border-top: 0;
+    height: 103px;
+    padding-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.recmsg{
+    background-color: rgb(88, 53, 20);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sentmsg{
+    background-color: rgb(116, 53, 11);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.msgbox{
+    align-content: center;
+    display: flex;
+    height: inherit;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.msgbox textarea{
+    margin-top: -3px;
+    margin-bottom: 0px;
+    height: 80%;
+    margin-right: 1%;
+}

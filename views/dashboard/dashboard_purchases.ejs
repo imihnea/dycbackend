@@ -1,14 +1,16 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
-<div class="hero-body">
+<div class="columns">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
         <div class="columns">
-            <% include ../partials/sidebar %>
-            <div class="column" >
+            <div class="column"></div>
+            <div class="column is-four-fifths">
                 <div style="overflow-x: hidden;">
                     <% if (products == '') { %>
                         <h1 class="new-text">You haven't made any purchases yet.</h1>
-                     <% } %>
+                        <% } %>
                     <% products.forEach(function(product){ %>
                         <% 
                             let currencies = [0, 0, 0, 0, 0];
@@ -80,9 +82,12 @@
                         </div>
                         <hr>                    
                     <% }); %>         
-            </div>        
-            </div> 
+                </div>        
+            </div>
+            <div class="column"></div>
         </div>
+
+    </div> 
 </div>
 
 <% include ../partials/footer %>

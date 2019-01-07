@@ -72,6 +72,10 @@ input, select, .dd-btn{
     right: 2em !important;
 }
 
+.dash-select{
+    margin-top: 1vh;
+}
+
 .search-input{
     border-bottom-right-radius: 0 !important;
     border-top-right-radius: 0 !important;

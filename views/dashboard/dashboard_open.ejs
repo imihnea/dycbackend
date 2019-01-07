@@ -1,10 +1,12 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
-<div class="hero-body">
+<div class="columns">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right" >
         <div class="columns">
-            <% include ../partials/sidebar %>
-            <div class="column" >
+            <div class="column"></div>
+            <div class="column is-four-fifths">
                 <div style="overflow-x: hidden;">
                     <% products.forEach(function(product){ %>
                         <% 
@@ -80,10 +82,14 @@
                         </div>
                     </div>
                     <hr>                    
-                <% }); %>         
-            </div>        
-        </div> 
-    </div>
+                    <% }); %>         
+                </div>        
+            </div>
+            <div class="column"></div>
+        </div>
+        
+</div> 
 </div>
+
 
 <% include ../partials/footer %>
