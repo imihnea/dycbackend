@@ -4,36 +4,28 @@
 
 <div class="hero-body">
     <div class="container content">
-        <div class="columns toptitle">
-            <div class="column">
-                <h1>Welcome to Deal Your Crypto</h1>
-                <p>Register or <a href="/login">Sign In</a></p>
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths lrform" >
+                <h1 style="color: orange">Sign Up</h1>
+                <div class="social-media">
+                    <a href="/auth/facebook" class="btn-face">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+    
+                    <a href="/auth/google" class="btn-google">
+                        <i class="fab fa-google"></i>
+                    </a>
+                </div>
+                <form action="/register" method="POST">
+                    <input class="input smmargin" name="email" placeholder="Email" autofocus type="email" required />
+                    <input class="input smmargin" name="username" placeholder="Username" type="text" required />
+                    <input class="input smmargin" name="password" placeholder="Password" type="password" required />
+                    <div class="control smmargin">
+                        <button class="button is-primary">Register</button>
+                    </div>
+                </form>
+                <p style="padding-top: 1vh; color: orange">Already a member? <a href="/login">Sign in here</a></p>
             </div>
-        </div>
-
-        <div class="columns">
-                <div class="column" >
-                    <form action="/register" method="POST">
-                        <input class="input smmargin" name="email" placeholder="Email" autofocus type="email" required />
-                        <input class="input smmargin" name="username" placeholder="Username" type="text" required />
-                        <input class="input smmargin" name="password" placeholder="Password" type="password" required />
-                        <div class="control smmargin">
-                            <button class="button is-primary">Register</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="column">
-                        <div class="separator"></div>
-                </div>
-                <div class="column">
-                        <div class="control smmargin">
-                            <button class="button is-primary" onclick="window.location.href='/auth/google'">Sign in with Google</button>
-                        </div>
-                        <div class="control smmargin">
-                            <button class="button is-primary" onclick="window.location.href='/auth/facebook'">Sign in with Facebook</button>
-                        </div>
-                </div>
         </div>
     </div>
 </div>

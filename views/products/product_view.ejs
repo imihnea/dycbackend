@@ -1,0 +1,291 @@
+<% include ../partials/header %>
+<script src="../../dist/js/maincateg.js"></script>
+<script src="../../dist/js/products.js"></script>       
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="../../dist/css/product_view.css">
+<link rel="stylesheet" href="/../dist/css/index.css"> 
+<script src="../../dist/js/product_view.js"></script>
+<div class="hero-body">
+    <div class="container ">
+        <div class="column">
+            <h1 class="title"><strong><%= product.name %></strong></h2>
+        </div>
+        <hr>
+        <div class="columns" style="height: 39vh;">
+            <div class="column ">
+                <div class="thumbnails">
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id1" checked="checked"/>
+                        <label for="id1">
+                            <img class="thumbnail" src="<%= product.images[0].url %>"/>
+                        </label>
+                    </div>
+                    <% if (product.images[1]) { %>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id2"/>
+                        <label for="id2">
+                            <img class="thumbnail" src="<%= product.images[1].url %>"/>
+                        </label>
+                    </div>
+                    <% } %>
+                    <% if (product.images[2]) { %>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id3"/>
+                        <label for="id3">
+                            <img class="thumbnail" src="<%= product.images[2].url %>"/>
+                        </label>
+                    </div>
+                    <% } %>
+                    <% if (product.images[3]) { %>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id4"/>
+                        <label for="id4">
+                            <img class="thumbnail" src="<%= product.images[3].url %>"/>
+                        </label>
+                    </div>
+                    <% } %>
+                    <% if (product.images[4]) { %>
+                    <div class="level">
+                        <input type="radio" name="slide_switch" id="id5"/>
+                        <label for="id5">
+                            <img class="thumbnail" src="<%= product.images[4].url %>"/>
+                        </label>
+                    </div> 
+                    <% } %>                
+                </div>
+            </div>
+            <div class="column is-three-fifths">
+                <div class="slider">
+                    <img class="mainImg " src="<%= product.images[0].url %>"/>
+                    <% if (product.images[1]) { %>
+                    <img class="mainImg hiddenImg" src="<%= product.images[1].url %>"/>
+                    <% } %>
+                    <% if (product.images[2]) { %>
+                    <img class="mainImg hiddenImg" src="<%= product.images[2].url %>"/>
+                    <% } %>
+                    <% if (product.images[3]) { %>
+                    <img class="mainImg hiddenImg" src="<%= product.images[3].url %>"/>
+                    <% } %>
+                    <% if (product.images[4]) { %>
+                    <img class="mainImg hiddenImg" src="<%= product.images[4].url %>"/>
+                    <% } %>
+                </div>
+            </div>
+            <div class="column is-one-quarter">
+                <p class="productUserText">Sold by: <a class="productUserLink" href="#">AAAAAAAA  <span style="color: green !important;">x/5 <i class="fas fa-star"></i></span></a></p>
+                <% 
+                    let currencies = [0, 0, 0, 0, 0];
+                    product.accepted.forEach(( key, i ) => {
+                        if ((key == 'BTC') && (product.price[i])){
+                            currencies[0] = 1;
+                        }
+                        if ((key == 'BCH') && (product.price[i])){
+                            currencies[1] = 1;
+                        }
+                        if ((key == 'ETH') && (product.price[i])){
+                            currencies[2] = 1;
+                        }
+                        if ((key == 'LTC') && (product.price[i])){
+                            currencies[3] = 1;
+                        }
+                        if ((key == 'DASH') && (product.price[i])){
+                            currencies[4] = 1;
+                        }
+                    });
+                %>
+                <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                    <div class="prices">
+                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                        <p class="price_text"> <%= product.price[0] %></p>
+                    </div>
+                <% } 
+                    if ((product.price[1] != 0) && (currencies[1] == 1)) {
+                %>
+                    <div class="prices">
+                        <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                        <p class="price_text"> <%= product.price[1] %></p>
+                    </div>
+                <% } 
+                    if ((product.price[2] != 0) && (currencies[2] == 1)) {
+                %>
+                    <div class="prices">
+                        <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                        <p class="price_text"> <%= product.price[2] %></p>
+                    </div>
+                <% } 
+                    if ((product.price[3] != 0) && (currencies[3] == 1)) {
+                %>
+                    <div class="prices">
+                        <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                        <p class="price_text"> <%= product.price[3] %></p>
+                    </div>
+                <% } 
+                    if ((product.price[4] != 0) && (currencies[4] == 1)) {
+                %>
+                    <div class="prices">
+                        <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                        <p class="price_text"> <%= product.price[4] %></p>
+                    </div>
+                <% } %>
+                <p style="color: orange !important;"><sub>Transportation cost: TBD</sub></p>
+                <br>
+               
+                <form action="/products/<%= product.id %>/buy" method="POST">
+                    
+                    <% 
+                        product.accepted.forEach((key, i) => {
+                            if ((key === 'true') && (i === 0)){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
+                                    <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="BTC" required>
+                                </label>
+                            <% }
+                            if ((key === 'true') && (i === 1)){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
+                                    <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="BCH">
+                                </label>
+                            <% }
+                            if ((key === 'true') && (i === 2)){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
+                                    <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="ETH">
+                                </label>
+                            <% }
+                            if ((key === 'true') && (i === 3)){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
+                                    <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="LTC">
+                                </label>
+                            <% }
+                            if ((key === 'true') && (i === 4)){ %>
+                                <label class="img-check ">
+                                    <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
+                                    <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="DASH">
+                                </label>
+                            <% }
+                        });
+                    %>
+                    <div class="control smmargin">
+                        <button class="button is-primary">Buy</button>
+                    </div>
+                </form>
+                <div style="margin-top: 1vh;">
+                    <a class="productContactLink" href="#"><button class="button is-primary">Contact</button></a>
+                </div>
+            </div>  
+        </div>
+        <hr>
+        <div class="column">
+            <p class="productSubTitleText">Description</p>
+            <br>
+            <p class="productDescriptionText" ><%= product.description %></p>
+        </div> 
+        <hr>
+        <p class="productSubTitleText">Similar products</p>
+        <div class="column">    
+            <!-- Add a few products from the same category -->
+            <div class="columns" style="justify-content: center;">
+                <div class="column card feat_card" style="max-width: 250px;">
+                    <a href="">
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="../../dist/img/blanc.jpg" class="featimgs">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies">
+                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                            </div>
+                             
+                        </div> 
+                    </a>                       
+                </div>
+                <div class="column card feat_card">
+                    <a href="">
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="../../dist/img/blanc.jpg" class="featimgs">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies">
+                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                            </div>
+                             
+                        </div> 
+                    </a>                       
+                </div>
+                <div class="column card feat_card">
+                    <a href="">
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="../../dist/img/blanc.jpg" class="featimgs">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies">
+                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                            </div>
+                             
+                        </div> 
+                    </a>                       
+                </div>
+                <div class="column card feat_card">
+                    <a href="">
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="../../dist/img/blanc.jpg" class="featimgs">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies">
+                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                            </div>
+                             
+                        </div> 
+                    </a>                       
+                </div>
+            </div>
+        </div>
+    </div>    
+</div> 
+
+<% include ../partials/footer %>

@@ -1,5 +1,14 @@
 
 /* Index */
+
+.container{
+    margin: auto;
+}
+
+.hero-content{
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 1rem;
+}
 div.featured{
     margin-top: 2vh;
 }
@@ -23,6 +32,47 @@ figure.latestimg{
     margin-top: 3%;
     margin-bottom: 0 !important;
 
+}
+
+.feat_card{
+    margin: 10px;
+    padding: 0 !important;
+}
+
+/* .column{
+
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+} */
+
+.card{
+    border-radius: 5px;
+    border-style: double;
+    border-color: orange;
+    background-color: transparent;
+}
+
+.card-image{
+    padding: 25px;
+}
+
+.media, .media-content{
+    text-align: center !important;
+}
+
+.title.is-5{
+    font-size: 0.9rem;
+    color: orange;
+}
+
+.accepted_currencies{
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.view_details{
+    margin-top: 1vh;
 }
 
 div.featured-item{

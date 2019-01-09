@@ -1,3 +1,77 @@
 .column.prod_info{
     text-align: left !important;
 }
+
+input[type=radio].curr_checkbox{ 
+    display: none; 
+}
+
+input[type=checkbox].curr_checkbox{ 
+    display: none; 
+}
+
+.btc-label{
+    padding-left: 20px;
+    display: flex;
+    background-image: url('../img/bitcoin.png');
+    background-repeat: no-repeat;
+    background-color: #E9EEF4;
+    background-size: auto 100%;
+}
+
+.img-check:checked + label.btc-label {
+ background-position: 0 0;
+ border: 3px solid #2FBCDF;
+}
+
+.gray{
+    -webkit-filter: grayscale(1);
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: grayscale(100%);
+	filter: url('../svg/desaturate.svg#greyscale');
+}
+
+.cccy{
+    width: 15%;
+}
+
+.curr-filter{
+    display: flex;
+    align-items: baseline;
+    color: orange !important;
+}
+
+.curr-filter:hover{
+    background-color: transparent !important;
+}
+
+.curr-label{
+    left: 0.5vw;
+    position: relative;
+    top: -0.1vh;
+}
+
+.filter-list{
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+.filter-summary{
+    color: orange;
+    text-align: left;
+    margin-left: 1vw;
+    outline: none;
+    cursor: pointer;
+}
+
+.menu-item:hover{
+    background-color: #402504!important;
+}
+
+.filter-input{
+    background-color: transparent;
+    border-radius: 5px;
+    outline: none;
+    padding-left: 5px;
+}

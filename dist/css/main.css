@@ -1,3 +1,36 @@
+html{
+    height:100%;
+}
+html, body{
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+input[type='text'], select, .dd-btn, .src-btn{
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    rgb(138, 96, 54) !important;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    rgb(138, 96, 54) !important;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    rgb(138, 96, 54) !important;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    rgb(138, 96, 54) !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color:    rgb(138, 96, 54) !important;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+    color:    rgb(138, 96, 54) !important;
+}
+
 /* Header */
 .navi{
     padding-top: 1vh;
@@ -5,14 +38,80 @@
     padding-left: 2%;
     padding-right: 2%;
     box-shadow: 0.1px 0.1px 1px black;
+    border-bottom-style: solid;
+    border-width: 0.5px;
 }
 
 .level-left{
     padding-left: 1vw;
 }
 
+input, select, .dd-btn{
+    border-style: double !important;
+    color: orange !important;
+    border-color: orange !important;
+}
 .search{
     width: 70%;
+}
+
+.select select:not([multiple]) {
+    padding-right: 0!important;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+    right: 3em !important;
+    border-color: orange !important;
+}
+
+.cont-select:not(.is-multiple):not(.is-loading)::after {
+    right: 1em !important;
+}
+
+.dash-select:not(.is-multiple):not(.is-loading)::after {
+    right: 2em !important;
+}
+
+.dash-select{
+    margin-top: 1vh;
+}
+
+.search-input{
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.search-select{
+    border-radius: 0 !important;
+    border-right-style: none !important;
+}
+
+.src-btn{
+    margin-left: -2vw;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+    background-color: orange !important;
+    color: black !important;
+    border-style: double !important;
+    border-color: orange !important;
+}
+
+.balance-btn{
+    background-color: transparent !important;
+    color: orange !important;
+    border-color: orange !important;
+}
+
+.navbar{
+    background-color: black !important;
+}
+
+.header-link{
+    color: orange;
+}
+
+.searchbar{
+    width: 37vw;    
 }
 
 .dropdown.categ{
@@ -24,14 +123,48 @@
     text-align: center;
 }
 
+.dropdown-item:hover{
+    background-color: #402504 !important;
+}
+
+.main-categ{
+    text-align: left !important;
+    color: orange !important;
+}
+
+.sec-categ{
+    margin-left: -2vw;
+}
+
+.sec-categ a{
+    color: orange !important;
+}
+
+.categories{
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange !important;
+    background-color: black !important;
+}
+
+
 .currency{
     display: flex !important;
     align-items: center;
     justify-content: space-evenly;
+    color: orange !important;
+}
+
+.currencies{
+    background-color: black !important;
+    border-style: double;
+    border-radius: 10px !important;
+    border-color: orange !important;
 }
 
 .curr_img{
     max-width: 25px;
+    max-height: 25px;
 }
 
 @media screen and (max-width: 768px){
@@ -53,23 +186,32 @@
 
     /* Make media queries for search input and select */
 }
-
-
-a.dropdown-item{
-    text-align: center !important;
-}   
+ 
 /* Header Ends */
 
 /* Content Begins */
+
+body{
+    min-height: 100%;
+    position: relative;
+    background-color: black;
+}
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
-    box-shadow: 0.1px 0.1px 1px black;
+    /* box-shadow: 0.1px 0.1px 1px black; */
     padding: 1%;
     margin-bottom: 0% !important;
 }
 
 .smmargin{
     margin-top: 1.5vh;
+}
+
+.input, .textarea, select, .dd-btn{
+    background-color: transparent !important;
+    border-style: double !important;
+    color: orange !important;
+    border-color: orange !important;
 }
 
 .control{
@@ -80,8 +222,139 @@ div.column{
     text-align: center !important;
 }
 
+.prices{
+    display: flex;
+    justify-content: space-between;
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange;
+    margin-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-top: 1vh;
+    color: orange;
+}
+
+hr{
+    background-color: orange !important;
+}
+
+.sub_name{
+    color: orange !important;
+}
+
+.sub_name:hover{
+    background-color: #402504 !important
+}
+
+.menu-categ{
+    border-style: double;
+    border-radius: 10px;
+    border-color: orange;
+}
+
+.menu-label{
+    color: orange !important;
+}
+
+.price_img{
+    width: 30px;
+}
+
+.button.is-primary{
+    background-color: orange !important;
+    color: black !important;
+}
+
+.title{
+    color: orange !important;
+}
+
+.subtitle{
+    color: #c36a1b !important;
+}
+
+.open-img{
+    width: 200px;
+    height: 100%;
+}
+
+.view-btn{
+    background-color: orange !important;
+    border-color: transparent !important;
+}
+
+.view-btn:hover{
+    border-color: transparent;
+}
+
+.firstcol{
+    justify-content: center;
+}
+
+.card:hover{
+    background-color: #c3691b52;
+}
+
+.card{
+    max-height: 281px !important;
+    max-width: 250px !important;
+}
+
+.card-content{
+    padding-top: 0 !important;
+}
+
+.featimgs{
+    max-width: 160px;
+    margin: auto;
+}
+
+.deals{
+    border-style: double;
+    border-color: orange;
+    padding: 20px;
+    border-top-style: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-top: -1.5vh;
+    margin-left: -12px;
+    margin-right: -12px;
+}
 /* Content Ends */
 
 /* Footer Begins */
+.hero-foot{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 128px;
+    border-top-style: solid;
+    border-width: 0.5px;
+    padding-top: 1vh;
+}
 
+body::after {
+    content: '';
+    display: block;
+    height: 128px;
+}
+
+.tabs a {
+    color: orange !important;
+    border-bottom-color: #4a4a4a !important;
+}
+
+.tabs a:hover{
+    border-bottom-color: white !important;
+    background-color: #3b3737 !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.copyright{
+    text-align: center; 
+    padding-top: 1vh;
+    color: orange;
+}
 /* Footer Ends */

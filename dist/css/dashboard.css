@@ -4,8 +4,35 @@
     margin-top: 3vh !important;
 }
 
+.panel-block{
+    color: orange !important;
+}
 .panel-heading{
     margin-bottom: 0 !important;
+    background-color: orange !important;
+    color: white;
+}
+
+.panel-heading, .panel-block {
+    border-bottom-color: orange !important;
+    border-left-color: orange !important;
+    border-right-color: orange !important;
+}
+
+.panel-heading:first-child{
+    border-top-color: orange !important;
+}
+
+.dashboard-right{
+    padding-top: 4vh;
+}
+
+.profilepic{
+    max-width: 250px; 
+    border-style: solid; 
+    border-width: 1px; 
+    border-radius: 5px; 
+    border-color: orange;
 }
 
 .adrcol{
@@ -75,4 +102,276 @@ ul.currencies{
     display: flex;
     justify-content: space-evenly;
     margin-top: 0.5vh;
+}
+
+.currency-input{
+    display: none;
+}
+
+summary{
+    outline: none;
+}
+
+summary:hover{
+    cursor: pointer;    
+}
+
+.detail{
+    border-style: double;
+    border-width: 0px;
+    border-top-width: 1px;
+    padding: 5px 10px 5px 10px;
+}
+
+.feature-div{
+    padding-top: 5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 5vw;
+    border-style: double;
+    margin-top: 3vh;
+    border-radius: 10px;
+    border-color: orange;
+    color: orange;
+}
+
+.tokens-faq{
+    padding-top: 5vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 5vw;
+    color: orange;
+}
+
+details{
+    border-style: double;   
+    border-radius: 10px;
+    border-color: orange;
+    color: orange;
+    margin-top: 1vh;
+}
+
+.is-primary{
+    color: black !important;
+}
+
+.label{
+    color: orange !important;
+}
+
+.new-text{
+    color: orange;
+    font-size: 24px;
+}
+
+.token-text{
+    color: orange;
+    margin-bottom: 3vh;
+}
+
+.new-table{
+    background-color: transparent;
+    color: orange;
+    position: relative;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid orange !important;
+}
+
+th{
+    color: orange !important;
+}
+
+hr{
+    background-color: orange;
+}
+
+.column.prod_info{
+    text-align: left !important;
+}
+
+.panel-block:hover{
+    background-color: #402504 !important;
+}
+
+.active-page{
+    background-color: #402504 !important;
+}
+
+.messageItem{
+    /* background-color: transparent !important; */
+    border-style: double;
+    border-radius: 5px;
+    border-color: orange;
+}
+
+.messageItem:hover{
+    background-color: #402504;
+}
+
+.modal-card-head{
+    background-color: black !important;
+    color: orange !important;
+    border: 1px solid orange;
+}
+
+.modal-card-title{
+    color: orange !important;
+}
+
+.delete::before, .modal-close::before, .delete::after, .modal-close::after{
+    background-color: orange !important;
+}
+
+.modal-card-body{
+    border-left: 1px solid orange;
+    border-right: 1px solid orange;
+    border-bottom: 1px solid orange;
+    background-color: black !important;
+}
+
+.modal-card-foot{
+    background-color: black !important;
+    border-top: 0;
+    border-left: 1px solid orange;
+    border-right: 1px solid orange;
+    border-bottom: 1px solid orange;
+}
+
+.modal-section-title{
+    text-align: left; 
+    border-bottom: 1px solid orange;
+}
+
+.modal-form{
+    display: flex; 
+    justify-content: space-evenly;
+}
+
+.cont-select{
+    width: 100% !important;
+    margin-top: 1vh !important;
+}
+
+.textarea{
+    margin-top: 1vh;
+}
+
+.file-upload {
+	position: relative;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+@keyframes colorchange{
+    from { color: grey; }
+    to { color: orange; }
+}
+
+.file-upload__label {
+  display: block;
+  color: grey;
+  background: transparent;
+  border-radius: .4em;
+  
+}
+
+.file-upload__label:hover{
+    cursor: pointer;
+    /* color: orange; */
+    animation-name: colorchange;
+    animation-duration: 0.5s;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
+}
+
+.file-upload__input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+}
+
+.hide{
+    visibility: hidden;
+    display: none;
+}
+
+time{
+    font-size: 0.7rem;
+    color: #ccc;
+    margin-top: 3px;
+    float: right;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.toplevel{
+    border-style: double;
+    border-radius: 5px;
+    padding: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.midlevel{
+    border-style: double;
+    border-radius: 5px;
+    padding: 2rem;
+    margin-top: -1.7rem;
+    border-top: 0;
+    height: 58vh;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.leftlv{
+    padding-left: 0 !important;
+}
+
+.bottomlv{
+    border-style: double;
+    padding: 2.5rem;
+    border-top: 0;
+    height: 103px;
+    padding-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.recmsg{
+    background-color: rgb(88, 53, 20);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sentmsg{
+    background-color: rgb(116, 53, 11);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.msgbox{
+    align-content: center;
+    display: flex;
+    height: inherit;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.msgbox textarea{
+    margin-top: -3px;
+    margin-bottom: 0px;
+    height: 80%;
+    margin-right: 1%;
 }
