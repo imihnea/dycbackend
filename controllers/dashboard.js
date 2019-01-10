@@ -3,6 +3,7 @@
 /* eslint-disable no-restricted-syntax */
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
+const User = require('../models/user');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

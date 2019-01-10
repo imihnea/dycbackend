@@ -6,24 +6,15 @@ Frontend:
 
     High Priority:
 
-        Category pages ( redesign sidebar - toggle-able menu for categories, back button + filters for subcategories )
+         Search result page
+         
+         Ongoing purchase interface
 
-        Product page => Create page
-                     => Image gallery
-
-        Search result page
-
-        Top-up interface
-        
-        New deals => Multiple file input
+         Finished deal => review interface
 
     Low Priority:
 
-        Make slideshow buttons work properly
-
         Make everything responsive (see comments in css files)
-
-        Make truncation work
 
 
 Backend:
@@ -39,9 +30,7 @@ Backend:
       
       Dashboard 
                => Settings
-                  => New stuff here, maybe avatar, 2FA, connections.
-               => New Deals
-                  => Test multiple file input
+                  => 2FA, connections
                => Closed Deals
                   => Sold, expired, deactivated status
                => Purchases

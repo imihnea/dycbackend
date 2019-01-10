@@ -4,12 +4,12 @@
     <div class="container content">
         <div class="columns" style="border-style: double; border-bottom-style: solid; border-color: orange; border-top-left-radius: 5px; border-top-right-radius: 5px;">
             <div class="column">
-                <img src="../../dist/img/rollo.png" style="max-height: 200px; width: auto;">
+                <img src="<%= user.avatar.url %>" style="max-height: 200px; width: auto;">
             </div>
             <div class="column">
-                <p class="subtitle">ABCD ABCD</p>
+                <p class="subtitle"><%= user.full_name %></p>
                 <p class="subtitle">Rating: X/5 <i class="fas fa-star"></i></p>
-                <p class="subtitle">Region: Europe</p>
+                <p class="subtitle">Country: <%= user.country %></p>
             </div>
         </div>
         <div class="deals" >
