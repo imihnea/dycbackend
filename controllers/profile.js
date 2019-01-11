@@ -13,12 +13,19 @@ cloudinary.config({
 
 module.exports = {
     // View Profile
-    getProfile(req, res){
+    async getProfile(req, res){
         User.findById(req.params.id, async (err, user) => {
           if (err) {
             req.flash('error', err.message);
           } else {
-            res.render('index/profile', { user: user });
+            Product.find( { 'author.id' : user._id }, async (error, prod) => {
+              if (error) {
+                req.flash('error', error.message);
+                res.redirect('back');
+              } else {
+                res.render('index/profile', { user: user, products: prod });
+              }
+            });
           }
         });
       },
@@ -48,7 +55,7 @@ module.exports = {
                 user.address1 = req.body.address1;
                 user.zip = req.body.zip;
                 if (req.body.address2) {
-                user.address2 = req.body.address2;
+                  user.address2 = req.body.address2;
                 }
                 user.save();
                 res.redirect(`/profile/${user._id}`);

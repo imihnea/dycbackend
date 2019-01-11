@@ -308,6 +308,8 @@ hr{
 .featimgs{
     max-width: 160px;
     margin: auto;
+    width: auto !important;
+    height: 125px !important;
 }
 
 .deals{

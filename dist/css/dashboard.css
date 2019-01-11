@@ -265,8 +265,13 @@ hr{
     justify-content: space-evenly;
 }
 
-@keyframes colorchange{
+@keyframes colorchange-orange{
     from { color: grey; }
+    to { color: orange; }
+}
+
+@keyframes colorchange-green{
+    from { color: green; }
     to { color: orange; }
 }
 
@@ -275,15 +280,20 @@ hr{
   color: grey;
   background: transparent;
   border-radius: .4em;
-  
+}
+
+.file-upload__label-green{
+    display: block;
+    color: green;
+    background: transparent;
+    border-radius: .4em;
 }
 
 .file-upload__label:hover{
     cursor: pointer;
-    /* color: orange; */
-    animation-name: colorchange;
+    animation-name: colorchange-orange;
     animation-duration: 0.5s;
-    animation-fill-mode:forwards;
+    animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
@@ -297,6 +307,30 @@ hr{
     width:0;
     height: 100%;
     opacity: 0;
+}
+
+.file-delete__input{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+}
+
+.file-delete__label{
+    display: block;
+    color: grey;
+    background: transparent;
+    border-radius: .4em;
+    cursor: pointer;
+}
+
+.file-delete__label:hover{
+    color: red;
 }
 
 .hide{

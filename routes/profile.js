@@ -35,7 +35,7 @@ const upload = multer({
 
 // GET Profile route
 
-router.get('/:id', getProfile);
+router.get('/:id', asyncErrorHandler(getProfile));
 
 // PUT Profile route
 

@@ -26,51 +26,55 @@ module.exports = {
     res.render('posts/new');
   },
   async productCreate(req, res) {
-    req.body.product.images = [];
-    for (const file of req.files) {
-      const image = await cloudinary.v2.uploader.upload(file.path);
-      req.body.product.images.push({
-        url: image.secure_url,
-        public_id: image.public_id,
-      });
-    }
-    const author = {
-      id: req.user._id,
-      username: req.user.username,
-    };
-    req.body.product.author = author;
-    // Everything is stored in constants so we can protect against
-    // people making fields in the DevTools
-    const name = req.body.product.name;
-    const description = req.body.product.description;
-    const category = req.body.product.category;
-    const accepted = [req.body.product.acc_btc, req.body.product.acc_bch, req.body.product.acc_eth,
-      req.body.product.acc_ltc, req.body.product.acc_dash];
-    const price = [req.body.product.btc_price, req.body.product.bch_price,
-      req.body.product.eth_price, req.body.product.ltc_price,
-      req.body.product.dash_price];
-    
-    // In case someone deletes the 'required' attribute of a price input
-    price.forEach((item, i) => {
-      if ((!item[i]) && (accepted[i])) {
-        accepted[i] = !accepted[i];
+    if ( req.files.length === 0 ){
+      req.flash('error', 'You need to upload at least one image.');
+      res.redirect('dashboard/new');
+    } else {
+      req.body.product.images = [];
+      for (const file of req.files) {
+        const image = await cloudinary.v2.uploader.upload(file.path);
+        req.body.product.images.push({
+          url: image.secure_url,
+          public_id: image.public_id,
+        });
       }
-    });
+      const author = {
+        id: req.user._id,
+        username: req.user.username,
+      };
+      req.body.product.author = author;
+      // Everything is stored in constants so we can protect against
+      // people making fields in the DevTools
+      const name = req.body.product.name;
+      const description = req.body.product.description;
+      const category = req.body.product.category;
+      const accepted = [req.body.product.acc_btc, req.body.product.acc_bch, req.body.product.acc_eth,
+        req.body.product.acc_ltc, req.body.product.acc_dash];
+      const price = [req.body.product.btc_price, req.body.product.bch_price,
+        req.body.product.eth_price, req.body.product.ltc_price,
+        req.body.product.dash_price];
+      
+      // In case someone deletes the 'required' attribute of a price input
+      price.forEach((item, i) => {
+        if ((!item[i]) && (accepted[i])) {
+          accepted[i] = !accepted[i];
+        }
+      });
 
-    req.body.product.price = price;
-    // TODO: Verify the data before creating the new product
-    const newproduct = {
-      name: name,
-      images: req.body.product.images,
-      category: category,
-      description: description,
-      price: price,
-      author: author,
-      accepted: accepted,
-    };
-    const product = await Product.create(newproduct);
-    // const product = await Product.create(req.body.product);
-    res.redirect(`/products/${product._id}/view`);
+      req.body.product.price = price;
+      // TODO: Verify the data before creating the new product
+      const newproduct = {
+        name: name,
+        images: req.body.product.images,
+        category: category,
+        description: description,
+        price: price,
+        author: author,
+        accepted: accepted,
+      };
+      const product = await Product.create(newproduct);
+      res.redirect(`/products/${product._id}/view`);
+    }    
   },
   // Products Show
   async productShow(req, res) {

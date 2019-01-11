@@ -100,3 +100,16 @@ div.latest-details{
     margin: auto;
     width: 50%;
 }
+
+.userinfo{
+    border-style: double;
+    border-bottom-style: solid; 
+    border-color: orange; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+}
+
+.avatar{
+    max-height: 200px; 
+    width: auto;
+}
