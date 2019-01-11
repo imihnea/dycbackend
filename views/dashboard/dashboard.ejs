@@ -15,38 +15,43 @@
                     <p class="subtitle">Personal Details</p>
                     <div class="column is-three-fifths" style="margin: auto;">
                         <div class="level">
-                            <input class="input" name="name" placeholder="Full Name*" type="text" required />
+                            <input class="input" name="name" placeholder="Full Name*" type="text"
+                            <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
                         </div>
-                        <div class="level">
+                        <div class="level" style="flex-wrap: wrap;">
                             <div class="column select cont-select" style="padding: 0 !important">
                                 <select name="country" class="countries" id="countryId" style="width: 100%;">
-                                    <option value="">Select Country</option>
+                                    <option <% if (user.country) { %> value="<%= user.country %>" <% } %>>Select Country</option>
                                 </select>
                             </div>
                             <div class="column select dash-select" style="padding-top: 0 !important">
                                 <select name="state" class="states" id="stateId" style="width: 100%;">
-                                    <option value="">Select State</option>
+                                    <option <% if (user.state) { %> value="<%= user.state %>" <% } %>>Select State</option>
                                 </select>
                             </div>
                             <div class="column select cont-select" style="padding: 0 !important">
                                 <select name="city" class="cities" id="cityId" style="width: 100%;">
-                                <option value="">Select City</option>
+                                <option <% if (user.city) { %> value="<%= user.city %>" <% } %>>Select City</option>
                                 </select>
                             </div>
+                            <sub style="width: 100%; margin-top: 5px;">Do not modify if not changed</sub>
                         </div>
                     <div class="level">
                             <div class="columns level-item">
                                 <div class="column is-three-fifths">
-                                    <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text" required />
+                                    <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
+                                    <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
                                 </div>
                                 <div class="column">
-                                    <input class="input" name="zip" type="number" placeholder="ZIP Code*" required />
+                                    <input class="input" name="zip" type="number" placeholder="ZIP Code*"
+                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
                                 </div>
                             </div>   
                     </div>
                                     
                         <div class="level">
-                            <input class="input" name="address2" placeholder="Address Line 2" type="text"/>
+                            <input class="input" name="address2" placeholder="Address Line 2" type="text"
+                            <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
                         </div>
 
                         <div class="level">
@@ -57,13 +62,20 @@
                                 </div>
                                 <div class="column">
                                     <div class="file-upload">
-                                        <label for="upload[0]" class="file-upload__label">
-                                            <span style="font-size: 5rem;">
-                                                <i class="far fa-plus-square square"></i>
-                                                <i class="far fa-check-square hide"></i>
-                                            </span>
-                                        </label>
-                                        <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
+                                        <div>
+                                            <label for="upload[0]" class="file-upload__label">
+                                                <span style="font-size: 5rem;">
+                                                    <i class="far fa-plus-square square"></i>
+                                                    <i class="far fa-check-square hide"></i>
+                                                </span>
+                                            </label>
+                                            <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
+                                            <label class="file-delete__label hide">
+                                                <span>
+                                                    <i class="far fa-trash-alt"></i>
+                                                </span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

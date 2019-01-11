@@ -8,28 +8,10 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div style="overflow-x: hidden;">
-                    Pages: <% include ../partials/paginateProducts %>
+                    <% if (products.length >= 10) { %>
+                        Pages: <% include ../partials/paginateProducts %>
+                    <% } %>
                     <% products.docs.forEach(function(product){ %>
-                        <% 
-                            let currencies = [0, 0, 0, 0, 0];
-                            product.accepted.forEach(( key ) => {
-                                if (key == 'BTC'){
-                                    currencies[0] = 1;
-                                }
-                                if (key == 'BCH'){
-                                    currencies[1] = 1;
-                                }
-                                if (key == 'ETH'){
-                                    currencies[2] = 1;
-                                }
-                                if (key == 'LTC'){
-                                    currencies[3] = 1;
-                                }
-                                if (key == 'DASH'){
-                                    currencies[4] = 1;
-                                }
-                            });
-                        %>
                         <div class="columns">
                             <div class="column is-one-quarter">
                                     <img src="<%= product.images[0].url %>" class="open-img">
@@ -46,34 +28,34 @@
                                 </div>   
                             </div>
                             <div class="column prod_info">
-                            <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                            <% if (product.accepted[0]) { %>
                                 <div class="prices">
                                     <p class="price_text"> <%= product.price[0] %></p>
                                     <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                 </div>
                             <% } 
-                                if ((product.price[1] != 0) && (currencies[1] == 1)) {
+                                if (product.accepted[1]) {
                             %>
                                 <div class="prices">
                                     <p class="price_text"> <%= product.price[1] %></p>
                                     <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                 </div>
                             <% } 
-                                if ((product.price[2] != 0) && (currencies[2] == 1)) {
+                                if (product.accepted[2]) {
                             %>
                                 <div class="prices">
                                     <p class="price_text"> <%= product.price[2] %></p>
                                     <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                 </div>
                             <% } 
-                                if ((product.price[3] != 0) && (currencies[3] == 1)) {
+                                if (product.accepted[3]) {
                             %>
                                 <div class="prices">
                                     <p class="price_text"> <%= product.price[3] %></p>
                                     <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                 </div>
                             <% } 
-                                if ((product.price[4] != 0) && (currencies[4] == 1)) {
+                                if (product.accepted[4]) {
                             %>
                                 <div class="prices">
                                     <p class="price_text"> <%= product.price[4] %></p>
@@ -85,6 +67,9 @@
                     <hr>                    
                     <% }); %>         
                 </div>        
+                <% if (products.length >= 10) { %>
+                    Pages: <% include ../partials/paginateProducts %>
+                <% } %>
             </div>
             <div class="column"></div>
         </div>

@@ -11,7 +11,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const { productCreate, productIndex, productDestroy } = require('../controllers/dashboard');
+const { productCreate, productIndex, productDestroy, productEdit, productUpdate } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -161,61 +161,11 @@ router.get('/new', isLoggedIn, (req, res) => {
 // CREATE - add new product to DB
 router.post('/', isLoggedIn, upload.array('images', 5), asyncErrorHandler(productCreate));
 
-// SHOW - shows more info about one product
-router.get('/:id', isLoggedIn, (req, res) => {
-  // find the product with provided ID
-  product.findById(req.params.id).exec((err, foundproduct) => {
-    if (err || !foundproduct) {
-      req.flash('error', 'Sorry, that product does not exist!');
-      return res.redirect('/dashboard/open');
-    }
-    // render show template with that product
-    res.render('dashboard/dashboard_view', { product: foundproduct });
-  });
-});
-
 // EDIT - shows edit form for a product
-router.get('/:id/edit', isLoggedIn, checkUserproduct, (req, res) => {
-  product.findById(req.params.id, (err, foundproduct) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('/dashboard/open');
-    } else {
-      // render edit template with that product
-      res.render('dashboard/dashboard_edit', { product: foundproduct, user: req.user });
-    }
-  });
-});
+router.get('/:id/edit', isLoggedIn, checkUserproduct, asyncErrorHandler(productEdit));
 
 // PUT - updates product in the database
-router.put('/:id', upload.single('image'), checkUserproduct, (req, res) => {
-  product.findById(req.params.id, async (err, Product) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('back');
-    } else {
-      if (req.file) {
-        try {
-          await cloudinary.v2.uploader.destroy(Product.imageId);
-          const result = await cloudinary.v2.uploader.upload(req.file.path);
-          Product.imageId = result.public_id;
-          Product.image = result.secure_url;
-        } catch (error) {
-          req.flash('error', error.message);
-          return res.redirect('back');
-        }
-      }
-      Product.name = req.body.name;
-      Product.description = req.body.description;
-      Product.category = req.body.category;
-      Product.accepted = req.body.accepted;
-      Product.price = req.body.price;
-      Product.save();
-      req.flash('success', 'Successfully Updated!');
-      res.redirect(`/dashboard/${Product._id}`);
-    }
-  });
-});
+router.put('/:id', upload.array('images', 5), checkUserproduct, asyncErrorHandler(productUpdate));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', asyncErrorHandler(productDestroy));

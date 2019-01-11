@@ -55,11 +55,12 @@ module.exports = {
         req.body.product.dash_price];
       
       // In case someone deletes the 'required' attribute of a price input
-      price.forEach((item, i) => {
-        if ((!item[i]) && (accepted[i])) {
-          accepted[i] = !accepted[i];
-        }
-      });
+      // TODO: Decide if this shit's going to be useful, omegalul
+      // price.forEach((item, i) => {
+      //   if ((!item[i]) && (accepted[i])) {
+      //     accepted[i] = !accepted[i];
+      //   }
+      // });
 
       req.body.product.price = price;
       // TODO: Verify the data before creating the new product
@@ -92,29 +93,33 @@ module.exports = {
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
-    res.render('posts/edit', { product });
+    res.render('dashboard/dashboard_edit', { product: product, user: req.user });
   },
   // Products Update
   async productUpdate(req, res) {
     // find the product by id
     const product = await Product.findById(req.params.id);
+    
+    // No way to use this yet
+
     // check if there's any images for deletion
-    if (req.body.deleteImages && req.body.deleteImages.length) {
-      // assign deleteImages from req.body to its own variable
-      const deleteImages = req.body.deleteImages;
-      // loop over deleteImages
-      for (const public_id of deleteImages) {
-        // delete images from cloudinary
-        await cloudinary.v2.uploader.destroy(public_id);
-        // delete image from product.images
-        for (const image of product.images) {
-          if (image.public_id === public_id) {
-            const index = product.images.indexOf(image);
-            product.images.splice(index, 1);
-          }
-        }
-      }
-    }
+    // if (req.body.deleteImages && req.body.deleteImages.length) {
+    //   // assign deleteImages from req.body to its own variable
+    //   const deleteImages = req.body.deleteImages;
+    //   // loop over deleteImages
+    //   for (const public_id of deleteImages) {
+    //     // delete images from cloudinary
+    //     await cloudinary.v2.uploader.destroy(public_id);
+    //     // delete image from product.images
+    //     for (const image of product.images) {
+    //       if (image.public_id === public_id) {
+    //         const index = product.images.indexOf(image);
+    //         product.images.splice(index, 1);
+    //       }
+    //     }
+    //   }
+    // }
+
     // check if there are any new images for upload
     if (req.files) {
       // upload images
@@ -127,14 +132,32 @@ module.exports = {
         });
       }
     }
+  
+    const accepted = [req.body.product.acc_btc, req.body.product.acc_bch, req.body.product.acc_eth,
+      req.body.product.acc_ltc, req.body.product.acc_dash];
+    const price = [req.body.product.btc_price, req.body.product.bch_price,
+      req.body.product.eth_price, req.body.product.ltc_price,
+      req.body.product.dash_price];
+    
+    // In case someone deletes the 'required' attribute of a price input
+    // TODO: decide if this shit is actually going to be useful, omegalul
+    // price.forEach((item, i) => {
+    //   if ((!item[i]) && (accepted[i])) {
+    //     console.log('kappa');
+    //     accepted[i] = !accepted[i];
+    //   }
+    // });
+
     // update the product with any new properties
     product.name = req.body.product.name;
     product.description = req.body.product.description;
-    product.price = req.body.product.price;
+    product.category = req.body.product.category;
+    product.price = price;
+    product.accepted = accepted;
     // save the updated product into the db
     product.save();
     // redirect to show page
-    res.redirect(`/products/${product.id}`);
+    res.redirect(`/products/${product.id}/view`);
   },
   // Products Destroy
   async productDestroy(req, res) {

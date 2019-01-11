@@ -74,54 +74,34 @@
             </div>
             <div class="column is-one-quarter">
                 <p class="productUserText">Sold by: <a class="productUserLink" href="#">AAAAAAAA  <span style="color: green !important;">x/5 <i class="fas fa-star"></i></span></a></p>
-                <% 
-                    let currencies = [0, 0, 0, 0, 0];
-                    product.accepted.forEach(( key, i ) => {
-                        if ((key == 'BTC') && (product.price[i])){
-                            currencies[0] = 1;
-                        }
-                        if ((key == 'BCH') && (product.price[i])){
-                            currencies[1] = 1;
-                        }
-                        if ((key == 'ETH') && (product.price[i])){
-                            currencies[2] = 1;
-                        }
-                        if ((key == 'LTC') && (product.price[i])){
-                            currencies[3] = 1;
-                        }
-                        if ((key == 'DASH') && (product.price[i])){
-                            currencies[4] = 1;
-                        }
-                    });
-                %>
-                <% if ((product.price[0] != 0) && (currencies[0] == 1)) { %>
+                <% if ((product.price[0] != 0) && (product.accepted[0])) { %>
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                         <p class="price_text"> <%= product.price[0] %></p>
                     </div>
                 <% } 
-                    if ((product.price[1] != 0) && (currencies[1] == 1)) {
+                    if ((product.price[1] != 0) && (product.accepted[1])) {
                 %>
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                         <p class="price_text"> <%= product.price[1] %></p>
                     </div>
                 <% } 
-                    if ((product.price[2] != 0) && (currencies[2] == 1)) {
+                    if ((product.price[2] != 0) && (product.accepted[2])) {
                 %>
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                         <p class="price_text"> <%= product.price[2] %></p>
                     </div>
                 <% } 
-                    if ((product.price[3] != 0) && (currencies[3] == 1)) {
+                    if ((product.price[3] != 0) && (product.accepted[3])) {
                 %>
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                         <p class="price_text"> <%= product.price[3] %></p>
                     </div>
                 <% } 
-                    if ((product.price[4] != 0) && (currencies[4] == 1)) {
+                    if ((product.price[4] != 0) && (product.accepted[4])) {
                 %>
                     <div class="prices">
                         <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
