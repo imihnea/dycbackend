@@ -4,6 +4,8 @@
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
+const feature1_time = 60000;
+const feature2_time = 120000;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -77,9 +79,9 @@ module.exports = {
           if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
             if ( user.feature_tokens >= 20 ) {
               feat_1.status = true;
-              feat_1.expiry_date = Date.now() + 60000;
+              feat_1.expiry_date = Date.now() + feature1_time;
               feat_2.status = true;
-              feat_2.expiry_date = Date.now() + 60000;
+              feat_2.expiry_date = Date.now() + feature2_time;
               User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -20 } }, (err) => {
                 if (err) {
                   console.log(err);
@@ -96,7 +98,7 @@ module.exports = {
           if (( req.body.product.feat_1 )  && ( k === 0 )) {
             if ( user.feature_tokens >= 5 ) {
               feat_1.status = true;
-              feat_1.expiry_date = Date.now() + 60000;
+              feat_1.expiry_date = Date.now() + feature1_time;
               User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -5 } }, (err) => {
                 if (err) {
                   console.log(err);
@@ -111,7 +113,7 @@ module.exports = {
           if (( req.body.product.feat_2 )  && ( k === 0 )) {
             if (user.feature_tokens >= 15) {
               feat_2.status = true;
-              feat_2.expiry_date = Date.now() + 60000;
+              feat_2.expiry_date = Date.now() + feature2_time;
               User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -15 } }, (err) => {
                 if (err) {
                   console.log(err);
@@ -219,6 +221,64 @@ module.exports = {
     product.save();
     // redirect to show page
     res.redirect(`/products/${product.id}/view`);
+  },
+  // Feature product
+  async productFeature(req, res) {
+    const product = await Product.findById(req.params.id);
+    const feature_id = req.params.feature_id;
+    switch ( feature_id ) {
+      case '1': 
+        await User.findById(req.user._id, (err, user) => {
+          if (err) {
+            req.flash('error', 'An error has occured. (Could not find user)');
+            res.redirect('back');
+          } else {
+              if ( user.feature_tokens >= 5 ) {
+                product.feat_1.status = true;
+                product.feat_1.expiry_date = Date.now() + feature1_time;
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -5 } }, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                product.save();
+                res.redirect(`/products/${product.id}/view`);
+              } else {
+                req.flash('error', 'Not enough tokens to promote product.');
+                res.redirect('back');
+              }
+          }
+        });
+        break;
+
+      case '2': 
+        await User.findById(req.user._id, (err, user) => {
+          if (err) {
+            req.flash('error', 'An error has occured. (Could not find user)');
+            res.redirect('back');
+          } else {
+              if (user.feature_tokens >= 15) {
+                product.feat_2.status = true;
+                product.feat_2.expiry_date = Date.now() + feature2_time;
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -15 } }, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                product.save();
+                res.redirect(`/products/${product.id}/view`);
+              } else {
+                req.flash('error', 'Not enough tokens to promote product.');
+                res.redirect('back');
+              }
+          }
+        });
+        break;
+      
+      default:
+        break;
+      
+    }
   },
   // Products Destroy
   async productDestroy(req, res) {

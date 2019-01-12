@@ -11,7 +11,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const { productCreate, productIndex, productDestroy, productEdit, productUpdate } = require('../controllers/dashboard');
+const { productCreate, productIndex, productDestroy, productEdit, productUpdate, productFeature } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -169,6 +169,9 @@ router.get('/:id/edit', isLoggedIn, checkUserproduct, asyncErrorHandler(productE
 
 // PUT - updates product in the database
 router.put('/:id', upload.array('images', 5), checkUserproduct, asyncErrorHandler(productUpdate));
+
+// PUT - features the product
+router.put('/:id/edit/:feature_id', isLoggedIn, checkUserproduct, asyncErrorHandler(productFeature));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', asyncErrorHandler(productDestroy));
