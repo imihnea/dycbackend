@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
           currencies[j].classList.add('gray');
           fields[j].classList.add('currency-input');
           inputs[j].required = false;
+          inputs[j].value = '';
         }
         if (item === currencies[j]) {
           fields[j].classList.toggle('currency-input');

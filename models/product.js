@@ -15,6 +15,14 @@ const ProductSchema = new Schema({
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
+  feat_1: {
+    status: { type: Boolean, default: false},
+    expiry_date: Date
+  },
+  feat_2: {
+    status: { type: Boolean, default: false},
+    expiry_date: Date
+  },
   buyer: String,
   bought_with: String,
   author: {

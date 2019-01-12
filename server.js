@@ -35,6 +35,8 @@ require('dotenv').config();
 
 const User = require('./models/user');
 
+const Product = require('./models/product');
+
 // requiring routes
 
 const categoryRoutes = require('./routes/categories');
@@ -149,6 +151,18 @@ app.use('/profile', profileRoutes);
 app.get('*', (req, res) => {
   res.send('Error 404');
 });
+
+// Remove expired feature fields
+
+setInterval(() => {
+  Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // console.log(result);
+    }
+  });
+}, 300000);
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');

@@ -114,13 +114,16 @@ router.get('/tokens', isLoggedIn, (req, res) => {
 });
 
 // Buy tokens route
-router.post('/tokens', isLoggedIn, (req, res) => {
+router.post('/tokens/:id', isLoggedIn, (req, res) => {
   const query = { _id: req.user._id };
-  User.findByIdAndUpdate(query, { $inc: { feature_tokens: req.body.tokens_nr } }, (err) => {
+  // Currency id => used to decrease currency held by user
+  const id = req.params.id;
+  const tokens = req.body.tokens_nr;
+  User.findByIdAndUpdate(query, { $inc: { feature_tokens: tokens } }, (err) => {
     if (err) {
       req.flash('error', err.message);
     } else {
-      req.flash('success', 'Successfully purchased DYC-Coins!');
+      req.flash('success', 'Successfully purchased tokens!');
       res.redirect('/dashboard/tokens');
     }
   });

@@ -52,16 +52,8 @@ module.exports = {
         req.body.product.acc_ltc, req.body.product.acc_dash];
       const price = [req.body.product.btc_price, req.body.product.bch_price,
         req.body.product.eth_price, req.body.product.ltc_price,
-        req.body.product.dash_price];
+        req.body.product.dash_price];      
       
-      // In case someone deletes the 'required' attribute of a price input
-      // TODO: Decide if this shit's going to be useful, omegalul
-      // price.forEach((item, i) => {
-      //   if ((!item[i]) && (accepted[i])) {
-      //     accepted[i] = !accepted[i];
-      //   }
-      // });
-
       req.body.product.price = price;
       // TODO: Verify the data before creating the new product
       const newproduct = {
@@ -73,6 +65,75 @@ module.exports = {
         author: author,
         accepted: accepted,
       };
+
+      await User.findById(req.user._id, (err, user) => {
+        if (err) {
+          req.flash('error', 'An error has occured. (Could not find user)');
+          res.redirect('back');
+        } else {
+          const feat_1 = {};
+          const feat_2 = {};
+          let k = 0;
+          if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+            if ( user.feature_tokens >= 20 ) {
+              feat_1.status = true;
+              feat_1.expiry_date = Date.now() + 60000;
+              feat_2.status = true;
+              feat_2.expiry_date = Date.now() + 60000;
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -20 } }, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              newproduct.feat_1 = feat_1;
+              newproduct.feat_2 = feat_2;
+              k = 1;
+            } else {
+              req.flash('error', 'Not enough tokens to promote product.');
+              res.redirect('back');
+            }
+          }
+          if (( req.body.product.feat_1 )  && ( k === 0 )) {
+            if ( user.feature_tokens >= 5 ) {
+              feat_1.status = true;
+              feat_1.expiry_date = Date.now() + 60000;
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -5 } }, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              newproduct.feat_1 = feat_1;
+            } else {
+              req.flash('error', 'Not enough tokens to promote product.');
+              res.redirect('back');
+            }
+          }
+          if (( req.body.product.feat_2 )  && ( k === 0 )) {
+            if (user.feature_tokens >= 15) {
+              feat_2.status = true;
+              feat_2.expiry_date = Date.now() + 60000;
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -15 } }, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              newproduct.feat_2 = feat_2;
+            } else {
+              req.flash('error', 'Not enough tokens to promote product.');
+              res.redirect('back');
+            }
+          }
+        }
+      });
+
+      // In case someone deletes the 'required' attribute of a price input
+      // TODO: Decide if this shit's going to be useful, omegalul
+      // price.forEach((item, i) => {
+      //   if ((!item[i]) && (accepted[i])) {
+      //     accepted[i] = !accepted[i];
+      //   }
+      // });
+
       const product = await Product.create(newproduct);
       res.redirect(`/products/${product._id}/view`);
     }    
