@@ -1,5 +1,6 @@
 <% include ../partials/header %>
-<link rel="stylesheet" href="/../dist/css/index.css">  
+<link rel="stylesheet" href="/../dist/css/index.css">
+<link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
 <div class="hero-body">
     <div class="container content">
         <div class="columns userinfo">
@@ -8,14 +9,30 @@
             </div>
             <div class="column">
                 <p class="subtitle"><%= user.full_name %></p>
-                <p class="subtitle">Rating: X/5 <i class="fas fa-star"></i></p>
+                <p class="subtitle">Rating:</p>
+                <% for(let i = 0; i < 5; i++) { %>
+                    <% if(i < floorRating) { %>
+                    <!-- display a full star -->
+                    <i class="fas fa-star"></i>
+                    <% } else if((user.avgRating - i) > 0 && (user.avgRating - i) < 1) { %>
+                    <!-- display a half star -->
+                    <i class="fas fa-star-half-alt"></i>
+                    <% } else { %>
+                    <!-- display an empty star -->
+                    <i class="far fa-star"></i>
+                    <% } %>
+                <% } %>
+                <%= `${user.avgRating} star${user.avgRating === 1 ? '' : 's'}` %>
                 <p class="subtitle">Country: <%= user.country %></p>
             </div>
         </div>
         <div class="deals" >
             <p class="subtitle" style="text-align: center;">Active Deals</p>
             <div class="columns" style="justify-content: center;">
-                <% products.forEach((product) => { %>
+                <% if (products.length >= 10) { %>
+                    Pages: <% include ../partials/paginateProducts %>
+                <% } %>
+                <% products.docs.forEach((product) => { %>
                     <div class="column card feat_card" style="max-width: 250px;">
                         <a href="/products/<%= product.id %>/view">
                             <div class="card-image">
@@ -51,6 +68,74 @@
                     </div>
                 <% }); %>
             </div>
+        </div>
+        <div class="deals" >
+            <p class="subtitle" style="text-align: center;">Reviews</p>
+            <br>
+            <!-- display all reviews -->
+            <% user.reviews.forEach(function(review) { %>
+                <div>
+                    <p class="subtitle" >Author: <%= review.author.username %><br>
+                    <p class="subtitle" >Comment: <%= review.body %><br>
+                    <p class="subtitle" >Rating: <%= review.rating %> stars
+                </div>
+                <% if(review.author.equals(currentUser._id)) { %>
+                <div>
+                    <button class="button is-primary">Edit</button>
+
+                    <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                        <textarea name="review[body]" required><%= review.body %></textarea>
+                        <fieldset class="starability-basic">
+                        <legend>Rating:</legend>
+                        <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                        <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
+                        <label for="edit-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
+                        <label for="edit-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
+                        <label for="edit-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
+                        <label for="edit-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
+                        <label for="edit-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+
+                        <input class="button is-primary" type="submit" value="Update">
+                    </form>
+                    
+                    <script>
+                        $('#edit-rate<%= review.rating %>').prop('checked', true);
+                    </script>
+
+                    <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                        <input class="button is-primary" type="submit" value="Delete">
+                    </form>
+                </div>
+                <% } %>
+                <hr>
+            <% }); %>
+            <% if(currentUser){ %>
+            <p class="subtitle" >Create a Review</p>
+            <form action="/profile/<%= user.id %>/reviews" method="POST">
+                <textarea class="textarea" name="review[body]" required></textarea>
+                <fieldset class="starability-basic">
+                <legend class="productDescriptionText">Rating:</legend>
+                <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                <label for="rate1" title="Terrible">1 star</label>
+                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                <label for="rate2" title="Not good">2 stars</label>
+                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                <label for="rate3" title="Average">3 stars</label>
+                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                <label for="rate4" title="Very good">4 stars</label>
+                <input type="radio" id="rate5" name="review[rating]" value="5" />
+                <label for="rate5" title="Amazing">5 stars</label>
+                </fieldset>
+    
+                <input class="button is-primary" type="submit">
+            </form>
+            <% } %>
         </div>
     </div>
 </div>

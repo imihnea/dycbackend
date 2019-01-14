@@ -19,16 +19,16 @@ Frontend:
 
 Backend:
 
-   High Priority:
+      High Priority:
 
-      Dashboard => Add balance route
-      Search bar => Routes and logic for search via category and all
+         Dashboard => Add balance route
+         Search bar => Routes and logic for search via category and all
 
-   Low Priority:
+      Low Priority:
 
       Login => Link accounts facebook,gmail etc to original
       
-      Dashboard 
+       Dashboard 
                => Settings
                   => 2FA, connections
                => Closed Deals
@@ -36,10 +36,10 @@ Backend:
                => Purchases
                   => Query purchased by author
       
-      Index 
+         Index 
                => Get products from the database
         
-      Validation where input!!!
-      Categories => Add more in future
-      Register => Add recaptcha to avoid spam
-      Contact => Add recaptcha to avoid spam                        
+         Validation where input!!!
+         Categories => Add more in future
+         Register => Add recaptcha to avoid spam
+         Contact => Add recaptcha to avoid spam                        

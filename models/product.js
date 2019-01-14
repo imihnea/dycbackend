@@ -49,7 +49,7 @@ ProductSchema.pre('remove', async () => {
   });
 });
 
-ProductSchema.methods.calculateAvgRating = () => {
+ProductSchema.methods.calculateAvgRating = function() {
   let ratingsTotal = 0;
   if (this.reviews.length) {
     this.reviews.forEach((review) => {

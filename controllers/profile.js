@@ -14,21 +14,22 @@ cloudinary.config({
 module.exports = {
     // View Profile
     async getProfile(req, res){
-        User.findById(req.params.id, async (err, user) => {
-          if (err) {
-            req.flash('error', err.message);
-          } else {
-            Product.find( { 'author.id' : user._id }, async (error, prod) => {
-              if (error) {
-                req.flash('error', error.message);
-                res.redirect('back');
-              } else {
-                res.render('index/profile', { user: user, products: prod });
-              }
-            });
-          }
-        });
-      },
+      const user = await User.findById(req.params.id).populate({
+        path: 'reviews',
+        options: { sort: { _id: -1 } },
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+      });
+      const floorRating = user.calculateAvgRating();
+      const products = await Product.paginate({ available: true, 'author.id': req.params.id }, {
+        page: req.query.page || 1,
+        limit: 10,
+      });
+      products.page = Number(products.page);
+      res.render('index/profile', { user, products, floorRating });
+  },
     // Profile Update
     async profileUpdate(req, res) {
         User.findById(req.params.id, async (err, user) => {

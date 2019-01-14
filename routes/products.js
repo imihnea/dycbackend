@@ -1,18 +1,15 @@
 const express = require('express');
 
-const product = require('../models/product');
+const Product = require('../models/product');
+
+const { productShow } = require('../controllers/dashboard');
+
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const router = express.Router();
 
-router.get('/:id/view', (req, res) => {
-  product.findById(req.params.id).exec((err, foundproduct) => {
-    if (err || !foundproduct) {
-      req.flash('error', 'Sorry, that product does not exist!');
-      return res.redirect('/');
-    }
-    // render show template with that product
-    res.render('products/product_view', { product: foundproduct });
-  });
-});
+router.get('/:id/view', asyncErrorHandler(productShow));
 
 module.exports = router;
