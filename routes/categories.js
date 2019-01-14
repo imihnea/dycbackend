@@ -4,6 +4,12 @@ const product = require('../models/product');
 
 const router = express.Router();
 
+const { getCollectibles } = require('../controllers/categories');
+
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware;
+
 // show all categories
 router.get('/', (req, res) => {
   res.render('index/categories');
@@ -119,24 +125,7 @@ router.get('/Other', (req, res) => {
 
 // =================== COLLECTIBLES AND ART ===================
 // show all products inside specific subcategory
-router.get('/Collectibles-Art/Collectibles', (req, res) => {
-// Get all products from DB
-  product.find({ category: 'collectibles' }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      res.render('products/product_all', {
-        products: allproducts,
-        main: 'Collectibles-Art',
-        subfirst: 'Collectibles',
-        subsecond: 'Antiques',
-        subthird: 'SportsMemorabilia',
-        subfourth: 'Art',
-        categ: req.url.split('/')[2],
-      });
-    }
-  });
-});
+router.get('/Collectibles-Art/Collectibles', asyncErrorHandler(getCollectibles));
 
 // show all products inside specific subcategory
 router.get('/Collectibles-Art/Antiques', (req, res) => {

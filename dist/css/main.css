@@ -205,8 +205,8 @@ body{
 
 .page{
     color: black;
-    background-color: orange;
-    border-color: transparent;
+    background-color: orange !important;
+    border-color: transparent !important;
 }
 
 .page:hover{

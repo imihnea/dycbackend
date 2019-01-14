@@ -11,10 +11,10 @@ Frontend:
          Ongoing purchase interface
 
          Finished deal => review interface
-         
-         Featuring => category level featuring
 
     Low Priority:
+
+        Change all pagintion partials to paginateIndex
 
         Make everything responsive (see comments in css files)
 

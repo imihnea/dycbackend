@@ -8,5 +8,4 @@ document.addEventListener('DOMContentLoaded', () => {
             item.classList.toggle('active');
         }
     });
-    console.log(pageNumber);
 });
