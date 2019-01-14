@@ -1,13 +1,13 @@
-<div style="margin: 20px 0;">
+<div style="margin-left: 1vw;">
     <% if(products.page - 1) { %>
-        <a href="/dashboard/open?page=<%= products.page - 1 %>">Prev</a>
+        <a class="button page" href="/dashboard/open?page=<%= products.page - 1 %>">Prev</a>
     <% } %>
     <% for(let i = 1; i <= products.pages; i++) { %>
-        <a href="/dashboard/open?page=<%= i %>"
+        <a class="button page %>" href="/dashboard/open?page=<%= i %>"
              <%= i === products.page ? 'style=color:#000;' : '' %>
             ><%= i %></a>
     <% } %>
     <% if((products.page + 1) <= products.pages) { %>
-        <a href="/dashboard/open?page=<%= products.page + 1 %>">Next</a>
+        <a class="button page" href="/dashboard/open?page=<%= products.page + 1 %>">Next</a>
     <% } %>
-    </div>
+</div>

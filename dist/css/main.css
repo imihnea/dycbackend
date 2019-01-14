@@ -196,6 +196,31 @@ body{
     position: relative;
     background-color: black;
 }
+
+.button:hover{
+    color: orange !important;
+    background-color: transparent !important;
+    border-color: orange !important;
+}
+
+.page{
+    color: black;
+    background-color: orange;
+    border-color: transparent;
+}
+
+.page:hover{
+    color: orange;
+    background-color: transparent;
+    border-color: orange;
+}
+
+.page.active{
+    color: orange !important;
+    background-color: transparent;
+    border-color: orange;
+}
+
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
     /* box-shadow: 0.1px 0.1px 1px black; */

@@ -4,8 +4,12 @@
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
+
+// Constants for quick modification
 const feature1_time = 60000;
 const feature2_time = 120000;
+const feature1_cost = -5;
+const feature2_cost = -15;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,14 +18,30 @@ cloudinary.config({
 });
 
 module.exports = {
-  // Products Index
-  async productIndex(req, res) {
+  // Products Indexes
+  async openProductIndex(req, res) {
     const products = await Product.paginate({ available: true, 'author.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
     });
     products.page = Number(products.page);
     res.render('dashboard/dashboard_open', { products });
+  },
+  async closedProductIndex(req, res) {
+    const products = await Product.paginate({ available: false, 'author.id': req.user._id }, {
+      page: req.query.page || 1,
+      limit: 10,
+    });
+    products.page = Number(products.page);
+    res.render('dashboard/dashboard_closed', { products });
+  },
+  async purchasedProductIndex(req, res) {
+    const products = await Product.paginate({ available: false, 'buyer.id': req.user._id }, {
+      page: req.query.page || 1,
+      limit: 10,
+    });
+    products.page = Number(products.page);
+    res.render('dashboard/dashboard_purchases', { products });
   },
   // Products New
   productNew(req, res) {
@@ -82,7 +102,7 @@ module.exports = {
               feat_1.expiry_date = Date.now() + feature1_time;
               feat_2.status = true;
               feat_2.expiry_date = Date.now() + feature2_time;
-              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -20 } }, (err) => {
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
                 if (err) {
                   console.log(err);
                 }
@@ -99,7 +119,7 @@ module.exports = {
             if ( user.feature_tokens >= 5 ) {
               feat_1.status = true;
               feat_1.expiry_date = Date.now() + feature1_time;
-              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -5 } }, (err) => {
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
                 if (err) {
                   console.log(err);
                 }
@@ -114,7 +134,7 @@ module.exports = {
             if (user.feature_tokens >= 15) {
               feat_2.status = true;
               feat_2.expiry_date = Date.now() + feature2_time;
-              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -15 } }, (err) => {
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
                 if (err) {
                   console.log(err);
                 }
@@ -236,7 +256,7 @@ module.exports = {
               if ( user.feature_tokens >= 5 ) {
                 product.feat_1.status = true;
                 product.feat_1.expiry_date = Date.now() + feature1_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -5 } }, (err) => {
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
                   if (err) {
                     console.log(err);
                   }
@@ -260,7 +280,7 @@ module.exports = {
               if (user.feature_tokens >= 15) {
                 product.feat_2.status = true;
                 product.feat_2.expiry_date = Date.now() + feature2_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: -15 } }, (err) => {
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
                   if (err) {
                     console.log(err);
                   }

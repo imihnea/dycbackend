@@ -11,7 +11,8 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const { productCreate, productIndex, productDestroy, productEdit, productUpdate, productFeature } = require('../controllers/dashboard');
+const { productCreate, productDestroy, productEdit, productUpdate, productFeature, 
+        openProductIndex, closedProductIndex, purchasedProductIndex } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -130,31 +131,33 @@ router.post('/tokens/:id', isLoggedIn, (req, res) => {
 });
 
 // Show all open offers
-router.get('/open', isLoggedIn, asyncErrorHandler(productIndex));
+router.get('/open', isLoggedIn, asyncErrorHandler(openProductIndex));
 
 // Show all closed offers
-router.get('/closed', isLoggedIn, (req, res) => {
-  product.find({ available: false, 'author.id': req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('/dashboard');
-    } else {
-      res.render('dashboard/dashboard_closed', { products: allproducts });
-    }
-  });
-});
+router.get('/closed', isLoggedIn, asyncErrorHandler(closedProductIndex));
+// router.get('/closed', isLoggedIn, (req, res) => {
+//   product.find({ available: false, 'author.id': req.user._id }, (err, allproducts) => {
+//     if (err) {
+//       req.flash('error', err.message);
+//       res.redirect('/dashboard');
+//     } else {
+//       res.render('dashboard/dashboard_closed', { products: allproducts });
+//     }
+//   });
+// });
 
 // Show all purchases
-router.get('/purchases', isLoggedIn, (req, res) => {
-  product.find({ buyer: req.user._id }, (err, allproducts) => {
-    if (err) {
-      req.flash('error', err.message);
-      res.redirect('/dashboard');
-    } else {
-      res.render('dashboard/dashboard_purchases', { products: allproducts });
-    }
-  });
-});
+router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
+// router.get('/purchases', isLoggedIn, (req, res) => {
+//   product.find({ buyer: req.user._id }, (err, allproducts) => {
+//     if (err) {
+//       req.flash('error', err.message);
+//       res.redirect('/dashboard');
+//     } else {
+//       res.render('dashboard/dashboard_purchases', { products: allproducts });
+//     }
+//   });
+// });
 
 // NEW - show form to create new product
 router.get('/new', isLoggedIn, (req, res) => {
