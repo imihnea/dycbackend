@@ -13,9 +13,9 @@
                     <div style="overflow-x: hidden;">
                         <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
                             <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
-                            <% include ../partials/paginateProducts %>
+                            <% include ../partials/paginateClosedProducts %>
                         </div>
-                        <% products.docs.forEach(function(product){ %>
+                        <% products.docs.forEach((product) => { %>
                             <div class="columns">
                                 <div class="column is-one-quarter">
                                         <img src="<%= product.images[0].url %>" class="open-img">
@@ -69,7 +69,7 @@
                     </div>        
                     <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
                         <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
-                        <% include ../partials/paginateProducts %>
+                        <% include ../partials/paginateClosedProducts %>
                     </div>
                 <% } %>       
             </div>

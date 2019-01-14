@@ -53,9 +53,9 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
-    const products = await Product.paginate({ featured: true, available: true }, {
+    const products = await Product.paginate({ "feat_2.status": true, available: true }, {
       page: req.query.page || 1,
-      limit: 16,
+      limit: 20,
     });
     products.page = Number(products.page);
     res.render('index', { currentUser: req.user, products });

@@ -11,6 +11,8 @@ Frontend:
          Ongoing purchase interface
 
          Finished deal => review interface
+         
+         Featuring => category level featuring
 
     Low Priority:
 
