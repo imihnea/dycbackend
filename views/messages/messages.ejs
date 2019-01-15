@@ -1,0 +1,37 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="columns" style="color: orange;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+        <div class="columns" style="justify-content: space-evenly; flex-wrap: wrap;">
+            <% chats.docs.forEach((chat) => { %>
+                <a href="<%= chat._id %>" class="column is-two-fifths" style="margin: 1%;">
+                    <div class="column columns messageItem">
+                        <div class="column is-half">
+                            <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                <%= chat.user1.avatarUrl %>
+                            <% } else { %>
+                                <%= chat.user2.avatarUrl %>
+                            <% } %>"  style="width: 100%; height: auto; max-height: 221px;" class="open-img">
+                        </div>
+                        <div class="column prod_info ">
+                            <p class="title is-5"><% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                <%= chat.user1.username %>
+                            <% } else { %>
+                                <%= chat.user2.username %>
+                            <% } %></p>
+                            <p class="title is-5">Deal: <%= chat.product.name %></p>
+                            <p class="subtitle">Last message: <br>
+                                <%=((  chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) : ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) %>
+                                /<%= (( chat.messages[chat.messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getDate()) : ( chat.messages[chat.messageCount - 1].createdAt.getDate()) %> -
+                                <%= (( chat.messages[chat.messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getHours()) : ( chat.messages[chat.messageCount - 1].createdAt.getHours()) %>:
+                                <%= (( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) : ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) %></p>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>  
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

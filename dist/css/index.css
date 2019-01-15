@@ -20,7 +20,7 @@ div.latprod-title{
 
 figure.featimg{
     /* TODO: Add breakpoints */
-    width: 100%; 
+    width: 125px;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }

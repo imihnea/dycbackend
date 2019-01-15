@@ -1,0 +1,71 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="columns" style="color: orange;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div>
+                    <div class="level toplevel">
+                        <div class="level-left">
+                                <a><p class="title is-4"><% if (user._id.toString() != chat.user1.id.toString()) { %>
+                                    <%= chat.user1.username %>
+                                <% } else { %>
+                                    <%= chat.user2.username %>
+                                <% } %></p></a>
+                        </div>
+                        <div class="level-right" style="padding-right: 1vw;">
+                                <a href="/products/<%= chat.product.id %>/view"><p class="title is-4">Product Page</p></a>
+                        </div>
+                    </div>
+
+                    <div class="midlevel">
+                        <% chat.messages.forEach((message) => { %>
+                            <% if (message.sender.toString() != user._id.toString()) { %>
+                                <div class="level">
+                                    <div class="level-left leftlv">
+                                        <div class="recmsg">
+                                            <p><%= message.message %></p>
+                                            <time>
+                                                <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                                /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                                <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                                <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                            </time>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } else if (message.sender.toString() == user._id.toString()) { %>
+                                <div class="level" style="display: block;">
+                                    <div class="level-right">
+                                        <div class="sentmsg">
+                                            <p><%= message.message %></p>
+                                            <time>
+                                                <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                                /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                                <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                                <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                            </time>
+                                        </div>
+                                    </div>      
+                                </div>
+                            <% } %>
+                        <% }); %>
+                        
+                        
+                    </div>
+                    <div class="bottomlv">
+                        <form action="<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
+                                <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
+                                <button class="button is-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

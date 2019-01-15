@@ -135,29 +135,9 @@ router.get('/open', isLoggedIn, asyncErrorHandler(openProductIndex));
 
 // Show all closed offers
 router.get('/closed', isLoggedIn, asyncErrorHandler(closedProductIndex));
-// router.get('/closed', isLoggedIn, (req, res) => {
-//   product.find({ available: false, 'author.id': req.user._id }, (err, allproducts) => {
-//     if (err) {
-//       req.flash('error', err.message);
-//       res.redirect('/dashboard');
-//     } else {
-//       res.render('dashboard/dashboard_closed', { products: allproducts });
-//     }
-//   });
-// });
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
-// router.get('/purchases', isLoggedIn, (req, res) => {
-//   product.find({ buyer: req.user._id }, (err, allproducts) => {
-//     if (err) {
-//       req.flash('error', err.message);
-//       res.redirect('/dashboard');
-//     } else {
-//       res.render('dashboard/dashboard_purchases', { products: allproducts });
-//     }
-//   });
-// });
 
 // NEW - show form to create new product
 router.get('/new', isLoggedIn, (req, res) => {

@@ -204,21 +204,21 @@ body{
 }
 
 .page{
-    color: black;
+    color: black !important;
     background-color: orange !important;
     border-color: transparent !important;
 }
 
 .page:hover{
-    color: orange;
-    background-color: transparent;
-    border-color: orange;
+    color: orange !important;
+    background-color: transparent !important;
+    border-color: orange !important;
 }
 
 .page.active{
     color: orange !important;
-    background-color: transparent;
-    border-color: orange;
+    background-color: transparent !important;
+    border-color: orange !important;
 }
 
 /* Make .columns margin-left and right disappear for <= 768px */
@@ -331,7 +331,6 @@ hr{
 }
 
 .featimgs{
-    max-width: 160px;
     margin: auto;
     width: auto !important;
     height: 125px !important;

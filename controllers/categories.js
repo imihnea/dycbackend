@@ -13,19 +13,32 @@ module.exports = {
             limit: 10,
         });
         //TODO: Find regex that does both in one command
-        let categ = req.url.split('/')[2];
-        categ = categ.match(/.+?(?=\?)/);
         products.page = Number(products.page);
-        res.render('products/product_all', {
-            products: products,
-            featured_products: featured_products,
-            main: 'Collectibles-Art',
-            subfirst: 'Collectibles',
-            subsecond: 'Antiques',
-            subthird: 'SportsMemorabilia',
-            subfourth: 'Art',
-            categ: categ[0],
-        });
+        let categ = req.url.split('/')[2];
+        if ( categ.match(/.+?(?=\?)/) ){
+            categ = categ.match(/.+?(?=\?)/);
+            res.render('products/product_all', {
+                products: products,
+                featured_products: featured_products,
+                main: 'Collectibles-Art',
+                subfirst: 'Collectibles',
+                subsecond: 'Antiques',
+                subthird: 'SportsMemorabilia',
+                subfourth: 'Art',
+                categ: categ[0],
+            });
+        } else {
+            res.render('products/product_all', {
+                products: products,
+                featured_products: featured_products,
+                main: 'Collectibles-Art',
+                subfirst: 'Collectibles',
+                subsecond: 'Antiques',
+                subthird: 'SportsMemorabilia',
+                subfourth: 'Art',
+                categ: categ,
+            });
+        }
     }
 
 };

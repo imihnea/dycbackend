@@ -152,7 +152,9 @@
                     </div>
                 </form>
                 <div style="margin-top: 1vh;">
-                    <a class="productContactLink" href="#"><button class="button is-primary">Contact</button></a>
+                    <form action="/messages/<%= product._id %>/createChat" method="POST">
+                        <button class="productContactLink button is-primary">Contact</button>
+                    </form>
                 </div>
             </div>  
         </div>
