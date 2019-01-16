@@ -39,7 +39,7 @@ const upload = multer({
 
 // Dashboard index route
 router.get('/', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard', { user: req.user });
+  res.render('dashboard/dashboard', { user: req.user, errors: req.session.errors });
 });
 
 // Show all addresses for withdraw
@@ -158,7 +158,7 @@ router.get('/purchases', isLoggedIn, (req, res) => {
 
 // NEW - show form to create new product
 router.get('/new', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_new', { user: req.user });
+  res.render('dashboard/dashboard_new', { user: req.user, errors: req.session.errors });
 });
 
 // CREATE - add new product to DB

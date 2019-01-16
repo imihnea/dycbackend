@@ -49,6 +49,13 @@ module.exports = {
                         return res.redirect('back');
                     }
                 }
+                req.check('name', 'Name must be between 3 and 20 letters.').matches(/^[a-z ]+$/i).notEmpty().isLength({ min: 3, max: 20 });
+                req.check('country', 'Please select a country.').notEmpty();
+                req.check('state', 'Please select a state.').notEmpty();
+                req.check('city', 'Please select a city.').notEmpty();
+                req.check('address1', 'Please input a valid first address.').matches(/^[a-z0-9 ]+$/i).notEmpty();
+                req.check('zip', 'Please specify a numeric zip code.').notEmpty().isNumeric();
+                // Check address2 as well eventually
                 user.full_name = req.body.name;
                 user.country = req.body.country;
                 user.state = req.body.state;
@@ -58,8 +65,16 @@ module.exports = {
                 if (req.body.address2) {
                   user.address2 = req.body.address2;
                 }
+                const errors = req.validationErrors();
+                if (errors) {
+                  res.render('dashboard/dashboard', {
+                    user: req.user,
+                    errors: errors,
+                  });
+                } else {
                 user.save();
                 res.redirect(`/profile/${user._id}`);
+                }
             }
         });
   },

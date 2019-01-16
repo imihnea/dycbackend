@@ -33,13 +33,10 @@ Backend:
                   => 2FA, connections
                => Closed Deals
                   => Sold, expired, deactivated status
-               => Purchases
-                  => Query purchased by author
       
          Index 
                => Get products from the database
-        
-         Validation where input!!!
-         Categories => Add more in future
-         Register => Add recaptcha to avoid spam
-         Contact => Add recaptcha to avoid spam                        
+
+Categories => Add more in future
+Register => Add recaptcha to avoid spam
+Contact => Add recaptcha to avoid spam                        

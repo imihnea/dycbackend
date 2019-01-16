@@ -24,13 +24,10 @@ module.exports = {
     res.render('dashboard/dashboard_open', { products });
   },
   // Products New
-  productNew(req, res) {
-    res.render('posts/new');
-  },
   async productCreate(req, res) {
     if ( req.files.length === 0 ){
       req.flash('error', 'You need to upload at least one image.');
-      res.redirect('dashboard/new');
+      res.redirect('dashboard/dashboard_new');
     } else {
       req.body.product.images = [];
       for (const file of req.files) {
@@ -47,6 +44,11 @@ module.exports = {
       req.body.product.author = author;
       // Everything is stored in constants so we can protect against
       // people making fields in the DevTools
+      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-z ]+$/i).notEmpty();
+      req.check('product[name]', 'The name of the product must be between 3 and 30 characters.').isLength({ min: 3, max: 30 });
+      req.check('product[category]', 'Please choose a category.').notEmpty();
+      req.check('product[description]', 'The product must have a valid description.').notEmpty();
+      // Figure out how to validate accepted + price
       const name = req.body.product.name;
       const description = req.body.product.description;
       const category = req.body.product.category;
@@ -54,10 +56,9 @@ module.exports = {
         req.body.product.acc_ltc, req.body.product.acc_dash];
       const price = [req.body.product.btc_price, req.body.product.bch_price,
         req.body.product.eth_price, req.body.product.ltc_price,
-        req.body.product.dash_price];      
-      
+        req.body.product.dash_price];
+        
       req.body.product.price = price;
-      // TODO: Verify the data before creating the new product
       const newproduct = {
         name: name,
         images: req.body.product.images,
@@ -67,7 +68,13 @@ module.exports = {
         author: author,
         accepted: accepted,
       };
-
+      const errors = req.validationErrors();
+      if (errors) {
+        res.render('dashboard/dashboard_new', {
+          user: req.user,
+          errors: errors,
+        });
+      } else {
       await User.findById(req.user._id, (err, user) => {
         if (err) {
           req.flash('error', 'An error has occured. (Could not find user)');
@@ -138,6 +145,7 @@ module.exports = {
 
       const product = await Product.create(newproduct);
       res.redirect(`/products/${product._id}/view`);
+    }
     }    
   },
   // Products Show

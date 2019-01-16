@@ -41,6 +41,7 @@ module.exports = {
     }
     passport.authenticate('local',
       {
+        successFlash: 'Welcome to Deal Your Crypto!',
         successRedirect: '/',
         failureRedirect: '/login',
         failureFlash: true,

@@ -153,9 +153,21 @@ app.use('/profile', profileRoutes);
 app.use('/products/:id/reviews', reviewsRoutes);
 app.use('/profile/:id/reviews', reviewsRoutesUser);
 
-// error 404 page
 app.get('*', (req, res) => {
-  res.send('Error 404');
+  res.send('Your friendly 404.');
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // // set locals, only providing error in development
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // // render the error page
+  // res.status(err.status || 500);
+  // res.render('error');
+  req.session.error = req.flash('error', err.message);
+  res.redirect('back');
 });
 
 // Remove expired feature fields
