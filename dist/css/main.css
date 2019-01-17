@@ -258,6 +258,10 @@ div.column{
     padding-right: 1vw;
     padding-top: 1vh;
     color: orange;
+    width: 75%;
+    position: relative; 
+    margin: auto; 
+    margin-bottom: 10px;
 }
 
 hr{
@@ -286,8 +290,12 @@ hr{
     width: 30px;
 }
 
-.button.is-primary{
+.is-primary{
     background-color: orange !important;
+    color: black !important;
+}
+
+.is-danger{
     color: black !important;
 }
 
@@ -300,8 +308,9 @@ hr{
 }
 
 .open-img{
-    width: 200px;
-    height: 100%;
+    width: auto;
+    height: 125px;
+    max-width: 200px;
 }
 
 .view-btn{

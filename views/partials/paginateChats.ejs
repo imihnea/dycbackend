@@ -1,0 +1,13 @@
+<div style="margin-left: 1vw;">
+    <% if(chats.page - 1) { %>
+        <a class="button page" href="?page=<%= chats.page - 1 %>">Prev</a>
+    <% } %>
+    <% for(let i = 1; i <= chats.pages; i++) { %>
+        <a class="button page %>" href="?page=<%= i %>"
+                <%= i === chats.page ? 'style=color:#000;' : '' %>
+            ><%= i %></a>
+    <% } %>
+    <% if((chats.page + 1) <= chats.pages) { %>
+        <a class="button page" href="?page=<%= chats.page + 1 %>">Next</a>
+    <% } %>
+</div>

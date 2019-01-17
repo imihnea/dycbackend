@@ -13,13 +13,21 @@ module.exports = {
                     page: req.query.page || 1,
                     limit: 10,
                 });
+        //TODO: Find other user as well, only store IDs in chat
         chats.page = Number(chats.page);
         res.render('messages/messages', { chats, user: req.user });
     },
     // Get Messages
     async getMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
-        res.render('messages/messages_msg', { chat: chat, user: req.user });
+        let userid = '';
+        if ( chat.user1.id.toString() !== req.user._id ) {
+            userid = chat.user1.id;
+        } else {
+            userid = chat.user2.id;
+        }
+        const user2 = await User.findById(userid);
+        res.render('messages/messages_msg', { chat: chat, user: req.user, user2: user2 });
     },
     // Create Chat
     async newChat(req, res) {
@@ -31,16 +39,17 @@ module.exports = {
             // Find the product
             const product = await Product.findById( req.params.id );
             // Check if the user is the seller of the product
-            if ( product.author.id === req.user._id ) {
+            if ( product.author.id.toString() === req.user._id.toString() ) {
                 req.flash('error', 'You cannot start a chat with yourself.');
                 res.redirect('back');
             } else {
                 // Find the seller
                 const user2 = await User.findById( product.author.id );
                 const newChat = {
-                    user1: { id: req.user._id, username: req.user.username, avatarUrl: req.user.avatar.url},
-                    user2: { id: user2.id, username: user2.username, avatarUrl: user2.avatar.url},
-                    product: { id: product._id, name: product.name }
+                    user1: { id: req.user._id, fullname: req.user.full_name, avatarUrl: req.user.avatar.url },
+                    user2: { id: user2.id, fullname: user2.full_name, avatarUrl: user2.avatar.url },
+                    product: { id: product._id, name: product.name, imageUrl: product.images[0].url, price: product.price,
+                    accepted: product.accepted }
                 };
                 chat = await Chat.create(newChat);
                 res.redirect(`/messages/${chat._id}`);
@@ -59,7 +68,7 @@ module.exports = {
         // Insert the message
         chat.messages.push(newMessage);
         chat.messageCount += 1;
-        chat.save();
+        await chat.save();
         res.redirect(`/messages/${chat._id}`);
     }
 };

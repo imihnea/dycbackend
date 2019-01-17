@@ -21,8 +21,8 @@
                                 <div class="column is-one-quarter">
                                         <img src="<%= product.images[0].url %>" class="open-img">
                                 </div>
-                                <div class="column prod_info is-half">
-                                    <p class="title is-5"><%= product.name %></p>
+                                <div class="column prod_info">
+                                    <p class="title is-5 dealname"><%= product.name %></p>
                                     <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
                                     <div style="display: flex;">
                                         <a href="/products/<%= product._id %>/view"><button class="button view-btn">View</button></a>
@@ -32,37 +32,47 @@
                                         </form>
                                     </div>   
                                 </div>
-                                <div class="column prod_info">
+                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
                                 <% if (product.accepted[0]) { %>
-                                    <div class="prices">
+                                    <div class="prices" style="width: 30%;
+                                    position: relative;
+                                    margin: auto;">
                                         <p class="price_text"> <%= product.price[0] %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[1]) {
                                 %>
-                                    <div class="prices">
+                                    <div class="prices" style="width: 30%;
+                                    position: relative;
+                                    margin: auto;">
                                         <p class="price_text"> <%= product.price[1] %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[2]) {
                                 %>
-                                    <div class="prices">
+                                    <div class="prices" style="width: 30%;
+                                    position: relative;
+                                    margin: auto;">
                                         <p class="price_text"> <%= product.price[2] %></p>
                                         <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[3]) {
                                 %>
-                                    <div class="prices">
+                                    <div class="prices" style="width: 30%;
+                                    position: relative;
+                                    margin: auto;">
                                         <p class="price_text"> <%= product.price[3] %></p>
                                         <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[4]) {
                                 %>
-                                    <div class="prices">
+                                    <div class="prices" style="width: 30%;
+                                    position: relative;
+                                    margin: auto;">
                                         <p class="price_text"> <%= product.price[4] %></p>
                                         <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                                     </div>
@@ -70,12 +80,13 @@
                             </div>
                         </div>
                         <hr>                    
-                        <% }); %>         
+                        <% }); %> 
+                        <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
+                            <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
+                            <% include ../partials/paginateIndex %>
+                        </div>        
                     </div>        
-                    <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
-                        <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
-                        <% include ../partials/paginateIndex %>
-                    </div>
+                    
                 <% } %>
             </div>
             <div class="column"></div>
@@ -87,3 +98,4 @@
 
 <% include ../partials/footer %>
 <script src='../../dist/js/dashboard_products.js'></script>
+<script src="../../dist/js/dashboard_open.js"></script>
