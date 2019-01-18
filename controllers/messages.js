@@ -13,7 +13,6 @@ module.exports = {
                     page: req.query.page || 1,
                     limit: 10,
                 });
-        //TODO: Find other user as well, only store IDs in chat
         chats.page = Number(chats.page);
         res.render('messages/messages', { chats, user: req.user });
     },
@@ -21,13 +20,31 @@ module.exports = {
     async getMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
         let userid = '';
-        if ( chat.user1.id.toString() !== req.user._id ) {
+        if ( chat.user1.id.toString() !== req.user._id.toString() ) {
             userid = chat.user1.id;
         } else {
             userid = chat.user2.id;
         }
         const user2 = await User.findById(userid);
         res.render('messages/messages_msg', { chat: chat, user: req.user, user2: user2 });
+    },
+    // Update "read" field
+    async updateMessages(req, res) {
+        const chat = await Chat.findById( req.params.id );
+        let userid = '';
+        if ( chat.user1.id.toString() !== req.user._id.toString() ) {
+            userid = chat.user1.id;
+        } else {
+            userid = chat.user2.id;
+        }
+        const user2 = await User.findById(userid);
+        chat.messages.forEach((message) => {
+            if ( message.sender.toString() === user2._id.toString() ) {
+                message.read = true;
+            }
+        });
+        await chat.save();
+        res.redirect(`/messages/${ req.params.id }`);
     },
     // Create Chat
     async newChat(req, res) {

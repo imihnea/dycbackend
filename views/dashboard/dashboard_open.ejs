@@ -12,8 +12,8 @@
                     <p class="title">Click <a href="/dashboard/new">here</a> to create a deal.</p>
                 <% } else { %>
                     <div style="overflow-x: hidden;">
-                        <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
-                            <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
+                        <div class="pagination">
+                            <p class="subtitle pagePad">Pages:</p> 
                             <% include ../partials/paginateIndex %>
                         </div>
                         <% products.docs.forEach((product) => { %>
@@ -34,45 +34,35 @@
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
                                 <% if (product.accepted[0]) { %>
-                                    <div class="prices" style="width: 30%;
-                                    position: relative;
-                                    margin: auto;">
+                                    <div class="prices openPrices">
                                         <p class="price_text"> <%= product.price[0] %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[1]) {
                                 %>
-                                    <div class="prices" style="width: 30%;
-                                    position: relative;
-                                    margin: auto;">
+                                    <div class="prices openPrices">
                                         <p class="price_text"> <%= product.price[1] %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[2]) {
                                 %>
-                                    <div class="prices" style="width: 30%;
-                                    position: relative;
-                                    margin: auto;">
+                                    <div class="prices openPrices">
                                         <p class="price_text"> <%= product.price[2] %></p>
                                         <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[3]) {
                                 %>
-                                    <div class="prices" style="width: 30%;
-                                    position: relative;
-                                    margin: auto;">
+                                    <div class="prices openPrices">
                                         <p class="price_text"> <%= product.price[3] %></p>
                                         <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                     </div>
                                 <% } 
                                     if (product.accepted[4]) {
                                 %>
-                                    <div class="prices" style="width: 30%;
-                                    position: relative;
-                                    margin: auto;">
+                                    <div class="prices openPrices">
                                         <p class="price_text"> <%= product.price[4] %></p>
                                         <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                                     </div>
@@ -81,8 +71,8 @@
                         </div>
                         <hr>                    
                         <% }); %> 
-                        <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
-                            <p class="subtitle" style="padding-top: 0.3vh;">Pages:</p> 
+                        <div class="pagination paginationD">
+                            <p class="subtitle pagePad">Pages:</p> 
                             <% include ../partials/paginateIndex %>
                         </div>        
                     </div>        

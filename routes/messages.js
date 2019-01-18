@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getChats, getMessages, newMessage, newChat } = require('../controllers/messages');
+const { getChats, getMessages, newMessage, newChat, updateMessages } = require('../controllers/messages');
 
 const middleware = require('../middleware/index');
 
@@ -13,6 +13,9 @@ router.get('/', isLoggedIn, asyncErrorHandler(getChats));
 
 // show messages
 router.get('/:id', isLoggedIn, asyncErrorHandler(getMessages));
+
+// update read field
+router.put('/:id', isLoggedIn, asyncErrorHandler(updateMessages));
 
 // send message
 router.put('/:id/sendMessage', isLoggedIn, asyncErrorHandler(newMessage));

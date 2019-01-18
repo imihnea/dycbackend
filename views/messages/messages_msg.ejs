@@ -1,30 +1,25 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
 <div class="columns" style="color: orange;">
     <!-- <% include ../partials/sidebar %> -->
     <div class="column is-one-fifth" style="margin-top: 2vh;">
         <a href="/messages" class="button is-primary">Back to Dashboard</a>
         <div>
-            <div class="messageProfile" style="position: relative; margin-top: 2vh; padding-top: 2.5vh; padding-bottom: 1vh; margin-left: 1vw; margin-right: 5px; height: 20%;">
+            <div class="messageProfile">
                 <div class="">
                     <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                         <%= chat.user1.avatarUrl %>
                     <% } else { %>
                         <%= chat.user2.avatarUrl %>
-                    <% } %>"  style="width: auto; height: 150px;" class="open-img">
+                    <% } %>" class="open-img ">
                 </div>
                 <hr>
                 <div class=" prod_info ">
-                    <% if (chat.user1.id.toString() !== user._id.toString()) { %> 
-                        <p class="title is-5" style="font-size: 0.9rem !important;">Full Name: <%= user.full_name %></p>
-                        <p class="title is-5" style="font-size: 0.9rem !important;">Country: <%= user.country %></p>
-                        <p class="title is-5" style="font-size: 0.9rem !important;">City: <%= user.city %></p>
-                    <% } else { %>
-                        <p class="title is-5" style="font-size: 0.9rem !important;">Full Name: <%= user2.full_name %></p>
-                        <p class="title is-5" style="font-size: 0.9rem !important;">Country: <%= user2.country %></p>
-                        <p class="title is-5" style="font-size: 0.9rem !important;">City: <%= user2.city %></p>
-                    <% } %>
-                    <a href="" class="button is-primary">View Profile</a>
+                    <p class="title is-5 messageProfileText">Full Name: <%= user2.full_name %></p>
+                    <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
+                    <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
+                    <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
                     <a href="" class="button is-danger">Report</a>
                 </div>
             </div>
@@ -38,11 +33,7 @@
                 <div>
                     <div class="level toplevel">
                         <div class="level-left">
-                                <a><p class="title is-4"><% if (user._id.toString() != chat.user1.id.toString()) { %>
-                                    <%= user2.full_name %>
-                                <% } else { %>
-                                    <%= user.full_name %>
-                                <% } %></p></a>
+                                <a href="/profile/<%= user2.id %></a>"><p class="title is-4"><%= user2.full_name %></p></a>                                   
                         </div>
                         <div class="level-right" style="padding-right: 1vw;">
                         </div>
@@ -95,49 +86,49 @@
         </div>
     </div>
     <div class="column is-one-fifth">
-        <div style="margin-right: 1vw; margin-top: 3vh;">
-            <div class="messageProfile" style="position: relative; margin-top: 2vh; padding-top: 2.5vh; padding-bottom: 1vh; margin-left: 1vw; margin-right: 5px; height: 20%;">
-                <div class="">
-                    <img src="<%= chat.product.imageUrl %>"  style="width: auto; height: 150px;" class="open-img">
+        <div class="productSide">
+            <div class="messageProfile">
+                <div>
+                    <img src="<%= chat.product.imageUrl %>"  class="open-img">
                 </div>
                 <hr>
                 <div class=" prod_info ">  
-                    <p class="title is-5" style="font-size: 0.9rem !important;">Name: <%= chat.product.name %></p>
+                    <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>
                     <% if ((chat.product.price[0] != 0) && (chat.product.accepted[0])) { %>
-                        <div class="prices" style="width: 75%; position: relative; margin: auto; margin-bottom: 10px;">
+                        <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             <p class="price_text"> <%= chat.product.price[0] %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[1] != 0) && (chat.product.accepted[1])) {
                     %>
-                        <div class="prices" style="width: 75%; position: relative; margin: auto; margin-bottom: 10px;">
+                        <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                             <p class="price_text"> <%= chat.product.price[1] %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[2] != 0) && (chat.product.accepted[2])) {
                     %>
-                        <div class="prices" style="width: 75%; position: relative; margin: auto; margin-bottom: 10px;">
+                        <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                             <p class="price_text"> <%= chat.product.price[2] %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[3] != 0) && (chat.product.accepted[3])) {
                     %>
-                        <div class="prices" style="width: 75%; position: relative; margin: auto; margin-bottom: 10px;">
+                        <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                             <p class="price_text"> <%= chat.product.price[3] %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[4] != 0) && (chat.product.accepted[4])) {
                     %>
-                        <div class="prices" style="width: 75%; position: relative; margin: auto; margin-bottom: 10px;">
+                        <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                             <p class="price_text"> <%= chat.product.price[4] %></p>
                         </div>
                     <% } %>
-                    <a href="" class="button is-primary">View Product</a>
+                    <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>
                 </div>
             </div>
         </div>
