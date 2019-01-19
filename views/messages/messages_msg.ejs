@@ -20,7 +20,38 @@
                     <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
                     <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
                     <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
-                    <a href="" class="button is-danger">Report</a>
+                    <button href="" class="button is-danger report">Report</button>
+                    <div class="modal modalReport">
+                        <div class="modal-background"></div>
+                            <div class="modal-card">
+                                <header class="modal-card-head">
+                                <p class="modal-card-title">Report User</p>
+                                <button class="delete deleteReport" aria-label="close"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                <form class="modal-form" action="/products/<%= chat._id %>/report" method="POST" style="display: block;">
+                                    <input type="text" name="userid" value="<%= user2.id %>" hidden>
+                                    <div class="field select cont-select smmargin">
+                                        <select name="topic" style="width: 100%;">
+                                            <option value="" selected disabled>Reason</option>
+                                            <option value="Fake">Fake product</option>
+                                            <option value="Scam">Scamming attempt</option>
+                                            <option value="Harassment">Harassment</option>
+                                        </select>
+                                    </div>
+                                    <div class="field" style="margin-top: 3px;">
+                                        <div class="control">
+                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="button is-primary">Send</button>
+                                </form>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button class="button is-danger cancelReport">Cancel</button>
+                                </footer>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,7 +73,7 @@
                     <div class="midlevel" id="mid">
                         <% chat.messages.forEach((message) => { %>
                             <% if (message.sender.toString() != user._id.toString()) { %>
-                                <div class="level">
+                                <div class="level" style="margin-top: -15px;">
                                     <div class="level-left leftlv">
                                         <div class="recmsg msg">
                                             <p><%= message.message %></p>
@@ -136,3 +167,4 @@
 </div>
 
 <% include ../partials/footer %>
+<script src="../../dist/js/messages_msg.js"></script>
