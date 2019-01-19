@@ -25,7 +25,7 @@
                             </form>    
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="btc_value" placeholder="0.000000000 BTC" type="number" step="any" disabled />
+                                <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.currency[0]) { %><%= user.currency[0] %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -111,7 +111,7 @@
                             </form>
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="bch_value" placeholder="0.000000000 BCH" type="number" step="any" disabled />
+                                <input class="input smmargin adradr" name="bch_value" placeholder="<% if (user.currency[1]) { %><%= user.currency[1] %> BCH<% } else { %>0.000000000 BCH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -196,7 +196,7 @@
                             </form> 
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="eth_value" placeholder="0.000000000 ETH" type="number" step="any" disabled />
+                                <input class="input smmargin adradr" name="eth_value" placeholder="<% if (user.currency[2]) { %><%= user.currency[2] %> ETH<% } else { %>0.000000000 ETH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -282,7 +282,7 @@
                             </form>
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="ltc_value" placeholder="0.000000000 LTC" type="number" step="any" disabled />
+                                <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.currency[3]) { %><%= user.currency[3] %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -367,7 +367,7 @@
                             </form>
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="dash_value" placeholder="0.000000000 DASH" type="number" step="any" disabled />
+                                <input class="input smmargin adradr" name="dash_value" placeholder="<% if (user.currency[4]) { %><%= user.currency[4] %> DASH<% } else { %>0.000000000 DASH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
