@@ -43,6 +43,87 @@ module.exports = {
     products.page = Number(products.page);
     res.render('dashboard/dashboard_purchases', { products });
   },
+  // Show address page
+  getAddresses(req, res) {
+    res.render('dashboard/dashboard_addr', { user: req.user });
+  },
+  // Get address modifications
+  async addAddresses(req, res) {
+    const query = { _id: req.user._id };
+    const name = req.body.btcadr || req.body.bchadr || req.body.ethadr
+                                || req.body.ltcadr || req.body.dashadr;
+    if (name === req.body.btcadr) {
+      await User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
+        if (err) {
+          req.flash('error', err.message);
+        } else {
+          req.flash('success', 'Successfully updated address!');
+          res.redirect('/dashboard/addresses');
+        }
+      });
+    } else if (name === req.body.bchadr) {
+      await User.findByIdAndUpdate(query, { bchadr: name }, (err) => {
+        if (err) {
+          req.flash('error', err.message);
+        } else {
+          req.flash('success', 'Successfully updated address!');
+          res.redirect('/dashboard/addresses');
+        }
+      });
+    } else if (name === req.body.ethadr) {
+      await User.findByIdAndUpdate(query, { ethadr: name }, (err) => {
+        if (err) {
+          req.flash('error', err.message);
+        } else {
+          req.flash('success', 'Successfully updated address!');
+          res.redirect('/dashboard/addresses');
+        }
+      });
+    } else if (name === req.body.ltcadr) {
+      await User.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
+        if (err) {
+          req.flash('error', err.message);
+        } else {
+          req.flash('success', 'Successfully updated address!');
+          res.redirect('/dashboard/addresses');
+        }
+      });
+    } else if (name === req.body.dashadr) {
+      await User.findByIdAndUpdate(query, { dashadr: name }, (err) => {
+        if (err) {
+          req.flash('error', err.message);
+        } else {
+          req.flash('success', 'Successfully updated address!');
+          res.redirect('/dashboard/addresses');
+        }
+      });
+    }
+  },
+  async topUp(req, res) {
+    // Take the currency from a wallet before this happens
+    const user = await User.findById(req.user._id);
+    if (user.currency[req.params.id]) {
+      user.currency[req.params.id] += Number(req.body.value);
+    } else {
+      user.currency[req.params.id] = Number(req.body.value);
+    }
+    user.markModified('currency');
+    await user.save();
+    res.redirect('/dashboard/addresses');
+  },
+  async withdraw(req, res) {
+    const user = await User.findById(req.user._id);
+    if (user.currency[req.params.id] >= req.body.value) {
+      user.currency[req.params.id] -= Number(req.body.value);
+      user.markModified('currency');
+      await user.save();
+      // Send the currency to a wallet before redirecting
+      res.redirect('/dashboard/addresses');
+    } else {
+      req.flash('error', 'The inputted value exceeds the value present in your account. Please try again.');
+      res.redirect('/dashboard/addresses');
+    }
+  },
   // Products New
   productNew(req, res) {
     res.render('posts/new');

@@ -30,7 +30,11 @@ module.exports = {
     });
   },
   getLogin(req, res) {
-    res.render('index/login');
+    if ( req.user ) {
+      res.render('index/login', { user: req.user });
+    } else {
+      res.render('index/login');
+    }
   },
   // POST /login
   postLogin(req, res, next) {

@@ -11,7 +11,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const { productCreate, productDestroy, productEdit, productUpdate, productFeature, 
+const { getAddresses, addAddresses, topUp, withdraw, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
@@ -44,70 +44,16 @@ router.get('/', isLoggedIn, (req, res) => {
 });
 
 // Show all addresses for withdraw
-router.get('/addresses', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_addr', { user: req.user });
-});
+router.get('/addresses', isLoggedIn, getAddresses);
 
-router.post('/addresses', isLoggedIn, (req, res) => {
-  const query = { _id: req.user._id };
-  const name = req.body.btcadr || req.body.bchadr || req.body.ethadr
-                               || req.body.ltcadr || req.body.dashadr;
-  if (name === req.body.btcadr) {
-    User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
-      if (err) {
-        req.flash('error', err.message);
-      } else {
-        req.flash('success', 'Successfully updated address!');
-        res.redirect('/dashboard/addresses');
-      }
-    });
-  } else if (name === req.body.bchadr) {
-    User.findByIdAndUpdate(query, { bchadr: name }, (err) => {
-      if (err) {
-        req.flash('error', err.message);
-      } else {
-        req.flash('success', 'Successfully updated address!');
-        res.redirect('/dashboard/addresses');
-      }
-    });
-  } else if (name === req.body.ethadr) {
-    User.findByIdAndUpdate(query, { ethadr: name }, (err) => {
-      if (err) {
-        req.flash('error', err.message);
-      } else {
-        req.flash('success', 'Successfully updated address!');
-        res.redirect('/dashboard/addresses');
-      }
-    });
-  } else if (name === req.body.ltcadr) {
-    User.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
-      if (err) {
-        req.flash('error', err.message);
-      } else {
-        req.flash('success', 'Successfully updated address!');
-        res.redirect('/dashboard/addresses');
-      }
-    });
-  } else if (name === req.body.dashadr) {
-    User.findByIdAndUpdate(query, { dashadr: name }, (err) => {
-      if (err) {
-        req.flash('error', err.message);
-      } else {
-        req.flash('success', 'Successfully updated address!');
-        res.redirect('/dashboard/addresses');
-      }
-    });
-  }
-});
+// Modify addresses
+router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 
-// Messages route
-router.get('/messages', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_messages', { user: req.user });
-});
+// Top-up
+router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 
-router.get('/messages/:id', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_messages_msg', { user: req.user });
-});
+// Withdraw
+router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
 
 // Dashboard tokens route; gets current number of tokens
 router.get('/tokens', isLoggedIn, (req, res) => {

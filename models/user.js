@@ -17,6 +17,7 @@ const UserSchema = new Schema({
   username: { type: String, set: toLower },
   avatar: { url: String, public_id: String },
   password: String,
+  currency: { type: [ Number ], default: 0 },
   full_name: String,
   country: String,
   state: String,
