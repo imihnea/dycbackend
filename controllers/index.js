@@ -3,9 +3,14 @@ const passport = require('passport');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const crypto = require('crypto');
+const Nexmo = require('nexmo');
 const User = require('../models/user');
 const Product = require('../models/product');
 
+const nexmo = new Nexmo({
+  apiKey: process.env.NEXMO_API_KEY,
+  apiSecret: process.env.NEXMO_API_SECRET
+});
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
@@ -28,6 +33,47 @@ module.exports = {
       req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
       res.redirect('/');
     });
+  },
+  postVerify(req, res) {
+    let pin = req.body.pin;
+    let requestId = req.body.requestId;
+   
+    nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      } else {
+        if(result && result.status == '0') { // Success!
+          req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
+          res.redirect('/dashboard')
+        } else {
+          req.flash('error', 'Wrong PIN code, please try again.');
+          return res.redirect('back');
+        }
+      }
+    });
+  },
+  get2factor(req, res) {
+    res.render('index/2factor')
+  },
+  post2factor(req, res) {
+  let phoneNumber = req.body.number;
+  console.log(phoneNumber);
+  nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+    if(err) {
+      req.flash('error', err.message);
+      res.redirect('back');
+    } else {
+      console.log(result);
+      let requestId = result.request_id;
+      if(result.status == '0') {
+        res.render('index/verify', {requestId: requestId}); // Success! Now, have your user enter the PIN
+      } else {
+        req.flash('error', 'Something went wrong, please try again.');
+        res.redirect('back');
+      }
+    }
+  });
   },
   getLogin(req, res) {
     res.render('index/login');

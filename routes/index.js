@@ -23,11 +23,14 @@ const {
   getGdpr,
   getTos,
   getPrivPol,
+  postVerify,
+  get2factor,
+  post2factor
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
 
-const { asyncErrorHandler } = middleware; // destructuring assignment
+const { asyncErrorHandler, isLoggedIn } = middleware; // destructuring assignment
 
 // index route
 router.get('/', asyncErrorHandler(getIndex));
@@ -46,6 +49,12 @@ router.get('/register', getRegister);
 
 //  handle sign up logic
 router.post('/register', asyncErrorHandler(postRegister));
+
+router.post('/verify', isLoggedIn, postVerify);
+
+router.get('/2factor', isLoggedIn, get2factor);
+
+router.post('/2factor', isLoggedIn, post2factor);
 
 //  show login form
 router.get('/login', getLogin);

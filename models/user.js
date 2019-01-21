@@ -18,6 +18,7 @@ const UserSchema = new Schema({
   avatar: { url: String, public_id: String },
   password: String,
   full_name: String,
+  number: { type: Number, unique: true, index: true },
   country: String,
   state: String,
   city: String,
