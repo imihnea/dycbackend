@@ -51,6 +51,10 @@ const profileRoutes = require('./routes/profile');
 
 const messagesRoutes = require('./routes/messages');
 
+const reviewsRoutes = require('./routes/reviews');
+
+const reviewsRoutesUser = require('./routes/reviewsusers');
+
 // Gzip compression
 
 app.use(compression());
@@ -149,6 +153,8 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);
 app.use('/profile', profileRoutes);
 app.use('/messages', messagesRoutes);
+app.use('/products/:id/reviews', reviewsRoutes);
+app.use('/profile/:id/reviews', reviewsRoutesUser);
 
 // error 404 page
 app.get('*', (req, res) => {

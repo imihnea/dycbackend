@@ -34,7 +34,7 @@ module.exports = {
     if (review.author.equals(req.user._id)) {
       return next();
     }
-    req.session.error = 'Bye bye';
-    return res.redirect('/');
+    req.session.error = 'There was an error with your request, please try again';
+    return res.redirect('back');
   },
 };

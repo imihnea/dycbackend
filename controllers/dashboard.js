@@ -260,7 +260,7 @@ module.exports = {
       },
     });
     const floorRating = product.calculateAvgRating();
-    res.render('posts/show', { product, floorRating });
+    res.render('products/product_view', { product, floorRating });
   },
   // Products Edit
   async productEdit(req, res) {

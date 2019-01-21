@@ -9,8 +9,16 @@ const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 module.exports = {
     async getProduct(req, res) {
-        const foundproduct = await Product.findById(req.params.id);
-        res.render('products/product_view', { product: foundproduct });
+        const product = await Product.findById(req.params.id).populate({
+            path: 'reviews',
+            options: { sort: { _id: -1 } },
+            populate: {
+              path: 'author',
+              model: 'User',
+            },
+        });
+        const floorRating = product.calculateAvgRating();
+        res.render('products/product_view', { product, floorRating });
     },
     postReport(req, res) {
       const output = `
