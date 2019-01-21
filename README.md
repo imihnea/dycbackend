@@ -34,8 +34,10 @@ Backend:
                => Closed Deals
                   => Sold, expired, deactivated status
       
-      Index 
-               => Get products from the database
+      Reviews
+               => Unable to review your own products / own user page
+               => Paginate reviews
+               => Add author's avatar url to the review
         
       Categories => Add more in future
       Register => Add recaptcha to avoid spam

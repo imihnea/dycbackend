@@ -61,17 +61,7 @@
     border-color: orange !important;
 }
 */
-.productSubTitleText{
-	color: orange !important;
-	text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2vh;
-}
 
-.productDescriptionText{
-	color: orange !important;
-	text-align: left;
-}
 
 /*.productUserText{
 	margin-bottom: 2vh;
