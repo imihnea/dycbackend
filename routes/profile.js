@@ -31,6 +31,10 @@ const imageFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: imageFilter,
+  onError : function(err, next) {
+    console.log('error', err);
+    next(err);
+  },
 });
 
 // GET Profile route

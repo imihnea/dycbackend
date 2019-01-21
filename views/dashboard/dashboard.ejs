@@ -13,6 +13,15 @@
                 <hr>
                 <form action="/profile/<%= user._id %>/update?_method=PUT" method="POST" enctype="multipart/form-data">
                     <p class="subtitle">Personal Details</p>
+                    <div class="container is-fluid">
+                        <% if(errors){ %>
+                            <div class="notification is-danger" role="alert"> 
+                            <% errors.forEach(function( err){ %>
+                                <%= err.msg %><br>
+                            <% }) %>
+                            </div>
+                        <% } %>
+                    </div>
                     <div class="column is-three-fifths" style="margin: auto;">
                         <div class="level">
                             <input class="input" name="name" placeholder="Full Name*" type="text"

@@ -12,6 +12,15 @@
 
                     <form action="/dashboard" method="POST" enctype="multipart/form-data">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
+                        <div class="container is-fluid">
+                            <% if(errors){ %>
+                                <div class="notification is-danger" role="alert"> 
+                                <% errors.forEach(function( err){ %>
+                                    <%= err.msg %><br>
+                                <% }) %>
+                                </div>
+                            <% } %>
+                        </div>
                         <input class="input" name="product[name]" placeholder="Name" type="text" required />
                         <div class="select cont-select">
                             <select type="text" name="product[category]" style="width: 100%;">
