@@ -8,15 +8,15 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <% if (deals.docs.length === 0) { %>
-                        <p class="title">You have not purchased any products yet.</p>
+                        <p class="title">You have no ongoing deals at this time.</p>
                 <% } else { %>
                     <div style="overflow-x: hidden;">
-                        <% if (deals.docs.length > 10) { %>
-                            <div class="pagination">
-                                <p class="subtitle pagePad">Pages:</p> 
-                                <% include ../partials/paginatePurchases %>
-                            </div>
-                        <% } %>
+        
+                        <div class="pagination">
+                            <p class="subtitle pagePad">Pages:</p> 
+                            <% include ../partials/paginatePurchases %>
+                        </div>
+                       
                         <% deals.docs.forEach((deal) => { %>
                             <div class="columns">
                                     <div class="column is-one-quarter">
@@ -24,9 +24,11 @@
                                     </div>
                                     <div class="column prod_info">
                                         <p class="title is-5 dealname"><%= deal.product.name %></p>
-                                        <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
+                                        <p class="subtitle is-6" style="margin-bottom: 0;"><sub>Shipping: TBD</sub></p>
+                                        <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Status: <%= deal.status %></sub></p>
                                         <div style="display: flex;">
                                             <a href="/products/<%= deal.product.id %>/view"><button class="button view-btn">View</button></a>
+                                            <a href="/messages/<%= deal.chat %>" style="margin-left: 1vw;"><button class="button view-btn">Contact</button></a>
                                         </div>   
                                     </div>
                                     <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
@@ -55,12 +57,12 @@
                             <hr>                            
                         <% }); %>         
                     </div>        
-                    <% if (deals.docs.length > 10) { %>
+                    
                         <div class="pagination">
                             <p class="subtitle pagePad">Pages:</p> 
                             <% include ../partials/paginatePurchases %>
                         </div>
-                    <% } %>
+                 
                 <% } %>
             </div>
             <div class="column"></div>

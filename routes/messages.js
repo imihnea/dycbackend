@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getChats, getMessages, newMessage, newChat, updateMessages } = require('../controllers/messages');
+const { getChats, getMessages, newMessage, newChat, updateMessages, newOngoingChat } = require('../controllers/messages');
 
 const middleware = require('../middleware/index');
 
@@ -22,5 +22,8 @@ router.put('/:id/sendMessage', isLoggedIn, asyncErrorHandler(newMessage));
 
 // create chat
 router.post('/:id/createChat', isLoggedIn, asyncErrorHandler(newChat));
+
+// create ongoing deal chat
+router.put('/:id/:dealid/createOngoing', isLoggedIn, asyncErrorHandler(newOngoingChat));
 
 module.exports = router;

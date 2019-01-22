@@ -13,8 +13,10 @@ const ProductSchema = new Schema({
   status: String,
   price: { type: Array, default: [0, 0, 0, 0, 0] },
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
-  available: { type: Boolean, default: true },
+  available: { type: String, default: "True" },
+  repeatable: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  nrBought: Number,
   feat_1: {
     status: { type: Boolean, default: false},
     expiry_date: Date
@@ -23,8 +25,6 @@ const ProductSchema = new Schema({
     status: { type: Boolean, default: false},
     expiry_date: Date
   },
-  buyer: String,
-  bought_with: String,
   author: {
     id: {
       type: Schema.Types.ObjectId,

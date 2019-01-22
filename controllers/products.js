@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 
 const Product = require('../models/product');
+const User = require('../models/user');
+const Deal = require('../models/deal');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -64,5 +66,60 @@ module.exports = {
                 res.redirect('back');
             }); 
         });
+    },
+    async buyProduct(req, res) {
+        // Get the user, the product and the currency the user buys with
+        const user  = await User.findById(req.user._id);
+        const product = await Product.findById(req.params.id);
+        const buyWith = req.body.currency;
+        // if ( user._id.toString() === product.author.id ) {
+        //     req.flash('error', 'You cannot purchase your own product.');
+        //     res.redirect('back');
+        // } else {
+            // Security measure - can create another field in devtools
+            if ( product.accepted[buyWith] ) {
+                if ( user.currency[buyWith] < product.price[buyWith] ) {
+                    req.flash('error', 'You do not have enough currency to purchase this product.');
+                    res.redirect('back');
+                } else {
+                    // Create deal
+                    let deal = {
+                        product: {
+                            id: product._id,
+                            name: product.name,
+                            imageUrl: product.images[0].url,
+                            author: product.author,
+                            price: product.price,
+                            accepted: product.accepted
+                        },
+                        buyer: {
+                            id: user._id,
+                            name: user.username,
+                            avatarUrl: user.avatar.url
+                        },
+                        boughtWith: buyWith,
+                        price: product.price[buyWith]
+                    };
+                    deal = await Deal.create(deal); 
+                    // Update product and user
+                    user.currency[buyWith] -= product.price[buyWith];
+                    // The product will remain available if it's repeatable
+                    if ( !product.repeatable ) {
+                        product.available = "Closed";
+                    }
+                    if (product.nrBought) {
+                        product.nrBought += 1;
+                    } else {
+                        product.nrBought = 1;
+                    }
+                    product.markModified('buyers');
+                    await product.save();
+                    user.markModified('currency');
+                    await user.save();
+                    // Link chat to deal
+                    res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                }
+            }
+        // }
     }
 }

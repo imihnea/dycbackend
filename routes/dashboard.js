@@ -12,7 +12,7 @@ const User = require('../models/user');
 const router = express.Router();
 
 const { getAddresses, addAddresses, topUp, withdraw, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
-        openProductIndex, closedProductIndex, purchasedProductIndex } = require('../controllers/dashboard');
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -81,6 +81,9 @@ router.get('/open', isLoggedIn, asyncErrorHandler(openProductIndex));
 
 // Show all closed offers
 router.get('/closed', isLoggedIn, asyncErrorHandler(closedProductIndex));
+
+// Show ongoing deals
+router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));

@@ -1,6 +1,7 @@
 const Chat = require('../models/chat');
 const User = require('../models/user');
 const Product = require('../models/product');
+const Deal = require('../models/deal');
 
 module.exports = {
     // Chats Indexes
@@ -72,6 +73,43 @@ module.exports = {
                 res.redirect(`/messages/${chat._id}`);
             }
         }        
+    },
+    // Create Chat - Ongoing deal with no chat
+    async newOngoingChat(req, res) {
+        // Verify if this chat already exists
+        let chat = await Chat.find( { "user1.id": req.user._id, "product.id": req.params.id });
+        if ( chat == [] ) {
+            // Link the chat to the deal
+            let deal = await Deal.findById(req.params.dealid);
+            deal.chat = chat._id;
+            await deal.save();
+            req.flash('success', 'You have successfully bought the product.');
+            res.redirect(`/dashboard/purchases`);
+        } else {
+            // Find the product
+            const product = await Product.findById( req.params.id );
+            // Check if the user is the seller of the product
+            // if ( product.author.id.toString() === req.user._id.toString() ) {
+            //     req.flash('error', 'You cannot start a chat with yourself.');
+            //     res.redirect('back');
+            // } else {
+                // Find the seller
+                const user2 = await User.findById( product.author.id );
+                const newChat = {
+                    user1: { id: req.user._id, fullname: req.user.full_name, avatarUrl: req.user.avatar.url },
+                    user2: { id: user2.id, fullname: user2.full_name, avatarUrl: user2.avatar.url },
+                    product: { id: product._id, name: product.name, imageUrl: product.images[0].url, price: product.price,
+                    accepted: product.accepted }
+                };
+                chat = await Chat.create(newChat);
+                // Link the chat to the deal
+                let deal = await Deal.findById(req.params.dealid);
+                deal.chat = chat._id;
+                await deal.save();
+                req.flash('success', 'You have successfully bought the product.');
+                res.redirect(`/dashboard/purchases`);
+            // }
+        }
     },
     // Create Message
     async newMessage(req, res) {

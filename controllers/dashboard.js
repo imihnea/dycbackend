@@ -4,6 +4,7 @@
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
+const Deal = require('../models/deal');
 
 // Constants for quick modification
 const feature1_time = 60000;
@@ -20,7 +21,7 @@ cloudinary.config({
 module.exports = {
   // Products Indexes
   async openProductIndex(req, res) {
-    const products = await Product.paginate({ available: true, 'author.id': req.user._id }, {
+    const products = await Product.paginate({ available: "True", 'author.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
     });
@@ -28,7 +29,7 @@ module.exports = {
     res.render('dashboard/dashboard_open', { products });
   },
   async closedProductIndex(req, res) {
-    const products = await Product.paginate({ available: false, 'author.id': req.user._id }, {
+    const products = await Product.paginate({ available: "Closed", 'author.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
     });
@@ -36,12 +37,20 @@ module.exports = {
     res.render('dashboard/dashboard_closed', { products });
   },
   async purchasedProductIndex(req, res) {
-    const products = await Product.paginate({ available: false, 'buyer.id': req.user._id }, {
+    const deals = await Deal.paginate({ 'buyer.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
     });
-    products.page = Number(products.page);
-    res.render('dashboard/dashboard_purchases', { products });
+    deals.page = Number(deals.page);
+    res.render('dashboard/dashboard_purchases', { deals });
+  },
+  async ongoingProductIndex(req, res) {
+    const deals = await Deal.paginate({ $and: [{ $or: [{ 'buyer.id': req.user._id }, { 'product.author.id': req.user._id }]}, { status: { $ne: 'Completed' } }] }, {
+      page: req.query.page || 1,
+      limit: 10,
+    });
+    deals.page = Number(deals.page);
+    res.render('dashboard/dashboard_ongoing', { deals });
   },
   // Show address page
   getAddresses(req, res) {

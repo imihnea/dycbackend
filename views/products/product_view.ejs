@@ -128,38 +128,38 @@
                 <p style="color: orange !important;"><sub>Transportation cost: TBD</sub></p>
                 <br>
                
-                <form action="/products/<%= product.id %>/buy" method="POST">
+                <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST">
                     
                     <% 
                         product.accepted.forEach((key, i) => {
                             if ((key === 'true') && (i === 0)){ %>
                                 <label class="img-check ">
                                     <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
-                                    <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="BTC" required>
+                                    <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
                                 </label>
                             <% }
                             if ((key === 'true') && (i === 1)){ %>
                                 <label class="img-check ">
                                     <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
-                                    <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="BCH">
+                                    <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1">
                                 </label>
                             <% }
                             if ((key === 'true') && (i === 2)){ %>
                                 <label class="img-check ">
                                     <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
-                                    <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="ETH">
+                                    <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2">
                                 </label>
                             <% }
                             if ((key === 'true') && (i === 3)){ %>
                                 <label class="img-check ">
                                     <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
-                                    <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="LTC">
+                                    <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3">
                                 </label>
                             <% }
                             if ((key === 'true') && (i === 4)){ %>
                                 <label class="img-check ">
                                     <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
-                                    <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="DASH">
+                                    <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4">
                                 </label>
                             <% }
                         });
