@@ -117,14 +117,25 @@
                             </div>
                         </form>
                     </div>
+                    <% if(currentUser.twofactor === true) { %> 
                     <div class="column chemail">
-                        <h2>Activate 2-Factor</h2>
-                        <form action="/2factor">
+                        <h2>Deactivate 2-Factor</h2>
+                        <form action="/disable2factor" method="POST" onsubmit="return confirm('Are you sure?');">
                             <div class="control smmargin">
-                                <button class="button is-primary">Click here to activate 2-Factor Authentication</button>
+                                <button class="button is-primary">Click here to deactivate 2-Factor Authentication</button>
                             </div>
                         </form>
-                    </div> 
+                    </div>
+                    <% } else { %>
+                        <div class="column chemail">
+                            <h2>Activate 2-Factor</h2>
+                            <form action="/2factor">
+                                <div class="control smmargin">
+                                    <button class="button is-primary">Click here to activate 2-Factor Authentication</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
             </div>
             <div class="column"></div>

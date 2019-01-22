@@ -25,7 +25,9 @@ const {
   getPrivPol,
   postVerify,
   get2factor,
-  post2factor
+  post2factor,
+  postdisable2factor,
+  postVerifyLogin
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
@@ -52,9 +54,13 @@ router.post('/register', asyncErrorHandler(postRegister));
 
 router.post('/verify', isLoggedIn, postVerify);
 
+router.post('/login/verify', postVerifyLogin);
+
 router.get('/2factor', isLoggedIn, get2factor);
 
 router.post('/2factor', isLoggedIn, post2factor);
+
+router.post('/disable2factor', isLoggedIn, postdisable2factor);
 
 //  show login form
 router.get('/login', getLogin);

@@ -30,7 +30,8 @@ Backend:
       
        Dashboard 
                => Settings
-                  => 2FA, connections
+                  => connections
+               => 2 Factor when withdrawing
                => Closed Deals
                   => Sold, expired, deactivated status
       
