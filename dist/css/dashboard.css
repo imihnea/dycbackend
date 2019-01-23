@@ -376,3 +376,7 @@ hr{
     position: relative !important;
     margin: auto !important;
 }
+
+.is-success{
+    color: black !important;
+}

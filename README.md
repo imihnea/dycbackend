@@ -42,3 +42,5 @@ Backend:
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
       Contact => Add recaptcha to avoid spam                        
+      Logs => Log errors
+           => Log deal status changes

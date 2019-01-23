@@ -1,0 +1,177 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
+<a href="/dashboard/ongoing" class="button is-primary" style="margin-top: 1vh; margin-left: 1vw;">Back to Dashboard</a>
+<div class="columns" style="color: orange;">
+    <div class="column">
+        <div>
+            <div class="messageProfile">
+                <p class="title is-5">Buyer</p>
+                <div class="">
+                    <img src="<%= buyer.avatar.url %>" class="open-img ">
+                </div>
+                <hr>
+                <div class=" prod_info ">
+                    <p class="title is-5 messageProfileText">Full Name: <%= buyer.full_name %></p>
+                    <p class="title is-5 messageProfileText">Country: <%= buyer.country %></p>
+                    <p class="title is-5 messageProfileText">City: <%= buyer.city %></p>
+                    <p class="title is-5 messageProfileText">Address Line 1: <%= buyer.address1 %></p>
+                    <% if (buyer.address2) { %>
+                        <p class="title is-5 messageProfileText">Address Line 2: <%= buyer.address2 %></p>
+                    <% } %>
+                    <p class="title is-5 messageProfileText">Zip Code: <%= buyer.zip %></p>
+                    <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
+                    <button href="" class="button is-danger report">Report</button>
+                    <div class="modal modalReport">
+                        <div class="modal-background"></div>
+                            <div class="modal-card">
+                                <header class="modal-card-head">
+                                <p class="modal-card-title">Report User</p>
+                                <button class="delete deleteReport" aria-label="close"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                <form class="modal-form" action="/products/<%= deal.chat %>/report" method="POST" style="display: block;">
+                                    <input type="text" name="userid" value="<%= buyer.id %>" hidden>
+                                    <div class="field select cont-select smmargin">
+                                        <select name="topic" style="width: 100%;">
+                                            <option value="" selected disabled>Reason</option>
+                                            <option value="Fake">Fake product</option>
+                                            <option value="Scam">Scamming attempt</option>
+                                            <option value="Harassment">Harassment</option>
+                                        </select>
+                                    </div>
+                                    <div class="field" style="margin-top: 3px;">
+                                        <div class="control">
+                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="button is-primary">Send</button>
+                                </form>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button class="button is-danger cancelReport">Cancel</button>
+                                </footer>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column ">
+        <div class="">
+            <div class="messageProfile" style="margin-top: 2vh;">
+                <div>
+                    <p class="title is-5">Product</p>                      
+                    <img src="<%= deal.product.imageUrl %>"  class="open-img">
+                </div>
+                <hr>
+                <div class=" prod_info ">
+                    <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
+                    <div class="prices openPrices">
+                        <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
+                        <% switch(deal.boughtWith) {
+                            case 0: { %>
+                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <% break;}
+                            case 1: { %>
+                                <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                <% break; }
+                            case 2: {%>
+                                <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                <% break; }
+                            case 3: { %>
+                                <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                <% break; }
+                            case 4: { %>
+                                <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
+                                <% break; }
+                            default: { break; } } %> 
+                    </div>
+                    <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <%= deal.status %></p>
+                    <a href="/products/<%= deal.product.id %>/view" style="display: block; margin: auto; width: 25%; margin-top: 1vh;" class="button is-primary">View Product</a>
+                    <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
+                        <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; margin-bottom: 1vh;">
+                            <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST"><button class="button is-success">Accept Deal</button></form>
+                            <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
+                            <!-- Add modal to send refusal message -->
+                        </div>
+                    <% } %>
+                    <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
+                        <div style="display: block; margin: auto; margin-top: 1vh;">
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                                <form action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="margin-left: 1vw;"><button class="button is-primary">Ask for a refund</button></form>
+                                <!-- Add modal to send refusal message  -->
+                            </div>
+                            <sub>Completing the deal means that you have received the product and that it is the same product that was advertised.</sub> 
+                        </div>
+                    <% } %>
+                    <!-- Add modal to send refusal message -->
+                    <% if ((deal.status === 'Complete') && (user._id.toString() === buyer._id.toString())) { %>
+                        <form action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST"><button class="button is-primary">Ask for a refund</button></form>
+                    <% } %>
+                    <% if ((deal.status === 'Buyer asked for refund') && (user._id.toString() === seller._id.toString())) { %>
+                        <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                    <% } %>
+                    <% if ((deal.status === 'Processing') && (user._id.toString() === buyer._id.toString())) { %>
+                        <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                    <% } %>
+                    <!-- Add modal to send refusal message -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+            <div>
+                <div class="messageProfile">
+                    <p class="title is-5">Seller</p>
+                    <div class="">
+                        <img src="<%= seller.avatar.url %>" class="open-img ">
+                    </div>
+                    <hr>
+                    <div class=" prod_info ">
+                        <p class="title is-5 messageProfileText">Full Name: <%= seller.full_name %></p>
+                        <p class="title is-5 messageProfileText">Country: <%= seller.country %></p>
+                        <p class="title is-5 messageProfileText">City: <%= seller.city %></p>
+                        <a href="/profile/<%= seller.id %>" class="button is-primary">View Profile</a>
+                        <button href="" class="button is-danger report">Report</button>
+                        <div class="modal modalReport">
+                            <div class="modal-background"></div>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                    <p class="modal-card-title">Report User</p>
+                                    <button class="delete deleteReport" aria-label="close"></button>
+                                    </header>
+                                    <section class="modal-card-body">
+                                    <form class="modal-form" action="/products/<%= deal.chat %>/report" method="POST" style="display: block;">
+                                        <input type="text" name="userid" value="<%= seller.id %>" hidden>
+                                        <div class="field select cont-select smmargin">
+                                            <select name="topic" style="width: 100%;">
+                                                <option value="" selected disabled>Reason</option>
+                                                <option value="Fake">Fake product</option>
+                                                <option value="Scam">Scamming attempt</option>
+                                                <option value="Harassment">Harassment</option>
+                                            </select>
+                                        </div>
+                                        <div class="field" style="margin-top: 3px;">
+                                            <div class="control">
+                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                            </div>
+                                        </div>
+                                        <button class="button is-primary">Send</button>
+                                    </form>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-danger cancelReport">Cancel</button>
+                                    </footer>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<% include ../partials/footer %>
+<script src="../../dist/js/messages_msg.js"></script>

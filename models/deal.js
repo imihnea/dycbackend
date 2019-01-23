@@ -12,7 +12,8 @@ const DealSchema = new Schema({
     boughtWith: Number,
     price: Number,
     chat: Schema.Types.ObjectId,
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    completedAt: Date
 });
 
 DealSchema.plugin(mongoosePaginate);
