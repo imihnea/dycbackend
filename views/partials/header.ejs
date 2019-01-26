@@ -9,9 +9,8 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <script src="/dist/js/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css"/>
-
+    <link rel="stylesheet" href="https://unpkg.com/instantsearch.css@7.1.0/themes/algolia-min.css" />
+    <link rel="stylesheet" type="text/css" href="/dist/css/index.css" />
 </head>
 <body>
 <div class="hero-head">
@@ -238,10 +237,9 @@
                         </div>
                     </div>
                 </div>
-                <div id="searchbox" class="level-item search">
+                <div class="input-group" id="searchbox"></div>
 
                 </div>
-            </div>
     
             <div class="level-right navbar-end">
                 <% if(!currentUser){ %>
@@ -315,91 +313,39 @@
     </div>
 <% } %>
 
-<div id="results" class="ais-InstantSearch">
+<div id="results" class="container-fluid">  
+    <div class="content-wrapper">
+        <aside>
+        <div id="clear-refinements"></div>
 
-    <div class="left-panel">
-      <div id="clear-refinements"></div>
+        <section class="facet-wrapper">
+            <div class="facet-category-title" class="facet">
+            Show results for
+            </div>
+            <div id="categories"></div>
+        </section>
 
-      <h2>Brands</h2>
-      <div id="brand-list"></div>
-    </div>
+        <section class="facet-wrapper">
+            <div class="facet-category-title">Refine by</div>
+            <div id="types" class="facet"></div>
+            <div id="brands" class="facet"></div>
+            <div id="rating" class="facet"></div>
+            <div id="price" class="facet"></div>
+        </section>
 
-    <div class="right-panel">
-      <div id="hits"></div>
-      <div id="pagination"></div>
+        </aside>
+
+        <div class="results-wrapper">
+        <section id="results-topbar">
+            <div class="sort-by"><div id="sort-by"></div></div>
+
+            <div id="stats" class="text-muted"></div>
+        </section>
+
+        <main id="hits"></main>
+        <section id="pagination"></section>
+        </div>
     </div>
 </div>
 
 <div id="allpage"> <!-- this ends on footer to hide when something is searched -->
-
-<script src="https://cdn.jsdelivr.net/npm/algoliasearch@3.32.0/dist/algoliasearchLite.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0"></script>
-<script>
-/* global instantsearch algoliasearch */
-
-const search = instantsearch({
-    indexName: 'demo_ecommerce',
-    searchClient: algoliasearch('B1G2GM9NG0', 'aadef574be1f9252bb48d4ea09b5cfe5'),
-    searchFunction(helper) {
-    const container = document.querySelector('#results');
-    const restofpage = document.querySelector('#allpage');
-
-    if (helper.state.query === '') {
-      container.style.display = 'none';
-    } else {
-      container.style.display = '';
-      restofpage.style.display = 'none';
-    }
-
-    helper.search();
-  }
-});
-  
-  search.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#searchbox',
-    })
-  );
-  
-  search.addWidget(
-    instantsearch.widgets.clearRefinements({
-      container: '#clear-refinements',
-    })
-  );
-  
-  search.addWidget(
-    instantsearch.widgets.refinementList({
-      container: '#brand-list',
-      attribute: 'brand',
-    })
-  );
-  
-  search.addWidget(
-    instantsearch.widgets.hits({
-      container: '#hits',
-      templates: {
-        item: `
-          <div>
-            <img src="{{image}}" align="left" alt="{{name}}" />
-            <div class="hit-name">
-              {{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}}}
-            </div>
-            <div class="hit-description">
-              {{#helpers.highlight}}{ "attribute": "description" }{{/helpers.highlight}}
-            </div>
-            <div class="hit-price">\${{price}}</div>
-          </div>
-        `,
-      },
-    })
-  );
-  
-  search.addWidget(
-    instantsearch.widgets.pagination({
-      container: '#pagination',
-    })
-  );
-  
-  search.start();
-
-</script>
