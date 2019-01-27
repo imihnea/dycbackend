@@ -12,8 +12,11 @@ const DealSchema = new Schema({
     boughtWith: Number,
     price: Number,
     chat: Schema.Types.ObjectId,
+    refund: { reason: String, message: String, option: String, status: { type: String, default: 'Not requested' }, sellerReason: String, sellerMessage: String, sellerOption: String },
     createdAt: { type: Date, default: Date.now },
-    completedAt: Date
+    completedAt: Date,
+    refundableUntil: Date,
+    paid: { type: Boolean, default: false }
 });
 
 DealSchema.plugin(mongoosePaginate);

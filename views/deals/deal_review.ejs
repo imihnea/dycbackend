@@ -1,0 +1,65 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
+<link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
+<div class="columns" style="color: orange; justify-content: center;">
+    <div class="column is-three-fifths" style="margin-top: 2vh;">
+        <div class="messageProfile" style="height: auto; margin-left: auto; margin-right: auto; padding-bottom: 2.5vh;">
+            <div>
+                <p class="title is-5"><%= deal.product.name %></p>                      
+                <img src="<%= deal.product.imageUrl %>"  class="open-img">
+            </div>
+            <hr>
+            <div class=" prod_info ">
+
+                <div class="prices openPrices" style="width: 50% !important;">
+                    <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
+                    <% switch(deal.boughtWith) {
+                        case 0: { %>
+                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            <% break;}
+                        case 1: { %>
+                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                            <% break; }
+                        case 2: {%>
+                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                            <% break; }
+                        case 3: { %>
+                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                            <% break; }
+                        case 4: { %>
+                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
+                            <% break; }
+                        default: { break; } } %> 
+                </div>
+            </div>
+        </div>
+        <p class="title is-3" style="margin-top: 3vh;">Leave a Review</p>
+        <form action="/products/<%= deal.product.id %>/reviews" method="POST">
+            <textarea class="textarea" name="review[body]" placeholder="What a great product!" required></textarea>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
+                    <fieldset class="starability-basic" style="margin: auto;">
+                        <legend class="productDescriptionText">Rating:</legend>
+                        <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                        <input type="radio" id="rate1" name="review[rating]" value="1" />
+                        <label for="rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="rate2" name="review[rating]" value="2" />
+                        <label for="rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="rate3" name="review[rating]" value="3" />
+                        <label for="rate3" title="Average">3 stars</label>
+                        <input type="radio" id="rate4" name="review[rating]" value="4" />
+                        <label for="rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="rate5" name="review[rating]" value="5" />
+                        <label for="rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                </div>
+                <div style="display: flex;">
+                    <input class="button is-primary" type="submit">    
+                    <a href="/" class="button is-primary" style="margin-left: 1vw;">Skip</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<% include ../partials/footer %>

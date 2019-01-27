@@ -124,8 +124,7 @@ time{
 .recmsg{
     background-color: rgb(88, 53, 20);
     padding: 10px;
-    border-radius: 10px;
-    border-radius: 100px;
+    border-radius: 15px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
     padding-right: 20px;
@@ -136,8 +135,7 @@ time{
 .sentmsg{
     background-color: rgb(116, 53, 11);
     padding: 10px;
-    border-radius: 10px;
-    border-radius: 100px;
+    border-radius: 15px;
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
     padding-left: 20px;

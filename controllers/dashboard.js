@@ -45,7 +45,12 @@ module.exports = {
     res.render('dashboard/dashboard_purchases', { deals });
   },
   async ongoingProductIndex(req, res) {
-    const deals = await Deal.paginate({ $and: [{ $or: [{ 'buyer.id': req.user._id }, { 'product.author.id': req.user._id }]}, { status: { $ne: 'Completed' } }] }, {
+    const deals = await Deal.paginate({ $and:[ 
+      {$or:
+         [{refundableUntil: {$exists: true, $gt: Date.now()}}, {refundableUntil: {$exists: false}}]}, 
+      {$or:
+         [{'buyer.id': req.user._id}, {'product.author.id': req.user._id}]},
+      {status: {$nin: ['Cancelled', 'Refunded', 'Declined']}}]}, {
       page: req.query.page || 1,
       limit: 10,
     });

@@ -11,6 +11,7 @@ const ChatSchema = new Schema({
         createdAt: { type: Date, default: Date.now },
         read: { type: Boolean, default: false } }],
     messageCount: { type: Number, default: 0 },
+    deal: Schema.Types.ObjectId
 });
 
 ChatSchema.plugin(mongoosePaginate);

@@ -16,11 +16,19 @@
                 <% } %>
             <% chats.docs.forEach((chat) => { %>
                 <div class="columns messageItem">
-                    <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
-                        <button class="chatBtn">
-                            <span class="chatSpan"></span>
-                        </button>
-                    </form>
+                    <% if (!chat.deal) { %>
+                        <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
+                            <button class="chatBtn">
+                                <span class="chatSpan"></span>
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <form action="/messages/<%= chat._id %>/<%= chat.deal %>?_method=PUT" method="POST" class="updMsg">
+                            <button class="chatBtn">
+                                <span class="chatSpan"></span>
+                            </button>
+                        </form>
+                    <% } %>
                     <div class="column is-half">
                         <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                             <%= chat.user1.avatarUrl %>

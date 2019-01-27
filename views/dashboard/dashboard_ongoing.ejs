@@ -26,10 +26,12 @@
                                         <p class="title is-5 dealname"><%= deal.product.name %></p>
                                         <p class="subtitle is-6" style="margin-bottom: 0;"><sub>Shipping: TBD</sub></p>
                                         <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Status: <%= deal.status %></sub></p>
-                                        <div style="display: flex;">
-                                            <a href="/deals/<%= deal.id %>"><button class="button view-btn">View</button></a>
-                                            <a href="/messages/<%= deal.chat %>" style="margin-left: 1vw;"><button class="button view-btn">Contact</button></a>
-                                        </div>   
+                                        <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
+                                            <button class="button view-btn">View</button>
+                                        </form>
+                                        <!-- <div style="display: flex;">
+                                            <a href="/deals/<%= deal.id %>"></a>
+                                        </div>    -->
                                     </div>
                                     <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
                                         <div class="prices openPrices">

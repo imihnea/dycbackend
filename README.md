@@ -44,3 +44,8 @@ Backend:
       Contact => Add recaptcha to avoid spam                        
       Logs => Log errors
            => Log deal status changes
+
+
+Security: 
+
+      Messages & Deals => Verify if the current user is supposed to take part

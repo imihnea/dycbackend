@@ -1,12 +1,12 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
-<div class="columns" style="color: orange;">
+<a href="/messages" class="button is-primary" style="margin-top: 1vh; margin-left: 1vw;">Back to Dashboard</a>
+<div class="columns" style="color: orange; margin-top: 1vh;">
     <!-- <% include ../partials/sidebar %> -->
-    <div class="column is-one-fifth" style="margin-top: 2vh;">
-        <a href="/messages" class="button is-primary">Back to Dashboard</a>
+    <div class="column is-one-fifth">
         <div>
-            <div class="messageProfile">
+            <div class="messageProfile" style="margin-top: 0;">
                 <div class="">
                     <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                         <%= chat.user1.avatarUrl %>
@@ -62,21 +62,23 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div>
-                    <div class="level toplevel">
-                        <div class="level-left">
-                                <a href="/profile/<%= user2.id %></a>"><p class="title is-4"><%= user2.full_name %></p></a>                                   
-                        </div>
-                        <div class="level-right" style="padding-right: 1vw;">
-                        </div>
-                    </div>
-
-                    <div class="midlevel" id="mid">
+                    <div class="midlevel" id="mid" style="border-top-style: double; border-width: 3px;">
+                        <% if (chat.messageCount === 0) { %>
+                            <div class="level" style="justify-content: center;
+                            position: relative;
+                            height: 5vh;
+                            top: -3.4vh;
+                            background-color: #631;">
+                                <p class="title is-5">This is the start of the conversation</p>
+                            </div>
+                        <% } %>
                         <% chat.messages.forEach((message) => { %>
                             <% if (message.sender.toString() != user._id.toString()) { %>
                                 <div class="level" style="margin-top: -15px;">
                                     <div class="level-left leftlv">
                                         <div class="recmsg msg">
-                                            <p><%= message.message %></p>
+                                            <p style="font-size: 0.7rem; color: #ccc"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
+                                            <span style="white-space: pre-line"><p><%= message.message %></p></span>
                                             <time>
                                                 <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
                                                 /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
@@ -90,7 +92,8 @@
                                 <div class="level" style="display: block;">
                                     <div class="level-right">
                                         <div class="sentmsg msg">
-                                            <p><%= message.message %></p>
+                                            <p style="font-size: 0.7rem; color: #ccc">You</p>
+                                            <span style="white-space: pre-line"><p><%= message.message %></p></span>
                                             <time>
                                                 <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
                                                 /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
@@ -117,8 +120,8 @@
         </div>
     </div>
     <div class="column is-one-fifth">
-        <div class="productSide">
-            <div class="messageProfile">
+        <div class="productSide" style="margin-top: 0;">
+            <div class="messageProfile" style="margin-top: 0;">
                 <div>
                     <img src="<%= chat.product.imageUrl %>"  class="open-img">
                 </div>
