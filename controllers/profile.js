@@ -54,17 +54,15 @@ module.exports = {
                 req.check('state', 'Please select a state.').notEmpty();
                 req.check('city', 'Please select a city.').notEmpty();
                 req.check('address1', 'Please input a valid first address.').matches(/^[a-zA-Z0-9., ]+$/i).notEmpty();
+                req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-zA-Z0-9., ]+$/i);
                 req.check('zip', 'Please specify a numeric zip code.').notEmpty().isNumeric();
-                // Check address2 as well eventually
                 user.full_name = req.body.name;
                 user.country = req.body.country;
                 user.state = req.body.state;
                 user.city = req.body.city;
                 user.address1 = req.body.address1;
                 user.zip = req.body.zip;
-                if (req.body.address2) {
-                  user.address2 = req.body.address2;
-                }
+                user.address2 = req.body.address2;
                 const errors = req.validationErrors();
                 if (errors) {
                   res.render('dashboard/dashboard', {

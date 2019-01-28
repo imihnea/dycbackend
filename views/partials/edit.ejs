@@ -6,6 +6,15 @@
             <h1 class="title">Edit <%= product.name %></h1>
             <form action="/dashboard/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
+                <div class="container is-fluid">
+                    <% if(errors){ %>
+                        <div class="notification is-danger" role="alert"> 
+                        <% errors.forEach(function( err){ %>
+                            <%= err.msg %><br>
+                        <% }) %>
+                        </div>
+                    <% } %>
+                </div>
                 <input class="input smmargin" name="product[name]" value="<%= product.name %>" type="text" required />
                 <div class="select cont-select">
                     <select name="product[category]" style="width: 100%;">
@@ -143,12 +152,12 @@
                     <% if (product.accepted[0]){ %>
                         <label class="img-check ">
                             <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy" id="btcimg">
-                            <input id="btc-check" type="checkbox" name="product[acc_btc]" class="curr_checkbox" checked>
+                            <input id="btc-check" type="checkbox" name="product[acc_btc]" value="true" class="curr_checkbox" checked>
                         </label>
                     <% } else { %>
                         <label class="img-check ">
                             <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy gray" id="btcimg">
-                            <input id="btc-check" type="checkbox" name="product[acc_btc]" class="curr_checkbox" >
+                            <input id="btc-check" type="checkbox" name="product[acc_btc]" value="true" class="curr_checkbox" >
                         </label>
                     <% } %>
                 </label>
@@ -156,12 +165,12 @@
                     <% if (product.accepted[1]){ %>
                         <label class="img-check ">
                             <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy" id="bchimg">
-                            <input id="bch-check" type="checkbox" name="product[acc_bch]"  class="curr_checkbox"  checked>
+                            <input id="bch-check" type="checkbox" name="product[acc_bch]"  class="curr_checkbox" value="true" checked>
                         </label>
                     <% } else { %>
                         <label class="img-check ">
                             <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy gray" id="bchimg">
-                            <input id="bch-check" type="checkbox" name="product[acc_bch]"  class="curr_checkbox">
+                            <input id="bch-check" type="checkbox" name="product[acc_bch]" value="true"  class="curr_checkbox">
                         </label>
                     <% } %>
                 </label>
@@ -169,12 +178,12 @@
                     <% if (product.accepted[2]){ %>
                         <label class="img-check ">
                             <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy" id="ethimg">
-                            <input id="eth-check" type="checkbox" name="product[acc_eth]"  class="curr_checkbox"  checked>
+                            <input id="eth-check" type="checkbox" name="product[acc_eth]"  value="true" class="curr_checkbox"  checked>
                         </label>
                     <% } else { %>
                         <label class="img-check ">
                             <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy gray" id="ethimg">
-                            <input id="eth-check" type="checkbox" name="product[acc_eth]"  class="curr_checkbox" >
+                            <input id="eth-check" type="checkbox" name="product[acc_eth]" value="true"  class="curr_checkbox" >
                         </label>
                     <% } %>
                 </label>
@@ -182,12 +191,12 @@
                     <% if (product.accepted[3]){ %>
                         <label class="img-check ">
                             <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy" id="ltcimg">
-                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]"  class="curr_checkbox"  checked>
+                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]"  value="true" class="curr_checkbox"  checked>
                         </label>
                     <% } else { %>
                         <label class="img-check ">
                             <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy gray" id="ltcimg">
-                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]"  class="curr_checkbox" >
+                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]" value="true"  class="curr_checkbox" >
                         </label>
                     <% } %>
                 </label>
@@ -195,12 +204,12 @@
                     <% if (product.accepted[4]){ %>
                         <label class="img-check ">
                             <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy" id="dashimg">
-                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  class="curr_checkbox" checked>
+                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  value="true" class="curr_checkbox" checked>
                         </label>
                     <% } else { %>
                         <label class="img-check ">
                             <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy gray" id="dashimg">
-                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  class="curr_checkbox" >
+                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  value="true" class="curr_checkbox" >
                         </label>
                     <% } %>
                 </label>

@@ -30,9 +30,8 @@ Backend:
                => 2 Factor when withdrawing
       
       Reviews
-               => Unable to review your own products / own user page
                => Paginate reviews
-               => Add author's avatar url to the review
+               => Disable product review for non-repeatable deals; create user review instead
         
       Categories => Add more in future
       Register => Add recaptcha to avoid spam

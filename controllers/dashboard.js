@@ -157,111 +157,129 @@ module.exports = {
         username: req.user.username,
       };
       req.body.product.author = author;
-      // Everything is stored in constants so we can protect against
-      // people making fields in the DevTools
-      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-z ]+$/i).notEmpty();
+
+      // Look into which symbols are security threats - product name, product description
+      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z ]+$/i).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
       req.check('product[category]', 'Please choose a category.').notEmpty();
       req.check('product[description]', 'The product must have a valid description.').notEmpty();
-      // Figure out how to validate accepted + price
-      const name = req.body.product.name;
-      const description = req.body.product.description;
-      const category = req.body.product.category;
-      const accepted = [req.body.product.acc_btc, req.body.product.acc_bch, req.body.product.acc_eth,
-        req.body.product.acc_ltc, req.body.product.acc_dash];
-      const price = [req.body.product.btc_price, req.body.product.bch_price,
-        req.body.product.eth_price, req.body.product.ltc_price,
-        req.body.product.dash_price];      
-      
-      req.body.product.price = price;
-      const newproduct = {
-        name: name,
-        images: req.body.product.images,
-        category: category,
-        description: description,
-        price: price,
-        author: author,
-        accepted: accepted,
-      };
-      const errors = req.validationErrors();
-      if (errors) {
-        res.render('dashboard/dashboard_new', {
-          user: req.user,
-          errors: errors,
-        });
-      } else {
-        await User.findById(req.user._id, (err, user) => {
-          if (err) {
-            req.flash('error', 'An error has occured. (Could not find user)');
-            res.redirect('back');
-          } else {
-            const feat_1 = {};
-            const feat_2 = {};
-            let k = 0;
-            if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
-              if ( user.feature_tokens >= 20 ) {
-                feat_1.status = true;
-                feat_1.expiry_date = Date.now() + feature1_time;
-                feat_2.status = true;
-                feat_2.expiry_date = Date.now() + feature2_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-                newproduct.feat_1 = feat_1;
-                newproduct.feat_2 = feat_2;
-                k = 1;
-              } else {
-                req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
-              }
-            }
-            if (( req.body.product.feat_1 )  && ( k === 0 )) {
-              if ( user.feature_tokens >= 5 ) {
-                feat_1.status = true;
-                feat_1.expiry_date = Date.now() + feature1_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-                newproduct.feat_1 = feat_1;
-              } else {
-                req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
-              }
-            }
-            if (( req.body.product.feat_2 )  && ( k === 0 )) {
-              if (user.feature_tokens >= 15) {
-                feat_2.status = true;
-                feat_2.expiry_date = Date.now() + feature2_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-                newproduct.feat_2 = feat_2;
-              } else {
-                req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
-              }
-            }
-          }
-        });
-
-        // In case someone deletes the 'required' attribute of a price input
-        // TODO: Decide if this shit's going to be useful, omegalul
-        // price.forEach((item, i) => {
-        //   if ((!item[i]) && (accepted[i])) {
-        //     accepted[i] = !accepted[i];
-        //   }
-        // });
-
-        const product = await Product.create(newproduct);
-        res.redirect(`/products/${product._id}/view`);
+      let accepted = [];
+      let price = [];
+      if (req.body.product.acc_btc === "true") {
+        req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
+        accepted[0]=true;
+        price[0]=req.body.product.btc_price;
       }
-    }    
+      if (req.body.product.acc_bch === "true") {
+        req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
+        accepted[1]=true;
+        price[1]=req.body.product.bch_price;
+      }
+      if (req.body.product.acc_eth === "true") {
+        req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
+        accepted[2]=true;
+        price[2]=req.body.product.eth_price;
+      }
+      if (req.body.product.acc_ltc === "true") {
+        req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
+        accepted[3]=true;
+        price[3]=req.body.product.ltc_price;
+      }
+      if (req.body.product.acc_dash === "true") {
+        req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
+        accepted[4]=true;
+        price[4]=req.body.product.dash_price;
+      }
+      if ((accepted.length === 0 ) || (price.length === 0 )) {
+        req.flash('error', 'Your product must have a price.');
+        res.redirect('back');
+      } else {     
+          // Everything is stored in constants so we can protect against
+          // people making fields in the DevTools
+          const name = req.body.product.name;
+          const description = req.body.product.description;
+          const category = req.body.product.category;
+          const newproduct = {
+            name: name,
+            images: req.body.product.images,
+            category: category,
+            description: description,
+            price: price,
+            author: author,
+            accepted: accepted,
+          };
+          const errors = req.validationErrors();
+          if (errors) {
+            res.render('dashboard/dashboard_new', {
+              user: req.user,
+              errors: errors,
+            });
+          } else {
+            await User.findById(req.user._id, (err, user) => {
+              if (err) {
+                req.flash('error', 'An error has occured. (Could not find user)');
+                res.redirect('back');
+              } else {
+                const feat_1 = {};
+                const feat_2 = {};
+                let k = 0;
+                if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+                  if ( user.feature_tokens >= 20 ) {
+                    feat_1.status = true;
+                    feat_1.expiry_date = Date.now() + feature1_time;
+                    feat_2.status = true;
+                    feat_2.expiry_date = Date.now() + feature2_time;
+                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    });
+                    newproduct.feat_1 = feat_1;
+                    newproduct.feat_2 = feat_2;
+                    k = 1;
+                  } else {
+                    req.flash('error', 'Not enough tokens to promote product.');
+                    res.redirect('back');
+                  }
+                }
+                if (( req.body.product.feat_1 )  && ( k === 0 )) {
+                  if ( user.feature_tokens >= 5 ) {
+                    feat_1.status = true;
+                    feat_1.expiry_date = Date.now() + feature1_time;
+                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    });
+                    newproduct.feat_1 = feat_1;
+                  } else {
+                    req.flash('error', 'Not enough tokens to promote product.');
+                    res.redirect('back');
+                  }
+                }
+                if (( req.body.product.feat_2 )  && ( k === 0 )) {
+                  if (user.feature_tokens >= 15) {
+                    feat_2.status = true;
+                    feat_2.expiry_date = Date.now() + feature2_time;
+                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    });
+                    newproduct.feat_2 = feat_2;
+                  } else {
+                    req.flash('error', 'Not enough tokens to promote product.');
+                    res.redirect('back');
+                  }
+                }
+              }
+            });
+    
+            const product = await Product.create(newproduct);
+            res.redirect(`/products/${product._id}/view`);
+          }
+        }    
+      }
   },
   // Products Show
   async productShow(req, res) {
@@ -279,7 +297,7 @@ module.exports = {
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
-    res.render('dashboard/dashboard_edit', { product: product, user: req.user });
+    res.render('dashboard/dashboard_edit', { product: product, user: req.user, errors: req.session.errors });
   },
   // Products Update
   async productUpdate(req, res) {
@@ -318,32 +336,79 @@ module.exports = {
         });
       }
     }
-  
-    const accepted = [req.body.product.acc_btc, req.body.product.acc_bch, req.body.product.acc_eth,
-      req.body.product.acc_ltc, req.body.product.acc_dash];
-    const price = [req.body.product.btc_price, req.body.product.bch_price,
-      req.body.product.eth_price, req.body.product.ltc_price,
-      req.body.product.dash_price];
-    
-    // In case someone deletes the 'required' attribute of a price input
-    // TODO: decide if this shit is actually going to be useful, omegalul
-    // price.forEach((item, i) => {
-    //   if ((!item[i]) && (accepted[i])) {
-    //     console.log('kappa');
-    //     accepted[i] = !accepted[i];
-    //   }
-    // });
-
-    // update the product with any new properties
-    product.name = req.body.product.name;
-    product.description = req.body.product.description;
-    product.category = req.body.product.category;
-    product.price = price;
-    product.accepted = accepted;
-    // save the updated product into the db
-    product.save();
-    // redirect to show page
-    res.redirect(`/products/${product.id}/view`);
+    // Look into which symbols are security threats - product name, product description
+    req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z ]+$/i).notEmpty();
+    req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
+    req.check('product[category]', 'Please choose a category.').notEmpty();
+    req.check('product[description]', 'The product must have a valid description.').notEmpty();
+    let accepted = [];
+    let price = [];
+    if (req.body.product.acc_btc === "true") {
+      req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
+      accepted[0]=true;
+      price[0]=req.body.product.btc_price;
+    }
+    if (req.body.product.acc_btc === null) {
+      accepted[0]=false;
+    }
+    if (req.body.product.acc_bch === "true") {
+      req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
+      accepted[1]=true;
+      price[1]=req.body.product.bch_price;
+    }
+    if (req.body.product.acc_bch === null) {
+      accepted[1]=false;
+    }
+    if (req.body.product.acc_eth === "true") {
+      req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
+      accepted[2]=true;
+      price[2]=req.body.product.eth_price;
+    }
+    if (req.body.product.acc_eth === null) {
+      accepted[2]=false;
+    }
+    if (req.body.product.acc_ltc === "true") {
+      req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
+      accepted[3]=true;
+      price[3]=req.body.product.ltc_price;
+    }
+    if (req.body.product.acc_ltc === null) {
+      accepted[3]=false;
+    }
+    if (req.body.product.acc_dash === "true") {
+      req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
+      accepted[4]=true;
+      price[4]=req.body.product.dash_price;
+    }
+    if (req.body.product.acc_dash === null) {
+      accepted[4]=false;
+    }
+    if ((accepted.length === 0 ) || (price.length === 0 )) {
+      req.flash('error', 'Your product must have a price.');
+      res.redirect('back');
+    } else {     
+      const errors = req.validationErrors();
+      if (errors) {
+        res.render('dashboard/dashboard_edit', {
+          user: req.user,
+          errors: errors,
+          product
+        });
+      } else {
+        // Everything is stored in constants so we can protect against
+        // people making fields in the DevTools
+        // update the product with any new properties
+        product.name = req.body.product.name;
+        product.description = req.body.product.description;
+        product.category = req.body.product.category;
+        product.price = price;
+        product.accepted = accepted;
+        // save the updated product into the db
+        product.save();
+        // redirect to show page
+        res.redirect(`/products/${product.id}/view`);
+      }
+    }
   },
   // Feature product
   async productFeature(req, res) {

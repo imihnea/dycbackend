@@ -72,171 +72,172 @@
             </div>
         </div>
         <div class="deals" >
-            <p class="subtitle" style="text-align: center; margin-top: 1vh;">Reviews</p>
-            <br>
-            <!-- display all reviews -->
-            <% user.reviews.forEach(function(review) { %>
-                <div class="columns container is-fluid" style="display: flex;
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: orange;
-                    margin-bottom: 1vh;
-                    padding: 2%;
-                    border-radius: 10px;">
-                        <div>
-                            <!-- TODO: Add user avatar url to review.author -->
-                            <a href="/profile/<%= review.author.id %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
-                            <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.author.username %></a>
-                            <% if (review.createdAt) { %>
-                            <p class="productDescriptionText" style="text-align:center !important;" >
-                                <% switch(review.createdAt.getMonth()) {
-                                    case (0) : { %>
-                                    Jan
-                                    <% break; }%>
-                                    <% case (1) :{ %>
-                                    Feb
-                                    <% break; } %>
-                                    <% case (2) :{ %>
-                                    Mar
-                                    <% break; } %>
-                                    <% case (3) :{ %>
-                                    Apr
-                                    <% break; } %>
-                                    <% case (4) :{ %>
-                                    May
-                                    <% break; } %>
-                                    <% case (5) :{ %>
-                                    Jun
-                                    <% break; } %>
-                                    <% case (6) :{ %>
-                                    Jul
-                                    <% break; } %>
-                                    <% case (7) :{ %>
-                                    Aug
-                                    <% break; } %>
-                                    <% case (8) :{ %>
-                                    Sep 
-                                    <% break; } %>
-                                    <% case (9) :{ %>
-                                    Oct
-                                    <% break; } %>
-                                    <% case (10) :{ %>
-                                    Nov
-                                    <% break; } %>
-                                    <% case (11) :{ %>
-                                    Dec
-                                    <% break; } %>
-                                    <% default: { break; }%>
+            <% if (user.reviews.length > 0) { %>
+                <p class="subtitle" style="text-align: center; margin-top: 1vh;">Reviews</p>
+                <br>
+                <!-- display all reviews -->
+                <% user.reviews.forEach(function(review, index) { %>
+                    <div class="columns container is-fluid" style="display: flex;
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: orange;
+                        margin-bottom: 1vh;
+                        padding: 2%;
+                        border-radius: 10px;">
+                            <div>
+                                <a href="/profile/<%= review.author.id %>"><img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px;"></a>
+                                <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.author.username %></a>
+                                <% if (review.createdAt) { %>
+                                <p class="productDescriptionText" style="text-align:center !important;" >
+                                    <% switch(review.createdAt.getMonth()) {
+                                        case (0) : { %>
+                                        Jan
+                                        <% break; }%>
+                                        <% case (1) :{ %>
+                                        Feb
+                                        <% break; } %>
+                                        <% case (2) :{ %>
+                                        Mar
+                                        <% break; } %>
+                                        <% case (3) :{ %>
+                                        Apr
+                                        <% break; } %>
+                                        <% case (4) :{ %>
+                                        May
+                                        <% break; } %>
+                                        <% case (5) :{ %>
+                                        Jun
+                                        <% break; } %>
+                                        <% case (6) :{ %>
+                                        Jul
+                                        <% break; } %>
+                                        <% case (7) :{ %>
+                                        Aug
+                                        <% break; } %>
+                                        <% case (8) :{ %>
+                                        Sep 
+                                        <% break; } %>
+                                        <% case (9) :{ %>
+                                        Oct
+                                        <% break; } %>
+                                        <% case (10) :{ %>
+                                        Nov
+                                        <% break; } %>
+                                        <% case (11) :{ %>
+                                        Dec
+                                        <% break; } %>
+                                        <% default: { break; }%>
+                                    <% } %>
+                                    <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
+                                    <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
                                 <% } %>
-                                <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
-                                <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
-                            <% } %>
-                        </div>
-                        <div style="padding-left: 2vw; max-width: 80%;">
-                            <div style="float: left;"><%  
-                                let i = 0;
-                                for(i; i < review.rating; i++) { %>
-                                <!-- display a full star -->
-                                <i class="fas fa-star" style="color: orange;"></i>
-                            <% } %>
-                            <% for(i; i < 5; i++) { %>
-                                    <!-- display an empty star -->
-                                    <i class="far fa-star" style="color: orange;"></i>
-                            <% } %>
                             </div>
-                            <br>
-                            <p class="productDescriptionText" style="margin-top: 1vh;" ><%= review.body %></p>
-                        </div>
-                        <% if(currentUser){ %>
-                            <% if(review.author.equals(currentUser._id)) { %>
-                            <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
-                                <button class="button is-primary edit">Edit</button>
-                                <div class="modal modalEdit">
-                                    <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Edit Review</p>
-                                                <button class="delete deleteEdit" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-foot" style="display: block;">
-                                                <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
-                                                    <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
-                                                    <fieldset class="starability-basic" style="    margin-top: 1vh;
-                                                    margin-bottom: 1vh;
-                                                    margin-left: auto;
-                                                    margin-right: auto;">
-                                                        <legend>Rating:</legend>
-                                                        <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                                                        <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
-                                                        <label for="edit-rate1" title="Terrible">1 star</label>
-                                                        <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
-                                                        <label for="edit-rate2" title="Not good">2 stars</label>
-                                                        <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
-                                                        <label for="edit-rate3" title="Average">3 stars</label>
-                                                        <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
-                                                        <label for="edit-rate4" title="Very good">4 stars</label>
-                                                        <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
-                                                        <label for="edit-rate5" title="Amazing">5 stars</label>
-                                                    </fieldset>
-                        
-                                                    <input class="button is-primary" type="submit" value="Update">
-                                                </form>
-                                            </section>
-                                        </div>
+                            <div style="padding-left: 2vw; max-width: 80%;">
+                                <div style="float: left;"><%  
+                                    let i = 0;
+                                    for(i; i < review.rating; i++) { %>
+                                    <!-- display a full star -->
+                                    <i class="fas fa-star" style="color: orange;"></i>
+                                <% } %>
+                                <% for(i; i < 5; i++) { %>
+                                        <!-- display an empty star -->
+                                        <i class="far fa-star" style="color: orange;"></i>
+                                <% } %>
                                 </div>
-
-                                <script>
-                                    $('#edit-rate<%= review.rating %>').prop('checked', true);
-                                </script>
-        
-                                <button class="button is-danger del">Delete</button>
-                                <div class="modal modalDelete">
-                                    <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Are you sure?</p>
-                                                <button class="delete deleteDelete" aria-label="close"></button>
-                                            </header>
-                                            <section class=" modal-card-foot" style="display: block;">
-                                                <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                                <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
-                                                    <input class="button is-danger noborder" type="submit" value="Delete">
-                                                </form>
-                                            </section>
-                                        </div>
-                                </div>
-
+                                <br>
+                                <p class="productDescriptionText" style="margin-top: 1vh;" ><%= review.body %></p>
                             </div>
+                            <% if(currentUser){ %>
+                                <% if(review.author.equals(currentUser._id)) { %>
+                                <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
+                                    <button class="button is-primary edit">Edit</button>
+                                    <div class="modal modalEdit">
+                                        <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Edit Review</p>
+                                                    <button class="delete deleteEdit" aria-label="close"></button>
+                                                </header>
+                                                <section class="modal-card-foot" style="display: block;">
+                                                    <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                                                        <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
+                                                        <fieldset class="starability-basic" style="    margin-top: 1vh;
+                                                        margin-bottom: 1vh;
+                                                        margin-left: auto;
+                                                        margin-right: auto;">
+                                                            <legend>Rating:</legend>
+                                                            <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                                                            <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
+                                                            <label for="edit-rate1" title="Terrible">1 star</label>
+                                                            <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
+                                                            <label for="edit-rate2" title="Not good">2 stars</label>
+                                                            <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
+                                                            <label for="edit-rate3" title="Average">3 stars</label>
+                                                            <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
+                                                            <label for="edit-rate4" title="Very good">4 stars</label>
+                                                            <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
+                                                            <label for="edit-rate5" title="Amazing">5 stars</label>
+                                                        </fieldset>
+                            
+                                                        <input class="button is-primary" type="submit" value="Update">
+                                                    </form>
+                                                </section>
+                                            </div>
+                                    </div>
+
+                                    <script>
+                                        $('#edit-rate<%= review.rating %>').prop('checked', true);
+                                    </script>
+            
+                                    <button class="button is-danger del">Delete</button>
+                                    <div class="modal modalDelete">
+                                        <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Are you sure?</p>
+                                                    <button class="delete deleteDelete" aria-label="close"></button>
+                                                </header>
+                                                <section class=" modal-card-foot" style="display: block;">
+                                                    <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
+                                                    <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                                        <input class="button is-danger noborder" type="submit" value="Delete">
+                                                    </form>
+                                                </section>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <% } %>
                             <% } %>
-                        <% } %>
-                </div>
-                       
-                <hr>
-            <% }); %>
-            <% if(currentUser){ %>
-            <p class="subtitle" style="text-align: center;" >Create a Review</p>
-            <form action="/profile/<%= user.id %>/reviews" method="POST">
-                <textarea class="textarea" name="review[body]" required></textarea>
-                <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                    <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
-                        <fieldset class="starability-basic" style="margin: auto;">
-                            <legend class="productDescriptionText">Rating:</legend>
-                            <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                            <input type="radio" id="rate1" name="review[rating]" value="1" />
-                            <label for="rate1" title="Terrible">1 star</label>
-                            <input type="radio" id="rate2" name="review[rating]" value="2" />
-                            <label for="rate2" title="Not good">2 stars</label>
-                            <input type="radio" id="rate3" name="review[rating]" value="3" />
-                            <label for="rate3" title="Average">3 stars</label>
-                            <input type="radio" id="rate4" name="review[rating]" value="4" />
-                            <label for="rate4" title="Very good">4 stars</label>
-                            <input type="radio" id="rate5" name="review[rating]" value="5" />
-                            <label for="rate5" title="Amazing">5 stars</label>
-                        </fieldset>
+                    </div>    
+                    <% if (index < user.reviews.length - 1) { %><hr><% } %>
+                <% }); %>     
+            <% } %>
+            <% if((currentUser) && (currentUser._id.toString() !== user._id.toString())) { %>
+                <% if (user.reviews.length > 0) { %><hr><% } %>
+                <p class="subtitle" style="text-align: center;" >Create a Review</p>
+                <form action="/profile/<%= user.id %>/reviews" method="POST">
+                    <textarea class="textarea" name="review[body]" required></textarea>
+                    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                        <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
+                            <fieldset class="starability-basic" style="margin: auto;">
+                                <legend class="productDescriptionText">Rating:</legend>
+                                <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                                <label for="rate1" title="Terrible">1 star</label>
+                                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                                <label for="rate2" title="Not good">2 stars</label>
+                                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                                <label for="rate3" title="Average">3 stars</label>
+                                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                                <label for="rate4" title="Very good">4 stars</label>
+                                <input type="radio" id="rate5" name="review[rating]" value="5" />
+                                <label for="rate5" title="Amazing">5 stars</label>
+                            </fieldset>
+                        </div>
+                        <input class="button is-primary" type="submit">    
                     </div>
-                    <input class="button is-primary" type="submit">    
-                </div>
-            </form>
+                </form>
             <% } %>
         </div>
     </div>

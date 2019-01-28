@@ -21,6 +21,7 @@ module.exports = {
 		}
 		// create the review
 		req.body.review.author = req.user._id;
+		req.body.review.avatarUrl = req.user.avatar.url;
 		let review = await Review.create(req.body.review);
 		// assign review to product
 		product.reviews.push(review);
@@ -62,6 +63,7 @@ module.exports = {
 			}
 			// create the review
 			req.body.review.author = req.user._id;
+			req.body.review.avatarUrl = req.user.avatar.url;
 			let review = await Review.create(req.body.review);
 			// assign review to user
 			user.reviews.push(review);
