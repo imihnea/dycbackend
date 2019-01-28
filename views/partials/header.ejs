@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <script src="/dist/js/main.js"></script>
 </head>
 <body>
 <div class="hero-head">
@@ -236,35 +235,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="level-item search">
-                    <div class="field has-addons">
-                        <p class="control searchbar">
-                            <input class="input search-input" type="text" placeholder="Look for anything">
-                        </p>
-                        <div class="select ">
-                            <select class="search-select">
-                                <option value=""selected>All categories</option>
-                                <option value="" disabled>--------------------------------</option>
-                                <option value="">Collectibles & Art</option>
-                                <option value="">Home & Garden</option>
-                                <option value="">Sporting Goods</option>
-                                <option value="">Electronics</option>
-                                <option value="">Auto Parts & Accessories</option>
-                                <option value="">Toys & Hobbies</option>
-                                <option value="">Fashion</option>
-                                <option value="">Musical Instruments & Gear</option>
-                                <option value="">Other Categories</option>
-                            </select> 
-                        </div>
-                        <p class="control">
-                            <button class="button src-btn">
-                            Search
-                            </button>
-                        </p>
-                        
-                    </div>
+                <div class="input-group" id="searchbox"></div>
+
                 </div>
-            </div>
+            <!-- </div> -->
     
             <div class="level-right navbar-end">
                 <% if(!currentUser){ %>
@@ -337,3 +311,40 @@
         </div>
     </div>
 <% } %>
+
+<div id="results" class="container-fluid">  
+    <div class="content-wrapper">
+        <aside>
+        <div id="clear-refinements"></div>
+
+        <section class="facet-wrapper">
+            <div class="facet-category-title" class="facet">
+            Show results for
+            </div>
+            <div id="categories"></div>
+        </section>
+
+        <section class="facet-wrapper">
+            <div class="facet-category-title">Refine by</div>
+            <div id="types" class="facet"></div>
+            <div id="brands" class="facet"></div>
+            <div id="rating" class="facet"></div>
+            <div id="price" class="facet"></div>
+        </section>
+
+        </aside>
+
+        <div class="results-wrapper">
+        <section id="results-topbar">
+            <div class="sort-by"><div id="sort-by"></div></div>
+
+            <div id="stats" class="text-muted"></div>
+        </section>
+
+        <main id="hits"></main>
+        <section id="pagination"></section>
+        </div>
+    </div>
+</div>
+
+<div id="allpage"> <!-- this ends on footer to hide when something is searched -->

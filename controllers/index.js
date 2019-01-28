@@ -5,7 +5,12 @@ const async = require('async');
 const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
+const Nexmo = require('nexmo');
 
+const nexmo = new Nexmo({
+  apiKey: process.env.NEXMO_API_KEY,
+  apiSecret: process.env.NEXMO_API_SECRET
+});
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
@@ -29,6 +34,63 @@ module.exports = {
       res.redirect('/');
     });
   },
+  postVerify(req, res) {
+    let pin = req.body.pin;
+    let requestId = req.body.requestId;
+    let phoneNumber = req.body.number;
+   
+    nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      } else {
+        if(result && result.status == '0') { // Success!
+          User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
+            if (err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            }
+          });
+          req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
+          res.redirect('/dashboard')
+        } else {
+          req.flash('error', 'Wrong PIN code, please try again.');
+          return res.redirect('back');
+        }
+      }
+    });
+  },
+  get2factor(req, res) {
+    res.render('index/2factor')
+  },
+  post2factor(req, res) {
+  let phoneNumber = req.body.number;
+  nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+    if(err) {
+      req.flash('error', err.message);
+      res.redirect('back');
+    } else {
+      let requestId = result.request_id;
+      if(result.status == '0') {
+        res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
+      } else {
+        req.flash('error', 'Something went wrong, please try again.');
+        res.redirect('back');
+      }
+    }
+  });
+  },
+  postdisable2factor(req, res) {
+    User.findByIdAndUpdate(req.user._id, { number: undefined, twofactor: false }, (err) => { // Change number: null to delete number completely
+      if (err) {
+        req.flash('error', err.message);
+        res.redirect('back');
+      } else {
+        req.flash('success', 'Successfully disabled 2-Factor authentication.');
+        res.redirect('back');
+      }
+    });
+  },
   getLogin(req, res) {
     if ( req.user ) {
       res.render('index/login', { user: req.user });
@@ -43,13 +105,63 @@ module.exports = {
     } else {
       req.session.cookie.expires = false; // Cookie expires at end of session
     }
-    passport.authenticate('local',
-      {
-        successFlash: 'Welcome to Deal Your Crypto!',
-        successRedirect: '/dashboard',
-        failureRedirect: '/login',
-        failureFlash: true,
-      })(req, res, next);
+    User.findOne({ username: req.body.username }, (err, user) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      if(!user) {
+        req.flash('error', 'Invalid user/password combination or the user does not exist.')
+        return res.redirect('back');
+      }
+        if (user.twofactor === true) {
+          nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+            if(err) {
+              req.flash('error', err.message);
+              return res.redirect('back');
+            } else {
+              let requestId = result.request_id;
+              if(result.status == '0') {
+                res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
+              } else {
+                req.flash('error', 'Something went wrong, please try again.');
+                return res.redirect('back');
+              }
+            }
+          });
+        } else {
+          passport.authenticate('local',
+          {
+            successFlash: 'Welcome to Deal Your Crypto!',
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true,
+          })(req, res, next);
+        }
+      });
+  },
+  postVerifyLogin(req, res, next) {
+    let pin = req.body.pin;
+    let requestId = req.body.requestId;
+    nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      } else {
+        if(result && result.status == '0') { // Success!
+            passport.authenticate('local',
+          {
+            successFlash: 'Welcome to Deal Your Crypto!',
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true,
+          })(req, res, next);
+        } else {
+          req.flash('error', 'Wrong PIN code, please try again.');
+          return res.redirect('back');
+        }
+      }
+    });
   },
   // GET /logout
   getLogout(req, res) {

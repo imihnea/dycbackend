@@ -1,11 +1,8 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="columns" style="color: orange;">
-    
-        <% include ../partials/sidebar %>
-   
-
-    <div class="column dashboard-right">
+<div class="columns" style="color: orange;"> 
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right" style="margin-bottom: 4vh;">
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
@@ -115,7 +112,26 @@
                                 <button class="button is-primary">Click here to change your Email</button>
                             </div>
                         </form>
-                    </div> 
+                    </div>
+                    <% if(currentUser.twofactor === true) { %> 
+                    <div class="column chemail">
+                        <h2>Deactivate 2-Factor</h2>
+                        <form action="/disable2factor" method="POST" onsubmit="return confirm('Are you sure?');">
+                            <div class="control smmargin">
+                                <button class="button is-primary">Click here to deactivate 2-Factor Authentication</button>
+                            </div>
+                        </form>
+                    </div>
+                    <% } else { %>
+                        <div class="column chemail">
+                            <h2>Activate 2-Factor</h2>
+                            <form action="/2factor">
+                                <div class="control smmargin">
+                                    <button class="button is-primary">Click here to activate 2-Factor Authentication</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
             </div>
             <div class="column"></div>

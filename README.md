@@ -7,10 +7,6 @@ Frontend:
     High Priority:
 
          Search result page
-         
-         Ongoing purchase interface
-
-         Finished deal => review interface
 
     Low Priority:
 
@@ -30,9 +26,8 @@ Backend:
       
       Dashboard 
                => Settings
-                  => 2FA, connections
-               => Closed Deals
-                  => Sold, expired, deactivated status
+                  => connections
+               => 2 Factor when withdrawing
       
       Reviews
                => Unable to review your own products / own user page

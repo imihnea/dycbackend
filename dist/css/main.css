@@ -116,7 +116,7 @@ input, select, .dd-btn{
 
 .dropdown.categ{
     margin-left: 1vw;
-    width: 30%;
+    width: auto;
 }
 
 .dropdown-item{

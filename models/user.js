@@ -19,6 +19,8 @@ const UserSchema = new Schema({
   password: String,
   currency: { type: [ Number ], default: 0 },
   full_name: String,
+  number: { type: Number, unique: true },
+  twofactor: { type: Boolean },
   country: String,
   state: String,
   city: String,

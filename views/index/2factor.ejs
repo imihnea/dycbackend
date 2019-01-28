@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
+
+<div class="hero-body">
+    <div class="container content">
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths lrform" >
+                <h1 style="color: orange">Activate 2-Factor</h1>
+                <form action="/2factor" method="POST">
+                    <input class="input smmargin" name="number" type="tel" placeholder="Phone number" required  />
+                    <div class="control smmargin">
+                        <button class="button is-primary">Activate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
