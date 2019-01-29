@@ -90,34 +90,34 @@
                 <% } %>
                 <p style="color: orange;"><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
-                    <% if ((product.price[0]) && (product.accepted[0])) { %>
+                    <% if (product.accepted[0]) { %>
                         <div class="prices openPrices">
                             <p class="price_text"> <%= product.price[0] %></p>
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
                     <% } 
-                        if ((product.price[1]) && (product.accepted[1])) {
+                        if (product.accepted[1]) {
                     %>
                         <div class="prices openPrices">
                             <p class="price_text"> <%= product.price[1] %></p>
                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                         </div>
                     <% } 
-                        if ((product.price[2]) && (product.accepted[2])) {
+                        if (product.accepted[2]) {
                     %>
                         <div class="prices openPrices">
                             <p class="price_text"> <%= product.price[2] %></p>
                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                         </div>
                     <% } 
-                        if ((product.price[3]) && (product.accepted[3])) {
+                        if (product.accepted[3]) {
                     %>
                         <div class="prices openPrices">
                             <p class="price_text"> <%= product.price[3] %></p>
                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                         </div>
                     <% } 
-                        if ((product.price[4]) && (product.accepted[4])) {
+                        if (product.accepted[4]) {
                     %>
                         <div class="prices openPrices">
                             <p class="price_text"> <%= product.price[4] %></p>
@@ -130,40 +130,37 @@
                
                 <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST">
                     
-                    <% 
-                        product.accepted.forEach((key, i) => {
-                            if ((key === 'true') && (i === 0)){ %>
-                                <label class="img-check ">
-                                    <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
-                                    <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
-                                </label>
-                            <% }
-                            if ((key === 'true') && (i === 1)){ %>
-                                <label class="img-check ">
-                                    <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
-                                    <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1">
-                                </label>
-                            <% }
-                            if ((key === 'true') && (i === 2)){ %>
-                                <label class="img-check ">
-                                    <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
-                                    <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2">
-                                </label>
-                            <% }
-                            if ((key === 'true') && (i === 3)){ %>
-                                <label class="img-check ">
-                                    <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
-                                    <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3">
-                                </label>
-                            <% }
-                            if ((key === 'true') && (i === 4)){ %>
-                                <label class="img-check ">
-                                    <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
-                                    <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4">
-                                </label>
-                            <% }
-                        });
-                    %>
+                    <% if (product.accepted[0]) { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
+                            <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
+                        </label>
+                    <% } %>
+                    <% if (product.accepted[1]) { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
+                            <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1">
+                        </label>
+                    <% } %>
+                    <% if (product.accepted[2]) { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
+                            <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2">
+                        </label>
+                    <% } %>
+                    <% if (product.accepted[3]) { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
+                            <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3">
+                        </label>
+                    <% } %>
+                    <% if (product.accepted[4]) { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
+                            <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4">
+                        </label>
+                    <% } %>
+
                     <div class="control smmargin">
                         <button class="button is-primary">Buy</button>
                     </div>
