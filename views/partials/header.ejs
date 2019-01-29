@@ -297,20 +297,6 @@
         </div>
     </nav>
 </div>
-<% if(error && error.length > 0) { %>
-<div class="container is-fluid">
-    <div class="notification is-danger" role="alert">
-        <%= error %>
-    </div>
-</div>
-<% } %>
-<% if(success && success.length > 0) { %>
-    <div class="container is-fluid">
-        <div class="notification is-success" role="alert">
-            <%= success %>
-        </div>
-    </div>
-<% } %>
 
 <div id="results" class="container-fluid">  
     <div class="content-wrapper">
@@ -348,3 +334,18 @@
 </div>
 
 <div id="allpage"> <!-- this ends on footer to hide when something is searched -->
+
+    <% if(error && error.length > 0) { %>
+        <div class="container is-fluid">
+            <div class="notification is-danger" role="alert">
+                <%= error %>
+            </div>
+        </div>
+    <% } %>
+    <% if(success && success.length > 0) { %>
+            <div class="container is-fluid">
+                <div class="notification is-success" role="alert">
+                    <%= success %>
+                </div>
+            </div>
+    <% } %>

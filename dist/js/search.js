@@ -1,8 +1,8 @@
 /* global instantsearch algoliasearch */
 var search = instantsearch({
   indexName: 'instant_search',
-  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
-  // searchClient: algoliasearch('DGT3ES35E2', '8802424e32923b175631b3a21ffbb33f'),
+  // searchClient: algoliasearch('XILOZELVR5', 'd0413f1b299d094d3c09a326456d1ee2'),
+  searchClient: algoliasearch('DGT3ES35E2', '8802424e32923b175631b3a21ffbb33f'),
   searchFunction(helper) {
     const container = document.querySelector('#results');
     const restofpage = document.querySelector('#allpage');
