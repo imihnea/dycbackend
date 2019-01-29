@@ -199,6 +199,7 @@ module.exports = {
           const name = req.body.product.name;
           const description = req.body.product.description;
           const category = req.body.product.category;
+          
           const newproduct = {
             name: name,
             images: req.body.product.images,
@@ -208,6 +209,10 @@ module.exports = {
             author: author,
             accepted: accepted,
           };
+          if (req.body.product.repeatable === "true") {
+            newproduct.repeatable = req.body.product.repeatable;
+          }
+          
           const errors = req.validationErrors();
           if (errors) {
             res.render('dashboard/dashboard_new', {
