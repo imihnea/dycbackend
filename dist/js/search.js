@@ -1,13 +1,8 @@
 /* global instantsearch algoliasearch */
 var search = instantsearch({
   indexName: 'instant_search',
-<<<<<<< HEAD
-  // searchClient: algoliasearch('XILOZELVR5', 'd0413f1b299d094d3c09a326456d1ee2'),
-  searchClient: algoliasearch('DGT3ES35E2', '8802424e32923b175631b3a21ffbb33f'),
-=======
   searchClient: algoliasearch('XILOZELVR5', 'd0413f1b299d094d3c09a326456d1ee2'),
   // searchClient: algoliasearch('DGT3ES35E2', '8802424e32923b175631b3a21ffbb33f'),
->>>>>>> 60776740a85a2c2a6658d4c0f5b12c9c5c1a05ff
   searchFunction(helper) {
     const container = document.querySelector('#results');
     const restofpage = document.querySelector('#allpage');
