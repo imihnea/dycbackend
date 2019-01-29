@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/dist/css/index.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
@@ -335,6 +336,7 @@
 
 <div id="allpage"> <!-- this ends on footer to hide when something is searched -->
 
+<<<<<<< HEAD
     <% if(error && error.length > 0) { %>
         <div class="container is-fluid">
             <div class="notification is-danger" role="alert">
@@ -349,3 +351,19 @@
                 </div>
             </div>
     <% } %>
+=======
+<% if(error && error.length > 0) { %>
+<div class="container is-fluid">
+    <div class="notification is-danger" role="alert">
+        <%= error %>
+    </div>
+</div>
+<% } %>
+<% if(success && success.length > 0) { %>
+    <div class="container is-fluid">
+        <div class="notification is-success" role="alert">
+            <%= success %>
+        </div>
+    </div>
+<% } %>
+>>>>>>> 60776740a85a2c2a6658d4c0f5b12c9c5c1a05ff
