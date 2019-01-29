@@ -7,11 +7,11 @@
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
-                <% if (deals.docs.length === 0) { %>
+                <% if (deals.total === 0) { %>
                         <p class="title">You have not purchased any products yet.</p>
                 <% } else { %>
                     <div style="overflow-x: hidden;">
-                        <% if (deals.docs.length > 10) { %>
+                        <% if (deals.total > 10) { %>
                             <div class="pagination">
                                 <p class="subtitle pagePad">Pages:</p> 
                                 <% include ../partials/paginatePurchases %>
@@ -55,7 +55,7 @@
                             <hr>                            
                         <% }); %>         
                     </div>        
-                    <% if (deals.docs.length > 10) { %>
+                    <% if (deals.total > 10) { %>
                         <div class="pagination">
                             <p class="subtitle pagePad">Pages:</p> 
                             <% include ../partials/paginatePurchases %>

@@ -28,7 +28,7 @@
         <div class="deals" >
             <p class="subtitle" style="text-align: center;">Active Deals</p>
             <div class="columns" style="justify-content: center; flex-wrap: wrap;">
-                <% if (products.length >= 10) { %>
+                <% if (products.total >= 10) { %>
                     Pages: <% include ../partials/paginateIndex %>
                 <% } %>
                 <% products.docs.forEach((product) => { %>
@@ -66,17 +66,27 @@
                         </a>                       
                     </div>
                 <% }); %>
-                <% if (products.length >= 10) { %>
+                <% if (products.total >= 10) { %>
                     Pages: <% include ../partials/paginateIndex %>
                 <% } %>
             </div>
         </div>
         <div class="deals" >
-            <% if (user.reviews.length > 0) { %>
+            <% if (reviews.total > 0) { %>
                 <p class="subtitle" style="text-align: center; margin-top: 1vh;">Reviews</p>
                 <br>
+                <% if (reviews.total >= 5) { %>
+                    <div class="pagination" style="    margin-top: -1vh;
+                    margin-bottom: 1vh;
+                    justify-content: space-evenly;
+                    align-items: baseline;
+                ">
+                        <p class="subtitle pagePad">Pages:</p> 
+                        <% include ../partials/paginateReviews %>
+                    </div>
+                <% } %>
                 <!-- display all reviews -->
-                <% user.reviews.forEach(function(review, index) { %>
+                <% reviews.docs.forEach(function(review, index) { %>
                     <div class="columns container is-fluid" style="display: flex;
                         border-style: solid;
                         border-width: 1px;
@@ -210,11 +220,20 @@
                                 <% } %>
                             <% } %>
                     </div>    
-                    <% if (index < user.reviews.length - 1) { %><hr><% } %>
+                
                 <% }); %>     
+                <% if (reviews.total >= 5) { %>
+                    <div class="pagination" style="    margin-top: 2vh;
+                    justify-content: space-evenly;
+                    align-items: baseline;
+                ">
+                        <p class="subtitle pagePad">Pages:</p> 
+                        <% include ../partials/paginateReviews %>
+                    </div>
+                <% } %>
             <% } %>
-            <% if((currentUser) && (currentUser._id.toString() !== user._id.toString())) { %>
-                <% if (user.reviews.length > 0) { %><hr><% } %>
+            <% if((currentUser) && (currentUser._id.toString() !== user._id.toString()) && (reviewed === false)) { %>
+                <% if (reviews.total > 0) { %><hr><% } %>
                 <p class="subtitle" style="text-align: center;" >Create a Review</p>
                 <form action="/profile/<%= user.id %>/reviews" method="POST">
                     <textarea class="textarea" name="review[body]" required></textarea>

@@ -6,37 +6,18 @@
     <div class="column is-three-fifths" style="margin-top: 2vh;">
         <div class="messageProfile" style="height: auto; margin-left: auto; margin-right: auto; padding-bottom: 2.5vh;">
             <div>
-                <p class="title is-5"><%= deal.product.name %></p>                      
-                <img src="<%= deal.product.imageUrl %>"  class="open-img">
+                <p class="title is-5"><%= seller.name %></p>                      
+                <img src="<%= seller.avatar.url %>"  class="open-img">
             </div>
             <hr>
             <div class=" prod_info ">
 
-                <div class="prices openPrices" style="width: 50% !important;">
-                    <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
-                    <% switch(deal.boughtWith) {
-                        case 0: { %>
-                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            <% break;}
-                        case 1: { %>
-                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                            <% break; }
-                        case 2: {%>
-                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                            <% break; }
-                        case 3: { %>
-                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                            <% break; }
-                        case 4: { %>
-                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
-                            <% break; }
-                        default: { break; } } %> 
-                </div>
+
             </div>
         </div>
         <p class="title is-3" style="margin-top: 3vh;">Leave a Review</p>
-        <form action="/products/<%= deal.product.id %>/reviews" method="POST">
-            <textarea class="textarea" name="review[body]" placeholder="What a great product!" required></textarea>
+        <form action="/profile/<%= user.id %>/reviews" method="POST">
+            <textarea class="textarea" name="review[body]" placeholder="What a great seller!" required></textarea>
             <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                 <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
                     <fieldset class="starability-basic" style="margin: auto;">

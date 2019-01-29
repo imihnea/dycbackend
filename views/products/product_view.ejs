@@ -181,12 +181,12 @@
         <hr>
 
             <div class="column">
-                <% if (product.reviews.length > 0) { %>
+                <% if (reviews.total > 0) { %>
                     <p class="productSubTitleText">Reviews</p>
                     <br>
                     <!-- display all reviews -->
                     <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
-                    <% product.reviews.forEach(function(review, index) { %>
+                    <% reviews.docs.forEach(function(review, index) { %>
                         <div class="columns container is-fluid" style="display: flex;
                         border-style: solid;
                         border-width: 1px;
@@ -196,8 +196,8 @@
                         border-radius: 10px;">
                             <div>
                                 <!-- TODO: Add user avatar url to review.author -->
-                                <a href="/profile/<%= review.author.id %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
-                                <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.author.username %></a>
+                                <a href="/profile/<%= review.author %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
+                                <a href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                                 <% if (review.createdAt) { %>
                                 <p class="productDescriptionText" style="text-align:center !important;" >
                                     <% switch(review.createdAt.getMonth()) {
@@ -323,11 +323,11 @@
                             <% } %>
                         </div>
                         
-                        <% if (index < product.reviews.length - 1) { %><hr><% } %>
+                        <% if (index < reviews.total - 1) { %><hr><% } %>
                     <% }); %>
                 <% } %>
-                <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString())) { %>
-                    <% if (product.reviews.length > 0) { %><hr><% } %>
+                <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
+                    <% if (reviews.total > 0) { %><hr><% } %>
                     <p class="productSubTitleText" >Write a Review</p>
                     <form action="/products/<%= product.id %>/reviews" method="POST">
                         <textarea class="textarea" name="review[body]" required></textarea>
@@ -351,9 +351,9 @@
                             <input class="button is-primary" type="submit">    
                         </div>
                     </form>
-                    <hr>
-                <% } %>
-            </div>
+                    <% } %>
+                </div>
+                <% if (reviewed===false) { %><hr><% } %>
         <p class="productSubTitleText">Similar products</p>
         <div class="column">    
             <!-- Add a few products from the same category -->

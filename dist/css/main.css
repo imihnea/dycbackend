@@ -369,6 +369,16 @@ hr{
     margin-left: -12px;
     margin-right: -12px;
 }
+
+.pagination{
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 2vh;
+}
+
+.paginationD{ 
+    margin-top: 4vh;
+}
 /* Content Ends */
 
 /* Footer Begins */

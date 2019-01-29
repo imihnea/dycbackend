@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 const Review = require('./review');
 const Schema = mongoose.Schema;
 

@@ -20,6 +20,8 @@ module.exports = {
 			return res.redirect(`/products/${product.id}/view`);
 		}
 		// create the review
+		req.body.review.product = req.params.id;
+		req.body.review.name = product.author.username;
 		req.body.review.author = req.user._id;
 		req.body.review.avatarUrl = req.user.avatar.url;
 		let review = await Review.create(req.body.review);
@@ -62,6 +64,8 @@ module.exports = {
 				return res.redirect(`/profile/${user.id}`);
 			}
 			// create the review
+			req.body.review.user = user._id;
+			req.body.review.name = user.username;
 			req.body.review.author = req.user._id;
 			req.body.review.avatarUrl = req.user.avatar.url;
 			let review = await Review.create(req.body.review);

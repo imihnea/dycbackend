@@ -1,0 +1,13 @@
+<div style="margin-left: 1vw;">
+    <% if(reviews.page - 1) { %>
+        <a class="button page" href="?page=<%= reviews.page - 1 %>">Prev</a>
+    <% } %>
+    <% for(let i = 1; i <= reviews.pages; i++) { %>
+        <a class="button page %>" href="?page=<%= i %>"
+                <%= i === reviews.page ? 'style=color:#000;' : '' %>
+            ><%= i %></a>
+    <% } %>
+    <% if((reviews.page + 1) <= reviews.pages) { %>
+        <a class="button page" href="?page=<%= reviews.page + 1 %>">Next</a>
+    <% } %>
+</div>

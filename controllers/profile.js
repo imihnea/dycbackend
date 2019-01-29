@@ -4,6 +4,7 @@
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
+const Review = require('../models/review');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -22,13 +23,30 @@ module.exports = {
           model: 'User',
         },
       });
+      const reviews = await Review.paginate({ user: req.params.id },{
+        sort: { createdAt: -1 },
+        populate: 'user',
+        page: req.query.page || 1,
+        limit: 5,
+      });
+      reviews.page = Number(reviews.page);
       const floorRating = user.calculateAvgRating();
       const products = await Product.paginate({ available: true, 'author.id': req.params.id }, {
         page: req.query.page || 1,
         limit: 10,
       });
       products.page = Number(products.page);
-      res.render('index/profile', { user, products, floorRating });
+      if (req.user) {
+        let reviewed = false;
+        reviews.docs.forEach((review) => {
+            if (review.author.toString() === req.user._id.toString()) {
+                reviewed = true;
+            }
+        });
+        res.render('index/profile', { user, products, floorRating, reviews, reviewed });
+      } else {
+        res.render('index/profile', {user, products, floorRating, reviews, reviewed: true});
+      }
     },
     // Profile Update
     async profileUpdate(req, res) {

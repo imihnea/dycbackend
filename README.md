@@ -10,7 +10,9 @@ Frontend:
 
     Low Priority:
 
-        Make everything responsive (see comments in css files)
+         Make deal page look like contact page
+
+         Make everything responsive (see comments in css files)
 
 
 Backend:
@@ -31,7 +33,6 @@ Backend:
       
       Reviews
                => Paginate reviews
-               => Disable product review for non-repeatable deals; create user review instead
         
       Categories => Add more in future
       Register => Add recaptcha to avoid spam

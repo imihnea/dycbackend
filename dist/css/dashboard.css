@@ -357,15 +357,7 @@ hr{
     display: none;
 }
 
-.pagination{
-    display: flex; 
-    justify-content: center; 
-    margin-bottom: 2vh;
-}
 
-.paginationD{ 
-    margin-top: 4vh;
-}
 
 .pagePad{
     padding-top: 1.7vh;

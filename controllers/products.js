@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Review = require('../models/review');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -19,8 +20,25 @@ module.exports = {
               model: 'User',
             },
         });
+        const reviews = await Review.paginate({ product: req.params.id },{
+            sort: { createdAt: -1 },
+            populate: 'product',
+            page: req.query.page || 1,
+            limit: 5,
+          });
+        reviews.page = Number(reviews.page);
         const floorRating = product.calculateAvgRating();
-        res.render('products/product_view', { product, floorRating });
+        if (req.user) {
+            let reviewed = false;
+            reviews.docs.forEach((review) => {
+                if (review.author.toString() === req.user._id.toString()) {
+                    reviewed = true;
+                }
+            });
+            res.render('products/product_view', { product, floorRating, reviews, reviewed });
+        } else {
+            res.render('products/product_view', {product, floorRating, reviews, reviewed: true});
+        }
     },
     postReport(req, res) {
       const output = `
