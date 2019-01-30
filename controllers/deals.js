@@ -141,7 +141,5 @@ module.exports = {
                 res.render('deals/deal_review_user', { user: req.user, seller: user, deal });
             }
         }
-    },
-
-    
+    },   
 };

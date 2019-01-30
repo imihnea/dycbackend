@@ -9,34 +9,34 @@ const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, 
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal } = middleware; // destructuring assignment
 
 // show deal
-router.get('/:id', isLoggedIn, asyncErrorHandler(getDeal));
+router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
 
 // cancel deal
-router.put('/:id/cancel', isLoggedIn, asyncErrorHandler(cancelDeal));
+router.put('/:id/cancel', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(cancelDeal));
 
 // accept deal
-router.put('/:id/accept', isLoggedIn, asyncErrorHandler(acceptDeal));
+router.put('/:id/accept', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(acceptDeal));
 
 // decline deal
-router.put('/:id/decline', isLoggedIn, asyncErrorHandler(declineDeal));
+router.put('/:id/decline', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(declineDeal));
 
 // complete deal
-router.put('/:id/complete', isLoggedIn, asyncErrorHandler(completeDeal));
+router.put('/:id/complete', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeDeal));
 
 // send refund request message
-router.put('/:id/refundRequest', isLoggedIn, asyncErrorHandler(refundRequest));
+router.put('/:id/refundRequest', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundRequest));
 
 // refund deal
-router.put('/:id/refund', isLoggedIn, asyncErrorHandler(refundDeal));
+router.put('/:id/refund', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeal));
 
 // deny refund request
-router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(refundDeny));
+router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeny));
 
 // review product
-router.get('/:id/review', isLoggedIn, asyncErrorHandler(reviewProduct));
+router.get('/:id/review', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
 
 setInterval(async () => {
     // get deals that need to be paid

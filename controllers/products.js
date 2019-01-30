@@ -96,10 +96,7 @@ module.exports = {
         // } else {
             // Security measure - can create another field in devtools
             if ( product.accepted[buyWith] ) {
-                if ( user.currency[buyWith] < product.price[buyWith] ) {
-                    req.flash('error', 'You do not have enough currency to purchase this product.');
-                    res.redirect('back');
-                } else {
+                if (( user.currency[buyWith] >= product.price[buyWith]) && (user.currency[buyWith]) ) {
                     // Create deal
                     let deal = {
                         product: {
@@ -136,7 +133,13 @@ module.exports = {
                     await user.save();
                     // Link chat to deal
                     res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                } else {
+                    req.flash('error', 'You do not have enough currency to purchase this product.');
+                    res.redirect('back');
                 }
+            } else {
+                req.flash('error', 'Something went wrong. Please try again.');
+                res.redirect('back');
             }
         // }
     }

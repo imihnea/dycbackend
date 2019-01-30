@@ -138,6 +138,10 @@ module.exports = {
       res.redirect('/dashboard/addresses');
     }
   },
+  // Show new product form
+  newProduct(req, res) {
+    res.render('dashboard/dashboard_new', {user: req.user, errors: req.session.errors});
+  },
   // Products New
   async productCreate(req, res) {
     if ( req.files.length === 0 ){

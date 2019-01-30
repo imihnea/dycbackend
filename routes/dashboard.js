@@ -12,11 +12,11 @@ const User = require('../models/user');
 const router = express.Router();
 
 const { getAddresses, addAddresses, topUp, withdraw, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
-        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex } = require('../controllers/dashboard');
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, checkUserproduct, asyncErrorHandler } = middleware; // destructuring assignment
+const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -89,9 +89,7 @@ router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
 
 // NEW - show form to create new product
-router.get('/new', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_new', { user: req.user, errors: req.session.errors });
-});
+router.get('/new', isLoggedIn, hasCompleteProfile, newProduct);
 
 // CREATE - add new product to DB
 router.post('/', isLoggedIn, upload.array('images', 5), asyncErrorHandler(productCreate));

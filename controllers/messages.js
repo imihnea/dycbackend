@@ -27,20 +27,13 @@ module.exports = {
             userid = chat.user2.id;
         }
         const user2 = await User.findById(userid);
-        res.render('messages/messages_msg', { chat: chat, user: req.user, user2: user2 });
+        res.render('messages/messages_msg', { chat, user: req.user, user2 });
     },
     // Update "read" field
     async updateMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
-        let userid = '';
-        if ( chat.user1.id.toString() !== req.user._id.toString() ) {
-            userid = chat.user1.id;
-        } else {
-            userid = chat.user2.id;
-        }
-        const user2 = await User.findById(userid);
-        chat.messages.forEach((message) => {
-            if ( message.sender.toString() === user2._id.toString() ) {
+        await chat.messages.forEach((message) => {
+            if ( message.sender.toString() !== req.user._id.toString() ) {
                 message.read = true;
             }
         });
@@ -49,15 +42,8 @@ module.exports = {
     },
     async updateMessagesDeal(req, res) {
         const chat = await Chat.findById( req.params.id );
-        let userid = '';
-        if ( chat.user1.id.toString() !== req.user._id.toString() ) {
-            userid = chat.user1.id;
-        } else {
-            userid = chat.user2.id;
-        }
-        const user2 = await User.findById(userid);
-        chat.messages.forEach((message) => {
-            if ( message.sender.toString() === user2._id.toString() ) {
+        await chat.messages.forEach((message) => {
+            if ( message.sender.toString() !== req.user._id.toString() ) {
                 message.read = true;
             }
         });
@@ -67,8 +53,8 @@ module.exports = {
     // Create Chat
     async newChat(req, res) {
         // Verify if this chat already exists
-        let chat = await Chat.find( { "user1.id": req.user._id, "product.id": req.params.id });
-        if ( chat == [] ) {
+        let chat = await Chat.findOne( { "user1.id": req.user._id, "product.id": req.params.id });
+        if ( chat ) {
             res.redirect(`/messages/${chat._id}`);
         } else {
             // Find the product
@@ -142,7 +128,7 @@ module.exports = {
     },
     async newMessageDeal(req, res) {
         // Find the chat
-        const chat = await Chat.findById( req.params.chatid );
+        const chat = await Chat.findById( req.params.id );
         // Create the new message
         const newMessage = {
             sender: req.user._id,
@@ -153,6 +139,5 @@ module.exports = {
         chat.messageCount += 1;
         await chat.save();
         res.redirect(`/deals/${req.params.dealid}`);
-    }
-    
+    },    
 };

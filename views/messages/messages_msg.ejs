@@ -105,13 +105,11 @@
                                 </div>
                             <% } %>
                         <% }); %>
-                        
-                        
                     </div>
                     <div class="bottomlv">
-                        <form action="<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
-                                <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
-                                <button class="button is-primary">Send</button>
+                        <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
+                            <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
+                            <button class="button is-primary">Send</button>
                         </form>
                     </div>
                 </div>

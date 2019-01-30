@@ -1,0 +1,231 @@
+.content-wrapper {
+    margin: 0 -15px;
+    min-width: 620px;
+  }
+
+  aside {
+    position: fixed;
+    overflow-y: auto;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid #4a4a4a;
+    background: black;
+  }
+  aside .facet-category-title {
+    font-size: 1.2em;
+    color: rgb(255, 205, 111);
+    margin: 0 0 8px;
+  }
+  aside .facet-wrapper {
+    padding-bottom: 12px;
+    border-bottom: solid 1px orange;
+    margin-bottom: 12px;
+    font-size: 0.87em;
+  }
+  aside .facet {
+    margin-bottom: 16px;
+  }
+  aside .facet-title {
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  aside .facet-item,
+  aside a {
+    color: orange;
+  }
+  aside .facet-item:hover,
+  aside a:hover {
+    color: #b32500;
+    text-decoration: none;
+  }
+  aside .facet-item.active,
+  aside a.active {
+    font-weight: bold;
+  }
+  aside .facet-item input,
+  aside a input {
+    margin-right: 4px;
+  }
+  aside .facet-name {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+  }
+  aside .facet-count {
+    margin-left: 4px;
+    color: #888;
+  }
+  
+  .results-wrapper {
+    padding: 70px 20px 10px 240px;
+  }
+  
+  #results-topbar {
+    display: block;
+    width: 100%;
+    line-height: 22px;
+  }
+  #results-topbar::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  #results-topbar .sort-by {
+    float: right;
+  }
+  #results-topbar label {
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+  #results-topbar #sort-by {
+    display: inline-block;
+  }
+  
+  #clear-refinements {
+    display: block;
+    margin-bottom: 16px;
+  }
+  #clear-refinements .ais-ClearRefinements-button,
+  #clear-refinements .ais-ClearRefinements-button:hover {
+    background-color: black;
+    border: 1px solid orange;
+    color: orange;
+    display: block;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  #clear-refinements .btn {
+    font-size: 13px;
+    padding: 0;
+  }
+  #clear-refinements .btn .ais-ClearRefinements-link > button {
+    margin: 6px 12px;
+  }
+  
+  #hits {
+    margin: 0 -0.5%;
+  }
+  #hits::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  
+  .ais-Hits-list {
+    margin-top: 0;
+    margin-left: 2rem;
+    margin-right: 1rem;
+  }
+  
+  .ais-Hits-item,
+  .ais-InfiniteHits-item,
+  .ais-InfiniteResults-item,
+  .ais-Results-item {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+  
+  .hit {
+    padding: 10px 20px 20px;
+    margin-bottom: 10px;
+    border-bottom: solid 1px orange;
+    border: solid 1px orange;
+    box-shadow: 0 0 3px orange;
+    position: relative;
+  }
+  .hit .product-picture-wrapper {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .hit .product-picture {
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0 auto;
+  }
+  .hit .product-picture img {
+    transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
+    height: 150px;
+    max-width: 100%;
+  }
+  .hit .product-desc-wrapper {
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .hit .product-name {
+    font-weight: bold;
+    color: orange;
+    font-size: 0.9em;
+    margin: 0 0 8px;
+    min-width: 120px;
+  }
+  .hit .product-type {
+    font-size: 0.8em;
+    margin: 0 0 10px;
+    color: #a2a2a2;
+  }
+  .hit .product-rating {
+    margin-bottom: 10px;
+  }
+  .hit .product-price {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: orange;
+    float: right;
+    letter-spacing: -1px;
+  }
+  .hit mark {
+    color: orange;
+    font-style: normal;
+    background-color: #ffbe61;
+  }
+  
+  .ais-RangeInput-submit {
+    display: block;
+    float: right;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    margin-left: 4px;
+    font-size: 10px;
+    line-height: 20px;
+    border: solid 1px #888;
+    border-radius: 50%;
+    text-align: center;
+    background: none;
+    color: orange;
+  }
+  
+  .ais-Panel-header {
+    margin: 4px 0;
+    clear: both;
+    padding: initial;
+    border-bottom: none;
+    color: #ffbe61;
+  }
+  
+  .ais-Panel-header h5 {
+    font-weight: bold;
+    text-transform: none;
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .ais-Stats-text {
+    padding-left: 50px;
+    font-size: 0.8em;
+    color: orange;
+  }
+
+  .input-group {
+    width: auto;
+  }

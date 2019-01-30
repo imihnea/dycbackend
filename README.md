@@ -6,6 +6,8 @@ Frontend:
 
     High Priority:
 
+         Transportation Fee
+
          Search result page
 
     Low Priority:
@@ -14,12 +16,15 @@ Frontend:
 
          Make everything responsive (see comments in css files)
 
+         Color Scheme
+
 
 Backend:
 
    High Priority:
 
       Dashboard => Add balance route
+                => Add transportation fees to new products
       Search bar => Routes and logic for search via category and all
 
    Low Priority:
@@ -30,17 +35,9 @@ Backend:
                => Settings
                   => connections
                => 2 Factor when withdrawing
-      
-      Reviews
-               => Paginate reviews
         
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
       Contact => Add recaptcha to avoid spam                        
       Logs => Log errors
            => Log deal status changes
-
-
-Security: 
-
-      Messages & Deals => Verify if the current user is supposed to take part

@@ -157,7 +157,7 @@
                 <% }); %>    
             </div>
             <div class="bottomlv">
-                <form action="/messages/<%= deal._id %>/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
+                <form action="/messages/<%= deal._id %>/<%= chat._id %>/sendMessageDeal?_method=PUT" method="POST" class="msgbox">
                     <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
                     <button class="button is-primary">Send</button>
                 </form>
