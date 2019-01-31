@@ -372,3 +372,28 @@ hr{
 .is-success{
     color: black !important;
 }
+
+.options{
+    border-style: double; 
+    border-width: 1px; 
+    border-radius: 5px; 
+    width: 260px;
+}
+
+.optionsUnchecked{
+    border-color: #bf9c5c;
+}
+
+.optionsChecked{
+    border-color: orange;
+}
+
+.optionsChecked > .column i, .optionsChecked > .column p {
+    color: orange !important;
+}
+
+.transportFee{
+    display: flex; 
+    justify-content: space-evenly; 
+    align-items: baseline;
+}

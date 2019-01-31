@@ -6,7 +6,7 @@ Frontend:
 
     High Priority:
 
-         Transportation Fee
+         Transportation Fee => Product page
 
          Search result page
 
