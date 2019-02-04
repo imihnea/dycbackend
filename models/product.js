@@ -15,6 +15,11 @@ const ProductSchema = new Schema({
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: String, default: "True" },
   repeatable: { type: Boolean, default: false },
+  deliveryOptions: { city: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }}, 
+                     state: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }},
+                     country: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }}, 
+                     worldwide: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }} 
+                    },
   createdAt: { type: Date, default: Date.now },
   nrBought: Number,
   feat_1: {
@@ -31,6 +36,9 @@ const ProductSchema = new Schema({
       ref: 'User',
     },
     username: String,
+    city: String,
+    country: String,
+    state: String
   },
   reviews: [
     {

@@ -159,40 +159,117 @@ module.exports = {
       const author = {
         id: req.user._id,
         username: req.user.username,
+        city: req.user.city,
+        state: req.user.state,
+        country: req.user.country
       };
       req.body.product.author = author;
-
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z ]+$/i).notEmpty();
+      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
       req.check('product[category]', 'Please choose a category.').notEmpty();
       req.check('product[description]', 'The product must have a valid description.').notEmpty();
+      req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+      req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+      req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+      req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+      
+      let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
+      let nrOptions = 0;
+      if (req.body.product.city === "true") {
+        req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        deliveryOptions.city.valid=true;
+        deliveryOptions.city.cost=req.body.product.cityTransport;
+        if (deliveryOptions.city.cost == "paid") {
+          req.check('product[cityTransportPercent]', 'The same city transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+          deliveryOptions.city.percent = req.body.product.cityTransportPercent;
+        } else {
+          deliveryOptions.city.percent = 0;
+        }
+        nrOptions += 1;
+      } else {
+        deliveryOptions.city.valid=false;
+        deliveryOptions.city.percent = 0;
+        deliveryOptions.city.cost = 'No delivery';
+      }
+      if (req.body.product.state === "true") {
+        req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        deliveryOptions.state.valid=true;
+        deliveryOptions.state.cost=req.body.product.stateTransport;
+        if (deliveryOptions.state.cost == "paid") {
+          req.check('product[stateTransportPercent]', 'The same state transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+          deliveryOptions.state.percent = req.body.product.stateTransportPercent;
+        } else {
+          deliveryOptions.state.percent = 0;
+        }
+        nrOptions += 1;
+      } else {
+        deliveryOptions.state.valid=false;
+        deliveryOptions.state.percent = 0;
+        deliveryOptions.state.cost = 'No delivery';
+      }
+      if (req.body.product.country === "true") {
+        req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        deliveryOptions.country.valid=true;
+        deliveryOptions.country.cost=req.body.product.countryTransport;
+        if (deliveryOptions.country.cost == "paid") {
+          req.check('product[countryTransportPercent]', 'The same country transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+          deliveryOptions.country.percent = req.body.product.countryTransportPercent;
+        } else {
+          deliveryOptions.country.percent = 0;
+        }
+        nrOptions += 1;
+      } else {
+        deliveryOptions.country.valid=false;
+        deliveryOptions.country.percent = 0;
+        deliveryOptions.country.cost = 'No delivery';
+      }
+      if (req.body.product.worldwide === "true") {
+        req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        deliveryOptions.worldwide.valid=true;
+        deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
+        if (deliveryOptions.worldwide.cost == "paid") {
+          req.check('product[worldwideTransportPercent]', 'The worldwide transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+          deliveryOptions.worldwide.percent = req.body.product.worldwideTransportPercent;
+        } else {
+          deliveryOptions.worldwide.percent = 0;
+        }
+        nrOptions += 1;
+      } else {
+        deliveryOptions.worldwide.valid=false;
+        deliveryOptions.worldwide.percent = 0;
+        deliveryOptions.worldwide.cost = 'No delivery';
+      }
+      if (nrOptions === 0) {
+          req.flash('error', 'The product must have a delivery method.');
+          res.redirect('back');
+      }
       let accepted = [];
       let price = [];
       if (req.body.product.acc_btc === "true") {
         req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[0]=true;
-        price[0]=req.body.product.btc_price;
+        price[0]=Number(req.body.product.btc_price);
       }
       if (req.body.product.acc_bch === "true") {
         req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[1]=true;
-        price[1]=req.body.product.bch_price;
+        price[1]=Number(req.body.product.bch_price);
       }
       if (req.body.product.acc_eth === "true") {
         req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[2]=true;
-        price[2]=req.body.product.eth_price;
+        price[2]=Number(req.body.product.eth_price);
       }
       if (req.body.product.acc_ltc === "true") {
         req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[3]=true;
-        price[3]=req.body.product.ltc_price;
+        price[3]=Number(req.body.product.ltc_price);
       }
       if (req.body.product.acc_dash === "true") {
         req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[4]=true;
-        price[4]=req.body.product.dash_price;
+        price[4]=Number(req.body.product.dash_price);
       }
       if ((accepted.length === 0 ) || (price.length === 0 )) {
         req.flash('error', 'Your product must have a price.');
@@ -212,6 +289,7 @@ module.exports = {
             price: price,
             author: author,
             accepted: accepted,
+            deliveryOptions: deliveryOptions
           };
           if (req.body.product.repeatable === "true") {
             newproduct.repeatable = req.body.product.repeatable;

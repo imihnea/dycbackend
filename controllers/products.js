@@ -35,9 +35,9 @@ module.exports = {
                     reviewed = true;
                 }
             });
-            res.render('products/product_view', { product, floorRating, reviews, reviewed });
+            res.render('products/product_view', { product, floorRating, reviews, reviewed, user: req.user });
         } else {
-            res.render('products/product_view', {product, floorRating, reviews, reviewed: true});
+            res.render('products/product_view', { product, floorRating, reviews, reviewed: true, user: false });
         }
     },
     postReport(req, res) {
@@ -90,13 +90,29 @@ module.exports = {
         const user  = await User.findById(req.user._id);
         const product = await Product.findById(req.params.id);
         const buyWith = req.body.currency;
+
+        // Unable to buy your own products - Uncomment after testing is done 
+
         // if ( user._id.toString() === product.author.id ) {
         //     req.flash('error', 'You cannot purchase your own product.');
         //     res.redirect('back');
         // } else {
             // Security measure - can create another field in devtools
             if ( product.accepted[buyWith] ) {
-                if (( user.currency[buyWith] >= product.price[buyWith]) && (user.currency[buyWith]) ) {
+                let totalPrice = product.price[buyWith];
+                if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) {
+                    totalPrice += product.price[buyWith]*product.deliveryOptions.city.percent/100;
+                } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) {
+                    totalPrice += product.price[buyWith]*product.deliveryOptions.state.percent/100;
+                } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) {
+                    totalPrice += product.price[buyWith]*product.deliveryOptions.state.percent/100;
+                } else if (product.deliveryOptions.worldwide.valid === true) {
+                    totalPrice += product.price[buyWith]*product.deliveryOptions.worldwide.percent/100;
+                } else {
+                    req.flash('error', 'The seller does not deliver in your area.');
+                    res.redirect('back');
+                }
+                if (( user.currency[buyWith] >= totalPrice) && (user.currency[buyWith]) ) {
                     // Create deal
                     let deal = {
                         product: {
@@ -113,11 +129,11 @@ module.exports = {
                             avatarUrl: user.avatar.url
                         },
                         boughtWith: buyWith,
-                        price: product.price[buyWith]
+                        price: totalPrice
                     };
                     deal = await Deal.create(deal); 
                     // Update product and user
-                    user.currency[buyWith] -= product.price[buyWith];
+                    user.currency[buyWith] -= totalPrice;
                     // The product will remain available if it's repeatable
                     if ( !product.repeatable ) {
                         product.available = "Closed";

@@ -129,35 +129,75 @@
                     <% if ((chat.product.price[0] != 0) && (chat.product.accepted[0])) { %>
                         <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            <p class="price_text"> <%= chat.product.price[0] %></p>
+                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
+                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
+                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
+                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% } %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[1] != 0) && (chat.product.accepted[1])) {
                     %>
                         <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                            <p class="price_text"> <%= chat.product.price[1] %></p>
+                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
+                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
+                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
+                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                <%= product.price[1] + product.price[1]*product.deliveryOptions.worldwide.percent/100 %>
+                            <% } %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[2] != 0) && (chat.product.accepted[2])) {
                     %>
                         <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                            <p class="price_text"> <%= chat.product.price[2] %></p>
+                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
+                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
+                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
+                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                <%= product.price[2] + product.price[2]*product.deliveryOptions.worldwide.percent/100 %>
+                            <% } %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[3] != 0) && (chat.product.accepted[3])) {
                     %>
                         <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                            <p class="price_text"> <%= chat.product.price[3] %></p>
+                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
+                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
+                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
+                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                <%= product.price[3] + product.price[3]*product.deliveryOptions.worldwide.percent/100 %>
+                            <% } %></p>
                         </div>
                     <% } 
                         if ((chat.product.price[4] != 0) && (chat.product.accepted[4])) {
                     %>
                         <div class="prices msgPrices">
                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                            <p class="price_text"> <%= chat.product.price[4] %></p>
+                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>
+                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
+                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
+                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                <%= product.price[4] + product.price[4]*product.deliveryOptions.worldwide.percent/100 %>
+                            <% } %></p>
                         </div>
                     <% } %>
                     <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>

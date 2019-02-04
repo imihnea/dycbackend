@@ -27,7 +27,14 @@ module.exports = {
             userid = chat.user2.id;
         }
         const user2 = await User.findById(userid);
-        res.render('messages/messages_msg', { chat, user: req.user, user2 });
+        let buyer;
+        if (chat.user1.id.toString() === req.user._id.toString()) {
+            buyer = req.user;
+        } else {
+            buyer = user2;
+        }
+        const product = await Product.findById(chat.product.id);
+        res.render('messages/messages_msg', { chat, user: req.user, user2, buyer, product });
     },
     // Update "read" field
     async updateMessages(req, res) {

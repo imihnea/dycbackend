@@ -6,8 +6,6 @@ Frontend:
 
     High Priority:
 
-         Transportation Fee => Product page
-
          Search result page
 
     Low Priority:
@@ -35,7 +33,6 @@ Backend:
                => Settings
                   => connections
                => 2 Factor when withdrawing
-        
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
       Contact => Add recaptcha to avoid spam                        

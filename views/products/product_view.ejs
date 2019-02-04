@@ -72,6 +72,19 @@
                     <% if (product.images[4]) { %>
                     <img class="mainImg hiddenImg" src="<%= product.images[4].url %>"/>
                     <% } %>
+                    <img class="mImg"  src="<%= product.images[0].url %>"/>
+                    <% if (product.images[1]) { %>
+                    <img class="mImg noDisp" src="<%= product.images[1].url %>"/>
+                    <% } %>
+                    <% if (product.images[2]) { %>
+                    <img class="mImg noDisp" src="<%= product.images[2].url %>"/>
+                    <% } %>
+                    <% if (product.images[3]) { %>
+                    <img class="mImg noDisp" src="<%= product.images[3].url %>"/>
+                    <% } %>
+                    <% if (product.images[4]) { %>
+                    <img class="mImg noDisp" src="<%= product.images[4].url %>"/>
+                    <% } %>
                 </div>
             </div>
             <div class="column is-one-quarter">
@@ -89,89 +102,142 @@
                     <% } %>
                 <% } %>
                 <p style="color: orange;"><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
-                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
-                    <% if (product.accepted[0]) { %>
-                        <div class="prices openPrices">
-                            <p class="price_text"> <%= product.price[0] %></p>
-                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                        </div>
-                    <% } 
-                        if (product.accepted[1]) {
-                    %>
-                        <div class="prices openPrices">
-                            <p class="price_text"> <%= product.price[1] %></p>
-                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                        </div>
-                    <% } 
-                        if (product.accepted[2]) {
-                    %>
-                        <div class="prices openPrices">
-                            <p class="price_text"> <%= product.price[2] %></p>
-                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                        </div>
-                    <% } 
-                        if (product.accepted[3]) {
-                    %>
-                        <div class="prices openPrices">
-                            <p class="price_text"> <%= product.price[3] %></p>
-                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                        </div>
-                    <% } 
-                        if (product.accepted[4]) {
-                    %>
-                        <div class="prices openPrices">
-                            <p class="price_text"> <%= product.price[4] %></p>
-                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                        </div>
-                    <% } %>
-                </div>
-                <p style="color: orange !important;"><sub>Transportation cost: TBD</sub></p>
-                <br>
-               
-                <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST">
-                    
-                    <% if (product.accepted[0]) { %>
-                        <label class="img-check ">
-                            <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="cccy gray" id="btcimg">
-                            <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
-                        </label>
-                    <% } %>
-                    <% if (product.accepted[1]) { %>
-                        <label class="img-check ">
-                            <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="cccy gray" id="bchimg">
-                            <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1">
-                        </label>
-                    <% } %>
-                    <% if (product.accepted[2]) { %>
-                        <label class="img-check ">
-                            <img src="../../dist/img/ethereum.png" alt="ethereum" class="cccy gray" id="ethimg">
-                            <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2">
-                        </label>
-                    <% } %>
-                    <% if (product.accepted[3]) { %>
-                        <label class="img-check ">
-                            <img src="../../dist/img/litecoin.png" alt="Litecoin" class="cccy gray" id="ltcimg">
-                            <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3">
-                        </label>
-                    <% } %>
-                    <% if (product.accepted[4]) { %>
-                        <label class="img-check ">
-                            <img src="../../dist/img/dash.png" alt="DASH" class="cccy gray" id="dashimg">
-                            <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4">
-                        </label>
-                    <% } %>
+                <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                    <div class="column prod_info" style="padding: 0;">
+                        <% if (product.accepted[0]) { %>
+                            <label class="img-check ">
+                                <div class="prices openPrices">
+                                    <p class="price_text">
+                                        <% if (user) { %>
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
+                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                                <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                            <% } %>
+                                        <% } else { %>
+                                            <%= product.price[0] %>
+                                        <% } %>
+                                    </p>
+                                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                </div>
+                                
+                                <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
+                            </label>
+                        <% } 
+                        if (product.accepted[1]) { %>
+                            <label class="img-check">
+                                <div class="prices openPrices">
+                                    <p class="price_text">      
+                                        <% if(user) { %>                          
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
+                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.worldwide.percent/100 %>
+                                            <% } %>
+                                        <% } else { %>
+                                            <%= product.price[1] %>
+                                        <% } %>
+                                </p>
+                                    <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                </div>
+                                
+                                <input id="bch-check" type="radio" name="currency" class="curr_checkbox" value="1">
+                            </label>
+                        <% } 
+                        if (product.accepted[2]) { %>
+                            <label class="img-check">
+                                <div class="prices openPrices">
+                                    <p class="price_text">
+                                        <% if(user) { %>
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
+                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.worldwide.percent/100 %>
+                                            <% } %>
+                                        <% } else { %>
+                                            <%= product.price[2] %>
+                                        <% } %>
+                                    </p>
+                                    <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                </div>
 
-                    <div class="control smmargin">
-                        <button class="button is-primary">Buy</button>
+                                <input id="eth-check" type="radio" name="currency" class="curr_checkbox" value="2">
+                            </label>
+                        <% } 
+                            if (product.accepted[3]) { %>
+                                <label class="img-check">
+                                    <div class="prices openPrices">
+                                        <p class="price_text">
+                                            <% if(user) { %>
+                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
+                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
+                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
+                                                <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.worldwide.percent/100 %>
+                                                <% } %>
+                                            <% } else { %>
+                                                <%= product.price[3] %>
+                                            <% } %>
+                                        </p>
+                                        <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                    </div>
+                                
+                                    <input id="ltc-check" type="radio" name="currency" class="curr_checkbox" value="3">
+                                </label>
+                        <% } 
+                            if (product.accepted[4]) { %>
+                                <label class="img-check">
+                                    <div class="prices openPrices">
+                                        <p class="price_text">
+                                            <% if(user) { %>
+                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>
+                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
+                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
+                                                <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.worldwide.percent/100 %>
+                                                <% } %>
+                                            <% } else { %>
+                                                <%= product.price[4] %>
+                                            <% } %>
+                                        </p>
+                                        <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                    </div>
+
+                                    <input id="dash-check" type="radio" name="currency" class="curr_checkbox" value="4">
+                                </label>
+                        <% } %>
                     </div>
+                    <p style="color: orange !important;"><sub>Transportation costs included</sub></p>
+                    <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
+                    <br>   
+                    <button class="button is-primary" id="buyBtn" disabled>Buy</button>
+                    
                 </form>
                 <div style="margin-top: 1vh;">
                     <form action="/messages/<%= product._id %>/createChat" method="POST">
                         <button class="productContactLink button is-primary">Contact</button>
                     </form>
                 </div>
-            </div>  
-        </div>
+            </div>                
+        </div>  
         <hr>
         <div class="column">
             <p class="productSubTitleText">Description</p>
@@ -179,181 +245,180 @@
             <p class="productDescriptionText" ><%= product.description %></p>
         </div> 
         <hr>
-
-            <div class="column">
-                <% if (reviews.total > 0) { %>
-                    <p class="productSubTitleText">Reviews</p>
-                    <br>
-                    <!-- display all reviews -->
-                    <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
-                    <% reviews.docs.forEach(function(review, index) { %>
-                        <div class="columns container is-fluid" style="display: flex;
-                        border-style: solid;
-                        border-width: 1px;
-                        border-color: orange;
-                        margin-bottom: 1vh;
-                        padding: 2%;
-                        border-radius: 10px;">
-                            <div>
-                                <!-- TODO: Add user avatar url to review.author -->
-                                <a href="/profile/<%= review.author %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
-                                <a href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
-                                <% if (review.createdAt) { %>
-                                <p class="productDescriptionText" style="text-align:center !important;" >
-                                    <% switch(review.createdAt.getMonth()) {
-                                        case (0) : { %>
-                                        Jan
-                                        <% break; }%>
-                                        <% case (1) :{ %>
-                                        Feb
-                                        <% break; } %>
-                                        <% case (2) :{ %>
-                                        Mar
-                                        <% break; } %>
-                                        <% case (3) :{ %>
-                                        Apr
-                                        <% break; } %>
-                                        <% case (4) :{ %>
-                                        May
-                                        <% break; } %>
-                                        <% case (5) :{ %>
-                                        Jun
-                                        <% break; } %>
-                                        <% case (6) :{ %>
-                                        Jul
-                                        <% break; } %>
-                                        <% case (7) :{ %>
-                                        Aug
-                                        <% break; } %>
-                                        <% case (8) :{ %>
-                                        Sep 
-                                        <% break; } %>
-                                        <% case (9) :{ %>
-                                        Oct
-                                        <% break; } %>
-                                        <% case (10) :{ %>
-                                        Nov
-                                        <% break; } %>
-                                        <% case (11) :{ %>
-                                        Dec
-                                        <% break; } %>
-                                        <% default: { break; }%>
-                                    <% } %>
-                                    <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
-                                    <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
+        <div class="column">
+            <% if (reviews.total > 0) { %>
+                <p class="productSubTitleText">Reviews</p>
+                <br>
+                <!-- display all reviews -->
+                <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
+                <% reviews.docs.forEach(function(review, index) { %>
+                    <div class="columns container is-fluid" style="display: flex;
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: orange;
+                    margin-bottom: 1vh;
+                    padding: 2%;
+                    border-radius: 10px;">
+                        <div>
+                            <!-- TODO: Add user avatar url to review.author -->
+                            <a href="/profile/<%= review.author %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
+                            <a href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
+                            <% if (review.createdAt) { %>
+                            <p class="productDescriptionText" style="text-align:center !important;" >
+                                <% switch(review.createdAt.getMonth()) {
+                                    case (0) : { %>
+                                    Jan
+                                    <% break; }%>
+                                    <% case (1) :{ %>
+                                    Feb
+                                    <% break; } %>
+                                    <% case (2) :{ %>
+                                    Mar
+                                    <% break; } %>
+                                    <% case (3) :{ %>
+                                    Apr
+                                    <% break; } %>
+                                    <% case (4) :{ %>
+                                    May
+                                    <% break; } %>
+                                    <% case (5) :{ %>
+                                    Jun
+                                    <% break; } %>
+                                    <% case (6) :{ %>
+                                    Jul
+                                    <% break; } %>
+                                    <% case (7) :{ %>
+                                    Aug
+                                    <% break; } %>
+                                    <% case (8) :{ %>
+                                    Sep 
+                                    <% break; } %>
+                                    <% case (9) :{ %>
+                                    Oct
+                                    <% break; } %>
+                                    <% case (10) :{ %>
+                                    Nov
+                                    <% break; } %>
+                                    <% case (11) :{ %>
+                                    Dec
+                                    <% break; } %>
+                                    <% default: { break; }%>
                                 <% } %>
-                            </div>
-                            
-                            <div style="padding-left: 2vw; max-width: 80%;">
-                                <div style="float: left;"><%  
-                                    let i = 0;
-                                    for(i; i < review.rating; i++) { %>
-                                    <!-- display a full star -->
-                                    <i class="fas fa-star" style="color: orange;"></i>
-                                <% } %>
-                                <% for(i; i < 5; i++) { %>
-                                        <!-- display an empty star -->
-                                        <i class="far fa-star" style="color: orange;"></i>
-                                <% } %>
-                                </div>
-                                <br>
-                                <p class="productDescriptionText" style="margin-top: 1vh;" ><%= review.body %></p>
-                            </div>
-                            <% if(currentUser){ %>
-                                <% if(review.author.equals(currentUser._id)) { %>
-                                <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
-                                    <button class="button is-primary edit">Edit</button>
-                                    <div class="modal modalEdit">
-                                        <div class="modal-background"></div>
-                                            <div class="modal-card">
-                                                <header class="modal-card-head">
-                                                    <p class="modal-card-title">Edit Review</p>
-                                                    <button class="delete deleteEdit" aria-label="close"></button>
-                                                </header>
-                                                <section class="modal-card-foot" style="display: block;">
-                                                    <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
-                                                        <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
-                                                        <fieldset class="starability-basic" style="    margin-top: 1vh;
-                                                        margin-bottom: 1vh;
-                                                        margin-left: auto;
-                                                        margin-right: auto;">
-                                                            <legend>Rating:</legend>
-                                                            <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                                                            <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
-                                                            <label for="edit-rate1" title="Terrible">1 star</label>
-                                                            <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
-                                                            <label for="edit-rate2" title="Not good">2 stars</label>
-                                                            <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
-                                                            <label for="edit-rate3" title="Average">3 stars</label>
-                                                            <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
-                                                            <label for="edit-rate4" title="Very good">4 stars</label>
-                                                            <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
-                                                            <label for="edit-rate5" title="Amazing">5 stars</label>
-                                                        </fieldset>
-                            
-                                                        <input class="button is-primary" type="submit" value="Update">
-                                                    </form>
-                                                </section>
-                                            </div>
-                                    </div>
-
-                                    <script>
-                                        $('#edit-rate<%= review.rating %>').prop('checked', true);
-                                    </script>
-            
-                                    <button class="button is-danger del">Delete</button>
-                                    <div class="modal modalDelete">
-                                        <div class="modal-background"></div>
-                                            <div class="modal-card">
-                                                <header class="modal-card-head">
-                                                    <p class="modal-card-title">Are you sure?</p>
-                                                    <button class="delete deleteDelete" aria-label="close"></button>
-                                                </header>
-                                                <section class=" modal-card-foot" style="display: block;">
-                                                    <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                                    <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
-                                                        <input class="button is-danger noborder" type="submit" value="Delete">
-                                                    </form>
-                                                </section>
-                                            </div>
-                                    </div>
-
-                                </div>
-                                <% } %>
+                                <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
+                                <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
                             <% } %>
                         </div>
                         
-                        <% if (index < reviews.total - 1) { %><hr><% } %>
-                    <% }); %>
-                <% } %>
-                <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                    <% if (reviews.total > 0) { %><hr><% } %>
-                    <p class="productSubTitleText" >Write a Review</p>
-                    <form action="/products/<%= product.id %>/reviews" method="POST">
-                        <textarea class="textarea" name="review[body]" required></textarea>
-                        <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                            <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
-                                <fieldset class="starability-basic" style="margin: auto;">
-                                    <legend class="productDescriptionText">Rating:</legend>
-                                    <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                                    <input type="radio" id="rate1" name="review[rating]" value="1" />
-                                    <label for="rate1" title="Terrible">1 star</label>
-                                    <input type="radio" id="rate2" name="review[rating]" value="2" />
-                                    <label for="rate2" title="Not good">2 stars</label>
-                                    <input type="radio" id="rate3" name="review[rating]" value="3" />
-                                    <label for="rate3" title="Average">3 stars</label>
-                                    <input type="radio" id="rate4" name="review[rating]" value="4" />
-                                    <label for="rate4" title="Very good">4 stars</label>
-                                    <input type="radio" id="rate5" name="review[rating]" value="5" />
-                                    <label for="rate5" title="Amazing">5 stars</label>
-                                </fieldset>
+                        <div style="padding-left: 2vw; max-width: 80%;">
+                            <div style="float: left;"><%  
+                                let i = 0;
+                                for(i; i < review.rating; i++) { %>
+                                <!-- display a full star -->
+                                <i class="fas fa-star" style="color: orange;"></i>
+                            <% } %>
+                            <% for(i; i < 5; i++) { %>
+                                    <!-- display an empty star -->
+                                    <i class="far fa-star" style="color: orange;"></i>
+                            <% } %>
                             </div>
-                            <input class="button is-primary" type="submit">    
+                            <br>
+                            <p class="productDescriptionText" style="margin-top: 1vh;" ><%= review.body %></p>
                         </div>
-                    </form>
-                    <% } %>
-                </div>
-                <% if (reviewed===false) { %><hr><% } %>
+                        <% if(currentUser){ %>
+                            <% if(review.author.equals(currentUser._id)) { %>
+                            <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
+                                <button class="button is-primary edit">Edit</button>
+                                <div class="modal modalEdit">
+                                    <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Edit Review</p>
+                                                <button class="delete deleteEdit" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-foot" style="display: block;">
+                                                <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                                                    <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
+                                                    <fieldset class="starability-basic" style="    margin-top: 1vh;
+                                                    margin-bottom: 1vh;
+                                                    margin-left: auto;
+                                                    margin-right: auto;">
+                                                        <legend>Rating:</legend>
+                                                        <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                                                        <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
+                                                        <label for="edit-rate1" title="Terrible">1 star</label>
+                                                        <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
+                                                        <label for="edit-rate2" title="Not good">2 stars</label>
+                                                        <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
+                                                        <label for="edit-rate3" title="Average">3 stars</label>
+                                                        <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
+                                                        <label for="edit-rate4" title="Very good">4 stars</label>
+                                                        <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
+                                                        <label for="edit-rate5" title="Amazing">5 stars</label>
+                                                    </fieldset>
+                        
+                                                    <input class="button is-primary" type="submit" value="Update">
+                                                </form>
+                                            </section>
+                                        </div>
+                                </div>
+
+                                <script>
+                                    $('#edit-rate<%= review.rating %>').prop('checked', true);
+                                </script>
+        
+                                <button class="button is-danger del">Delete</button>
+                                <div class="modal modalDelete">
+                                    <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Are you sure?</p>
+                                                <button class="delete deleteDelete" aria-label="close"></button>
+                                            </header>
+                                            <section class=" modal-card-foot" style="display: block;">
+                                                <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
+                                                <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                                    <input class="button is-danger noborder" type="submit" value="Delete">
+                                                </form>
+                                            </section>
+                                        </div>
+                                </div>
+
+                            </div>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    
+                    <% if (index < reviews.total - 1) { %><hr><% } %>
+                <% }); %>
+            <% } %>
+            <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
+                <% if (reviews.total > 0) { %><hr><% } %>
+                <p class="productSubTitleText" >Write a Review</p>
+                <form action="/products/<%= product.id %>/reviews" method="POST">
+                    <textarea class="textarea" name="review[body]" required></textarea>
+                    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                        <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
+                            <fieldset class="starability-basic" style="margin: auto;">
+                                <legend class="productDescriptionText">Rating:</legend>
+                                <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                                <label for="rate1" title="Terrible">1 star</label>
+                                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                                <label for="rate2" title="Not good">2 stars</label>
+                                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                                <label for="rate3" title="Average">3 stars</label>
+                                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                                <label for="rate4" title="Very good">4 stars</label>
+                                <input type="radio" id="rate5" name="review[rating]" value="5" />
+                                <label for="rate5" title="Amazing">5 stars</label>
+                            </fieldset>
+                        </div>
+                        <input class="button is-primary" type="submit">    
+                    </div>
+                </form>
+                <% } %>
+        </div>
+        <% if ((reviewed===false) && (currentUser._id.toString() !== product.author.id.toString())) { %><hr><% } %>
         <p class="productSubTitleText">Similar products</p>
         <div class="column">    
             <!-- Add a few products from the same category -->
@@ -378,7 +443,6 @@
                                 <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
                                 <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
                             </div>
-                             
                         </div> 
                     </a>                       
                 </div>
@@ -402,7 +466,6 @@
                                 <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
                                 <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
                             </div>
-                             
                         </div> 
                     </a>                       
                 </div>
@@ -426,7 +489,6 @@
                                 <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
                                 <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
                             </div>
-                             
                         </div> 
                     </a>                       
                 </div>
@@ -450,13 +512,13 @@
                                 <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
                                 <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
                             </div>
-                             
                         </div> 
                     </a>                       
                 </div>
             </div>
         </div>
     </div>    
-</div> 
+</div>
+
 
 <% include ../partials/footer %>

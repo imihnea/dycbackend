@@ -3,21 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const thumbnailItems = [].slice.call(thumbnails);
   const main = document.querySelectorAll('.mainImg');
   const mainItems = [].slice.call(main);
+  const heightImgs = document.querySelectorAll('.mImg');
+  const heightItems = [].slice.call(heightImgs);
   thumbnailItems.forEach((item, i) => {
     item.addEventListener('click', (event) => {
       event.stopPropagation();
       for (let j = 0; j < mainItems.length; j += 1) {
         if (!mainItems[j].classList.contains('hiddenImg')) {
           mainItems[j].classList.add('hiddenImg');
+          heightItems[j].classList.add('noDisp');
         }
       }
       mainItems[i].classList.remove('hiddenImg');
+      heightItems[i].classList.remove('noDisp');
     });
   });
 
   const editOpenButtons = document.querySelectorAll('.edit');
   const editCloseButtons = document.querySelectorAll('.deleteEdit');
-  const editCancelButtons = document.querySelectorAll('.cancelEdit');
   const editModals = document.querySelectorAll('.modalEdit');
   const editOpenButtonItems = [].slice.call(editOpenButtons);
   const editCloseButtonItems = [].slice.call(editCloseButtons);
@@ -37,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const deleteOpenButtons = document.querySelectorAll('.del');
   const deleteCloseButtons = document.querySelectorAll('.deleteDelete');
-  const deleteCancelButtons = document.querySelectorAll('.cancelDelete');
   const deleteModals = document.querySelectorAll('.modalDelete');
   const deleteOpenButtonItems = [].slice.call(deleteOpenButtons);
   const deleteCloseButtonItems = [].slice.call(deleteCloseButtons);

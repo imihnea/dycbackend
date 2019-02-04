@@ -1,16 +1,32 @@
 .slider{
 	position: relative;
+	/* height: 55vh; */
 }
 
-.slider>img{
-	position: absolute;
+.mainImg{
+	position:absolute;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
 	top: 0;
 	max-width: 50vw;
-    max-height: 39vh;
+    max-height: 55vh;
+}
+
+.mImg{
+	position: relative;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+	top: 0;
+	max-width: 50vw;
+	max-height: 55vh;
+}
+
+.noDisp{
+	display: none;
 }
 
 .hiddenImg{
@@ -54,25 +70,10 @@
 	transform: scale(1);
 }
 
-/* .card{
-	background-color: transparent !important;
-	border-style: double !important;
-    border-radius: 5px !important;
-    border-color: orange !important;
-}
-*/
-
-
-/*.productUserText{
-	margin-bottom: 2vh;
-	color: orange !important;
+.currency-input{
+    display: none;
 }
 
-.productUserLink{
-	color: darkseagreen !important;
+.pricesChecked {
+	background-color: rgb(68, 40, 4);
 }
-
-.productContactLink{
-	position: relative;
-	top: 1vh;
-} */
