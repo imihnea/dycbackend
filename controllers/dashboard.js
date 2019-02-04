@@ -11,6 +11,11 @@ const feature1_time = 60000;
 const feature2_time = 120000;
 const feature1_cost = -5;
 const feature2_cost = -15;
+const tokenPrices = [/* BTC */ 0.5,
+                    /* BCH */ 1,
+                    /* ETH */ 2,
+                    /* LTC */ 3,
+                    /* DASH */ 4];
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -136,6 +141,37 @@ module.exports = {
     } else {
       req.flash('error', 'The inputted value exceeds the value present in your account. Please try again.');
       res.redirect('/dashboard/addresses');
+    }
+  },
+  // Get tokens page
+  getTokens(req, res) {
+    res.render('dashboard/dashboard_tokens', { user: req.user, tokenPrices, errors: req.session.errors });
+  },
+  // Buy Tokens
+  async buyTokens(req, res) {
+    const user = await User.findById(req.user._id);
+    req.check('tokensNr','The number of tokens must be an integer number.').matches(/^[0-9]+$/g).notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+        res.render('dashboard/dashboard_tokens', {
+          user: req.user,
+          tokenPrices,
+          errors: errors,
+        });
+    } else {
+        const tokens = Number(req.body.tokensNr);
+        const totalPrice = tokens * tokenPrices[req.params.id];
+        if (user.currency[req.params.id] >= totalPrice) {
+            user.currency[req.params.id] -= totalPrice;
+            user.feature_tokens += tokens;
+            user.markModified('currency');
+            await user.save();
+            req.flash('success', 'Tokens purchased successfully!');
+            res.redirect('back');
+        } else {
+            req.flash('error', 'Not enough currency.');
+            res.redirect('back');
+        }
     }
   },
   // Show new product form

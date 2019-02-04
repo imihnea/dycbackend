@@ -22,7 +22,6 @@ Backend:
    High Priority:
 
       Dashboard => Add balance route
-                => Add transportation fees to new products
       Search bar => Routes and logic for search via category and all
 
    Low Priority:

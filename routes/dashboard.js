@@ -11,7 +11,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const { getAddresses, addAddresses, topUp, withdraw, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
+const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
@@ -56,25 +56,10 @@ router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
 
 // Dashboard tokens route; gets current number of tokens
-router.get('/tokens', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard_tokens', { user: req.user });
-});
+router.get('/tokens', isLoggedIn, getTokens);
 
 // Buy tokens route
-router.post('/tokens/:id', isLoggedIn, (req, res) => {
-  const query = { _id: req.user._id };
-  // Currency id => used to decrease currency held by user
-  const id = req.params.id;
-  const tokens = req.body.tokens_nr;
-  User.findByIdAndUpdate(query, { $inc: { feature_tokens: tokens } }, (err) => {
-    if (err) {
-      req.flash('error', err.message);
-    } else {
-      req.flash('success', 'Successfully purchased tokens!');
-      res.redirect('/dashboard/tokens');
-    }
-  });
-});
+router.post('/tokens/:id', isLoggedIn, asyncErrorHandler(buyTokens));
 
 // Show all open offers
 router.get('/open', isLoggedIn, asyncErrorHandler(openProductIndex));
