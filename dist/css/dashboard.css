@@ -363,11 +363,7 @@ hr{
     padding-top: 1.7vh;
 }
 
-.openPrices{
-    width: 30% !important;
-    position: relative !important;
-    margin: auto !important;
-}
+
 
 .is-success{
     color: black !important;

@@ -109,14 +109,16 @@
                                 <div class="prices openPrices">
                                     <p class="price_text">
                                         <% if (user) { %>
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
                                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
-                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
+                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                                 <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                            <% } else { %>
+                                                <%= product.price[0] %>
                                             <% } %>
                                         <% } else { %>
                                             <%= product.price[0] %>
@@ -133,14 +135,16 @@
                                 <div class="prices openPrices">
                                     <p class="price_text">      
                                         <% if(user) { %>                          
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
                                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
-                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
-                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.worldwide.percent/100 %>
+                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
+                                                <%= product.price[1] + (product.price[1]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                            <% } else { %>
+                                                <%= product.price[1] %>
                                             <% } %>
                                         <% } else { %>
                                             <%= product.price[1] %>
@@ -157,14 +161,16 @@
                                 <div class="prices openPrices">
                                     <p class="price_text">
                                         <% if(user) { %>
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
                                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
-                                            <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
-                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.worldwide.percent/100 %>
+                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
+                                                <%= product.price[2] + (product.price[2]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                            <% } else { %>
+                                                <%= product.price[2] %>
                                             <% } %>
                                         <% } else { %>
                                             <%= product.price[2] %>
@@ -181,14 +187,16 @@
                                     <div class="prices openPrices">
                                         <p class="price_text">
                                             <% if(user) { %>
-                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                                     <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
-                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
                                                     <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
-                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                                     <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
-                                                <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
-                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.worldwide.percent/100 %>
+                                                <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
+                                                    <%= product.price[3] + (product.price[3]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                <% } else { %>
+                                                    <%= product.price[3] %>
                                                 <% } %>
                                             <% } else { %>
                                                 <%= product.price[3] %>
@@ -205,14 +213,16 @@
                                     <div class="prices openPrices">
                                         <p class="price_text">
                                             <% if(user) { %>
-                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) { %> 
+                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                                     <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>
-                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) { %>
+                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
                                                     <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
-                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) { %>
+                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                                     <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
-                                                <% } else if (product.deliveryOptions.worldwide.valid === true ) { %>
-                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.worldwide.percent/100 %>
+                                                <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
+                                                    <%= product.price[4] + (product.price[4]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                <% } else { %>
+                                                    <%= product.price[4] %>
                                                 <% } %>
                                             <% } else { %>
                                                 <%= product.price[4] %>

@@ -282,30 +282,36 @@ module.exports = {
       }
       let accepted = [];
       let price = [];
+      let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
       if (req.body.product.acc_btc === "true") {
         req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[0]=true;
         price[0]=Number(req.body.product.btc_price);
+        btcPrice=price[0];
       }
       if (req.body.product.acc_bch === "true") {
         req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[1]=true;
         price[1]=Number(req.body.product.bch_price);
+        bchPrice=price[1];
       }
       if (req.body.product.acc_eth === "true") {
         req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[2]=true;
         price[2]=Number(req.body.product.eth_price);
+        ethPrice=price[2];
       }
       if (req.body.product.acc_ltc === "true") {
         req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[3]=true;
         price[3]=Number(req.body.product.ltc_price);
+        ltcPrice=price[3];
       }
       if (req.body.product.acc_dash === "true") {
         req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[4]=true;
         price[4]=Number(req.body.product.dash_price);
+        dashPrice=price[4];
       }
       if ((accepted.length === 0 ) || (price.length === 0 )) {
         req.flash('error', 'Your product must have a price.');
@@ -323,6 +329,11 @@ module.exports = {
             category: category,
             description: description,
             price: price,
+            btcPrice,
+            bchPrice,
+            ethPrice,
+            ltcPrice,
+            dashPrice,
             author: author,
             accepted: accepted,
             deliveryOptions: deliveryOptions
@@ -466,10 +477,12 @@ module.exports = {
     req.check('product[description]', 'The product must have a valid description.').notEmpty();
     let accepted = [];
     let price = [];
+    let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
     if (req.body.product.acc_btc === "true") {
       req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[0]=true;
       price[0]=req.body.product.btc_price;
+      btcPrice=price[0];
     }
     if (req.body.product.acc_btc === null) {
       accepted[0]=false;
@@ -478,6 +491,7 @@ module.exports = {
       req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[1]=true;
       price[1]=req.body.product.bch_price;
+      bchPrice=price[1];
     }
     if (req.body.product.acc_bch === null) {
       accepted[1]=false;
@@ -486,6 +500,7 @@ module.exports = {
       req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[2]=true;
       price[2]=req.body.product.eth_price;
+      ethPrice=price[2];
     }
     if (req.body.product.acc_eth === null) {
       accepted[2]=false;
@@ -494,6 +509,7 @@ module.exports = {
       req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[3]=true;
       price[3]=req.body.product.ltc_price;
+      ltcPrice=price[3];
     }
     if (req.body.product.acc_ltc === null) {
       accepted[3]=false;
@@ -502,6 +518,7 @@ module.exports = {
       req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[4]=true;
       price[4]=req.body.product.dash_price;
+      dashPrice=price[4];
     }
     if (req.body.product.acc_dash === null) {
       accepted[4]=false;
@@ -526,6 +543,11 @@ module.exports = {
         product.category = req.body.product.category;
         product.price = price;
         product.accepted = accepted;
+        product.btcPrice = btcPrice;
+        product.bchPrice = bchPrice;
+        product.ethPrice = ethPrice;
+        product.ltcPrice = ltcPrice;
+        product.dashPrice = dashPrice;
         // save the updated product into the db
         product.save();
         // redirect to show page

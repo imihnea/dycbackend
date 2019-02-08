@@ -100,13 +100,13 @@ module.exports = {
             // Security measure - can create another field in devtools
             if ( product.accepted[buyWith] ) {
                 let totalPrice = product.price[buyWith];
-                if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) {
+                if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) {
                     totalPrice += product.price[buyWith]*product.deliveryOptions.city.percent/100;
-                } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) {
+                } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) {
                     totalPrice += product.price[buyWith]*product.deliveryOptions.state.percent/100;
-                } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) {
+                } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) {
                     totalPrice += product.price[buyWith]*product.deliveryOptions.state.percent/100;
-                } else if (product.deliveryOptions.worldwide.valid === true) {
+                } else if ((product.deliveryOptions.worldwide.valid === true) && (product.deliveryOptions.worldwide.cost === 'paid')) {
                     totalPrice += product.price[buyWith]*product.deliveryOptions.worldwide.percent/100;
                 } else {
                     req.flash('error', 'The seller does not deliver in your area.');

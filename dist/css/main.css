@@ -379,6 +379,12 @@ hr{
 .paginationD{ 
     margin-top: 4vh;
 }
+
+.openPrices{
+    width: 30% !important;
+    position: relative !important;
+    margin: auto !important;
+}
 /* Content Ends */
 
 /* Footer Begins */
