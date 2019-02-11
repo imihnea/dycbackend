@@ -5,8 +5,6 @@ const router = express.Router();
 
 const multer = require('multer');
 
-const cloudinary = require('cloudinary');
-
 const { profileUpdate, getProfile } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');

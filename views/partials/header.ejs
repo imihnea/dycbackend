@@ -239,8 +239,11 @@
                 </div>
                 
             </div>
-            <div class="level-item">
-                <div class="input-group" id="searchbox"></div>
+            <div class="level-item input-group">
+                <form action="/search" method="POST" style="display: flex; width: 85%;">
+                    <input type="text" class="input" name="searchName" placeholder="Search for a product" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+                    <button class="button is-primary" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;">Search</button>
+                </form>
             </div>
             <div class="level-right navbar-end">
                 <% if(!currentUser){ %>
@@ -299,43 +302,6 @@
         </div>
     </nav>
 </div>
-
-<div id="results" class="container-fluid">  
-    <div class="content-wrapper">
-        <aside>
-            <div id="clear-refinements"></div>
-
-            <section class="facet-wrapper">
-                <div class="facet-category-title" class="facet">
-                Show results for
-                </div>
-                <div id="categories"></div>
-            </section>
-
-            <section class="facet-wrapper">
-                <div class="facet-category-title">Refine by</div>
-                <div id="types" class="facet"></div>
-                <div id="brands" class="facet"></div>
-                <div id="rating" class="facet"></div>
-                <div id="price" class="facet"></div>
-            </section>
-
-        </aside>
-
-        <div class="results-wrapper">
-            <section id="results-topbar">
-                <div class="sort-by"><div id="sort-by"></div></div>
-
-                <div id="stats" class="text-muted"></div>
-            </section>
-
-            <main id="hits"></main>
-            <section id="pagination"></section>
-        </div>
-    </div>
-</div>
-
-<div id="allpage"> <!-- this ends on footer to hide when something is searched -->
 
 <% if(error && error.length > 0) { %>
 <div class="container is-fluid">

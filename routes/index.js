@@ -27,7 +27,9 @@ const {
   get2factor,
   post2factor,
   postdisable2factor,
-  postVerifyLogin
+  postVerifyLogin,
+  postSearch,
+  filterSearch
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
@@ -67,6 +69,11 @@ router.get('/login', getLogin);
 
 //  POST login logic - test this in prod
 router.post('/login', postLogin);
+
+// POST Search
+router.post('/search', asyncErrorHandler(postSearch));
+
+router.post('/filterSearch', asyncErrorHandler(filterSearch));
 
 router.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));

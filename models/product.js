@@ -1,34 +1,34 @@
 const mongoose = require('mongoose');
-const mongooseAlgolia = require('mongoose-algolia');
+const mongoosastic = require('mongoosastic');
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 const Review = require('./review');
 
 
 const ProductSchema = new Schema({
-  name: String,
-  images: [{ url: String, public_id: String }],
-  category: String,
-  description: String,
-  status: String,
+  name: { type: String, es_indexed: true, es_type: 'text' },
+  images: [{ url: {type: String, es_indexed: true, es_type: 'text' }, public_id: String }],
+  category: { type: String, es_indexed: true, es_type: 'text' },
+  description: { type: String, es_indexed: true, es_type: 'text' },
+  status: { type: String, es_indexed: true, es_type: 'text' },
   price: { type: Array, default: [0, 0, 0, 0, 0] },
-  btcPrice: {type: Number, default: 0},
-  bchPrice: {type: Number, default: 0},
-  ethPrice: {type: Number, default: 0},
-  ltcPrice: {type: Number, default: 0},
-  dashPrice: {type: Number, default: 0},
+  btcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  bchPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  ethPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  ltcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  dashPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
-  available: { type: String, default: "True" },
+  available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
-  deliveryOptions: { city: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }}, 
-                     state: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }},
-                     country: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }}, 
-                     worldwide: {valid: {type: Boolean, default: false}, cost: String, percent: { type: Number, default: 0 }} 
+  deliveryOptions: { city: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }}, 
+                     state: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }},
+                     country: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }}, 
+                     worldwide: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }} 
                     },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now, es_indexed: true  },
   nrBought: Number,
   feat_1: {
-    status: { type: Boolean, default: false},
+    status: { type: Boolean, default: false, es_indexed: true },
     expiry_date: Date
   },
   feat_2: {
@@ -51,7 +51,7 @@ const ProductSchema = new Schema({
       ref: 'Review',
     },
   ],
-  avgRating: { type: Number, default: 0 },
+  avgRating: { type: Number, default: 0, es_indexed: true },
 });
 
 ProductSchema.pre('remove', async () => {
@@ -79,21 +79,37 @@ ProductSchema.methods.calculateAvgRating = function() {
 
 ProductSchema.plugin(mongoosePaginate);
 
-ProductSchema.plugin(mongooseAlgolia,{
-  appId: process.env.ALGOLIA_APP_ID,
-  apiKey: process.env.ALGOLIA_API_KEY,
-  indexName: 'instant_search', //The name of the index in Algolia, you can also pass in a function
-  selector: '-_id -status -available -repeatable -createdAt -nrBought -feat_1 -feat_2 -reviews', //You can decide which field that are getting synced to Algolia (same as selector in mongoose)
-  defaults: {
-    author: 'unknown',
-  },
-  debug: true// Default: false -> If true operations are logged out in your console
-});
+// For local ElasticSearch
+ProductSchema.plugin(mongoosastic);
 
-mongoose.model('Product', ProductSchema).SyncToAlgolia(); //Clears the Algolia index for this schema and synchronizes all documents to Algolia (based on the settings defined in your plugin settings)
-mongoose.model('Product', ProductSchema).SetAlgoliaSettings({
-  searchableAttributes: ['name','category','description', 'author'] //Sets the settings for this schema, see [Algolia's Index settings parameters](https://www.algolia.com/doc/api-client/javascript/settings#set-settings) for more info.
-});
+// For hosted ElasticSearch
+// ProductSchema.plugin(mongoosastic,{  
+//   host:"",
+//   port: ,
+//   protocol: "https",
+//   auth: "username:password",
+//   curlDebug: true
+// });
 
+mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
+  if (err) {
+    console.log('error creating mapping (you can safely ignore this)');
+    console.log(err);
+  } else {
+    console.log('mapping created!');
+    console.log(mapping);
+  }
+});
+let stream = mongoose.model('Product', ProductSchema).synchronize();
+let count = 0;
+stream.on('data', function(err, doc){
+  count++;
+});
+stream.on('close', function(){
+  console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+  console.log(err);
+});
 
 module.exports = mongoose.model('Product', ProductSchema);

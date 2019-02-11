@@ -3,12 +3,6 @@ const express = require('express');
 
 const multer = require('multer');
 
-const cloudinary = require('cloudinary');
-
-const product = require('../models/product');
-
-const User = require('../models/user');
-
 const router = express.Router();
 
 const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, productDestroy, productEdit, productUpdate, productFeature, 

@@ -229,6 +229,34 @@ module.exports = {
       res.redirect('back');
     });
   },
+  async postSearch(req, res) {
+    //TODO: validate searchName
+    await Product.search(
+      { "wildcard": { "name": `${req.body.searchName}*` } },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'None' });
+          }
+        }
+      );
+  },
+  async filterSearch(req, res) {
+    //TODO: validation
+    // _exists_:category if a category was not chosen - need to check if one was chosen and make
+    // another search statement if so
+    await Product.search(
+      { "bool": { "must": [{"wildcard": { "name": `${req.body.searchName}*` }}, {"match": { "category": `${req.body.category}`} }]}},
+      (err, products) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category });
+        }
+      }
+    );
+  },
   getReset(req, res) {
     User.findOne(
       {
