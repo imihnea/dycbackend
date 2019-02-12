@@ -7,6 +7,8 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div class="adr">
+                    <% include ../partials/paybear %>
+                    <button class="button is-primary" id="paybear-all">Pay with All Crypto</button>
                     <div class="currency"> 
                         <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
                     </div>
@@ -22,7 +24,7 @@
                                     <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                                 </div>
                                 <button class="button is-primary">Change Address</button>
-                            </form>    
+                            </form>
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
                                 <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.currency[0]) { %><%= user.currency[0] %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />

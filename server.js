@@ -57,6 +57,16 @@ const reviewsRoutesUser = require('./routes/reviewsusers');
 
 const dealsRoutes = require('./routes/deals');
 
+//Paybear 3 routes
+
+const callbackRoutes = require('./routes/callback');
+
+const currenciesRoutes = require('./routes/currencies');
+
+const getAddress = require('./routes/paybear').getAddress;
+
+const statusRoutes = require('./routes/status');
+
 // Gzip compression
 
 app.use(compression());
@@ -151,6 +161,9 @@ app.use((req, res, next) => {
 
 // refactored routes
 app.use('/', indexRoutes);
+app.use('/', callbackRoutes);
+app.use('/', currenciesRoutes);
+app.use('/', statusRoutes);
 app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes
 app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);
@@ -159,6 +172,7 @@ app.use('/messages', messagesRoutes);
 app.use('/products/:id/reviews', reviewsRoutes);
 app.use('/profile/:id/reviews', reviewsRoutesUser);
 app.use('/deals', dealsRoutes);
+
 
 // error 404 page
 app.get('*', (req, res) => {
