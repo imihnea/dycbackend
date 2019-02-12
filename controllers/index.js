@@ -237,25 +237,100 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'None' });
+            res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all' });
           }
         }
       );
   },
   async filterSearch(req, res) {
     //TODO: validation
-    // _exists_:category if a category was not chosen - need to check if one was chosen and make
-    // another search statement if so
-    await Product.search(
-      { "bool": { "must": [{"wildcard": { "name": `${req.body.searchName}*` }}, {"match": { "category": `${req.body.category}`} }]}},
-      (err, products) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category });
-        }
+    let tags = [];
+    if (req.body.currency) {
+      tags.push(req.body.currency);
+    }
+    if (tags.length > 0) {
+      if (req.body.category !== 'all') {
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.category}`}},
+              ],
+              "filter": [
+                { "terms": { "tags": tags }}
+              ]
+            }
+          },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: req.body.currency });
+            }
+          }
+        );
+      } else {
+        await Product.search(
+          { 
+            "bool": {
+              "must": [ 
+                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "match": { "category": "all" }},
+              ],
+              "filter": [
+                { "terms": { "tags": tags }}
+              ]
+            }
+          },
+            (err, products) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: req.body.currency });
+              }
+            }
+        );
       }
-    );
+    } else {
+      if (req.body.category !== 'all') {
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.category}` }},
+              ],
+            }
+          },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: req.body.currency });
+            }
+          }
+        );
+      } else {
+        await Product.search(
+          { 
+            "bool": {
+              "must": [ 
+                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "match": { "category": "all" }},
+              ],
+            }
+          },
+            (err, products) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: req.body.currency });
+              }
+            }
+        );
+      }
+    }
   },
   getReset(req, res) {
     User.findOne(

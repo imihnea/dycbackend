@@ -8,7 +8,7 @@
         <aside>
             <form action="/filterSearch" method="POST">
                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                <input type="radio" name="category" value="<% if (searchCateg !== 'None') { %> <%= searchCateg %> <% } else { %>None<% } %>" hidden>
+                <input type="radio" name="category" value="<% if (searchCateg !== 'all') { %> <%= searchCateg %> <% } else { %> all <% } %>" hidden checked>
                 <section class="facet-wrapper">
                     <div class="facet-category-title" class="facet">
                         Show results for
@@ -48,7 +48,29 @@
                     <div class="facet-category-title">Sort by</div>
                     <div class="sort-by">
                         <div id="sort-by">
-        
+                            <details>
+                                <div class="menu-item">
+                                    <input type="radio" name="currency" value="btc" id="btc">
+                                    <label for="btc">BTC</label>
+                                </div>
+                                <div class="menu-item">
+                                    <input type="radio" name="currency" value="bch" id="bch">
+                                    <label for="bch">BCH</label>
+                                </div>
+                                <div class="menu-item">
+                                    <input type="radio" name="currency" value="eth" id="eth">
+                                    <label for="eth">ETH</label>
+                                </div>
+                                <div class="menu-item">
+                                    <input type="radio" name="currency" value="ltc" id="ltc">
+                                    <label for="ltc">LTC</label>
+                                </div>
+                                <div class="menu-item">
+                                    <input type="radio" name="currency" value="dash" id="dash">
+                                    <label for="dash">DASH</label>
+                                </div>
+                                <summary>Accepted Currency</summary>
+                            </details>
                         </div>
                     </div>
                 </section>   

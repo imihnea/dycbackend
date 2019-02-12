@@ -192,6 +192,7 @@ module.exports = {
           public_id: image.public_id,
         });
       }
+      let tags = ["abcd"];
       const author = {
         id: req.user._id,
         username: req.user.username,
@@ -288,30 +289,35 @@ module.exports = {
         accepted[0]=true;
         price[0]=Number(req.body.product.btc_price);
         btcPrice=price[0];
+        tags.push('btc');
       }
       if (req.body.product.acc_bch === "true") {
         req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[1]=true;
         price[1]=Number(req.body.product.bch_price);
         bchPrice=price[1];
+        tags.push('bch');
       }
       if (req.body.product.acc_eth === "true") {
         req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[2]=true;
         price[2]=Number(req.body.product.eth_price);
         ethPrice=price[2];
+        tags.push('eth');
       }
       if (req.body.product.acc_ltc === "true") {
         req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[3]=true;
         price[3]=Number(req.body.product.ltc_price);
         ltcPrice=price[3];
+        tags.push('ltc');
       }
       if (req.body.product.acc_dash === "true") {
         req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
         accepted[4]=true;
         price[4]=Number(req.body.product.dash_price);
         dashPrice=price[4];
+        tags.push('dash');
       }
       if ((accepted.length === 0 ) || (price.length === 0 )) {
         req.flash('error', 'Your product must have a price.');
@@ -321,8 +327,7 @@ module.exports = {
           // people making fields in the DevTools
           const name = req.body.product.name;
           const description = req.body.product.description;
-          const category = req.body.product.category;
-          
+          const category = [ 'all', `${req.body.product.category}`];
           const newproduct = {
             name: name,
             images: req.body.product.images,
@@ -336,7 +341,8 @@ module.exports = {
             dashPrice,
             author: author,
             accepted: accepted,
-            deliveryOptions: deliveryOptions
+            deliveryOptions: deliveryOptions,
+            tags
           };
           if (req.body.product.repeatable === "true") {
             newproduct.repeatable = req.body.product.repeatable;
@@ -483,45 +489,75 @@ module.exports = {
       accepted[0]=true;
       price[0]=req.body.product.btc_price;
       btcPrice=price[0];
+      if (product.tags.indexOf('btc') === -1) {
+        product.tags.push('btc');
+      }
     }
     if (req.body.product.acc_btc === null) {
       accepted[0]=false;
+      if (product.tags.indexOf('btc') !== -1) {
+        product.tags.splice(product.tags.indexOf('btc'));
+      }
     }
     if (req.body.product.acc_bch === "true") {
       req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[1]=true;
       price[1]=req.body.product.bch_price;
       bchPrice=price[1];
+      if (product.tags.indexOf('bch') === -1) {
+        product.tags.push('bch');
+      }
     }
     if (req.body.product.acc_bch === null) {
       accepted[1]=false;
+      if (product.tags.indexOf('bch') !== -1) {
+        product.tags.splice(product.tags.indexOf('bch'));
+      }
     }
     if (req.body.product.acc_eth === "true") {
       req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[2]=true;
       price[2]=req.body.product.eth_price;
       ethPrice=price[2];
+      if (product.tags.indexOf('eth') === -1) {
+        product.tags.push('eth');
+      }
     }
     if (req.body.product.acc_eth === null) {
       accepted[2]=false;
+      if (product.tags.indexOf('eth') !== -1) {
+        product.tags.splice(product.tags.indexOf('eth'));
+      }
     }
     if (req.body.product.acc_ltc === "true") {
       req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[3]=true;
       price[3]=req.body.product.ltc_price;
       ltcPrice=price[3];
+      if (product.tags.indexOf('ltc') === -1) {
+        product.tags.push('ltc');
+      }
     }
     if (req.body.product.acc_ltc === null) {
       accepted[3]=false;
+      if (product.tags.indexOf('ltc') !== -1) {
+        product.tags.splice(product.tags.indexOf('ltc'));
+      }
     }
     if (req.body.product.acc_dash === "true") {
       req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
       accepted[4]=true;
       price[4]=req.body.product.dash_price;
       dashPrice=price[4];
+      if (product.tags.indexOf('dash') === -1) {
+        product.tags.push('dash');
+      }
     }
     if (req.body.product.acc_dash === null) {
       accepted[4]=false;
+      if (product.tags.indexOf('dash') !== -1) {
+        product.tags.splice(product.tags.indexOf('dash'));
+      }
     }
     if ((accepted.length === 0 ) || (price.length === 0 )) {
       req.flash('error', 'Your product must have a price.');
@@ -540,7 +576,7 @@ module.exports = {
         // update the product with any new properties
         product.name = req.body.product.name;
         product.description = req.body.product.description;
-        product.category = req.body.product.category;
+        product.category[1] = req.body.product.category;
         product.price = price;
         product.accepted = accepted;
         product.btcPrice = btcPrice;

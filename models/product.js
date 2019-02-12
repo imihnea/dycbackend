@@ -8,7 +8,7 @@ const Review = require('./review');
 const ProductSchema = new Schema({
   name: { type: String, es_indexed: true, es_type: 'text' },
   images: [{ url: {type: String, es_indexed: true, es_type: 'text' }, public_id: String }],
-  category: { type: String, es_indexed: true, es_type: 'text' },
+  category: { type: Array, es_indexed: true, es_type: 'text' },
   description: { type: String, es_indexed: true, es_type: 'text' },
   status: { type: String, es_indexed: true, es_type: 'text' },
   price: { type: Array, default: [0, 0, 0, 0, 0] },
@@ -25,10 +25,10 @@ const ProductSchema = new Schema({
                      country: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }}, 
                      worldwide: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }} 
                     },
-  createdAt: { type: Date, default: Date.now, es_indexed: true  },
+  createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
   nrBought: Number,
   feat_1: {
-    status: { type: Boolean, default: false, es_indexed: true },
+    status: { type: Boolean, default: false, es_indexed: true, es_type: 'boolean' },
     expiry_date: Date
   },
   feat_2: {
@@ -52,6 +52,7 @@ const ProductSchema = new Schema({
     },
   ],
   avgRating: { type: Number, default: 0, es_indexed: true },
+  tags: { type: Array, es_indexed: true, es_type: 'keyword' }
 });
 
 ProductSchema.pre('remove', async () => {
