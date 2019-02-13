@@ -50,24 +50,69 @@
                         <div id="sort-by">
                             <details>
                                 <div class="menu-item">
-                                    <input type="radio" name="currency" value="btc" id="btc">
-                                    <label for="btc">BTC</label>
+                                    <details>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="btc-asc" id="asc">
+                                            <label for="asc">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="btc-desc" id="desc">
+                                            <label for="desc">Descending</label>
+                                        </div>
+                                        <summary>Bitcoin</summary>
+                                    </details>
                                 </div>
                                 <div class="menu-item">
-                                    <input type="radio" name="currency" value="bch" id="bch">
-                                    <label for="bch">BCH</label>
+                                    <details>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="bch-asc" id="asc">
+                                            <label for="asc">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="bch-desc" id="desc">
+                                            <label for="desc">Descending</label>
+                                        </div>
+                                        <summary>Bitcoin Cash</summary>
+                                    </details>
                                 </div>
                                 <div class="menu-item">
-                                    <input type="radio" name="currency" value="eth" id="eth">
-                                    <label for="eth">ETH</label>
+                                    <details>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="eth-asc" id="asc">
+                                            <label for="asc">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="eth-desc" id="desc">
+                                            <label for="desc">Descending</label>
+                                        </div>
+                                        <summary>Ethereum</summary>
+                                    </details>
                                 </div>
                                 <div class="menu-item">
-                                    <input type="radio" name="currency" value="ltc" id="ltc">
-                                    <label for="ltc">LTC</label>
+                                    <details>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="ltc-asc" id="asc">
+                                            <label for="asc">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="ltc-desc" id="desc">
+                                            <label for="desc">Descending</label>
+                                        </div>
+                                        <summary>Litecoin</summary>
+                                    </details>
                                 </div>
                                 <div class="menu-item">
-                                    <input type="radio" name="currency" value="dash" id="dash">
-                                    <label for="dash">DASH</label>
+                                    <details>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="dash-asc" id="asc">
+                                            <label for="asc">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="dash-desc" id="desc">
+                                            <label for="desc">Descending</label>
+                                        </div>
+                                        <summary>DASH</summary>
+                                    </details>
                                 </div>
                                 <summary>Accepted Currency</summary>
                             </details>
@@ -97,6 +142,9 @@
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
                                         <p class="is-5 dealname"><a href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                        <% if (product._source.feat_1.status === true) { %>
+                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
+                                        <% } %>
                                         <p class="is-5 dealname">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
                                         <p>
                                             <% for(let i = 0; i < 5; i++) { %>

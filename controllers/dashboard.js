@@ -585,7 +585,7 @@ module.exports = {
         product.ltcPrice = ltcPrice;
         product.dashPrice = dashPrice;
         // save the updated product into the db
-        product.save();
+        await product.save();
         // redirect to show page
         res.redirect(`/products/${product.id}/view`);
       }

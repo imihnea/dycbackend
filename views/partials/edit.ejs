@@ -20,50 +20,50 @@
                     <select name="product[category]" style="width: 100%;">
                             <option disabled selected>Categories</option>
                             <option disabled>Collectibles & Art</option>
-                            <option <% if ( product.category == "collectibles") { %> selected <% } else { %> <% } %>  value="collectibles">Collectibles</option>
-                            <option <% if ( product.category == "antiques") { %> selected <% } else { %> <% } %>  value="antiques">Antiques</option>
-                            <option <% if ( product.category == "sportsmemorabilia") { %> selected <% } else { %> <% } %>  value="sportsmemorabilia">Sports Memorabilia</option>
-                            <option <% if ( product.category == "art") { %> selected <% } else { %> <% } %>  value="art">Art</option>
+                            <option <% if ( product.category[1] == "collectibles") { %> selected <% } else { %> <% } %>  value="collectibles">Collectibles</option>
+                            <option <% if ( product.category[1] == "antiques") { %> selected <% } else { %> <% } %>  value="antiques">Antiques</option>
+                            <option <% if ( product.category[1] == "sportsmemorabilia") { %> selected <% } else { %> <% } %>  value="sportsmemorabilia">Sports Memorabilia</option>
+                            <option <% if ( product.category[1] == "art") { %> selected <% } else { %> <% } %>  value="art">Art</option>
                             <option disabled>Home & Garden</option>
-                            <option <% if ( product.category == "yardgardenoutdoor") { %> selected <% } else { %> <% } %>  value="yardgardenoutdoor">Yard, Garden & Outdoor</option>
-                            <option <% if ( product.category == "crafts") { %> selected <% } else { %> <% } %>  value="crafts">Crafts</option>
-                            <option <% if ( product.category == "homeimprovement") { %> selected <% } else { %> <% } %>  value="homeimprovement">Home Improvement</option>
-                            <option <% if ( product.category == "petsupplies") { %> selected <% } else { %> <% } %>  value="petsupplies">Pet Supplies</option>
+                            <option <% if ( product.category[1] == "yardgardenoutdoor") { %> selected <% } else { %> <% } %>  value="yardgardenoutdoor">Yard, Garden & Outdoor</option>
+                            <option <% if ( product.category[1] == "crafts") { %> selected <% } else { %> <% } %>  value="crafts">Crafts</option>
+                            <option <% if ( product.category[1] == "homeimprovement") { %> selected <% } else { %> <% } %>  value="homeimprovement">Home Improvement</option>
+                            <option <% if ( product.category[1] == "petsupplies") { %> selected <% } else { %> <% } %>  value="petsupplies">Pet Supplies</option>
                             <option disabled>Sporting goods</option>
-                            <option <% if ( product.category == "outdoorsports") { %> selected <% } else { %> <% } %> value="outdoorsports">Outdoor Sports</option>
-                            <option <% if ( product.category == "teamsports") { %> selected <% } else { %> <% } %>  value="teamsports">Team Sports</option>
-                            <option <% if ( product.category == "exercisefitness") { %> selected <% } else { %> <% } %>  value="exercisefitness">Exercise & Fitness</option>
-                            <option <% if ( product.category == "golf") { %> selected <% } else { %> <% } %>  value="golf">Golf</option>
+                            <option <% if ( product.category[1] == "outdoorsports") { %> selected <% } else { %> <% } %> value="outdoorsports">Outdoor Sports</option>
+                            <option <% if ( product.category[1] == "teamsports") { %> selected <% } else { %> <% } %>  value="teamsports">Team Sports</option>
+                            <option <% if ( product.category[1] == "exercisefitness") { %> selected <% } else { %> <% } %>  value="exercisefitness">Exercise & Fitness</option>
+                            <option <% if ( product.category[1] == "golf") { %> selected <% } else { %> <% } %>  value="golf">Golf</option>
                             <option disabled>Electronics</option>
-                            <option <% if ( product.category == "computerstablets") { %> selected <% } else { %> <% } %>  value="computerstablets">Computers & Tablets</option>
-                            <option <% if ( product.category == "camerasphoto") { %> selected <% } else { %> <% } %>  value="camerasphoto">Cameras & Photo</option>
-                            <option <% if ( product.category == "tvaudiosurveillance") { %> selected <% } else { %> <% } %>  value="tvaudiosurveillance">TV, Audio & Surveillance</option>
-                            <option <% if ( product.category == "phonesandaccessories") { %> selected <% } else { %> <% } %>  value="phonesandaccessories">Cell Phones & Accessories</option>
+                            <option <% if ( product.category[1] == "computerstablets") { %> selected <% } else { %> <% } %>  value="computerstablets">Computers & Tablets</option>
+                            <option <% if ( product.category[1] == "camerasphoto") { %> selected <% } else { %> <% } %>  value="camerasphoto">Cameras & Photo</option>
+                            <option <% if ( product.category[1] == "tvaudiosurveillance") { %> selected <% } else { %> <% } %>  value="tvaudiosurveillance">TV, Audio & Surveillance</option>
+                            <option <% if ( product.category[1] == "phonesandaccessories") { %> selected <% } else { %> <% } %>  value="phonesandaccessories">Cell Phones & Accessories</option>
                             <option disabled>Auto Parts & Accessories</option>
-                            <option <% if ( product.category == "gpssecurity") { %> selected <% } else { %> <% } %>  value="gpssecurity">GPS & Security Devices</option>
-                            <option <% if ( product.category == "radarlaser") { %> selected <% } else { %> <% } %>  value="radarlaser">Radar & Laser Detectors</option>
-                            <option <% if ( product.category == "caredetailing") { %> selected <% } else { %> <% } %>  value="caredetailing">Care & Detailing</option>
-                            <option <% if ( product.category == "scooter") { %> selected <% } else { %> <% } %>  value="scooter">Scooter Parts & Accessories</option>
+                            <option <% if ( product.category[1] == "gpssecurity") { %> selected <% } else { %> <% } %>  value="gpssecurity">GPS & Security Devices</option>
+                            <option <% if ( product.category[1] == "radarlaser") { %> selected <% } else { %> <% } %>  value="radarlaser">Radar & Laser Detectors</option>
+                            <option <% if ( product.category[1] == "caredetailing") { %> selected <% } else { %> <% } %>  value="caredetailing">Care & Detailing</option>
+                            <option <% if ( product.category[1] == "scooter") { %> selected <% } else { %> <% } %>  value="scooter">Scooter Parts & Accessories</option>
                             <option disabled>Toys & Hobbies</option>
-                            <option <% if ( product.category == "radiocontrol") { %> selected <% } else { %> <% } %>  value="radiocontrol">Radio Control</option>
-                            <option <% if ( product.category == "kidstoys") { %> selected <% } else { %> <% } %>  value="kidstoys">Kids Toys</option>
-                            <option <% if ( product.category == "actionfigures") { %> selected <% } else { %> <% } %>  value="actionfigures">Action Figures</option>
-                            <option <% if ( product.category == "dollsbears") { %> selected <% } else { %> <% } %>  value="dollsbears">Dolls & Bears</option>
+                            <option <% if ( product.category[1] == "radiocontrol") { %> selected <% } else { %> <% } %>  value="radiocontrol">Radio Control</option>
+                            <option <% if ( product.category[1] == "kidstoys") { %> selected <% } else { %> <% } %>  value="kidstoys">Kids Toys</option>
+                            <option <% if ( product.category[1] == "actionfigures") { %> selected <% } else { %> <% } %>  value="actionfigures">Action Figures</option>
+                            <option <% if ( product.category[1] == "dollsbears") { %> selected <% } else { %> <% } %>  value="dollsbears">Dolls & Bears</option>
                             <option disabled>Fashion</option>
-                            <option <% if ( product.category == "women") { %> selected <% } else { %> <% } %>  value="women">Women</option>
-                            <option <% if ( product.category == "men") { %> selected <% } else { %> <% } %>  value="men">Men</option>
-                            <option <% if ( product.category == "jewerlywatches") { %> selected <% } else { %> <% } %>  value="jewerlywatches">Jewerly & Watches</option>
-                            <option <% if ( product.category == "shoes") { %> selected <% } else { %> <% } %>  value="shoes">Shoes</option>
+                            <option <% if ( product.category[1] == "women") { %> selected <% } else { %> <% } %>  value="women">Women</option>
+                            <option <% if ( product.category[1] == "men") { %> selected <% } else { %> <% } %>  value="men">Men</option>
+                            <option <% if ( product.category[1] == "jewerlywatches") { %> selected <% } else { %> <% } %>  value="jewerlywatches">Jewerly & Watches</option>
+                            <option <% if ( product.category[1] == "shoes") { %> selected <% } else { %> <% } %>  value="shoes">Shoes</option>
                             <option disabled>Musical instruments & gear</option>
-                            <option <% if ( product.category == "guitar") { %> selected <% } else { %> <% } %>  value="guitar">Guitar</option>
-                            <option <% if ( product.category == "proaudio") { %> selected <% } else { %> <% } %>  value="proaudio">Pro Audio Equipment</option>
-                            <option <% if ( product.category == "string") { %> selected <% } else { %> <% } %>  value="string">String</option>
-                            <option <% if ( product.category == "stagelightningeffects") { %> selected <% } else { %> <% } %>  value="stagelightningeffects">Stage Lightning & Effects</option>
+                            <option <% if ( product.category[1] == "guitar") { %> selected <% } else { %> <% } %>  value="guitar">Guitar</option>
+                            <option <% if ( product.category[1] == "proaudio") { %> selected <% } else { %> <% } %>  value="proaudio">Pro Audio Equipment</option>
+                            <option <% if ( product.category[1] == "string") { %> selected <% } else { %> <% } %>  value="string">String</option>
+                            <option <% if ( product.category[1] == "stagelightningeffects") { %> selected <% } else { %> <% } %>  value="stagelightningeffects">Stage Lightning & Effects</option>
                             <option disabled>Other categories</option>
-                            <option <% if ( product.category == "videogamesconsoles") { %> selected <% } else { %> <% } %>  value="videogamesconsoles">Video Games & Consoles</option>
-                            <option <% if ( product.category == "healthbeauty") { %> selected <% } else { %> <% } %>  value="healthbeauty">Health & Beauty</option>
-                            <option <% if ( product.category == "baby") { %> selected <% } else { %> <% } %>  value="baby">Baby</option>
-                            <option <% if ( product.category == "businessindustrial") { %> selected <% } else { %> <% } %>  value="businessindustrial">Business & Industrial</option>
+                            <option <% if ( product.category[1] == "videogamesconsoles") { %> selected <% } else { %> <% } %>  value="videogamesconsoles">Video Games & Consoles</option>
+                            <option <% if ( product.category[1] == "healthbeauty") { %> selected <% } else { %> <% } %>  value="healthbeauty">Health & Beauty</option>
+                            <option <% if ( product.category[1] == "baby") { %> selected <% } else { %> <% } %>  value="baby">Baby</option>
+                            <option <% if ( product.category[1] == "businessindustrial") { %> selected <% } else { %> <% } %>  value="businessindustrial">Business & Industrial</option>
                     </select>
                 </div>
                 <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>

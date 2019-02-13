@@ -7,6 +7,7 @@ const User = require('../models/user');
 const Product = require('../models/product');
 const Nexmo = require('nexmo');
 
+
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
   apiSecret: process.env.NEXMO_API_SECRET
@@ -233,6 +234,7 @@ module.exports = {
     //TODO: validate searchName
     await Product.search(
       { "wildcard": { "name": `${req.body.searchName}*` } },
+      { sort: ["feat_1.status:desc", "createdAt:desc"] },
         (err, products) => {
           if (err) {
             console.log(err);
@@ -245,13 +247,16 @@ module.exports = {
   async filterSearch(req, res) {
     //TODO: validation
     let tags = [];
+    let currency = [];
     if (req.body.currency) {
-      tags.push(req.body.currency);
+      // The currency is given is this format -> currency-asc/desc
+      currency = req.body.currency.split('-');
+      tags.push(currency[0]);
     }
     if (tags.length > 0) {
       if (req.body.category !== 'all') {
         await Product.search(
-          { 
+          {
             "bool": { 
               "must": [
                 { "wildcard": { "name": `${req.body.searchName}*` }},
@@ -261,12 +266,13 @@ module.exports = {
                 { "terms": { "tags": tags }}
               ]
             }
-          },
+          }, 
+          { sort: [`${currency[0]}Price:${currency[1]}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
             } else {
-              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: req.body.currency });
+              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: currency[0], sortType: currency[1] });
             }
           }
         );
@@ -282,12 +288,13 @@ module.exports = {
                 { "terms": { "tags": tags }}
               ]
             }
-          },
+          }, 
+          { sort: [`${currency[0]}Price:${currency[1]}`, "feat_1.status:desc", "createdAt:desc"] },
             (err, products) => {
               if (err) {
                 console.log(err);
               } else {
-                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: req.body.currency });
+                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: currency[0], sortType: currency[1] });
               }
             }
         );
@@ -302,7 +309,8 @@ module.exports = {
                 { "match": { "category": `${req.body.category}` }},
               ],
             }
-          },
+          }, 
+          { sort: ["feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -320,7 +328,8 @@ module.exports = {
                 { "match": { "category": "all" }},
               ],
             }
-          },
+          }, 
+          { sort: ["feat_1.status:desc", "createdAt:desc"] },
             (err, products) => {
               if (err) {
                 console.log(err);
