@@ -236,9 +236,16 @@
                         <% } %>
                     </div>
                     <p style="color: orange !important;"><sub>Transportation costs included</sub></p>
-                    <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
-                    <br>   
-                    <button class="button is-primary" id="buyBtn" disabled>Buy</button>
+                    <!-- <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub> -->
+                    <br>
+                    <% if(!currentUser){ %> 
+                    <a href="/login" class="button is-primary">Login to buy</a>
+                    <% } else if(currentUser.username === product.author.username) { %>
+                    <a href="/dashboard/tokens" class="button is-primary">Promote your product</a>
+                    <% } else { %>
+                    <% include ../partials/paybear %>
+                    <button class="button is-primary" id="paybear-all">Buy</button>
+                    <% } %>
                     
                 </form>
                 <div style="margin-top: 1vh;">
@@ -530,5 +537,29 @@
     </div>    
 </div>
 
+<script>
+    (function () {
+        window.paybear = new Paybear({
+            button: '#paybear-all',
+            fiatValue: 1,
+            statusUrl: "/paybear/status/<%= product.orderId %>",
+            redirectTo: "/dashboard/addresses",
+            statusInterval: "30",
+            currencies: [
+                {
+                "title":"Litecoin",
+                "code":"LTC",
+                "icon":"/dist/img/litecoin.png",
+                "blockExplorer":"https://live.blockcypher.com/ltc/address/%s/",
+                "walletLink":"litecoin:%s?amount=%s",
+                "maxConfirmations":3,
+                "address":"MSBR2HvAZ1TRfxKCdCDRGBYgJNt4DTo1pm",
+                "coinsValue":"<%= product.price[3] %>",
+                "rate":"https://api.paybear.io/v2/exchange/usd/rate"
+                }
+            ]
+        });
+    })();
+</script>
 
 <% include ../partials/footer %>

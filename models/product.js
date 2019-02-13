@@ -52,6 +52,9 @@ const ProductSchema = new Schema({
     },
   ],
   avgRating: { type: Number, default: 0 },
+  confirmations: { type: Number },
+  orderId: { type: Number },
+  invoice: { type: String },
 });
 
 ProductSchema.pre('remove', async () => {

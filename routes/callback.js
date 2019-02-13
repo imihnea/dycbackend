@@ -1,11 +1,14 @@
 const app = new (require('express').Router)();
-
+const Product = require('../models/product');
 app.post('/paybear/callback/:order', (req, res) => {
   if(req.body && req.params.order) {
   var orderId = req.params.order;
   var data = req.body;
   var invoice = data.invoice;
 
+  var confirmations = data.confirmations;
+
+  Product.findByIdAndUpdate(req.params.id, { orderId: orderId, confirmations: confirmations, invoice: invoice });
   //save data.confirmations - number of confirmations to DB
 
   if(data.confirmations >= data.maxConfirmations) {

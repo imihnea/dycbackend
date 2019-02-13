@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
@@ -11,7 +10,7 @@ const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 module.exports = {
-    async getProduct(req, res) {
+    async getProduct(req, res) {  
         const product = await Product.findById(req.params.id).populate({
             path: 'reviews',
             options: { sort: { _id: -1 } },
