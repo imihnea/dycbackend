@@ -542,7 +542,7 @@
         window.paybear = new Paybear({
             button: '#paybear-all',
             fiatValue: 1,
-            statusUrl: "/paybear/status/<%= product.orderId %>",
+            statusUrl: "/paybear/status/${orderId}",
             redirectTo: "/dashboard/addresses",
             statusInterval: "30",
             currencies: [
@@ -553,7 +553,7 @@
                 "blockExplorer":"https://live.blockcypher.com/ltc/address/%s/",
                 "walletLink":"litecoin:%s?amount=%s",
                 "maxConfirmations":3,
-                "address":"MSBR2HvAZ1TRfxKCdCDRGBYgJNt4DTo1pm",
+                "currencyUrl":"/paybear/currencies?order=${orderId}&token=LTC",
                 "coinsValue":"<%= product.price[3] %>",
                 "rate":"https://api.paybear.io/v2/exchange/usd/rate"
                 }
