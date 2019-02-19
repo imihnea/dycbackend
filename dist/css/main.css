@@ -134,10 +134,16 @@ input, select, .dd-btn{
 
 .sec-categ{
     margin-left: -2vw;
+    min-width: 200px;
 }
 
 .sec-categ a{
     color: orange !important;
+}
+
+.categorySelect:not(.is-multiple):not(.is-loading)::after{
+    right: 1rem !important;
+    border-color: orange;
 }
 
 .categories{
@@ -220,6 +226,24 @@ body{
     color: orange !important;
     background-color: transparent !important;
     border-color: orange !important;
+}
+
+.searchBtn{
+    border-color: transparent;
+    background-color: transparent;
+    color: orange;
+    cursor: pointer;
+    margin-bottom: 0.3vh;
+}
+
+.searchBtn:hover{
+    border-bottom-style: solid;
+    border-bottom-color: orange !important;
+    border-bottom-width: 1px;
+}
+
+.searchBtn:focus{
+    outline: transparent;
 }
 
 /* Make .columns margin-left and right disappear for <= 768px */

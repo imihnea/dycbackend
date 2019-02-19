@@ -8,23 +8,35 @@
         <div class="slider">
         <div class="legend"></div>
         <div class="image">
-            <a href="categories/Collectibles-Art">
-            <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483374/collection.png" ></div></a>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles & Art" hidden>
+                <input type="text" name="category" value="Collectibles" hidden>
+                <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483374/collection.png" ></div></button>
+            </form>
         </div>
         </div>
         <div class="slider">
-        <div class="legend"></div>
-        <div class="image">
-            <a href="categories/MusicalInstruments-Gear">
-                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483375/music.png" ></div></a>
-        </div>
+            <div class="legend"></div>
+            <div class="image">
+                <form action="/secondCategSearch" method="POST">
+                    <input type="text" name="searchName" value="" hidden>
+                    <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                    <input type="text" name="category" value="Music" hidden>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483375/music.png" ></div></button>
+                </form>
+            </div>
         </div>
         <div class="slider">
-        <div class="legend"></div>
-        <div class="image">
-            <a href="categories/Sporting-Goods">
-                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483371/sport.png" ></div></a>
-        </div>
+            <div class="legend"></div>
+            <div class="image">
+                <form action="/secondCategSearch" method="POST">
+                    <input type="text" name="searchName" value="" hidden>
+                    <input type="text" name="searchCateg" value="Sports & Outdoors" hidden>
+                    <input type="text" name="category" value="Sports & Fitness" hidden>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483371/sport.png" ></div></button>
+                </form>
+            </div>
         </div>
     </div>
     <div class="switch">

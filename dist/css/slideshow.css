@@ -214,3 +214,13 @@
   .switch ul{
     overflow:hidden;
   }
+  
+.sliderBtn{
+    border-color: transparent; 
+    background-color: transparent; 
+    cursor: pointer;
+}
+
+.sliderBtn:focus{
+    outline: transparent;
+}

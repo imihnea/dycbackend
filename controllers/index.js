@@ -230,20 +230,6 @@ module.exports = {
       res.redirect('back');
     });
   },
-  async postSearch(req, res) {
-    //TODO: validate searchName
-    await Product.search(
-      { "wildcard": { "name": `*${req.body.searchName}*` } },
-      { sort: ["feat_1.status:desc", "createdAt:desc"] },
-        (err, products) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all' });
-          }
-        }
-      );
-  },
   async firstCategSearch(req, res) {
     //TODO: validation
     let tags = [];
@@ -277,7 +263,7 @@ module.exports = {
                 secCat = item.opt;
               }
             });
-            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: currency[0], sortType: currency[1] });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency });
           }
         }
       );
@@ -341,7 +327,7 @@ module.exports = {
                 thiCat = item.opt;
               }
             });
-            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: currency[0], sortType: currency[1] });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency });
           }
         }
       );
@@ -401,7 +387,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: currency[0], sortType: currency[1] });
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency });
           }
         }
       );
@@ -456,7 +442,7 @@ module.exports = {
             if (err) {
               console.log(err);
             } else {
-              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: currency[0], sortType: currency[1] });
+              res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, currency: req.body.currency });
             }
           }
         );
@@ -478,7 +464,7 @@ module.exports = {
               if (err) {
                 console.log(err);
               } else {
-                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: currency[0], sortType: currency[1] });
+                res.render('index/search', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: 'all', currency: req.body.currency });
               }
             }
         );

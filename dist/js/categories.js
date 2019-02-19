@@ -1,6 +1,6 @@
 const Categories = [
     { name: 'Collectibles & Art', opt: ['Collectibles', 'Antiques', 'Art'] },
-    { name: 'Electronics', opt: ['Computers & Laptops', 'Cameras', 'TV & Audio', 'Phones & Tablets', 'Consoles & Videogames', 'Other Electronics'] },
+    { name: 'Electronics', opt: ['Computers & Laptops', 'Cameras', 'TV & Audio', 'Phones & Tablets', 'Consoles & Games', 'Other Devices'] },
     { name: 'Fashion & Beauty', opt: ['Female Clothes', 'Female Shoes', 'Male Clothes', 'Male Shoes', 'Accessories', 'Jewellry', 'Other Products']},
     { name: 'Home Improvement', opt: ['Furniture', 'Decoration', 'Garden', 'Hardware & Tools', 'Other Home Products']},
     { name: 'Leisure Time', opt: ['Books', 'Movies & Television', 'Music', 'Other Leisure Products']},
@@ -20,7 +20,7 @@ const Categories = [
     { name: 'TV & Audio', opt: ['TVs', 'Projectors', 'Audio Systems', 'Portable Players', 'Accessories', 'Other'] },
     { name: 'Phones & Tablets', opt: ['Phones', 'Tablets', 'Accessories', 'Other'] },
     { name: 'Consoles & Games', opt: ['Consoles', 'Videogames', 'Console Accessories', 'Other'] },
-    { name: 'Other Electronics', opt: ['GPS', 'Medical Electronics', 'Other'] },
+    { name: 'Other Devices', opt: ['GPS', 'Medical Electronics', 'Other'] },
     { name: 'Female Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Skirts', 'Dresses', 'Wedding Dresses', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
     { name: 'Female Shoes', opt: ['Sneakers', 'Boots', 'Shoes', 'Slippers', 'Sandals', 'Other'] },
     { name: 'Male Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },

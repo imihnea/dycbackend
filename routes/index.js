@@ -28,7 +28,6 @@ const {
   post2factor,
   postdisable2factor,
   postVerifyLogin,
-  postSearch,
   filterSearch,
   firstCategSearch,
   secondCategSearch,
@@ -74,7 +73,6 @@ router.get('/login', getLogin);
 router.post('/login', postLogin);
 
 // POST Search
-router.post('/search', asyncErrorHandler(postSearch));
 
 router.post('/filterSearch', asyncErrorHandler(filterSearch));
 
