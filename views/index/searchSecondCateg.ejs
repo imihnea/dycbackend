@@ -5,84 +5,47 @@
 
 <div id="results" class="container-fluid">  
     <div class="content-wrapper">
-        <aside>
+        <aside>            
             <section class="facet-wrapper">
                 <div class="facet-category-title" class="facet">
                     Categories
                 </div>
                 <div id="categories">
-                    <% if (searchCateg === 'all') { %>
-                        <form action="/firstCategSearch" method="POST">
+                    <form action="/firstCategSearch" method="POST">
+                        <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                        <input type="text" name="category" value="<%= searchCateg %>" hidden>
+                        <button class="searchBtn"><i class="fas fa-caret-left"></i> <%= searchCateg %></button>
+                    </form>
+                    <% thiCat.forEach((category) => { %>
+                        <form action="/thirdCategSearch" method="POST">
                             <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Electronics" hidden>
-                            <button class="searchBtn">Electronics</button>
+                            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                            <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
+                            <input type="text" name="category" value="<%= category %>" hidden>
+                            <button class="searchBtn"><%= category %></button>
                         </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Home Improvement" hidden>
-                            <button class="searchBtn">Home Improvement</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Fashion & Beauty" hidden>
-                            <button class="searchBtn">Fashion & Beauty</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Pet Supplies" hidden>
-                            <button class="searchBtn">Pet Supplies</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Mothers & Babies" hidden>
-                            <button class="searchBtn">Mothers & Babies</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Sports & Outdoors" hidden>
-                            <button class="searchBtn">Sports & Outdoors</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Collectibles & Art" hidden>
-                            <button class="searchBtn">Collectibles & Art</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Leisure Time" hidden>
-                            <button class="searchBtn">Leisure Time</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Vehicles" hidden>
-                            <button class="searchBtn">Vehicles</button>
-                        </form>
-                        <form action="/firstCategSearch" method="POST">
-                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                            <input type="text" name="category" value="Real Estate" hidden>
-                            <button class="searchBtn">Real Estate</button>
-                        </form>
-                    <% } %>
+                    <% }); %>
                 </div>
             </section>
     
-            <!-- <section class="facet-wrapper">
-                <div class="facet-category-title">Refine by</div>
-                <div id="types" class="facet"></div>
-                <div id="brands" class="facet"></div>
-                <div id="rating" class="facet"></div>
-                <div id="price" class="facet"></div>
-            </section> -->
-            <form action="/filterSearch" method="POST">
+                <!-- <section class="facet-wrapper">
+                    <div class="facet-category-title">Refine by</div>
+                    <div id="types" class="facet"></div>
+                    <div id="brands" class="facet"></div>
+                    <div id="rating" class="facet"></div>
+                    <div id="price" class="facet"></div>
+                </section> -->
+            <form action="/secondCategSearch" method="POST">
                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                <input type="radio" name="category" value="<%= searchCateg %>" hidden checked>
+                <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
                 <section class="facet-wrapper">
                     <div class="facet-category-title">Sort by</div>
                     <div class="sort-by">
                         <div id="sort-by">
-                            <details class="firstTierDetails">
+                            <details  class="firstTierDetails">
                                 <div class="menu-item">
-                                    <details class="secondTierDetails">
+                                    <details  class="secondTierDetails">
                                         <div class="menu-item">
                                             <input type="radio" name="currency" value="btc-asc" id="asc">
                                             <label for="asc" class="thirdTierFilter">Ascending</label>
@@ -95,7 +58,7 @@
                                     </details>
                                 </div>
                                 <div class="menu-item">
-                                    <details class="secondTierDetails">
+                                    <details  class="secondTierDetails">
                                         <div class="menu-item">
                                             <input type="radio" name="currency" value="bch-asc" id="asc">
                                             <label for="asc" class="thirdTierFilter">Ascending</label>
@@ -108,7 +71,7 @@
                                     </details>
                                 </div>
                                 <div class="menu-item">
-                                    <details class="secondTierDetails">
+                                    <details  class="secondTierDetails">
                                         <div class="menu-item">
                                             <input type="radio" name="currency" value="eth-asc" id="asc">
                                             <label for="asc" class="thirdTierFilter">Ascending</label>
@@ -121,7 +84,7 @@
                                     </details>
                                 </div>
                                 <div class="menu-item">
-                                    <details class="secondTierDetails">
+                                    <details  class="secondTierDetails">
                                         <div class="menu-item">
                                             <input type="radio" name="currency" value="ltc-asc" id="asc">
                                             <label for="asc" class="thirdTierFilter">Ascending</label>
@@ -134,7 +97,7 @@
                                     </details>
                                 </div>
                                 <div class="menu-item">
-                                    <details class="secondTierDetails">
+                                    <details  class="secondTierDetails">
                                         <div class="menu-item">
                                             <input type="radio" name="currency" value="dash-asc" id="asc">
                                             <label for="asc" class="thirdTierFilter">Ascending</label>

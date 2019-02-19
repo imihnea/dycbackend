@@ -204,7 +204,9 @@ module.exports = {
       // Look into which symbols are security threats - product name, product description
       req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
-      req.check('product[category]', 'Please choose a category.').notEmpty();
+      req.check('product[category][0]', 'Please choose a main category.').notEmpty();
+      req.check('product[category][1]', 'Please choose a secondary category.').notEmpty();
+      req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty();
       req.check('product[description]', 'The product must have a valid description.').notEmpty();
       req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
@@ -327,7 +329,7 @@ module.exports = {
           // people making fields in the DevTools
           const name = req.body.product.name;
           const description = req.body.product.description;
-          const category = [ 'all', `${req.body.product.category}`];
+          const category = [ 'all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
           const newproduct = {
             name: name,
             images: req.body.product.images,
@@ -479,7 +481,9 @@ module.exports = {
     // Look into which symbols are security threats - product name, product description
     req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z ]+$/i).notEmpty();
     req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
-    req.check('product[category]', 'Please choose a category.').notEmpty();
+    req.check('product[category][0]', 'Please choose a main category.').notEmpty();
+    req.check('product[category][1]', 'Please choose a secondary category.').notEmpty();
+    req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty();
     req.check('product[description]', 'The product must have a valid description.').notEmpty();
     let accepted = [];
     let price = [];
@@ -576,7 +580,9 @@ module.exports = {
         // update the product with any new properties
         product.name = req.body.product.name;
         product.description = req.body.product.description;
-        product.category[1] = req.body.product.category;
+        product.category[1] = req.body.product.category[0];
+        product.category[2] = req.body.product.category[1];
+        product.category[3] = req.body.product.category[2];
         product.price = price;
         product.accepted = accepted;
         product.btcPrice = btcPrice;

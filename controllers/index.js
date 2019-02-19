@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Nexmo = require('nexmo');
-
+const { Categories, secCategories } = require('../dist/js/categories');
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -233,7 +233,7 @@ module.exports = {
   async postSearch(req, res) {
     //TODO: validate searchName
     await Product.search(
-      { "wildcard": { "name": `${req.body.searchName}*` } },
+      { "wildcard": { "name": `*${req.body.searchName}*` } },
       { sort: ["feat_1.status:desc", "createdAt:desc"] },
         (err, products) => {
           if (err) {
@@ -243,6 +243,190 @@ module.exports = {
           }
         }
       );
+  },
+  async firstCategSearch(req, res) {
+    //TODO: validation
+    let tags = [];
+    let currency = [];
+    let secCat = [];
+    if (req.body.currency) {
+      // The currency is given is this format -> currency-asc/desc
+      currency = req.body.currency.split('-');
+      tags.push(currency[0]);
+    }
+    if (tags.length > 0) {
+      await Product.search(
+        {
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.category}`}},
+            ],
+            "filter": [
+              { "terms": { "tags": tags }}
+            ]
+          }
+        }, 
+        { sort: [`${currency[0]}Price:${currency[1]}`, "feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Categories.forEach((item) => {
+              if (req.body.category == item.name) {
+                secCat = item.opt;
+              }
+            });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: currency[0], sortType: currency[1] });
+          }
+        }
+      );
+    } else {
+      await Product.search(
+        { 
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.category}` }},
+            ],
+          }
+        }, 
+        { sort: ["feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Categories.forEach((item) => {
+              if (req.body.category == item.name) {
+                secCat = item.opt;
+              }
+            });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency });
+          }
+        }
+      );
+    }
+  },
+  async secondCategSearch(req, res) {
+    //TODO: validation
+    let tags = [];
+    let currency = [];
+    let thiCat = [];
+    if (req.body.currency) {
+      // The currency is given is this format -> currency-asc/desc
+      currency = req.body.currency.split('-');
+      tags.push(currency[0]);
+    }
+    if (tags.length > 0) {
+      await Product.search(
+        {
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.searchCateg}`}},
+              { "match": { "category": `${req.body.category}`}},
+            ],
+            "filter": [
+              { "terms": { "tags": tags }}
+            ]
+          }
+        }, 
+        { sort: [`${currency[0]}Price:${currency[1]}`, "feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            secCategories.forEach((item) => {
+              if (req.body.category == item.name) {
+                thiCat = item.opt;
+              }
+            });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: currency[0], sortType: currency[1] });
+          }
+        }
+      );
+    } else {
+      await Product.search(
+        { 
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.searchCateg}`}},
+              { "match": { "category": `${req.body.category}`}},
+            ],
+          }
+        }, 
+        { sort: ["feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            secCategories.forEach((item) => {
+              if (req.body.category == item.name) {
+                thiCat = item.opt;
+              }
+            });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency });
+          }
+        }
+      );
+    }
+  },
+  async thirdCategSearch(req, res){
+    //TODO: validation
+    let tags = [];
+    let currency = [];
+    if (req.body.currency) {
+      // The currency is given is this format -> currency-asc/desc
+      currency = req.body.currency.split('-');
+      tags.push(currency[0]);
+    }
+    if (tags.length > 0) {
+      await Product.search(
+        {
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.searchCateg}`}},
+              { "match": { "category": `${req.body.secondSearchCateg}`}},
+              { "match": { "category": `${req.body.category}`}},
+            ],
+            "filter": [
+              { "terms": { "tags": tags }}
+            ]
+          }
+        }, 
+        { sort: [`${currency[0]}Price:${currency[1]}`, "feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: currency[0], sortType: currency[1] });
+          }
+        }
+      );
+    } else {
+      await Product.search(
+        { 
+          "bool": { 
+            "must": [
+              { "wildcard": { "name": `*${req.body.searchName}*` }},
+              { "match": { "category": `${req.body.searchCateg}`}},
+              { "match": { "category": `${req.body.secondSearchCateg}`}},
+              { "match": { "category": `${req.body.category}`}},
+            ],
+          }
+        }, 
+        { sort: ["feat_1.status:desc", "createdAt:desc"] },
+        (err, products) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency });
+          }
+        }
+      );
+    }
   },
   async filterSearch(req, res) {
     //TODO: validation
@@ -259,7 +443,7 @@ module.exports = {
           {
             "bool": { 
               "must": [
-                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": `${req.body.category}`}},
               ],
               "filter": [
@@ -281,7 +465,7 @@ module.exports = {
           { 
             "bool": {
               "must": [ 
-                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": "all" }},
               ],
               "filter": [
@@ -305,7 +489,7 @@ module.exports = {
           { 
             "bool": { 
               "must": [
-                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": `${req.body.category}` }},
               ],
             }
@@ -324,7 +508,7 @@ module.exports = {
           { 
             "bool": {
               "must": [ 
-                { "wildcard": { "name": `${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": "all" }},
               ],
             }

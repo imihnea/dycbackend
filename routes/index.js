@@ -29,7 +29,10 @@ const {
   postdisable2factor,
   postVerifyLogin,
   postSearch,
-  filterSearch
+  filterSearch,
+  firstCategSearch,
+  secondCategSearch,
+  thirdCategSearch
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
@@ -74,6 +77,12 @@ router.post('/login', postLogin);
 router.post('/search', asyncErrorHandler(postSearch));
 
 router.post('/filterSearch', asyncErrorHandler(filterSearch));
+
+router.post('/firstCategSearch', asyncErrorHandler(firstCategSearch));
+
+router.post('/secondCategSearch', asyncErrorHandler(secondCategSearch));
+
+router.post('/thirdCategSearch', asyncErrorHandler(thirdCategSearch));
 
 router.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));

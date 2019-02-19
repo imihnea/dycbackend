@@ -37,3 +37,53 @@ ul{
     border-radius: 10px;
     border-color: orange;
 }
+
+.searchBtn{
+    border-color: transparent;
+    background-color: transparent;
+    color: orange;
+    cursor: pointer;
+    margin-bottom: 0.3vh;
+}
+
+.searchBtn:hover{
+    border-bottom-style: solid;
+    border-bottom-color: orange !important;
+    border-bottom-width: 1px;
+}
+
+.searchBtn:focus{
+    outline: transparent;
+}
+
+.firstTierFilter{
+    color: orange;
+    outline: transparent;
+}
+
+.secondTierFilter{
+    color: #fc5;
+    outline: transparent;
+}
+
+.thirdTierFilter{
+    color: #ff4;
+    outline: transparent;
+}
+
+.firstTierDetails{
+    cursor: pointer;
+}
+
+.secondTierDetails{
+    /* margin-left: 1vw; */
+    cursor: pointer;
+}
+
+.menu-item{
+    margin-left: 1vw;
+}
+
+.menu-item:hover{
+    background-color: transparent !important;
+}
