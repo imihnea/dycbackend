@@ -16,99 +16,18 @@
                         <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                         <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
                         <input type="text" name="currency" value="<%= currency %>" hidden>
+                        <input type="text" name="continent" value="<%= continent %>" hidden>
                         <button class="searchBtn"><i class="fas fa-caret-left"></i> <%= secondSearchCateg %></button>
                     </form>
                 </div>
             </section>
     
-                <!-- <section class="facet-wrapper">
-                    <div class="facet-category-title">Refine by</div>
-                    <div id="types" class="facet"></div>
-                    <div id="brands" class="facet"></div>
-                    <div id="rating" class="facet"></div>
-                    <div id="price" class="facet"></div>
-                </section> -->
             <form action="/thirdCategSearch" method="POST">
                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
                 <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                 <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
                 <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
-                <input type="text" name="currency" value="<%= currency %>" hidden>
-                <section class="facet-wrapper">
-                    <div class="facet-category-title">Sort by</div>
-                    <div class="sort-by">
-                        <div id="sort-by">
-                            <details  class="firstTierDetails">
-                                <div class="menu-item">
-                                    <details  class="secondTierDetails">
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="btc-asc" id="asc" <% if (currency == 'btc-asc') { %> checked <% } %>>
-                                            <label for="asc" class="thirdTierFilter">Ascending</label>
-                                        </div>
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="btc-desc" id="desc" <% if (currency == 'btc-desc') { %> checked <% } %>>
-                                            <label for="desc" class="thirdTierFilter">Descending</label>
-                                        </div>
-                                        <summary class="secondTierFilter">Bitcoin</summary>
-                                    </details>
-                                </div>
-                                <div class="menu-item">
-                                    <details  class="secondTierDetails">
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="bch-asc" id="asc" <% if (currency == 'bch-asc') { %> checked <% } %>>
-                                            <label for="asc" class="thirdTierFilter">Ascending</label>
-                                        </div>
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="bch-desc" id="desc" <% if (currency == 'bch-desc') { %> checked <% } %>>
-                                            <label for="desc" class="thirdTierFilter">Descending</label>
-                                        </div>
-                                        <summary class="secondTierFilter">Bitcoin Cash</summary>
-                                    </details>
-                                </div>
-                                <div class="menu-item">
-                                    <details  class="secondTierDetails">
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="eth-asc" id="asc" <% if (currency == 'eth-asc') { %> checked <% } %>>
-                                            <label for="asc" class="thirdTierFilter">Ascending</label>
-                                        </div>
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="eth-desc" id="desc" <% if (currency == 'eth-desc') { %> checked <% } %>>
-                                            <label for="desc" class="thirdTierFilter">Descending</label>
-                                        </div>
-                                        <summary class="secondTierFilter">Ethereum</summary>
-                                    </details>
-                                </div>
-                                <div class="menu-item">
-                                    <details  class="secondTierDetails">
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="ltc-asc" id="asc" <% if (currency == 'ltc-asc') { %> checked <% } %>>
-                                            <label for="asc" class="thirdTierFilter">Ascending</label>
-                                        </div>
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="ltc-desc" id="desc" <% if (currency == 'ltc-desc') { %> checked <% } %>>
-                                            <label for="desc" class="thirdTierFilter">Descending</label>
-                                        </div>
-                                        <summary class="secondTierFilter">Litecoin</summary>
-                                    </details>
-                                </div>
-                                <div class="menu-item">
-                                    <details  class="secondTierDetails">
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="dash-asc" id="asc" <% if (currency == 'dash-asc') { %> checked <% } %>>
-                                            <label for="asc" class="thirdTierFilter">Ascending</label>
-                                        </div>
-                                        <div class="menu-item">
-                                            <input type="radio" name="currency" value="dash-desc" id="desc" <% if (currency == 'dash-desc') { %> checked <% } %>>
-                                            <label for="desc" class="thirdTierFilter">Descending</label>
-                                        </div>
-                                        <summary class="secondTierFilter">DASH</summary>
-                                    </details>
-                                </div>
-                                <summary class="firstTierFilter">Accepted Currency</summary>
-                            </details>
-                        </div>
-                    </div>
-                </section>   
+                <% include ../partials/filterSort %>
                 <button class="button is-primary">Filter</button>         
             </form>
 

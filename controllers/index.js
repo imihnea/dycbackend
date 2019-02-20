@@ -64,22 +64,28 @@ module.exports = {
   get2factor(req, res) {
     res.render('index/2factor')
   },
-  post2factor(req, res) {
-  let phoneNumber = req.body.number;
-  nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
-    if(err) {
-      req.flash('error', err.message);
-      res.redirect('back');
+  async post2factor(req, res) {
+    let phoneNumber = req.body.number;
+    const user = await User.findOne({number: phoneNumber});
+    if (user) {
+      req.flash('error', 'Phone number already used. Please try again using another number.');
+      res.redirect('/2factor');
     } else {
-      let requestId = result.request_id;
-      if(result.status == '0') {
-        res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
-      } else {
-        req.flash('error', 'Something went wrong, please try again.');
-        res.redirect('back');
-      }
+      nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+        if(err) {
+          req.flash('error', err.message);
+          res.redirect('back');
+        } else {
+          let requestId = result.request_id;
+          if(result.status == '0') {
+            res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
+          } else {
+            req.flash('error', 'Something went wrong, please try again.');
+            res.redirect('back');
+          }
+        }
+      });
     }
-  });
   },
   postdisable2factor(req, res) {
     User.findByIdAndUpdate(req.user._id, { number: undefined, twofactor: false }, (err) => { // Change number: null to delete number completely
@@ -235,6 +241,10 @@ module.exports = {
     let tags = [];
     let currency = [];
     let secCat = [];
+    let continent = '';
+    if (req.body.continent) {
+      continent = req.body.continent;
+    }
     if (req.body.currency) {
       // The currency is given is this format -> currency-asc/desc
       currency = req.body.currency.split('-');
@@ -247,6 +257,7 @@ module.exports = {
             "must": [
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.category}`}},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -263,7 +274,7 @@ module.exports = {
                 secCat = item.opt;
               }
             });
-            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent });
           }
         }
       );
@@ -274,6 +285,7 @@ module.exports = {
             "must": [
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.category}` }},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
           }
         }, 
@@ -287,7 +299,7 @@ module.exports = {
                 secCat = item.opt;
               }
             });
-            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent });
           }
         }
       );
@@ -298,6 +310,10 @@ module.exports = {
     let tags = [];
     let currency = [];
     let thiCat = [];
+    let continent = '';
+    if (req.body.continent) {
+      continent = req.body.continent;
+    }
     if (req.body.currency) {
       // The currency is given is this format -> currency-asc/desc
       currency = req.body.currency.split('-');
@@ -311,6 +327,7 @@ module.exports = {
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -327,7 +344,7 @@ module.exports = {
                 thiCat = item.opt;
               }
             });
-            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent });
           }
         }
       );
@@ -339,6 +356,7 @@ module.exports = {
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
           }
         }, 
@@ -352,7 +370,7 @@ module.exports = {
                 thiCat = item.opt;
               }
             });
-            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent });
           }
         }
       );
@@ -362,6 +380,10 @@ module.exports = {
     //TODO: validation
     let tags = [];
     let currency = [];
+    let continent = '';
+    if (req.body.continent) {
+      continent = req.body.continent;
+    }
     if (req.body.currency) {
       // The currency is given is this format -> currency-asc/desc
       currency = req.body.currency.split('-');
@@ -376,6 +398,7 @@ module.exports = {
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.secondSearchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -387,7 +410,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency });
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent });
           }
         }
       );
@@ -400,6 +423,7 @@ module.exports = {
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.secondSearchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
+              { "wildcard": { "author.continent": `*${continent}*`}}
             ],
           }
         }, 
@@ -408,7 +432,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency });
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent });
           }
         }
       );

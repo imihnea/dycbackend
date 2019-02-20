@@ -43,7 +43,8 @@ const ProductSchema = new Schema({
     username: String,
     city: String,
     country: String,
-    state: String
+    state: String,
+    continent: String
   },
   reviews: [
     {

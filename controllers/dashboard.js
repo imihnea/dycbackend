@@ -198,7 +198,8 @@ module.exports = {
         username: req.user.username,
         city: req.user.city,
         state: req.user.state,
-        country: req.user.country
+        country: req.user.country,
+        continent: req.user.continent
       };
       req.body.product.author = author;
       // Look into which symbols are security threats - product name, product description
