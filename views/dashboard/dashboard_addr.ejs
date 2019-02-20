@@ -2,6 +2,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <div class="columns">
     <% include ../partials/sidebar %>
+    <% include ../partials/savvy %>
     <div class="column dashboard-right adrcol">
         <div class="columns">
             <div class="column"></div>
@@ -27,6 +28,8 @@
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
                                 <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.currency[0]) { %><%= user.currency[0] %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
                             </div>
+
+                            <!-- <button class="button is-primary" id="savvy-bitcoin">Top-up BTC</button> -->
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
                             <div class="modal modalTopup">
@@ -284,7 +287,10 @@
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
                                 <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.currency[3]) { %><%= user.currency[3] %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
                             </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+
+
+                                <button type="submit" class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                            </form>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
                             <div class="modal modalTopup">
                                 <div class="modal-background"></div>
@@ -307,7 +313,8 @@
                                         <form class="modal-form" action="/dashboard/addresses/topup/3?_method=PUT" method="POST">
                                             <label class="label adrlabel">Value</label>
                                             <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" />
-                                            <button class="button is-primary">Continue</button>
+                                            <button class="button is-primary" id="savvy-litecoin">Top-up 0.01 LTC</button>
+                                            <!-- <button class="button is-primary">Continue</button> -->
                                         </form>
                                         </section>
                                         <footer class="modal-card-foot">
@@ -438,6 +445,28 @@
         
     </div>   
 </div>
-
+<script>
+    (function () {
+        window.savvy = new Savvy({
+            button: '#savvy-litecoin',
+            fiatValue: "<%= ltcrate %>"*0.01,
+            statusUrl: "/savvy/status/123",
+            redirectTo: "/dashboard/addresses",
+            currencies: [
+                    {
+                    "title":"Litecoin",
+                    "code":"LTC",
+                    "icon":"/dist/img/litecoin.png",
+                    "blockExplorer":"https://live.blockcypher.com/ltc/address/%s/",
+                    "walletLink":"litecoin:%s?amount=%s",
+                    "maxConfirmations":3,
+                    "address":"MN4GTWCLDEMpPaiQuiK9YPJi82kcZDkVWN",
+                    "coinsValue":0.01,
+                    "rate":"<%= ltcrate %>"
+                    }
+                ]
+        });
+    })();
+</script>
 <script src="../../dist/js/dashboard_addr.js"></script>
 <% include ../partials/footer %>

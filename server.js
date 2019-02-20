@@ -57,6 +57,12 @@ const reviewsRoutesUser = require('./routes/reviewsusers');
 
 const dealsRoutes = require('./routes/deals');
 
+const savvycallbackRoutes = require('./routes/savvy/callback');
+
+const savvycurrenciesRoutes = require('./routes/savvy/currencies');
+
+const savvystatusRoutes = require('./routes/savvy/status');
+
 // Gzip compression
 
 app.use(compression());
@@ -151,6 +157,9 @@ app.use((req, res, next) => {
 
 // refactored routes
 app.use('/', indexRoutes);
+app.use('/', savvycallbackRoutes);
+app.use('/', savvycurrenciesRoutes);
+app.use('/', savvystatusRoutes);
 app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes
 app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);

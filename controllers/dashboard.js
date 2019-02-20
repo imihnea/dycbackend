@@ -5,6 +5,9 @@ const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+var request = require("request");
+
+var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 // Constants for quick modification
 const feature1_time = 60000;
@@ -64,7 +67,15 @@ module.exports = {
   },
   // Show address page
   getAddresses(req, res) {
-    res.render('dashboard/dashboard_addr', { user: req.user });
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var ltcrate = data.ltc.rate;
+            res.render('dashboard/dashboard_addr', { user: req.user, ltcrate });
+        }
+    });
   },
   // Get address modifications
   async addAddresses(req, res) {
