@@ -20,6 +20,8 @@ const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile } = middleware; // destructuring assignment
 
+var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
+
 // Set Storage Engine
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
@@ -58,7 +60,7 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
   var callback = 'https://dyc.herokuapp.com/savvy/callback/'
   var encoded_callback = encodeURIComponent(callback);
   console.log(encoded_callback);
-  var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=ltc" + "&lock_address_timeout=3600";
+  var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
 
   request.get({
     url: url 
