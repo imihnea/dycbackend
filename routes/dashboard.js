@@ -55,7 +55,7 @@ router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 
 router.post('/addresses/ltc', isLoggedIn, (req, res) => {
-  var callback = 'http://localhost:8080/savvy/callback/'
+  var callback = 'https://dyc.herokuapp.com/savvy/callback/'
   var encoded_callback = encodeURIComponent(callback);
   console.log(encoded_callback);
   var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=ltc" + "&lock_address_timeout=3600";

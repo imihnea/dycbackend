@@ -3,7 +3,7 @@ var https = require('https');
 var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 function getAddress(orderId, token, callback) {
-  var callbackUrl = 'http://localhost:8080/savvy/callback/' + orderId;
+  var callbackUrl = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
   var lock_address = 3600;
   var url = 'https://api.savvy.io/v3/' + token.toLowerCase() + '/payment/' + encodeURI(callbackUrl) + '?token=' + SAVVY_SECRET + '&lock_address=' + lock_address;
 
