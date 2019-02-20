@@ -9,6 +9,8 @@ const product = require('../models/product');
 
 const User = require('../models/user');
 
+const request = require('request');
+
 const router = express.Router();
 
 const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
@@ -51,6 +53,22 @@ router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 
 // Top-up
 router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
+
+router.post('/addresses/ltc', isLoggedIn, (req, res) => {
+  var callback = 'http://localhost:8080/savvy/callback/'
+  var encoded_callback = encodeURIComponent(callback);
+  console.log(encoded_callback);
+  var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=ltc" + "&lock_address_timeout=3600";
+
+  request.get({
+    url: url 
+
+    }, function(error, response, body) {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(body, null, 3);
+  });
+
+});
 
 // Withdraw
 router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
