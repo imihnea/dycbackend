@@ -61,7 +61,15 @@ router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 
 router.get('/addresses/ltc', isLoggedIn, (req, res) => {
-  res.render('ltc', { address, orderId, ltcrate, orderTotal });
+  var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+  request(url, function(error, response, body){
+      if(!error && response.statusCode == 200) {
+          var json = JSON.parse(body);
+          var data = json.data;
+          var ltcrate = data.ltc.rate;
+          res.render('ltc', { ltcrate });
+      }
+  });
 });
 
 router.post('/addresses/ltc', isLoggedIn, (req, res) => {
@@ -69,7 +77,7 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
   var encoded_callback = encodeURIComponent(callback);
   console.log(encoded_callback);
   var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-
+  var ltcrate = req.body.ltcrate;
   request.get({
     url: url 
     }, function(error, response, body) {
@@ -78,17 +86,21 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
         res.redirect('back');
       } else {
         console.log(body);
-        var json = body;
-        var invoice = json.invoice;
-        var address = json.address;
+        var json = JSON.parse(body);
+        var invoice = json.data.invoice;
+        var address = json.data.address;
+        console.log(invoice);
+        console.log(address);
+        var orderTotal = 0.01;
         var orderId = uuidv1();
-        Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, maxConfirmations: 3, orderTotal: 0.01, paid: false }, (err) => {
+        Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, maxConfirmations: 3, orderTotal: orderTotal, paid: false }, (err) => {
           if(err) {
             req.flash('error', err.message);
             res.redirect('back');
+          } else {
+            res.render('ltc', { ltcrate, orderTotal, orderId, address })
           }
         });
-        res.redirect('/dashboard/addresses/ltc', { address, orderId, ltcrate, orderTotal });
       }
   });
 
