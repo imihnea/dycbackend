@@ -9,6 +9,10 @@ const product = require('../models/product');
 
 const User = require('../models/user');
 
+const Checkout = require('../models/checkout');
+
+const uuidv1 = require('uuid/v1');
+
 const request = require('request');
 
 const router = express.Router();
@@ -56,6 +60,10 @@ router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 // Top-up
 router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 
+router.get('/addresses/ltc', isLoggedIn, (req, res) => {
+  res.render('ltc', { address, orderId, ltcrate, orderTotal });
+});
+
 router.post('/addresses/ltc', isLoggedIn, (req, res) => {
   var callback = 'https://dyc.herokuapp.com/savvy/callback/'
   var encoded_callback = encodeURIComponent(callback);
@@ -64,10 +72,23 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
 
   request.get({
     url: url 
-
     }, function(error, response, body) {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(body, null, 3);
+      if(error) {
+        req.flash('error', error.message);
+        res.redirect('back');
+      } else {
+        var json = body.data;
+        var invoice = json.invoice;
+        var address = json.address;
+        var orderId = uuidv1();
+        Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, maxConfirmations: 3, orderTotal: 0.01, paid: false }, (err) => {
+          if(err) {
+            req.flash('error', err.message);
+            res.redirect('back');
+          }
+        });
+        res.redirect('/dashboard/addresses/ltc', { address, orderId, ltcrate, orderTotal });
+      }
   });
 
 });

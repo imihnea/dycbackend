@@ -1,11 +1,20 @@
 const app = new (require('express').Router)();
+const Checkout = require('../models/checkout');
 
 app.get('/savvy/status/:order', (req, res) => {
   var orderId = req.params.order;
 var confirmations = null;
   
-confirmations = 0; //get from DB, see callback.js
-maxConfirmations = 3; //get from DB, see callback.js
+confirmations = Checkout.findOne({ orderId: orderId }, 'confirmations', function(err, checkout) {
+  if(err){
+    res.send(err);
+  }
+}); //get from DB, see callback.js
+maxConfirmations = Checkout.findOne({ orderId: orderId }, 'maxConfirmations', function(err, checkout) {
+  if(err){
+    res.send(err);
+  }
+});  //get from DB, see callback.js
 var resp = {
   success: confirmations >= maxConfirmations
 };
