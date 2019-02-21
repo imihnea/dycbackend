@@ -2,6 +2,8 @@ const app = new (require('express').Router)();
 
 app.post('/savvy/callback/:order', (req, res) => {
   console.log("hit callback");
+  console.log(`Asta e req.body: ${req.body}`);
+  console.log(`Asta e req.params.order: ${req.params.order}`);
   if(req.body && req.params.order) {
   var orderId = req.params.order;
   var data = req.body;
