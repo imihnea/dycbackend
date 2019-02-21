@@ -2,6 +2,7 @@ const app = new (require('express').Router)();
 const Checkout = require('../../models/checkout');
 
 app.post('/savvy/callback/:order', (req, res) => {
+  if (req.body && req.params.order) {
   var orderId = req.params.order;
   console.log('order id = ', orderId);
   console.log('callback body = ', req.body);
@@ -19,6 +20,9 @@ app.post('/savvy/callback/:order', (req, res) => {
     res.send(invoice);
   } else {
     res.send('waiting for confirmations');
+  } 
+  } else {
+    res.send('error')
   }
 });
 
