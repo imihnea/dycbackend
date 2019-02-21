@@ -23,10 +23,8 @@ app.post('/savvy/callback/:order', (req, res) => {
       if(err) {
         res.send(err);
       } else {
-        if(amountPaid >= orderTotal) {
-          next();
-        } else {
-          res.send(`underpaid by ${orderTotal-amountPaid}`);
+        if(amountPaid !== orderTotal) {
+          res.send(`wrong amount paid`);
         }
       }
     });
@@ -34,12 +32,8 @@ app.post('/savvy/callback/:order', (req, res) => {
     Checkout.findOne(query, 'invoice', function(err, invoice, next) {
       if(err) {
         res.send(err);
-      } else {
-        if(invoice !== data.invoice) {
-          res.send('wrong invoice');
-        } else {
-          next();
-        }
+      } else if(invoice !== data.invoice) {
+        res.send('wrong invoice');
       }
     });
     //mark the order as paid
