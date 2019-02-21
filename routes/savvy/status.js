@@ -5,7 +5,7 @@ app.get('/savvy/status/:order', (req, res) => {
   var orderId = req.params.order;
 var confirmations = null;
 var maxConfirmations = null;
-  
+ 
 Checkout.findOne({ orderId: orderId }, function(err, checkout) {
   if(err || checkout === null){
     console.log('status.js la confirmations var')
