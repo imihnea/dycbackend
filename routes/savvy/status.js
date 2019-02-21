@@ -5,16 +5,19 @@ app.get('/savvy/status/:order', async (req, res) => {
   var orderId = req.params.order;
 var confirmations = null;
   
-confirmations = await Checkout.findOne({orderId: orderId}, 'confirmations', function(err, confirmations) { 
+var confirmations1 = await Checkout.findOne({orderId: orderId}, '-_id confirmations', function(err, confirmations) { 
   if(err) {
     res.send(err)
   }
 }); //get from DB, see callback.js
-maxConfirmations = await Checkout.findOne({orderId: orderId}, 'maxConfirmations', function(err, maxConfirmations) { 
+var maxConfirmations1 = await Checkout.findOne({orderId: orderId}, '-_id maxConfirmations', function(err, maxConfirmations) { 
   if(err) {
     res.send(err)
   }
 }); //get from DB, see callback.js
+
+confirmations = confirmations1.confirmations;
+maxConfirmations = maxConfirmations1.maxConfirmations;
 
 console.log('----------------------');
 console.log(confirmations);
