@@ -77,7 +77,8 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
         req.flash('error', error.message);
         res.redirect('back');
       } else {
-        var json = body.data;
+        console.log(body);
+        var json = body;
         var invoice = json.invoice;
         var address = json.address;
         var orderId = uuidv1();
