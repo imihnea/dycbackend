@@ -93,7 +93,7 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
         console.log(invoice);
         console.log(address);
         var orderTotal = 0.01;
-        Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, confirmations: 0, maxConfirmations: 3, orderTotal: orderTotal, paid: false }, (err) => {
+        Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, confirmations: 0, maxConfirmations: 2, orderTotal: orderTotal, paid: false }, (err) => {
           if(err) {
             req.flash('error', err.message);
             res.redirect('back');

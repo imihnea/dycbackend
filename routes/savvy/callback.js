@@ -11,8 +11,11 @@ app.post('/savvy/callback/:order', (req, res) => {
   var amount_payed = data.inTransaction.amount / Math.power(10, data.inTransaction.exp);
   console.log('amount payed ===', amount_payed);
 
+
+  
   console.log(req.body.confirmations);
-  if (req.body.confirmations >= 3) {
+  if (req.body.confirmations >= 2) {
+    Checkout.findOneAndUpdate({orderId: orderId}, {confirmations: req.body.confirmations}, (err));
     res.send(invoice);
   } else {
     res.send('waiting for confirmations');
