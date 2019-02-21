@@ -1,5 +1,5 @@
 const app = new (require('express').Router)();
-const Checkout = require('../models/checkout');
+const Checkout = require('../../models/checkout');
 
 app.get('/savvy/status/:order', (req, res) => {
   var orderId = req.params.order;
