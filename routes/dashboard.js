@@ -73,7 +73,8 @@ router.get('/addresses/ltc', isLoggedIn, (req, res) => {
 });
 
 router.post('/addresses/ltc', isLoggedIn, (req, res) => {
-  var callback = 'https://dyc.herokuapp.com/savvy/callback/'
+  var orderId = uuidv1();
+  var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
   var encoded_callback = encodeURIComponent(callback);
   console.log(encoded_callback);
   var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
@@ -92,12 +93,12 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
         console.log(invoice);
         console.log(address);
         var orderTotal = 0.01;
-        var orderId = uuidv1();
         Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, maxConfirmations: 3, orderTotal: orderTotal, paid: false }, (err) => {
           if(err) {
             req.flash('error', err.message);
             res.redirect('back');
           } else {
+            console.log(orderId);
             res.render('ltc', { ltcrate, orderTotal, orderId, address })
           }
         });
