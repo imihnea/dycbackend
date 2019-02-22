@@ -31,4 +31,5 @@ if(confirmations !== null)
   resp.confirmations = confirmations;
 res.json(resp); //return this data to savvy form
 });
+
 module.exports = app;

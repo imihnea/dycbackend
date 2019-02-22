@@ -1,8 +1,7 @@
 const app = new (require('express').Router)();
 const Checkout = require('../../models/checkout');
 
-app.post('/savvy/callback/:order', (req, res) => {
-  if (req.body && req.params.order) {
+app.post('/savvy/callback/:order', async (req, res) => {
   var orderId = req.params.order;
   console.log('order id = ', orderId);
   console.log('callback body = ', req.body);
@@ -16,13 +15,22 @@ app.post('/savvy/callback/:order', (req, res) => {
   
   console.log(req.body.confirmations);
   if (req.body.confirmations >= 2) {
-    Checkout.findOneAndUpdate({orderId: orderId}, {confirmations: req.body.confirmations}, (err));
+    var query = Checkout.findOne({ orderId: orderId });
+    query.exec(function(err, checkout) {
+      if(err) {
+        res.send('error');
+      }
+      if(checkout !== null ) {
+        var query_3 = Checkout.findOneAndUpdate({ orderId: orderId }, {confirmations: req.body.confirmations });
+        query_3.then(function(doc2) {
+          console.log("Deposit arrived!");
+        });
+      }
+    });
+
     res.send(invoice);
   } else {
     res.send('waiting for confirmations');
-  } 
-  } else {
-    res.send('error')
   }
 });
 
