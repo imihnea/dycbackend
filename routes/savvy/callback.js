@@ -14,7 +14,7 @@ app.post('/savvy/callback/:order', (req, res) => {
 
   
   console.log(req.body.confirmations);
-  if (req.body.confirmations >= 2) {
+  if (req.body.confirmations >= 1) {
     var query = Checkout.findOne({ orderId: orderId });
     query.exec(function(err, checkout) {
       if(err) {
