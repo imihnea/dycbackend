@@ -103,6 +103,17 @@
                     </div>
                     <summary class="firstTierFilter">Accepted Currency</summary>
                 </details>
+                <details class="firstTierDetails">
+                    <div class="menu-item">
+                        <input type="radio" name="avgRating" value="asc" id="avgasc" <% if (avgRating == 'asc') { %> checked <% } %>>
+                        <label for="avgasc" class="thirdTierFilter">Ascending</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="radio" name="avgRating" value="desc" id="avgdesc" <% if (avgRating == 'desc') { %> checked <% } %>>
+                        <label for="avgdesc" class="thirdTierFilter">Descending</label>
+                    </div>
+                    <summary class="firstTierFilter">Average Rating</summary>
+                </details>
             </div>
         </div>
     </section>   

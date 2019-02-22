@@ -268,3 +268,28 @@ aside .facet-count {
 i.tooltip:hover .iTooltip{
   visibility: visible;
 }
+
+.spacing{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.paginationU{
+  display: flex; 
+  justify-content: center; 
+  /* margin-bottom: 2vh; */
+}
+
+.paginationD{ 
+  margin-top: 4vh;
+}
+
+.paginationBtn{
+  margin-left: 0.25vw;
+}
+
+.dots{
+  margin-left: 0.25vw;
+    position: relative;
+    bottom: -0.5vw;
+}
