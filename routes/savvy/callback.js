@@ -1,14 +1,14 @@
 const app = new (require('express').Router)();
 const Checkout = require('../../models/checkout');
 
-app.post('/savvy/callback/:order', async (req, res) => {
+app.post('/savvy/callback/:order', (req, res) => {
   var orderId = req.params.order;
   console.log('order id = ', orderId);
   console.log('callback body = ', req.body);
   console.log('---------------');
   var data = req.body;
   var invoice = data.invoice;
-  var amount_payed = data.inTransaction.amount / Math.power(10, data.inTransaction.exp);
+  var amount_payed = data.inTransaction.amount / Math.pow(10, data.inTransaction.exp);
   console.log('amount payed ===', amount_payed);
 
 
