@@ -73,7 +73,8 @@ module.exports = {
             var json = JSON.parse(body);
             var data = json.data;
             var ltcrate = data.ltc.rate;
-            res.render('dashboard/dashboard_addr', { user: req.user, ltcrate });
+            var maxConfirmationsLTC = data.ltc.maxConfirmations;
+            res.render('dashboard/dashboard_addr', { user: req.user, ltcrate, maxConfirmationsLTC });
         }
     });
   },

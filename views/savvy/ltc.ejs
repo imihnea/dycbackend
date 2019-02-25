@@ -1,6 +1,6 @@
-<% include partials/header %>
+<% include ../partials/header %>
 <div class="hero-body">
-        <% include partials/savvy %>
+        <% include ../partials/savvy %>
     <div class="container content">
         <h1>Here you can Top-up Litecoin! Press button!</h1>
         <button class="button is-primary" id="savvy-litecoin">Top-up <%= coinsValue %> LTC</button>
@@ -20,7 +20,7 @@
                         "icon":"/dist/img/litecoin.png",
                         "blockExplorer":"https://live.blockcypher.com/ltc/address/%s/",
                         "walletLink":"litecoin:%s?amount=%s",
-                        "maxConfirmations":2,
+                        "maxConfirmations":"<%= maxConfirmationsLTC %>",
                         "address":"<%= address %>",
                         "coinsValue":"<%= coinsValue %>",
                         "rate":"<%= ltcrate %>"
@@ -29,4 +29,4 @@
             });
         })();
     </script>
-<% include partials/footer %>
+<% include ../partials/footer %>
