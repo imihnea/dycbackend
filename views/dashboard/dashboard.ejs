@@ -1,77 +1,88 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<div class="columns" style="color: orange;">
-    
-        <% include ../partials/sidebar %>
-   
-
-    <div class="column dashboard-right">
+<div class="columns" style="color: orange;"> 
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right" style="margin-bottom: 4vh;">
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <h2 class="title">Account Details</h2>
                 <hr>
-                <form action="" method="POST">
+                <form action="/profile/<%= user._id %>/update?_method=PUT" method="POST" enctype="multipart/form-data">
                     <p class="subtitle">Personal Details</p>
+                    <div class="container is-fluid">
+                        <% if(errors){ %>
+                            <div class="notification is-danger" role="alert"> 
+                            <% errors.forEach(function( err){ %>
+                                <%= err.msg %><br>
+                            <% }) %>
+                            </div>
+                        <% } %>
+                    </div>
                     <div class="column is-three-fifths" style="margin: auto;">
                         <div class="level">
-                            <input class="input" name="name" placeholder="Full Name*" type="text" required />
+                            <input class="input" name="name" placeholder="Full Name*" type="text"
+                            <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
                         </div>
-                        <div class="level">
+                        <div class="level" style="flex-wrap: wrap;">
                             <div class="column select cont-select" style="padding: 0 !important">
                                 <select name="country" class="countries" id="countryId" style="width: 100%;">
-                                    <option value="">Select Country</option>
+                                    <option <% if (user.country) { %> value="<%= user.country %>" <% } %>>Select Country</option>
                                 </select>
                             </div>
                             <div class="column select dash-select" style="padding-top: 0 !important">
                                 <select name="state" class="states" id="stateId" style="width: 100%;">
-                                    <option value="">Select State</option>
+                                    <option <% if (user.state) { %> value="<%= user.state %>" <% } %>>Select State</option>
                                 </select>
                             </div>
                             <div class="column select cont-select" style="padding: 0 !important">
                                 <select name="city" class="cities" id="cityId" style="width: 100%;">
-                                <option value="">Select City</option>
+                                <option <% if (user.city) { %> value="<%= user.city %>" <% } %>>Select City</option>
                                 </select>
                             </div>
+                            <sub style="width: 100%; margin-top: 5px;">Do not modify if not changed</sub>
                         </div>
                     <div class="level">
                             <div class="columns level-item">
                                 <div class="column is-three-fifths">
-                                    <input class="input" name="adrlin1" placeholder="Address Line 1* (Street name, number, etc.)" type="text" required />
+                                    <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
+                                    <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
                                 </div>
                                 <div class="column">
-                                    <input class="input" name="zip" type="number" placeholder="ZIP Code*" required />
+                                    <input class="input" name="zip" type="number" placeholder="ZIP Code*"
+                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
                                 </div>
                             </div>   
                     </div>
                                     
                         <div class="level">
-                            <input class="input" name="adrlin2" placeholder="Address Line 2" type="text"/>
+                            <input class="input" name="address2" placeholder="Address Line 2" type="text"
+                            <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
                         </div>
 
                         <div class="level">
                             <div class="columns level-item">
                                 <div class="column">
                                     <!-- Every user will have a default profile pic  -->
-                                    <img src="../../dist/img/rollo.png" class="profilepic">
+                                    <img src="<%= user.avatar.url %>" class="profilepic">
                                 </div>
                                 <div class="column">
-                                    <div class="file has-name">
-                                    <label class="file-label">
-                                        <input class="file-input" type="file" name="image" accept="image/*">
-                                        <span class="file-cta">
-                                            <span class="file-icon">
-                                                <i class="fas fa-upload"></i>
-                                            </span>
-                                            <span class="file-label">
-                                                Choose a profile picture
-                                            </span>
-                                        </span>
-                                        <span class="file-name">
-                                            .jpeg .jpg .png
-                                        </span>
-                                    </label>
-                                </div>
+                                    <div class="file-upload">
+                                        <div>
+                                            <label for="upload[0]" class="file-upload__label">
+                                                <span style="font-size: 5rem;">
+                                                    <i class="far fa-plus-square square"></i>
+                                                    <i class="far fa-check-square hide"></i>
+                                                </span>
+                                            </label>
+                                            <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
+                                            <label class="file-delete__label hide">
+                                                <span>
+                                                    <i class="far fa-trash-alt"></i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +91,7 @@
 
                     </div>       
                 </form>
-                <a href="/profile/<%= user._id %>/view"><button class="button is-primary">View Profile</button></a>
+                <a href="/profile/<%= user._id %>"><button class="button is-primary">View Profile</button></a>
                 <hr>
                 <h2 class="subtitle">Credentials</h2>
                 <div class="columns">
@@ -101,7 +112,26 @@
                                 <button class="button is-primary">Click here to change your Email</button>
                             </div>
                         </form>
-                    </div> 
+                    </div>
+                    <% if(currentUser.twofactor === true) { %> 
+                    <div class="column chemail">
+                        <h2>Deactivate 2-Factor</h2>
+                        <form action="/disable2factor" method="POST" onsubmit="return confirm('Are you sure?');">
+                            <div class="control smmargin">
+                                <button class="button is-primary">Click here to deactivate 2-Factor Authentication</button>
+                            </div>
+                        </form>
+                    </div>
+                    <% } else { %>
+                        <div class="column chemail">
+                            <h2>Activate 2-Factor</h2>
+                            <form action="/2factor">
+                                <div class="control smmargin">
+                                    <button class="button is-primary">Click here to activate 2-Factor Authentication</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
             </div>
             <div class="column"></div>
@@ -115,3 +145,4 @@
 <% include ../partials/footer %>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 <script src="//geodata.solutions/includes/countrystatecity.js"></script>
+<script src="../../dist/js/dashboard.js"></script>

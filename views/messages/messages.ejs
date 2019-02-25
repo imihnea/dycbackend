@@ -1,0 +1,66 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css" />
+<div class="columns" style="color: orange;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+        <div class="columns flexWrap">
+                <% if (chats.docs.length === 0) { %>
+                    <p class="title">You do not have any open chats at this time.</p>
+                    <p class="subtitle">Chats get deleted after a month of no activity.</p>
+                <% } else { %>
+                    <div class="pagination messagePagination">
+                        <p class="subtitle pagePad">Pages:</p> 
+                        <% include ../partials/paginateChats %>
+                    </div>
+                <% } %>
+            <% chats.docs.forEach((chat) => { %>
+                <div class="columns messageItem">
+                    <% if (!chat.deal) { %>
+                        <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
+                            <button class="chatBtn">
+                                <span class="chatSpan"></span>
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <form action="/messages/<%= chat._id %>/<%= chat.deal %>?_method=PUT" method="POST" class="updMsg">
+                            <button class="chatBtn">
+                                <span class="chatSpan"></span>
+                            </button>
+                        </form>
+                    <% } %>
+                    <div class="column is-half">
+                        <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                            <%= chat.user1.avatarUrl %>
+                        <% } else { %>
+                            <%= chat.user2.avatarUrl %>
+                        <% } %>" class="open-img msgImg">
+                    </div>
+                    <div class="column prod_info ">
+                        <p class="title is-5 messageProfileText"><% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                            <%= chat.user1.fullname %>
+                        <% } else { %>
+                            <%= chat.user2.fullname %>
+                        <% } %></p>
+                        <p class="title is-5 messageProfileText">Deal: <%= chat.product.name %></p>
+                        <p class="subtitle messageProfileText">Last message: <br>
+                            <%=((  chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) : ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) %>
+                            /<%= (( chat.messages[chat.messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getDate()) : ( chat.messages[chat.messageCount - 1].createdAt.getDate()) %> -
+                            <%= (( chat.messages[chat.messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getHours()) : ( chat.messages[chat.messageCount - 1].createdAt.getHours()) %>:
+                            <%= (( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) : ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) %></p>
+                    </div>
+                </div>
+            <% }); %>  
+            <% if (chats.docs.length !== 0 ) { %>
+                <div class="pagination paginationD messagePagination">
+                    <p class="subtitle pagePad">Pages:</p> 
+                    <% include ../partials/paginateChats %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
+<script src="../../dist/js/messages.js"></script>
+<script src='../../dist/js/dashboard_products.js'></script>

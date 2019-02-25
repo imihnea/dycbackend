@@ -1,50 +1,50 @@
 <div class="column">
 
-    <img src="<%= product.image %>">
+        <img src="<%= product.image %>">
+        
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <tbody>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <td id="viewname">
+                       <%= product.name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <td id="viewdesc">
+                        <%= product.description %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Price ($)
+                    </th>
+                    <td id="viewprice">
+                        <%= product.price %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Currency
+                    </th>
+                    <td id="viewcurrency">
+                        <%= product.accepted %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Closing Date
+                    </th>
+                    <td id="viewdate">
+                        11/11/2018 4:33 PM
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <tbody>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <td id="viewname">
-                   <%= product.name %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Description
-                </th>
-                <td id="viewdesc">
-                    <%= product.description %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Price ($)
-                </th>
-                <td id="viewprice">
-                    <%= product.price %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Currency
-                </th>
-                <td id="viewcurrency">
-                    <%= product.accepted %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Closing Date
-                </th>
-                <td id="viewdate">
-                    11/11/2018 4:33 PM
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
+    </div>

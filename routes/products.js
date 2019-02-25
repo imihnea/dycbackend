@@ -1,18 +1,20 @@
 const express = require('express');
 
-const product = require('../models/product');
-
 const router = express.Router();
 
-router.get('/:id/view', (req, res) => {
-  product.findById(req.params.id).exec((err, foundproduct) => {
-    if (err || !foundproduct) {
-      req.flash('error', 'Sorry, that product does not exist!');
-      return res.redirect('/');
-    }
-    // render show template with that product
-    res.render('products/product_view', { product: foundproduct });
-  });
-});
+const { getProduct, postReport, buyProduct } = require('../controllers/products');
+
+const middleware = require('../middleware/index');
+
+const { isLoggedIn, asyncErrorHandler, hasCompleteProfile } = middleware;
+
+// Get product
+router.get('/:id/view', asyncErrorHandler(getProduct));
+
+// Report product/user
+router.post('/:id/report', isLoggedIn, postReport);
+
+// Buy products
+router.put('/:id/buy', isLoggedIn, hasCompleteProfile, asyncErrorHandler(buyProduct));
 
 module.exports = router;

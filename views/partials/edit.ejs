@@ -1,13 +1,23 @@
-<script src="../../dist/js/dashboard_new.js"></script>
 <link rel="stylesheet" href="../../dist/css/products.css">
-<div class="column" >
-        <h1>Edit <%= product.name %></h1>
-        <form action="/dashboard/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-            <input class="input smmargin" name="name" value="<%= product.name %>" type="text" required />
-            
-            <div class="filencat">
-                <div class="select">
-                    <select name="category">
+<div class="column dashboard-right">
+    <div class="columns">
+        <div class="column"></div>
+        <div class="column is-three-fifths">
+            <h1 class="title">Edit <%= product.name %></h1>
+            <form action="/dashboard/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
+                <div class="container is-fluid">
+                    <% if(errors){ %>
+                        <div class="notification is-danger" role="alert"> 
+                        <% errors.forEach(function( err){ %>
+                            <%= err.msg %><br>
+                        <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+                <input class="input smmargin" name="product[name]" value="<%= product.name %>" type="text" required />
+                <div class="select cont-select">
+                    <select name="product[category]" style="width: 100%;">
                             <option disabled selected>Categories</option>
                             <option disabled>Collectibles & Art</option>
                             <option <% if ( product.category == "collectibles") { %> selected <% } else { %> <% } %>  value="collectibles">Collectibles</option>
@@ -56,205 +66,233 @@
                             <option <% if ( product.category == "businessindustrial") { %> selected <% } else { %> <% } %>  value="businessindustrial">Business & Industrial</option>
                     </select>
                 </div>
+                <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
+                <hr>
+                <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
+                <div class="file-upload">
+                    <div>
+                        <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                            <span style="font-size: 5rem;">
+                                <i class="far fa-plus-square square <% if (product.images[0]) { %> hide <% } %>"></i>
+                                <i class="far fa-check-square <% if (!product.images[0]) { %> hide <% } %>"></i>
+                            </span>
+                        </label>
+                        <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                            <% if (product.images[0]) { %> value="<%= product.images[0].url %>" <% } %>>
+                        <label class="file-delete__label <% if (!product.images[0]) { %> hide <% } %>">
+                            <span>
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                            <span style="font-size: 5rem;">
+                                <i class="far fa-plus-square square <% if (product.images[1]) { %> hide <% } %>"></i>
+                                <i class="far fa-check-square <% if (!product.images[1]) { %> hide <% } %>"></i>
+                            </span>
+                        </label>
+                        <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                            <% if (product.images[1]) { %> value="<%= product.images[1].url %>" <% } %>>
+                        <label class="file-delete__label <% if (!product.images[1]) { %> hide <% } %>">
+                            <span>
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                            <span style="font-size: 5rem;">
+                                <i class="far fa-plus-square square <% if (product.images[2]) { %> hide <% } %>"></i>
+                                <i class="far fa-check-square <% if (!product.images[2]) { %> hide <% } %>"></i>
+                            </span>
+                        </label>
+                        <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                            <% if (product.images[2]) { %> value="<%= product.images[2].url %>" <% } %>>
+                        <label class="file-delete__label <% if (!product.images[2]) { %> hide <% } %>">
+                            <span>
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                            <span style="font-size: 5rem;">
+                                <i class="far fa-plus-square square <% if (product.images[3]) { %> hide <% } %>"></i>
+                                <i class="far fa-check-square <% if (!product.images[3]) { %> hide <% } %>"></i>
+                            </span>
+                        </label>
+                        <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                            <% if (product.images[3]) { %> value="<%= product.images[3].url %>" <% } %>>
+                        <label class="file-delete__label <% if (!product.images[3]) { %> hide <% } %>">
+                            <span>
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                            <span style="font-size: 5rem;">
+                                <i class="far fa-plus-square square <% if (product.images[4]) { %> hide <% } %>"></i>
+                                <i class="far fa-check-square <% if (!product.images[4]) { %> hide <% } %>"></i>
+                            </span>
+                        </label>
+                        <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                            <% if (product.images[4]) { %> value="<%= product.images[4].url %>" <% } %>>
+                        <label class="file-delete__label <% if (!product.images[4]) { %> hide <% } %>">
+                            <span>
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </label>
+                    </div>
+                </div>                                     
+                <hr>
+                <h4 class="new-text" style="margin-bottom: 3vh;">Accepted currencies</h4>
+                <label class="checkbox">
+                    <% if (product.accepted[0]){ %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy" id="btcimg">
+                            <input id="btc-check" type="checkbox" name="product[acc_btc]" value="true" class="curr_checkbox" checked>
+                        </label>
+                    <% } else { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy gray" id="btcimg">
+                            <input id="btc-check" type="checkbox" name="product[acc_btc]" value="true" class="curr_checkbox" >
+                        </label>
+                    <% } %>
+                </label>
+                <label class="checkbox">
+                    <% if (product.accepted[1]){ %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy" id="bchimg">
+                            <input id="bch-check" type="checkbox" name="product[acc_bch]"  class="curr_checkbox" value="true" checked>
+                        </label>
+                    <% } else { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy gray" id="bchimg">
+                            <input id="bch-check" type="checkbox" name="product[acc_bch]" value="true"  class="curr_checkbox">
+                        </label>
+                    <% } %>
+                </label>
+                <label class="checkbox">
+                    <% if (product.accepted[2]){ %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy" id="ethimg">
+                            <input id="eth-check" type="checkbox" name="product[acc_eth]"  value="true" class="curr_checkbox"  checked>
+                        </label>
+                    <% } else { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy gray" id="ethimg">
+                            <input id="eth-check" type="checkbox" name="product[acc_eth]" value="true"  class="curr_checkbox" >
+                        </label>
+                    <% } %>
+                </label>
+                <label class="checkbox">
+                    <% if (product.accepted[3]){ %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy" id="ltcimg">
+                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]"  value="true" class="curr_checkbox"  checked>
+                        </label>
+                    <% } else { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy gray" id="ltcimg">
+                            <input id="ltc-check" type="checkbox" name="product[acc_ltc]" value="true"  class="curr_checkbox" >
+                        </label>
+                    <% } %>
+                </label>
+                <label class="checkbox">
+                    <% if (product.accepted[4]){ %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy" id="dashimg">
+                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  value="true" class="curr_checkbox" checked>
+                        </label>
+                    <% } else { %>
+                        <label class="img-check ">
+                            <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy gray" id="dashimg">
+                            <input id="dash-check" type="checkbox" name="product[acc_dash]"  value="true" class="curr_checkbox" >
+                        </label>
+                    <% } %>
+                </label>
 
-                <div class="file has-name">
-                    <label class="file-label">
-                        <input class="file-input" type="file" name="image" accept="image/*">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="file-label">
-                                    Choose a file…
-                                </span>
-                            </span>
-                            <span class="file-name">
-                                .jpeg .jpg .png
-                            </span>
-                    </label>
+                <% if (product.accepted[0]) { %>
+                    <input class="input smmargin" id="btc-price" name="product[btc_price]" placeholder="<%= product.price[0] %> BTC" type="number" value="<%= product.price[0] %>" step=any />
+                <% } else { %>
+                    <input class="currency-input input smmargin" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step=any />
+                <% } %>
+
+                <% if (product.accepted[1]) { %>
+                    <input class="input smmargin" id="bch-price"  name="product[bch_price]" placeholder="<%= product.price[1] %> BCH" type="number" value="<%= product.price[1] %>" step=any />
+                <% } else { %>
+                    <input class="currency-input input smmargin" id="bch-price"  name="product[bch_price]" placeholder="Price (BCH)" type="number" step=any />
+                <% } %>
+
+                <% if (product.accepted[2]) { %>
+                    <input class="input smmargin" id="eth-price"  name="product[eth_price]" placeholder="<%= product.price[2] %> ETH" type="number" value="<%= product.price[2] %>" step=any />
+                <% } else { %>
+                    <input class="currency-input input smmargin" id="eth-price"  name="product[eth_price]" placeholder="Price (ETH)" type="number" step=any />
+                <% } %>
+
+                <% if (product.accepted[3]) { %>
+                    <input class="input smmargin" id="ltc-price"  name="product[ltc_price]" placeholder="<%= product.price[3] %> LTC" type="number" value="<%= product.price[3] %>" step=any />
+                <% } else { %>
+                    <input class="currency-input input smmargin" id="ltc-price"  name="product[ltc_price]" placeholder="Price (LTC)" type="number" step=any />
+                <% } %>
+
+                <% if (product.accepted[4]) { %>
+                    <input class="input smmargin" id="dash-price"  name="product[dash_price]" placeholder="<%= product.price[4] %> DASH" type="number" value="<%= product.price[4] %>" step=any />
+                <% } else { %>
+                    <input class="currency-input input smmargin" id="dash-price"  name="product[dash_price]" placeholder="Price (DASH)" type="number" step=any />
+                <% } %>
+
+                <hr />
+                <div class="control smmargin">
+                    <button class="button is-primary">Update</button>
                 </div>
-            </div>
-            
-            <textarea name="description" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
-            <h4 style="margin-top: 1vh;">Accepted currencies</h4>
-            <% 
-                let currencies = [0, 0, 0, 0, 0];
-                product.accepted.forEach(( key ) => {
-                    if (key == 'BTC'){
-                        currencies[0] = 1;
-                    }
-                    if (key == 'BCH'){
-                        currencies[1] = 1;
-                    }
-                    if (key == 'ETH'){
-                        currencies[2] = 1;
-                    }
-                    if (key == 'LTC'){
-                        currencies[3] = 1;
-                    }
-                    if (key == 'DASH'){
-                        currencies[4] = 1;
-                    }
-                });
-            %>
-            <label class="checkbox">
-                <% if (currencies[0] == 1){ %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy" id="btcimg">
-                        <input id="btc-check" type="checkbox" name="accepted" class="curr_checkbox" value="BTC" checked>
-                    </label>
-                <% } else { %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/bitcoin.png" id="btc-check-img" alt="Bitcoin" class="new_cccy gray" id="btcimg">
-                        <input id="btc-check" type="checkbox" name="accepted" class="curr_checkbox" value="BTC">
-                    </label>
-                <% } %>
-            </label>
-            <label class="checkbox">
-                <% if (currencies[1] == 1){ %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy" id="bchimg">
-                        <input id="bch-check" type="checkbox" name="accepted"  class="curr_checkbox" value="BCH" checked>
-                    </label>
-                <% } else { %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/bitcoincash.png" id="bch-check-img"  alt="BitcoinCash" class="new_cccy gray" id="bchimg">
-                        <input id="bch-check" type="checkbox" name="accepted"  class="curr_checkbox" value="BCH">
-                    </label>
-                <% } %>
-            </label>
-            <label class="checkbox">
-                <% if (currencies[2] == 1){ %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy" id="ethimg">
-                        <input id="eth-check" type="checkbox" name="accepted"  class="curr_checkbox" value="ETH" checked>
-                    </label>
-                <% } else { %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/ethereum.png" id="eth-check-img"  alt="ethereum" class="new_cccy gray" id="ethimg">
-                        <input id="eth-check" type="checkbox" name="accepted"  class="curr_checkbox" value="ETH">
-                    </label>
-                <% } %>
-            </label>
-            <label class="checkbox">
-                <% if (currencies[3] == 1){ %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy" id="ltcimg">
-                        <input id="ltc-check" type="checkbox" name="accepted"  class="curr_checkbox" value="LTC" checked>
-                    </label>
-                <% } else { %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/litecoin.png" id="ltc-check-img"  alt="Litecoin" class="new_cccy gray" id="ltcimg">
-                        <input id="ltc-check" type="checkbox" name="accepted"  class="curr_checkbox" value="LTC">
-                    </label>
-                <% } %>
-            </label>
-            <label class="checkbox">
-                <% if (currencies[4] == 1){ %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy" id="dashimg">
-                        <input id="dash-check" type="checkbox" name="accepted"  class="curr_checkbox" value="DASH" checked>
-                    </label>
-                <% } else { %>
-                    <label class="img-check ">
-                        <img src="../../dist/img/dash.png" id="dash-check-img"  alt="DASH" class="new_cccy gray" id="dashimg">
-                        <input id="dash-check" type="checkbox" name="accepted"  class="curr_checkbox" value="DASH">
-                    </label>
-                <% } %>
-            </label>
-
-            <% if (currencies[0] == 1) { %>
-                <input class="input smmargin" id="btc-price" name="btc_price" placeholder="<%= product.price[0] %> BTC" type="number" step=any />
-            <% } else { %>
-                <input class="currency-input input smmargin" id="btc-price" name="btc_price" placeholder="Price (BTC)" type="number" step=any />
-            <% } %>
-
-            <% if (currencies[1] == 1) { %>
-                <input class="input smmargin" id="bch-price"  name="bch_price" placeholder="<%= product.price[1] %> BCH" type="number" step=any />
-            <% } else { %>
-                <input class="currency-input input smmargin" id="bch-price"  name="bch_price" placeholder="Price (BCH)" type="number" step=any />
-            <% } %>
-
-            <% if (currencies[2] == 1) { %>
-                <input class="input smmargin" id="eth-price"  name="eth_price" placeholder="<%= product.price[2] %> ETH" type="number" step=any />
-            <% } else { %>
-                <input class="currency-input input smmargin" id="eth-price"  name="eth_price" placeholder="Price (ETH)" type="number" step=any />
-            <% } %>
-
-            <% if (currencies[3] == 1) { %>
-                <input class="input smmargin" id="ltc-price"  name="ltc_price" placeholder="<%= product.price[3] %> LTC" type="number" step=any />
-            <% } else { %>
-                <input class="currency-input input smmargin" id="ltc-price"  name="ltc_price" placeholder="Price (LTC)" type="number" step=any />
-            <% } %>
-
-            <% if (currencies[4] == 1) { %>
-                <input class="input smmargin" id="dash-price"  name="dash_price" placeholder="<%= product.price[4] %> DASH" type="number" step=any />
-            <% } else { %>
-                <input class="currency-input input smmargin" id="dash-price"  name="dash_price" placeholder="Price (DASH)" type="number" step=any />
-            <% } %>
-
-            <hr />
-            <div class="control smmargin">
-                <button class="button is-primary">Update</button>
-            </div>
-            
-            
-
-        </form>
-        <hr />
-        <h4 style="margin-top: 1vh;">Feature your deal</h4>
-        <h5>You have <%= user.feature_tokens %> DYC-Coins</h5>
-        <table class="table is-hoverable is-bordered">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Duration</th>
-                    <th>Cost</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Subcategory feature</td>
-                    <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
-                    <td>14 days</td>
-                    <td>5 DYC-Coins</td>
-                    <td>
-                        <form action="/dashboard/feature/subcateg/<%= product._id %>" method="POST">
-                            <div class="control smmargin">
-                                <button class="button is-primary">Feature</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Front-page feature</td>
-                    <td>The deal will be shown on the front-page of the website.</td>
-                    <td>7 days</td>
-                    <td>15 DYC-Coins</td>
-                    <td>
-                        <form action="/dashboard/feature/front/<%= product._id %>" method="POST">
-                            <div class="control smmargin">
-                                <button class="button is-primary">Feature</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Slider feature</td>
-                    <td>The deal will be shown on the front-page slider.</td>
-                    <td>3 days</td>
-                    <td>20 DYC-Coins</td>
-                    <td>
-                        <form action="/dashboard/feature/slider/<%= product._id %>" method="POST">
-                            <div class="control smmargin">
-                                <button class="button is-primary">Feature</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-            
+            </form>
+            <hr>
+            <h4 class="new-text">Feature your deal</h4>
+            <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
+            <table class="table is-hoverable is-bordered new-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Subcategory feature</td>
+                        <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
+                        <td>14 days</td>
+                        <td>5 Tokens</td>
+                        <td style="padding-top: 0;">
+                            <form action="/dashboard/<%= product._id %>/edit/1?_method=PUT" method="POST" style="padding: inherit;">
+                                <div class="control smmargin">
+                                    <button class="button is-primary">Feature</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Front-page feature</td>
+                        <td>The deal will be shown on the front-page of the website.</td>
+                        <td>7 days</td>
+                        <td>15 Tokens</td>
+                        <td style="padding-top: 0;">
+                            <form action="/dashboard/<%= product._id %>/edit/2?_method=PUT" method="POST" style="padding: inherit;">
+                                <div class="control smmargin">
+                                    <button class="button is-primary">Feature</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="column"></div>
     </div>
+</div>
+<script src="../../dist/js/dashboard_edit.js"></script>

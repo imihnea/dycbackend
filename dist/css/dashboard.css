@@ -205,6 +205,25 @@ hr{
     border-style: double;
     border-radius: 5px;
     border-color: orange;
+    position: relative; 
+    margin-top: 5px; 
+    margin-left: 5px; 
+    margin-right: 5px; 
+    width: 20%; 
+    height: 20%;
+}
+
+.messageProfile{
+    border-style: double;
+    border-radius: 5px;
+    border-color: orange;
+    position: relative; 
+    margin-top: 2vh; 
+    padding-top: 2.5vh; 
+    padding-bottom: 1vh; 
+    margin-left: 1vw; 
+    margin-right: 5px; 
+    height: 20%;
 }
 
 .messageItem:hover{
@@ -265,8 +284,13 @@ hr{
     justify-content: space-evenly;
 }
 
-@keyframes colorchange{
+@keyframes colorchange-orange{
     from { color: grey; }
+    to { color: orange; }
+}
+
+@keyframes colorchange-green{
+    from { color: green; }
     to { color: orange; }
 }
 
@@ -275,15 +299,20 @@ hr{
   color: grey;
   background: transparent;
   border-radius: .4em;
-  
+}
+
+.file-upload__label-green{
+    display: block;
+    color: green;
+    background: transparent;
+    border-radius: .4em;
 }
 
 .file-upload__label:hover{
     cursor: pointer;
-    /* color: orange; */
-    animation-name: colorchange;
+    animation-name: colorchange-orange;
     animation-duration: 0.5s;
-    animation-fill-mode:forwards;
+    animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
@@ -299,79 +328,68 @@ hr{
     opacity: 0;
 }
 
+.file-delete__input{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+}
+
+.file-delete__label{
+    display: block;
+    color: grey;
+    background: transparent;
+    border-radius: .4em;
+    cursor: pointer;
+}
+
+.file-delete__label:hover{
+    color: red;
+}
+
 .hide{
     visibility: hidden;
     display: none;
 }
 
-time{
-    font-size: 0.7rem;
-    color: #ccc;
-    margin-top: 3px;
-    float: right;
-    cursor: default;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+
+
+.pagePad{
+    padding-top: 1.7vh;
 }
 
-.toplevel{
-    border-style: double;
-    border-radius: 5px;
-    padding: 10px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+
+
+.is-success{
+    color: black !important;
 }
 
-.midlevel{
-    border-style: double;
-    border-radius: 5px;
-    padding: 2rem;
-    margin-top: -1.7rem;
-    border-top: 0;
-    height: 58vh;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+.options{
+    border-style: double; 
+    border-width: 1px; 
+    border-radius: 5px; 
+    width: 260px;
 }
 
-.leftlv{
-    padding-left: 0 !important;
+.optionsUnchecked{
+    border-color: #bf9c5c;
 }
 
-.bottomlv{
-    border-style: double;
-    padding: 2.5rem;
-    border-top: 0;
-    height: 103px;
-    padding-top: 0;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+.optionsChecked{
+    border-color: orange;
 }
 
-.recmsg{
-    background-color: rgb(88, 53, 20);
-    padding: 10px;
-    border-radius: 10px;
+.optionsChecked > .column i, .optionsChecked > .column p {
+    color: orange !important;
 }
 
-.sentmsg{
-    background-color: rgb(116, 53, 11);
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.msgbox{
-    align-content: center;
-    display: flex;
-    height: inherit;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-.msgbox textarea{
-    margin-top: -3px;
-    margin-bottom: 0px;
-    height: 80%;
-    margin-right: 1%;
+.transportFee{
+    display: flex; 
+    justify-content: space-evenly; 
+    align-items: baseline;
 }

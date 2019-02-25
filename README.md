@@ -6,17 +6,15 @@ Frontend:
 
     High Priority:
 
-        Search result page
-
-        Ongoing purchase interface
-
-        Finished deal => review interface
-
-        Messaging interface
+         Search result page
 
     Low Priority:
 
-        Make everything responsive (see comments in css files)
+         Make deal page look like contact page
+
+         Make everything responsive (see comments in css files)
+
+         Color Scheme
 
 
 Backend:
@@ -32,18 +30,10 @@ Backend:
       
       Dashboard 
                => Settings
-                  => New stuff here, maybe avatar, 2FA, connections.
-               => New Deals
-                  => Test multiple file input
-               => Closed Deals
-                  => Sold, expired, deactivated status
-               => Purchases
-                  => Query purchased by author
-      
-      Index 
-               => Get products from the database
-        
-      Validation where input!!!
+                  => connections
+               => 2 Factor when withdrawing
       Categories => Add more in future
       Register => Add recaptcha to avoid spam
       Contact => Add recaptcha to avoid spam                        
+      Logs => Log errors
+           => Log deal status changes

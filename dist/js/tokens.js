@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const currencies = [].slice.call(currency);
   const field = document.querySelectorAll('.fields');
   const fields = [].slice.call(field);
-  const input = document.querySelectorAll('.input-tokens');
+  const input = document.querySelectorAll('.inputTokens');
   const inputs = [].slice.call(input);
   currencies.forEach((item) => {
     item.addEventListener('click', (event) => {
@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
           currencies[j].classList.add('gray');
           fields[j].classList.add('currency-input');
           inputs[j].required = false;
+          inputs[j].value = '';
         }
         if (item === currencies[j]) {
           fields[j].classList.toggle('currency-input');

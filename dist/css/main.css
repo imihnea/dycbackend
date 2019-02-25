@@ -116,7 +116,7 @@ input, select, .dd-btn{
 
 .dropdown.categ{
     margin-left: 1vw;
-    width: 30%;
+    width: auto;
 }
 
 .dropdown-item{
@@ -196,6 +196,32 @@ body{
     position: relative;
     background-color: black;
 }
+
+
+.button:hover{
+    color: orange !important;
+    background-color: transparent !important;
+    border-color: orange !important;
+}
+
+.page{
+    color: black !important;
+    background-color: orange !important;
+    border-color: transparent !important;
+}
+
+.page:hover{
+    color: orange !important;
+    background-color: transparent !important;
+    border-color: orange !important;
+}
+
+.page.active{
+    color: orange !important;
+    background-color: transparent !important;
+    border-color: orange !important;
+}
+
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
     /* box-shadow: 0.1px 0.1px 1px black; */
@@ -233,6 +259,10 @@ div.column{
     padding-right: 1vw;
     padding-top: 1vh;
     color: orange;
+    width: 75%;
+    position: relative; 
+    margin: auto; 
+    margin-bottom: 10px;
 }
 
 hr{
@@ -261,8 +291,12 @@ hr{
     width: 30px;
 }
 
-.button.is-primary{
+.is-primary{
     background-color: orange !important;
+    color: black !important;
+}
+
+.is-danger{
     color: black !important;
 }
 
@@ -274,9 +308,22 @@ hr{
     color: #c36a1b !important;
 }
 
+.productSubTitleText{
+	color: orange !important;
+	text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2vh;
+}
+
+.productDescriptionText{
+	color: orange !important;
+	text-align: left;
+}
+
 .open-img{
-    width: 200px;
-    height: 100%;
+    width: auto;
+    height: 125px;
+    max-width: 200px;
 }
 
 .view-btn{
@@ -306,8 +353,9 @@ hr{
 }
 
 .featimgs{
-    max-width: 160px;
     margin: auto;
+    width: auto !important;
+    height: 125px !important;
 }
 
 .deals{
@@ -320,6 +368,22 @@ hr{
     margin-top: -1.5vh;
     margin-left: -12px;
     margin-right: -12px;
+}
+
+.pagination{
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 2vh;
+}
+
+.paginationD{ 
+    margin-top: 4vh;
+}
+
+.openPrices{
+    width: 30% !important;
+    position: relative !important;
+    margin: auto !important;
 }
 /* Content Ends */
 

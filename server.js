@@ -35,6 +35,8 @@ require('dotenv').config();
 
 const User = require('./models/user');
 
+const Product = require('./models/product');
+
 // requiring routes
 
 const categoryRoutes = require('./routes/categories');
@@ -44,6 +46,22 @@ const indexRoutes = require('./routes/index');
 const dashboardRoutes = require('./routes/dashboard');
 
 const productRoutes = require('./routes/products');
+
+const profileRoutes = require('./routes/profile');
+
+const messagesRoutes = require('./routes/messages');
+
+const reviewsRoutes = require('./routes/reviews');
+
+const reviewsRoutesUser = require('./routes/reviewsusers');
+
+const dealsRoutes = require('./routes/deals');
+
+const savvycallbackRoutes = require('./routes/savvy/callback');
+
+const savvycurrenciesRoutes = require('./routes/savvy/currencies');
+
+const savvystatusRoutes = require('./routes/savvy/status');
 
 // Gzip compression
 
@@ -74,6 +92,7 @@ app.use(methodOverride('_method'));
 app.locals.moment = require('moment');
 
 app.use(flash());
+app.use(bodyParser.json()); // for parsing POST req
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(passport.initialize());
@@ -138,14 +157,57 @@ app.use((req, res, next) => {
 
 // refactored routes
 app.use('/', indexRoutes);
+app.use('/', savvycallbackRoutes);
+app.use('/', savvycurrenciesRoutes);
+app.use('/', savvystatusRoutes);
 app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes
 app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);
+app.use('/profile', profileRoutes);
+app.use('/messages', messagesRoutes);
+app.use('/products/:id/reviews', reviewsRoutes);
+app.use('/profile/:id/reviews', reviewsRoutesUser);
+app.use('/deals', dealsRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
-  res.send('Error 404');
+  res.send('Your friendly 404.');
 });
+
+// error handler
+app.use(function(err, req, res, next) {
+  // // set locals, only providing error in development
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // // render the error page
+  // res.status(err.status || 500);
+  // res.render('error');
+  req.session.error = req.flash('error', err.message);
+  res.redirect('back');
+});
+
+// Remove expired feature fields
+
+// setInterval(() => {
+//   Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       // console.log(result);
+//     }
+//   });
+// }, 300000);
+
+// setInterval(() => {
+//   Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       // console.log(result);
+//     }
+//   });
+// }, 300000);
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');

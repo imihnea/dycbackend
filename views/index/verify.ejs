@@ -1,0 +1,22 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">
+                
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths lrform">
+                <h1 style="color: orange;">Check your phone</h1>
+                <form action="/verify" method="POST" style="padding-top: 3vh;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 1rem;">
+                        <input name="pin" required type="number" placeholder="1234" />
+                        <input name="requestId" type="hidden" value="<%= requestId %>" >
+                        <input name="number" type="hidden" value="<%= number %>" >
+                        <button class="button is-primary">Verify PIN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>
