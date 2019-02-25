@@ -79,6 +79,8 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
   console.log(encoded_callback);
   var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
   var ltcrate = req.body.ltcrate;
+  var orderTotal = req.body.orderTotal;
+  var coinsValue = req.body.coinsValue;
   request.get({
     url: url 
     }, function(error, response, body) {
@@ -92,14 +94,13 @@ router.post('/addresses/ltc', isLoggedIn, (req, res) => {
         var address = json.data.address;
         console.log(invoice);
         console.log(address);
-        var orderTotal = 0.01;
         Checkout.create({ user: req.user, invoice: invoice, address: address, orderId: orderId, confirmations: 0, maxConfirmations: 2, orderTotal: orderTotal, paid: false }, (err) => {
           if(err) {
             req.flash('error', err.message);
             res.redirect('back');
           } else {
             console.log(orderId);
-            res.render('ltc', { ltcrate, orderTotal, orderId, address })
+            res.render('ltc', { ltcrate, orderTotal, orderId, address, coinsValue })
           }
         });
       }

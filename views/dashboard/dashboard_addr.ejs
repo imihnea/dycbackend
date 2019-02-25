@@ -277,18 +277,14 @@
                                     <label class="label adrlabel">New<br/> Address</label>
                                     <input class="input smmargin adradr" name="ltcadr" placeholder="Litecoin Address" type="text" required />       
                                 </div>
-                    
+
                                 <button class="button is-primary">Change Address</button>            
                             </form>
                             <div class="address">
                                 <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
                                 <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.currency[3]) { %><%= user.currency[3] %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
                             </div>
-
-                            <form action="/dashboard/addresses/ltc" method="POST">
-                                <input type="hidden" name="ltcrate" value="<%= ltcrate %>" />
-                                <button type="submit" class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            </form>
+                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
                             <div class="modal modalTopup">
                                 <div class="modal-background"></div>
@@ -308,11 +304,11 @@
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/topup/3?_method=PUT" method="POST">
+                                        <form action="/dashboard/addresses/ltc" method="POST">
+                                            <input type="hidden" name="ltcrate" value="<%= ltcrate %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" />
-                                            
-                                            <!-- <button class="button is-primary">Continue</button> -->
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" />
+                                            <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
                                         <footer class="modal-card-foot">

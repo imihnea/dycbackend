@@ -237,9 +237,14 @@
                     </div>
                     <p style="color: orange !important;"><sub>Transportation costs included</sub></p>
                     <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
-                    <br>   
+                    <br>
+                    <% if(!currentUser){ %> 
+                    <a href="/login" class="button is-primary">Login to buy</a>
+                    <% } else if(currentUser.username === product.author.username) { %>
+                    <a href="/dashboard/tokens" class="button is-primary">Promote your product</a>
+                    <% } else { %>
                     <button class="button is-primary" id="buyBtn" disabled>Buy</button>
-                    
+                    <% } %>
                 </form>
                 <div style="margin-top: 1vh;">
                     <form action="/messages/<%= product._id %>/createChat" method="POST">

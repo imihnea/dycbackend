@@ -3,14 +3,14 @@
         <% include partials/savvy %>
     <div class="container content">
         <h1>Here you can Top-up Litecoin! Press button!</h1>
-        <button class="button is-primary" id="savvy-litecoin">Top-up 0.01 LTC</button>
+        <button class="button is-primary" id="savvy-litecoin">Top-up <%= coinsValue %> LTC</button>
     </div>
 </div>
 <script>
         (function () {
             window.savvy = new Savvy({
                 button: '#savvy-litecoin',
-                fiatValue: "<%= ltcrate %>"*"<%= orderTotal %>",
+                fiatValue: "<%= coinsValue %>"*"<%= ltcrate %>",
                 statusUrl: "/savvy/status/<%= orderId %>",
                 redirectTo: "/dashboard/addresses",
                 currencies: [
@@ -18,11 +18,11 @@
                         "title":"Litecoin",
                         "code":"LTC",
                         "icon":"/dist/img/litecoin.png",
-                        "blockExplorer":"https://live.blockcypher.com/ltc/address/<%= address %>/",
-                        "walletLink":"litecoin:<%= address %>?amount=0.01",
+                        "blockExplorer":"https://live.blockcypher.com/ltc/address/%s/",
+                        "walletLink":"litecoin:%s?amount=%s",
                         "maxConfirmations":2,
                         "address":"<%= address %>",
-                        "coinsValue":0.01,
+                        "coinsValue":"<%= coinsValue %>",
                         "rate":"<%= ltcrate %>"
                         }
                     ]
