@@ -6,6 +6,8 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
 var request = require("request");
+const uuidv1 = require('uuid/v1');
+const Checkout = require('../models/checkout');
 
 var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
@@ -75,6 +77,92 @@ module.exports = {
             var ltcrate = data.ltc.rate;
             var maxConfirmationsLTC = data.ltc.maxConfirmations;
             res.render('dashboard/dashboard_addr', { user: req.user, ltcrate, maxConfirmationsLTC });
+        }
+    });
+  },
+  async savvyStatus(req, res) {
+    var orderId = req.params.order;
+    var confirmations = null;
+      
+    var confirmations1 = await Checkout.findOne({orderId: orderId}, '-_id confirmations', function(err, confirmations) { 
+      if(err) {
+        res.send(err)
+      }
+    }); //get from DB, see callback.js
+    var maxConfirmations1 = await Checkout.findOne({orderId: orderId}, '-_id maxConfirmations', function(err, maxConfirmations) { 
+      if(err) {
+        res.send(err)
+      }
+    }); //get from DB, see callback.js
+    
+    confirmations = confirmations1.confirmations;
+    maxConfirmations = maxConfirmations1.maxConfirmations;
+    
+    console.log('----------------------');
+    console.log(confirmations);
+    console.log(maxConfirmations);
+    console.log('----------------------');
+    
+    var resp = {
+      success: confirmations >= maxConfirmations
+    };
+    if(confirmations !== null)
+      resp.confirmations = confirmations;
+    res.json(resp); //return this data to savvy form
+  },
+  getLTC(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var ltcrate = data.ltc.rate;
+            var maxConfirmationsLTC = data.ltc.maxConfirmations;
+            res.render('savvy/ltc', { ltcrate, maxConfirmationsLTC });
+        }
+    });
+  },
+  postLTC(req, res) {
+    var orderId = uuidv1();
+    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
+    var encoded_callback = encodeURIComponent(callback);
+    console.log(encoded_callback);
+    var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
+    var ltcrate = req.body.ltcrate;
+    var maxConfirmationsLTC = req.body.maxConfirmationsLTC;
+    var orderTotal = req.body.orderTotal;
+    var coinsValue = req.body.coinsValue;
+    request.get({
+      url: url 
+      }, function(error, response, body) {
+        if(error) {
+          req.flash('error', error.message);
+          res.redirect('back');
+        } else {
+          console.log(body);
+          var json = JSON.parse(body);
+          var invoice = json.data.invoice;
+          var address = json.data.address;
+          console.log(invoice);
+          console.log(address);
+          Checkout.create({
+            user: req.user,
+            invoice: invoice,
+            address: address,
+            orderId: orderId,
+            confirmations: 0,
+            maxConfirmations: maxConfirmationsLTC,
+            orderTotal: orderTotal,
+            paid: false
+          }, (err) => {
+            if(err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            } else {
+              console.log(orderId);
+              res.render('savvy/ltc', { ltcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsLTC })
+            }
+          });
         }
     });
   },

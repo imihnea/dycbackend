@@ -5,26 +5,14 @@ const multer = require('multer');
 
 const cloudinary = require('cloudinary');
 
-const product = require('../models/product');
-
-const User = require('../models/user');
-
-const Checkout = require('../models/checkout');
-
-const uuidv1 = require('uuid/v1');
-
-const request = require('request');
-
 const router = express.Router();
 
 const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, productDestroy, productEdit, productUpdate, productFeature, 
-        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct } = require('../controllers/dashboard');
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getLTC, postLTC } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile } = middleware; // destructuring assignment
-
-var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -60,63 +48,11 @@ router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 // Top-up
 router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
 
-router.get('/addresses/ltc', isLoggedIn, (req, res) => {
-  var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-  request(url, function(error, response, body){
-      if(!error && response.statusCode == 200) {
-          var json = JSON.parse(body);
-          var data = json.data;
-          var ltcrate = data.ltc.rate;
-          var maxConfirmationsLTC = data.ltc.maxConfirmations;
-          res.render('savvy/ltc', { ltcrate, maxConfirmationsLTC });
-      }
-  });
-});
+//GET Ltc deposit
+router.get('/addresses/ltc', isLoggedIn, getLTC);
 
-router.post('/addresses/ltc', isLoggedIn, (req, res) => {
-  var orderId = uuidv1();
-  var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-  var encoded_callback = encodeURIComponent(callback);
-  console.log(encoded_callback);
-  var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-  var ltcrate = req.body.ltcrate;
-  var maxConfirmationsLTC = req.body.maxConfirmationsLTC;
-  var orderTotal = req.body.orderTotal;
-  var coinsValue = req.body.coinsValue;
-  request.get({
-    url: url 
-    }, function(error, response, body) {
-      if(error) {
-        req.flash('error', error.message);
-        res.redirect('back');
-      } else {
-        console.log(body);
-        var json = JSON.parse(body);
-        var invoice = json.data.invoice;
-        var address = json.data.address;
-        console.log(invoice);
-        console.log(address);
-        Checkout.create({
-          user: req.user,
-          invoice: invoice,
-          address: address,
-          orderId: orderId,
-          confirmations: 0,
-          maxConfirmations: maxConfirmationsLTC,
-          orderTotal: orderTotal,
-          paid: false
-        }, (err) => {
-          if(err) {
-            req.flash('error', err.message);
-            res.redirect('back');
-          } else {
-            console.log(orderId);
-            res.render('savvy/ltc', { ltcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsLTC })
-          }
-        });
-      }
-  });
-});
+//POST Ltc deposit
+router.post('/addresses/ltc', isLoggedIn, postLTC);
 
 // Withdraw
 router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
