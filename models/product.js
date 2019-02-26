@@ -39,17 +39,19 @@ const ProductSchema = new Schema({
     id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      es_type: 'text'
     },
-    username: String,
-    city: String,
-    country: String,
-    state: String,
-    continent: String
+    username: { type: String, es_type: 'text'},
+    city: { type: String, es_type: 'text'},
+    country: { type: String, es_type: 'text'},
+    state: { type: String, es_type: 'text'},
+    continent: { type: String, es_type: 'text'}
   },
   reviews: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Review',
+      es_type: 'text'
     },
   ],
   avgRating: { type: Number, default: 0, es_indexed: true },
@@ -82,16 +84,14 @@ ProductSchema.methods.calculateAvgRating = function() {
 ProductSchema.plugin(mongoosePaginate);
 
 // For local ElasticSearch
-ProductSchema.plugin(mongoosastic);
+// ProductSchema.plugin(mongoosastic);
 
 // For hosted ElasticSearch
-// ProductSchema.plugin(mongoosastic,{  
-//   host:"",
-//   port: ,
-//   protocol: "https",
-//   auth: "username:password",
-//   curlDebug: true
-// });
+ProductSchema.plugin(mongoosastic,{  
+  // hosts: ['172.18.0.3:9300', '172.18.0.3:9200', 'elasticsearch:9200', 'elasticsearch:9300', 'localhost:9200', 'localhost:9300'],
+  host: 'elasticsearch',
+  port: 9200
+});
 
 mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
   if (err) {
