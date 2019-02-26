@@ -64,7 +64,7 @@ app.use(compression());
 // assign mongoose promise library and connect to database
 mongoose.Promise = global.Promise;
 
-const DATABASEURL = process.env.DATABASEURL || 'mongodb://localhost/DYC';
+const DATABASEURL = process.env.DATABASEURL || 'mongodb://mongo:27017';
 
 // Database
 
