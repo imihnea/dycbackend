@@ -39,31 +39,31 @@ app.post('/savvy/callback/:order', (req, res) => {
         if(checkout !== null) {
           var user = checkout.user;
           if(coin === 'btc') {
-            var query_btc = User.findByIdAndUpdate({ _id: user }, { btcbalance: btcbalance + amountPaid } );
+            var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: amountPaid } } );
             query_btc.then(function(doc) {
               console.log("Deposit arrived!");
             });
           }
           if(coin === 'ltc') {
-            var query_ltc = User.findByIdAndUpdate({ _id: user }, { ltcbalance: ltcbalance + amountPaid } );
+            var query_ltc = User.findByIdAndUpdate({ _id: user }, { $inc: { ltcbalance: amountPaid } } );
             query_ltc.then(function(doc) {
               console.log("Deposit arrived!");
             });
           }
           if(coin === 'eth') {
-            var query_eth = User.findByIdAndUpdate({ _id: user }, { ethbalance: ethbalance + amountPaid } );
+            var query_eth = User.findByIdAndUpdate({ _id: user }, { $inc: { ethbalance: amountPaid } } );
             query_eth.then(function(doc) {
               console.log("Deposit arrived!");
             });
           }
           if(coin === 'bch') {
-            var query_bch = User.findByIdAndUpdate({ _id: user }, { bchbalance: bchbalance + amountPaid } );
+            var query_bch = User.findByIdAndUpdate({ _id: user }, { $inc: { bchbalance: amountPaid } } );
             query_bch.then(function(doc) {
               console.log("Deposit arrived!");
             });
           }
           if(coin === 'dash') {
-            var query_dash = User.findByIdAndUpdate({ _id: user }, { dashbalance: dashbalance + amountPaid } );
+            var query_dash = User.findByIdAndUpdate({ _id: user }, { $inc: { dashbalance: amountPaid } } );
             query_dash.then(function(doc) {
               console.log("Deposit arrived!");
             });
