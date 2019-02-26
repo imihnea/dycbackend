@@ -63,22 +63,28 @@ module.exports = {
   get2factor(req, res) {
     res.render('index/2factor')
   },
-  post2factor(req, res) {
-  let phoneNumber = req.body.number;
-  nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
-    if(err) {
-      req.flash('error', err.message);
-      res.redirect('back');
+  async post2factor(req, res) {
+    let phoneNumber = req.body.number;
+    const user = await User.findOne({number: phoneNumber});
+    if (user) {
+      req.flash('error', 'Phone number already used. Please try again using another number.');
+      res.redirect('/2factor');
     } else {
-      let requestId = result.request_id;
-      if(result.status == '0') {
-        res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
-      } else {
-        req.flash('error', 'Something went wrong, please try again.');
-        res.redirect('back');
-      }
+      nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+        if(err) {
+          req.flash('error', err.message);
+          res.redirect('back');
+        } else {
+          let requestId = result.request_id;
+          if(result.status == '0') {
+            res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
+          } else {
+            req.flash('error', 'Something went wrong, please try again.');
+            res.redirect('back');
+          }
+        }
+      });
     }
-  });
   },
   postdisable2factor(req, res) {
     User.findByIdAndUpdate(req.user._id, { number: undefined, twofactor: false }, (err) => { // Change number: null to delete number completely
