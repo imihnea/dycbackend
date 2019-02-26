@@ -28,6 +28,29 @@
                 </div>
                 <summary class="firstTierFilter">Continent</summary>
             </details>
+            <details class="firstTierDetails">
+                <div class="menu-item">
+                    <input type="radio" name="condition" value="and" id="Brand New" <% if (continent == 'and') { %> checked <% } %>>
+                    <label for="Brand New" class="thirdTierFilter">Brand New</label>
+                </div>
+                <div class="menu-item">
+                    <input type="radio" name="condition" value="ik" id="Like New" <% if (continent == 'ik') { %> checked <% } %>>
+                    <label for="Like New" class="thirdTierFilter">Like New</label>
+                </div>
+                <div class="menu-item">
+                    <input type="radio" name="condition" value="efur" id="Refurbished" <% if (continent == 'efur') { %> checked <% } %>>
+                    <label for="Refurbished" class="thirdTierFilter">Refurbished</label>
+                </div>
+                <div class="menu-item">
+                    <input type="radio" name="condition" value="se" id="Used" <% if (continent == 'se') { %> checked <% } %>>
+                    <label for="Used" class="thirdTierFilter">Used</label>
+                </div>
+                <div class="menu-item">
+                    <input type="radio" name="condition" value="oke" id="Broken or Scrap" <% if (continent == 'oke') { %> checked <% } %>>
+                    <label for="Broken or Scrap" class="thirdTierFilter">Broken or Scrap</label>
+                </div>
+                <summary class="firstTierFilter">Condition</summary>
+            </details>
         </div>
         <div id="rating" class="facet"></div>
     </section>

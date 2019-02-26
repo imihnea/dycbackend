@@ -255,6 +255,10 @@ module.exports = {
       currency = req.body.currency.split('-');
       tags.push(currency[0]);
     }
+    let condition = '';
+    if (req.body.condition) {
+      condition = req.body.condition;
+    }
     let avgRating = req.body.avgRating;
     if (tags.length > 0) {
       await Product.search(
@@ -263,7 +267,8 @@ module.exports = {
             "must": [
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.category}`}},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -280,7 +285,7 @@ module.exports = {
                 secCat = item.opt;
               }
             });
-            res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );
@@ -291,7 +296,8 @@ module.exports = {
             "must": [
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.category}` }},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
           }
         }, 
@@ -305,7 +311,7 @@ module.exports = {
                 secCat = item.opt;
               }
             });
-            res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );
@@ -329,6 +335,10 @@ module.exports = {
       currency = req.body.currency.split('-');
       tags.push(currency[0]);
     }
+    let condition = '';
+    if (req.body.condition) {
+      condition = req.body.condition;
+    }
     let avgRating = req.body.avgRating;
     if (tags.length > 0) {
       await Product.search(
@@ -338,7 +348,8 @@ module.exports = {
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -355,7 +366,7 @@ module.exports = {
                 thiCat = item.opt;
               }
             });
-            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );
@@ -367,7 +378,8 @@ module.exports = {
               { "wildcard": { "name": `*${req.body.searchName}*` }},
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
           }
         }, 
@@ -381,7 +393,7 @@ module.exports = {
                 thiCat = item.opt;
               }
             });
-            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );
@@ -404,6 +416,10 @@ module.exports = {
       currency = req.body.currency.split('-');
       tags.push(currency[0]);
     }
+    let condition = '';
+    if (req.body.condition) {
+      condition = req.body.condition;
+    }
     let avgRating = req.body.avgRating;
     if (tags.length > 0) {
       await Product.search(
@@ -414,7 +430,8 @@ module.exports = {
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.secondSearchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
             "filter": [
               { "terms": { "tags": tags }}
@@ -426,7 +443,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );
@@ -439,7 +456,8 @@ module.exports = {
               { "match": { "category": `${req.body.searchCateg}`}},
               { "match": { "category": `${req.body.secondSearchCateg}`}},
               { "match": { "category": `${req.body.category}`}},
-              { "wildcard": { "author.continent": `*${continent}*`}}
+              { "wildcard": { "author.continent": `*${continent}*`}},
+              { "wildcard": {"condition": `*${condition}*`}}
             ],
           }
         }, 
@@ -448,7 +466,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating });
+            res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
           }
         }
       );

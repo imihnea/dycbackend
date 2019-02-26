@@ -9,7 +9,7 @@
                 <div class="columns">
                    <div class="column"></div>
                 <div class="column is-three-fifths">
-
+                    <h1 class="title">New Deal</h1>
                     <form action="/dashboard" method="POST" enctype="multipart/form-data">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                         <div class="container is-fluid">
@@ -48,6 +48,16 @@
                                     <option disabled selected>Tertiary Category</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="select cont-select">
+                            <select type="text" name="product[condition]" style="width: 100%">
+                                <option value="Not Specified" disabled selected>Condition</option>
+                                <option value="Brand New">Brand New</option>
+                                <option value="Like New">Like New</option>
+                                <option value="Refurbished">Refurbished</option>
+                                <option value="Used">Used</option>
+                                <option value="Broken or Scrap">Broken or Scrap</option>
+                            </select>
                         </div>
                         <textarea name="product[description]" class="textarea" placeholder="Description"></textarea>     
                         <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center;">
@@ -215,7 +225,7 @@
                         </div>
                         <hr>
                         <h4 class="new-text" style="margin-bottom: 3vh;">Transport Fees</h4>
-                        <div id="cityDeliv" class="hide" style="">
+                        <div id="cityDeliv" class="hide">
                             <p class="subtitle is-5">Same city delivery</p>
                             <br>
                             <div class="columns">
@@ -253,7 +263,7 @@
                             </div>
                         </div>
                         <br>
-                        <div id="stateDeliv" class="hide" style="">
+                        <div id="stateDeliv" class="hide">
                             <p class="subtitle is-5">Same state delivery</p> 
                             <br>
                             <div class="columns">
@@ -291,7 +301,7 @@
                             </div>
                         </div>
                         <br>
-                        <div id="countryDeliv" class="hide" style="">                           
+                        <div id="countryDeliv" class="hide">                           
                             <p class="subtitle is-5">Same country delivery</p>
                             <br>
                             <div class="columns">
@@ -329,7 +339,7 @@
                             </div>
                         </div>
                         <br>
-                        <div id="worldwideDeliv" class="hide" style="">
+                        <div id="worldwideDeliv" class="hide">
                             <p class="subtitle is-5">Worldwide delivery</p>
                             <br>
                             <div class="columns">

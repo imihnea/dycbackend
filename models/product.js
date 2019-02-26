@@ -9,6 +9,7 @@ const ProductSchema = new Schema({
   name: { type: String, es_indexed: true, es_type: 'text' },
   images: [{ url: {type: String, es_indexed: true, es_type: 'text' }, public_id: String }],
   category: { type: Array, es_indexed: true, es_type: 'text' },
+  condition: { type: String, es_indexed: true, es_type: 'text' },
   description: { type: String, es_indexed: true, es_type: 'text' },
   status: { type: String, es_indexed: true, es_type: 'text' },
   price: { type: Array, default: [0, 0, 0, 0, 0] },
@@ -84,14 +85,13 @@ ProductSchema.methods.calculateAvgRating = function() {
 ProductSchema.plugin(mongoosePaginate);
 
 // For local ElasticSearch
-// ProductSchema.plugin(mongoosastic);
+ProductSchema.plugin(mongoosastic);
 
 // For hosted ElasticSearch
-ProductSchema.plugin(mongoosastic,{  
-  // hosts: ['172.18.0.3:9300', '172.18.0.3:9200', 'elasticsearch:9200', 'elasticsearch:9300', 'localhost:9200', 'localhost:9300'],
-  host: 'elasticsearch',
-  port: 9200
-});
+// ProductSchema.plugin(mongoosastic,{  
+  // host: 'elasticsearch',
+  // port: 9200
+// });
 
 mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
   if (err) {
