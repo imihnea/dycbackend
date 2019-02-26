@@ -47,9 +47,11 @@
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/topup/0?_method=PUT" method="POST">
+                                        <form action="/dashboard/addresses/btc" method="POST">
+                                            <input type="hidden" name="btcrate" value="<%= btcrate %>" />
+                                            <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>
@@ -133,9 +135,11 @@
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/topup/1?_method=PUT" method="POST">
+                                        <form action="/dashboard/addresses/bch" method="POST">
+                                            <input type="hidden" name="bchrate" value="<%= bchrate %>" />
+                                            <input type="hidden" name="maxConfirmationsBCH" value="<%= maxConfirmationsBCH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" />
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -218,9 +222,11 @@
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/topup/2?_method=PUT" method="POST">
+                                        <form action="/dashboard/addresses/eth" method="POST">
+                                            <input type="hidden" name="ethrate" value="<%= ethrate %>" />
+                                            <input type="hidden" name="maxConfirmationsETH" value="<%= maxConfirmationsETH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" />
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -391,9 +397,11 @@
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/topup/4?_method=PUT" method="POST">
+                                        <form action="/dashboard/addresses/dash" method="POST">
+                                            <input type="hidden" name="dashrate" value="<%= dashrate %>" />
+                                            <input type="hidden" name="maxConfirmationsDASH" value="<%= maxConfirmationsDASH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" />
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>

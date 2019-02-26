@@ -75,8 +75,28 @@ module.exports = {
             var json = JSON.parse(body);
             var data = json.data;
             var ltcrate = data.ltc.rate;
+            var btcrate = data.btc.rate;
+            var bchrate = data.bch.rate;
+            var ethrate = data.eth.rate;
+            var dashrate = data.dash.rate;
             var maxConfirmationsLTC = data.ltc.maxConfirmations;
-            res.render('dashboard/dashboard_addr', { user: req.user, ltcrate, maxConfirmationsLTC });
+            var maxConfirmationsBTC = data.btc.maxConfirmations;
+            var maxConfirmationsBCH = data.bch.maxConfirmations;
+            var maxConfirmationsETH = data.eth.maxConfirmations;
+            var maxConfirmationsDASH = data.dash.maxConfirmations;
+            res.render('dashboard/dashboard_addr', 
+            { user: req.user,
+              ltcrate,
+              btcrate,
+              bchrate,
+              ethrate,
+              dashrate,
+              maxConfirmationsLTC,
+              maxConfirmationsBTC,
+              maxConfirmationsBCH,
+              maxConfirmationsETH,
+              maxConfirmationsDASH
+            });
         }
     });
   },
@@ -161,6 +181,230 @@ module.exports = {
             } else {
               console.log(orderId);
               res.render('savvy/ltc', { ltcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsLTC })
+            }
+          });
+        }
+    });
+  },
+  getBTC(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var btcrate = data.btc.rate;
+            var maxConfirmationsBTC = data.btc.maxConfirmations;
+            res.render('savvy/btc', { btcrate, maxConfirmationsBTC });
+        }
+    });
+  },
+  postBTC(req, res) {
+    var orderId = uuidv1();
+    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
+    var encoded_callback = encodeURIComponent(callback);
+    console.log(encoded_callback);
+    var url = "https://api.savvy.io/v3/btc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
+    var btcrate = req.body.btcrate;
+    var maxConfirmationsBTC = req.body.maxConfirmationsBTC;
+    var orderTotal = req.body.orderTotal;
+    var coinsValue = req.body.coinsValue;
+    request.get({
+      url: url 
+      }, function(error, response, body) {
+        if(error) {
+          req.flash('error', error.message);
+          res.redirect('back');
+        } else {
+          console.log(body);
+          var json = JSON.parse(body);
+          var invoice = json.data.invoice;
+          var address = json.data.address;
+          console.log(invoice);
+          console.log(address);
+          Checkout.create({
+            user: req.user,
+            invoice: invoice,
+            address: address,
+            orderId: orderId,
+            confirmations: 0,
+            maxConfirmations: maxConfirmationsBTC,
+            orderTotal: orderTotal,
+            paid: false
+          }, (err) => {
+            if(err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            } else {
+              console.log(orderId);
+              res.render('savvy/btc', { btcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsBTC })
+            }
+          });
+        }
+    });
+  },
+  getBCH(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var bchrate = data.bch.rate;
+            var maxConfirmationsBCH = data.bch.maxConfirmations;
+            res.render('savvy/bch', { bchrate, maxConfirmationsBCH });
+        }
+    });
+  },
+  postBCH(req, res) {
+    var orderId = uuidv1();
+    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
+    var encoded_callback = encodeURIComponent(callback);
+    console.log(encoded_callback);
+    var url = "https://api.savvy.io/v3/bch/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
+    var bchrate = req.body.bchrate;
+    var maxConfirmationsBCH = req.body.maxConfirmationsBCH;
+    var orderTotal = req.body.orderTotal;
+    var coinsValue = req.body.coinsValue;
+    request.get({
+      url: url 
+      }, function(error, response, body) {
+        if(error) {
+          req.flash('error', error.message);
+          res.redirect('back');
+        } else {
+          console.log(body);
+          var json = JSON.parse(body);
+          var invoice = json.data.invoice;
+          var address = json.data.address;
+          console.log(invoice);
+          console.log(address);
+          Checkout.create({
+            user: req.user,
+            invoice: invoice,
+            address: address,
+            orderId: orderId,
+            confirmations: 0,
+            maxConfirmations: maxConfirmationsBCH,
+            orderTotal: orderTotal,
+            paid: false
+          }, (err) => {
+            if(err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            } else {
+              console.log(orderId);
+              res.render('savvy/bch', { bchrate, orderTotal, orderId, address, coinsValue , maxConfirmationsBCH })
+            }
+          });
+        }
+    });
+  },
+  getETH(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var ethrate = data.eth.rate;
+            var maxConfirmationsETH = data.eth.maxConfirmations;
+            res.render('savvy/eth', { ethrate, maxConfirmationsETH });
+        }
+    });
+  },
+  postETH(req, res) {
+    var orderId = uuidv1();
+    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
+    var encoded_callback = encodeURIComponent(callback);
+    console.log(encoded_callback);
+    var url = "https://api.savvy.io/v3/eth/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
+    var ethrate = req.body.ethrate;
+    var maxConfirmationsETH = req.body.maxConfirmationsETH;
+    var orderTotal = req.body.orderTotal;
+    var coinsValue = req.body.coinsValue;
+    request.get({
+      url: url 
+      }, function(error, response, body) {
+        if(error) {
+          req.flash('error', error.message);
+          res.redirect('back');
+        } else {
+          console.log(body);
+          var json = JSON.parse(body);
+          var invoice = json.data.invoice;
+          var address = json.data.address;
+          console.log(invoice);
+          console.log(address);
+          Checkout.create({
+            user: req.user,
+            invoice: invoice,
+            address: address,
+            orderId: orderId,
+            confirmations: 0,
+            maxConfirmations: maxConfirmationsETH,
+            orderTotal: orderTotal,
+            paid: false
+          }, (err) => {
+            if(err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            } else {
+              console.log(orderId);
+              res.render('savvy/eth', { ethrate, orderTotal, orderId, address, coinsValue , maxConfirmationsETH })
+            }
+          });
+        }
+    });
+  },
+  getDASH(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var dashrate = data.dash.rate;
+            var maxConfirmationsDASH = data.dash.maxConfirmations;
+            res.render('savvy/dash', { dashrate, maxConfirmationsDASH });
+        }
+    });
+  },
+  postDASH(req, res) {
+    var orderId = uuidv1();
+    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
+    var encoded_callback = encodeURIComponent(callback);
+    console.log(encoded_callback);
+    var url = "https://api.savvy.io/v3/dash/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
+    var dashrate = req.body.dashrate;
+    var maxConfirmationsDASH = req.body.maxConfirmationsDASH;
+    var orderTotal = req.body.orderTotal;
+    var coinsValue = req.body.coinsValue;
+    request.get({
+      url: url 
+      }, function(error, response, body) {
+        if(error) {
+          req.flash('error', error.message);
+          res.redirect('back');
+        } else {
+          console.log(body);
+          var json = JSON.parse(body);
+          var invoice = json.data.invoice;
+          var address = json.data.address;
+          console.log(invoice);
+          console.log(address);
+          Checkout.create({
+            user: req.user,
+            invoice: invoice,
+            address: address,
+            orderId: orderId,
+            confirmations: 0,
+            maxConfirmations: maxConfirmationsDASH,
+            orderTotal: orderTotal,
+            paid: false
+          }, (err) => {
+            if(err) {
+              req.flash('error', err.message);
+              res.redirect('back');
+            } else {
+              console.log(orderId);
+              res.render('savvy/dash', { dashrate, orderTotal, orderId, address, coinsValue , maxConfirmationsDASH })
             }
           });
         }
