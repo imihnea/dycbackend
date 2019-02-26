@@ -17,7 +17,7 @@ app.post('/savvy/callback/:order', (req, res) => {
 
     
     console.log(data.confirmations);
-    if (data.confirmations >= 1) {
+    if (data.maxConfirmations > data.confirmations) {
       var query = Checkout.findOne({ orderId: orderId });
       query.exec(function(err, checkout) {
         if(err) {
@@ -73,6 +73,10 @@ app.post('/savvy/callback/:order', (req, res) => {
             console.log("Marked as paid");
           });
         }
+      });
+      var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {confirmations: data.confirmations });
+      query_1.then(function(doc2) {
+        console.log("Confirmation arrived!");
       });
       res.send(invoice);
     } else {
