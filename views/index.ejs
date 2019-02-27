@@ -52,7 +52,9 @@
 
 <div class="hero-body hero-content">
     <% if (products.docs.length === 0) { %>
-        <p class="title">There are no promoted products yet.</p>
+        <div class="column">
+            <p class="title">There are no promoted products yet.</p>
+        </div>
     <% } else { 
         if (products.docs.length > 20) { %>
             <div style="display: flex; justify-content: center; margin-bottom: 2vh;">

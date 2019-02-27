@@ -135,8 +135,10 @@
                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true )) && (product.deliveryOptions.worldwide.cost === 'paid') { %>
+                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                 <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% } else { %>
+                                <%= product.price[0] %>
                             <% } %></p>
                         </div>
                     <% } 
@@ -150,8 +152,10 @@
                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true )) && (product.deliveryOptions.worldwide.cost === 'paid') { %>
+                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                 <%= product.price[1] + (product.price[1]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% }else { %>
+                                <%= product.price[1] %>
                             <% } %></p>
                         </div>
                     <% } 
@@ -165,8 +169,10 @@
                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true )) && (product.deliveryOptions.worldwide.cost === 'paid') { %>
+                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                 <%= product.price[2] + (product.price[2]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% }else { %>
+                                <%= product.price[2] %>
                             <% } %></p>
                         </div>
                     <% } 
@@ -180,8 +186,10 @@
                                 <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                 <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true )) && (product.deliveryOptions.worldwide.cost === 'paid') { %>
+                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                 <%= product.price[3] + (product.price[3]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% }else { %>
+                                <%= product.price[3] %>
                             <% } %></p>
                         </div>
                     <% } 
@@ -195,8 +203,10 @@
                                 <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
                                 <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true )) && (product.deliveryOptions.worldwide.cost === 'paid') { %>
+                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
                                 <%= product.price[4] + (product.price[4]*product.deliveryOptions.worldwide.percent*0.01) %>
+                            <% }else { %>
+                                <%= product.price[4] %>
                             <% } %></p>
                         </div>
                     <% } %>

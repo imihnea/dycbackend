@@ -23,15 +23,35 @@
 }
 
 .msgImg{
-    width: 100%; 
-    height: 100px; 
+    height: 100%; 
     display: block;
     max-width: 200px;
+    max-height: 200px;
+}
+
+.messageObj{
+    border-style: double;
+    border-radius: 5px;
+    border-color: orange;
+    position: relative; 
+    margin-top: 5px; 
+    margin-left: 5px; 
+    margin-right: 5px;
+}
+
+.messageObj:hover{
+    background-color: #402504;
+}
+
+.is-half {
+    width: auto !important;
 }
 
 .flexWrap{
     justify-content: space-evenly; 
     flex-wrap: wrap;
+    height: 20vh; 
+    width: 25vw;
 }
 
 .productSide{
@@ -166,4 +186,14 @@ time{
     width: 100% !important; 
     margin-top: 0 !important; 
     margin-bottom: 0 !important;
+}
+
+.halfPad{
+    padding-left:25vw; 
+    padding-right: 25vw;
+}
+
+.flexEvenly{
+    display: flex; 
+    justify-content: space-evenly;
 }

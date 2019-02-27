@@ -238,6 +238,11 @@ hr{
 
 .modal-card-title{
     color: orange !important;
+    text-align: center;
+}
+
+.deleteForm{
+    margin: auto;
 }
 
 .delete::before, .modal-close::before, .delete::after, .modal-close::after{

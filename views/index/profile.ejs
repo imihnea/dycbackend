@@ -96,7 +96,7 @@
                         border-radius: 10px;">
                             <div>
                                 <a href="/profile/<%= review.author.id %>"><img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px;"></a>
-                                <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.author.username %></a>
+                                <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                                 <% if (review.createdAt) { %>
                                 <p class="productDescriptionText" style="text-align:center !important;" >
                                     <% switch(review.createdAt.getMonth()) {

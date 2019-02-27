@@ -60,6 +60,7 @@ module.exports = {
     // Create Chat
     async newChat(req, res) {
         // Verify if this chat already exists
+        const user = req.user;
         let chat = await Chat.findOne( { "user1.id": req.user._id, "product.id": req.params.id });
         if ( chat ) {
             res.redirect(`/messages/${chat._id}`);
@@ -70,7 +71,10 @@ module.exports = {
             if ( product.author.id.toString() === req.user._id.toString() ) {
                 req.flash('error', 'You cannot start a chat with yourself.');
                 res.redirect('back');
-            } else {
+            } else if ( ((user.city == product.author.city) && (product.deliveryOptions.city.valid == true)) ||
+                        ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) ||
+                        ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) ||
+                        (product.deliveryOptions.worldwide.valid == true) ) {
                 // Find the seller
                 const user2 = await User.findById( product.author.id );
                 const newChat = {
@@ -81,6 +85,9 @@ module.exports = {
                 };
                 chat = await Chat.create(newChat);
                 res.redirect(`/messages/${chat._id}`);
+            } else {
+                req.flash('error', 'The seller does not deliver in your area.');
+                res.redirect('back');
             }
         }        
     },

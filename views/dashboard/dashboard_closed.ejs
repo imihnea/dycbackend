@@ -10,61 +10,92 @@
                 <% if (products.docs.length === 0) { %>
                     <p class="title">You do not have any closed deals yet.</p>
                 <% } else { %>
-                    <div style="overflow-x: hidden;">
+                    <div>
                         <div class="pagination">
                             <p class="subtitle pagePad" >Pages:</p> 
                             <% include ../partials/paginateIndex %>
                         </div>
                         <% products.docs.forEach((product) => { %>
-                            <div class="columns">
-                                    <div class="column is-one-quarter">
-                                            <img src="<%= product.images[0].url %>" class="open-img">
+                            <article class="hit columns">
+                                <div class="column is-one-fifth product-picture-wrapper">
+                                    <div class="product-picture">
+                                        <img src="<%= product.images[0].url %>">
                                     </div>
-                                    <div class="column prod_info">
-                                        <p class="title is-5 dealname"><%= product.name %></p>
-                                        <p class="subtitle is-6"><sub>Shipping: TBD</sub></p>
-                                        <div style="display: flex;">
-                                            <a href="/products/<%= product._id %>/view"><button class="button view-btn">View</button></a>
-                                        </div>   
+                                </div>
+                                <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                    <div class="product-name">
+                                        <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
+                                        <% if (product.feat_1.status === true) { %>
+                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
+                                        <% } %>
+                                        <p>
+                                            <% for(let i = 0; i < 5; i++) { %>
+                                                <% if(i < Math.floor(product.avgRating)) { %>
+                                                <!-- display a full star -->
+                                                <i class="fas fa-star" style="color: orange;"></i>
+                                                <% } else if((product.avgRating - i) > 0 && (product.avgRating - i) < 1) { %>
+                                                <!-- display a half star -->
+                                                <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                                                <% } else { %>
+                                                <!-- display an empty star -->
+                                                <i class="far fa-star" style="color: orange;"></i>
+                                                <% } %>
+                                            <% } %>
+                                        </p>
+                                        <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                     </div>
-                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
-                                    <% if (product.accepted[0]) { %>
+                                    <div style="position: absolute; bottom: 10px; left: 23%;">
+                                        <% if (product.deliveryOptions.city.valid) { %>
+                                            <i class="fas fa-city fa-2x tooltip" style="color: green;"><span class="iTooltip">Same city delivery</span></i>  
+                                        <% } %>
+                                        <% if (product.deliveryOptions.state.valid) { %>
+                                            <i class="fas fa-map-marked-alt fa-2x tooltip" style="color: green;"><span class="iTooltip">Same state delivery</span></i>  
+                                        <% } %>
+                                        <% if (product.deliveryOptions.country.valid) { %>
+                                            <i class="fas fa-flag fa-2x tooltip" style="color: green;"><span class="iTooltip">Same country delivery</span></i>  
+                                        <% } %>
+                                        <% if (product.deliveryOptions.worldwide.valid) { %>
+                                            <i class="fas fa-globe-americas fa-2x tooltip" style="color: green;"><span class="iTooltip">Worldwide delivery</span></i>  
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                    <% if (product.btcPrice > 0) { %>
                                         <div class="prices openPrices">
-                                            <p class="price_text"> <%= product.price[0] %></p>
+                                            <p class="price_text"> <%= product.btcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     <% } 
-                                        if (product.accepted[1]) {
+                                        if (product.bchPrice > 0) {
                                     %>
                                         <div class="prices openPrices">
-                                            <p class="price_text"> <%= product.price[1] %></p>
+                                            <p class="price_text"> <%= product.bchPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                         </div>
                                     <% } 
-                                        if (product.accepted[2]) {
+                                        if (product.ethPrice > 0) {
                                     %>
                                         <div class="prices openPrices">
-                                            <p class="price_text"> <%= product.price[2] %></p>
+                                            <p class="price_text"> <%= product.ethPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                         </div>
                                     <% } 
-                                        if (product.accepted[3]) {
+                                        if (product.ltcPrice > 0) {
                                     %>
                                         <div class="prices openPrices">
-                                            <p class="price_text"> <%= product.price[3] %></p>
+                                            <p class="price_text"> <%= product.ltcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                         </div>
                                     <% } 
-                                        if (product.accepted[4]) {
+                                        if (product.dashPrice) {
                                     %>
                                         <div class="prices openPrices">
-                                            <p class="price_text"> <%= product.price[4] %></p>
+                                            <p class="price_text"> <%= product.dashPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                                         </div>
                                     <% } %>
                                 </div>
-                            </div>
-                            <hr>                         
+                            </article>                            
                         <% }); %>         
                     </div>        
                     <div  class="pagination paginationD">

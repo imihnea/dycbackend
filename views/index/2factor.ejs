@@ -4,12 +4,15 @@
 
 <div class="hero-body">
     <div class="container content">
-        <div class="columns" style="justify-content: center">
+        <div class="columns">
             <div class="column is-three-fifths lrform" >
-                <h1 style="color: orange">Activate 2-Factor</h1>
+                <h1 class="title">Activate 2-Factor</h1>
+                <!-- Add phone icon/image -->
+                <p class="subtitle is-3">Check your phone!</p>
+                <p class="subtitle is-5">You will receive a verification code to input here.</p>
                 <form action="/2factor" method="POST">
-                    <input class="input smmargin" name="number" type="tel" placeholder="Phone number" required  />
-                    <div class="control smmargin">
+                    <input class="input" name="number" type="tel" placeholder="Phone number" required  />
+                    <div class="control">
                         <button class="button is-primary">Activate</button>
                     </div>
                 </form>

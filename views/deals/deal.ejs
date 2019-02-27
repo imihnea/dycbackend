@@ -194,18 +194,20 @@
                                 default: { break; } } %> 
                         </div>
                         <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
-                        <a href="/products/<%= deal.product.id %>/view" style="display: block; margin: auto; width: 50%; margin-top: 1vh;" class="button is-primary">View Product</a>
                         <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                             <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; margin-bottom: 1vh;">
                                 <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST"><button class="button is-success">Accept Deal</button></form>
                                 <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
                             </div>
                         <% } %>
+                        
                         <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
-                            <div style="display: block; margin: auto; margin-top: 1vh;">
-                                <div style="display: flex; justify-content: space-evenly;">
-                                    <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
-                                    <button class="button is-primary refundRequest">Ask for a refund</button>
+                            <div style="display: block; margin: auto;">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <div>
+                                    <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-success">Complete Deal</button></form>
+                                    <button class="button is-primary refundRequest" style="margin-top: 1vh;">Ask for a refund</button>
                                     <div class="modal modalRefundRequest">
                                         <div class="modal-background"></div>
                                             <div class="modal-card">
@@ -244,6 +246,7 @@
                             </div>
                         <% } %>
                         <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested')) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>                            
                             <button class="button is-primary refundRequest">Ask for a refund</button>
                             <div class="modal modalRefundRequest">
                                 <div class="modal-background"></div>
@@ -282,6 +285,7 @@
                         <% } %>
 
                         <% if ((user._id.toString() === seller._id.toString()) && (deal.refund.status !== 'Not requested')) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                             <button class="button is-primary refundDetails">View Refund Details</button>
                             <div class="modal modalRefundDetails">
                                 <div class="modal-background"></div>
@@ -332,13 +336,22 @@
                                     </div>
                             </div>
                         <% } %>
+                        
                         <% if ((deal.status === 'Processing') && (user._id.toString() === buyer._id.toString())) { %>
-                            <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                            <div style="display: flex; justify-content: space-evenly">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                            </div>
                         <% } %>
                         <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
-                            <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                            <div style="display: flex; justify-content: space-evenly">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                            </div>
                         <% } %>
-
+                        <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === seller._id.toString())) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                        <% } %>
                     </div>
                 </div>
             </div>

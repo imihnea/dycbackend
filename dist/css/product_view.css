@@ -77,3 +77,13 @@
 .pricesChecked {
 	background-color: rgb(68, 40, 4);
 }
+
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+
+.prices {
+	width: 55% !important;
+	margin-top: 1vh;
+}
