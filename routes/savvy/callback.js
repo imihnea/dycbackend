@@ -83,7 +83,7 @@ app.post('/savvy/callback/:order', (req, res) => {
             if(err) {
               res.send('error');
             }
-            var user = callback.user;
+            var user1 = callback.user;
             const output = `
             <h1>Deposit successfully confirmed!</h1>
             <h3>Thank you for your trust, here are the details:</h3>
@@ -106,7 +106,7 @@ app.post('/savvy/callback/:order', (req, res) => {
                   // setup email data with unicode symbols
                   const mailOptions = {
                       from: `support@dyc.com>`, // sender address
-                      to: `${user.email}`, // list of receivers
+                      to: `${user1.email}`, // list of receivers
                       subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
                       html: output, // html body
                   };
