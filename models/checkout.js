@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const CheckoutSchema = new Schema({
     user: { type: String },
     orderId: { type: String },
+    coin: { type: String },
     invoice: { type: String, unique: true },
     address: { type: String },
     confirmations: { type: Number },

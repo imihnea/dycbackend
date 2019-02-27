@@ -167,6 +167,7 @@ module.exports = {
           Checkout.create({
             user: req.user,
             invoice: invoice,
+            coin: 'LTC',
             address: address,
             orderId: orderId,
             confirmations: 0,
@@ -179,7 +180,7 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/ltc', { ltcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsLTC })
+              res.render('savvy/ltc', { ltcrate, orderId, address, coinsValue , maxConfirmationsLTC })
             }
           });
         }
@@ -205,7 +206,6 @@ module.exports = {
     var url = "https://api.savvy.io/v3/btc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
     var btcrate = req.body.btcrate;
     var maxConfirmationsBTC = req.body.maxConfirmationsBTC;
-    var orderTotal = req.body.orderTotal;
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
@@ -223,11 +223,12 @@ module.exports = {
           Checkout.create({
             user: req.user,
             invoice: invoice,
+            coin: 'BTC',
             address: address,
             orderId: orderId,
             confirmations: 0,
             maxConfirmations: maxConfirmationsBTC,
-            orderTotal: orderTotal,
+            orderTotal: coinsValue,
             paid: false
           }, (err) => {
             if(err) {
@@ -235,7 +236,7 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/btc', { btcrate, orderTotal, orderId, address, coinsValue , maxConfirmationsBTC })
+              res.render('savvy/btc', { btcrate, orderId, address, coinsValue , maxConfirmationsBTC })
             }
           });
         }
@@ -261,7 +262,6 @@ module.exports = {
     var url = "https://api.savvy.io/v3/bch/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
     var bchrate = req.body.bchrate;
     var maxConfirmationsBCH = req.body.maxConfirmationsBCH;
-    var orderTotal = req.body.orderTotal;
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
@@ -279,11 +279,12 @@ module.exports = {
           Checkout.create({
             user: req.user,
             invoice: invoice,
+            coin: 'BCH',
             address: address,
             orderId: orderId,
             confirmations: 0,
             maxConfirmations: maxConfirmationsBCH,
-            orderTotal: orderTotal,
+            orderTotal: coinsValue,
             paid: false
           }, (err) => {
             if(err) {
@@ -291,7 +292,7 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/bch', { bchrate, orderTotal, orderId, address, coinsValue , maxConfirmationsBCH })
+              res.render('savvy/bch', { bchrate, orderId, address, coinsValue , maxConfirmationsBCH })
             }
           });
         }
@@ -317,7 +318,6 @@ module.exports = {
     var url = "https://api.savvy.io/v3/eth/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
     var ethrate = req.body.ethrate;
     var maxConfirmationsETH = req.body.maxConfirmationsETH;
-    var orderTotal = req.body.orderTotal;
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
@@ -335,11 +335,12 @@ module.exports = {
           Checkout.create({
             user: req.user,
             invoice: invoice,
+            coin: 'ETH',
             address: address,
             orderId: orderId,
             confirmations: 0,
             maxConfirmations: maxConfirmationsETH,
-            orderTotal: orderTotal,
+            orderTotal: coinsValue,
             paid: false
           }, (err) => {
             if(err) {
@@ -347,7 +348,7 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/eth', { ethrate, orderTotal, orderId, address, coinsValue , maxConfirmationsETH })
+              res.render('savvy/eth', { ethrate, orderId, address, coinsValue , maxConfirmationsETH })
             }
           });
         }
@@ -373,7 +374,6 @@ module.exports = {
     var url = "https://api.savvy.io/v3/dash/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
     var dashrate = req.body.dashrate;
     var maxConfirmationsDASH = req.body.maxConfirmationsDASH;
-    var orderTotal = req.body.orderTotal;
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
@@ -391,11 +391,12 @@ module.exports = {
           Checkout.create({
             user: req.user,
             invoice: invoice,
+            coin: 'DASH',
             address: address,
             orderId: orderId,
             confirmations: 0,
             maxConfirmations: maxConfirmationsDASH,
-            orderTotal: orderTotal,
+            orderTotal: coinsValue,
             paid: false
           }, (err) => {
             if(err) {
@@ -403,7 +404,7 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/dash', { dashrate, orderTotal, orderId, address, coinsValue , maxConfirmationsDASH })
+              res.render('savvy/dash', { dashrate, orderId, address, coinsValue , maxConfirmationsDASH })
             }
           });
         }
