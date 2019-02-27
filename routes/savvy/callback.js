@@ -79,10 +79,11 @@ app.post('/savvy/callback/:order', (req, res) => {
             console.log("Marked as paid");
           });
           var mailquery = User.findById({ _id: user });
-          mailquery.exec(function(err, user) {
+          mailquery.exec(function(err, callback) {
             if(err) {
               res.send('error');
             }
+            var user = callback.user;
             const output = `
             <h1>Deposit successfully confirmed!</h1>
             <h3>Thank you for your trust, here are the details:</h3>
