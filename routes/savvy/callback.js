@@ -78,8 +78,9 @@ app.post('/savvy/callback/:order', (req, res) => {
           query_4.then(function(doc) {
             console.log("Marked as paid");
           });
-          var mailquery = User.findOne({ _id: user });
+          var mailquery = User.findById({ _id: user });
           mailquery.exec(function(err, user1) {
+            console.log(`user1 variable is === ${user1}`);
             if(err) {
               res.send('error');
             }
@@ -112,7 +113,7 @@ app.post('/savvy/callback/:order', (req, res) => {
                   // send mail with defined transport object
                   transporter.sendMail(mailOptions, (error) => {
                       if (error) {
-                      console.log('error sending mail for confirmation');
+                      console.log(`error for sending mail confirmation === ${error}`);
                       }
                   }); 
               });
