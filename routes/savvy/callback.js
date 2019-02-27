@@ -105,7 +105,7 @@ app.post('/savvy/callback/:order', (req, res) => {
                   });
                   // setup email data with unicode symbols
                   const mailOptions = {
-                      from: `support@dyc.com>`, // sender address
+                      from: `support@dyc.com`, // sender address
                       to: `${user1.email}`, // list of receivers
                       subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
                       html: output, // html body
