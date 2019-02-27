@@ -150,7 +150,6 @@ module.exports = {
     var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
     var ltcrate = req.body.ltcrate;
     var maxConfirmationsLTC = req.body.maxConfirmationsLTC;
-    var orderTotal = req.body.orderTotal;
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
@@ -172,7 +171,7 @@ module.exports = {
             orderId: orderId,
             confirmations: 0,
             maxConfirmations: maxConfirmationsLTC,
-            orderTotal: orderTotal,
+            orderTotal: coinsValue,
             paid: false
           }, (err) => {
             if(err) {

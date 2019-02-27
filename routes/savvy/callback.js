@@ -1,6 +1,12 @@
 const app = new (require('express').Router)();
 const Checkout = require('../../models/checkout');
 const User = require('../../models/user');
+const nodemailer = require('nodemailer');
+
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 app.post('/savvy/callback/:order', (req, res) => {
   if(req.body && req.params.order) {
@@ -71,6 +77,45 @@ app.post('/savvy/callback/:order', (req, res) => {
           var query_4 = Checkout.findOneAndUpdate({ orderId: orderId }, { paid: true });
           query_4.then(function(doc) {
             console.log("Marked as paid");
+          });
+          var mailquery = User.findById({ _id: user });
+          mailquery.exec(function(err, user) {
+            if(err) {
+              res.send('error');
+            }
+            const output = `
+            <h1>Deposit successfully confirmed!</h1>
+            <h3>Thank you for your trust, here are the details:</h3>
+            <h3>Amount deposited: ${amountPaid} ${coin.toUpperCase()} </h3>
+            <h3>We look forward to doing more business with you!</h3>
+            <h3>Deal Your Crypto</h3>
+            `;
+             // Generate test SMTP service account from ethereal.email
+              // Only needed if you don't have a real mail account for testing
+              nodemailer.createTestAccount(() => {
+                  // create reusable transporter object using the default SMTP transport
+                  const transporter = nodemailer.createTransport({
+                  host: EMAIL_HOST,
+                  port: EMAIL_PORT,
+                  auth: {
+                      user: EMAIL_USER,
+                      pass: EMAIL_API_KEY,
+                  },
+                  });
+                  // setup email data with unicode symbols
+                  const mailOptions = {
+                      from: `support@dyc.com>`, // sender address
+                      to: `${user.email}`, // list of receivers
+                      subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
+                      html: output, // html body
+                  };
+                  // send mail with defined transport object
+                  transporter.sendMail(mailOptions, (error) => {
+                      if (error) {
+                      console.log('error sending mail for confirmation');
+                      }
+                  }); 
+              });
           });
         }
       });

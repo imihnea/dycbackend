@@ -24,8 +24,8 @@
                                 <button class="button is-primary">Change Address</button>
                             </form>    
                             <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.currency[0]) { %><%= user.currency[0] %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
+                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -112,8 +112,8 @@
                             <button class="button is-primary">Change Address</button>          
                             </form>
                             <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="bch_value" placeholder="<% if (user.currency[1]) { %><%= user.currency[1] %> BCH<% } else { %>0.000000000 BCH <% } %>" type="number" step="any" disabled />
+                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                <input class="input smmargin adradr" name="bch_value" placeholder="<% if (user.bchbalance) { %><%= user.bchbalance %> BCH<% } else { %>0.000000000 BCH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -199,8 +199,8 @@
                                 <button class="button is-primary">Change Address</button>         
                             </form> 
                             <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="eth_value" placeholder="<% if (user.currency[2]) { %><%= user.currency[2] %> ETH<% } else { %>0.000000000 ETH <% } %>" type="number" step="any" disabled />
+                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                <input class="input smmargin adradr" name="eth_value" placeholder="<% if (user.ethbalance) { %><%= user.ethbalance %> ETH<% } else { %>0.000000000 ETH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -287,8 +287,8 @@
                                 <button class="button is-primary">Change Address</button>            
                             </form>
                             <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.currency[3]) { %><%= user.currency[3] %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
+                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.ltcbalance) { %><%= user.ltcbalance %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -374,8 +374,8 @@
                             <button class="button is-primary">Change Address</button>
                             </form>
                             <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Value</label>
-                                <input class="input smmargin adradr" name="dash_value" placeholder="<% if (user.currency[4]) { %><%= user.currency[4] %> DASH<% } else { %>0.000000000 DASH <% } %>" type="number" step="any" disabled />
+                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                <input class="input smmargin adradr" name="dash_value" placeholder="<% if (user.dashbalance) { %><%= user.dashbalance %> DASH<% } else { %>0.000000000 DASH <% } %>" type="number" step="any" disabled />
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>

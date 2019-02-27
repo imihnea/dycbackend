@@ -262,27 +262,27 @@
                             <div class="dropdown-content currencies">
                                <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="btc_curr"><% if (currentUser.currency[0]) {%> <%=  currentUser.currency[0] %> <%  } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance %> <%  } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="bch_curr"><% if (currentUser.currency[1]) { %> <%=  currentUser.currency[1] %> <% } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="bch_curr"><% if (currentUser.bchbalance) { %> <%=  currentUser.bchbalance %> <% } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="../../dist/img/bitcoincash.png" alt="Bitcoin Cash"></span>
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="eth_curr"><% if (currentUser.currency[2]) { %> <%=  currentUser.currency[2] %> <% } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="eth_curr"><% if (currentUser.ethbalance) { %> <%=  currentUser.ethbalance %> <% } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="ltc_curr"><% if (currentUser.currency[3]) { %> <%=  currentUser.currency[3] %> <% } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="ltc_curr"><% if (currentUser.ltcbalance) { %> <%=  currentUser.ltcbalance %> <% } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="dash_curr"><% if (currentUser.currency[4]) { %> <%= currentUser.currency[4] %> <% } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="dash_curr"><% if (currentUser.dashbalance) { %> <%= currentUser.dashbalance %> <% } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
                                 </div>
                                 <hr class="dropdown-divider">
