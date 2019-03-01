@@ -2,18 +2,16 @@
 
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
 <div class="hero-body">
-    <div class="container content">
-                
+    <div class="container content">       
         <div class="columns" style="justify-content: center">
             <div class="column is-three-fifths lrform">
-                <h1 style="color: orange;">Check your phone</h1>
-                <form action="/verify" method="POST" style="padding-top: 3vh;">
-                    <div style="display: flex; justify-content: space-between; padding-top: 1rem;">
-                        <input name="pin" required type="number" placeholder="1234" />
-                        <input name="requestId" type="hidden" value="<%= requestId %>" >
-                        <input name="number" type="hidden" value="<%= number %>" >
-                        <button class="button is-primary">Verify PIN</button>
-                    </div>
+                <h1 style="color: orange; margin-top: 1vh;">Verify Number</h1>
+                <p class="subtitle is-5">Input your verification number to activate two-factor authentication.</p>
+                <form action="/verify" method="POST" style="padding-top: 3vh; display: flex; justify-content: space-evenly;">
+                    <input name="pin" type="number" placeholder="1234" class="input" style="width: 80%;" required />
+                    <input name="requestId" type="hidden" value="<%= requestId %>" required>
+                    <input name="number" type="hidden" value="<%= number %>" required>
+                    <button class="button is-primary">Verify PIN</button>
                 </form>
             </div>
         </div>

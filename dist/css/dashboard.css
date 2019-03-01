@@ -299,6 +299,10 @@ hr{
     to { color: orange; }
 }
 
+.green {
+    color: green;
+}
+
 .file-upload__label {
   display: block;
   color: grey;
@@ -358,17 +362,13 @@ hr{
 }
 
 .hide{
-    visibility: hidden;
-    display: none;
+    visibility: hidden !important;
+    display: none !important;
 }
-
-
 
 .pagePad{
     padding-top: 1.7vh;
 }
-
-
 
 .is-success{
     color: black !important;

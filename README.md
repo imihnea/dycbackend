@@ -6,16 +6,11 @@ Frontend:
 
     High Priority:
 
-         UI 
-            => 2 factor
-            => New product => Repeatable deal => Add an icon + tooltip
-                           => Transport Fees => Disappear if no delivery option is selected
-                                             => Less empty space
-                           => Feature deal
+         Color Scheme
                       
     Low Priority:
 
-         Color Scheme
+         UI => New product => Feature deal
 
          Make everything responsive (see comments in css files)
 

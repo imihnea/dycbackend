@@ -1,17 +1,18 @@
 <% include ../partials/header %>
 
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
+<link rel="stylesheet" href="../../dist/css/intlTelInput.min.css">
 
 <div class="hero-body">
     <div class="container content">
         <div class="columns">
-            <div class="column is-three-fifths lrform" >
+            <div class="column is-three-fifths lrform" style="margin: auto;">
                 <h1 class="title">Activate 2-Factor</h1>
-                <!-- Add phone icon/image -->
-                <p class="subtitle is-3">Check your phone!</p>
-                <p class="subtitle is-5">You will receive a verification code to input here.</p>
-                <form action="/2factor" method="POST">
-                    <input class="input" name="number" type="tel" placeholder="Phone number" required  />
+                <br>
+                <p class="subtitle is-3">Grab your phone!</p>
+                <p class="subtitle is-5">You will receive a verification code after submitting your phone number.</p>
+                <form action="/2factor" method="POST" style="display: flex; justify-content: space-evenly;">
+                    <input class="input" name="number" id="telephone" type="tel" placeholder="Phone number" required/>
                     <div class="control">
                         <button class="button is-primary">Activate</button>
                     </div>
@@ -20,5 +21,6 @@
         </div>
     </div>
 </div>
-
 <% include ../partials/footer %>
+<script src="../../dist/js/intlTelInput.min.js"></script>
+<script src="../../dist/js/2factor.js"></script>

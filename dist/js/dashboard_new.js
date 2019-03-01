@@ -90,6 +90,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  let city = document.getElementById('city');
+  let state = document.getElementById('state');
+  let country = document.getElementById('country');
+  let worldwide = document.getElementById('worldwide'); 
+  let transport = document.getElementById('transport');
+
+  city.addEventListener('change', () => {
+    if (city.checked == true) {
+      transport.classList.remove('hide');
+    } else {
+      if ((state.checked == false) && (country.checked == false) && 
+          (worldwide.checked == false)) {
+            transport.classList.add('hide');
+      }
+    }
+  });
+  state.addEventListener('click', () => {
+    if (state.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((city.checked == false) && (country.checked == false) && 
+            (worldwide.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+  country.addEventListener('click', () => {
+    if (country.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((state.checked == false) && (city.checked == false) && 
+            (worldwide.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+  worldwide.addEventListener('click', () => {
+    if (worldwide.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((state.checked == false) && (country.checked == false) && 
+            (city.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+
   document.getElementsByName('product[cityTransport]').forEach((item) => {
     item.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -161,6 +220,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('paidWorldwideOpt').classList.remove('optionsChecked');
       }
     });
+  });
+
+  const repeatable = document.querySelector('.fa-redo');
+  repeatable.addEventListener('click', (event) => {
+    event.stopPropagation();
+    repeatable.classList.toggle('green');
   });
 
   const newCurrency = document.querySelectorAll('.new_cccy');
