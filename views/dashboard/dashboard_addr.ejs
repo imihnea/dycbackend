@@ -13,12 +13,12 @@
                     <div class="columns">
                         <div class="column">
                             <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
+                                <label class="label adrlabel">Current<br/>  Withdrawal Address</label>
                                 <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
                             </div>
                             <form action="/dashboard/addresses" method="POST">
                                 <div class="address">
-                                    <label class="label adrlabel">New <br/> Address</label>
+                                    <label class="label adrlabel">New <br/> Withdrawal Address</label>
                                     <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                                 </div>
                                 <button class="button is-primary">Change Address</button>
@@ -70,22 +70,28 @@
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
                                         <div style="text-align: left;">
-                                            <p class="subtitle">1. Instruction 1</p>
-                                            <p class="subtitle">2. Instruction 2</p>
-                                            <p class="subtitle">3. Instruction 3</p>
-                                            <p class="subtitle">4. Instruction 4</p>
-                                            <p class="subtitle">5. Instruction 5</p>    
+                                            <p class="subtitle">1. Input how much you wish to withdraw</p>
+                                            <p class="subtitle">2. Add a withdrawal address (if you haven't already)</p>
+                                            <p class="subtitle">3. Bear in mind there will be 0.00005 BTC subtracted to cover transaction fee.</p>
+                                            <p class="subtitle">4. Click continue to start the transaction</p>
+                                            <p class="subtitle">5. If you've received a succes message, check your wallet for your funds.</p>
                                         </div>
                                         <br>
                                         <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdraw/0?_method=PUT" method="POST">
+                                        <form class="modal-form" action="/dashboard/addresses/withdrawBTC" method="POST">
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" required/>
+                                            <% if(user.btcadr) { %>
+                                            <input type="hidden" name="address" value="<%= user.btcadr %>" />
+                                            <% } else { %>
+                                            <input class="input adradr" name="address" placeholder="Bitcoin Address" type="text" required />
+                                            <% } %>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>
                                     <footer class="modal-card-foot">
                                         <button class="button is-danger cancelWithdraw">Cancel</button>
+                                        <p class="subtitle">Your withdrawal will also have 0.00005000 (BTC) subtracted to cover the transaction fee.</p>
                                     </footer>
                                     </div>
                             </div>
@@ -139,7 +145,7 @@
                                             <input type="hidden" name="bchrate" value="<%= bchrate %>" />
                                             <input type="hidden" name="maxConfirmationsBCH" value="<%= maxConfirmationsBCH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -168,7 +174,7 @@
                                         <p class="title is-5 modal-section-title">Input Value</p>
                                         <form class="modal-form" action="/dashboard/addresses/withdraw/1?_method=PUT" method="POST">
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="value" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>
@@ -226,7 +232,7 @@
                                             <input type="hidden" name="ethrate" value="<%= ethrate %>" />
                                             <input type="hidden" name="maxConfirmationsETH" value="<%= maxConfirmationsETH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -255,7 +261,7 @@
                                         <p class="title is-5 modal-section-title">Input Value</p>
                                         <form class="modal-form" action="/dashboard/addresses/withdraw/2?_method=PUT" method="POST">
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="value" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>
@@ -314,7 +320,7 @@
                                             <input type="hidden" name="ltcrate" value="<%= ltcrate %>" />
                                             <input type="hidden" name="maxConfirmationsLTC" value="<%= maxConfirmationsLTC %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -343,7 +349,7 @@
                                         <p class="title is-5 modal-section-title">Input Value</p>
                                         <form class="modal-form" action="/dashboard/addresses/withdraw/3?_method=PUT" method="POST">
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>
@@ -401,7 +407,7 @@
                                             <input type="hidden" name="dashrate" value="<%= dashrate %>" />
                                             <input type="hidden" name="maxConfirmationsDASH" value="<%= maxConfirmationsDASH %>" />
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                         </section>
@@ -430,7 +436,7 @@
                                         <p class="title is-5 modal-section-title">Input Value</p>
                                         <form class="modal-form" action="/dashboard/addresses/withdraw/4?_method=PUT" method="POST">
                                             <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" />
+                                            <input class="input adradr" name="value" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
                                             <button class="button is-primary">Continue</button>
                                         </form>
                                     </section>

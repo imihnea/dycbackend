@@ -7,6 +7,8 @@ const cloudinary = require('cloudinary');
 
 const router = express.Router();
 
+const User = require('../models/user');
+
 const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, 
@@ -15,6 +17,13 @@ const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, produ
 const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile } = middleware; // destructuring assignment
+
+var Client = require('coinbase').Client;
+
+var client = new Client({
+  'apiKey': 'ClTJkzAmtBDFy8UI',
+  'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
+});
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -79,6 +88,43 @@ router.get('/addresses/dash', isLoggedIn, getDASH);
 
 //POST Dash deposit
 router.post('/addresses/dash', isLoggedIn, postDASH);
+
+router.post('/addresses/withdrawBTC', isLoggedIn, (req, res) => {
+  var address = req.body.address;
+  var amount = Number(req.body.value) + 0.00005000;
+  console.log(req.body.value);
+  console.log(amount);
+  client.getAccount('primary', function(err, account) {
+    if(err) {
+      req.flash('error', err.message + '- prima eroare'); // Don't show this error to the user
+      res.redirect('back');
+    } else {
+      if(req.user.btcbalance >= amount) {
+        account.sendMoney(
+          {'to': address,
+          'amount': amount,
+          'currency': 'BTC'
+          }, function(err, tx) {
+            if(err) {
+              req.flash('error', err.message  + '- a doua eroare'); // Don't show this one either
+              res.redirect('back');
+            } else {
+              console.log(tx);
+              var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } } );
+              query_btc.then(function(doc) {
+                req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                res.redirect('back');
+                console.log(`Withdrawn ${amount} BTC successfully.`);
+              });
+            }
+        });
+      } else {
+        req.flash('error', `Insufficient funds to withdraw.`);
+        res.redirect('back');
+      }
+    }
+  });
+});
 
 // Withdraw
 router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
