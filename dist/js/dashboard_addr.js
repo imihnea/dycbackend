@@ -54,4 +54,33 @@ document.addEventListener('DOMContentLoaded', () => {
       withdrawModalItems[i].classList.toggle('is-active');
     });
   });
+
+  // Coinswitch
+  const coinswitchOpenButtons = document.querySelectorAll('.coinswitch');
+  const coinswitchCloseButtons = document.querySelectorAll('.deleteCoinswitch');
+  const coinswitchCancelButtons = document.querySelectorAll('.cancelCoinswitch');
+  const coinswitchModals = document.querySelectorAll('.modalCoinswitch');
+  const coinswitchOpenButtonItems = [].slice.call(coinswitchOpenButtons);
+  const coinswitchCloseButtonItems = [].slice.call(coinswitchCloseButtons);
+  const coinswitchCancelButtonItems = [].slice.call(coinswitchCancelButtons);
+  const coinswitchModalItems = [].slice.call(coinswitchModals);
+  coinswitchOpenButtonItems.forEach((item, i) => {
+    item.addEventListener('click', (event) => {
+      event.stopPropagation();
+      coinswitchModalItems[i].classList.toggle('is-active');
+    });
+  });
+  coinswitchCloseButtonItems.forEach((item, i) => {
+    item.addEventListener('click', (event) => {
+      event.stopPropagation();
+      coinswitchModalItems[i].classList.toggle('is-active');
+    });
+  });
+  coinswitchCancelButtonItems.forEach((item, i) => {
+    item.addEventListener('click', (event) => {
+      event.stopPropagation();
+      coinswitchModalItems[i].classList.toggle('is-active');
+    });
+  });
+
 });

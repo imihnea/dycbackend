@@ -11,6 +11,13 @@ const Checkout = require('../models/checkout');
 
 var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
+const Coinswitch = require('coinswitch');
+
+const cs = new Coinswitch({
+  apiKey: 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+  userIP: '1.1.1.1'
+});
+
 // Constants for quick modification
 const feature1_time = 60000;
 const feature2_time = 120000;
@@ -68,8 +75,10 @@ module.exports = {
     res.render('dashboard/dashboard_ongoing', { deals });
   },
   // Show address page
-  getAddresses(req, res) {
+  async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    const coinsList = await cs.getCoins()  // coinsList is an array
+    console.log(coinsList[0])
     request(url, function(error, response, body){
         if(!error && response.statusCode == 200) {
             var json = JSON.parse(body);

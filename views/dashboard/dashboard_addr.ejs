@@ -1,5 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<script type="text/javascript" src="/dist/js/bulma-steps.min.js"></script>
 <div class="columns">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right adrcol">
@@ -29,12 +31,13 @@
                             </div>
                             <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                             <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                            <button class="button is-primary coinswitch" style="margin-top:1vh;">Deposit with Altcoins</button>
                             <div class="modal modalTopup">
                                 <div class="modal-background"></div>
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Add Bitcoin</p>
-                                        <button class="delete deleteTopup" aria-label="close"></button>
+                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -65,7 +68,7 @@
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Withdraw Bitcoin</p>
-                                        <button class="delete deleteWithdraw" aria-label="close"></button>
+                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -95,9 +98,167 @@
                                     </footer>
                                     </div>
                             </div>
+                            <div class="modal modalCoinswitch">
+                                <div class="modal-background"></div>
+                                    <div class="modal-card">
+                                    <header class="modal-card-head">
+                                        <p class="modal-card-title">Deposit Altcoins</p>
+                                        <button class="delete deleteCoinswitch is-large" aria-label="close"></button>
+                                    </header>
+                                    <section class="modal-card-body">
+                                            <div class="steps" id="stepsDemo">
+                                                <div class="step-item is-active is-success">
+                                                    <div class="step-marker">1</div>
+                                                    <div class="step-details">
+                                                    <p class="step-title">Account</p>
+                                                    </div>
+                                                </div>
+                                                <div class="step-item">
+                                                    <div class="step-marker">2</div>
+                                                    <div class="step-details">
+                                                    <p class="step-title">Profile</p>
+                                                    </div>
+                                                </div>
+                                                <div class="step-item">
+                                                    <div class="step-marker">3</div>
+                                                    <div class="step-details">
+                                                    <p class="step-title">Social</p>
+                                                    </div>
+                                                </div>
+                                                <div class="step-item">
+                                                    <div class="step-marker">4</div>
+                                                    <div class="step-details">
+                                                    <p class="step-title">Finish</p>
+                                                    </div>
+                                                </div>
+                                                <div class="steps-content">
+                                                    <div class="step-content has-text-centered is-active">
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Username</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                            <input class="input" name="username" id="username" type="text" placeholder="Username" autofocus data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Password</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control has-icon has-icon-right">
+                                                            <input class="input" type="password" name="password" id="password" placeholder="Password" data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Confirm password</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control has-icon has-icon-right">
+                                                            <input class="input" type="password" name="password_confirm" id="password_confirm" placeholder="Confirm password" data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="step-content has-text-centered">
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Firstname</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                            <input class="input" name="firstname" id="firstname" type="text" placeholder="Firstname" autofocus data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Last name</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control has-icon has-icon-right">
+                                                            <input class="input" type="text" name="lastname" id="lastname" placeholder="Last name" data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Email</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control has-icon has-icon-right">
+                                                            <input class="input" type="email" name="email" id="email" placeholder="Email" data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="step-content has-text-centered">
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Facebook account</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                            <input class="input" name="facebook" id="facebook" type="text" placeholder="Facebook account url" autofocus data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
+                                                        <label class="label">Twitter account</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                            <input class="input" name="twitter" id="twitter" type="text" placeholder="Twitter account url" autofocus data-validate="require">
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="step-content has-text-centered">
+                                                    <h1 class="title is-4">Your account is now created!</h1>
+                                                    </div>
+                                                </div>
+                                                <div class="steps-actions">
+                                                    <div class="steps-action">
+                                                        <a href="#" data-nav="previous" class="button is-light">Previous</a>
+                                                    </div>
+                                                    <div class="steps-action">
+                                                        <a href="#" data-nav="next" class="button is-light">Next</a>
+                                                    </div>
+                                                </div>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-danger cancelCoinswitch">Cancel</button>
+                                    </footer>
+                                    </div>
+                                    <script>
+                                    bulmaSteps.attach();
+                                    </script>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
                 <hr />
                 <div class="adr">
                     <div class="currency">
@@ -128,7 +289,7 @@
                                     <div class="modal-card">
                                         <header class="modal-card-head">
                                         <p class="modal-card-title">Add Bitcoin Cash</p>
-                                        <button class="delete deleteTopup" aria-label="close"></button>
+                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -159,7 +320,7 @@
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Withdraw Bitcoin Cash</p>
-                                        <button class="delete deleteWithdraw" aria-label="close"></button>
+                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -215,7 +376,7 @@
                                     <div class="modal-card">
                                         <header class="modal-card-head">
                                         <p class="modal-card-title">Add Ethereum</p>
-                                        <button class="delete deleteTopup" aria-label="close"></button>
+                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -246,7 +407,7 @@
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Withdraw Ethereum</p>
-                                        <button class="delete deleteWithdraw" aria-label="close"></button>
+                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -303,7 +464,7 @@
                                     <div class="modal-card">
                                         <header class="modal-card-head">
                                         <p class="modal-card-title">Add Litecoin</p>
-                                        <button class="delete deleteTopup" aria-label="close"></button>
+                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -334,7 +495,7 @@
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Withdraw Litecoin</p>
-                                        <button class="delete deleteWithdraw" aria-label="close"></button>
+                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -390,7 +551,7 @@
                                     <div class="modal-card">
                                         <header class="modal-card-head">
                                         <p class="modal-card-title">Add DASH</p>
-                                        <button class="delete deleteTopup" aria-label="close"></button>
+                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>
@@ -421,7 +582,7 @@
                                     <div class="modal-card">
                                     <header class="modal-card-head">
                                         <p class="modal-card-title">Withdraw DASH</p>
-                                        <button class="delete deleteWithdraw" aria-label="close"></button>
+                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-body">
                                         <p class="title is-5 modal-section-title">Instructions</p>

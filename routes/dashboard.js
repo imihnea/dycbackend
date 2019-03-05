@@ -25,6 +25,13 @@ var client = new Client({
   'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
 });
 
+const Coinswitch = require('coinswitch');
+
+const cs = new Coinswitch({
+  apiKey: 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+  userIP: '1.1.1.1'
+});
+
 // Set Storage Engine
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
@@ -51,7 +58,7 @@ router.get('/', isLoggedIn, (req, res) => {
 });
 
 // Show all addresses for withdraw
-router.get('/addresses', isLoggedIn, getAddresses);
+router.get('/addresses', isLoggedIn, asyncErrorHandler(getAddresses));
 
 // Modify addresses
 router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
@@ -124,6 +131,37 @@ router.post('/addresses/withdrawBTC', isLoggedIn, (req, res) => {
       }
     }
   });
+});
+
+router.post('/addresses/altcoins/3', isLoggedIn, async (req, res) => {
+  const {
+    offerReferenceId,
+    depositCoinAmount,
+    destinationCoinAmount
+  } = await cs.generateOffer('ltc', 'btc', 0.2) // deposit, destination, amount
+  
+  const {
+    orderId,
+    exchangeAddress: { address }
+  } = await cs.makeOrder({
+    depositCoin: 'ltc',
+    destinationCoin: 'btc',
+    depositCoinAmount,
+    offerReferenceId,
+    userReferenceId: 'test-user',
+    destinationAddress: { address: '3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp' },
+    refundAddress: { address: 'MN4GTWCLDEMpPaiQuiK9YPJi82kcZDkVWN' }
+  })
+  
+  console.log(`
+  =========
+  Order ID: ${orderId}
+  Deposit: LTC (${depositCoinAmount})
+  Receive: BTC (${destinationCoinAmount})
+  Exchange Address: ${address}
+  =========
+  `)
+
 });
 
 // Withdraw
