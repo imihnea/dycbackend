@@ -5,8 +5,8 @@
     <div class="container content">
                 
         <div class="columns" style="justify-content: center">
-            <div class="column is-three-fifths lrform">
-                <h1 style="color: orange;">Sign In</h1>
+            <div class="column is-three-fifths frame">
+                <h1 class="title">Sign In</h1>
                 <div class="social-media">
                     <a href="/auth/facebook" class="btn-face">
                         <i class="fab fa-facebook"></i>
@@ -16,11 +16,11 @@
                         <i class="fab fa-google"></i>
                     </a>
                 </div>
-                <form action="/login" method="POST" style="padding-top: 3vh;">
+                <form action="/login" method="POST" class="logSigForm">
                     <input class="input smmargin" name="username" placeholder="Username" type="text" required />
                     <input class="input smmargin" name="password" placeholder="Password" type="password" required />
                     <div style="display: flex; justify-content: space-between; padding-top: 1rem;">
-                        <label class="checkbox"style="padding-top: 0.65vh; color: orange">
+                        <label class="checkbox"style="padding-top: 0.65vh;" class="title">
                             <input type="checkbox" name="remember"  >
                                 Remember me
                         </label>
@@ -28,7 +28,7 @@
                     </div>                    
                 </form>
                 <a href="/forgot" >Reset Password</a>
-                <p style="color: orange;">Not a member? <a href="/register">Sign up here</a></p>
+                <p>Not a member? <a href="/register">Sign up here</a></p>
             </div>
         </div>
     </div>

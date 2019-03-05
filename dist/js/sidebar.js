@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#addresses').classList.add('active-page');
       break;
     }
-    case ('/dashboard/messages'): {
+    case ('/messages/'): {
       document.querySelector('#messages').classList.add('active-page');
       break;
     }

@@ -136,13 +136,22 @@ aside .facet-count {
   margin-bottom: 3vh;
 }
 
+.dealname{
+  color: black !important;
+}
+
+.dealname:hover{
+  color: #3273dc !important;
+}
+
 .hit {
   padding: 10px 20px 20px;
   margin-bottom: 10px;
-  border-bottom: solid 1px orange;
+  /* border-bottom: solid 1px orange;
   border: solid 1px orange;
-  box-shadow: 0 0 3px orange;
+  box-shadow: 0 0 3px orange; */
   position: relative;
+  margin-top: 1vh;
 }
 .hit .product-picture-wrapper {
   /* display: table;

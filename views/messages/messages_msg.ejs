@@ -3,10 +3,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
 <a href="/messages" class="button is-primary" style="margin-top: 1vh; margin-left: 1vw;">Back to Dashboard</a>
 <div class="columns" style="color: orange; margin-top: 1vh;">
-    <!-- <% include ../partials/sidebar %> -->
     <div class="column is-one-fifth">
         <div>
-            <div class="messageProfile" style="margin-top: 0;">
+            <div class="messageProfile frame" style="margin-top: 0;">
                 <div class="">
                     <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                         <%= chat.user1.avatarUrl %>
@@ -14,7 +13,7 @@
                         <%= chat.user2.avatarUrl %>
                     <% } %>" class="open-img ">
                 </div>
-                <hr>
+                <br>
                 <div class=" prod_info ">
                     <p class="title is-5 messageProfileText">Full Name: <%= user2.full_name %></p>
                     <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
@@ -56,78 +55,77 @@
             </div>
         </div>
     </div>
-
-    <div class="column dashboard-right">
-        <div class="columns">
-            <div class="column"></div>
-            <div class="column is-four-fifths">
-                <div>
-                    <div class="midlevel" id="mid" style="border-top-style: double; border-width: 3px;">
-                        <% if (chat.messageCount === 0) { %>
-                            <div class="level" style="justify-content: center;
-                            position: relative;
-                            height: 5vh;
-                            top: -3.4vh;
-                            background-color: #631;">
-                                <p class="title is-5">This is the start of the conversation</p>
+    <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
+        <div>
+            <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
+                <% if (chat.messageCount === 0) { %>
+                    <div class="level topFirst" >
+                        <div>
+                            <p class="is-5">This is the beginning of the conversation</p>
+                            <p class="is-6">Start by saying hi!</p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="level topWarn">
+                        <div>
+                            <p class="is-5">Be mindful of the information you send</p>
+                        </div>
+                    </div>
+                <% } %>
+                <% chat.messages.forEach((message) => { %>
+                    <% if (message.sender.toString() != user._id.toString()) { %>
+                        <div class="level" style="margin-top: -15px;">
+                            <div class="level-left leftlv">
+                                <div class="recmsg msg frame">
+                                    <p class="recName"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
+                                    <span style="white-space: pre-line"><p><%= message.message %></p></span>
+                                    <time class="recDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                        /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                        <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
+                                </div>
                             </div>
-                        <% } %>
-                        <% chat.messages.forEach((message) => { %>
-                            <% if (message.sender.toString() != user._id.toString()) { %>
-                                <div class="level" style="margin-top: -15px;">
-                                    <div class="level-left leftlv">
-                                        <div class="recmsg msg">
-                                            <p style="font-size: 0.7rem; color: #ccc"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
-                                            <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                            <time>
-                                                <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                                /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                                <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                                <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                            </time>
-                                        </div>
-                                    </div>
+                        </div>
+                    <% } else if (message.sender.toString() == user._id.toString()) { %>
+                        <div class="level" style="display: block;">
+                            <div class="level-right">
+                                <div class="sentmsg msg frame">
+                                    <p class="sentName">You</p>
+                                    <span style="white-space: pre-line"><p><%= message.message %></p></span>
+                                    <time class="sentDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                        /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                        <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
                                 </div>
-                            <% } else if (message.sender.toString() == user._id.toString()) { %>
-                                <div class="level" style="display: block;">
-                                    <div class="level-right">
-                                        <div class="sentmsg msg">
-                                            <p style="font-size: 0.7rem; color: #ccc">You</p>
-                                            <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                            <time>
-                                                <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                                /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                                <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                                <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                            </time>
-                                        </div>
-                                    </div>      
-                                </div>
-                            <% } %>
-                        <% }); %>
-                    </div>
-                    <div class="bottomlv">
-                        <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
-                            <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
-                            <button class="button is-primary">Send</button>
-                        </form>
-                    </div>
-                </div>
+                            </div>      
+                        </div>
+                    <% } %>
+                <% }); %>
             </div>
-            <div class="column"></div>
+            <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
+                <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
+                    <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
+                    <button class="button is-primary">Send</button>
+                </form>
+            </div>
         </div>
     </div>
+
     <div class="column is-one-fifth">
         <div class="productSide" style="margin-top: 0;">
-            <div class="messageProfile" style="margin-top: 0;">
+            <div class="messageProfile frame" style="margin-top: 0;">
                 <div>
                     <img src="<%= chat.product.imageUrl %>"  class="open-img">
                 </div>
-                <hr>
+                <br>
                 <div class=" prod_info ">  
                     <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>
                     <% if ((chat.product.price[0] != 0) && (chat.product.accepted[0])) { %>
-                        <div class="prices msgPrices">
+                        <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                 <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
@@ -144,7 +142,7 @@
                     <% } 
                         if ((chat.product.price[1] != 0) && (chat.product.accepted[1])) {
                     %>
-                        <div class="prices msgPrices">
+                        <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                             <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                 <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
@@ -161,7 +159,7 @@
                     <% } 
                         if ((chat.product.price[2] != 0) && (chat.product.accepted[2])) {
                     %>
-                        <div class="prices msgPrices">
+                        <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                             <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                 <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
@@ -178,7 +176,7 @@
                     <% } 
                         if ((chat.product.price[3] != 0) && (chat.product.accepted[3])) {
                     %>
-                        <div class="prices msgPrices">
+                        <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                             <p class="price_text"><% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                 <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
@@ -195,7 +193,7 @@
                     <% } 
                         if ((chat.product.price[4] != 0) && (chat.product.accepted[4])) {
                     %>
-                        <div class="prices msgPrices">
+                        <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                             <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
                                 <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>

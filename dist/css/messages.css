@@ -24,15 +24,12 @@
 
 .msgImg{
     height: 100%; 
-    display: block;
+    /* display: block; */
     max-width: 200px;
     max-height: 200px;
 }
 
 .messageObj{
-    border-style: double;
-    border-radius: 5px;
-    border-color: orange;
     position: relative; 
     margin-top: 5px; 
     margin-left: 5px; 
@@ -40,7 +37,7 @@
 }
 
 .messageObj:hover{
-    background-color: #402504;
+    background-color: #a59e9e !important;
 }
 
 .is-half {
@@ -70,6 +67,11 @@
     font-size: 0.9rem !important;
 }
 
+.productFrame{
+    margin-top: 2vh; 
+    margin-right: 1vw;
+}
+
 time{
     font-size: 0.6rem;
     color: #ccc;
@@ -82,7 +84,6 @@ time{
 }
 
 .toplevel{
-    border-style: double;
     border-radius: 5px;
     padding: 10px;
     border-bottom-left-radius: 0px;
@@ -91,12 +92,28 @@ time{
     z-index: 1;
 }
 
+.topFirst{
+    justify-content: center;
+    position: relative;
+    height: 7vh;
+    top: -2vh;
+    background-color: #ffffff;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
+}
+
+.topWarn{
+    justify-content: center;
+    position: relative;
+    height: 5vh;
+    top: -2vh;
+    background-color: #ffffff;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
+}
+
 .midlevel{
-    border-style: double;
     border-radius: 5px;
     padding: 2rem;
     margin-top: -1.7rem;
-    border-top: 0;
     height: 58vh;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -125,6 +142,8 @@ time{
 
 .midlevel::-webkit-scrollbar {
     width: 0.5em;
+    position: relative;
+    z-index: 0;
 }
 
 .leftlv{
@@ -132,32 +151,60 @@ time{
 }
 
 .bottomlv{
-    border-style: double;
-    padding: 2.5rem;
-    border-top: 0;
-    height: 103px;
-    padding-top: 0;
+    padding: 1rem;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
+.recName{
+    position: relative;
+    font-size: 0.7rem;
+    color: black;
+    top: -15px;
+    left: -15px;
+    font-weight: 600;
+}
+
+.recDate{
+    color: black;
+    position: relative;
+    top: 15px;
+    left: -15px;
+}
+
+.sentName{
+    position: relative;
+    font-size: 0.7rem;
+    color: black;
+    top: -15px;
+    right: 10px;
+    font-weight: 600;
+}
+
+.sentDate{
+    color: black;
+    position: relative;
+    left: 10px;
+    top: 15px;
+}
+
 .recmsg{
-    background-color: rgb(88, 53, 20);
+    background-color: #5f91e8 !important;
     padding: 10px;
     border-radius: 15px;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
+    border-bottom-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
     padding-right: 20px;
     margin-top: -2%;
     padding-left: 20px;
 }
 
 .sentmsg{
-    background-color: rgb(116, 53, 11);
+    background-color: #a7abab !important;
     padding: 10px;
     border-radius: 15px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
+    border-bottom-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
     padding-left: 20px;
     margin-top: -2%;
     padding-right: 20px;
@@ -184,8 +231,6 @@ time{
 
 .messagePagination{
     width: 100% !important; 
-    margin-top: 0 !important; 
-    margin-bottom: 0 !important;
 }
 
 .halfPad{

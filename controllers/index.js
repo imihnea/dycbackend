@@ -177,7 +177,7 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
-    const products = await Product.paginate({ "feat_2.status": true, available: true }, {
+    const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
       page: req.query.page || 1,
       limit: 20,
     });
