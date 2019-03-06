@@ -38,7 +38,7 @@ ul{
     border-color: orange;
 }
 
-.searchBtn{
+/* .searchBtn{
     border-color: transparent;
     background-color: transparent;
     color: orange;
@@ -50,24 +50,24 @@ ul{
     border-bottom-style: solid;
     border-bottom-color: orange !important;
     border-bottom-width: 1px;
-}
+} */
 
 .searchBtn:focus{
     outline: transparent;
 }
 
 .firstTierFilter{
-    color: orange;
+    color: black;
     outline: transparent;
 }
 
 .secondTierFilter{
-    color: #fc5;
+    color: black;
     outline: transparent;
 }
 
 .thirdTierFilter{
-    color: #ff4;
+    color: black;
     outline: transparent;
 }
 

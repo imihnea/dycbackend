@@ -1,5 +1,4 @@
 <% include ../partials/header %>
-<script src="../../dist/js/maincateg.js"></script>
 <link rel="stylesheet" href="../../dist/css/categories.css">
 <link rel="stylesheet" href="../../dist/css/products.css">
 
@@ -18,7 +17,7 @@
                         <input type="text" name="currency" value="<%= currency %>" hidden>
                         <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                         <input type="text" name="continent" value="<%= continent %>" hidden>
-                        <button class="searchBtn"><i class="fas fa-caret-left"></i> <%= secondSearchCateg %></button>
+                        <button class="searchBtn searchCategBtn"><i class="fas fa-caret-left"></i> <%= thirdSearchCateg %></button>
                     </form>
                 </div>
             </section>
@@ -44,7 +43,7 @@
         </aside>
 
         <div class="results-wrapper">
-            <section id="paginationTop" class="paginationU"> <% if (total > 2) { %> <p class="subtitle pagePad">Pages:</p><% include ../partials/paginateThirdSearch %><% } %></section>
+            <section id="paginationTop" class="paginationU"> <% if (total > 2) { %><% include ../partials/paginateThirdSearch %><% } %></section>
             <section id="results-topbar">
                 <div id="stats" class="text-muted"></div>
             </section>
@@ -52,7 +51,7 @@
             <main id="hits" style="width: 85%; margin-left: 5vw;">
                 <%  if (products.length > 0) {
                         products.forEach((product) => { %>
-                            <article class="hit columns">
+                            <article class="hit columns frame">
                                 <div class="column is-one-fifth product-picture-wrapper">
                                     <div class="product-picture">
                                         <img src="<%= product._source.images[0].url %>">
@@ -60,11 +59,11 @@
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
-                                        <p class="is-5 dealname"><a href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                        <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
                                         <% if (product._source.feat_1.status === true) { %>
                                             <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
                                         <% } %>
-                                        <p class="is-5 dealname">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
+                                        <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
                                         <p>
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product._source.avgRating)) { %>
@@ -98,35 +97,35 @@
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
                                     <% if (product._source.btcPrice > 0) { %>
-                                        <div class="prices openPrices">
+                                        <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.btcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     <% } 
                                         if (product._source.bchPrice > 0) {
                                     %>
-                                        <div class="prices openPrices">
+                                        <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.bchPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                         </div>
                                     <% } 
                                         if (product._source.ethPrice > 0) {
                                     %>
-                                        <div class="prices openPrices">
+                                        <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.ethPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                         </div>
                                     <% } 
                                         if (product._source.ltcPrice > 0) {
                                     %>
-                                        <div class="prices openPrices">
+                                        <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.ltcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                         </div>
                                     <% } 
                                         if (product._source.dashPrice) {
                                     %>
-                                        <div class="prices openPrices">
+                                        <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.dashPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                                         </div>
@@ -137,7 +136,7 @@
                         <p class="title is-4">No products found.</p>
                 <% } %>
             </main>
-            <section id="paginationBottom" class="paginationU paginationD"> <% if (total > 2) { %> <p class="subtitle pagePad">Pages:</p><% include ../partials/paginateThirdSearch %><% } %></section>
+            <section id="paginationBottom" class="paginationU paginationD"> <% if (total > 2) { %><% include ../partials/paginateThirdSearch %><% } %></section>
         </div>
     </div>
 </div>

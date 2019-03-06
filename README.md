@@ -6,13 +6,11 @@ Frontend:
 
     High Priority:
 
-         Color Scheme
-                      
-    Low Priority:
-
          UI => New product => Feature deal
             => Better Tooltips
             => Fix accepted currencies @ edit
+                      
+    Low Priority:
 
          Make everything responsive (see comments in css files)
 

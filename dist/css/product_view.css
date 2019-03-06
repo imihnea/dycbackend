@@ -84,6 +84,12 @@
 }
 
 .prices {
-	width: 55% !important;
+	/* width: 55% !important; */
 	margin-top: 1vh;
+}
+
+.productHr{
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
 }

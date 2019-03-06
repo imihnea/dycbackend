@@ -32,13 +32,8 @@ input[type='text'], select, .dd-btn, .src-btn{
 }
 
 p, h1, h2, h3, h4, h5, h6,  option, select, span {
-    /* text-shadow: 0.5px 0.5px black; */
     color: black;
 }
-
-/* span {
-    text-shadow: 0.5px 0.5px black;
-} */
 
 input{
     text-shadow: 0.4px 0.4px black;
@@ -168,18 +163,9 @@ a:hover {
 .sec-categ{
     margin-left: -2vw;
     min-width: 200px;
-    background-color: rgb(224,228,204);
-    border-radius: 25px;
-    border-right-color: rgb(250, 105, 0);
-    border-style: double;
-    border-radius: 10px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-color: black !important;
-    border-left-width: 0px;
     margin-top: 1px;
     margin-bottom: 1px;
-    padding: 0.2rem 1rem !important;
+    padding: 0.7rem 1rem !important;
 }
 
 .sec-categ a{
@@ -250,8 +236,6 @@ body{
 
 
 .button:hover{
-    /* color: black !important; */
-    /* background-color: transparent !important; */
     border-color: black !important;
 }
 
@@ -299,7 +283,6 @@ body{
 
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
-    /* box-shadow: 0.1px 0.1px 1px black; */
     padding: 1%;
     margin-bottom: 0% !important;
 }
@@ -442,16 +425,12 @@ hr{
 }
 
 .card:hover{
-    background-color: #6b301bb8 !important;
+    background-color: #3269ca7d !important;
 }
 
 .card{
-    border-radius: 5px;
-    border-style: double;
-    border-color: black;
     max-height: 281px !important;
     max-width: 250px !important;
-    background-color: #1b676b8f !important;
 }
 
 .card-content{

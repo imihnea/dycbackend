@@ -9,14 +9,43 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <script src="../../dist/js/product_view.js"></script>
 <div class="hero-body">
-    <div class="container ">
+    <div class="container frame">
+        <nav class="breadcrumb" style="margin-left: 1vw;" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <form action="/firstCategSearch" method="POST">
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="category" value="<%= product.category[1] %>" hidden>
+                        <button class="searchBtn"><%= product.category[1] %></button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/secondCategSearch" method="POST" =>
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="searchCateg" value="<%= product.category[1] %>" hidden>
+                        <input type="text" name="category" value="<%= product.category[2] %>" hidden>
+                        <button class="searchBtn"><%= product.category[2] %></button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/thirdCategSearch" method="POST">
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="searchCateg" value="<%= product.category[1] %>" hidden>
+                        <input type="text" name="secondSearchCateg" value="<%= product.category[2] %>" hidden>
+                        <input type="text" name="category" value="<%= product.category[3] %>" hidden>
+                        <button class="searchBtn searchCategBtn"><%= product.category[3] %></button>
+                    </form>
+                </li>
+                <li class="is-active"><a href="#" aria-current="page"><%= product.name %></a></li>
+            </ul>
+        </nav>
         <div class="column">
             <h1 class="title"><strong><%= product.name %></strong></h2>
         </div>
-        <hr>
+        <hr  class="productHr">
         <div class="columns">
             <div class="column ">
-                <div class="thumbnails">
+                <div class="thumbnails" style="margin-left: 1vw;">
                     <div class="level">
                         <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                         <label for="id1">
@@ -88,7 +117,7 @@
                 </div>
             </div>
             <div class="column is-one-quarter">
-                <p class="productUserText" style="color: orange;">Sold by: <a class="productUserLink" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
+                <p class="productUserText">Sold by: <a class="productUserLink" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
                     <!-- display a full star -->
@@ -101,12 +130,12 @@
                     <i class="far fa-star" style="color: orange;"></i>
                     <% } %>
                 <% } %>
-                <p style="color: orange;"><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
+                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
                 <form action="/products/<%= product.id %>/buy?_method=PUT" id="buyForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
                     <div class="column prod_info" style="padding: 0;">
                         <% if (product.accepted[0]) { %>
                             <label class="img-check ">
-                                <div class="prices ">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">
                                         <% if (user) { %>
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
@@ -132,7 +161,7 @@
                         <% } 
                         if (product.accepted[1]) { %>
                             <label class="img-check">
-                                <div class="prices ">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">      
                                         <% if(user) { %>                          
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
@@ -158,7 +187,7 @@
                         <% } 
                         if (product.accepted[2]) { %>
                             <label class="img-check">
-                                <div class="prices ">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">
                                         <% if(user) { %>
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
@@ -184,7 +213,7 @@
                         <% } 
                             if (product.accepted[3]) { %>
                                 <label class="img-check">
-                                    <div class="prices ">
+                                    <div class="prices frame openPrices">
                                         <p class="price_text">
                                             <% if(user) { %>
                                                 <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
@@ -210,7 +239,7 @@
                         <% } 
                             if (product.accepted[4]) { %>
                                 <label class="img-check">
-                                    <div class="prices">
+                                    <div class="prices frame openPrices">
                                         <p class="price_text">
                                             <% if (user) { %>
                                                 <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
@@ -235,7 +264,7 @@
                                 </label>
                         <% } %>
                     </div>
-                    <p style="color: orange !important;"><sub>Transportation costs included</sub></p>
+                    <p><sub>Transportation costs included</sub></p>
                     <br>   
                 </form>
                 <% if (!user) { %> 
@@ -260,13 +289,30 @@
                 <% } %>
             </div>                
         </div>  
-        <hr>
+        <hr  class="productHr">
         <div class="column">
             <p class="productSubTitleText">Description</p>
             <br>
             <p class="productDescriptionText" ><%= product.description %></p>
+            <br>
+            <table class="table is-striped is-narrow" style="margin: auto;">
+                <thead>
+                    <td><p class="productDescriptionText" style="font-weight: 600;">Additional Information</p></td>
+                    <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Condition</td>
+                        <td><%= product.condition %></td>
+                    </tr>
+                    <tr>
+                        <td>Continent of origin</td>
+                        <td><%= product.author.continent %></td>
+                    </tr>
+                </tbody>
+            </table>
         </div> 
-        <hr>
+        <hr class="productHr">
         <div class="column">
             <% if (reviews.total > 0) { %>
                 <p class="productSubTitleText">Reviews</p>
@@ -409,11 +455,11 @@
                         <% } %>
                     </div>
                     
-                    <% if (index < reviews.total - 1) { %><hr><% } %>
+                    <% if (index < reviews.total - 1) { %><hr  class="productHr"><% } %>
                 <% }); %>
             <% } %>
             <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                <% if (reviews.total > 0) { %><hr><% } %>
+                <% if (reviews.total > 0) { %><hr  class="productHr"><% } %>
                 <p class="productSubTitleText" >Write a Review</p>
                 <form action="/products/<%= product.id %>/reviews" method="POST">
                     <textarea class="textarea" name="review[body]" required></textarea>
@@ -441,9 +487,9 @@
         </div>
         <% if (currentUser) { %>
             <% if (currentUser._id.toString() !== product.author.id.toString()) { %>
-                <hr>
+                <hr  class="productHr">
             <% } else if ( reviews.total > 0 ) { %>
-                <hr>
+                <hr  class="productHr">
             <% } %>
         <% } %>
         <p class="productSubTitleText">Similar products</p>

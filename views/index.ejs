@@ -66,7 +66,7 @@
         
         <div class="container columns" style="flex-wrap: wrap; justify-content: space-evenly; width: 50vw;"> 
         <% products.docs.forEach((product) => { %>
-            <div class="column card feat_card" style="flex-grow: 0;">
+            <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= product._id %>/view">
                     <div class="card-image">
                         <figure class="image featimg">
@@ -76,7 +76,7 @@
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
-                                <p class="title is-5 dealname"><%= product.name %> </p>
+                                <p class="title is-5"><%= product.name %> </p>
                             </div>
                         </div>
                         <div class="accepted_currencies">
