@@ -77,8 +77,6 @@ module.exports = {
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    const coinsList = await cs.getCoins()  // coinsList is an array
-    console.log(coinsList[0])
     request(url, function(error, response, body){
         if(!error && response.statusCode == 200) {
             var json = JSON.parse(body);

@@ -133,7 +133,18 @@ router.post('/addresses/withdrawBTC', isLoggedIn, (req, res) => {
   });
 });
 
-router.post('/addresses/altcoins/3', isLoggedIn, async (req, res) => {
+router.get('/addresses/altcoins/pair', async (req, res) => {
+  const coinsList = await cs.getDepositCoins('btc')  // coinsList is an array
+  console.log(coinsList[0])
+  res.send(coinsList);
+});
+
+router.get('/addresses/altcoins/rate', async (req, res) => {
+  const rate = await cs.getExchangeLimit(deposit, 'btc')
+  console.log(rate)
+});
+
+router.post('/addresses/altcoins/deposit', async (req, res) => {
   const {
     offerReferenceId,
     depositCoinAmount,
@@ -162,6 +173,11 @@ router.post('/addresses/altcoins/3', isLoggedIn, async (req, res) => {
   =========
   `)
 
+});
+
+router.get('/addresses/altcoins/status', async (req, res) => {
+  const status = await cs.getOrder(orderId)
+  console.log(status)
 });
 
 // Withdraw
