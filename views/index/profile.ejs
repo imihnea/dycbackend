@@ -1,13 +1,14 @@
 <% include ../partials/header %>
-<link rel="stylesheet" href="/../dist/css/index.css">  
-<link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
+<link rel="stylesheet" href="../../dist/css/index.css">  
+<link rel="stylesheet" href="../../dist/css/starability-basic.min.css">
 <div class="hero-body">
-    <div class="container content">
-        <div class="columns userinfo">
-            <div class="column">
+    <div class="container content frame">
+        <div class="columns" style="margin-top: 1vh;">
+            <div class="column is-two-fifths">
                 <img src="<%= user.avatar.url %>" class="avatar">
             </div>
-            <div class="column">
+            <div class="column"></div>
+            <div class="column frame">
                 <p class="subtitle"><%= user.full_name %></p>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
@@ -23,57 +24,69 @@
                 <% } %>
                 <p style="color: orange;"><%= `${user.avgRating} star${user.avgRating === 1 ? '' : 's'}` %></p>
                 <p class="subtitle">Country: <%= user.country %></p>
+                <p class="subtitle">Products sold: </p>
             </div>
+            <div class="column"></div>
         </div>
-        <div class="deals" >
-            <p class="subtitle" style="text-align: center;">Active Deals</p>
-            <div class="columns" style="justify-content: center; flex-wrap: wrap;">
-                <% if (products.total >= 10) { %>
-                    Pages: <% include ../partials/paginateIndex %>
-                <% } %>
-                <% products.docs.forEach((product) => { %>
-                    <div class="column card feat_card" style="max-width: 250px;">
-                        <a href="/products/<%= product.id %>/view">
-                            <div class="card-image">
-                                <figure class="image profileProducts">
-                                    <img src="<%= product.images[0].url %>" class="featimgs">
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-content">
-                                        <p class="title is-5"><%= product.name %></p>
+        <% if (products.total == 0) { %>
+            <div class="smallerCenter frame" style="text-align: center;">
+                <p class="subtitle">This user does not have any active deals.</p>    
+            </div> 
+        <% } else { %>
+            <div class="deals smallerCenter frame" >
+                <p class="subtitle" style="text-align: center;">Active Deals</p>
+                <div class="columns" style="justify-content: center; flex-wrap: wrap;">
+                    <% if (products.total >= 10) { %>
+                        Pages: <% include ../partials/paginateIndex %>
+                    <% } %>
+                    <% products.docs.forEach((product) => { %>
+                        <div class="column card feat_card frame" style="max-width: 250px;">
+                            <a href="/products/<%= product.id %>/view">
+                                <div class="card-image">
+                                    <figure class="image profileProducts">
+                                        <img src="<%= product.images[0].url %>" class="featimgs">
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p class="title is-5"><%= product.name %></p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="accepted_currencies">
-                                    <% if (product.accepted[0]) { %>
-                                        <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                    <% } %>
-                                    <% if (product.accepted[1]) { %>
-                                        <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                    <% } %>
-                                    <% if (product.accepted[2]) { %>
-                                        <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                    <% } %>
-                                    <% if (product.accepted[3]) { %>
-                                        <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                    <% } %>
-                                    <% if (product.accepted[4]) { %>
-                                        <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                                    <% } %>
-                                </div>
+                                    <div class="accepted_currencies">
+                                        <% if (product.accepted[0]) { %>
+                                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                        <% } %>
+                                        <% if (product.accepted[1]) { %>
+                                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                        <% } %>
+                                        <% if (product.accepted[2]) { %>
+                                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                        <% } %>
+                                        <% if (product.accepted[3]) { %>
+                                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                        <% } %>
+                                        <% if (product.accepted[4]) { %>
+                                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                                        <% } %>
+                                    </div>
+                                </div> 
                             </div> 
+                                </div> 
+                            </a>                       
                         </a>                       
-                    </div>
-                <% }); %>
-                <% if (products.total >= 10) { %>
-                    Pages: <% include ../partials/paginateIndex %>
-                <% } %>
+                            </a>                       
+                        </div>
+                    <% }); %>
+                    <% if (products.total >= 10) { %>
+                        Pages: <% include ../partials/paginateIndex %>
+                    <% } %>
+                </div>
             </div>
-        </div>
-        <div class="deals" >
+        <% } %>
+        <div class="deals frame smallerCenter" style="margin-top: 2vh;" >
             <% if (reviews.total > 0) { %>
-                <p class="subtitle" style="text-align: center; margin-top: 1vh;">Reviews</p>
+                <p class="subtitle" style="text-align: center;">Reviews</p>
                 <br>
                 <% if (reviews.total >= 5) { %>
                     <div class="pagination" style="    margin-top: -1vh;
@@ -87,13 +100,9 @@
                 <% } %>
                 <!-- display all reviews -->
                 <% reviews.docs.forEach(function(review, index) { %>
-                    <div class="columns container is-fluid" style="display: flex;
-                        border-style: solid;
-                        border-width: 1px;
-                        border-color: orange;
+                    <div class="columns container is-fluid frame" style="display: flex;
                         margin-bottom: 1vh;
-                        padding: 2%;
-                        border-radius: 10px;">
+                        padding: 2%;">
                             <div>
                                 <a href="/profile/<%= review.author.id %>"><img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px;"></a>
                                 <a href="/profile/<%= review.author.id %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
@@ -159,7 +168,7 @@
                             </div>
                             <% if(currentUser){ %>
                                 <% if(review.author.equals(currentUser._id)) { %>
-                                <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
+                                <div class="column is-one-fifth" style="position: absolute; right: -1%; top: 3%;">
                                     <button class="button is-primary edit">Edit</button>
                                     <div class="modal modalEdit">
                                         <div class="modal-background"></div>
@@ -235,7 +244,7 @@
             <% if((currentUser) && (currentUser._id.toString() !== user._id.toString()) && (reviewed === false)) { %>
                 <% if (reviews.total > 0) { %><hr><% } %>
                 <p class="subtitle" style="text-align: center;" >Create a Review</p>
-                <form action="/profile/<%= user.id %>/reviews" method="POST">
+                <form action="/profile/<%= user.id %>/reviews" method="POST" class="smallerCenter">
                     <textarea class="textarea" name="review[body]" required></textarea>
                     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                         <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">

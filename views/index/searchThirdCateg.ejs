@@ -1,10 +1,10 @@
 <% include ../partials/header %>
 <link rel="stylesheet" href="../../dist/css/categories.css">
 <link rel="stylesheet" href="../../dist/css/products.css">
-
+<link rel="stylesheet" href="../../dist/css/tooltips.css">
 <div id="results" class="container-fluid">  
     <div class="content-wrapper">
-        <aside>            
+        <aside class="products">            
             <section class="facet-wrapper">
                 <div class="facet-category-title" class="facet">
                     Categories
@@ -80,18 +80,39 @@
                                         </p>
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                     </div>
-                                    <div style="position: absolute; bottom: 10px; left: 23%;">
+                                    <div style="display: flex; margin-top: 1vh;">
+                                        <% let k = 0; %>
                                         <% if (product._source.deliveryOptions.city.valid) { %>
-                                            <i class="fas fa-city fa-2x tooltip" style="color: green;"><span class="iTooltip">Same city delivery</span></i>  
+                                            <div class="label">
+                                                <span class="tooltip-toggle" aria-label="Same City Delivery" tabindex="0">
+                                                    <i class="fa fa-city fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
                                         <% } %>
                                         <% if (product._source.deliveryOptions.state.valid) { %>
-                                            <i class="fas fa-map-marked-alt fa-2x tooltip" style="color: green;"><span class="iTooltip">Same state delivery</span></i>  
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Same State Delivery" tabindex="0">
+                                                    <i class="fa fa-map-marked-alt fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
                                         <% } %>
                                         <% if (product._source.deliveryOptions.country.valid) { %>
-                                            <i class="fas fa-flag fa-2x tooltip" style="color: green;"><span class="iTooltip">Same country delivery</span></i>  
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Same Country Delivery" tabindex="0">
+                                                    <i class="fa fa-flag fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
                                         <% } %>
                                         <% if (product._source.deliveryOptions.worldwide.valid) { %>
-                                            <i class="fas fa-globe-americas fa-2x tooltip" style="color: green;"><span class="iTooltip">Worldwide delivery</span></i>  
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Worldwide Delivery" tabindex="0">
+                                                    <i class="fa fa-globe-americas fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
                                         <% } %>
                                     </div>
                                 </div>

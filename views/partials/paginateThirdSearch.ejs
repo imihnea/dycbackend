@@ -3,7 +3,9 @@
         <form action="/thirdCategSearch" method="POST">
             <input type="number" name="from" value="<%= Number(from) - 2 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
-            <input type="text" name="category" value="<%= searchCateg %>" hidden >
+            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+            <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
+            <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
             <input type="text" name="continent" value="<%= continent %>" hidden>
             <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
             <input type="text" name="currency" value="<%= currency %>" hidden>

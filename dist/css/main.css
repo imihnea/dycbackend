@@ -311,6 +311,12 @@ div.content{
     padding-bottom: 2vh !important;
 }
 
+.smallerCenter{
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .input, .textarea, select, .dd-btn{
     background-color: white !important;
     border-style: double !important;
@@ -444,15 +450,7 @@ hr{
 }
 
 .deals{
-    border-style: double;
-    border-color: black;
     padding: 20px;
-    border-top-style: none;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    margin-top: -1.5vh;
-    margin-left: -12px;
-    margin-right: -12px;
 }
 
 .pagination{

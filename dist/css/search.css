@@ -4,7 +4,7 @@
     position: relative;
   }
 
-aside {
+aside.products {
   position: absolute;
   overflow-y: auto;
   top: 0;
@@ -154,14 +154,16 @@ aside .facet-count {
 
 .hit.frame{
   padding-top: 1vh !important;
-  padding-bottom: 1vh !important;
+  padding-bottom: 0vh !important;
 }
 
 .hit .product-picture img {
-  min-height: 150px;
+  /* min-height: 150px; */
   max-height: 200px;
-  min-width: 150px;
+  /* min-width: 150px; */
   max-width: 175px;
+  width: fit-content;
+  height: fit-content;
 }
 .hit .product-desc-wrapper {
   height: auto;
@@ -197,7 +199,7 @@ aside .facet-count {
   width: auto !important;
 }
 
-.iTooltip{
+/* .iTooltip{
   visibility: hidden;
   width: 120px;
   background-color: black;
@@ -215,7 +217,7 @@ aside .facet-count {
 
 i.tooltip:hover .iTooltip{
   visibility: visible;
-}
+} */
 
 .spacing{
   display: flex;

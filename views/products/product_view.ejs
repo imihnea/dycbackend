@@ -42,8 +42,8 @@
         <div class="column">
             <h1 class="title"><strong><%= product.name %></strong></h2>
         </div>
-        <hr  class="productHr">
-        <div class="columns">
+        <hr  class="smallerCenter">
+        <div class="columns detailsContainer">
             <div class="column ">
                 <div class="thumbnails" style="margin-left: 1vw;">
                     <div class="level">
@@ -289,8 +289,8 @@
                 <% } %>
             </div>                
         </div>  
-        <hr  class="productHr">
-        <div class="column">
+        <hr  class="smallerCenter">
+        <div class="column detailsContainer">
             <p class="productSubTitleText">Description</p>
             <br>
             <p class="productDescriptionText" ><%= product.description %></p>
@@ -312,7 +312,7 @@
                 </tbody>
             </table>
         </div> 
-        <hr class="productHr">
+        <hr class="smallerCenter">
         <div class="column">
             <% if (reviews.total > 0) { %>
                 <p class="productSubTitleText">Reviews</p>
@@ -320,16 +320,12 @@
                 <!-- display all reviews -->
                 <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
                 <% reviews.docs.forEach(function(review, index) { %>
-                    <div class="columns container is-fluid" style="display: flex;
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: orange;
+                    <div class="columns container is-fluid frame" style="display: flex;
                     margin-bottom: 1vh;
-                    padding: 2%;
-                    border-radius: 10px;">
+                    padding: 2%;">
                         <div>
                             <a href="/profile/<%= review.author %>"><img src="<%= review.avatarUrl %>"" style="width: 75px; height: 75px;"></a>
-                            <a href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
+                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                             <% if (review.createdAt) { %>
                             <p class="productDescriptionText" style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {
@@ -393,7 +389,7 @@
                         </div>
                         <% if(currentUser){ %>
                             <% if(review.author.equals(currentUser._id)) { %>
-                            <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
+                            <div class="column is-one-fifth" style="position: absolute; right: -1%; top: 3%;">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
                                     <div class="modal-background"></div>
@@ -455,13 +451,13 @@
                         <% } %>
                     </div>
                     
-                    <% if (index < reviews.total - 1) { %><hr  class="productHr"><% } %>
+                    <% if (index < reviews.total - 1) { %><hr  class="smallerCenter"><% } %>
                 <% }); %>
             <% } %>
             <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                <% if (reviews.total > 0) { %><hr  class="productHr"><% } %>
+                <% if (reviews.total > 0) { %><hr  class="smallerCenter"><% } %>
                 <p class="productSubTitleText" >Write a Review</p>
-                <form action="/products/<%= product.id %>/reviews" method="POST">
+                <form action="/products/<%= product.id %>/reviews" method="POST" class="detailsContainer">
                     <textarea class="textarea" name="review[body]" required></textarea>
                     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                         <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
@@ -487,13 +483,13 @@
         </div>
         <% if (currentUser) { %>
             <% if (currentUser._id.toString() !== product.author.id.toString()) { %>
-                <hr  class="productHr">
+                <hr  class="smallerCenter">
             <% } else if ( reviews.total > 0 ) { %>
-                <hr  class="productHr">
+                <hr  class="smallerCenter">
             <% } %>
         <% } %>
         <p class="productSubTitleText">Similar products</p>
-        <div class="column">    
+        <div class="column detailsContainer">    
             <!-- Add a few products from the same category -->
             <div class="columns" style="justify-content: center;">
                 <div class="column card feat_card" style="max-width: 250px;">

@@ -1,0 +1,40 @@
+.tooltip-toggle {
+  cursor: pointer;
+  position: relative; }
+  .tooltip-toggle svg {
+    height: 18px;
+    width: 18px; }
+  .tooltip-toggle::before {
+    position: absolute;
+    top: -90px;
+    background-color: white;
+    border-radius: 5px;
+    color: #fff;
+    content: attr(aria-label);
+    padding: 1rem;
+    text-transform: none;
+    transition: all 0.3s ease;
+    width: 160px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important; }
+  .tooltip-toggle::after {
+    position: absolute;
+    top: -12px;
+    left: 9px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #2B222A;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+    margin-left: -5px;
+    width: 0; }
+  .tooltip-toggle::before, .tooltip-toggle::after {
+    color: black;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+    opacity: 0;
+    pointer-events: none;
+    text-align: center; }
+  .tooltip-toggle:focus::before, .tooltip-toggle:focus::after, .tooltip-toggle:hover::before, .tooltip-toggle:hover::after {
+    opacity: 1;
+    transition: all 0.5s ease; }

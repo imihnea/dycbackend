@@ -7,8 +7,6 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
-            => Better Tooltips
-            => Fix accepted currencies @ edit
                       
     Low Priority:
 
