@@ -25,12 +25,7 @@ var client = new Client({
   'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
 });
 
-const Coinswitch = require('coinswitch');
-
-const cs = new Coinswitch({
-  apiKey: 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-  userIP: '1.1.1.1'
-});
+var request = require("request");
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -134,14 +129,45 @@ router.post('/addresses/withdrawBTC', isLoggedIn, (req, res) => {
 });
 
 router.get('/addresses/altcoins/pair', async (req, res) => {
-  const coinsList = await cs.getDepositCoins('btc')  // coinsList is an array
-  console.log(coinsList[0])
-  res.send(coinsList);
+  var options = { method: 'POST',
+  url: 'https://api.coinswitch.co/v2/pairs',
+  headers: 
+   { 'x-user-ip': '1.1.1.1',
+     'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+     'content-type': 'application/json' },
+  body: '{"destinationCoin":"btc"}' };
+
+request(options, function (error, response, body) {
+  if(!error && response.statusCode == 200) {
+    var json = JSON.parse(body);
+    var data = json.data;
+    console.log(data);
+    //Add Check for isActive: true
+    res.send(data);
+  }
+});
 });
 
-router.get('/addresses/altcoins/rate', async (req, res) => {
-  const rate = await cs.getExchangeLimit(deposit, 'btc')
-  console.log(rate)
+router.post('/addresses/altcoins/rate', async (req, res) => {
+  console.log(req.body.counter);
+  const deposit = req.body.counter;
+  var options = { method: 'POST',
+  url: 'https://api.coinswitch.co/v2/rate',
+  headers:
+   { 'x-user-ip': '1.1.1.1',
+     'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+     'content-type': 'application/json' },
+     body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` };
+
+request(options, function (error, response, body) {
+  if(!error && response.statusCode == 200) {
+    var json = JSON.parse(body);
+    var data = json.data;
+    console.log(data);
+    //Add Check for isActive: true
+    res.send(data);
+  }
+});
 });
 
 router.post('/addresses/altcoins/deposit', async (req, res) => {

@@ -167,7 +167,7 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control">
-                                                                <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="rate" id="rate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -179,7 +179,7 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="max" id="max" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -191,7 +191,7 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="min" id="min" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -203,7 +203,7 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="fee" placeholder="0.00050000" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -291,7 +291,7 @@
                                                         <a href="#" data-nav="previous" class="button is-light">Previous</a>
                                                     </div>
                                                     <div class="steps-action">
-                                                        <a href="#" data-nav="next" class="button is-light">Next</a>
+                                                        <a href="#" data-nav="next" class="button is-light" id="next">Next</a>
                                                     </div>
                                                 </div>
                                     </section>

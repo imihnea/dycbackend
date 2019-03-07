@@ -1,5 +1,3 @@
-console.log('Client-side code running');
-
 function populateSelect(target, min, max, data){
     if (!target){
         return false;
@@ -12,8 +10,8 @@ function populateSelect(target, min, max, data){
 
         for (var i = min; i<=max; i++){
             var opt = document.createElement('option');
-            opt.value = i;
-            opt.innerHTML = `${data[i].name} (${data[i].symbol})`;
+            opt.value = data[i].depositCoin;
+            opt.innerHTML = `${data[i].depositCoin.toUpperCase()}`;
             select.appendChild(opt);
         }
     }

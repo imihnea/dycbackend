@@ -11,13 +11,6 @@ const Checkout = require('../models/checkout');
 
 var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
-const Coinswitch = require('coinswitch');
-
-const cs = new Coinswitch({
-  apiKey: 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-  userIP: '1.1.1.1'
-});
-
 // Constants for quick modification
 const feature1_time = 60000;
 const feature2_time = 120000;
