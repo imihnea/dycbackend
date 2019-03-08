@@ -85,13 +85,13 @@ ProductSchema.methods.calculateAvgRating = function() {
 ProductSchema.plugin(mongoosePaginate);
 
 // For local ElasticSearch
-ProductSchema.plugin(mongoosastic);
+// ProductSchema.plugin(mongoosastic);
 
 // For hosted ElasticSearch
-// ProductSchema.plugin(mongoosastic,{  
-  // host: 'elasticsearch',
-  // port: 9200
-// });
+ProductSchema.plugin(mongoosastic,{  
+  host: '188.25.149.235',
+  port: 9200
+});
 
 mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
   if (err) {

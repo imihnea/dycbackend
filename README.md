@@ -19,6 +19,9 @@ Backend:
    High Priority:
 
       Dashboard => Add balance route
+      Users => User types
+                  => Different fee
+            => Count number of products sold
 
    Low Priority:
 
