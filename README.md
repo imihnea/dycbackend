@@ -6,15 +6,12 @@ Frontend:
 
     High Priority:
 
-         Search result page
+         UI => New product => Feature deal
+                           => Delivery & Transport => add hover styling and pointer cursor
 
     Low Priority:
 
-         Make deal page look like contact page
-
          Make everything responsive (see comments in css files)
-
-         Color Scheme
 
 
 Backend:
@@ -22,18 +19,20 @@ Backend:
    High Priority:
 
       Dashboard => Add balance route
-      Search bar => Routes and logic for search via category and all
+      Users => User types
+                  => Different fee
+            => Count number of products sold
 
    Low Priority:
 
-      Login => Link accounts facebook,gmail etc to original
+      Login => Link accounts facebook, gmail etc to original
       
       Dashboard 
                => Settings
                   => connections
                => 2 Factor when withdrawing
-      Categories => Add more in future
       Register => Add recaptcha to avoid spam
       Contact => Add recaptcha to avoid spam                        
       Logs => Log errors
            => Log deal status changes
+      Categories => Add more in future

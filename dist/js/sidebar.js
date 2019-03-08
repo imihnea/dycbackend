@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#addresses').classList.add('active-page');
       break;
     }
-    case ('/dashboard/messages'): {
+    case ('/messages/'): {
       document.querySelector('#messages').classList.add('active-page');
       break;
     }
@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     case ('/dashboard/purchases'): {
       document.querySelector('#purchases').classList.add('active-page');
+      break;
+    }
+    case ('/dashboard/open'): {
+      document.querySelector('#open').classList.add('active-page');
+      break;
+    }
+    case ('/dashboard/ongoing'): {
+      document.querySelector('#ongoing').classList.add('active-page');
       break;
     }
     default: {

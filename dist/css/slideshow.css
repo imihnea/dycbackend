@@ -10,11 +10,13 @@
   }
   .slides{
     width:400%;
-    height:100%;
     position:relative;
     -webkit-animation:slide 15s infinite;
     -moz-animation:slide 15s infinite;
     animation:slide 15s infinite;
+    background-color: black;
+    margin-top: -4px;
+    height: 97%;
   }
 
   .on{
@@ -214,3 +216,13 @@
   .switch ul{
     overflow:hidden;
   }
+  
+.sliderBtn{
+    border-color: transparent; 
+    background-color: transparent; 
+    cursor: pointer;
+}
+
+.sliderBtn:focus{
+    outline: transparent;
+}

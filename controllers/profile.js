@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Review = require('../models/review');
+const { Regions } = require('../dist/js/regions');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -78,6 +79,11 @@ module.exports = {
                 user.country = req.body.country;
                 user.state = req.body.state;
                 user.city = req.body.city;
+                Regions.forEach((region) => {
+                  if (user.country === region.country) {
+                    user.continent = region.continent;
+                  }
+                });
                 user.address1 = req.body.address1;
                 user.zip = req.body.zip;
                 user.address2 = req.body.address2;
@@ -88,7 +94,7 @@ module.exports = {
                     errors: errors,
                   });
                 } else {
-                user.save();
+                await user.save();
                 res.redirect(`/profile/${user._id}`);
                 }
             }

@@ -70,42 +70,25 @@
 	transform: scale(1);
 }
 
-/* .card{
-	background-color: transparent !important;
-	border-style: double !important;
-    border-radius: 5px !important;
-    border-color: orange !important;
-}
-*/
-.productSubTitleText{
-	color: orange !important;
-	text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2vh;
-}
-
-.productDescriptionText{
-	color: orange !important;
-	text-align: left;
-}
-
-/*.productUserText{
-	margin-bottom: 2vh;
-	color: orange !important;
-}
-
-.productUserLink{
-	color: darkseagreen !important;
-}
-
-.productContactLink{
-	position: relative;
-	top: 1vh;
-} */
 .currency-input{
     display: none;
 }
 
 .pricesChecked {
-	background-color: rgb(68, 40, 4);
+	background-color: #d0b94f !important;
+}
+
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+
+.prices {
+	/* width: 55% !important; */
+	margin-top: 1vh;
+}
+
+.detailsContainer{
+	width: 90%;
+    margin: auto;
 }

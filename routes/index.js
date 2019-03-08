@@ -27,7 +27,10 @@ const {
   get2factor,
   post2factor,
   postdisable2factor,
-  postVerifyLogin
+  postVerifyLogin,
+  firstCategSearch,
+  secondCategSearch,
+  thirdCategSearch
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
@@ -87,6 +90,14 @@ router.get('/auth/google/callback',
   (req, res) => {
     res.redirect('/dashboard');
   });
+
+// POST Search
+
+router.post('/firstCategSearch', asyncErrorHandler(firstCategSearch));
+
+router.post('/secondCategSearch', asyncErrorHandler(secondCategSearch));
+
+router.post('/thirdCategSearch', asyncErrorHandler(thirdCategSearch));
 
 // GET Logout route
 router.get('/logout', getLogout);

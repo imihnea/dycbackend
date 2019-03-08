@@ -9,14 +9,43 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <script src="../../dist/js/product_view.js"></script>
 <div class="hero-body">
-    <div class="container ">
+    <div class="container frame">
+        <nav class="breadcrumb" style="margin-left: 1vw;" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <form action="/firstCategSearch" method="POST">
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="category" value="<%= product.category[1] %>" hidden>
+                        <button class="searchBtn"><%= product.category[1] %></button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/secondCategSearch" method="POST" =>
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="searchCateg" value="<%= product.category[1] %>" hidden>
+                        <input type="text" name="category" value="<%= product.category[2] %>" hidden>
+                        <button class="searchBtn"><%= product.category[2] %></button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/thirdCategSearch" method="POST">
+                        <input type="text" name="searchName" value="" hidden>
+                        <input type="text" name="searchCateg" value="<%= product.category[1] %>" hidden>
+                        <input type="text" name="secondSearchCateg" value="<%= product.category[2] %>" hidden>
+                        <input type="text" name="category" value="<%= product.category[3] %>" hidden>
+                        <button class="searchBtn searchCategBtn"><%= product.category[3] %></button>
+                    </form>
+                </li>
+                <li class="is-active"><a href="#" aria-current="page"><%= product.name %></a></li>
+            </ul>
+        </nav>
         <div class="column">
             <h1 class="title"><strong><%= product.name %></strong></h2>
         </div>
-        <hr>
-        <div class="columns">
+        <hr  class="smallerCenter">
+        <div class="columns detailsContainer">
             <div class="column ">
-                <div class="thumbnails">
+                <div class="thumbnails" style="margin-left: 1vw;">
                     <div class="level">
                         <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                         <label for="id1">
@@ -88,7 +117,7 @@
                 </div>
             </div>
             <div class="column is-one-quarter">
-                <p class="productUserText" style="color: orange;">Sold by: <a class="productUserLink" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
+                <p class="productUserText">Sold by: <a class="productUserLink" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
                     <!-- display a full star -->
@@ -101,22 +130,22 @@
                     <i class="far fa-star" style="color: orange;"></i>
                     <% } %>
                 <% } %>
-                <p style="color: orange;"><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
-                <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
+                <form action="/products/<%= product.id %>/buy?_method=PUT" id="buyForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
                     <div class="column prod_info" style="padding: 0;">
                         <% if (product.accepted[0]) { %>
                             <label class="img-check ">
-                                <div class="prices openPrices">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">
                                         <% if (user) { %>
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
+                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.city.percent/100) %>
                                             <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
+                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.state.percent/100) %>
                                             <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
+                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.country.percent/100) %>
                                             <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.worldwide.percent/100) %>
                                             <% } else { %>
                                                 <%= product.price[0] %>
                                             <% } %>
@@ -132,17 +161,17 @@
                         <% } 
                         if (product.accepted[1]) { %>
                             <label class="img-check">
-                                <div class="prices openPrices">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">      
                                         <% if(user) { %>                          
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
+                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.city.percent/100) %>
                                             <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
+                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.state.percent/100) %>
                                             <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
+                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.country.percent/100) %>
                                             <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= product.price[1] + (product.price[1]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.worldwide.percent/100) %>
                                             <% } else { %>
                                                 <%= product.price[1] %>
                                             <% } %>
@@ -158,17 +187,17 @@
                         <% } 
                         if (product.accepted[2]) { %>
                             <label class="img-check">
-                                <div class="prices openPrices">
+                                <div class="prices frame openPrices">
                                     <p class="price_text">
                                         <% if(user) { %>
                                             <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
+                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.city.percent/100) %>
                                             <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
+                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.state.percent/100) %>
                                             <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
+                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.country.percent/100) %>
                                             <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= product.price[2] + (product.price[2]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.worldwide.percent/100) %>
                                             <% } else { %>
                                                 <%= product.price[2] %>
                                             <% } %>
@@ -184,17 +213,17 @@
                         <% } 
                             if (product.accepted[3]) { %>
                                 <label class="img-check">
-                                    <div class="prices openPrices">
+                                    <div class="prices frame openPrices">
                                         <p class="price_text">
                                             <% if(user) { %>
                                                 <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
+                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.city.percent/100) %>
                                                 <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
+                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.state.percent/100) %>
                                                 <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                    <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
+                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.country.percent/100) %>
                                                 <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                    <%= product.price[3] + (product.price[3]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.worldwide.percent/100) %>
                                                 <% } else { %>
                                                     <%= product.price[3] %>
                                                 <% } %>
@@ -210,17 +239,17 @@
                         <% } 
                             if (product.accepted[4]) { %>
                                 <label class="img-check">
-                                    <div class="prices openPrices">
+                                    <div class="prices frame openPrices">
                                         <p class="price_text">
-                                            <% if(user) { %>
+                                            <% if (user) { %>
                                                 <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>
+                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.city.percent/100) %>
                                                 <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
+                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.state.percent/100) %>
                                                 <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                    <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
+                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.country.percent/100) %>
                                                 <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                    <%= product.price[4] + (product.price[4]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.worldwide.percent/100) %>
                                                 <% } else { %>
                                                     <%= product.price[4] %>
                                                 <% } %>
@@ -235,31 +264,55 @@
                                 </label>
                         <% } %>
                     </div>
-                    <p style="color: orange !important;"><sub>Transportation costs included</sub></p>
-                    <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
-                    <br>
-                    <% if(!currentUser){ %> 
-                    <a href="/login" class="button is-primary">Login to buy</a>
-                    <% } else if(currentUser.username === product.author.username) { %>
-                    <a href="/dashboard/tokens" class="button is-primary">Promote your product</a>
-                    <% } else { %>
-                    <button class="button is-primary" id="buyBtn" disabled>Buy</button>
-                    <% } %>
+                    <p><sub>Transportation costs included</sub></p>
+                    <br>   
                 </form>
-                <div style="margin-top: 1vh;">
-                    <form action="/messages/<%= product._id %>/createChat" method="POST">
-                        <button class="productContactLink button is-primary">Contact</button>
-                    </form>
-                </div>
+                <% if (!user) { %> 
+                    <a href="/login" class="button is-primary">Login to buy</a>
+                    <% } else if (user.username === product.author.username) { %>
+                        <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
+                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
+                    <% } else if ( ((user.city == product.author.city) && (product.deliveryOptions.city.valid == true)) ||
+                                   ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) ||
+                                   ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) ||
+                                   (product.deliveryOptions.worldwide.valid == true) ) { %>
+                        <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
+                        <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
+                            <button class="button is-primary" form="buyForm" id="buyBtn" disabled>Buy</button>
+                            <form action="/messages/<%= product._id %>/createChat" method="POST">
+                                <button class="productContactLink button is-primary">Contact</button>
+                            </form>
+                        </div>
+                <% } else { %>
+                    <p class="subtitle is-6">The seller does not deliver in your area</p>
+                    <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
+                <% } %>
             </div>                
         </div>  
-        <hr>
-        <div class="column">
+        <hr  class="smallerCenter">
+        <div class="column detailsContainer">
             <p class="productSubTitleText">Description</p>
             <br>
             <p class="productDescriptionText" ><%= product.description %></p>
+            <br>
+            <table class="table is-striped is-narrow" style="margin: auto;">
+                <thead>
+                    <td><p class="productDescriptionText" style="font-weight: 600;">Additional Information</p></td>
+                    <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Condition</td>
+                        <td><%= product.condition %></td>
+                    </tr>
+                    <tr>
+                        <td>Continent of origin</td>
+                        <td><%= product.author.continent %></td>
+                    </tr>
+                </tbody>
+            </table>
         </div> 
-        <hr>
+        <hr class="smallerCenter">
         <div class="column">
             <% if (reviews.total > 0) { %>
                 <p class="productSubTitleText">Reviews</p>
@@ -267,17 +320,12 @@
                 <!-- display all reviews -->
                 <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
                 <% reviews.docs.forEach(function(review, index) { %>
-                    <div class="columns container is-fluid" style="display: flex;
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: orange;
+                    <div class="columns container is-fluid frame" style="display: flex;
                     margin-bottom: 1vh;
-                    padding: 2%;
-                    border-radius: 10px;">
+                    padding: 2%;">
                         <div>
-                            <!-- TODO: Add user avatar url to review.author -->
-                            <a href="/profile/<%= review.author %>"><img src="../../dist/img/rollo.png" style="width: 75px; height: 75px;"></a>
-                            <a href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
+                            <a href="/profile/<%= review.author %>"><img src="<%= review.avatarUrl %>"" style="width: 75px; height: 75px;"></a>
+                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                             <% if (review.createdAt) { %>
                             <p class="productDescriptionText" style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {
@@ -341,7 +389,7 @@
                         </div>
                         <% if(currentUser){ %>
                             <% if(review.author.equals(currentUser._id)) { %>
-                            <div class="column is-one-fifth" style="position: absolute; right: -3%; top: 3%;">
+                            <div class="column is-one-fifth" style="position: absolute; right: -1%; top: 3%;">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
                                     <div class="modal-background"></div>
@@ -403,13 +451,13 @@
                         <% } %>
                     </div>
                     
-                    <% if (index < reviews.total - 1) { %><hr><% } %>
+                    <% if (index < reviews.total - 1) { %><hr  class="smallerCenter"><% } %>
                 <% }); %>
             <% } %>
             <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                <% if (reviews.total > 0) { %><hr><% } %>
+                <% if (reviews.total > 0) { %><hr  class="smallerCenter"><% } %>
                 <p class="productSubTitleText" >Write a Review</p>
-                <form action="/products/<%= product.id %>/reviews" method="POST">
+                <form action="/products/<%= product.id %>/reviews" method="POST" class="detailsContainer">
                     <textarea class="textarea" name="review[body]" required></textarea>
                     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                         <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
@@ -433,9 +481,15 @@
                 </form>
                 <% } %>
         </div>
-        <% if ((reviewed===false) && (currentUser._id.toString() !== product.author.id.toString())) { %><hr><% } %>
+        <% if (currentUser) { %>
+            <% if (currentUser._id.toString() !== product.author.id.toString()) { %>
+                <hr  class="smallerCenter">
+            <% } else if ( reviews.total > 0 ) { %>
+                <hr  class="smallerCenter">
+            <% } %>
+        <% } %>
         <p class="productSubTitleText">Similar products</p>
-        <div class="column">    
+        <div class="column detailsContainer">    
             <!-- Add a few products from the same category -->
             <div class="columns" style="justify-content: center;">
                 <div class="column card feat_card" style="max-width: 250px;">

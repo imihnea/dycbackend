@@ -39,4 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
       inputItems[i].disabled = false;
     });
   });
+
+  // Deactivate Modal
+  const deactivateOpenButton = document.querySelector('.deactivate');
+  const deactivateCloseButton = document.querySelector('.deleteDeactivate');
+  const deactivateModal = document.querySelector('.modalDeactivate');
+  deactivateOpenButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      deactivateModal.classList.toggle('is-active');
+    });
+  deactivateCloseButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      deactivateModal.classList.toggle('is-active');
+    });
+  deactivateCancelButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      deactivateModal.classList.toggle('is-active');
+    });
 });
