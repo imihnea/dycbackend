@@ -9,6 +9,8 @@ const router = express.Router();
 
 const User = require('../models/user');
 
+const Checkout = require('../models/checkout');
+
 const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, 
@@ -171,39 +173,82 @@ request(options, function (error, response, body) {
 });
 
 router.post('/addresses/altcoins/deposit', async (req, res) => {
-  const {
-    offerReferenceId,
-    depositCoinAmount,
-    destinationCoinAmount
-  } = await cs.generateOffer('ltc', 'btc', 0.2) // deposit, destination, amount
-  
-  const {
-    orderId,
-    exchangeAddress: { address }
-  } = await cs.makeOrder({
-    depositCoin: 'ltc',
-    destinationCoin: 'btc',
-    depositCoinAmount,
-    offerReferenceId,
-    userReferenceId: 'test-user',
-    destinationAddress: { address: '3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp' },
-    refundAddress: { address: 'MN4GTWCLDEMpPaiQuiK9YPJi82kcZDkVWN' }
-  })
-  
-  console.log(`
-  =========
-  Order ID: ${orderId}
-  Deposit: LTC (${depositCoinAmount})
-  Receive: BTC (${destinationCoinAmount})
-  Exchange Address: ${address}
-  =========
-  `)
+  console.log(req.body);
+  const deposit = req.body.deposit;
+  const amount = req.body.amount;
+  const refund = req.body.refund;
+  const user = req.body.user;
+  const coin = req.body.depositCoin;
+  var options = { method: 'POST',
+  url: 'https://api.coinswitch.co/v2/order',
+  headers: 
+  { 'x-user-ip': '1.1.1.1',
+    'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+    'content-type': 'application/json' },
+  body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` };
+
+request(options, function (error, response, body) {
+  if(!error && response.statusCode == 200) {
+    console.log(body);
+    var json = JSON.parse(body);
+    var data = json.data;
+    Checkout.create({
+      user: user.username,
+      coin: coin,
+      address: data.exchangeAddress.address,
+      orderId: data.orderId,
+      paid: false
+    }, (err) => {
+      if(err) {
+        res.send(err);
+      } else {
+        console.log('created deposit')
+        res.send(data);
+      }
+    });
+  }
+});
 
 });
 
-router.get('/addresses/altcoins/status', async (req, res) => {
-  const status = await cs.getOrder(orderId)
-  console.log(status)
+router.post('/addresses/altcoins/status', async (req, res) => {
+  console.log(req.body);
+  const orderId = req.body.orderId;
+  var options = { method: 'GET',
+  url: `https://api.coinswitch.co/v2/order/${orderId}`,
+  headers: 
+  { 'x-user-ip': '1.1.1.1',
+    'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'}};
+  // Down code needs testing before production
+  request(options, function (error, response, body) {
+    if(!error && response.statusCode == 200) {
+      console.log(body);
+      var json = JSON.parse(body);
+      var data = json.data;
+      if(data.status === 'complete') {
+        var query_2 = Checkout.findOne({ orderId: orderId });
+        query_2.exec(function(err, checkout) {
+          if(err) {
+            res.send('error');
+          }
+          if(checkout !== null) {
+            var user = checkout.user;
+            var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
+            query_btc.then(function(doc) {
+              console.log("Deposit arrived!");
+              var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
+              query_1.then(function(doc2) {
+                console.log("Checkout updated to paid!");
+                res.send(data);
+              });
+            });
+          }
+        });
+      } else {
+        res.send(data);
+      }
+    }
+  });
 });
 
 // Withdraw

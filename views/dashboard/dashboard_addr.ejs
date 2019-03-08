@@ -162,6 +162,18 @@
                                                     <div class="step-content has-text-centered">
                                                     <div class="field is-horizontal">
                                                         <div class="field-label is-normal">
+                                                        <label class="label">Deposit Coin:</label>
+                                                        </div>
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                                <input class="input" name="depositCoin" id="depositCoin" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
+                                                        <div class="field-label is-normal">
                                                         <label class="label">Instant Rate:</label>
                                                         </div>
                                                         <div class="field-body">
@@ -204,6 +216,8 @@
                                                         <div class="field">
                                                             <div class="control has-icon has-icon-right">
                                                                 <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="depositCoinAmount" id="depositCoinAmount" value="1" type="hidden" step="any" data-validate="require" />
+                                                                <input class="input" name="refundAddress" id="refundAddress" value="none" type="hidden" step="any" data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -211,13 +225,22 @@
                                                     </div>
                                                     <div class="step-content has-text-centered">
                                                     <div class="field is-horizontal">
+                                                        <div class="field-body">
+                                                        <div class="field">
+                                                            <div class="control">
+                                                                <p class="subtitle">After sending your crypto to the address, please move to the next step and wait for the transaction to be confirmed.</p>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-horizontal">
                                                         <div class="field-label is-normal">
                                                         <label class="label">Deposit to:</label>
                                                         </div>
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control">
-                                                                <input class="input" name="address" placeholder="Address" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="depositAddress" id="depositAddress" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -229,13 +252,24 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control">
-                                                                <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="expectedAmount" id="expectedAmount" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                <input class="input" name="orderIdHidden" id="orderIdHidden" value="none" type="hidden" step="any" data-validate="require"/>
+                                                                <input class="input" name="currentUser" id="currentUser" value="<%= currentUser %>" type="hidden" step="any" data-validate="require"/>
                                                             </div>
                                                         </div>
                                                         </div>
                                                     </div>
                                                     </div>
                                                     <div class="step-content has-text-centered">
+                                                            <div class="field is-horizontal">
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <p class="subtitle">Status updates automatically every 30 seconds. Please wait until transaction is complete, otherwise your account won't be credited!</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
                                                         <div class="field is-horizontal">
                                                             <div class="field-label is-normal">
                                                             <label class="label">Order ID:</label>
@@ -243,7 +277,7 @@
                                                             <div class="field-body">
                                                             <div class="field">
                                                                 <div class="control">
-                                                                    <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                    <input class="input" name="orderId" id="orderId" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
                                                                 </div>
                                                             </div>
                                                             </div>
@@ -255,7 +289,7 @@
                                                             <div class="field-body">
                                                             <div class="field">
                                                                 <div class="control">
-                                                                    <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                        <input class="input" name="status" id="status" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
                                                                 </div>
                                                             </div>
                                                             </div>
@@ -267,7 +301,7 @@
                                                             <div class="field-body">
                                                             <div class="field">
                                                                 <div class="control">
-                                                                    <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                        <input class="input" name="createDate" id="createDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                                 </div>
                                                             </div>
                                                             </div>
@@ -279,7 +313,7 @@
                                                             <div class="field-body">
                                                             <div class="field">
                                                                 <div class="control">
-                                                                    <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" />
+                                                                        <input class="input" name="expirationDate" id="expirationDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                                 </div>
                                                             </div>
                                                             </div>
