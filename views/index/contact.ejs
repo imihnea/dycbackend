@@ -4,51 +4,43 @@
 
 <div class="hero-body">
     <div class="container content">
-            <div class="columns toptitle">
-                <div class="column">
-                    <h1 class="title">Contact Us</h1>
-                    <p style="color: orange !important;">What can we help you with?</p>
+        <div class="columns toptitle">
+            <div class="column">
+                <div class="dashTop column">
+                    <h1 class="title">Contact</h1>
                 </div>
             </div>
-            
-            <div class="columns">
-                <div class="column"></div>
-                <div class="column is-three-fifths" >
-                    <form action="/contact/send" method="POST">                          
-                        <div class="control has-icons-left has-icons-right">
-                            <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
-                            <span class="icon is-small is-left">
-                            <i class="fas fa-user"></i>
-                            </span>
+        </div>
+        <br>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-three-fifths frame" >
+                <p class="title is-4">What can we help you with?</p>
+                <form action="/contact/send" method="POST">                                          
+                    <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
+                    <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
+                    <div class="field select cont-select smmargin">
+                        <select name="topic" style="width: 100vw;">
+                            <option value="General">General</option>
+                            <option value="Payments">Payments</option>
+                            <option value="Delivery">Delivery</option>
+                            <option value="Bugs">Bugs</option>
+                            <option value="Suggestions">Suggestions</option>
+                        </select>
+                    </div>
+                    <div class="field" style="width: 90%; margin: auto; ">
+                        <div class="control">
+                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                         </div>
-                        <div class="control has-icons-left has-icons-right">
-                            <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
-                            <span class="icon is-small is-left">
-                            <i class="fas fa-envelope"></i>
-                            </span>
-                        </div>
-                        <div class="field select cont-select smmargin">
-                                <select name="topic" style="width: 100vw;">
-                                    <option value="General">General</option>
-                                    <option value="Payments">Payments</option>
-                                    <option value="Delivery">Delivery</option>
-                                    <option value="Bugs">Bugs</option>
-                                    <option value="Suggestions">Suggestions</option>
-                                </select>
-                        </div>
-                        <div class="field" style="margin-top: 3px;">
-                                <div class="control">
-                                    <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                </div>
-                            </div>
-                        <div class="control smmargin">
-                            <button class="button is-primary is-large is-fullwidth">Send</button>
-                        </div>
-                    </form>
-                    <p class="smmargin" style="color: orange !important;">Make sure to check our FAQ out <a href="/faq">here</a>.</p>
-                </div>
-                <div class="column"></div>
+                    </div>
+                    <div class="control smmargin" style="margin: auto; margin-top: 1vh;">
+                        <button class="button is-primary is-large is-fullwidth">Send</button>
+                    </div>
+                </form>
+                <p style="margin: auto; margin-top: 1.5vh;">Make sure to check our FAQ out <a class="link" href="/faq">here</a>.</p>
             </div>
+            <div class="column"></div>
+        </div>
     </div>
 </div>
 <% include ../partials/footer %>

@@ -4,66 +4,80 @@
 <div class="columns">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right">
+        <div class="dashTop column">
+            <h2 class="title">Ongoing Deals</h2>
+        </div>
+        <br>
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <% if (deals.docs.length === 0) { %>
                         <p class="title">You have no ongoing deals at this time.</p>
                 <% } else { %>
-                    <div style="overflow-x: hidden;">
-        
-                        <div class="pagination">
-                            <p class="subtitle pagePad">Pages:</p> 
+                    <div>
+                        <div class="pagination paginationT">
                             <% include ../partials/paginatePurchases %>
                         </div>
-                       
+                        <main id="hits" style="width: 85%; margin: auto;">
                         <% deals.docs.forEach((deal) => { %>
-                            <div class="columns">
-                                    <div class="column is-one-quarter">
-                                            <img src="<%= deal.product.imageUrl %>" class="open-img">
-                                    </div>
-                                    <div class="column prod_info">
-                                        <p class="title is-5 dealname"><%= deal.product.name %></p>
-                                        <p class="subtitle is-6" style="margin-bottom: 0;"><sub>Shipping: TBD</sub></p>
-                                        <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Status: <%= deal.status %></sub></p>
-                                        <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
-                                            <button class="button view-btn">View</button>
-                                        </form>
-                                        <!-- <div style="display: flex;">
-                                            <a href="/deals/<%= deal.id %>"></a>
-                                        </div>    -->
-                                    </div>
-                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
-                                        <div class="prices openPrices">
-                                            <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
-                                            <% switch(deal.boughtWith) {
-                                                case 0: { %>
-                                                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                                    <% break;}
-                                                case 1: { %>
-                                                    <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                                                    <% break; }
-                                                case 2: {%>
-                                                    <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                                                    <% break; }
-                                                case 3: { %>
-                                                    <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                                                    <% break; }
-                                                case 4: { %>
-                                                    <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
-                                                    <% break; }
-                                                default: { break; } } %> 
+                            <article class="hit columns frame">
+                                    <div class="column is-one-fifth product-picture-wrapper">
+                                        <div class="product-picture">
+                                            <img src="<%= deal.product.imageUrl %>">
                                         </div>
-                                </div>
-                            </div>
-                            <hr>                            
+                                    </div>
+                                    <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                        <div class="product-name">
+                                            <p class="title is-6"><%= deal.product.name %></p>
+                                            <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Status: <%= deal.status %></sub></p>
+                                            <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
+                                                <button class="button view-btn is-primary">View Deal</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                        <% if (deal.product.price[0] > 0) { %>
+                                            <div class="prices openPrices frame">
+                                                <p class="price_text"> <%= deal.product.price[0] %></p>
+                                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            </div>
+                                        <% } 
+                                            if (deal.product.price[1] > 0) {
+                                        %>
+                                            <div class="prices openPrices frame">
+                                                <p class="price_text"> <%= deal.product.price[1] %></p>
+                                                <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                            </div>
+                                        <% } 
+                                            if (deal.product.price[2] > 0) {
+                                        %>
+                                            <div class="prices openPrices frame">
+                                                <p class="price_text"> <%= deal.product.price[2] %></p>
+                                                <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                            </div>
+                                        <% } 
+                                            if (deal.product.price[3] > 0) {
+                                        %>
+                                            <div class="prices openPrices frame">
+                                                <p class="price_text"> <%= deal.product.price[3] %></p>
+                                                <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                            </div>
+                                        <% } 
+                                            if (deal.product.price[4]) {
+                                        %>
+                                            <div class="prices openPrices frame">
+                                                <p class="price_text"> <%= deal.product.price[4] %></p>
+                                                <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </article>                                          
                         <% }); %>         
-                    </div>        
-                    
-                        <div class="pagination">
-                            <p class="subtitle pagePad">Pages:</p> 
-                            <% include ../partials/paginatePurchases %>
-                        </div>
+                    </main>
+                    <div class="pagination paginationD">
+                        <% include ../partials/paginatePurchases %>
+                    </div>
+                </div>        
                  
                 <% } %>
             </div>

@@ -1,0 +1,259 @@
+<% include ../partials/header %>
+<script src="../../dist/js/maincateg.js"></script>
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
+
+<div id="results" class="container-fluid">  
+    <div class="content-wrapper">
+        <aside>
+            <section class="facet-wrapper">
+                <div class="facet-category-title" class="facet">
+                    Categories
+                </div>
+                <div id="categories">
+                    <% if (searchCateg === 'all') { %>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Electronics" hidden>
+                            <button class="searchBtn">Electronics</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Home Improvement" hidden>
+                            <button class="searchBtn">Home Improvement</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Fashion & Beauty" hidden>
+                            <button class="searchBtn">Fashion & Beauty</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Pet Supplies" hidden>
+                            <button class="searchBtn">Pet Supplies</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Mothers & Babies" hidden>
+                            <button class="searchBtn">Mothers & Babies</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Sports & Outdoors" hidden>
+                            <button class="searchBtn">Sports & Outdoors</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Collectibles & Art" hidden>
+                            <button class="searchBtn">Collectibles & Art</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Leisure Time" hidden>
+                            <button class="searchBtn">Leisure Time</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Vehicles" hidden>
+                            <button class="searchBtn">Vehicles</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Real Estate" hidden>
+                            <button class="searchBtn">Real Estate</button>
+                        </form>
+                    <% } %>
+                </div>
+            </section>
+    
+            <!-- <section class="facet-wrapper">
+                <div class="facet-category-title">Refine by</div>
+                <div id="types" class="facet"></div>
+                <div id="brands" class="facet"></div>
+                <div id="rating" class="facet"></div>
+                <div id="price" class="facet"></div>
+            </section> -->
+            <form action="/filterSearch" method="POST">
+                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                <input type="radio" name="category" value="<%= searchCateg %>" hidden checked>
+                <section class="facet-wrapper">
+                    <div class="facet-category-title">Sort by</div>
+                    <div class="sort-by">
+                        <div id="sort-by">
+                            <details class="firstTierDetails">
+                                <div class="menu-item">
+                                    <details class="secondTierDetails">
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="btc-asc" id="asc">
+                                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="btc-desc" id="desc">
+                                            <label for="desc" class="thirdTierFilter">Descending</label>
+                                        </div>
+                                        <summary class="secondTierFilter">Bitcoin</summary>
+                                    </details>
+                                </div>
+                                <div class="menu-item">
+                                    <details class="secondTierDetails">
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="bch-asc" id="asc">
+                                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="bch-desc" id="desc">
+                                            <label for="desc" class="thirdTierFilter">Descending</label>
+                                        </div>
+                                        <summary class="secondTierFilter">Bitcoin Cash</summary>
+                                    </details>
+                                </div>
+                                <div class="menu-item">
+                                    <details class="secondTierDetails">
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="eth-asc" id="asc">
+                                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="eth-desc" id="desc">
+                                            <label for="desc" class="thirdTierFilter">Descending</label>
+                                        </div>
+                                        <summary class="secondTierFilter">Ethereum</summary>
+                                    </details>
+                                </div>
+                                <div class="menu-item">
+                                    <details class="secondTierDetails">
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="ltc-asc" id="asc">
+                                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="ltc-desc" id="desc">
+                                            <label for="desc" class="thirdTierFilter">Descending</label>
+                                        </div>
+                                        <summary class="secondTierFilter">Litecoin</summary>
+                                    </details>
+                                </div>
+                                <div class="menu-item">
+                                    <details class="secondTierDetails">
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="dash-asc" id="asc">
+                                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                                        </div>
+                                        <div class="menu-item">
+                                            <input type="radio" name="currency" value="dash-desc" id="desc">
+                                            <label for="desc" class="thirdTierFilter">Descending</label>
+                                        </div>
+                                        <summary class="secondTierFilter">DASH</summary>
+                                    </details>
+                                </div>
+                                <summary class="firstTierFilter">Accepted Currency</summary>
+                            </details>
+                        </div>
+                    </div>
+                </section>   
+                <button class="button is-primary">Filter</button>         
+            </form>
+
+        </aside>
+
+        <div class="results-wrapper">
+            <section id="paginationTop"></section>
+            <section id="results-topbar">
+                <div id="stats" class="text-muted"></div>
+            </section>
+
+            <main id="hits" style="width: 85%; margin-left: 5vw;">
+                <%  if (products.length > 0) {
+                        products.forEach((product) => { %>
+                            <article class="hit columns">
+                                <div class="column is-one-fifth product-picture-wrapper">
+                                    <div class="product-picture">
+                                        <img src="<%= product._source.images[0].url %>">
+                                    </div>
+                                </div>
+                                <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                    <div class="product-name">
+                                        <p class="is-5 dealname"><a href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                        <% if (product._source.feat_1.status === true) { %>
+                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
+                                        <% } %>
+                                        <p class="is-5 dealname">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
+                                        <p>
+                                            <% for(let i = 0; i < 5; i++) { %>
+                                                <% if(i < Math.floor(product._source.avgRating)) { %>
+                                                <!-- display a full star -->
+                                                <i class="fas fa-star" style="color: orange;"></i>
+                                                <% } else if((product._source.avgRating - i) > 0 && (product._source.avgRating - i) < 1) { %>
+                                                <!-- display a half star -->
+                                                <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                                                <% } else { %>
+                                                <!-- display an empty star -->
+                                                <i class="far fa-star" style="color: orange;"></i>
+                                                <% } %>
+                                            <% } %>
+                                        </p>
+                                        <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                    </div>
+                                    <div style="position: absolute; bottom: 10px; left: 23%;">
+                                        <% if (product._source.deliveryOptions.city.valid) { %>
+                                            <i class="fas fa-city fa-2x tooltip" style="color: green;"><span class="iTooltip">Same city delivery</span></i>  
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.state.valid) { %>
+                                            <i class="fas fa-map-marked-alt fa-2x tooltip" style="color: green;"><span class="iTooltip">Same state delivery</span></i>  
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.country.valid) { %>
+                                            <i class="fas fa-flag fa-2x tooltip" style="color: green;"><span class="iTooltip">Same country delivery</span></i>  
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.worldwide.valid) { %>
+                                            <i class="fas fa-globe-americas fa-2x tooltip" style="color: green;"><span class="iTooltip">Worldwide delivery</span></i>  
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                    <% if (product._source.btcPrice > 0) { %>
+                                        <div class="prices openPrices">
+                                            <p class="price_text"> <%= product._source.btcPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.bchPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices">
+                                            <p class="price_text"> <%= product._source.bchPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.ethPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices">
+                                            <p class="price_text"> <%= product._source.ethPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.ltcPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices">
+                                            <p class="price_text"> <%= product._source.ltcPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.dashPrice) {
+                                    %>
+                                        <div class="prices openPrices">
+                                            <p class="price_text"> <%= product._source.dashPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </article>
+                    <% }); } else { %> 
+                        <p class="title is-4">No products found.</p>
+                <% } %>
+            </main>
+            <section id="paginationBottom"></section>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
+<script src="../../dist/js/categname.js"></script>

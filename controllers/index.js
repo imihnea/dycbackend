@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Nexmo = require('nexmo');
+const { Categories, secCategories } = require('../dist/js/categories');
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -176,7 +177,7 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
-    const products = await Product.paginate({ "feat_2.status": true, available: true }, {
+    const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
       page: req.query.page || 1,
       limit: 20,
     });
@@ -235,6 +236,242 @@ module.exports = {
       res.redirect('back');
     });
   },
+    //TODO: change size on production - also modify pagination partials
+    async firstCategSearch(req, res) {
+      //TODO: validation
+      let tags = [];
+      let currency = [];
+      let secCat = [];
+      let from = 0;
+      if (req.body.from) {
+        from = req.body.from;
+      }
+      let continent = '';
+      if (req.body.continent) {
+        continent = req.body.continent;
+      }
+      if (req.body.currency) {
+        // The currency is given is this format -> currency-asc/desc
+        currency = req.body.currency.split('-');
+        tags.push(currency[0]);
+      }
+      let condition = '';
+      if (req.body.condition) {
+        condition = req.body.condition;
+      }
+      let avgRating = req.body.avgRating;
+      if (tags.length > 0) {
+        await Product.search(
+          {
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+              "filter": [
+                { "terms": { "tags": tags }}
+              ]
+            }
+          }, 
+          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              Categories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  secCat = item.opt;
+                }
+              });
+              res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      } else {
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.category}` }},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+            }
+          }, 
+          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              Categories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  secCat = item.opt;
+                }
+              });
+              res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      }
+    },
+    async secondCategSearch(req, res) {
+      //TODO: validation
+      let tags = [];
+      let currency = [];
+      let thiCat = [];
+      let from = 0;
+      if (req.body.from) {
+        from = req.body.from;
+      }
+      let continent = '';
+      if (req.body.continent) {
+        continent = req.body.continent;
+      }
+      if (req.body.currency) {
+        // The currency is given is this format -> currency-asc/desc
+        currency = req.body.currency.split('-');
+        tags.push(currency[0]);
+      }
+      let condition = '';
+      if (req.body.condition) {
+        condition = req.body.condition;
+      }
+      let avgRating = req.body.avgRating;
+      if (tags.length > 0) {
+        await Product.search(
+          {
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+              "filter": [
+                { "terms": { "tags": tags }}
+              ]
+            }
+          }, 
+          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              secCategories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  thiCat = item.opt;
+                }
+              });
+              res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      } else {
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+            }
+          }, 
+          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              secCategories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  thiCat = item.opt;
+                }
+              });
+              res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      }
+    },
+    async thirdCategSearch(req, res){
+      //TODO: validation
+      let tags = [];
+      let currency = [];
+      let from = 0;
+      if (req.body.from) {
+        from = req.body.from;
+      }
+      let continent = '';
+      if (req.body.continent) {
+        continent = req.body.continent;
+      }
+      if (req.body.currency) {
+        // The currency is given is this format -> currency-asc/desc
+        currency = req.body.currency.split('-');
+        tags.push(currency[0]);
+      }
+      let condition = '';
+      if (req.body.condition) {
+        condition = req.body.condition;
+      }
+      let avgRating = req.body.avgRating;
+      if (tags.length > 0) {
+        await Product.search(
+          {
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.secondSearchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+              "filter": [
+                { "terms": { "tags": tags }}
+              ]
+            }
+          }, 
+          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      } else {
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.secondSearchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
+            }
+          }, 
+          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
+            }
+          }
+        );
+      }
+    },
   getReset(req, res) {
     User.findOne(
       {

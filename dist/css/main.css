@@ -31,6 +31,14 @@ input[type='text'], select, .dd-btn, .src-btn{
     color:    rgb(138, 96, 54) !important;
 }
 
+p, h1, h2, h3, h4, h5, h6,  option, select, span {
+    color: black;
+}
+
+input{
+    text-shadow: 0.4px 0.4px black;
+}
+
 /* Header */
 .navi{
     padding-top: 1vh;
@@ -48,8 +56,8 @@ input[type='text'], select, .dd-btn, .src-btn{
 
 input, select, .dd-btn{
     border-style: double !important;
-    color: orange !important;
-    border-color: orange !important;
+    color: black !important;
+    border-color: black !important;
 }
 .search{
     width: 70%;
@@ -61,7 +69,7 @@ input, select, .dd-btn{
 
 .select:not(.is-multiple):not(.is-loading)::after {
     right: 3em !important;
-    border-color: orange !important;
+    border-color: black !important;
 }
 
 .cont-select:not(.is-multiple):not(.is-loading)::after {
@@ -90,24 +98,24 @@ input, select, .dd-btn{
     margin-left: -2vw;
     border-bottom-left-radius: 0 !important;
     border-top-left-radius: 0 !important;
-    background-color: orange !important;
+    background-color: black !important;
     color: black !important;
     border-style: double !important;
-    border-color: orange !important;
+    border-color: black !important;
 }
 
 .balance-btn{
-    background-color: transparent !important;
-    color: orange !important;
-    border-color: orange !important;
+    background-color: white !important;
+    color: black !important;
+    border-color: black !important;
 }
 
 .navbar{
-    background-color: black !important;
+    background-color: #3269ca !important;
 }
 
 .header-link{
-    color: orange;
+    color: black;
 }
 
 .searchbar{
@@ -119,32 +127,61 @@ input, select, .dd-btn{
     width: auto;
 }
 
-.dropdown-item{
-    text-align: center;
+.dropdown-content{
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }
 
-.dropdown-item:hover{
-    background-color: #402504 !important;
+.categDropdown:hover {
+    background-color: rgb(167,219,216) !important;
+    border-right-color: rgb(250, 105, 0);
+}
+
+.categDropdown.active {
+    background-color: rgb(167,219,216) !important;
+    border-right-color: rgb(250, 105, 0);
+}
+
+.dropdown-item{
+    text-align: center;
+    padding: 0.2rem 1rem !important;
+}
+
+a.link:hover {
+    color: black !important;
+}
+
+a:hover {
+    color: white !important;
 }
 
 .main-categ{
     text-align: left !important;
-    color: orange !important;
+    color: black !important;
 }
 
 .sec-categ{
     margin-left: -2vw;
+    min-width: 200px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding: 0.7rem 1rem !important;
 }
 
 .sec-categ a{
-    color: orange !important;
+    color: black !important;
+}
+
+.categorySelect:not(.is-multiple):not(.is-loading)::after{
+    right: 1rem !important;
+    border-color: black;
 }
 
 .categories{
     border-style: double;
     border-radius: 10px;
-    border-color: orange !important;
-    background-color: black !important;
+    border-color: black !important;
+    background-color: rgb(224,228,204) !important;
 }
 
 
@@ -152,14 +189,14 @@ input, select, .dd-btn{
     display: flex !important;
     align-items: center;
     justify-content: space-evenly;
-    color: orange !important;
+    color: black !important;
 }
 
 .currencies{
-    background-color: black !important;
+    background-color: rgb(224,228,204) !important;
     border-style: double;
     border-radius: 10px !important;
-    border-color: orange !important;
+    border-color: black !important;
 }
 
 .curr_img{
@@ -194,50 +231,97 @@ input, select, .dd-btn{
 body{
     min-height: 100%;
     position: relative;
-    background-color: black;
+    background-color: #d6dada !important;
 }
 
 
 .button:hover{
-    color: orange !important;
-    background-color: transparent !important;
-    border-color: orange !important;
+    border-color: black !important;
+}
+
+.button.is-primary:hover{
+    background-color: #275ab3 !important;
 }
 
 .page{
     color: black !important;
-    background-color: orange !important;
-    border-color: transparent !important;
+    background-color: #3273dc !important;
+    border-color: black !important;
 }
 
 .page:hover{
-    color: orange !important;
-    background-color: transparent !important;
-    border-color: orange !important;
+    color: black !important;
+    background-color: white !important;
+    border-color: black !important;
 }
 
 .page.active{
-    color: orange !important;
-    background-color: transparent !important;
-    border-color: orange !important;
+    color: black !important;
+    background-color: white !important;
+    border-color: black !important;
+}
+
+.searchBtn{
+    border-color: transparent;
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+    margin-bottom: 0.3vh;
+    width: 100%;
+    text-shadow: 0.3px 0.3px black;
+}
+
+.searchBtn:hover{
+    border-bottom-style: solid;
+    border-bottom-color: black !important;
+    border-bottom-width: 1px;
+}
+
+.searchBtn:focus{
+    outline: transparent;
 }
 
 /* Make .columns margin-left and right disappear for <= 768px */
 div.content{
-    /* box-shadow: 0.1px 0.1px 1px black; */
     padding: 1%;
     margin-bottom: 0% !important;
 }
 
+.content h1{
+    margin-bottom: 0px !important;
+}
+
 .smmargin{
     margin-top: 1.5vh;
+    width: 90% !important;
+}
+
+.dashTop{
+    background: -webkit-linear-gradient(to right, #3269ca, #4f38a4);
+    background: linear-gradient(to right, #3269ca, #4f38a4);
+    width: 30vw;
+    margin: auto;
+}
+
+.frame{
+    border-radius: 15px !important;
+    background-color: white !important;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
+    padding-top: 2vh !important;
+    padding-bottom: 2vh !important;
+}
+
+.smallerCenter{
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .input, .textarea, select, .dd-btn{
-    background-color: transparent !important;
+    background-color: white !important;
     border-style: double !important;
-    color: orange !important;
-    border-color: orange !important;
+    color: black !important;
+    border-color: black !important;
 }
 
 .control{
@@ -251,40 +335,34 @@ div.column{
 .prices{
     display: flex;
     justify-content: space-between;
-    border-style: double;
-    border-radius: 10px;
-    border-color: orange;
-    margin-bottom: 1vh;
     padding-left: 1vw;
     padding-right: 1vw;
-    padding-top: 1vh;
-    color: orange;
+    padding-top: 1vh !important;
+    padding-bottom: 0vh !important;
+    color: black;
     width: 75%;
-    position: relative; 
-    margin: auto; 
-    margin-bottom: 10px;
 }
 
 hr{
-    background-color: orange !important;
+    background-color: black !important;
 }
 
 .sub_name{
-    color: orange !important;
+    color: black !important;
 }
 
 .sub_name:hover{
-    background-color: #402504 !important
+    background-color: rgb(224,228,204) !important
 }
 
 .menu-categ{
     border-style: double;
     border-radius: 10px;
-    border-color: orange;
+    border-color: black;
 }
 
 .menu-label{
-    color: orange !important;
+    color: black !important;
 }
 
 .price_img{
@@ -292,31 +370,44 @@ hr{
 }
 
 .is-primary{
-    background-color: orange !important;
+    background-color: #3269ca !important;
     color: black !important;
+    border-width: 1px !important;
+    border-color: black !important;
 }
 
 .is-danger{
     color: black !important;
+    border-color: black !important;
+}
+
+.is-danger:hover{
+    color: white !important;
 }
 
 .title{
-    color: orange !important;
+    color: black !important;
 }
 
 .subtitle{
-    color: #c36a1b !important;
+    color: black !important;
+}
+
+.subWarning{
+    width: 100%; 
+    margin-top: 5px;
+    color: red !important;
 }
 
 .productSubTitleText{
-	color: orange !important;
+	color: black !important;
 	text-align: center;
     font-size: 2rem;
     margin-bottom: 2vh;
 }
 
 .productDescriptionText{
-	color: orange !important;
+	color: black !important;
 	text-align: left;
 }
 
@@ -327,12 +418,12 @@ hr{
 }
 
 .view-btn{
-    background-color: orange !important;
-    border-color: transparent !important;
+    background-color: #3269ca !important;
+    border-color: black !important;
 }
 
 .view-btn:hover{
-    border-color: transparent;
+    background-color: #326cd2 !important;
 }
 
 .firstcol{
@@ -340,7 +431,7 @@ hr{
 }
 
 .card:hover{
-    background-color: #c3691b52;
+    background-color: #3269ca7d !important;
 }
 
 .card{
@@ -359,31 +450,25 @@ hr{
 }
 
 .deals{
-    border-style: double;
-    border-color: orange;
     padding: 20px;
-    border-top-style: none;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    margin-top: -1.5vh;
-    margin-left: -12px;
-    margin-right: -12px;
 }
 
 .pagination{
-    display: flex; 
-    justify-content: center; 
-    margin-bottom: 2vh;
+    display: block !important; 
+}
+
+.paginationT{
+    margin-bottom: 2vh !important;
 }
 
 .paginationD{ 
-    margin-top: 4vh;
+    margin-top: 3vh !important;
 }
 
 .openPrices{
-    width: 30% !important;
     position: relative !important;
     margin: auto !important;
+    margin-top: 1vh !important;
 }
 /* Content Ends */
 
@@ -396,6 +481,7 @@ hr{
     border-top-style: solid;
     border-width: 0.5px;
     padding-top: 1vh;
+    background-color: #3269ca;
 }
 
 body::after {
@@ -405,13 +491,13 @@ body::after {
 }
 
 .tabs a {
-    color: orange !important;
+    color: black !important;
     border-bottom-color: #4a4a4a !important;
 }
 
 .tabs a:hover{
     border-bottom-color: white !important;
-    background-color: #3b3737 !important;
+    background-color: rgb(167,219,216) !important;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -419,6 +505,6 @@ body::after {
 .copyright{
     text-align: center; 
     padding-top: 1vh;
-    color: orange;
+    color: black;
 }
 /* Footer Ends */

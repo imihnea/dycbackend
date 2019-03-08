@@ -8,23 +8,35 @@
         <div class="slider">
         <div class="legend"></div>
         <div class="image">
-            <a href="categories/Collectibles-Art">
-            <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483374/collection.png" ></div></a>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles & Art" hidden>
+                <input type="text" name="category" value="Collectibles" hidden>
+                <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483374/collection.png" ></div></button>
+            </form>
         </div>
         </div>
         <div class="slider">
-        <div class="legend"></div>
-        <div class="image">
-            <a href="categories/MusicalInstruments-Gear">
-                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483375/music.png" ></div></a>
-        </div>
+            <div class="legend"></div>
+            <div class="image">
+                <form action="/secondCategSearch" method="POST">
+                    <input type="text" name="searchName" value="" hidden>
+                    <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                    <input type="text" name="category" value="Music" hidden>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483375/music.png" ></div></button>
+                </form>
+            </div>
         </div>
         <div class="slider">
-        <div class="legend"></div>
-        <div class="image">
-            <a href="categories/Sporting-Goods">
-                <div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483371/sport.png" ></div></a>
-        </div>
+            <div class="legend"></div>
+            <div class="image">
+                <form action="/secondCategSearch" method="POST">
+                    <input type="text" name="searchName" value="" hidden>
+                    <input type="text" name="searchCateg" value="Sports & Outdoors" hidden>
+                    <input type="text" name="category" value="Sports & Fitness" hidden>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1545483371/sport.png" ></div></button>
+                </form>
+            </div>
         </div>
     </div>
     <div class="switch">
@@ -40,7 +52,9 @@
 
 <div class="hero-body hero-content">
     <% if (products.docs.length === 0) { %>
-        <p class="title">There are no promoted products yet.</p>
+        <div class="column">
+            <p class="title">There are no promoted products yet.</p>
+        </div>
     <% } else { 
         if (products.docs.length > 20) { %>
             <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
@@ -52,7 +66,7 @@
         
         <div class="container columns" style="flex-wrap: wrap; justify-content: space-evenly; width: 50vw;"> 
         <% products.docs.forEach((product) => { %>
-            <div class="column card feat_card" style="flex-grow: 0;">
+            <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= product._id %>/view">
                     <div class="card-image">
                         <figure class="image featimg">
@@ -62,7 +76,7 @@
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
-                                <p class="title is-5 dealname"><%= product.name %> </p>
+                                <p class="title is-5"><%= product.name %> </p>
                             </div>
                         </div>
                         <div class="accepted_currencies">

@@ -197,7 +197,6 @@ request(options, function (error, response, body) {
       coin: coin,
       address: data.exchangeAddress.address,
       orderId: data.orderId,
-      paid: false
     }, (err) => {
       if(err) {
         res.send(err);

@@ -5,697 +5,696 @@
 <div class="columns">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right adrcol">
+        <div class="dashTop column">
+            <h2 class="title">Addresses</h2>
+        </div>
+        <br>
         <div class="columns">
-            <div class="column"></div>
-            <div class="column is-four-fifths">
-                <div class="adr">
-                    <div class="currency"> 
-                        <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
-                    </div>
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Withdrawal Address</label>
-                                <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
+            <div class="column is-four-fifths" style="margin: auto;">
+                <div class="columns">
+                    <div class="column is-half frame">  
+                        <div class="adr">
+                            <div class="currency"> 
+                                <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
                             </div>
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New <br/> Withdrawal Address</label>
-                                    <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
-                                </div>
-                                <button class="button is-primary">Change Address</button>
-                            </form>    
-                            <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
-                            </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                            <button class="button is-primary coinswitch" style="margin-top:1vh;" id="myButton">Deposit with Altcoins</button>
-                            <div class="modal modalTopup">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Add Bitcoin</p>
-                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input value to deposit</p>
-                                            <p class="subtitle">2. Click continue to start transaction</p>
-                                            <p class="subtitle">3. Check your order details</p>
-                                            <p class="subtitle">4. Press button to show deposit form</p>
-                                            <p class="subtitle">5. Check your email and form for confirmation</p>
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form action="/dashboard/addresses/btc" method="POST">
-                                            <input type="hidden" name="btcrate" value="<%= btcrate %>" />
-                                            <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelTopup">Cancel</button>
-                                    </footer>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="address">
+                                        <label class="label adrlabel">Current<br/>  Withdrawal Address</label>
+                                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
                                     </div>
-                            </div>
-                            <div class="modal modalWithdraw">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Withdraw Bitcoin</p>
-                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input how much you wish to withdraw</p>
-                                            <p class="subtitle">2. Add a withdrawal address (if you haven't already)</p>
-                                            <p class="subtitle">3. Bear in mind there will be 0.00005 BTC subtracted to cover transaction fee.</p>
-                                            <p class="subtitle">4. Click continue to start the transaction</p>
-                                            <p class="subtitle">5. If you've received a succes message, check your wallet for your funds.</p>
+                                    <form action="/dashboard/addresses" method="POST">
+                                        <div class="address">
+                                            <label class="label adrlabel">New <br/> Withdrawal Address</label>
+                                            <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                                         </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdrawBTC" method="POST">
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" required/>
-                                            <% if(user.btcadr) { %>
-                                            <input type="hidden" name="address" value="<%= user.btcadr %>" />
-                                            <% } else { %>
-                                            <input class="input adradr" name="address" placeholder="Bitcoin Address" type="text" required />
-                                            <% } %>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelWithdraw">Cancel</button>
-                                        <p class="subtitle">Your withdrawal will also have 0.00005000 (BTC) subtracted to cover the transaction fee.</p>
-                                    </footer>
+                                        <button class="button is-primary">Change Address</button>
+                                    </form>    
+                                    <div class="address">
+                                        <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
                                     </div>
-                            </div>
-                            <div class="modal modalCoinswitch">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Deposit Altcoins</p>
-                                        <button class="delete deleteCoinswitch is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                            <div class="steps" id="stepsDemo">
-                                                <div class="step-item is-active is-success">
-                                                    <div class="step-marker">1</div>
-                                                    <div class="step-details">
-                                                    <p class="step-title" style="color: orange;">Pair</p>
-                                                    </div>
+                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                                    <button class="button is-primary coinswitch" style="margin-top:1vh;" id="myButton">Deposit with Altcoins</button>
+                                    <div class="modal modalTopup">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Add Bitcoin</p>
+                                                <button class="delete deleteTopup is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Input value to deposit</p>
+                                                    <p class="subtitle">2. Click continue to start transaction</p>
+                                                    <p class="subtitle">3. Check your order details</p>
+                                                    <p class="subtitle">4. Press button to show deposit form</p>
+                                                    <p class="subtitle">5. Check your email and form for confirmation</p>
                                                 </div>
-                                                <div class="step-item">
-                                                    <div class="step-marker">2</div>
-                                                    <div class="step-details">
-                                                    <p class="step-title" style="color: orange;">Rate</p>
-                                                    </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form action="/dashboard/addresses/btc" method="POST">
+                                                    <input type="hidden" name="btcrate" value="<%= btcrate %>" />
+                                                    <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="coinsValue" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelTopup">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                    <div class="modal modalWithdraw">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Withdraw Bitcoin</p>
+                                                <button class="delete deleteWithdraw is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Input how much you wish to withdraw</p>
+                                                    <p class="subtitle">2. Add a withdrawal address (if you haven't already)</p>
+                                                    <p class="subtitle">3. Bear in mind there will be 0.00005 BTC subtracted to cover transaction fee.</p>
+                                                    <p class="subtitle">4. Click continue to start the transaction</p>
+                                                    <p class="subtitle">5. If you've received a succes message, check your wallet for your funds.</p>
                                                 </div>
-                                                <div class="step-item">
-                                                    <div class="step-marker">3</div>
-                                                    <div class="step-details">
-                                                    <p class="step-title" style="color: orange;">Deposit</p>
-                                                    </div>
-                                                </div>
-                                                <div class="step-item">
-                                                    <div class="step-marker">4</div>
-                                                    <div class="step-details">
-                                                    <p class="step-title" style="color: orange;">Status</p>
-                                                    </div>
-                                                </div>
-                                                <div class="steps-content">
-                                                    <div class="step-content has-text-centered is-active">
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Receive BTC</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" disabled/>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form class="modal-form" action="/dashboard/addresses/withdrawBTC" method="POST">
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" required/>
+                                                    <% if(user.btcadr) { %>
+                                                    <input type="hidden" name="address" value="<%= user.btcadr %>" />
+                                                    <% } else { %>
+                                                    <input class="input adradr" name="address" placeholder="Bitcoin Address" type="text" required />
+                                                    <% } %>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelWithdraw">Cancel</button>
+                                                <p class="subtitle">Your withdrawal will also have 0.00005000 (BTC) subtracted to cover the transaction fee.</p>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                    <div class="modal modalCoinswitch">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Deposit Altcoins</p>
+                                                <button class="delete deleteCoinswitch is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                    <div class="steps" id="stepsDemo">
+                                                        <div class="step-item is-active is-success">
+                                                            <div class="step-marker">1</div>
+                                                            <div class="step-details">
+                                                            <p class="step-title">Pair</p>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Deposit With</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <select name="coin" class="select" id="counter" style="width: 100%;" data-validate="require">
-                                                                </select>
+                                                        <div class="step-item">
+                                                            <div class="step-marker">2</div>
+                                                            <div class="step-details">
+                                                            <p class="step-title">Rate</p>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    <div class="step-content has-text-centered">
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Deposit Coin:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <input class="input" name="depositCoin" id="depositCoin" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                        <div class="step-item">
+                                                            <div class="step-marker">3</div>
+                                                            <div class="step-details">
+                                                            <p class="step-title">Deposit</p>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Instant Rate:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <input class="input" name="rate" id="rate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                        <div class="step-item">
+                                                            <div class="step-marker">4</div>
+                                                            <div class="step-details">
+                                                            <p class="step-title">Status</p>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Max Deposit:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="max" id="max" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Min Deposit:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="min" id="min" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Miner Fee:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control has-icon has-icon-right">
-                                                                <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                <input class="input" name="depositCoinAmount" id="depositCoinAmount" value="1" type="hidden" step="any" data-validate="require" />
-                                                                <input class="input" name="refundAddress" id="refundAddress" value="none" type="hidden" step="any" data-validate="require" />
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    <div class="step-content has-text-centered">
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <p class="subtitle">After sending your crypto to the address, please move to the next step and wait for the transaction to be confirmed.</p>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Deposit to:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <input class="input" name="depositAddress" id="depositAddress" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="field is-horizontal">
-                                                        <div class="field-label is-normal">
-                                                        <label class="label">Minimum Deposit:</label>
-                                                        </div>
-                                                        <div class="field-body">
-                                                        <div class="field">
-                                                            <div class="control">
-                                                                <input class="input" name="expectedAmount" id="expectedAmount" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                <input class="input" name="orderIdHidden" id="orderIdHidden" value="none" type="hidden" step="any" data-validate="require"/>
-                                                                <input class="input" name="currentUser" id="currentUser" value="<%= currentUser %>" type="hidden" step="any" data-validate="require"/>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    <div class="step-content has-text-centered">
+                                                        <div class="steps-content">
+                                                            <div class="step-content has-text-centered is-active">
                                                             <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Receive BTC</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" disabled/>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Deposit With</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <select name="counter" class="select" id="counter" style="width: 100%;" data-validate="require">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                            <div class="step-content has-text-centered">
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Deposit Coin:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <input class="input" name="depositCoin" id="depositCoin" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Instant Rate:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <input class="input" name="rate" id="rate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Max Deposit:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="max" id="max" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Min Deposit:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="min" id="min" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Miner Fee:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                        <input type="hidden" id="depositCoinAmount" value="1" required />
+                                                                        <input type="hidden" id="refundAddress" value="none" required />
+                                                                        <input type="hidden" id="currentUser" value="<%= currentUser %>" required />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                            <div class="step-content has-text-centered">
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Deposit to:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <input class="input" name="depositAddress" id="depositAddress" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Minimum Deposit:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control">
+                                                                        <input class="input" name="expectedAmount" id="expectedAmount" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                        <input type="hidden" id="orderIdHidden" required />  
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                            <div class="step-content has-text-centered">
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Order ID:</label>
+                                                                    </div>
                                                                     <div class="field-body">
                                                                     <div class="field">
                                                                         <div class="control">
-                                                                            <p class="subtitle">Status updates automatically every 30 seconds. Please wait until transaction is complete, otherwise your account won't be credited!</p>
+                                                                            <input class="input" name="orderId" id="orderId" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
                                                                         </div>
                                                                     </div>
                                                                     </div>
                                                                 </div>
-                                                        <div class="field is-horizontal">
-                                                            <div class="field-label is-normal">
-                                                            <label class="label">Order ID:</label>
-                                                            </div>
-                                                            <div class="field-body">
-                                                            <div class="field">
-                                                                <div class="control">
-                                                                    <input class="input" name="orderId" id="orderId" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Status:</label>
+                                                                    </div>
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <input class="input" name="status" id="status" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Created Date:</label>
+                                                                    </div>
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <input class="input" name="createDate" id="createDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Valid until:</label>
+                                                                    </div>
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <input class="input" name="expirationDate" id="expirationDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="steps-actions">
+                                                            <div class="steps-action">
+                                                                <a href="#" data-nav="previous" class="button is-light">Previous</a>
+                                                            </div>
+                                                            <div class="steps-action">
+                                                                <a href="#" data-nav="next" class="button is-light" id="next">Next</a>
                                                             </div>
                                                         </div>
-                                                        <div class="field is-horizontal">
-                                                            <div class="field-label is-normal">
-                                                            <label class="label">Status:</label>
-                                                            </div>
-                                                            <div class="field-body">
-                                                            <div class="field">
-                                                                <div class="control">
-                                                                        <input class="input" name="status" id="status" placeholder="Loading..." type="string" step="any" readonly data-validate="require" />
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="field is-horizontal">
-                                                            <div class="field-label is-normal">
-                                                            <label class="label">Created Date:</label>
-                                                            </div>
-                                                            <div class="field-body">
-                                                            <div class="field">
-                                                                <div class="control">
-                                                                        <input class="input" name="createDate" id="createDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="field is-horizontal">
-                                                            <div class="field-label is-normal">
-                                                            <label class="label">Valid until:</label>
-                                                            </div>
-                                                            <div class="field-body">
-                                                            <div class="field">
-                                                                <div class="control">
-                                                                        <input class="input" name="expirationDate" id="expirationDate" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelCoinswitch">Cancel</button>
+                                            </footer>
+                                        </div>
+                                        <script>
+                                        bulmaSteps.attach();
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column"></div>
+                    <div class="column is-half frame">
+                        <div class="adr">
+                            <div class="currency">
+                                <img src="../../dist/img/bitcoincash.png" class="adr_img"  alt="Bitcoin Cash">
+                            </div>
+                            <div class="columns">
+                                <div class="column">              
+                                    <div class="address">
+                                        <label class="label adrlabel">Current<br/>  Address</label>
+                                        <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
+                                    </div>
+                                    <form action="/dashboard/addresses" method="POST">
+                                        <div class="address">
+                                            <label class="label adrlabel">New<br/> Address</label>
+                                            <input class="input smmargin adradr" name="bchadr" placeholder="Bitcoin Cash Address" type="text" required />       
+                                        </div>
+                            
+                                    <button class="button is-primary">Change Address</button>          
+                                    </form>
+                                    <div class="address">
+                                        <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                        <input class="input smmargin adradr" name="bch_value" placeholder="<% if (user.bchbalance) { %><%= user.bchbalance %> BCH<% } else { %>0.000000000 BCH <% } %>" type="number" step="any" disabled />
+                                    </div>
+                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                                    <div class="modal modalTopup">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                            <p class="modal-card-title">Add Bitcoin Cash</p>
+                                            <button class="delete deleteTopup is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                            <p class="title is-5 modal-section-title">Instructions</p>
+                                            <div style="text-align: left;">
+                                                <p class="subtitle">1. Input value to deposit</p>
+                                                <p class="subtitle">2. Click continue to start transaction</p>
+                                                <p class="subtitle">3. Check your order details</p>
+                                                <p class="subtitle">4. Press button to show deposit form</p>
+                                                <p class="subtitle">5. Check your email and form for confirmation</p>
+                                            </div>
+                                            <br>
+                                            <p class="title is-5 modal-section-title">Input Value</p>
+                                            <form action="/dashboard/addresses/bch" method="POST">
+                                                <input type="hidden" name="bchrate" value="<%= bchrate %>" />
+                                                <input type="hidden" name="maxConfirmationsBCH" value="<%= maxConfirmationsBCH %>" />
+                                                <label class="label adrlabel">Value</label>
+                                                <input class="input adradr" name="coinsValue" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
+                                                <button class="button is-primary">Continue</button>
+                                            </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                            <button class="button is-danger cancelTopup">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                    <div class="modal modalWithdraw">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Withdraw Bitcoin Cash</p>
+                                                <button class="delete deleteWithdraw is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Instruction 1</p>
+                                                    <p class="subtitle">2. Instruction 2</p>
+                                                    <p class="subtitle">3. Instruction 3</p>
+                                                    <p class="subtitle">4. Instruction 4</p>
+                                                    <p class="subtitle">5. Instruction 5</p>    
                                                 </div>
-                                                <div class="steps-actions">
-                                                    <div class="steps-action">
-                                                        <a href="#" data-nav="previous" class="button is-light">Previous</a>
-                                                    </div>
-                                                    <div class="steps-action">
-                                                        <a href="#" data-nav="next" class="button is-light" id="next">Next</a>
-                                                    </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form class="modal-form" action="/dashboard/addresses/withdraw/1?_method=PUT" method="POST">
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="value" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelWithdraw">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="columns">
+                    <div class="column is-half frame">
+                        <div class="adr">
+                            <div class="currency">
+                                <img src="../../dist/img/ethereum.png"  class="adr_img" alt="Ethereum">
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                <div class="address">
+                                    <label class="label adrlabel">Current<br/>  Address</label>
+                                    <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
+                                    </div>
+                                    <form action="/dashboard/addresses" method="POST">
+                                        <div class="address">
+                                            <label class="label adrlabel">New<br/> Address</label>
+                                            <input class="input smmargin adradr" name="ethadr" placeholder="Ethereum Address" type="text" required />       
+                                        </div>
+                                        <button class="button is-primary">Change Address</button>         
+                                    </form> 
+                                    <div class="address">
+                                        <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                        <input class="input smmargin adradr" name="eth_value" placeholder="<% if (user.ethbalance) { %><%= user.ethbalance %> ETH<% } else { %>0.000000000 ETH <% } %>" type="number" step="any" disabled />
+                                    </div>
+                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                                    <div class="modal modalTopup">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Add Ethereum</p>
+                                                <button class="delete deleteTopup is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Input value to deposit</p>
+                                                    <p class="subtitle">2. Click continue to start transaction</p>
+                                                    <p class="subtitle">3. Check your order details</p>
+                                                    <p class="subtitle">4. Press button to show deposit form</p>
+                                                    <p class="subtitle">5. Check your email and form for confirmation</p>
                                                 </div>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelCoinswitch">Cancel</button>
-                                    </footer>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form action="/dashboard/addresses/eth" method="POST">
+                                                    <input type="hidden" name="ethrate" value="<%= ethrate %>" />
+                                                    <input type="hidden" name="maxConfirmationsETH" value="<%= maxConfirmationsETH %>" />
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="coinsValue" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelTopup">Cancel</button>
+                                            </footer>
+                                        </div>
                                     </div>
-                                    <script>
-                                    bulmaSteps.attach();
-                                    </script>
-                            </div>
+                                    <div class="modal modalWithdraw">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Withdraw Ethereum</p>
+                                                <button class="delete deleteWithdraw is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Instruction 1</p>
+                                                    <p class="subtitle">2. Instruction 2</p>
+                                                    <p class="subtitle">3. Instruction 3</p>
+                                                    <p class="subtitle">4. Instruction 4</p>
+                                                    <p class="subtitle">5. Instruction 5</p>    
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form class="modal-form" action="/dashboard/addresses/withdraw/2?_method=PUT" method="POST">
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="value" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelWithdraw">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>        
                         </div>
                     </div>
-                </div>
-                
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <img src="../../dist/img/bitcoincash.png" class="adr_img"  alt="Bitcoin Cash">
-                    </div>
-                    <div class="columns">
-                        <div class="column">              
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[bchadr]" value="<%= user.bchadr %>" disabled />
+                    <div class="column"></div>
+                    <div class="column is-half frame">
+                        <div class="adr">
+                            <div class="currency">
+                                <img src="../../dist/img/litecoin.png" class="adr_img"  alt="Litecoin">
                             </div>
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="bchadr" placeholder="Bitcoin Cash Address" type="text" required />       
-                                </div>
-                    
-                            <button class="button is-primary">Change Address</button>          
-                            </form>
-                            <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                <input class="input smmargin adradr" name="bch_value" placeholder="<% if (user.bchbalance) { %><%= user.bchbalance %> BCH<% } else { %>0.000000000 BCH <% } %>" type="number" step="any" disabled />
-                            </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                            <div class="modal modalTopup">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Add Bitcoin Cash</p>
-                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input value to deposit</p>
-                                            <p class="subtitle">2. Click continue to start transaction</p>
-                                            <p class="subtitle">3. Check your order details</p>
-                                            <p class="subtitle">4. Press button to show deposit form</p>
-                                            <p class="subtitle">5. Check your email and form for confirmation</p>
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form action="/dashboard/addresses/bch" method="POST">
-                                            <input type="hidden" name="bchrate" value="<%= bchrate %>" />
-                                            <input type="hidden" name="maxConfirmationsBCH" value="<%= maxConfirmationsBCH %>" />
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelTopup">Cancel</button>
-                                        </footer>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="address">
+                                        <label class="label adrlabel">Current<br/>  Address</label>
+                                        <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
                                     </div>
-                            </div>
-                            <div class="modal modalWithdraw">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Withdraw Bitcoin Cash</p>
-                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Instruction 1</p>
-                                            <p class="subtitle">2. Instruction 2</p>
-                                            <p class="subtitle">3. Instruction 3</p>
-                                            <p class="subtitle">4. Instruction 4</p>
-                                            <p class="subtitle">5. Instruction 5</p>    
+                                    <form action="/dashboard/addresses" method="POST">
+                                        <div class="address">
+                                            <label class="label adrlabel">New<br/> Address</label>
+                                            <input class="input smmargin adradr" name="ltcadr" placeholder="Litecoin Address" type="text" required />       
                                         </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdraw/1?_method=PUT" method="POST">
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 BCH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelWithdraw">Cancel</button>
-                                    </footer>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <img src="../../dist/img/ethereum.png"  class="adr_img" alt="Ethereum">
-                    </div>
-                    <div class="columns">
-                        <div class="column">
-                        <div class="address">
-                            <label class="label adrlabel">Current<br/>  Address</label>
-                            <input class="input smmargin adradr" name="user[ethadr]" value="<%= user.ethadr %>" disabled />
-                            </div>
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="ethadr" placeholder="Ethereum Address" type="text" required />       
-                                </div>
-                                <button class="button is-primary">Change Address</button>         
-                            </form> 
-                            <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                <input class="input smmargin adradr" name="eth_value" placeholder="<% if (user.ethbalance) { %><%= user.ethbalance %> ETH<% } else { %>0.000000000 ETH <% } %>" type="number" step="any" disabled />
-                            </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                            <div class="modal modalTopup">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Add Ethereum</p>
-                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input value to deposit</p>
-                                            <p class="subtitle">2. Click continue to start transaction</p>
-                                            <p class="subtitle">3. Check your order details</p>
-                                            <p class="subtitle">4. Press button to show deposit form</p>
-                                            <p class="subtitle">5. Check your email and form for confirmation</p>
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form action="/dashboard/addresses/eth" method="POST">
-                                            <input type="hidden" name="ethrate" value="<%= ethrate %>" />
-                                            <input type="hidden" name="maxConfirmationsETH" value="<%= maxConfirmationsETH %>" />
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelTopup">Cancel</button>
-                                        </footer>
-                                    </div>
-                            </div>
-                            <div class="modal modalWithdraw">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Withdraw Ethereum</p>
-                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Instruction 1</p>
-                                            <p class="subtitle">2. Instruction 2</p>
-                                            <p class="subtitle">3. Instruction 3</p>
-                                            <p class="subtitle">4. Instruction 4</p>
-                                            <p class="subtitle">5. Instruction 5</p>    
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdraw/2?_method=PUT" method="POST">
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 ETH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelWithdraw">Cancel</button>
-                                    </footer>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>        
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <img src="../../dist/img/litecoin.png" class="adr_img"  alt="Litecoin">
-                    </div>
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[ltcadr]" value="<%= user.ltcadr %>" disabled />
-                            </div>
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="ltcadr" placeholder="Litecoin Address" type="text" required />       
-                                </div>
 
-                                <button class="button is-primary">Change Address</button>            
-                            </form>
-                            <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.ltcbalance) { %><%= user.ltcbalance %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
-                            </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                            <div class="modal modalTopup">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Add Litecoin</p>
-                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input value to deposit</p>
-                                            <p class="subtitle">2. Click continue to start transaction</p>
-                                            <p class="subtitle">3. Check your order details</p>
-                                            <p class="subtitle">4. Press button to show deposit form</p>
-                                            <p class="subtitle">5. Check your email and form for confirmation</p>
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form action="/dashboard/addresses/ltc" method="POST">
-                                            <input type="hidden" name="ltcrate" value="<%= ltcrate %>" />
-                                            <input type="hidden" name="maxConfirmationsLTC" value="<%= maxConfirmationsLTC %>" />
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelTopup">Cancel</button>
-                                        </footer>
+                                        <button class="button is-primary">Change Address</button>            
+                                    </form>
+                                    <div class="address">
+                                        <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                        <input class="input smmargin adradr" name="ltc_value" placeholder="<% if (user.ltcbalance) { %><%= user.ltcbalance %> LTC<% } else { %>0.000000000 LTC <% } %>" type="number" step="any" disabled />
                                     </div>
-                            </div>
-                            <div class="modal modalWithdraw">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Withdraw Litecoin</p>
-                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Instruction 1</p>
-                                            <p class="subtitle">2. Instruction 2</p>
-                                            <p class="subtitle">3. Instruction 3</p>
-                                            <p class="subtitle">4. Instruction 4</p>
-                                            <p class="subtitle">5. Instruction 5</p>    
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdraw/3?_method=PUT" method="POST">
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelWithdraw">Cancel</button>
-                                    </footer>
+                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                                    <div class="modal modalTopup">
+                                        <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                <p class="modal-card-title">Add Litecoin</p>
+                                                <button class="delete deleteTopup is-large" aria-label="close"></button>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Input value to deposit</p>
+                                                    <p class="subtitle">2. Click continue to start transaction</p>
+                                                    <p class="subtitle">3. Check your order details</p>
+                                                    <p class="subtitle">4. Press button to show deposit form</p>
+                                                    <p class="subtitle">5. Check your email and form for confirmation</p>
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form action="/dashboard/addresses/ltc" method="POST">
+                                                    <input type="hidden" name="ltcrate" value="<%= ltcrate %>" />
+                                                    <input type="hidden" name="maxConfirmationsLTC" value="<%= maxConfirmationsLTC %>" />
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="coinsValue" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelTopup">Cancel</button>
+                                                </footer>
+                                            </div>
                                     </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <div class="adr">
-                    <div class="currency">
-                        <img src="../../dist/img/dash.png"  class="adr_img" alt="DASH">
-                    </div>
-                    <div class="columns">
-                        <div class="column">
-                            <div class="address">
-                                <label class="label adrlabel">Current<br/>  Address</label>
-                                <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
-                            </div>     
-                            <form action="/dashboard/addresses" method="POST">
-                                <div class="address">
-                                    <label class="label adrlabel">New<br/> Address</label>
-                                    <input class="input smmargin adradr" name="dashadr" placeholder="DASH Address" type="text" required />       
+                                    <div class="modal modalWithdraw">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Withdraw Litecoin</p>
+                                                <button class="delete deleteWithdraw is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Instruction 1</p>
+                                                    <p class="subtitle">2. Instruction 2</p>
+                                                    <p class="subtitle">3. Instruction 3</p>
+                                                    <p class="subtitle">4. Instruction 4</p>
+                                                    <p class="subtitle">5. Instruction 5</p>    
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form class="modal-form" action="/dashboard/addresses/withdraw/3?_method=PUT" method="POST">
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="value" placeholder="0.000000000 LTC" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelWithdraw">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
                                 </div>
-                            <button class="button is-primary">Change Address</button>
-                            </form>
-                            <div class="address">
-                                <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                <input class="input smmargin adradr" name="dash_value" placeholder="<% if (user.dashbalance) { %><%= user.dashbalance %> DASH<% } else { %>0.000000000 DASH <% } %>" type="number" step="any" disabled />
-                            </div>
-                            <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                            <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                            <div class="modal modalTopup">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Add DASH</p>
-                                        <button class="delete deleteTopup is-large" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Input value to deposit</p>
-                                            <p class="subtitle">2. Click continue to start transaction</p>
-                                            <p class="subtitle">3. Check your order details</p>
-                                            <p class="subtitle">4. Press button to show deposit form</p>
-                                            <p class="subtitle">5. Check your email and form for confirmation</p>
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form action="/dashboard/addresses/dash" method="POST">
-                                            <input type="hidden" name="dashrate" value="<%= dashrate %>" />
-                                            <input type="hidden" name="maxConfirmationsDASH" value="<%= maxConfirmationsDASH %>" />
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="coinsValue" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelTopup">Cancel</button>
-                                        </footer>
-                                    </div>
-                            </div>
-                            <div class="modal modalWithdraw">
-                                <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Withdraw DASH</p>
-                                        <button class="delete deleteWithdraw is-large" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="title is-5 modal-section-title">Instructions</p>
-                                        <div style="text-align: left;">
-                                            <p class="subtitle">1. Instruction 1</p>
-                                            <p class="subtitle">2. Instruction 2</p>
-                                            <p class="subtitle">3. Instruction 3</p>
-                                            <p class="subtitle">4. Instruction 4</p>
-                                            <p class="subtitle">5. Instruction 5</p>    
-                                        </div>
-                                        <br>
-                                        <p class="title is-5 modal-section-title">Input Value</p>
-                                        <form class="modal-form" action="/dashboard/addresses/withdraw/4?_method=PUT" method="POST">
-                                            <label class="label adrlabel">Value</label>
-                                            <input class="input adradr" name="value" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
-                                            <button class="button is-primary">Continue</button>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelWithdraw">Cancel</button>
-                                    </footer>
-                                    </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="column"></div>
-        </div>
-        
-    </div>   
+                <br>
+                <div class="columns">
+                    <div class="column is-half frame">
+                        <div class="adr">
+                            <div class="currency">
+                                <img src="../../dist/img/dash.png"  class="adr_img" alt="DASH">
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="address">
+                                        <label class="label adrlabel">Current<br/>  Address</label>
+                                        <input class="input smmargin adradr" name="user[dashadr]" value="<%= user.dashadr %>" disabled />
+                                    </div>     
+                                    <form action="/dashboard/addresses" method="POST">
+                                        <div class="address">
+                                            <label class="label adrlabel">New<br/> Address</label>
+                                            <input class="input smmargin adradr" name="dashadr" placeholder="DASH Address" type="text" required />       
+                                        </div>
+                                    <button class="button is-primary">Change Address</button>
+                                    </form>
+                                    <div class="address">
+                                        <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
+                                        <input class="input smmargin adradr" name="dash_value" placeholder="<% if (user.dashbalance) { %><%= user.dashbalance %> DASH<% } else { %>0.000000000 DASH <% } %>" type="number" step="any" disabled />
+                                    </div>
+                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
+                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
+                                    <div class="modal modalTopup">
+                                        <div class="modal-background"></div>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                <p class="modal-card-title">Add DASH</p>
+                                                <button class="delete deleteTopup is-large" aria-label="close"></button>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Input value to deposit</p>
+                                                    <p class="subtitle">2. Click continue to start transaction</p>
+                                                    <p class="subtitle">3. Check your order details</p>
+                                                    <p class="subtitle">4. Press button to show deposit form</p>
+                                                    <p class="subtitle">5. Check your email and form for confirmation</p>
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form action="/dashboard/addresses/dash" method="POST">
+                                                    <input type="hidden" name="dashrate" value="<%= dashrate %>" />
+                                                    <input type="hidden" name="maxConfirmationsDASH" value="<%= maxConfirmationsDASH %>" />
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="coinsValue" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                                </section>
+                                                <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelTopup">Cancel</button>
+                                                </footer>
+                                            </div>
+                                    </div>
+                                    <div class="modal modalWithdraw">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Withdraw DASH</p>
+                                                <button class="delete deleteWithdraw is-large" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p class="title is-5 modal-section-title">Instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">1. Instruction 1</p>
+                                                    <p class="subtitle">2. Instruction 2</p>
+                                                    <p class="subtitle">3. Instruction 3</p>
+                                                    <p class="subtitle">4. Instruction 4</p>
+                                                    <p class="subtitle">5. Instruction 5</p>    
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Input Value</p>
+                                                <form class="modal-form" action="/dashboard/addresses/withdraw/4?_method=PUT" method="POST">
+                                                    <label class="label adrlabel">Value</label>
+                                                    <input class="input adradr" name="value" placeholder="0.000000000 DASH" type="number" step="any" style="width: 60%;" required/>
+                                                    <button class="button is-primary">Continue</button>
+                                                </form>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="button is-danger cancelWithdraw">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column"></div>
+                </div>
+            </div>  
+        </div>    
+    </div> 
 </div>
 <script src="../../dist/js/dashboard_addr.js"></script>
 <script type="text/javascript" src="/dist/js/client.js"></script>

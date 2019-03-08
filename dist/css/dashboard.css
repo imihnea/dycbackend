@@ -5,22 +5,30 @@
 }
 
 .panel-block{
-    color: orange !important;
+    color: black !important;
+    background-color: white;
 }
 .panel-heading{
     margin-bottom: 0 !important;
-    background-color: orange !important;
-    color: white;
+    background-color: #3269ca !important;
+    color: black;
+}
+.panel-icon > .fas{
+    color: #3269ca;
 }
 
 .panel-heading, .panel-block {
-    border-bottom-color: orange !important;
-    border-left-color: orange !important;
-    border-right-color: orange !important;
+    border-bottom-color: black !important;
+    border-left-color: black !important;
+    border-right-color: black !important;
+}
+
+a.panel-block:hover{
+    color: black !important;
 }
 
 .panel-heading:first-child{
-    border-top-color: orange !important;
+    border-top-color: black !important;
 }
 
 .dashboard-right{
@@ -32,7 +40,7 @@
     border-style: solid; 
     border-width: 1px; 
     border-radius: 5px; 
-    border-color: orange;
+    border-color: black;
 }
 
 .adrcol{
@@ -128,11 +136,8 @@ summary:hover{
     padding-left: 2vw;
     padding-right: 2vw;
     padding-bottom: 5vw;
-    border-style: double;
     margin-top: 3vh;
-    border-radius: 10px;
-    border-color: orange;
-    color: orange;
+    color: black;
 }
 
 .tokens-faq{
@@ -140,52 +145,49 @@ summary:hover{
     padding-left: 2vw;
     padding-right: 2vw;
     padding-bottom: 5vw;
-    color: orange;
+    color: black;
 }
 
 details{
     border-style: double;   
     border-radius: 10px;
-    border-color: orange;
-    color: orange;
+    border-color: black;
+    color: black;
     margin-top: 1vh;
 }
 
-.is-primary{
+.label{
     color: black !important;
 }
 
-.label{
-    color: orange !important;
-}
-
 .new-text{
-    color: orange;
+    color: black;
     font-size: 24px;
 }
 
 .token-text{
-    color: orange;
+    color: black;
     margin-bottom: 3vh;
 }
 
 .new-table{
     background-color: transparent;
-    color: orange;
+    color: black;
     position: relative;
-    width: 100%;
+    width: 90%;
+    margin: auto;
 }
 
 table, th, td {
-    border: 1px solid orange !important;
+    border: 1px solid black !important;
 }
 
 th{
-    color: orange !important;
+    color: black !important;
 }
 
 hr{
-    background-color: orange;
+    background-color: black;
 }
 
 .column.prod_info{
@@ -193,18 +195,18 @@ hr{
 }
 
 .panel-block:hover{
-    background-color: #402504 !important;
+    background-color: #565f6d !important;
 }
 
 .active-page{
-    background-color: #402504 !important;
+    background-color: #565f6d !important;
 }
 
 .messageItem{
     /* background-color: transparent !important; */
     border-style: double;
     border-radius: 5px;
-    border-color: orange;
+    border-color: black;
     position: relative; 
     margin-top: 5px; 
     margin-left: 5px; 
@@ -214,54 +216,59 @@ hr{
 }
 
 .messageProfile{
-    border-style: double;
+    /* border-style: double;
     border-radius: 5px;
-    border-color: orange;
+    border-color: black; */
     position: relative; 
     margin-top: 2vh; 
-    padding-top: 2.5vh; 
-    padding-bottom: 1vh; 
+    /* padding-top: 2.5vh; 
+    padding-bottom: 1vh;  */
     margin-left: 1vw; 
-    margin-right: 5px; 
+    /* margin-right: 5px;  */
     height: 20%;
 }
 
 .messageItem:hover{
-    background-color: #402504;
+    background-color: rgb(243,134,48);
 }
 
 .modal-card-head{
-    background-color: black !important;
-    color: orange !important;
-    border: 1px solid orange;
+    background-color: rgb(185, 207, 208) !important;
+    color: black !important;
+    border: 1px solid black;
 }
 
 .modal-card-title{
-    color: orange !important;
+    color: black !important;
+    text-align: center;
+}
+
+.deleteForm{
+    margin: auto;
 }
 
 .delete::before, .modal-close::before, .delete::after, .modal-close::after{
-    background-color: orange !important;
+    background-color: black !important;
 }
 
 .modal-card-body{
-    border-left: 1px solid orange;
-    border-right: 1px solid orange;
-    border-bottom: 1px solid orange;
-    background-color: black !important;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    background-color: rgb(185, 207, 208) !important;
 }
 
 .modal-card-foot{
-    background-color: black !important;
+    background-color: rgb(185, 207, 208) !important;
     border-top: 0;
-    border-left: 1px solid orange;
-    border-right: 1px solid orange;
-    border-bottom: 1px solid orange;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .modal-section-title{
     text-align: left; 
-    border-bottom: 1px solid orange;
+    border-bottom: 1px solid black;
 }
 
 .modal-form{
@@ -270,12 +277,15 @@ hr{
 }
 
 .cont-select{
-    width: 100% !important;
+    width: 90% !important;
     margin-top: 1vh !important;
 }
 
 .textarea{
+    min-width: 90% !important;
+    margin: auto;
     margin-top: 1vh;
+    width: 90% !important;
 }
 
 .file-upload {
@@ -285,32 +295,48 @@ hr{
 }
 
 @keyframes colorchange-orange{
-    from { color: grey; }
-    to { color: orange; }
+    from { color: black; }
+    to { color: green; }
 }
 
 @keyframes colorchange-green{
     from { color: green; }
-    to { color: orange; }
+    to { color: black; }
+}
+
+.green {
+    color: green !important;
+}
+
+.square:hover {
+    color: #3269ca !important;
+}
+
+.fa-check-square {
+    color: green !important;
+}
+
+.fa-trash-alt {
+    color: red !important;
 }
 
 .file-upload__label {
   display: block;
-  color: grey;
+  color: grey !important;
   background: transparent;
   border-radius: .4em;
 }
 
 .file-upload__label-green{
     display: block;
-    color: green;
+    color: green !important;
     background: transparent;
     border-radius: .4em;
 }
 
 .file-upload__label:hover{
     cursor: pointer;
-    animation-name: colorchange-orange;
+    animation-name: colorchange-black;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
@@ -342,31 +368,36 @@ hr{
 
 .file-delete__label{
     display: block;
-    color: grey;
+    color: grey !important;
     background: transparent;
     border-radius: .4em;
     cursor: pointer;
 }
 
 .file-delete__label:hover{
-    color: red;
+    color: red !important;
+}
+
+.delivery{
+    color: #6c6c98 !important;
 }
 
 .hide{
-    visibility: hidden;
-    display: none;
+    visibility: hidden !important;
+    display: none !important;
 }
-
-
 
 .pagePad{
     padding-top: 1.7vh;
 }
 
-
-
 .is-success{
     color: black !important;
+    border-color: black !important;
+}
+
+.is-success:hover{
+    color: white !important;
 }
 
 .options{
@@ -377,19 +408,36 @@ hr{
 }
 
 .optionsUnchecked{
-    border-color: #bf9c5c;
+    border-color: #6c6c98;
 }
 
 .optionsChecked{
-    border-color: orange;
+    border-color: green;
 }
 
 .optionsChecked > .column i, .optionsChecked > .column p {
-    color: orange !important;
+    color: green !important;
 }
 
 .transportFee{
     display: flex; 
     justify-content: space-evenly; 
     align-items: baseline;
+}
+
+.catSelectLeft{
+    margin-right: 0.2vw;
+}
+
+.catSelectCenter{
+    margin-left: 0.1vw; 
+    margin-right: 0.1vw;
+}
+
+.catSelectRight{
+    margin-left: 0.1vw;
+}
+
+.catSelectLeft, .catSelectRight, .catSelectCenter{
+    width: 90% !important; 
 }

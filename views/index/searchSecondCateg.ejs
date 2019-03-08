@@ -1,46 +1,83 @@
 <% include ../partials/header %>
-<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
-<link rel="stylesheet" href="../../dist/css/search.css">
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
 <link rel="stylesheet" href="../../dist/css/tooltips.css">
-<div class="columns">
-    <% include ../partials/sidebar %>
-    <div class="column dashboard-right" >
-        <div class="dashTop column">
-            <h2 class="title">Open Deals</h2>
-        </div>
-        <br>
-        <div class="columns">
-            <div class="column"></div>
-            <div class="column is-four-fifths">
-                <% if (products.docs.length === 0) { %>
-                    <p class="title">You have not created any products yet.</p>
-                    <p class="title">Click <a href="/dashboard/new">here</a> to create a deal.</p>
-                <% } else { %>
-                    <div>
-                        <div class="pagination paginationT">
-                            <% include ../partials/paginateIndex %>
-                        </div>
-                        <main id="hits" style="width: 85%; margin: auto;">
-                        <% products.docs.forEach((product) => { %>
+<div id="results" class="container-fluid">  
+    <div class="content-wrapper">
+        <aside class="products">            
+            <section class="facet-wrapper">
+                <div class="facet-category-title" class="facet">
+                    Categories
+                </div>
+                <div id="categories">
+                    <form action="/firstCategSearch" method="POST">
+                        <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                        <input type="text" name="category" value="<%= searchCateg %>" hidden>
+                        <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                        <button class="searchBtn searchCategBtn"><i class="fas fa-caret-left"></i> <%= secondSearchCateg %></button>
+                    </form>
+                    <% thiCat.forEach((category) => { %>
+                        <form action="/thirdCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                            <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
+                            <input type="text" name="category" value="<%= category %>" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn"><%= category %></button>
+                        </form>
+                    <% }); %>
+                </div>
+            </section>
+            <form action="/secondCategSearch" method="POST" id="searchForm">
+                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
+                <% include ../partials/filterSort %>          
+            </form>
+            <div class="spacing">
+                <button class="button is-primary" form="searchForm">Filter</button>
+                <form action="/secondCategSearch" method="POST" id="resetForm">
+                    <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                    <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                    <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
+                    <button class="button is-primary">Reset Filter</button>
+                </form>        
+            </div>
+
+        </aside>
+
+        <div class="results-wrapper">
+            <section id="paginationTop" class="paginationU"> <% if (total > 2) { %><% include ../partials/paginateSecondSearch %><% } %></section>
+            <section id="results-topbar">
+                <div id="stats" class="text-muted"></div>
+            </section>
+
+            <main id="hits" style="width: 85%; margin-left: 5vw;">
+                <%  if (products.length > 0) {
+                        products.forEach((product) => { %>
                             <article class="hit columns frame">
                                 <div class="column is-one-fifth product-picture-wrapper">
                                     <div class="product-picture">
-                                        <img src="<%= product.images[0].url %>">
+                                        <img src="<%= product._source.images[0].url %>">
                                     </div>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
-                                        <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
-                                        <% if (product.feat_1.status === true) { %>
+                                        <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                        <% if (product._source.feat_1.status === true) { %>
                                             <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
                                         <% } %>
+                                        <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
                                         <p>
                                             <% for(let i = 0; i < 5; i++) { %>
-                                                <% if(i < Math.floor(product.avgRating)) { %>
+                                                <% if(i < Math.floor(product._source.avgRating)) { %>
                                                 <!-- display a full star -->
                                                 <i class="fas fa-star" style="color: orange;"></i>
-                                                <% } else if((product.avgRating - i) > 0 && (product.avgRating - i) < 1) { %>
+                                                <% } else if((product._source.avgRating - i) > 0 && (product._source.avgRating - i) < 1) { %>
                                                 <!-- display a half star -->
                                                 <i class="fas fa-star-half-alt" style="color: orange;"></i>
                                                 <% } else { %>
@@ -50,29 +87,10 @@
                                             <% } %>
                                         </p>
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
-                                        <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
-                                    </div>
-                                    <button class="button is-danger deleteModal">Delete</button>
-                                    <div class="modal modalDelete">
-                                        <div class="modal-background"></div>
-                                            <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Are you sure?</p>
-                                                <button class="delete deleteDelete" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body">
-                                                <p class="title is-5" style="text-align: center;">This is a permanent action. You will not be able to revert the status of your product.</p>
-                                            </section>
-                                            <footer class="modal-card-foot">
-                                                <form class="modal-form deleteForm" action="/dashboard/<%= product._id %>?_method=DELETE" method="POST">
-                                                    <button class="button is-danger">Delete</button>
-                                                </form>
-                                            </footer>
-                                            </div>
                                     </div>
                                     <div style="display: flex; margin-top: 1vh;">
                                         <% let k = 0; %>
-                                        <% if (product.deliveryOptions.city.valid) { %>
+                                        <% if (product._source.deliveryOptions.city.valid) { %>
                                             <div class="label">
                                                 <span class="tooltip-toggle" aria-label="Same City Delivery" tabindex="0">
                                                     <i class="fa fa-city fa-2x" style="color: green;"></i>
@@ -80,7 +98,7 @@
                                             </div>
                                             <% k += 1; %>
                                         <% } %>
-                                        <% if (product.deliveryOptions.state.valid) { %>
+                                        <% if (product._source.deliveryOptions.state.valid) { %>
                                             <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
                                                 <span class="tooltip-toggle" aria-label="Same State Delivery" tabindex="0">
                                                     <i class="fa fa-map-marked-alt fa-2x" style="color: green;"></i>
@@ -88,7 +106,7 @@
                                             </div>
                                             <% k += 1; %>
                                         <% } %>
-                                        <% if (product.deliveryOptions.country.valid) { %>
+                                        <% if (product._source.deliveryOptions.country.valid) { %>
                                             <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
                                                 <span class="tooltip-toggle" aria-label="Same Country Delivery" tabindex="0">
                                                     <i class="fa fa-flag fa-2x" style="color: green;"></i>
@@ -96,7 +114,7 @@
                                             </div>
                                             <% k += 1; %>
                                         <% } %>
-                                        <% if (product.deliveryOptions.worldwide.valid) { %>
+                                        <% if (product._source.deliveryOptions.worldwide.valid) { %>
                                             <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
                                                 <span class="tooltip-toggle" aria-label="Worldwide Delivery" tabindex="0">
                                                     <i class="fa fa-globe-americas fa-2x" style="color: green;"></i>
@@ -107,58 +125,50 @@
                                     </div>
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
-                                    <% if (product.btcPrice > 0) { %>
+                                    <% if (product._source.btcPrice > 0) { %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.btcPrice %></p>
+                                            <p class="price_text"> <%= product._source.btcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     <% } 
-                                        if (product.bchPrice > 0) {
+                                        if (product._source.bchPrice > 0) {
                                     %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.bchPrice %></p>
+                                            <p class="price_text"> <%= product._source.bchPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
                                         </div>
                                     <% } 
-                                        if (product.ethPrice > 0) {
+                                        if (product._source.ethPrice > 0) {
                                     %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.ethPrice %></p>
+                                            <p class="price_text"> <%= product._source.ethPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
                                         </div>
                                     <% } 
-                                        if (product.ltcPrice > 0) {
+                                        if (product._source.ltcPrice > 0) {
                                     %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.ltcPrice %></p>
+                                            <p class="price_text"> <%= product._source.ltcPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
                                         </div>
                                     <% } 
-                                        if (product.dashPrice) {
+                                        if (product._source.dashPrice) {
                                     %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.dashPrice %></p>
+                                            <p class="price_text"> <%= product._source.dashPrice %></p>
                                             <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
                                         </div>
                                     <% } %>
                                 </div>
-                            </article>      
-                        <% }); %> 
-                    </main>
-                        <div class="pagination paginationD">
-                            <% include ../partials/paginateIndex %>
-                        </div>        
-                    </div>        
-                    
+                            </article>
+                    <% }); } else { %> 
+                        <p class="title is-4">No products found.</p>
                 <% } %>
-            </div>
-            <div class="column"></div>
+            </main>
+            <section id="paginationBottom" class="paginationU paginationD"> <% if (total > 2) { %><% include ../partials/paginateSecondSearch %><% } %></section>
         </div>
-        
-</div> 
+    </div>
 </div>
 
-
 <% include ../partials/footer %>
-<script src='../../dist/js/dashboard_products.js'></script>
-<script src="../../dist/js/dashboard_open.js"></script>
+<script src="../../dist/js/categname.js"></script>

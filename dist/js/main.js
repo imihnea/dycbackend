@@ -47,10 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('mouseover', (event) => {
       event.stopPropagation();
       secCategItems[i].style.display = 'block';
+      mainCategItems[i].classList.add('active');
     });
     item.addEventListener('mouseout', (event) => {
       event.stopPropagation();
       secCategItems[i].style.display = 'none';
+      mainCategItems[i].classList.remove('active');
     });
   });
 });

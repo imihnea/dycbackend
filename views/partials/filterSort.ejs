@@ -1,0 +1,142 @@
+<section class="facet-wrapper">
+    <div class="facet-category-title">Refine</div>
+    <div id="continent" class="facet">
+        <details class="firstTierDetails">
+            <div class="menu-item">
+                <input type="radio" name="continent" value="fric" id="Africa" <% if (continent == 'fric') { %> checked <% } %>>
+                <label for="Africa" class="thirdTierFilter">Africa</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="continent" value="si" id="Asia" <% if (continent == 'si') { %> checked <% } %>>
+                <label for="Asia" class="thirdTierFilter">Asia</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="continent" value="urop" id="Europe" <% if (continent == 'urop') { %> checked <% } %>>
+                <label for="Europe" class="thirdTierFilter">Europe</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="continent" value="orth" id="North America" <% if (continent == 'orth') { %> checked <% } %>>
+                <label for="North America" class="thirdTierFilter">North America</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="continent" value="ceani" id="Oceania" <% if (continent == 'ceani') { %> checked <% } %>>
+                <label for="Oceania" class="thirdTierFilter">Oceania</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="continent" value="outh" id="South America" <% if (continent == 'outh') { %> checked <% } %>>
+                <label for="South America" class="thirdTierFilter">South America</label>
+            </div>
+            <summary class="firstTierFilter">Continent</summary>
+        </details>
+        <details class="firstTierDetails">
+            <div class="menu-item">
+                <input type="radio" name="condition" value="and" id="Brand New" <% if (continent == 'and') { %> checked <% } %>>
+                <label for="Brand New" class="thirdTierFilter">Brand New</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="condition" value="ik" id="Like New" <% if (continent == 'ik') { %> checked <% } %>>
+                <label for="Like New" class="thirdTierFilter">Like New</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="condition" value="efur" id="Refurbished" <% if (continent == 'efur') { %> checked <% } %>>
+                <label for="Refurbished" class="thirdTierFilter">Refurbished</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="condition" value="se" id="Used" <% if (continent == 'se') { %> checked <% } %>>
+                <label for="Used" class="thirdTierFilter">Used</label>
+            </div>
+            <div class="menu-item">
+                <input type="radio" name="condition" value="oke" id="Broken or Scrap" <% if (continent == 'oke') { %> checked <% } %>>
+                <label for="Broken or Scrap" class="thirdTierFilter">Broken or Scrap</label>
+            </div>
+            <summary class="firstTierFilter">Condition</summary>
+        </details>
+    </div>
+    <div id="rating" class="facet"></div>
+</section>
+<section class="facet-wrapper">
+    <div class="facet-category-title">Sort by</div>
+    <div class="sort-by">
+        <div id="sort-by">
+            <details  class="firstTierDetails">
+                <div class="menu-item">
+                    <details  class="secondTierDetails">
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="btc-asc" id="asc" <% if (currency == 'btc-asc') { %> checked <% } %>>
+                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                        </div>
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="btc-desc" id="desc" <% if (currency == 'btc-desc') { %> checked <% } %>>
+                            <label for="desc" class="thirdTierFilter">Descending</label>
+                        </div>
+                        <summary class="secondTierFilter">Bitcoin</summary>
+                    </details>
+                </div>
+                <div class="menu-item">
+                    <details  class="secondTierDetails">
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="bch-asc" id="asc" <% if (currency == 'bch-asc') { %> checked <% } %>>
+                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                        </div>
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="bch-desc" id="desc" <% if (currency == 'bch-desc') { %> checked <% } %>>
+                            <label for="desc" class="thirdTierFilter">Descending</label>
+                        </div>
+                        <summary class="secondTierFilter">Bitcoin Cash</summary>
+                    </details>
+                </div>
+                <div class="menu-item">
+                    <details  class="secondTierDetails">
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="eth-asc" id="asc" <% if (currency == 'eth-asc') { %> checked <% } %>>
+                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                        </div>
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="eth-desc" id="desc" <% if (currency == 'eth-desc') { %> checked <% } %>>
+                            <label for="desc" class="thirdTierFilter">Descending</label>
+                        </div>
+                        <summary class="secondTierFilter">Ethereum</summary>
+                    </details>
+                </div>
+                <div class="menu-item">
+                    <details  class="secondTierDetails">
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="ltc-asc" id="asc" <% if (currency == 'ltc-asc') { %> checked <% } %>>
+                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                        </div>
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="ltc-desc" id="desc" <% if (currency == 'ltc-desc') { %> checked <% } %>>
+                            <label for="desc" class="thirdTierFilter">Descending</label>
+                        </div>
+                        <summary class="secondTierFilter">Litecoin</summary>
+                    </details>
+                </div>
+                <div class="menu-item">
+                    <details  class="secondTierDetails">
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="dash-asc" id="asc" <% if (currency == 'dash-asc') { %> checked <% } %>>
+                            <label for="asc" class="thirdTierFilter">Ascending</label>
+                        </div>
+                        <div class="menu-item">
+                            <input type="radio" name="currency" value="dash-desc" id="desc" <% if (currency == 'dash-desc') { %> checked <% } %>>
+                            <label for="desc" class="thirdTierFilter">Descending</label>
+                        </div>
+                        <summary class="secondTierFilter">DASH</summary>
+                    </details>
+                </div>
+                <summary class="firstTierFilter">Accepted Currency</summary>
+            </details>
+            <details class="firstTierDetails">
+                <div class="menu-item">
+                    <input type="radio" name="avgRating" value="asc" id="avgasc" <% if (avgRating == 'asc') { %> checked <% } %>>
+                    <label for="avgasc" class="thirdTierFilter">Ascending</label>
+                </div>
+                <div class="menu-item">
+                    <input type="radio" name="avgRating" value="desc" id="avgdesc" <% if (avgRating == 'desc') { %> checked <% } %>>
+                    <label for="avgdesc" class="thirdTierFilter">Descending</label>
+                </div>
+                <summary class="firstTierFilter">Average Rating</summary>
+            </details>
+        </div>
+    </div>
+</section>   

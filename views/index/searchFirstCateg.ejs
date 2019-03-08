@@ -1,0 +1,255 @@
+<% include ../partials/header %>
+<link rel="stylesheet" href="../../dist/css/categories.css">
+<link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="../../dist/css/tooltips.css">
+
+<div id="results" class="container-fluid">  
+    <div class="content-wrapper">
+        <aside class="frame products" style="border-top-right-radius: 0px !important;">            
+            <section class="facet-wrapper">
+                <div class="facet-category-title" class="facet">
+                    Categories
+                </div>
+                <div id="categories">
+                    <% if (searchCateg === 'all') { %>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Electronics" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <button class="searchBtn searchCategBtn">Electronics</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Home Improvement" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Home Improvement</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Fashion & Beauty" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Fashion & Beauty</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Pet Supplies" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Pet Supplies</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Mothers & Babies" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Mothers & Babies</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Sports & Outdoors" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Sports & Outdoors</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Collectibles & Art" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Collectibles & Art</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Leisure Time" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Leisure Time</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Vehicles" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Vehicles</button>
+                        </form>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="Real Estate" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn">Real Estate</button>
+                        </form>
+                    <% } else { %>
+                        <form action="/firstCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="category" value="all" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <button class="searchBtn searchCategBtn"><i class="fas fa-caret-left"></i> <%= searchCateg %></button>
+                        </form>
+                        <% secCat.forEach((category) => { %>
+                        <form action="/secondCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                            <input type="text" name="category" value="<%= category %>" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <button class="searchBtn searchCategBtn"><%= category %></button>
+                        </form>
+                    <% }); } %>
+                </div>
+            </section>
+    
+            <form action="/firstCategSearch" method="POST" id="searchForm">
+                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                <input type="radio" name="category" value="<%= searchCateg %>" hidden checked>
+                <% include ../partials/filterSort %>
+            </form>
+            <div class="spacing">
+                <button class="button is-primary" form="searchForm">Filter</button>
+                <form action="/firstCategSearch" method="POST" id="resetForm">
+                    <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                    <input type="text" name="category" value="<%= searchCateg %>" hidden>
+                    <button class="button is-primary">Reset Filter</button>
+                </form>        
+            </div>
+
+        </aside>
+
+        <div class="results-wrapper">
+            <section id="paginationTop" class="paginationU"> <% if (total > 2) { %><% include ../partials/paginateFirstSearch %><% } %></section>
+            <section id="results-topbar">
+                <div id="stats" class="text-muted"></div>
+            </section>
+
+            <main id="hits" style="width: 85%; margin-left: 5vw;">
+                <%  if (products.length > 0) {
+                        products.forEach((product) => { %>
+                            <article class="hit columns frame">
+                                <div class="column is-one-fifth product-picture-wrapper">
+                                    <div class="product-picture">
+                                        <img src="<%= product._source.images[0].url %>">
+                                    </div>
+                                </div>
+                                <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                    <div class="product-name">
+                                        <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                        <% if (product._source.feat_1.status === true) { %>
+                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
+                                        <% } %>
+                                        <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
+                                        <p>
+                                            <% for(let i = 0; i < 5; i++) { %>
+                                                <% if(i < Math.floor(product._source.avgRating)) { %>
+                                                <!-- display a full star -->
+                                                <i class="fas fa-star" style="color: orange;"></i>
+                                                <% } else if((product._source.avgRating - i) > 0 && (product._source.avgRating - i) < 1) { %>
+                                                <!-- display a half star -->
+                                                <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                                                <% } else { %>
+                                                <!-- display an empty star -->
+                                                <i class="far fa-star" style="color: orange;"></i>
+                                                <% } %>
+                                            <% } %>
+                                        </p>
+                                        <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                    </div>
+                                    <div style="display: flex; margin-top: 1vh;">
+                                        <% let k = 0; %>
+                                        <% if (product._source.deliveryOptions.city.valid) { %>
+                                            <div class="label">
+                                                <span class="tooltip-toggle" aria-label="Same City Delivery" tabindex="0">
+                                                    <i class="fa fa-city fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.state.valid) { %>
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Same State Delivery" tabindex="0">
+                                                    <i class="fa fa-map-marked-alt fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.country.valid) { %>
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Same Country Delivery" tabindex="0">
+                                                    <i class="fa fa-flag fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
+                                        <% } %>
+                                        <% if (product._source.deliveryOptions.worldwide.valid) { %>
+                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
+                                                <span class="tooltip-toggle" aria-label="Worldwide Delivery" tabindex="0">
+                                                    <i class="fa fa-globe-americas fa-2x" style="color: green;"></i>
+                                                </span>
+                                            </div>
+                                            <% k += 1; %>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                    <% if (product._source.btcPrice > 0) { %>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.btcPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.bchPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.bchPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.ethPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.ethPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.ltcPrice > 0) {
+                                    %>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.ltcPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
+                                        </div>
+                                    <% } 
+                                        if (product._source.dashPrice) {
+                                    %>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.dashPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </article>
+                    <% }); } else { %> 
+                        <p class="title is-4">No products found.</p>
+                <% } %>
+            </main>
+            <section id="paginationBottom" class="paginationU paginationD"> <% if (total > 2) { %><% include ../partials/paginateFirstSearch %><% } %></section>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
+<script src="../../dist/js/categname.js"></script>

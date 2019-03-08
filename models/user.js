@@ -30,6 +30,7 @@ const UserSchema = new Schema({
   country: String,
   state: String,
   city: String,
+  continent: String,
   address1: String,
   address2: String,
   zip: Number,

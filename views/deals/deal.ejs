@@ -6,12 +6,12 @@
     <% if (user._id.toString() === seller._id.toString()) { %>
         <div class="column is-one-fifth">
             <div>
-                <div class="messageProfile">
+                <div class="messageProfile frame">
                     <p class="title is-5">Buyer</p>
                     <div class="">
                         <img src="<%= buyer.avatar.url %>" class="open-img ">
                     </div>
-                    <hr>
+                    <br>
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Full Name: <%= buyer.full_name %></p>
                         <p class="title is-5 messageProfileText">Country: <%= buyer.country %></p>
@@ -62,12 +62,12 @@
     <% if (user._id.toString() === buyer._id.toString()) { %>
         <div class="column is-one-fifth">
             <div>
-                <div class="messageProfile">
+                <div class="messageProfile frame">
                     <p class="title is-5">Seller</p>
                     <div class="">
                         <img src="<%= seller.avatar.url %>" class="open-img ">
                     </div>
-                    <hr>
+                    <br>
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Full Name: <%= seller.full_name %></p>
                         <p class="title is-5 messageProfileText">Country: <%= seller.country %></p>
@@ -112,24 +112,29 @@
     <% } %>
     <% if ((user._id.toString() === buyer._id.toString()) || (user._id.toString() === seller._id.toString())) { %>
         <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
-            <div class="midlevel" id="mid" style="border-top-style: double; border-width: 3px;">
+            <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
                 <% if (chat.messageCount === 0) { %>
-                    <div class="level" style="justify-content: center;
-                    position: relative;
-                    height: 5vh;
-                    top: -3.4vh;
-                    background-color: #631;">
-                        <p class="title is-5">This is the start of the conversation</p>
+                    <div class="level topFirst">
+                        <div>
+                            <p class="is-5">This is the beginning of the conversation</p>
+                            <p class="is-6">Start by saying hi!</p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="level topWarn">
+                        <div>
+                            <p class="is-5">Be mindful of the information you send</p>
+                        </div>
                     </div>
                 <% } %>
                 <% chat.messages.forEach((message) => { %>
                     <% if (message.sender.toString() != user._id.toString()) { %>
                         <div class="level" style="margin-top: -15px;">
                             <div class="level-left leftlv">
-                                <div class="recmsg msg">
-                                    <p style="font-size: 0.7rem; color: #ccc"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
+                                <div class="recmsg msg frame" style="background-color: #5f91e8 !important;">
+                                    <p class="recName"> <% if (message.sender._id === chat.user1.id) { %>Seller<% } else { %>Buyer<% } %></p>
                                     <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                    <time>
+                                    <time class="recDate">
                                         <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
                                         /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
                                         <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
@@ -141,10 +146,10 @@
                     <% } else if (message.sender.toString() == user._id.toString()) { %>
                         <div class="level" style="display: block;">
                             <div class="level-right">
-                                <div class="sentmsg msg">
-                                    <p style="font-size: 0.7rem; color: #ccc">You</p>
+                                <div class="sentmsg msg frame" style="background-color: #a7abab !important;">
+                                    <p class="sentName">You</p>
                                     <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                    <time>
+                                    <time class="sentDate">
                                         <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
                                         /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
                                         <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
@@ -156,7 +161,7 @@
                     <% } %>
                 <% }); %>    
             </div>
-            <div class="bottomlv">
+            <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
                 <form action="/messages/<%= deal._id %>/<%= chat._id %>/sendMessageDeal?_method=PUT" method="POST" class="msgbox">
                     <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
                     <button class="button is-primary">Send</button>
@@ -165,15 +170,15 @@
         </div>
         <div class="column is-one-fifth">
             <div class="">
-                <div class="messageProfile" style="margin-top: 2vh; margin-right: 1vw;">
+                <div class="messageProfile frame productFrame">
                     <div>
                         <p class="title is-5">Product</p>                      
                         <img src="<%= deal.product.imageUrl %>"  class="open-img">
                     </div>
-                    <hr>
+                    <br>
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
-                        <div class="prices openPrices" style="width: 80% !important;">
+                        <div class="prices openPrices frame" style="width: 80% !important;">
                             <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
                             <% switch(deal.boughtWith) {
                                 case 0: { %>
@@ -194,18 +199,20 @@
                                 default: { break; } } %> 
                         </div>
                         <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
-                        <a href="/products/<%= deal.product.id %>/view" style="display: block; margin: auto; width: 50%; margin-top: 1vh;" class="button is-primary">View Product</a>
                         <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                             <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; margin-bottom: 1vh;">
                                 <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST"><button class="button is-success">Accept Deal</button></form>
                                 <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
                             </div>
                         <% } %>
+                        
                         <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
-                            <div style="display: block; margin: auto; margin-top: 1vh;">
-                                <div style="display: flex; justify-content: space-evenly;">
-                                    <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
-                                    <button class="button is-primary refundRequest">Ask for a refund</button>
+                            <div style="display: block; margin: auto;">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <div>
+                                    <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-success">Complete Deal</button></form>
+                                    <button class="button is-primary refundRequest" style="margin-top: 1vh;">Ask for a refund</button>
                                     <div class="modal modalRefundRequest">
                                         <div class="modal-background"></div>
                                             <div class="modal-card">
@@ -244,6 +251,7 @@
                             </div>
                         <% } %>
                         <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested')) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>                            
                             <button class="button is-primary refundRequest">Ask for a refund</button>
                             <div class="modal modalRefundRequest">
                                 <div class="modal-background"></div>
@@ -282,6 +290,7 @@
                         <% } %>
 
                         <% if ((user._id.toString() === seller._id.toString()) && (deal.refund.status !== 'Not requested')) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                             <button class="button is-primary refundDetails">View Refund Details</button>
                             <div class="modal modalRefundDetails">
                                 <div class="modal-background"></div>
@@ -332,13 +341,22 @@
                                     </div>
                             </div>
                         <% } %>
+                        
                         <% if ((deal.status === 'Processing') && (user._id.toString() === buyer._id.toString())) { %>
-                            <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                            <div style="display: flex; justify-content: space-evenly">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                            </div>
                         <% } %>
                         <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
-                            <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                            <div style="display: flex; justify-content: space-evenly">
+                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                            </div>
                         <% } %>
-
+                        <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === seller._id.toString())) { %>
+                            <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                        <% } %>
                     </div>
                 </div>
             </div>

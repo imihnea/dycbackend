@@ -15,101 +15,98 @@
                 </div>
             <% } %>
         </div>
+        <div class="dashTop column">
+            <h2 class="title">Tokens</h2>
+        </div>
         <div class="columns">
             <div class="column">
-                <!-- <form action="/dashboard/tokens" method="POST" style="display: flex;"> -->
-                    <div class="feature-div">
-                        <h2>You have <%= user.feature_tokens %> Tokens</h2>
-                        <div class="sel_curr" style="padding-top: 3vh;">
-                            
-                            <label class="img-check ">
-                                <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="token-currency" id="btcimg">
-                                <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" checked required>
-                            </label>
-                            <label class="img-check ">
-                                <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="token-currency gray" id="bchimg">
-                                <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1" >
-                            </label>
-                            <label class="img-check ">
-                                <img src="../../dist/img/ethereum.png" alt="ethereum" class="token-currency gray" id="ethimg">
-                                <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2" >
-                            </label>
-                            <label class="img-check ">
-                                <img src="../../dist/img/litecoin.png" alt="Litecoin" class="token-currency gray" id="ltcimg">
-                                <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3" >
-                            </label>
-                            <label class="img-check ">
-                                <img src="../../dist/img/dash.png" alt="DASH" class="token-currency gray" id="dashimg">
-                                <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4" >
-                            </label>
-                        </div>
-                        <form action="/dashboard/tokens/0" method="POST">
-                            <div id="btc-fields" class="fields">
-                                <p style="padding-top: 3vh;">Price per token: <span id="btcTokenPrice"><%= tokenPrices[0] %></span> BTC</p>
-                                <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
-                                    min="0" max="500" required style="margin-top: 3vh;">
-                                <p style="padding-top: 3vh;">Total price: <span id="btcPrice" class="tPrice">0</span> BTC</p>
-                                <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
-                            </div>
-                        </form>
-                        <form action="/dashboard/tokens/1" method="POST">
-                            <div id="bch-fields" class="fields currency-input">
-                                <p style="padding-top: 3vh;">Price per token: <span id="bchTokenPrice"><%= tokenPrices[1] %></span> BCH</p>
-                                <input class="input inputTokens" id="bch-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
-                                    min="0" max="500" style="margin-top: 3vh;">
-                                <p style="padding-top: 3vh;">Total price: <span id="bchPrice" class="tPrice">0</span> BCH</p>
-                                <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
-                            </div>
-                        </form>
-                        <form action="/dashboard/tokens/2" method="POST">
-                            <div id="eth-fields" class="fields currency-input">
-                                <p style="padding-top: 3vh;">Price per token: <span id="ethTokenPrice"><%= tokenPrices[2] %></span> ETH</p>
-                                <input class="input inputTokens" id="eth-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
-                                    min="0" max="500" style="margin-top: 3vh;">
-                                <p style="padding-top: 3vh;">Total price: <span id="ethPrice" class="tPrice">0</span> ETH</p>
-                                <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
-                            </div>
-                        </form>
-                        <form action="/dashboard/tokens/3" method="POST">
-                            <div id="ltc-fields" class="fields currency-input">
-                                <p style="padding-top: 3vh;">Price per token: <span id="ltcTokenPrice"><%= tokenPrices[3] %></span> LTC</p>
-                                <input class="input inputTokens" id="ltc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
-                                    min="0" max="500" style="margin-top: 3vh;">
-                                <p style="padding-top: 3vh;">Total price: <span id="ltcPrice" class="tPrice">0</span> LTC</p>
-                                <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
-                            </div>
-                        </form>
-                        <form action="/dashboard/tokens/4" method="POST">
-                            <div id="dash-fields" class="fields currency-input">
-                                <p style="padding-top: 3vh;">Price per token: <span id="dashTokenPrice"><%= tokenPrices[4] %></span> DASH</p>
-                                <input class="input inputTokens" id="dash-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
-                                    min="0" max="500" style="margin-top: 3vh;">
-                                <p style="padding-top: 3vh;">Total price: <span id="dashPrice" class="tPrice">0</span> DASH</p>
-                                <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
-                            </div>
-                        </form>
+                <div class="feature-div frame">
+                    <h2>You have <%= user.feature_tokens %> Tokens</h2>
+                    <div class="sel_curr" style="padding-top: 3vh;">
+                        
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="token-currency" id="btcimg">
+                            <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" checked required>
+                        </label>
+                        <label class="img-check ">
+                            <img src="../../dist/img/bitcoincash.png" alt="BitcoinCash" class="token-currency gray" id="bchimg">
+                            <input id="bch-check" type="radio" name="currency"  class="curr_checkbox" value="1" >
+                        </label>
+                        <label class="img-check ">
+                            <img src="../../dist/img/ethereum.png" alt="ethereum" class="token-currency gray" id="ethimg">
+                            <input id="eth-check" type="radio" name="currency"  class="curr_checkbox" value="2" >
+                        </label>
+                        <label class="img-check ">
+                            <img src="../../dist/img/litecoin.png" alt="Litecoin" class="token-currency gray" id="ltcimg">
+                            <input id="ltc-check" type="radio" name="currency"  class="curr_checkbox" value="3" >
+                        </label>
+                        <label class="img-check ">
+                            <img src="../../dist/img/dash.png" alt="DASH" class="token-currency gray" id="dashimg">
+                            <input id="dash-check" type="radio" name="currency"  class="curr_checkbox" value="4" >
+                        </label>
                     </div>
-                <!-- </form> -->
+                    <form action="/dashboard/tokens/0" method="POST">
+                        <div id="btc-fields" class="fields">
+                            <p style="padding-top: 3vh;">Price per token: <span id="btcTokenPrice"><%= tokenPrices[0] %></span> BTC</p>
+                            <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
+                                min="0" max="500" required style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: <span id="btcPrice" class="tPrice">0</span> BTC</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                    </form>
+                    <form action="/dashboard/tokens/1" method="POST">
+                        <div id="bch-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: <span id="bchTokenPrice"><%= tokenPrices[1] %></span> BCH</p>
+                            <input class="input inputTokens" id="bch-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: <span id="bchPrice" class="tPrice">0</span> BCH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                    </form>
+                    <form action="/dashboard/tokens/2" method="POST">
+                        <div id="eth-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: <span id="ethTokenPrice"><%= tokenPrices[2] %></span> ETH</p>
+                            <input class="input inputTokens" id="eth-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: <span id="ethPrice" class="tPrice">0</span> ETH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                    </form>
+                    <form action="/dashboard/tokens/3" method="POST">
+                        <div id="ltc-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: <span id="ltcTokenPrice"><%= tokenPrices[3] %></span> LTC</p>
+                            <input class="input inputTokens" id="ltc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: <span id="ltcPrice" class="tPrice">0</span> LTC</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                    </form>
+                    <form action="/dashboard/tokens/4" method="POST">
+                        <div id="dash-fields" class="fields currency-input">
+                            <p style="padding-top: 3vh;">Price per token: <span id="dashTokenPrice"><%= tokenPrices[4] %></span> DASH</p>
+                            <input class="input inputTokens" id="dash-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
+                                min="0" max="500" style="margin-top: 3vh;">
+                            <p style="padding-top: 3vh;">Total price: <span id="dashPrice" class="tPrice">0</span> DASH</p>
+                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="column tokens-faq">
-                <details class="det" style="margin-top: 0vh;">
-                    <summary>
-                            What is a feature token?
-                    </summary>
-                    <p class="detail">The feature token is a type of currency used to promote deals on the marketplace</p>
-                </details>
-                <details>
-                        <summary>
-                                How can I promote my deal?
-                        </summary>
-                        <p class="detail">You can do so when creating the deal or afterwards, from the edit page.</p>
-                </details>
-                <details>
-                    <summary>
-                            Are there multiple levels of promotion?
-                    </summary>
-                    <p class="detail">Yes, we offer subcategory promotion and front-page promotion</p>
-                </details>
+                <div class="frame">
+                    <h3 class="title is-4">What is a feature token?</h3>
+                    <h4 class="title is-5">The feature token is a type of currency used to promote deals on the marketplace</h4>
+                </div>
+                <br>
+                <div class="frame">
+                    <h3 class="title is-4">How can I promote my deal?</h3>
+                    <h4 class="title is-5">You can do so when creating the deal or afterwards, from the edit page.</h4>
+                </div>
+                <br>
+                <div class="frame">
+                    <h3 class="title is-4">Are there multiple levels of promotion?</h3>
+                    <h4 class="title is-5">Yes, we offer category and search promotion and front-page promotion</h4>
+                </div>
             </div>
         </div>     
     </div>

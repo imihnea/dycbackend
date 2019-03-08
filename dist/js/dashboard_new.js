@@ -90,6 +90,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  let city = document.getElementById('city');
+  let state = document.getElementById('state');
+  let country = document.getElementById('country');
+  let worldwide = document.getElementById('worldwide'); 
+  let transport = document.getElementById('transport');
+
+  city.addEventListener('change', () => {
+    if (city.checked == true) {
+      transport.classList.remove('hide');
+    } else {
+      if ((state.checked == false) && (country.checked == false) && 
+          (worldwide.checked == false)) {
+            transport.classList.add('hide');
+      }
+    }
+  });
+  state.addEventListener('click', () => {
+    if (state.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((city.checked == false) && (country.checked == false) && 
+            (worldwide.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+  country.addEventListener('click', () => {
+    if (country.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((state.checked == false) && (city.checked == false) && 
+            (worldwide.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+  worldwide.addEventListener('click', () => {
+    if (worldwide.checked == true) {
+      if (transport.classList.contains('hide')){
+        transport.classList.remove('hide');
+      }
+    } else {
+      if (!transport.classList.contains('hide')){
+        if ((state.checked == false) && (country.checked == false) && 
+            (city.checked == false)) {
+              transport.classList.add('hide');
+        }
+      }
+    }
+  });
+
   document.getElementsByName('product[cityTransport]').forEach((item) => {
     item.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -163,6 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const repeatable = document.querySelector('.fa-redo');
+  repeatable.addEventListener('click', (event) => {
+    event.stopPropagation();
+    repeatable.classList.toggle('green');
+  });
+
   const newCurrency = document.querySelectorAll('.new_cccy');
   const newCurrencies = [].slice.call(newCurrency);
   newCurrencies.forEach((item) => {
@@ -210,6 +275,96 @@ document.addEventListener('DOMContentLoaded', () => {
       labelItems[i].classList.toggle('file-upload__label');
       labelItems[i].classList.toggle('file-upload__label-green');
       inputItems[i].disabled = false;
+    });
+  });
+
+  let firstCat = document.getElementById('firstCat');
+  let secondCat = document.getElementById('secondCat');
+  let thirdCat = document.getElementById('thirdCat');
+
+  const Categories = [
+    { name: 'Collectibles & Art', opt: ['Collectibles', 'Antiques', 'Art'] },
+    { name: 'Electronics', opt: ['Computers & Laptops', 'Cameras', 'TV & Audio', 'Phones & Tablets', 'Consoles & Videogames', 'Other Electronics'] },
+    { name: 'Fashion & Beauty', opt: ['Female Clothes', 'Female Shoes', 'Male Clothes', 'Male Shoes', 'Accessories', 'Jewellry', 'Other Products']},
+    { name: 'Home Improvement', opt: ['Furniture', 'Decoration', 'Garden', 'Hardware & Tools', 'Other Home Products']},
+    { name: 'Leisure Time', opt: ['Books', 'Movies & Television', 'Music', 'Other Leisure Products']},
+    { name: 'Mothers & Babies', opt: ['Clothes', 'Strollers', 'Baby Care', 'Safety', 'Toys', 'Other Baby Products']},
+    { name: 'Pet Supplies', opt: ['Dogs', 'Cats', 'Aquatic Pets', 'Birds', 'Other Pets']},
+    { name: 'Real Estate', opt: ['Apartments', 'Houses', 'Other Estates']},
+    { name: 'Sports & Outdoors', opt: ['Sports & Fitness', 'Outdoor']},
+    { name: 'Vehicles', opt: ['Automobiles', 'Trucks & Trailers', 'Motorcycles & ATVs', 'Boats', 'Other Vehicles']},
+  ];
+
+  const secCategories = [
+    { name: 'Collectibles', opt: ['Comics', 'Militaria', 'Collectible Metalware', 'Automated Devices', 'Vending Machines', 'Brewery Collectibles', 'Advertisements', 'Other'] },
+    { name: 'Antiques', opt: ['Furniture', 'Decorations', 'Maps', 'Musical Instruments', 'Rugs', 'Other'] },
+    { name: 'Art', opt: ['Visual Art', 'Art Supplies', 'Other'] },
+    { name: 'Computers & Laptops', opt: ['Laptops', 'PC Systems', 'Components', 'Office Electronics', 'Mice & Keyboards', 'Networking Devices', 'Accessories', 'Other'] },
+    { name: 'Cameras', opt: ['Digital Cameras', 'Video Cameras', 'Video Surveillance', 'Binoculars', 'Scopes', 'Lenses', 'Flashes', 'Lighting & Studio', 'Pods', 'Accessories', 'Other'] },
+    { name: 'TV & Audio', opt: ['TVs', 'Projectors', 'Audio Systems', 'Portable Players', 'Accessories', 'Other'] },
+    { name: 'Phones & Tablets', opt: ['Phones', 'Tablets', 'Accessories', 'Other'] },
+    { name: 'Consoles & Games', opt: ['Consoles', 'Videogames', 'Console Accessories', 'Other'] },
+    { name: 'Other Electronics', opt: ['GPS', 'Medical Electronics', 'Other'] },
+    { name: 'Female Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Skirts', 'Dresses', 'Wedding Dresses', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
+    { name: 'Female Shoes', opt: ['Sneakers', 'Boots', 'Shoes', 'Slippers', 'Sandals', 'Other'] },
+    { name: 'Male Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
+    { name: 'Male Shoes', opt: ['Sneakers', 'Boots', 'Shoes', 'Slippers', 'Sandals', 'Other'] },
+    { name: 'Accessories', opt: ['Watches', 'Ties', 'Belts', 'Scarves', 'Bags', 'Glasses', 'Hats & Caps', 'Wallets', 'Other'] },
+    { name: 'Jewellry', opt: ['Bracelets', 'Earrings', 'Necklaces', 'Rings', 'Sets', 'Other'] },
+    { name: 'Other Fashion', opt: ['Cosmetics', 'Perfumes', 'Skin Care', 'Foot, Hand & Nail Care', 'Hair Care', 'Shaving', 'Personal Care', 'Oral Care', 'Other'] },
+    { name: 'Furniture', opt: ['Bathroom', 'Bed Room', 'Living Room', 'Kitchen', 'Office', 'Other'] },
+    { name: 'Decoration', opt: ['Decorations', 'Other'] },
+    { name: 'Garden', opt: ['Garden Furniture', 'Plants', 'Tools & Accessories', 'Other'] },
+    { name: 'Hardware & Tools', opt: ['Power Tools', 'Hardware', 'Tools & Parts', 'Other'] },
+    { name: 'Other Home Products', opt: ['Construction Materials', 'Other'] },
+    { name: 'Books', opt: ['Books', 'Magazines', 'Comics', 'Textbooks', 'Other'] },
+    { name: 'Movies & Television', opt: ['Movies', 'TV Series', 'Other'] },
+    { name: 'Music', opt: ['Musical Instruments', 'Accessories', 'CDs & Vinyls', 'Other'] },
+    { name: 'Other Leisure Products', opt: ['Boardgames', 'Other'] },
+    { name: 'Clothes', opt: ['Maternity Clothes', 'Baby Clothes', 'Baby Shoes', 'Other'] },
+    { name: 'Strollers', opt: ['Strollers', 'Accessories', 'Replacement Parts', 'Other'] },
+    { name: 'Baby Care', opt: ['Bathing', 'Grooming', 'Health', 'Pacifiers & Teethers', 'Diapering', 'Other'] },
+    { name: 'Safety', opt: ['Cabinet Locks', 'Crib Netting', 'Edge & Corner Guards', 'Electrical Safety', 'Gates & Doorways', 'Harnesses', 'Kitchen Safety', 'Monitors', 'Other'] },
+    { name: 'Toys', opt: ['Balls', 'Bath Toys', 'Blocks', 'Crib Toys', 'Structures', 'Other'] },
+    { name: 'Other Baby Products', opt: ['Family Planning Tests', 'Monitoring Devices', 'Travel Gear', 'Other'] },
+    { name: 'Dogs', opt: ['Food', 'Treats', 'Apparel & Accessories', 'Beds', 'Carriers & Cages', 'Collars', 'Doors & Gates', 'Bug Control', 'Grooming', 'Health Supplies', 'Litter', 'Toys', 'Other'] },
+    { name: 'Cats', opt: ['Food', 'Treats', 'Apparel & Accessories', 'Beds', 'Carriers & Cages', 'Collars', 'Doors & Gates', 'Bug Control', 'Grooming', 'Health Supplies', 'Litter', 'Toys', 'Other'] },
+    { name: 'Aquatic Pets', opt: ['Food', 'Aquariums', 'Aquarium Accessories', 'Breeding Tanks', 'Health Supplies', 'Other'] },
+    { name: 'Birds', opt: ['Food', 'Treats', 'Carriers & Cages', 'Accessories', 'Health Supplies', 'Toys', 'Other'] },
+    { name: 'Other Pets', opt: ['Food', 'Treats', 'Cages & Carriers', 'Accessories', 'Health Supplies', 'Toys', 'Other'] },
+    { name: 'Apartments', opt: ['Flats', 'Apartments', 'Other'] },
+    { name: 'Houses', opt: ['One Floor Houses', 'Multiple Floor Houses', 'Other'] },
+    { name: 'Other Estates', opt: ['Fields', 'Farms', 'Other'] },
+    { name: 'Sports & Fitness', opt: ['Clothes', 'Fitness', 'Golf', 'Hunting & Fishing', 'Airsoft & Paintball', 'Tennis', 'Fan Items', 'Other'] },
+    { name: 'Outdoor', opt: ['Camping & Hiking', 'Climbing', 'Cycling', 'Skates & Skateboards', 'Water Sports', 'Winter Sports', 'Accessories', 'Other'] },
+    { name: 'Automobiles', opt: ['Cars', 'Car Care', 'Accessories', 'Lights', 'Parts', 'Tires', 'Other'] },
+    { name: 'Trucks & Trailers', opt: ['Semitrucks', 'Trucks', 'Trailers', 'Parts', 'Tires', 'Other'] },
+    { name: 'Motorcycles & ATVs', opt: ['Motorcycles', 'Scooters', 'ATVs', 'Parts', 'Tires', 'Other'] },
+    { name: 'Boats', opt: ['Leisure Boats', 'Fishing Boats', 'Parts', 'Other'] },
+    { name: 'Other Vehicles', opt: ['Other'] }
+  ];
+
+  firstCat.addEventListener('change', () => {
+    secondCat.innerHTML = '<option disabled selected>Secondary Category</option>';
+    thirdCat.innerHTML = '<option disabled selected>Tertiary Category</option>';
+    Categories.forEach((item) => {
+      if (firstCat.value == item.name) {
+        item.opt.forEach((option) => {
+          secondCat.innerHTML += `<option value="${option}">${option}</option>`;
+        }); 
+      }
+    });
+  });
+
+  secondCat.addEventListener('change', () => {
+    thirdCat.innerHTML = 
+    '<option disabled selected>Tertiary Category</option>';
+    secCategories.forEach((item) => {
+      if (secondCat.value == item.name) {
+        item.opt.forEach((option) => {
+          thirdCat.innerHTML += `<option value="${option}">${option}</option>`;
+        }); 
+      }
     });
   });
 });

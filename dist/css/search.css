@@ -4,7 +4,7 @@
     position: relative;
   }
 
-aside {
+aside.products {
   position: absolute;
   overflow-y: auto;
   top: 0;
@@ -12,17 +12,18 @@ aside {
   width: 17vw;
   padding: 30px;
   border-right: 1px solid #4a4a4a;
-  background: black;
-  height: 100%;
+  background: white;
+  /* height: 100%; */
 }
 aside .facet-category-title {
   font-size: 1.2em;
-  color: rgb(255, 205, 111);
+  font-weight: 600;
+  color: black;
   margin: 0 0 8px;
 }
 aside .facet-wrapper {
   padding-bottom: 12px;
-  border-bottom: solid 1px orange;
+  border-bottom: solid 1px black;
   margin-bottom: 12px;
   font-size: 0.87em;
 }
@@ -35,11 +36,11 @@ aside .facet-title {
 }
 aside .facet-item,
 aside a {
-  color: orange;
+  color: black;
 }
 aside .facet-item:hover,
 aside a:hover {
-  color: #b32500;
+  color: grey;
   text-decoration: none;
 }
 aside .facet-item.active,
@@ -136,99 +137,44 @@ aside .facet-count {
   margin-bottom: 3vh;
 }
 
+.dealname{
+  color: black !important;
+}
+
+.dealname:hover{
+  color: #3273dc !important;
+}
+
 .hit {
   padding: 10px 20px 20px;
   margin-bottom: 10px;
-  border-bottom: solid 1px orange;
-  border: solid 1px orange;
-  box-shadow: 0 0 3px orange;
   position: relative;
+  margin-top: 1vh;
 }
-.hit .product-picture-wrapper {
-  /* display: table;
-  table-layout: fixed;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 10px; */
+
+.hit.frame{
+  padding-top: 1vh !important;
+  padding-bottom: 0vh !important;
 }
-.hit .product-picture {
-  display: table-cell;
-  vertical-align: middle;
-  margin: 0 auto;
-}
+
 .hit .product-picture img {
-  transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
-  height: 150px;
-  max-width: 100%;
+  /* min-height: 150px; */
+  max-height: 200px;
+  /* min-width: 150px; */
+  max-width: 175px;
+  width: fit-content;
+  height: fit-content;
 }
 .hit .product-desc-wrapper {
   height: auto;
   width: 100%;
   overflow: hidden;
 }
-.hit .product-name {
+ .hit .product-name {
   font-weight: bold;
-  color: orange;
   font-size: 0.9em;
   margin: 0 0 8px;
   min-width: 120px;
-}
-.hit .product-type {
-  font-size: 0.8em;
-  margin: 0 0 10px;
-  color: #a2a2a2;
-}
-.hit .product-rating {
-  margin-bottom: 10px;
-}
-.hit .product-price {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: orange;
-  float: right;
-  letter-spacing: -1px;
-}
-.hit mark {
-  color: orange;
-  font-style: normal;
-  background-color: #ffbe61;
-}
-
-.ais-RangeInput-submit {
-  display: block;
-  float: right;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  margin-left: 4px;
-  font-size: 10px;
-  line-height: 20px;
-  border: solid 1px #888;
-  border-radius: 50%;
-  text-align: center;
-  background: none;
-  color: orange;
-}
-
-.ais-Panel-header {
-  margin: 4px 0;
-  clear: both;
-  padding: initial;
-  border-bottom: none;
-  color: #ffbe61;
-}
-
-.ais-Panel-header h5 {
-  font-weight: bold;
-  text-transform: none;
-  font-size: 1.5em;
-  margin: 10px 0;
-}
-
-.ais-Stats-text {
-  padding-left: 50px;
-  font-size: 0.8em;
-  color: orange;
 }
 
 .input-group {
@@ -249,7 +195,11 @@ aside .facet-count {
   border-top-left-radius: 0px;
 }
 
-.iTooltip{
+.searchCategBtn{
+  width: auto !important;
+}
+
+/* .iTooltip{
   visibility: hidden;
   width: 120px;
   background-color: black;
@@ -267,4 +217,29 @@ aside .facet-count {
 
 i.tooltip:hover .iTooltip{
   visibility: visible;
+} */
+
+.spacing{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.paginationU{
+  display: flex; 
+  justify-content: center; 
+  /* margin-bottom: 2vh; */
+}
+
+.paginationD{ 
+  margin-top: 4vh;
+}
+
+.paginationBtn{
+  margin-left: 0.25vw;
+}
+
+.dots{
+  margin-left: 0.25vw;
+    position: relative;
+    bottom: -0.5vw;
 }
