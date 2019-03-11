@@ -50,6 +50,15 @@
         </div>
 </div>
 
+<div class="container is-fluid">
+    <% if(errors){ %>
+        <div class="notification is-danger" role="alert"> 
+        <% errors.forEach(function( err){ %>
+            <%= err.msg %><br>
+        <% }) %>
+        </div>
+    <% } %>
+</div>
 <div class="hero-body hero-content">
     <% if (products.docs.length === 0) { %>
         <div class="column">
