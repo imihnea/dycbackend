@@ -241,7 +241,7 @@ module.exports = {
       let currency = [];
       let secCat = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       if (req.body.from) {
         req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty();
@@ -344,7 +344,7 @@ module.exports = {
       let currency = [];
       let thiCat = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       if (req.body.from) {
@@ -449,7 +449,7 @@ module.exports = {
       let tags = [];
       let currency = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
       req.check('secondSearchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
