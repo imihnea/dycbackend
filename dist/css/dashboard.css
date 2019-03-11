@@ -409,10 +409,28 @@ hr{
 
 .optionsUnchecked{
     border-color: #6c6c98;
+    cursor: pointer;
+}
+
+.optionsUnchecked:hover > .column i, .optionsUnchecked:hover > .column p{
+    color: green !important;
+}
+
+.optionsUnchecked:hover {
+    border-color: green;
 }
 
 .optionsChecked{
     border-color: green;
+    cursor: pointer;
+}
+
+.optionsChecked:hover > .column i, .optionsChecked:hover > .column p{
+    color: red !important;
+}
+
+.optionsChecked:hover {
+    border-color: red !important;
 }
 
 .optionsChecked > .column i, .optionsChecked > .column p {

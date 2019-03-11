@@ -7,7 +7,6 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
-                           => Delivery & Transport => add hover styling and pointer cursor
 
     Low Priority:
 
