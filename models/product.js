@@ -93,6 +93,7 @@ ProductSchema.plugin(mongoosastic);
   // port: 9200
 // });
 
+
 mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
   if (err) {
     console.log('error creating mapping');
@@ -102,6 +103,18 @@ mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {
     console.log(mapping);
   }
 });
+
+// Delete the index on server restart
+mongoose.model('Product', ProductSchema).esTruncate((err) => {
+  if (err) {
+    console.log('cannot delete index.');
+    console.log(err);
+  } else {
+    console.log('index deleted successfully.');
+  }
+});
+
+// Synchronize the index on server restart
 let stream = mongoose.model('Product', ProductSchema).synchronize();
 let count = 0;
 stream.on('data', function(err, doc){

@@ -275,7 +275,7 @@ module.exports = {
               ]
             }
           }, 
-          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -301,7 +301,7 @@ module.exports = {
               ],
             }
           }, 
-          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -356,7 +356,7 @@ module.exports = {
               ]
             }
           }, 
-          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -383,7 +383,7 @@ module.exports = {
               ],
             }
           }, 
-          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -438,7 +438,7 @@ module.exports = {
               ]
             }
           }, 
-          { from: from, size: 2, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);
@@ -461,7 +461,7 @@ module.exports = {
               ],
             }
           }, 
-          { from: from, size: 2, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
               console.log(err);

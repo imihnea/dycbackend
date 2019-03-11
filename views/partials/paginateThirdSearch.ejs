@@ -1,7 +1,7 @@
 <div style="margin-left: 1vw; display: flex;">
-    <% if (from - 2 >= 0) { %>
+    <% if (from - 10 >= 0) { %>
         <form action="/thirdCategSearch" method="POST">
-            <input type="number" name="from" value="<%= Number(from) - 2 %>" hidden>
+            <input type="number" name="from" value="<%= Number(from) - 10 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
             <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
@@ -16,12 +16,12 @@
         let page;
         let page2; 
         let currentPage;
-        if (from % 2 == 0) {
-            currentPage = from/2 + 1;
+        if (from % 10 == 0) {
+            currentPage = from/10 + 1;
             page = currentPage;
             page2 = currentPage - 1;
         } else {
-            currentPage = Math.floor(from/2) + 1;
+            currentPage = Math.floor(from/10) + 1;
             page = currentPage;
             page2 = currentPage - 1;
         } %>
@@ -47,7 +47,7 @@
                 break;
             case 2: %>
                 <form action="/thirdCategSearch" method="POST">
-                    <input type="number" name="from" value="2" hidden>
+                    <input type="number" name="from" value="10" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                     <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
@@ -60,7 +60,7 @@
                 <% break;
             case 3: %>
                 <form action="/thirdCategSearch" method="POST">
-                    <input type="number" name="from" value="2" hidden>
+                    <input type="number" name="from" value="10" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                     <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
@@ -71,7 +71,7 @@
                     <button class="button paginationBtn page">2</button>
                 </form> 
                 <form action="/thirdCategSearch" method="POST">
-                    <input type="number" name="from" value="4" hidden>
+                    <input type="number" name="from" value="20" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                     <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
@@ -88,7 +88,7 @@
                 <% }
                 for (let i = currentPage - 3; i < currentPage; i += 1) { %>
                     <form action="/thirdCategSearch" method="POST">
-                        <input type="number" name="from" value="<%= i*2 - 2 %>" hidden>
+                        <input type="number" name="from" value="<%= i*10 - 10 %>" hidden>
                         <input type="text" name="searchName" value="<%= searchName %>" hidden>
                         <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                         <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
@@ -102,13 +102,13 @@
                 break;
         }
 
-        let copyFrom = Number(from) + 2;
+        let copyFrom = Number(from) + 10;
         let nr = 0;
         let totalPages = 0;
-        if (total % 2 == 0) {
-            totalPages = total/2;
+        if (total % 10 == 0) {
+            totalPages = total/10;
         } else {
-            totalPages = Math.floor(total/2) + 1;
+            totalPages = Math.floor(total/10) + 1;
         }
           
         if ((currentPage != 1) && (currentPage != totalPages)) { %>
@@ -130,7 +130,7 @@
                 <button class="button paginationBtn page"><%= page + 1 %></button>
             </form> 
             <% 
-                copyFrom += 2;
+                copyFrom += 10;
                 page += 1;
                 nr += 1;
         } 
@@ -138,20 +138,22 @@
             <p class="subtitle dots">...</p>
         <% }
     %>
-    <form action="/thirdCategSearch" method="POST">
-        <input type="number" name="from" value="<%= totalPages * 2 - 2 %>" hidden>
-        <input type="text" name="searchName" value="<%= searchName %>" hidden>
-        <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
-        <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
-        <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
-        <input type="text" name="continent" value="<%= continent %>" hidden>
-        <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-        <input type="text" name="currency" value="<%= currency %>" hidden>
-        <button class="button paginationBtn page <% if (currentPage == totalPages) { %>active<% } %> "><%= totalPages %></button>
-    </form>
+    <% if (total > 10) { %>
+        <form action="/thirdCategSearch" method="POST">
+            <input type="number" name="from" value="<%= totalPages * 10 - 10 %>" hidden>
+            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+            <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
+            <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
+            <input type="text" name="continent" value="<%= continent %>" hidden>
+            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+            <input type="text" name="currency" value="<%= currency %>" hidden>
+            <button class="button paginationBtn page <% if (currentPage == totalPages) { %>active<% } %> "><%= totalPages %></button>
+        </form>
+    <% } %>
     <% if (currentPage < totalPages) { %>
         <form action="/thirdCategSearch" method="POST">
-            <input type="number" name="from" value="<%= Number(from) + 2 %>" hidden>
+            <input type="number" name="from" value="<%= Number(from) + 10 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
             <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
