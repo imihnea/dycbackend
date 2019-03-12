@@ -34,6 +34,7 @@ const UserSchema = new Schema({
   address1: String,
   address2: String,
   zip: Number,
+  accountType: { type: String, default: 'Standard' },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   resetEmailToken: String,
@@ -46,6 +47,7 @@ const UserSchema = new Schema({
   ltcadr: String,
   dashadr: String,
   feature_tokens: { type: Number, default: 0 },
+  nrSold: { type: Number, default: 0 },
   reviews: [
     {
       type: Schema.Types.ObjectId,

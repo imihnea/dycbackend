@@ -24,7 +24,7 @@
                 <% } %>
                 <p style="color: orange;"><%= `${user.avgRating} star${user.avgRating === 1 ? '' : 's'}` %></p>
                 <p class="subtitle">Country: <%= user.country %></p>
-                <p class="subtitle">Products sold: </p>
+                <p class="subtitle">Products sold: <%= user.nrSold %></p>
             </div>
             <div class="column"></div>
         </div>
@@ -35,53 +35,48 @@
         <% } else { %>
             <div class="deals smallerCenter frame" >
                 <p class="subtitle" style="text-align: center;">Active Deals</p>
+                <% if (products.total >= 10) { %>
+                    <div class="pagination paginationT"><% include ../partials/paginateIndex %></div>
+                <% } %>
                 <div class="columns" style="justify-content: center; flex-wrap: wrap;">
-                    <% if (products.total >= 10) { %>
-                        Pages: <% include ../partials/paginateIndex %>
-                    <% } %>
                     <% products.docs.forEach((product) => { %>
                         <div class="column card feat_card frame" style="max-width: 250px;">
-                            <a href="/products/<%= product.id %>/view">
-                                <div class="card-image">
-                                    <figure class="image profileProducts">
-                                        <img src="<%= product.images[0].url %>" class="featimgs">
-                                    </figure>
+                            <a href="/products/<%= product.id %>/view"></a>
+                            <div class="card-image">
+                                <figure class="image profileProducts">
+                                    <img src="<%= product.images[0].url %>" class="featimgs">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title is-5"><%= product.name %></p>
+                                    </div>
                                 </div>
-                                <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-content">
-                                            <p class="title is-5"><%= product.name %></p>
-                                        </div>
-                                    </div>
-                                    <div class="accepted_currencies">
-                                        <% if (product.accepted[0]) { %>
-                                            <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                        <% } %>
-                                        <% if (product.accepted[1]) { %>
-                                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                        <% } %>
-                                        <% if (product.accepted[2]) { %>
-                                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                        <% } %>
-                                        <% if (product.accepted[3]) { %>
-                                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                        <% } %>
-                                        <% if (product.accepted[4]) { %>
-                                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                                        <% } %>
-                                    </div>
-                                </div> 
+                                <div class="accepted_currencies">
+                                    <% if (product.accepted[0]) { %>
+                                        <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
+                                    <% } %>
+                                    <% if (product.accepted[1]) { %>
+                                        <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
+                                    <% } %>
+                                    <% if (product.accepted[2]) { %>
+                                        <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
+                                    <% } %>
+                                    <% if (product.accepted[3]) { %>
+                                        <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
+                                    <% } %>
+                                    <% if (product.accepted[4]) { %>
+                                        <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
+                                    <% } %>
+                                </div>
                             </div> 
-                                </div> 
-                            </a>                       
-                        </a>                       
-                            </a>                       
-                        </div>
+                        </div> 
                     <% }); %>
-                    <% if (products.total >= 10) { %>
-                        Pages: <% include ../partials/paginateIndex %>
-                    <% } %>
-                </div>
+                </div>                      
+                <% if (products.total >= 10) { %>
+                   <div class="pagination paginationD"><% include ../partials/paginateIndex %></div>
+                <% } %>
             </div>
         <% } %>
         <div class="deals frame smallerCenter" style="margin-top: 2vh;" >
@@ -272,3 +267,5 @@
 </div>
 
 <% include ../partials/footer %>
+
+<script src='../../dist/js/dashboard_products.js'></script>

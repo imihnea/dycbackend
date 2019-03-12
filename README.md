@@ -7,6 +7,7 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
+         Currencies => Delete currencies besides BTC
 
     Low Priority:
 
@@ -18,9 +19,7 @@ Backend:
    High Priority:
 
       Dashboard => Add balance route
-      Users => User types
-                  => Different fee
-            => Count number of products sold
+      Currencies => Delete currencies besides BTC
 
    Low Priority:
 

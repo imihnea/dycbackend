@@ -2,6 +2,15 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
 <a href="/dashboard/ongoing" class="button is-primary" style="margin-top: 1vh; margin-left: 1vw;">Back to Dashboard</a>
+<div class="container is-fluid">
+    <% if(errors){ %>
+        <div class="notification is-danger" role="alert"> 
+        <% errors.forEach(function( err){ %>
+            <%= err.msg %><br>
+        <% }) %>
+        </div>
+    <% } %>
+</div>
 <div class="columns" style="color: orange;">
     <% if (user._id.toString() === seller._id.toString()) { %>
         <div class="column is-one-fifth">
@@ -224,7 +233,7 @@
                                                     <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
                                                         <div class="field select cont-select smmargin">
                                                             <select name="reason" style="width: 100%;">
-                                                                <option value="" selected disabled>Reason</option>
+                                                                <option selected disabled>Reason</option>
                                                                 <option value="Product doesn't match">The product doesn't match the listing</option>
                                                                 <option value="Faulty product">Faulty product</option>
                                                                 <option value="Product hasn't arrived">The product hasn't arrived</option>
@@ -232,7 +241,7 @@
                                                         </div>
                                                         <div class="field select cont-select smmargin">
                                                             <select name="option" style="width: 100%;">
-                                                                <option value="" selected disabled>Refund option</option>
+                                                                <option selected disabled>Refund option</option>
                                                                 <option value="Money Back">Money Back</option>
                                                                 <option value="New Object">New object (if possible)</option>
                                                             </select>

@@ -11,7 +11,7 @@ module.exports = {
         const seller = await User.findById(deal.product.author.id);
         const buyer = await User.findById(deal.buyer.id);
         const chat = await Chat.findById(deal.chat);
-        res.render('deals/deal', { deal, seller, buyer, user: req.user, chat });
+        res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors: false });
     },
     async acceptDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -34,13 +34,24 @@ module.exports = {
     async completeDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
         const product = await Product.findById(deal.product.id);
+        const seller = await User.findById(deal.product.author.id);
         deal.completedAt = Date.now();
         deal.refundableUntil = Date.now() + refundTimer;
         deal.status = 'Completed';
         await deal.save();
+        seller.nrSold += 1;
+        await seller.save();
         if (!product.repeatable) {
             product.available = 'Closed';
             await product.save();
+            product.unIndex((err) => {
+                if (err) {
+                    console.log('Error while unindexing document.');
+                    console.log(err);
+                } else {
+                    console.log('Document unindexed successfully.');
+                }
+            });
         }
         res.redirect(`/deals/${deal._id}/review`);
     },
@@ -58,52 +69,83 @@ module.exports = {
     },
     async refundDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        if (req.body.refundOption === 'Money Back') {
-            // Find user
+        req.check('refundOption', 'Something went wrong. Please try again.').matches(/^(Money Back|New Object)$/).notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+            const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
-            // Refund deal
-            deal.completedAt = Date.now();
-            deal.refund.status = 'Fulfilled'
-            deal.refund.sellerOption = req.body.refundOption;
-            deal.status = 'Refunded';
-            await deal.save();
-            buyer.currency[deal.boughtWith] += deal.price;
-            buyer.markModified('currency');
-            await buyer.save();
-            req.flash('success', 'Refund status updated: Deal refunded successfully.');
-            res.redirect('back');
+            const chat = await Chat.findById(deal.chat);
+            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
         } else {
-            deal.status = 'Refunded';
-            deal.refund.status = 'Pending Delivery';
-            deal.refund.sellerOption = req.body.refundOption;
-            await deal.save();
-            req.flash('success', 'Refund status updated: Deal refund pending.');
-            res.redirect('back');
+            if (req.body.refundOption === 'Money Back') {
+                // Find user
+                const buyer = await User.findById(deal.buyer.id);
+                // Refund deal
+                deal.completedAt = Date.now();
+                deal.refund.status = 'Fulfilled'
+                deal.refund.sellerOption = req.body.refundOption;
+                deal.status = 'Refunded';
+                await deal.save();
+                buyer.currency[deal.boughtWith] += deal.price;
+                buyer.markModified('currency');
+                await buyer.save();
+                req.flash('success', 'Refund status updated: Deal refunded successfully.');
+                res.redirect('back');
+            } else {
+                deal.status = 'Refunded';
+                deal.refund.status = 'Pending Delivery';
+                deal.refund.sellerOption = req.body.refundOption;
+                await deal.save();
+                req.flash('success', 'Refund status updated: Deal refund pending.');
+                res.redirect('back');
+            }
         }
     },
     // Deny Refund
     async refundDeny(req, res) {
         const deal = await Deal.findById(req.params.id);
-        deal.sellerReason = req.body.reason;
-        deal.sellerMessage = req.body.message;
-        deal.refund.status = 'Denied';
-        deal.status = 'Refund denied';
-        req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
-        res.redirect('back');
+        req.check('reason', 'Something went wrong, please try again.').matches(/^(Scam attempt)$/).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! ]+$/gm).notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+            const seller = await User.findById(deal.product.author.id);
+            const buyer = await User.findById(deal.buyer.id);
+            const chat = await Chat.findById(deal.chat);
+            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+        } else {
+            deal.sellerReason = req.body.reason;
+            deal.sellerMessage = req.body.message;
+            deal.refund.status = 'Denied';
+            deal.status = 'Refund denied';
+            req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
+            res.redirect('back');
+        }
     },
     // Send refund request message
     async refundRequest(req, res) {
         // Find the deal
         const deal = await Deal.findById( req.params.id );
         // Create the refund request
-        deal.refund.status = 'Not fulfilled';
-        deal.refund.reason = req.body.reason;
-        deal.refund.message = req.body.message;
-        deal.refund.option = req.body.option;
-        deal.status = 'Processing Refund';
-        await deal.save();
-        req.flash('success', 'Refund request sent.');
-        res.redirect(`/deals/${deal._id}`);
+        req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Product hasn't arrived)$/).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! ]+$/gm).notEmpty();
+        req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Object)$/).notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+            const seller = await User.findById(deal.product.author.id);
+            const buyer = await User.findById(deal.buyer.id);
+            const chat = await Chat.findById(deal.chat);
+            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+        } else {
+            deal.refund.status = 'Not fulfilled';
+            deal.refund.timeOfRequest = Date.now();
+            deal.refund.reason = req.body.reason;
+            deal.refund.message = req.body.message;
+            deal.refund.option = req.body.option;
+            deal.status = 'Processing Refund';
+            await deal.save();
+            req.flash('success', 'Refund request sent.');
+            res.redirect(`/deals/${deal._id}`);
+        }
     },
     async reviewProduct(req, res) {
         const deal = await Deal.findById(req.params.id);

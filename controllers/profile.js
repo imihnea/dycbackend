@@ -32,7 +32,7 @@ module.exports = {
       });
       reviews.page = Number(reviews.page);
       const floorRating = user.calculateAvgRating();
-      const products = await Product.paginate({ available: true, 'author.id': req.params.id }, {
+      const products = await Product.paginate({ available: "True", 'author.id': req.params.id }, {
         page: req.query.page || 1,
         limit: 10,
       });

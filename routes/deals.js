@@ -11,6 +11,10 @@ const middleware = require('../middleware/index');
 
 const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal } = middleware; // destructuring assignment
 
+// Deal payout fees (%)
+const standardAccountFee = 15;
+const partnerAccountFee = 10;
+
 // show deal
 router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
 
@@ -45,7 +49,16 @@ setInterval(async () => {
             // get user who has to be paid
             let seller = await User.findById(item.product.author.id);
             // pay user
-            seller.currency[item.boughtWith] += item.price;
+            switch(seller.accountType) {
+                case 'Standard':
+                    seller.currency[item.boughtWith] += item.price - ( item.price * standardAccountFee * 0.01);
+                    break;
+                case 'Partner':
+                    seller.currency[item.boughtWith] += item.price - ( item.price * partnerAccountFee * 0.01);
+                    break;
+                default:
+                    break;
+            }
             seller.markModified('currency');
             seller.save();
             // set deal as paid  

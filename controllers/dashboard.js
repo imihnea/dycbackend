@@ -1012,6 +1012,14 @@ module.exports = {
     for (const image of product.images) {
       await cloudinary.v2.uploader.destroy(image.public_id);
     }
+    product.unIndex((err) => {
+      if (err) {
+          console.log('Error while unindexing document.');
+          console.log(err);
+      } else {
+          console.log('Document unindexed successfully.');
+      }
+    });
     await product.remove();
     req.session.success = 'Product deleted successfully!';
     res.redirect('/dashboard/open');
