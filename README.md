@@ -28,9 +28,7 @@ Backend:
       Dashboard 
                => Settings
                   => connections
-               => 2 Factor when withdrawing
-      Register => Add recaptcha to avoid spam
-      Contact => Add recaptcha to avoid spam                        
+               => 2 Factor when withdrawing                      
       Logs => Log errors
            => Log deal status changes
       Categories => Add more in future

@@ -1,9 +1,12 @@
 <% include ../partials/header %>
-
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
 <div class="hero-body">
-    <div class="container content">
-                
+    <% if (errors) { %>
+        <div class="notification is-danger container is-fluid" role="alert"> 
+            <%= errors.msg %>
+        </div>
+    <% } %>
+    <div class="container content">    
         <div class="columns" style="justify-content: center">
             <div class="column is-three-fifths frame">
                 <h1 class="title">Sign In</h1>
@@ -16,14 +19,15 @@
                         <i class="fab fa-google"></i>
                     </a>
                 </div>
-                <form action="/login" method="POST" class="logSigForm">
+                <form action="/login<% if (errors) { %>?errors=1<% } %>" method="POST" class="logSigForm">
                     <input class="input smmargin" name="username" placeholder="Username" type="text" required />
                     <input class="input smmargin" name="password" placeholder="Password" type="password" required />
-                    <div style="display: flex; justify-content: space-between; padding-top: 1rem; width: 90%; margin: auto;">
-                        <label class="checkbox"style="padding-top: 0.65vh;" class="title">
+                    <div class="column" style="width: 90%; margin: auto;">
+                        <label class="checkbox" class="title">
                             <input type="checkbox" name="remember"  >
-                                Remember me
+                            Remember me
                         </label>
+                        <div class="g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                         <button class="button is-primary">Login</button>
                     </div>                    
                 </form>
@@ -34,3 +38,4 @@
     </div>
 </div>
 <% include ../partials/footer %>
+<% if (errors) { %><script src="https://www.google.com/recaptcha/api.js" async defer></script><% } %>

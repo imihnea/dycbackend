@@ -1,8 +1,11 @@
 <% include ../partials/header %>
-
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
-
 <div class="hero-body">
+    <% if(errors){ %>
+        <div class="notification is-danger container is-fluid" role="alert"> 
+            <%= errors.msg %>
+        </div>
+    <% } %>
     <div class="container content">
         <div class="columns" style="justify-content: center">
             <div class="column is-three-fifths frame" >
@@ -21,6 +24,7 @@
                     <input class="input smmargin" name="username" placeholder="Username" type="text" required />
                     <input class="input smmargin" name="password" placeholder="Password" type="password" required />
                     <div class="control" style="margin-top: 1.5vh;">
+                        <div class="g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                         <button class="button is-primary">Register</button>
                     </div>
                 </form>
@@ -29,5 +33,5 @@
         </div>
     </div>
 </div>
-
 <% include ../partials/footer %>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>

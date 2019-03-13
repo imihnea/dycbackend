@@ -107,3 +107,12 @@ div.toptitle{
   width: 90%;
   margin: auto;
 }
+
+.g-recaptcha > div {
+  margin: auto;
+}
+
+.g-recaptcha{
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}

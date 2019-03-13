@@ -1,8 +1,22 @@
 <% include ../partials/header %>
 
-<link rel="stylesheet" href="../../dist/css/contact.css">
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
 
 <div class="hero-body">
+    <% if (errors) { %>
+        <div class="notification is-danger container is-fluid" role="alert"> 
+            <%= errors.msg %>
+        </div>
+    <% } %>
+    <div class="container is-fluid">
+        <% if (validationErrors) { %>
+            <div class="notification is-danger" role="alert"> 
+            <% validationErrors.forEach(function( err){ %>
+                <%= err.msg %><br>
+            <% }) %>
+            </div>
+        <% } %>
+    </div>
     <div class="container content">
         <div class="columns toptitle">
             <div class="column">
@@ -33,6 +47,7 @@
                             <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                         </div>
                     </div>
+                    <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                     <div class="control smmargin" style="margin: auto; margin-top: 1vh;">
                         <button class="button is-primary is-large is-fullwidth">Send</button>
                     </div>
@@ -44,3 +59,4 @@
     </div>
 </div>
 <% include ../partials/footer %>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>

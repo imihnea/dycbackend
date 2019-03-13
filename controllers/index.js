@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Nexmo = require('nexmo');
+const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
 
 const nexmo = new Nexmo({
@@ -16,23 +17,39 @@ const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 
 module.exports = {
   getRegister(req, res) {
-    res.render('index/register');
+    res.render('index/register', {errors: false});
   },
   // POST /register
   async postRegister(req, res) {
-    const newUser = new User({ email: req.body.email, username: req.body.username });
-    try {
-      await User.register(newUser, req.body.password);
-    } catch (error) {
-      req.flash('error', error.message);
-      return res.redirect('back');
+    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+      let errors = { msg: String };
+      errors.msg = 'Please complete the captcha.';
+      return res.render('index/register', {errors} );
     }
-    passport.authenticate('local')(req, res, () => {
-      req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
-      res.redirect('/');
+    const secretKey = RECAPTCHA_SECRET;
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    request(verificationURL, async (error, response, body) => {
+      body = JSON.parse(body);
+      if (body.success !== undefined && !body.success) {
+        let errors = { msg: String };
+        errors.msg = 'Captcha verification failed. Please try again.';
+        return res.render('index/register', {errors});
+      }
+      const newUser = new User({ email: req.body.email, username: req.body.username });
+      try {
+        await User.register(newUser, req.body.password);
+      } catch (error) {
+        req.flash('error', error.message);
+        return res.redirect('back');
+      }
+      passport.authenticate('local')(req, res, () => {
+        req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
+        res.redirect('/');
+      }); 
     });
   },
   postVerify(req, res) {
@@ -100,13 +117,31 @@ module.exports = {
   },
   getLogin(req, res) {
     if ( req.user ) {
-      res.render('index/login', { user: req.user });
+      res.render('index/login', { user: req.user, errors: false });
     } else {
-      res.render('index/login');
+      res.render('index/login', { errors: false });
     }
   },
   // POST /login
   postLogin(req, res, next) {
+    // Captcha only shows if the user had an invalid login request 
+    if (req.query.errors === 1) {
+      if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        let errors = { msg: String };
+        errors.msg = 'Please complete the captcha.';
+        return res.render('index/login', {errors} );
+      }
+      const secretKey = "6LdvYJcUAAAAABRACFNVD7CyVxgDa3M04i1_aGs5";
+      const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+      request(verificationURL, (error, response, body) => {
+        body = JSON.parse(body);
+        if (body.success !== undefined && !body.success) {
+          let errors = { msg: String };
+          errors.msg = 'Captcha verification failed. Please try again.';
+          return res.render('index/login', {errors});
+        } 
+      });
+    }
     if (req.body.remember) {
       req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
     } else {
@@ -114,38 +149,42 @@ module.exports = {
     }
     User.findOne({ username: req.body.username }, (err, user) => {
       if(err) {
-        req.flash('error', err.message);
-        return res.redirect('back');
+        let errors = { msg: String };
+        errors.msg = err.message;
+        return res.render('index/login', {errors});
       }
       if(!user) {
-        req.flash('error', 'Invalid user/password combination or the user does not exist.')
-        return res.redirect('back');
+        let errors = { msg: String };
+        errors.msg = 'Invalid user/password combination or the user does not exist.';
+        return res.render('index/login', {errors});
       }
-        if (user.twofactor === true) {
-          nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
-            if(err) {
-              req.flash('error', err.message);
-              return res.redirect('back');
+      if (user.twofactor === true) {
+        nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+          if(err) {
+            let errors = { msg: String };
+            errors.msg = err.message;
+            return res.render('index/login', {errors});
+          } else {
+            let requestId = result.request_id;
+            if(result.status == '0') {
+              res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
             } else {
-              let requestId = result.request_id;
-              if(result.status == '0') {
-                res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
-              } else {
-                req.flash('error', 'Something went wrong, please try again.');
-                return res.redirect('back');
-              }
+              let errors = { msg: String };
+              errors.msg = 'Something went wrong. Please try again.';
+              return res.render('index/login', {errors});
             }
-          });
-        } else {
-          passport.authenticate('local',
-          {
-            successFlash: 'Welcome to Deal Your Crypto!',
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true,
-          })(req, res, next);
-        }
-      });
+          }
+        });
+      } else {
+        passport.authenticate('local',
+        {
+          successFlash: 'Welcome to Deal Your Crypto!',
+          successRedirect: '/',
+          failureRedirect: '/login',
+          failureFlash: true,
+        })(req, res, next);
+      }
+    });
   },
   postVerifyLogin(req, res, next) {
     let pin = req.body.pin;
@@ -612,48 +651,76 @@ module.exports = {
     });
   },
   getContact(req, res) {
-    res.render('index/contact');
+    res.render('index/contact', {errors: false, validationErrors: false});
   },
   postContact(req, res) {
-    const output = `
-    <h1>Contact Request - Deal Your Crypto</h1>
-    <h3>Contact Details</h3>
-    <ul>
-      <li>Name: ${req.body.name}</li>
-      <li>Email: ${req.body.email}</li>
-      <li>Topic: ${req.body.topic}</li>
-    </ul>
-    <h3>Message</h3>
-    <p>${req.body.message}</p>
-    `;
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    nodemailer.createTestAccount(() => {
-      // create reusable transporter object using the default SMTP transport
-      const transporter = nodemailer.createTransport({
-        host: EMAIL_HOST,
-        port: EMAIL_PORT,
-        auth: {
-          user: EMAIL_USER,
-          pass: EMAIL_API_KEY,
-        },
-      });
-      // setup email data with unicode symbols
-      const mailOptions = {
-        from: `${req.body.name} <${req.body.email}>`, // sender address
-        to: 'support@dyc.com', // list of receivers
-        subject: 'Deal Your Crypto - Contact Request', // Subject line
-        html: output, // html body
-      };
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, (error) => {
-        if (error) {
-          req.flash('error', `${error.message}`);
-          res.render('back', { error: error.message });
-        }
-        req.flash('success', 'Successfully sent a mail! We will get back to you as soon as possible!');
-        res.redirect('/contact');
-      });
+    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+      let errors = { msg: String };
+      errors.msg = 'Please complete the captcha.';
+      return res.render('index/contact', {errors, validationErrors: false} );
+    }
+    const secretKey = RECAPTCHA_SECRET;
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    request(verificationURL, async (error, response, body) => {
+      body = JSON.parse(body);
+      if (body.success !== undefined && !body.success) {
+        let errors = { msg: String };
+        errors.msg = 'Captcha verification failed. Please try again.';
+        return res.render('index/contact', {errors});
+      }
+      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z ]$/g).trim().notEmpty();
+      req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty().trim();
+      req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestion)$/g).notEmpty();
+      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.!? ]$/).trim().notEmpty();
+      const validationErrors = req.validationErrors();
+      if (validationErrors) {
+        res.render('index/contact', {
+          user: req.user,
+          validationErrors,
+          errors: false
+        });
+      } else {
+        const output = `
+        <h1>Contact Request - Deal Your Crypto</h1>
+        <h3>Contact Details</h3>
+        <ul>
+          <li>Name: ${req.body.name}</li>
+          <li>Email: ${req.body.email}</li>
+          <li>Topic: ${req.body.topic}</li>
+        </ul>
+        <h3>Message</h3>
+        <p>${req.body.message}</p>
+        `;
+        // Generate test SMTP service account from ethereal.email
+        // Only needed if you don't have a real mail account for testing
+        nodemailer.createTestAccount(() => {
+          // create reusable transporter object using the default SMTP transport
+          const transporter = nodemailer.createTransport({
+            host: EMAIL_HOST,
+            port: EMAIL_PORT,
+            auth: {
+              user: EMAIL_USER,
+              pass: EMAIL_API_KEY,
+            },
+          });
+          // setup email data with unicode symbols
+          const mailOptions = {
+            from: `${req.body.name} <${req.body.email}>`, // sender address
+            to: 'support@dyc.com', // list of receivers
+            subject: 'Deal Your Crypto - Contact Request', // Subject line
+            html: output, // html body
+          };
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, (error) => {
+            if (error) {
+              req.flash('error', `${error.message}`);
+              res.render('back', { error: error.message });
+            }
+            req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
+            res.redirect('/contact');
+          });
+        });
+      }
     });
   },
   postForgotEmail(req, res, next) {
