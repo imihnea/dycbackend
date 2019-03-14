@@ -218,36 +218,56 @@ router.post('/addresses/altcoins/status', async (req, res) => {
   headers: 
   { 'x-user-ip': '1.1.1.1',
     'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'}};
-  // Down code needs testing before production
   request(options, function (error, response, body) {
     if(!error && response.statusCode == 200) {
       console.log(body);
       var json = JSON.parse(body);
       var data = json.data;
-      if(data.status === 'complete') {
-        var query_2 = Checkout.findOne({ orderId: orderId });
-        query_2.exec(function(err, checkout) {
-          if(err) {
-            res.send('error');
-          }
-          if(checkout !== null) {
-            var user = checkout.user;
-            var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
-            query_btc.then(function(doc) {
-              console.log("Deposit arrived!");
-              var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
-              query_1.then(function(doc2) {
-                console.log("Checkout updated to paid!");
-                res.send(data);
-              });
-            });
-          }
-        });
-      } else {
-        res.send(data);
-      }
+      res.send(data);
     }
   });
+});
+
+//This route polls api for order status every minute
+router.post('/addresses/altcoins/poll', async (req, res) => {
+  console.log(req.body);
+  const orderId = req.body.orderId;
+  var options = { method: 'GET',
+  url: `https://api.coinswitch.co/v2/order/${orderId}`,
+  headers: 
+  { 'x-user-ip': '1.1.1.1',
+    'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+    "Content-Type": "application/json",
+    Accept: 'application/json',}};
+  // Down code needs testing before production
+  setInterval(function() {
+  request(options, function (error, response, body) {
+      if(!error && response.statusCode == 200) {
+        console.log(body);
+        var json = JSON.parse(body);
+        var data = json.data;
+        if(data.status === 'complete') {
+          var query_2 = Checkout.findOne({ orderId: orderId });
+          query_2.exec(function(err, checkout) {
+            if(err) {
+              res.send('error');
+            }
+            if(checkout !== null) {
+              var user = checkout.user;
+              var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
+              query_btc.then(function(doc) {
+                console.log("Deposit arrived!");
+                var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
+                query_1.then(function(doc2) {
+                  console.log("Checkout updated to paid!");
+                });
+              });
+            }
+          });
+        }
+      }
+    });
+  }, 1000 * 60);
 });
 
 // Withdraw
