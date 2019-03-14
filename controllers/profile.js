@@ -76,12 +76,22 @@ module.exports = {
                 req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-zA-Z0-9., ]+$/i);
                 req.check('zip', 'Please specify a numeric zip code.').notEmpty().isNumeric();
                 user.full_name = req.body.name;
-                user.country = req.body.country;
-                user.state = req.body.state;
-                user.city = req.body.city;
-                Regions.forEach((region) => {
-                  if (user.country === region.country) {
+                if (user.country != req.body.country) {
+                  user.country = req.body.country;
+                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.country': user.country}});
+                }
+                if (user.state != req.body.state) {
+                  user.state = req.body.state;
+                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.state': user.state}});
+                }
+                if (user.state != req.body.city) {
+                  user.city = req.body.city;
+                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
+                }
+                Regions.forEach(async (region) => {
+                  if ((user.country == region.country) && (user.continent != region.continent)) {
                     user.continent = region.continent;
+                    await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.continent': user.continent}});
                   }
                 });
                 user.address1 = req.body.address1;
