@@ -8,9 +8,12 @@ Frontend:
 
          UI => New product => Feature deal
          Currencies => Delete currencies besides BTC
+         Profile => Fix pagination
+         Product => Similar products
 
     Low Priority:
 
+         Admin page
          Make everything responsive (see comments in css files)
 
 
@@ -20,6 +23,8 @@ Backend:
 
       Dashboard => Add balance route
       Currencies => Delete currencies besides BTC
+      Security => Validate and sanitize every user input
+               => Anti DDOS
 
    Low Priority:
 
@@ -31,4 +36,12 @@ Backend:
                => 2 Factor when withdrawing                      
       Logs => Log errors
            => Log deal status changes
+           => Log user changes
       Categories => Add more in future
+      Data => Save product data
+      
+After Launch:
+
+   Users => Create premium/business user who can access product and search data 
+   Data => Create another Elastic instance for premium/business user data
+        => Make a page where they can query that instance => Data compiled into charts 

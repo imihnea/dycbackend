@@ -5,6 +5,7 @@ const async = require('async');
 const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
+const searchTerm = require('../models/searchTerm');
 const Nexmo = require('nexmo');
 const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
@@ -320,6 +321,37 @@ module.exports = {
           products
         });
       } else {
+        if (from === 0) {
+          let search = {};
+          if (req.user) {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.category,
+                condition,
+                avgRating,
+              },
+              author: {
+                id: req.user._id,
+                username: req.user.username,
+                city: req.user.city,
+                state: req.user.state,
+                country: req.user.country,
+                continent: req.user.continent
+              }
+            };
+          } else {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.category,
+                condition,
+                avgRating,
+              }
+            };
+          }
+          searchTerm.create(search);
+        }
         if (tags.length > 0) {
           await Product.search(
             {
@@ -424,6 +456,39 @@ module.exports = {
           products
         });
       } else {
+        if (from === 0) {
+          let search = {};
+          if (req.user) {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.searchCateg,
+                secondCategory: req.body.category,
+                condition,
+                avgRating,
+              },
+              author: {
+                id: req.user._id,
+                username: req.user.username,
+                city: req.user.city,
+                state: req.user.state,
+                country: req.user.country,
+                continent: req.user.continent
+              }
+            };
+          } else {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.searchCateg,
+                secondCategory: req.body.category,
+                condition,
+                avgRating,
+              }
+            };
+          }
+          searchTerm.create(search);
+        }
         if (tags.length > 0) {
           await Product.search(
             {
@@ -530,6 +595,41 @@ module.exports = {
           products
         });
       } else {
+        if (from === 0) {
+          let search = {};
+          if (req.user) {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.searchCateg,
+                secondCategory: req.body.secondSearchCateg,
+                thirdCategory: req.body.category,
+                condition,
+                avgRating,
+              },
+              author: {
+                id: req.user._id,
+                username: req.user.username,
+                city: req.user.city,
+                state: req.user.state,
+                country: req.user.country,
+                continent: req.user.continent
+              }
+            };
+          } else {
+            search = {
+              query: req.body.searchName,
+              queryFilters: {
+                category: req.body.searchCateg,
+                secondCategory: req.body.secondSearchCateg,
+                thirdCategory: req.body.category,
+                condition,
+                avgRating,
+              }
+            };
+          }
+          searchTerm.create(search);
+        }
         if (tags.length > 0) {
           await Product.search(
             {
