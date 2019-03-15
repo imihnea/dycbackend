@@ -18,22 +18,28 @@
         <% } %>
     </div>
     <div class="container content">
-        <div class="columns toptitle">
-            <div class="column">
-                <div class="dashTop column">
-                    <h1 class="title">Contact</h1>
-                </div>
-            </div>
-        </div>
-        <br>
         <div class="columns">
             <div class="column"></div>
             <div class="column is-three-fifths frame" >
-                <p class="title is-4">What can we help you with?</p>
-                <form action="/contact/send" method="POST">                                          
-                    <input class="input smmargin" name="name" placeholder="Your name" type="text" required  autofocus/>
-                    <input class="input smmargin" name="email" placeholder="your@email.com" type="email" required />
-                    <div class="field select cont-select smmargin">
+                <p class="title">Contact</p>
+                <form action="/contact/send" method="POST">
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="name" placeholder="Your name" type="text" required  autofocus/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="email" placeholder="your@email.com" type="email" required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field select cont-select">
                         <select name="topic" style="width: 100vw;">
                             <option value="General">General</option>
                             <option value="Payments">Payments</option>
@@ -42,7 +48,7 @@
                             <option value="Suggestions">Suggestions</option>
                         </select>
                     </div>
-                    <div class="field" style="width: 90%; margin: auto; ">
+                    <div class="field" >
                         <div class="control">
                             <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                         </div>

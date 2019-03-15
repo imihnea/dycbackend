@@ -20,19 +20,31 @@
                     </a>
                 </div>
                 <form action="/login<% if (errors) { %>?errors=1<% } %>" method="POST" class="logSigForm">
-                    <input class="input smmargin" name="username" placeholder="Username" type="text" required />
-                    <input class="input smmargin" name="password" placeholder="Password" type="password" required />
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="username" placeholder="Username" type="text" required autofocus/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user-tie"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="password" placeholder="Password" type="password" required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </p>
+                    </div>
                     <div class="column" style="width: 90%; margin: auto;">
-                        <label class="checkbox" class="title">
-                            <input type="checkbox" name="remember"  >
-                            Remember me
-                        </label>
+                        <input type="checkbox" name="remember" id="checkbox" class="is-checkradio is-info" >
+                        <label for="checkbox" class="subtitle">Remember me</label>
                         <div class="g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                         <button class="button is-primary">Login</button>
                     </div>                    
                 </form>
                 <a href="/forgot" >Reset Password</a>
-                <p>Not a member? <a href="/register">Sign up here</a></p>
+                <p>Not a member? <a class="link" href="/register" >Sign up here!</a></p>
             </div>
         </div>
     </div>

@@ -78,6 +78,7 @@
                                                         <i class="far fa-check-square hide"></i>
                                                     </span>
                                                 </label>
+                                                <p>New profile picture</p>
                                                 <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
                                                 <label class="file-delete__label hide">
                                                     <span>
@@ -90,11 +91,11 @@
                                 </div>
                             </div>
                             
-                        <button class="button is-primary">Submit</button>
+                        <button class="button is-primary is-rounded">Submit</button>
     
                         </div>       
                     </form>
-                    <a href="/profile/<%= user._id %>"><button class="button is-primary">View Profile</button></a>
+                    <a href="/profile/<%= user._id %>"><button class="button is-primary is-rounded">View Profile</button></a>
                 </div>
                 <br>
                 <div class="frame">
@@ -104,7 +105,7 @@
                             <form action="/forgot" method="POST">
                                 <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
                                 <div class="control smmargin">
-                                    <button class="button is-primary">Click here to change your Password</button>
+                                    <button class="button is-primary is-rounded">Change your Password</button>
                                 </div>
                             </form>
                         </div>
@@ -112,13 +113,13 @@
                             <form action="/forgotemail" method="POST">
                                 <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
                                 <div class="control smmargin">
-                                    <button class="button is-primary">Click here to change your Email</button>
+                                    <button class="button is-primary is-rounded">Change your Email</button>
                                 </div>
                             </form>
                         </div>
                         <% if(currentUser.twofactor === true) { %> 
                         <div class="column chemail">
-                            <button class="button is-primary deactivate">Click here to deactivate Two-Factor Authentication</button>
+                            <button class="button is-primary deactivate is-rounded">Deactivate Two-Factor Authentication</button>
                             <div class="modal modalDeactivate">
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
@@ -132,7 +133,7 @@
                                         <br>
                                         <form class="modal-form" action="/disable2factor" method="POST">
                                             <div class="control smmargin">
-                                                <button class="button is-danger">Deactivate Two-Factor Authentication</button>
+                                                <button class="button is-danger is-rounded">Deactivate Two-Factor Authentication</button>
                                             </div>
                                         </form>
                                     </section>
@@ -143,7 +144,7 @@
                             <div class="column chemail">
                                 <form action="/2factor">
                                     <div class="control smmargin">
-                                        <button class="button is-primary">Click here to activate Two-Factor Authentication</button>
+                                        <button class="button is-primary is-rounded">Activate Two-Factor Authentication</button>
                                     </div>
                                 </form>
                             </div>

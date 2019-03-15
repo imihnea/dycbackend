@@ -114,8 +114,8 @@ input, select, .dd-btn{
     background-color: #3269ca !important;
 }
 
-.header-link{
-    color: black;
+.white-text{
+    color: white;
 }
 
 .searchbar{
@@ -371,7 +371,7 @@ hr{
 
 .is-primary{
     background-color: #3269ca !important;
-    color: black !important;
+    color: white !important;
     border-width: 1px !important;
     border-color: black !important;
 }

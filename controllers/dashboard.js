@@ -675,8 +675,8 @@ module.exports = {
     } else {
         const tokens = Number(req.body.tokensNr);
         const totalPrice = tokens * tokenPrices[req.params.id];
-        if (user.currency[req.params.id] >= totalPrice) {
-            user.currency[req.params.id] -= totalPrice;
+        if (user.btcbalance >= totalPrice) {
+            user.btcbalance -= totalPrice;
             user.feature_tokens += tokens;
             user.markModified('currency');
             await user.save();

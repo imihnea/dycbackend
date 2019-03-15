@@ -20,15 +20,36 @@
                     </a>
                 </div>
                 <form action="/register" method="POST" class="logSigForm">
-                    <input class="input smmargin" name="email" placeholder="Email" autofocus type="email" required />
-                    <input class="input smmargin" name="username" placeholder="Username" type="text" required />
-                    <input class="input smmargin" name="password" placeholder="Password" type="password" required />
+                    <div class="field">
+                        <p class="control has-icons-left">
+                        <input class="input" name="email" placeholder="Email" autofocus type="email" required />
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                        <input class="input" name="username" placeholder="Username" type="text" required />
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user-tie"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                        <input class="input" name="password" placeholder="Password" type="password" required />
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        </p>
+                    </div>
                     <div class="control" style="margin-top: 1.5vh;">
                         <div class="g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                         <button class="button is-primary">Register</button>
                     </div>
                 </form>
-                <p style="padding-top: 1vh;">Already a member? <a href="/login">Sign in here</a></p>
+                <p style="padding-top: 1vh;">Already a member? <a class="link" href="/login">Sign in here</a></p>
             </div>
         </div>
     </div>

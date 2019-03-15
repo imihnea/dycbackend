@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script type="text/javascript" src="/dist/js/savvy.js"></script>
     <link rel="stylesheet" type="text/css" href="/dist/css/savvy.css" />
+    <link rel="stylesheet" type="text/css" href="/dist//css//bulma-checkradio.min.css" />
 </head>
 <body>
 <div class="hero-head">
@@ -429,8 +430,8 @@
             </div>
             <div class="level-right navbar-end">
                 <% if(!currentUser){ %>
-                    <p class="level-item"><a href="/login" class="header-link">Login</a></p>
-                    <p class="level-item"><a href="/register" class="header-link">Register</a></p>
+                    <p class="level-item"><a href="/login" class="white-text">Login</a></p>
+                    <p class="level-item"><a href="/register" class="white-text">Register</a></p>
                 <% } else { %>
                     <div class=" level-item dropdown categ is-hoverable">
                         <div class="dropdown-trigger">
@@ -470,15 +471,15 @@
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="dropdown-item">
-                                    <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="header-link">Top-up</a>
+                                    <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Top-up</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p class="level-item"><a href="/dashboard" class="header-link">Dashboard</a></p>
-                    <p class="level-item"><a href="/logout" class="header-link">Logout</a></p>
+                    <p class="level-item"><a href="/dashboard" class="white-text">Dashboard</a></p>
+                    <p class="level-item"><a href="/logout" class="white-text">Logout</a></p>
                 <% } %>
-                <p class="level-item"><a href="/contact" class="header-link">Contact</a></p>
+                <p class="level-item"><a href="/contact" class="white-text">Contact</a></p>
             </div>
         </div>
     </nav>
@@ -487,14 +488,37 @@
 <% if(error && error.length > 0) { %>
 <div class="container is-fluid">
     <div class="notification is-danger" role="alert">
-        <%= error %>
+        <button class="delete"></button>
+        <span class="icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </span>
+        <span>
+            <%= error %>
+        </span>
     </div>
 </div>
 <% } %>
 <% if(success && success.length > 0) { %>
     <div class="container is-fluid">
         <div class="notification is-success" role="alert">
+            <button class="delete"></button>
+            <span class="icon">
+                <i class="fas fa-check-circle"></i>
+            </span>
+            <span>
             <%= success %>
+            </span>
         </div>
     </div>
 <% } %>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+    $notification = $delete.parentNode;
+    $delete.addEventListener('click', () => {
+      $notification.parentNode.removeChild($notification);
+    });
+  });
+});
+</script>
