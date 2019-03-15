@@ -7,7 +7,7 @@ const multer = require('multer');
 
 const cloudinary = require('cloudinary');
 
-const { profileUpdate, getProfile } = require('../controllers/profile');
+const { profileUpdate, getProfile, getReviews } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');
 
@@ -40,6 +40,10 @@ const upload = multer({
 // GET Profile route
 
 router.get('/:id', asyncErrorHandler(getProfile));
+
+// GET user reviews
+
+router.get('/:id/reviews', asyncErrorHandler(getReviews));
 
 // PUT Profile route
 

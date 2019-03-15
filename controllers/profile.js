@@ -34,7 +34,7 @@ module.exports = {
       const floorRating = user.calculateAvgRating();
       const products = await Product.paginate({ available: "True", 'author.id': req.params.id }, {
         page: req.query.page || 1,
-        limit: 10,
+        limit: 12,
       });
       products.page = Number(products.page);
       if (req.user) {
@@ -48,6 +48,16 @@ module.exports = {
       } else {
         res.render('index/profile', {user, products, floorRating, reviews, reviewed: true});
       }
+    },
+    async getReviews(req, res){
+      const reviews = await Review.paginate({ user: req.params.id },{
+        sort: { createdAt: -1 },
+        populate: 'user',
+        page: req.query.page || 1,
+        limit: 5,
+      });
+      reviews.page = Number(reviews.page);
+      res.render('partials/userReviews', {user: req.user, reviewedUser: req.params.id, reviews});
     },
     // Profile Update
     async profileUpdate(req, res) {

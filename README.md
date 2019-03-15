@@ -8,7 +8,6 @@ Frontend:
 
          UI => New product => Feature deal
          Currencies => Delete currencies besides BTC
-         Profile => Fix pagination
          Product => Similar products
 
     Low Priority:
