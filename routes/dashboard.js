@@ -7,27 +7,15 @@ const cloudinary = require('cloudinary');
 
 const router = express.Router();
 
-const User = require('../models/user');
-
-const Checkout = require('../models/checkout');
-
-const { getAddresses, addAddresses, topUp, withdraw, getTokens, buyTokens, productCreate, 
+const { getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, 
-        getLTC, postLTC, getBTC, postBTC, getBCH, postBCH, getETH, postETH, getDASH, postDASH } = require('../controllers/dashboard');
+        getLTC, postLTC, getBTC, postBTC, getBCH, postBCH, getETH, postETH, getDASH, postDASH,
+        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile } = middleware; // destructuring assignment
-
-var Client = require('coinbase').Client;
-
-var client = new Client({
-  'apiKey': 'ClTJkzAmtBDFy8UI',
-  'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
-});
-
-var request = require("request");
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -60,9 +48,6 @@ router.get('/addresses', isLoggedIn, asyncErrorHandler(getAddresses));
 // Modify addresses
 router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 
-// Top-up
-router.put('/addresses/topup/:id', isLoggedIn, asyncErrorHandler(topUp));
-
 //GET Ltc deposit
 router.get('/addresses/ltc', isLoggedIn, getLTC);
 
@@ -93,165 +78,23 @@ router.get('/addresses/dash', isLoggedIn, getDASH);
 //POST Dash deposit
 router.post('/addresses/dash', isLoggedIn, postDASH);
 
-router.post('/addresses/withdrawBTC', isLoggedIn, (req, res) => {
-  var address = req.body.address;
-  var amount = Number(req.body.value) + 0.00005000;
-  console.log(req.body.value);
-  console.log(amount);
-  client.getAccount('primary', function(err, account) {
-    if(err) {
-      req.flash('error', err.message + '- prima eroare'); // Don't show this error to the user
-      res.redirect('back');
-    } else {
-      if(req.user.btcbalance >= amount) {
-        account.sendMoney(
-          {'to': address,
-          'amount': amount,
-          'currency': 'BTC'
-          }, function(err, tx) {
-            if(err) {
-              req.flash('error', err.message  + '- a doua eroare'); // Don't show this one either
-              res.redirect('back');
-            } else {
-              console.log(tx);
-              var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } } );
-              query_btc.then(function(doc) {
-                req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-                res.redirect('back');
-                console.log(`Withdrawn ${amount} BTC successfully.`);
-              });
-            }
-        });
-      } else {
-        req.flash('error', `Insufficient funds to withdraw.`);
-        res.redirect('back');
-      }
-    }
-  });
-});
+//GET Pairs available for BTC
+router.get('/addresses/altcoins/pair', asyncErrorHandler(CoinSwitchPair));
 
-router.get('/addresses/altcoins/pair', async (req, res) => {
-  var options = { method: 'POST',
-  url: 'https://api.coinswitch.co/v2/pairs',
-  headers: 
-   { 'x-user-ip': '1.1.1.1',
-     'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-     'content-type': 'application/json' },
-  body: '{"destinationCoin":"btc"}' };
+//POST Pair, receive rate for the pair
+router.post('/addresses/altcoins/rate', asyncErrorHandler(CoinSwitchRate));
 
-request(options, function (error, response, body) {
-  if(!error && response.statusCode == 200) {
-    var json = JSON.parse(body);
-    var data = json.data;
-    console.log(data);
-    //Add Check for isActive: true
-    res.send(data);
-  }
-});
-});
+//POST Rate, receive transaction details
+router.post('/addresses/altcoins/deposit', asyncErrorHandler(CoinSwitchDeposit));
 
-router.post('/addresses/altcoins/rate', async (req, res) => {
-  console.log(req.body.counter);
-  const deposit = req.body.counter;
-  var options = { method: 'POST',
-  url: 'https://api.coinswitch.co/v2/rate',
-  headers:
-   { 'x-user-ip': '1.1.1.1',
-     'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-     'content-type': 'application/json' },
-     body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` };
+//POST order, check status for the order
+router.post('/addresses/altcoins/status', asyncErrorHandler(CoinSwitchStatus));
 
-request(options, function (error, response, body) {
-  if(!error && response.statusCode == 200) {
-    var json = JSON.parse(body);
-    var data = json.data;
-    console.log(data);
-    //Add Check for isActive: true
-    res.send(data);
-  }
-});
-});
+//This route polls api for order status every minute
+router.post('/addresses/altcoins/poll', asyncErrorHandler(CoinSwitchPoll));
 
-router.post('/addresses/altcoins/deposit', async (req, res) => {
-  console.log(req.body);
-  const deposit = req.body.deposit;
-  const amount = req.body.amount;
-  const refund = req.body.refund;
-  const user = req.body.user;
-  const coin = req.body.depositCoin;
-  var options = { method: 'POST',
-  url: 'https://api.coinswitch.co/v2/order',
-  headers: 
-  { 'x-user-ip': '1.1.1.1',
-    'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-    'content-type': 'application/json' },
-  body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` };
-
-request(options, function (error, response, body) {
-  if(!error && response.statusCode == 200) {
-    console.log(body);
-    var json = JSON.parse(body);
-    var data = json.data;
-    Checkout.create({
-      user: user.username,
-      coin: coin,
-      address: data.exchangeAddress.address,
-      orderId: data.orderId,
-    }, (err) => {
-      if(err) {
-        res.send(err);
-      } else {
-        console.log('created deposit')
-        res.send(data);
-      }
-    });
-  }
-});
-
-});
-
-router.post('/addresses/altcoins/status', async (req, res) => {
-  console.log(req.body);
-  const orderId = req.body.orderId;
-  var options = { method: 'GET',
-  url: `https://api.coinswitch.co/v2/order/${orderId}`,
-  headers: 
-  { 'x-user-ip': '1.1.1.1',
-    'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'}};
-  // Down code needs testing before production
-  request(options, function (error, response, body) {
-    if(!error && response.statusCode == 200) {
-      console.log(body);
-      var json = JSON.parse(body);
-      var data = json.data;
-      if(data.status === 'complete') {
-        var query_2 = Checkout.findOne({ orderId: orderId });
-        query_2.exec(function(err, checkout) {
-          if(err) {
-            res.send('error');
-          }
-          if(checkout !== null) {
-            var user = checkout.user;
-            var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
-            query_btc.then(function(doc) {
-              console.log("Deposit arrived!");
-              var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
-              query_1.then(function(doc2) {
-                console.log("Checkout updated to paid!");
-                res.send(data);
-              });
-            });
-          }
-        });
-      } else {
-        res.send(data);
-      }
-    }
-  });
-});
-
-// Withdraw
-router.put('/addresses/withdraw/:id', isLoggedIn, asyncErrorHandler(withdraw));
+// Withdraw BTC
+router.post('/addresses/withdrawBTC', isLoggedIn, asyncErrorHandler(withdraw));
 
 // Dashboard tokens route; gets current number of tokens
 router.get('/tokens', isLoggedIn, getTokens);

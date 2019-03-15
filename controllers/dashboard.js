@@ -28,6 +28,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+var Client = require('coinbase').Client;
+
+var client = new Client({
+  'apiKey': 'ClTJkzAmtBDFy8UI',
+  'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
+});
+
 module.exports = {
   // Products Indexes
   async openProductIndex(req, res) {
@@ -474,18 +481,181 @@ module.exports = {
     await user.save();
     res.redirect('/dashboard/addresses');
   },
+  //Withdraw BTC from Coinbase
   async withdraw(req, res) {
-    const user = await User.findById(req.user._id);
-    if (user.currency[req.params.id] >= req.body.value) {
-      user.currency[req.params.id] -= Number(req.body.value);
-      user.markModified('currency');
-      await user.save();
-      // Send the currency to a wallet before redirecting
-      res.redirect('/dashboard/addresses');
-    } else {
-      req.flash('error', 'The inputted value exceeds the value present in your account. Please try again.');
-      res.redirect('/dashboard/addresses');
+    var address = req.body.address;
+    var amount = Number(req.body.value) + 0.00005000;
+    console.log(req.body.value);
+    console.log(amount);
+    client.getAccount('primary', function(err, account) {
+      if(err) {
+        req.flash('error', err.message + '- prima eroare'); // Don't show this error to the user
+        res.redirect('back');
+      } else {
+        if(req.user.btcbalance >= amount) {
+          account.sendMoney(
+            {'to': address,
+            'amount': amount,
+            'currency': 'BTC'
+            }, function(err, tx) {
+              if(err) {
+                req.flash('error', err.message  + '- a doua eroare'); // Don't show this one either
+                res.redirect('back');
+              } else {
+                console.log(tx);
+                var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } } );
+                query_btc.then(function(doc) {
+                  req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                  res.redirect('back');
+                  console.log(`Withdrawn ${amount} BTC successfully.`);
+                });
+              }
+          });
+        } else {
+          req.flash('error', `Insufficient funds to withdraw.`);
+          res.redirect('back');
+        }
+      }
+    });
+  },
+  //Displays available pairs for BTC
+  async CoinSwitchPair(req, res) {
+    var options = { method: 'POST',
+    url: 'https://api.coinswitch.co/v2/pairs',
+    headers: 
+     { 'x-user-ip': '1.1.1.1',
+       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'content-type': 'application/json' },
+    body: '{"destinationCoin":"btc"}' };
+  
+  request(options, function (error, response, body) {
+    if(!error && response.statusCode == 200) {
+      var json = JSON.parse(body);
+      var data = json.data;
+      console.log(data);
+      //Add Check for isActive: true
+      res.send(data);
     }
+  });
+  },
+  //Checks rate for a pair
+  async CoinSwitchRate(req, res) {
+    console.log(req.body.counter);
+    const deposit = req.body.counter;
+    var options = { method: 'POST',
+    url: 'https://api.coinswitch.co/v2/rate',
+    headers:
+     { 'x-user-ip': '1.1.1.1',
+       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'content-type': 'application/json' },
+       body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` };
+  
+  request(options, function (error, response, body) {
+    if(!error && response.statusCode == 200) {
+      var json = JSON.parse(body);
+      var data = json.data;
+      console.log(data);
+      //Add Check for isActive: true
+      res.send(data);
+    }
+  });
+  },
+  //Route to start an order on CoinSwitch
+  async CoinSwitchDeposit(req, res) {
+    console.log(req.body);
+    const deposit = req.body.deposit;
+    const amount = req.body.amount;
+    const refund = req.body.refund;
+    const user = req.body.user;
+    const coin = req.body.depositCoin;
+    var options = { method: 'POST',
+    url: 'https://api.coinswitch.co/v2/order',
+    headers: 
+    { 'x-user-ip': '1.1.1.1',
+      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      'content-type': 'application/json' },
+    body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` };
+  
+  request(options, function (error, response, body) {
+    if(!error && response.statusCode == 200) {
+      console.log(body);
+      var json = JSON.parse(body);
+      var data = json.data;
+      Checkout.create({
+        user: user.username,
+        coin: coin,
+        address: data.exchangeAddress.address,
+        orderId: data.orderId,
+      }, (err) => {
+        if(err) {
+          res.send(err);
+        } else {
+          console.log('created deposit')
+          res.send(data);
+        }
+      });
+    }
+  });
+  },
+  //Get request to check order status, hit on final step
+  async CoinSwitchStatus(req, res) {
+    console.log(req.body);
+    const orderId = req.body.orderId;
+    var options = { method: 'GET',
+    url: `https://api.coinswitch.co/v2/order/${orderId}`,
+    headers: 
+    { 'x-user-ip': '1.1.1.1',
+      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'}};
+    request(options, function (error, response, body) {
+      if(!error && response.statusCode == 200) {
+        console.log(body);
+        var json = JSON.parse(body);
+        var data = json.data;
+        res.send(data);
+      }
+    });
+  },
+  // Polls server every minute to check for status of order
+  async CoinSwitchPoll(req, res) {
+    console.log(req.body);
+    const orderId = req.body.orderId;
+    var options = { method: 'GET',
+    url: `https://api.coinswitch.co/v2/order/${orderId}`,
+    headers: 
+    { 'x-user-ip': '1.1.1.1',
+      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      "Content-Type": "application/json",
+      Accept: 'application/json',}};
+    // Down code needs testing before production
+    var i = setInterval(function() {
+    request(options, function (error, response, body) {
+        if(!error && response.statusCode == 200) {
+          console.log(body);
+          var json = JSON.parse(body);
+          var data = json.data;
+          if(data.status === 'complete') {
+            var query_2 = Checkout.findOne({ orderId: orderId });
+            query_2.exec(function(err, checkout) {
+              if(err) {
+                res.send('error');
+              }
+              if(checkout !== null) {
+                var user = checkout.user;
+                var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
+                query_btc.then(function(doc) {
+                  console.log("Deposit arrived!");
+                  var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
+                  query_1.then(function(doc2) {
+                    console.log("Checkout updated to paid!");
+                    clearInterval(i);
+                  });
+                });
+              }
+            });
+          }
+        }
+      });
+    }, 1000 * 60);
   },
   // Get tokens page
   getTokens(req, res) {
