@@ -126,7 +126,14 @@ module.exports = {
                         buyer: {
                             id: user._id,
                             name: user.username,
-                            avatarUrl: user.avatar.url
+                            avatarUrl: user.avatar.url,
+                            'address.city': user.city,
+                            'address.state': user.state,
+                            'address.country': user.country,
+                            'address.continent': user.continent,
+                            'address.address1': user.address1,
+                            'address.address2': user.address2,
+                            'address.zip': user.zip,
                         },
                         boughtWith: buyWith,
                         price: totalPrice
@@ -147,6 +154,39 @@ module.exports = {
                     await product.save();
                     user.markModified('currency');
                     await user.save();
+                    // Send an email to the seller letting them know about the deal request
+                    const user2 = await User.findById(product.author.id);
+                    const output = `
+                    <h1>You have a new deal request</h1>
+                    <p>${req.user.full_name} wants to buy ${product.name}.</p>
+                    <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to see the deal request and decide whether to accept or deny it.</p>
+                    `;
+                    // Generate test SMTP service account from ethereal.email
+                    // Only needed if you don't have a real mail account for testing
+                    nodemailer.createTestAccount(() => {
+                    // create reusable transporter object using the default SMTP transport
+                        const transporter = nodemailer.createTransport({
+                            host: EMAIL_HOST,
+                            port: EMAIL_PORT,
+                            auth: {
+                                user: EMAIL_USER,
+                                pass: EMAIL_API_KEY,
+                            },
+                        });
+                        // setup email data with unicode symbols
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                            to: `${user2.email}`, // list of receivers
+                            subject: `New Deal Request`, // Subject line
+                            html: output, // html body
+                        };
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                            console.log(error);
+                            }
+                        });
+                    });
                     // Link chat to deal
                     res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                 } else {

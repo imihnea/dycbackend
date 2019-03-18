@@ -3,6 +3,7 @@
 /* eslint-disable no-restricted-syntax */
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
+const Deal = require('../models/deal');
 const User = require('../models/user');
 const Review = require('../models/review');
 const { Regions } = require('../dist/js/regions');
@@ -115,6 +116,18 @@ module.exports = {
                   });
                 } else {
                 await user.save();
+                await Deal.updateMany({'buyer.id': user._id, 'status': 'Processing'},
+                 { 
+                   $set: { 
+                    'product.author.address.country': user.country, 
+                    'product.author.address.state': user.state, 
+                    'product.author.address.city': user.city, 
+                    'product.author.address.continent': user.continent,
+                    'product.author.address.address1': user.address1,
+                    'product.author.address.address2': user.address2,
+                    'product.author.address.zip': user.zip
+                  } 
+                });
                 res.redirect(`/profile/${user._id}`);
                 }
             }

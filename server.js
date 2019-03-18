@@ -39,8 +39,6 @@ const Product = require('./models/product');
 
 // requiring routes
 
-const categoryRoutes = require('./routes/categories');
-
 const indexRoutes = require('./routes/index');
 
 const dashboardRoutes = require('./routes/dashboard');
@@ -160,8 +158,7 @@ app.use('/', indexRoutes);
 app.use('/', savvycallbackRoutes);
 app.use('/', savvycurrenciesRoutes);
 app.use('/', savvystatusRoutes);
-app.use('/categories', categoryRoutes); // by saying this we write shorter code in routes
-app.use('/dashboard', dashboardRoutes);
+app.use('/dashboard', dashboardRoutes); // by saying this we write shorter code in routes
 app.use('/products', productRoutes);
 app.use('/profile', profileRoutes);
 app.use('/messages', messagesRoutes);

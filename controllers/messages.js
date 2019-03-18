@@ -2,6 +2,11 @@ const Chat = require('../models/chat');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Deal = require('../models/deal');
+const nodemailer = require('nodemailer');
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 module.exports = {
     // Chats Indexes
@@ -80,6 +85,7 @@ module.exports = {
                     accepted: product.accepted }
                 };
                 chat = await Chat.create(newChat);
+                
                 res.redirect(`/messages/${chat._id}`);
             }
         }        
@@ -116,7 +122,7 @@ module.exports = {
             await deal.save();
             req.flash('success', 'You have successfully sent a purchase request.');
             res.redirect(`/deals/${deal._id}`);
-        }
+        };
     },
     // Create Message
     async newMessage(req, res) {
@@ -131,6 +137,41 @@ module.exports = {
         chat.messages.push(newMessage);
         chat.messageCount += 1;
         await chat.save();
+        // Send an email if it was the first message of the conversation    
+        if (chat.messageCount == 1) {      
+            const user2 = await User.findById(chat.user2.id);
+            const output = `
+            <h1>You have a new conversation</h1>
+            <p>${req.user.full_name} is interested in ${product.name}.</p>
+            <p>Click <a href="localhost:8080/messages/${chat._id}">here</a> to see the conversation.</p>
+            `;
+            // Generate test SMTP service account from ethereal.email
+            // Only needed if you don't have a real mail account for testing
+            nodemailer.createTestAccount(() => {
+            // create reusable transporter object using the default SMTP transport
+                const transporter = nodemailer.createTransport({
+                    host: EMAIL_HOST,
+                    port: EMAIL_PORT,
+                    auth: {
+                        user: EMAIL_USER,
+                        pass: EMAIL_API_KEY,
+                    },
+                });
+                // setup email data with unicode symbols
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${user2.email}`, // list of receivers
+                    subject: 'New Conversation Started', // Subject line
+                    html: output, // html body
+                };
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                    console.log(error);
+                    }
+                });
+            });
+        }
         res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
