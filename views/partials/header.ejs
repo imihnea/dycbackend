@@ -5,15 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Deal Your Crypto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Css Links -->
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/search.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <script type="text/javascript" src="/dist/js/savvy.js"></script>
     <link rel="stylesheet" type="text/css" href="/dist/css/savvy.css" />
-    <link rel="stylesheet" type="text/css" href="/dist//css//bulma-checkradio.min.css" />
+    <link rel="stylesheet" type="text/css" href="/dist/css/bulma-checkradio.min.css" />
+    <link rel="stylesheet" type="text/css" href="/dist/css/animate.css" />
+    <!-- JavaScript links -->
+    <script type="text/javascript" src="/dist/js/savvy.js"></script>
+    <script type="text/javascript" src="/dist/js/bulma-toast.min.js"></script>
 </head>
 <body>
 <div class="hero-head">
@@ -486,30 +490,30 @@
 </div>
 
 <% if(error && error.length > 0) { %>
-<div class="container is-fluid">
-    <div class="notification is-danger" role="alert">
-        <button class="delete"></button>
-        <span class="icon">
-            <i class="fas fa-exclamation-circle"></i>
-        </span>
-        <span>
-            <%= error %>
-        </span>
-    </div>
-</div>
+    <script>
+    bulmaToast.toast({ 
+        message: "<%= error %>",
+        type: "is-danger",
+        duration: "5000",
+        position: "bottom-left",
+        dismissible: "true",
+        pauseOnHover: "true",
+        animate: { in: "fadeInUp", out: "fadeOutDown" }
+    });
+    </script>
 <% } %>
 <% if(success && success.length > 0) { %>
-    <div class="container is-fluid">
-        <div class="notification is-success" role="alert">
-            <button class="delete"></button>
-            <span class="icon">
-                <i class="fas fa-check-circle"></i>
-            </span>
-            <span>
-            <%= success %>
-            </span>
-        </div>
-    </div>
+    <script>
+        bulmaToast.toast({ 
+            message: "<%= success %>",
+            type: "is-success",
+            duration: "5000",
+            position: "bottom-left",
+            dismissible: "true",
+            pauseOnHover: "true",
+            animate: { in: "fadeInUp", out: "fadeOutDown" }
+        });
+    </script>
 <% } %>
 
 <script>
