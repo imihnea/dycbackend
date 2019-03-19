@@ -62,11 +62,9 @@ module.exports = {
         const deal = await Deal.findById(req.params.id);
         const buyer = await User.findById(deal.buyer.id);
         deal.status = 'Declined';
-        buyer.currency[deal.boughtWith] += deal.price;
         await deal.save();
-        buyer.markModified('currency');
+        buyer.btcbalance += deal.price;
         await buyer.save();
-        const buyer = await User.findById(deal.buyer.id);
         const output = `
         <h1>Deal Status Changed: Declined</h1>
         <p>${req.user.full_name} has declined your deal request for ${product.name}.</p>
@@ -199,9 +197,8 @@ module.exports = {
         const buyer = await User.findById(deal.buyer.id);
         deal.status = 'Cancelled';
         deal.completedAt = Date.now();
-        buyer.currency[deal.boughtWith] += deal.price;
         await deal.save();
-        buyer.markModified('currency');
+        buyer.btcbalance += deal.price;
         await buyer.save();
         // Seller email
         const seller = await User.findById(deal.product.author.id);
@@ -260,8 +257,7 @@ module.exports = {
                 deal.refund.sellerOption = req.body.refundOption;
                 deal.status = 'Refunded';
                 await deal.save();
-                buyer.currency[deal.boughtWith] += deal.price;
-                buyer.markModified('currency');
+                buyer.btcbalance += deal.price;
                 await buyer.save();
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 res.redirect('back');

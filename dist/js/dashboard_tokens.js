@@ -1,10 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const prices = [
         Number(document.getElementById('btcTokenPrice').innerHTML),
-        Number(document.getElementById('bchTokenPrice').innerHTML),
-        Number(document.getElementById('ethTokenPrice').innerHTML),
-        Number(document.getElementById('ltcTokenPrice').innerHTML),
-        Number(document.getElementById('dashTokenPrice').innerHTML)
     ];
     const inputTokens = document.querySelectorAll('.inputTokens');
     const inputTokenItems = [].slice.call(inputTokens);

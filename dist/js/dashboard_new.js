@@ -1,50 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btc-check').addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (document.querySelector('#btc-price').classList.contains('currency-input')) {
-      document.querySelector('#btc-price').required = true;
-    } else {
-      document.querySelector('#btc-price').required = false;
-    }
-    document.querySelector('#btc-price').classList.toggle('currency-input');
-  });
-  document.getElementById('bch-check').addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (document.querySelector('#bch-price').classList.contains('currency-input')) {
-      document.querySelector('#bch-price').required = true;
-    } else {
-      document.querySelector('#bch-price').required = false;
-    }
-    document.querySelector('#bch-price').classList.toggle('currency-input');
-  });
-  document.getElementById('eth-check').addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (document.querySelector('#eth-price').classList.contains('currency-input')) {
-      document.querySelector('#eth-price').required = true;
-    } else {
-      document.querySelector('#eth-price').required = false;
-    }
-    document.querySelector('#eth-price').classList.toggle('currency-input');
-  });
-  document.getElementById('ltc-check').addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (document.querySelector('#ltc-price').classList.contains('currency-input')) {
-      document.querySelector('#ltc-price').required = true;
-    } else {
-      document.querySelector('#ltc-price').required = false;
-    }
-    document.querySelector('#ltc-price').classList.toggle('currency-input');
-  });
-  document.getElementById('dash-check').addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (document.querySelector('#dash-price').classList.contains('currency-input')) {
-      document.querySelector('#dash-price').required = true;
-    } else {
-      document.querySelector('#dash-price').required = false;
-    }
-    document.querySelector('#dash-price').classList.toggle('currency-input');
-  });
-
   document.getElementById('city').addEventListener('click', (event) => {
     event.stopPropagation();
     document.querySelector('#cityDiv').classList.toggle('optionsUnchecked');
@@ -154,16 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       if (item.value == 'paid') {
         document.getElementById('cityTransportDiv').classList.remove('hide');
-        document.getElementById('paidCityOpt').classList.remove('optionsUnchecked');
-        document.getElementById('paidCityOpt').classList.add('optionsChecked');
-        document.getElementById('freeCityOpt').classList.add('optionsUnchecked');
-        document.getElementById('freeCityOpt').classList.remove('optionsChecked');
+        document.getElementById('paidCityOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('paidCityOpt').classList.add('delivOptionsChecked');
+        document.getElementById('freeCityOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('freeCityOpt').classList.remove('delivOptionsChecked');
       } else {
         document.getElementById('cityTransportDiv').classList.add('hide');
-        document.getElementById('freeCityOpt').classList.remove('optionsUnchecked');
-        document.getElementById('freeCityOpt').classList.add('optionsChecked');
-        document.getElementById('paidCityOpt').classList.add('optionsUnchecked');
-        document.getElementById('paidCityOpt').classList.remove('optionsChecked');
+        document.getElementById('freeCityOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('freeCityOpt').classList.add('delivOptionsChecked');
+        document.getElementById('paidCityOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('paidCityOpt').classList.remove('delivOptionsChecked');
       }
     });
   });
@@ -172,16 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       if (item.value == 'paid') {
         document.getElementById('stateTransportDiv').classList.remove('hide');
-        document.getElementById('paidStateOpt').classList.remove('optionsUnchecked');
-        document.getElementById('paidStateOpt').classList.add('optionsChecked');
-        document.getElementById('freeStateOpt').classList.add('optionsUnchecked');
-        document.getElementById('freeStateOpt').classList.remove('optionsChecked');
+        document.getElementById('paidStateOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('paidStateOpt').classList.add('delivOptionsChecked');
+        document.getElementById('freeStateOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('freeStateOpt').classList.remove('delivOptionsChecked');
       } else {
         document.getElementById('stateTransportDiv').classList.add('hide');
-        document.getElementById('freeStateOpt').classList.remove('optionsUnchecked');
-        document.getElementById('freeStateOpt').classList.add('optionsChecked');
-        document.getElementById('paidStateOpt').classList.add('optionsUnchecked');
-        document.getElementById('paidStateOpt').classList.remove('optionsChecked');
+        document.getElementById('freeStateOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('freeStateOpt').classList.add('delivOptionsChecked');
+        document.getElementById('paidStateOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('paidStateOpt').classList.remove('delivOptionsChecked');
       }
     });
   });
@@ -190,16 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       if (item.value == 'paid') {
         document.getElementById('countryTransportDiv').classList.remove('hide');
-        document.getElementById('paidCountryOpt').classList.remove('optionsUnchecked');
-        document.getElementById('paidCountryOpt').classList.add('optionsChecked');
-        document.getElementById('freeCountryOpt').classList.add('optionsUnchecked');
-        document.getElementById('freeCountryOpt').classList.remove('optionsChecked');
+        document.getElementById('paidCountryOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('paidCountryOpt').classList.add('delivOptionsChecked');
+        document.getElementById('freeCountryOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('freeCountryOpt').classList.remove('delivOptionsChecked');
       } else {
         document.getElementById('countryTransportDiv').classList.add('hide');
-        document.getElementById('freeCountryOpt').classList.remove('optionsUnchecked');
-        document.getElementById('freeCountryOpt').classList.add('optionsChecked');
-        document.getElementById('paidCountryOpt').classList.add('optionsUnchecked');
-        document.getElementById('paidCountryOpt').classList.remove('optionsChecked');
+        document.getElementById('freeCountryOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('freeCountryOpt').classList.add('delivOptionsChecked');
+        document.getElementById('paidCountryOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('paidCountryOpt').classList.remove('delivOptionsChecked');
       }
     });
   });
@@ -208,16 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       if (item.value == 'paid') {
         document.getElementById('worldwideTransportDiv').classList.remove('hide');
-        document.getElementById('paidWorldwideOpt').classList.remove('optionsUnchecked');
-        document.getElementById('paidWorldwideOpt').classList.add('optionsChecked');
-        document.getElementById('freeWorldwideOpt').classList.add('optionsUnchecked');
-        document.getElementById('freeWorldwideOpt').classList.remove('optionsChecked');
+        document.getElementById('paidWorldwideOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('paidWorldwideOpt').classList.add('delivOptionsChecked');
+        document.getElementById('freeWorldwideOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('freeWorldwideOpt').classList.remove('delivOptionsChecked');
       } else {
         document.getElementById('worldwideTransportDiv').classList.add('hide');
-        document.getElementById('freeWorldwideOpt').classList.remove('optionsUnchecked');
-        document.getElementById('freeWorldwideOpt').classList.add('optionsChecked');
-        document.getElementById('paidWorldwideOpt').classList.add('optionsUnchecked');
-        document.getElementById('paidWorldwideOpt').classList.remove('optionsChecked');
+        document.getElementById('freeWorldwideOpt').classList.remove('delivOptionsUnchecked');
+        document.getElementById('freeWorldwideOpt').classList.add('delivOptionsChecked');
+        document.getElementById('paidWorldwideOpt').classList.add('delivOptionsUnchecked');
+        document.getElementById('paidWorldwideOpt').classList.remove('delivOptionsChecked');
       }
     });
   });
@@ -226,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   repeatable.addEventListener('click', (event) => {
     event.stopPropagation();
     repeatable.classList.toggle('green');
+    repeatable.classList.toggle('normal');
   });
 
   const newCurrency = document.querySelectorAll('.new_cccy');
