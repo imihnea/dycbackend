@@ -23,13 +23,13 @@
                     <br>
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Full Name: <%= buyer.full_name %></p>
-                        <p class="title is-5 messageProfileText">Country: <%= buyer.country %></p>
-                        <p class="title is-5 messageProfileText">City: <%= buyer.city %></p>
-                        <p class="title is-5 messageProfileText">Address Line 1: <%= buyer.address1 %></p>
-                        <% if (buyer.address2) { %>
-                            <p class="title is-5 messageProfileText">Address Line 2: <%= buyer.address2 %></p>
+                        <p class="title is-5 messageProfileText">Country: <%= deal.buyer.address.country %></p>
+                        <p class="title is-5 messageProfileText">City: <%= deal.buyer.address.city %></p>
+                        <p class="title is-5 messageProfileText">Address Line 1: <%= deal.buyer.address.address1 %></p>
+                        <% if (deal.buyer.address.address2) { %>
+                            <p class="title is-5 messageProfileText">Address Line 2: <%= deal.buyer.address.address2 %></p>
                         <% } %>
-                        <p class="title is-5 messageProfileText">Zip Code: <%= buyer.zip %></p>
+                        <p class="title is-5 messageProfileText">Zip Code: <%= deal.buyer.address.zip %></p>
                         <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
                         <button href="" class="button is-danger report">Report</button>
                         <div class="modal modalReport">
@@ -141,7 +141,7 @@
                         <div class="level" style="margin-top: -15px;">
                             <div class="level-left leftlv">
                                 <div class="recmsg msg frame" style="background-color: #5f91e8 !important;">
-                                    <p class="recName"> <% if (message.sender._id === chat.user1.id) { %>Seller<% } else { %>Buyer<% } %></p>
+                                    <p class="recName"> <% if (message.sender.toString() === chat.user1.id.toString()) { %>Buyer<% } else { %>Seller<% } %></p>
                                     <span style="white-space: pre-line"><p><%= message.message %></p></span>
                                     <time class="recDate">
                                         <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
