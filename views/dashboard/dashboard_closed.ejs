@@ -86,40 +86,10 @@
                                     </div>
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
-                                    <% if (product.btcPrice > 0) { %>
-                                        <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.btcPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                        </div>
-                                    <% } 
-                                        if (product.bchPrice > 0) {
-                                    %>
-                                        <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.bchPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                                        </div>
-                                    <% } 
-                                        if (product.ethPrice > 0) {
-                                    %>
-                                        <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.ethPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                                        </div>
-                                    <% } 
-                                        if (product.ltcPrice > 0) {
-                                    %>
-                                        <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.ltcPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                                        </div>
-                                    <% } 
-                                        if (product.dashPrice) {
-                                    %>
-                                        <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product.dashPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                                        </div>
-                                    <% } %>
+                                    <div class="prices openPrices frame">
+                                        <p class="price_text"> <%= product.btcPrice %></p>
+                                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                    </div>
                                 </div>
                             </article>                            
                         <% }); %>            

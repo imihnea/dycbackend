@@ -13,24 +13,8 @@
             <div class=" prod_info ">
 
                 <div class="prices openPrices" style="width: 50% !important;">
-                    <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
-                    <% switch(deal.boughtWith) {
-                        case 0: { %>
-                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            <% break;}
-                        case 1: { %>
-                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                            <% break; }
-                        case 2: {%>
-                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                            <% break; }
-                        case 3: { %>
-                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                            <% break; }
-                        case 4: { %>
-                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
-                            <% break; }
-                        default: { break; } } %> 
+                    <p class="price_text"> <%= deal.price %></p>
+                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                 </div>
             </div>
         </div>

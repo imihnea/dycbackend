@@ -7,7 +7,6 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
-         Currencies => Delete currencies besides BTC
          Product => Similar products
 
     Low Priority:
@@ -23,7 +22,6 @@ Backend:
    High Priority:
 
       Dashboard => Add balance route
-      Currencies => Delete currencies besides BTC
       Security => Validate and sanitize every user input
                => Anti DDOS
 

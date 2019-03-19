@@ -9,8 +9,7 @@ const router = express.Router();
 
 const { getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
-        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, 
-        getLTC, postLTC, getBTC, postBTC, getBCH, postBCH, getETH, postETH, getDASH, postDASH,
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
@@ -48,35 +47,11 @@ router.get('/addresses', isLoggedIn, asyncErrorHandler(getAddresses));
 // Modify addresses
 router.post('/addresses', isLoggedIn, asyncErrorHandler(addAddresses));
 
-//GET Ltc deposit
-router.get('/addresses/ltc', isLoggedIn, getLTC);
-
-//POST Ltc deposit
-router.post('/addresses/ltc', isLoggedIn, postLTC);
-
 //GET Btc deposit
 router.get('/addresses/btc', isLoggedIn, getBTC);
 
 //POST Btc deposit
 router.post('/addresses/btc', isLoggedIn, postBTC);
-
-//GET Bch deposit
-router.get('/addresses/bch', isLoggedIn, getBCH);
-
-//POST Bch deposit
-router.post('/addresses/bch', isLoggedIn, postBCH);
-
-//GET Eth deposit
-router.get('/addresses/eth', isLoggedIn, getETH);
-
-//POST Eth deposit
-router.post('/addresses/eth', isLoggedIn, postETH);
-
-//GET Dash deposit
-router.get('/addresses/dash', isLoggedIn, getDASH);
-
-//POST Dash deposit
-router.post('/addresses/dash', isLoggedIn, postDASH);
 
 //GET Pairs available for BTC
 router.get('/addresses/altcoins/pair', asyncErrorHandler(CoinSwitchPair));

@@ -133,136 +133,28 @@
                 <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
                 <form action="/products/<%= product.id %>/buy?_method=PUT" id="buyForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
                     <div class="column prod_info" style="padding: 0;">
-                        <% if (product.accepted[0]) { %>
-                            <label class="img-check ">
-                                <div class="prices frame openPrices">
-                                    <p class="price_text">
-                                        <% if (user) { %>
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.city.percent/100) %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.state.percent/100) %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.country.percent/100) %>
-                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= Number(product.price[0]) + Number(product.price[0]*product.deliveryOptions.worldwide.percent/100) %>
-                                            <% } else { %>
-                                                <%= product.price[0] %>
-                                            <% } %>
+                        <label class="img-check ">
+                            <div class="prices frame openPrices">
+                                <p class="price_text">
+                                    <% if (user) { %>
+                                        <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
+                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.city.percent/100) %>
+                                        <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
+                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.state.percent/100) %>
+                                        <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
+                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.country.percent/100) %>
+                                        <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
+                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.worldwide.percent/100) %>
                                         <% } else { %>
-                                            <%= product.price[0] %>
+                                            <%= product.btcPrice %>
                                         <% } %>
-                                    </p>
-                                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                </div>
-                                
-                                <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" required>
-                            </label>
-                        <% } 
-                        if (product.accepted[1]) { %>
-                            <label class="img-check">
-                                <div class="prices frame openPrices">
-                                    <p class="price_text">      
-                                        <% if(user) { %>                          
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.city.percent/100) %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.state.percent/100) %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.country.percent/100) %>
-                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= Number(product.price[1]) + Number(product.price[1]*product.deliveryOptions.worldwide.percent/100) %>
-                                            <% } else { %>
-                                                <%= product.price[1] %>
-                                            <% } %>
-                                        <% } else { %>
-                                            <%= product.price[1] %>
-                                        <% } %>
+                                    <% } else { %>
+                                        <%= product.btcPrice %>
+                                    <% } %>
                                 </p>
-                                    <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                                </div>
-                                
-                                <input id="bch-check" type="radio" name="currency" class="curr_checkbox" value="1">
-                            </label>
-                        <% } 
-                        if (product.accepted[2]) { %>
-                            <label class="img-check">
-                                <div class="prices frame openPrices">
-                                    <p class="price_text">
-                                        <% if(user) { %>
-                                            <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.city.percent/100) %>
-                                            <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.state.percent/100) %>
-                                            <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.country.percent/100) %>
-                                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                <%= Number(product.price[2]) + Number(product.price[2]*product.deliveryOptions.worldwide.percent/100) %>
-                                            <% } else { %>
-                                                <%= product.price[2] %>
-                                            <% } %>
-                                        <% } else { %>
-                                            <%= product.price[2] %>
-                                        <% } %>
-                                    </p>
-                                    <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                                </div>
-
-                                <input id="eth-check" type="radio" name="currency" class="curr_checkbox" value="2">
-                            </label>
-                        <% } 
-                            if (product.accepted[3]) { %>
-                                <label class="img-check">
-                                    <div class="prices frame openPrices">
-                                        <p class="price_text">
-                                            <% if(user) { %>
-                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.city.percent/100) %>
-                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.state.percent/100) %>
-                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.country.percent/100) %>
-                                                <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                    <%= Number(product.price[3]) + Number(product.price[3]*product.deliveryOptions.worldwide.percent/100) %>
-                                                <% } else { %>
-                                                    <%= product.price[3] %>
-                                                <% } %>
-                                            <% } else { %>
-                                                <%= product.price[3] %>
-                                            <% } %>
-                                        </p>
-                                        <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                                    </div>
-                                
-                                    <input id="ltc-check" type="radio" name="currency" class="curr_checkbox" value="3">
-                                </label>
-                        <% } 
-                            if (product.accepted[4]) { %>
-                                <label class="img-check">
-                                    <div class="prices frame openPrices">
-                                        <p class="price_text">
-                                            <% if (user) { %>
-                                                <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.city.percent/100) %>
-                                                <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.state.percent/100) %>
-                                                <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.country.percent/100) %>
-                                                <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                                    <%= Number(product.price[4]) + Number(product.price[4]*product.deliveryOptions.worldwide.percent/100) %>
-                                                <% } else { %>
-                                                    <%= product.price[4] %>
-                                                <% } %>
-                                            <% } else { %>
-                                                <%= product.price[4] %>
-                                            <% } %>
-                                        </p>
-                                        <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                                    </div>
-
-                                    <input id="dash-check" type="radio" name="currency" class="curr_checkbox" value="4">
-                                </label>
-                        <% } %>
+                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                        </label>
                     </div>
                     <p><sub>Transportation costs included</sub></p>
                     <br>   
@@ -276,9 +168,8 @@
                                    ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) ||
                                    ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) ||
                                    (product.deliveryOptions.worldwide.valid == true) ) { %>
-                        <sub id="currencyWarn" style="color: rgb(255, 115, 0);">You must select a currency before buying.</sub>
                         <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
-                            <button class="button is-primary" form="buyForm" id="buyBtn" disabled>Buy</button>
+                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
                             <form action="/messages/<%= product._id %>/createChat" method="POST">
                                 <button class="productContactLink button is-primary">Contact</button>
                             </form>
@@ -317,8 +208,6 @@
             <% if (reviews.total > 0) { %>
                 <p class="productSubTitleText">Reviews</p>
                 <br>
-                <!-- display all reviews -->
-                <!-- TODO: Paginate reviews, make different div for the last one - no border bottom -->
                 <% reviews.docs.forEach(function(review, index) { %>
                     <div class="columns container is-fluid frame" style="display: flex;
                     margin-bottom: 1vh;
@@ -432,18 +321,18 @@
                                 <button class="button is-danger del">Delete</button>
                                 <div class="modal modalDelete">
                                     <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Are you sure?</p>
-                                                <button class="delete deleteDelete" aria-label="close"></button>
-                                            </header>
-                                            <section class=" modal-card-foot" style="display: block;">
-                                                <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                                <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
-                                                    <input class="button is-danger noborder" type="submit" value="Delete">
-                                                </form>
-                                            </section>
-                                        </div>
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Are you sure?</p>
+                                            <button class="delete deleteDelete" aria-label="close"></button>
+                                        </header>
+                                        <section class=" modal-card-foot" style="display: block;">
+                                            <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
+                                            <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                                <input class="button is-danger noborder" type="submit" value="Delete">
+                                            </form>
+                                        </section>
+                                    </div>
                                 </div>
 
                             </div>

@@ -23,13 +23,13 @@
                     <br>
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Full Name: <%= buyer.full_name %></p>
-                        <p class="title is-5 messageProfileText">Country: <%= buyer.country %></p>
-                        <p class="title is-5 messageProfileText">City: <%= buyer.city %></p>
-                        <p class="title is-5 messageProfileText">Address Line 1: <%= buyer.address1 %></p>
-                        <% if (buyer.address2) { %>
-                            <p class="title is-5 messageProfileText">Address Line 2: <%= buyer.address2 %></p>
+                        <p class="title is-5 messageProfileText">Country: <%= deal.buyer.address.country %></p>
+                        <p class="title is-5 messageProfileText">City: <%= deal.buyer.address.city %></p>
+                        <p class="title is-5 messageProfileText">Address Line 1: <%= deal.buyer.address.address1 %></p>
+                        <% if (deal.buyer.address.address2) { %>
+                            <p class="title is-5 messageProfileText">Address Line 2: <%= deal.buyer.address.address2 %></p>
                         <% } %>
-                        <p class="title is-5 messageProfileText">Zip Code: <%= buyer.zip %></p>
+                        <p class="title is-5 messageProfileText">Zip Code: <%= deal.buyer.address.zip %></p>
                         <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
                         <button href="" class="button is-danger report">Report</button>
                         <div class="modal modalReport">
@@ -141,7 +141,7 @@
                         <div class="level" style="margin-top: -15px;">
                             <div class="level-left leftlv">
                                 <div class="recmsg msg frame" style="background-color: #5f91e8 !important;">
-                                    <p class="recName"> <% if (message.sender._id === chat.user1.id) { %>Seller<% } else { %>Buyer<% } %></p>
+                                    <p class="recName"> <% if (message.sender.toString() === chat.user1.id.toString()) { %>Buyer<% } else { %>Seller<% } %></p>
                                     <span style="white-space: pre-line"><p><%= message.message %></p></span>
                                     <time class="recDate">
                                         <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
@@ -188,24 +188,8 @@
                     <div class=" prod_info ">
                         <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
                         <div class="prices openPrices frame" style="width: 80% !important;">
-                            <p class="price_text"> <%= deal.product.price[deal.boughtWith] %></p>
-                            <% switch(deal.boughtWith) {
-                                case 0: { %>
-                                    <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                    <% break;}
-                                case 1: { %>
-                                    <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                                    <% break; }
-                                case 2: {%>
-                                    <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                                    <% break; }
-                                case 3: { %>
-                                    <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                                    <% break; }
-                                case 4: { %>
-                                    <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span>
-                                    <% break; }
-                                default: { break; } } %> 
+                            <p class="price_text"> <%= deal.price %></p>
+                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
                         <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                         <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>

@@ -305,7 +305,18 @@ hr{
 }
 
 .green {
-    color: green !important;
+    color: green;
+    cursor: pointer;
+}
+
+.green:hover{
+    cursor: pointer;
+    color: red;
+}
+
+.normal:hover{
+    cursor: pointer;
+    color: green;
 }
 
 .square:hover {
@@ -379,7 +390,7 @@ hr{
 }
 
 .delivery{
-    color: #6c6c98 !important;
+    color: #6c6c98;
 }
 
 .hide{
@@ -410,6 +421,27 @@ hr{
 .optionsUnchecked{
     border-color: #6c6c98;
     cursor: pointer;
+}
+
+.delivOptionsUnchecked{
+    border-color: #6c6c98;
+    cursor: pointer;
+}
+
+.delivOptionsUnchecked:hover > .column i, .delivOptionsUnchecked:hover > .column p{
+    color: green !important;
+}
+
+.delivOptionsUnchecked:hover {
+    border-color: green;
+}
+
+.delivOptionsChecked{
+    border-color: green;
+}
+
+.delivOptionsChecked > .column i, .delivOptionsChecked > .column p {
+    color: green !important;
 }
 
 .optionsUnchecked:hover > .column i, .optionsUnchecked:hover > .column p{

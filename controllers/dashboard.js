@@ -16,11 +16,7 @@ const feature1_time = 60000;
 const feature2_time = 120000;
 const feature1_cost = -5;
 const feature2_cost = -15;
-const tokenPrices = [/* BTC */ 0.5,
-                    /* BCH */ 1,
-                    /* ETH */ 2,
-                    /* LTC */ 3,
-                    /* DASH */ 4];
+const tokenPrices = [/* BTC */ 0.5];
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -137,62 +133,6 @@ module.exports = {
       resp.confirmations = confirmations;
     res.json(resp); //return this data to savvy form
   },
-  getLTC(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var ltcrate = data.ltc.rate;
-            var maxConfirmationsLTC = data.ltc.maxConfirmations;
-            res.render('savvy/ltc', { ltcrate, maxConfirmationsLTC });
-        }
-    });
-  },
-  postLTC(req, res) {
-    var orderId = uuidv1();
-    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-    var encoded_callback = encodeURIComponent(callback);
-    console.log(encoded_callback);
-    var url = "https://api.savvy.io/v3/ltc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-    var ltcrate = req.body.ltcrate;
-    var maxConfirmationsLTC = req.body.maxConfirmationsLTC;
-    var coinsValue = req.body.coinsValue;
-    request.get({
-      url: url 
-      }, function(error, response, body) {
-        if(error) {
-          req.flash('error', error.message);
-          res.redirect('back');
-        } else {
-          console.log(body);
-          var json = JSON.parse(body);
-          var invoice = json.data.invoice;
-          var address = json.data.address;
-          console.log(invoice);
-          console.log(address);
-          Checkout.create({
-            user: req.user,
-            invoice: invoice,
-            coin: 'LTC',
-            address: address,
-            orderId: orderId,
-            confirmations: 0,
-            maxConfirmations: maxConfirmationsLTC,
-            orderTotal: coinsValue,
-            paid: false
-          }, (err) => {
-            if(err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            } else {
-              console.log(orderId);
-              res.render('savvy/ltc', { ltcrate, orderId, address, coinsValue , maxConfirmationsLTC })
-            }
-          });
-        }
-    });
-  },
   getBTC(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
     request(url, function(error, response, body){
@@ -249,217 +189,12 @@ module.exports = {
         }
     });
   },
-  getBCH(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var bchrate = data.bch.rate;
-            var maxConfirmationsBCH = data.bch.maxConfirmations;
-            res.render('savvy/bch', { bchrate, maxConfirmationsBCH });
-        }
-    });
-  },
-  postBCH(req, res) {
-    var orderId = uuidv1();
-    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-    var encoded_callback = encodeURIComponent(callback);
-    console.log(encoded_callback);
-    var url = "https://api.savvy.io/v3/bch/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-    var bchrate = req.body.bchrate;
-    var maxConfirmationsBCH = req.body.maxConfirmationsBCH;
-    var coinsValue = req.body.coinsValue;
-    request.get({
-      url: url 
-      }, function(error, response, body) {
-        if(error) {
-          req.flash('error', error.message);
-          res.redirect('back');
-        } else {
-          console.log(body);
-          var json = JSON.parse(body);
-          var invoice = json.data.invoice;
-          var address = json.data.address;
-          console.log(invoice);
-          console.log(address);
-          Checkout.create({
-            user: req.user,
-            invoice: invoice,
-            coin: 'BCH',
-            address: address,
-            orderId: orderId,
-            confirmations: 0,
-            maxConfirmations: maxConfirmationsBCH,
-            orderTotal: coinsValue,
-            paid: false
-          }, (err) => {
-            if(err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            } else {
-              console.log(orderId);
-              res.render('savvy/bch', { bchrate, orderId, address, coinsValue , maxConfirmationsBCH })
-            }
-          });
-        }
-    });
-  },
-  getETH(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var ethrate = data.eth.rate;
-            var maxConfirmationsETH = data.eth.maxConfirmations;
-            res.render('savvy/eth', { ethrate, maxConfirmationsETH });
-        }
-    });
-  },
-  postETH(req, res) {
-    var orderId = uuidv1();
-    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-    var encoded_callback = encodeURIComponent(callback);
-    console.log(encoded_callback);
-    var url = "https://api.savvy.io/v3/eth/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-    var ethrate = req.body.ethrate;
-    var maxConfirmationsETH = req.body.maxConfirmationsETH;
-    var coinsValue = req.body.coinsValue;
-    request.get({
-      url: url 
-      }, function(error, response, body) {
-        if(error) {
-          req.flash('error', error.message);
-          res.redirect('back');
-        } else {
-          console.log(body);
-          var json = JSON.parse(body);
-          var invoice = json.data.invoice;
-          var address = json.data.address;
-          console.log(invoice);
-          console.log(address);
-          Checkout.create({
-            user: req.user,
-            invoice: invoice,
-            coin: 'ETH',
-            address: address,
-            orderId: orderId,
-            confirmations: 0,
-            maxConfirmations: maxConfirmationsETH,
-            orderTotal: coinsValue,
-            paid: false
-          }, (err) => {
-            if(err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            } else {
-              console.log(orderId);
-              res.render('savvy/eth', { ethrate, orderId, address, coinsValue , maxConfirmationsETH })
-            }
-          });
-        }
-    });
-  },
-  getDASH(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var dashrate = data.dash.rate;
-            var maxConfirmationsDASH = data.dash.maxConfirmations;
-            res.render('savvy/dash', { dashrate, maxConfirmationsDASH });
-        }
-    });
-  },
-  postDASH(req, res) {
-    var orderId = uuidv1();
-    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-    var encoded_callback = encodeURIComponent(callback);
-    console.log(encoded_callback);
-    var url = "https://api.savvy.io/v3/dash/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-    var dashrate = req.body.dashrate;
-    var maxConfirmationsDASH = req.body.maxConfirmationsDASH;
-    var coinsValue = req.body.coinsValue;
-    request.get({
-      url: url 
-      }, function(error, response, body) {
-        if(error) {
-          req.flash('error', error.message);
-          res.redirect('back');
-        } else {
-          console.log(body);
-          var json = JSON.parse(body);
-          var invoice = json.data.invoice;
-          var address = json.data.address;
-          console.log(invoice);
-          console.log(address);
-          Checkout.create({
-            user: req.user,
-            invoice: invoice,
-            coin: 'DASH',
-            address: address,
-            orderId: orderId,
-            confirmations: 0,
-            maxConfirmations: maxConfirmationsDASH,
-            orderTotal: coinsValue,
-            paid: false
-          }, (err) => {
-            if(err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            } else {
-              console.log(orderId);
-              res.render('savvy/dash', { dashrate, orderId, address, coinsValue , maxConfirmationsDASH })
-            }
-          });
-        }
-    });
-  },
   // Get address modifications
   async addAddresses(req, res) {
     const query = { _id: req.user._id };
-    const name = req.body.btcadr || req.body.bchadr || req.body.ethadr
-                                || req.body.ltcadr || req.body.dashadr;
+    const name = req.body.btcadr;
     if (name === req.body.btcadr) {
       await User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
-        if (err) {
-          req.flash('error', err.message);
-        } else {
-          req.flash('success', 'Successfully updated address!');
-          res.redirect('/dashboard/addresses');
-        }
-      });
-    } else if (name === req.body.bchadr) {
-      await User.findByIdAndUpdate(query, { bchadr: name }, (err) => {
-        if (err) {
-          req.flash('error', err.message);
-        } else {
-          req.flash('success', 'Successfully updated address!');
-          res.redirect('/dashboard/addresses');
-        }
-      });
-    } else if (name === req.body.ethadr) {
-      await User.findByIdAndUpdate(query, { ethadr: name }, (err) => {
-        if (err) {
-          req.flash('error', err.message);
-        } else {
-          req.flash('success', 'Successfully updated address!');
-          res.redirect('/dashboard/addresses');
-        }
-      });
-    } else if (name === req.body.ltcadr) {
-      await User.findByIdAndUpdate(query, { ltcadr: name }, (err) => {
-        if (err) {
-          req.flash('error', err.message);
-        } else {
-          req.flash('success', 'Successfully updated address!');
-          res.redirect('/dashboard/addresses');
-        }
-      });
-    } else if (name === req.body.dashadr) {
-      await User.findByIdAndUpdate(query, { dashadr: name }, (err) => {
         if (err) {
           req.flash('error', err.message);
         } else {
@@ -728,7 +463,7 @@ module.exports = {
       req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      
+      req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
       let nrOptions = 0;
       if (req.body.product.city === "true") {
@@ -799,146 +534,104 @@ module.exports = {
           req.flash('error', 'The product must have a delivery method.');
           res.redirect('back');
       }
-      let accepted = [];
       let price = [];
       let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
-      if (req.body.product.acc_btc === "true") {
-        req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
-        accepted[0]=true;
+        req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
         price[0]=Number(req.body.product.btc_price);
         btcPrice=price[0];
-        tags.push('btc');
-      }
-      if (req.body.product.acc_bch === "true") {
-        req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
-        accepted[1]=true;
-        price[1]=Number(req.body.product.bch_price);
-        bchPrice=price[1];
-        tags.push('bch');
-      }
-      if (req.body.product.acc_eth === "true") {
-        req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
-        accepted[2]=true;
-        price[2]=Number(req.body.product.eth_price);
-        ethPrice=price[2];
-        tags.push('eth');
-      }
-      if (req.body.product.acc_ltc === "true") {
-        req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
-        accepted[3]=true;
-        price[3]=Number(req.body.product.ltc_price);
-        ltcPrice=price[3];
-        tags.push('ltc');
-      }
-      if (req.body.product.acc_dash === "true") {
-        req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
-        accepted[4]=true;
-        price[4]=Number(req.body.product.dash_price);
-        dashPrice=price[4];
-        tags.push('dash');
-      }
-      if ((accepted.length === 0 ) || (price.length === 0 )) {
-        req.flash('error', 'Your product must have a price.');
-        res.redirect('back');
-      } else {     
-          // Everything is stored in constants so we can protect against
-          // people making fields in the DevTools
-          const name = req.body.product.name;
-          const description = req.body.product.description;
-          const category = [ 'all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
-          const condition = req.body.product.condition;
-          const newproduct = {
-            name: name,
-            images: req.body.product.images,
-            category,
-            condition,
-            description,
-            price,
-            btcPrice,
-            bchPrice,
-            ethPrice,
-            ltcPrice,
-            dashPrice,
-            author,
-            accepted,
-            deliveryOptions,
-            tags
-          };
-          if (req.body.product.repeatable === "true") {
-            newproduct.repeatable = req.body.product.repeatable;
-          }
-          
-          const errors = req.validationErrors();
-          if (errors) {
-            res.render('dashboard/dashboard_new', {
-              user: req.user,
-              errors: errors,
-            });
-          } else {
-            await User.findById(req.user._id, (err, user) => {
-              if (err) {
-                req.flash('error', 'An error has occured. (Could not find user)');
-                res.redirect('back');
-              } else {
-                const feat_1 = {};
-                const feat_2 = {};
-                let k = 0;
-                if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
-                  if ( user.feature_tokens >= 20 ) {
-                    feat_1.status = true;
-                    feat_1.expiry_date = Date.now() + feature1_time;
-                    feat_2.status = true;
-                    feat_2.expiry_date = Date.now() + feature2_time;
-                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
-                      if (err) {
-                        console.log(err);
-                      }
-                    });
-                    newproduct.feat_1 = feat_1;
-                    newproduct.feat_2 = feat_2;
-                    k = 1;
-                  } else {
-                    req.flash('error', 'Not enough tokens to promote product.');
-                    res.redirect('back');
-                  }
-                }
-                if (( req.body.product.feat_1 )  && ( k === 0 )) {
-                  if ( user.feature_tokens >= 5 ) {
-                    feat_1.status = true;
-                    feat_1.expiry_date = Date.now() + feature1_time;
-                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
-                      if (err) {
-                        console.log(err);
-                      }
-                    });
-                    newproduct.feat_1 = feat_1;
-                  } else {
-                    req.flash('error', 'Not enough tokens to promote product.');
-                    res.redirect('back');
-                  }
-                }
-                if (( req.body.product.feat_2 )  && ( k === 0 )) {
-                  if (user.feature_tokens >= 15) {
-                    feat_2.status = true;
-                    feat_2.expiry_date = Date.now() + feature2_time;
-                    User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
-                      if (err) {
-                        console.log(err);
-                      }
-                    });
-                    newproduct.feat_2 = feat_2;
-                  } else {
-                    req.flash('error', 'Not enough tokens to promote product.');
-                    res.redirect('back');
-                  }
+        tags.push('btc');  
+        // Everything is stored in constants so we can protect against
+        // people making fields in the DevTools
+        const name = req.body.product.name;
+        const description = req.body.product.description;
+        const category = [ 'all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
+        const condition = req.body.product.condition;
+        const newproduct = {
+          name: name,
+          images: req.body.product.images,
+          category,
+          condition,
+          description,
+          price,
+          btcPrice,
+          author,
+          deliveryOptions,
+          tags
+        };
+        if (req.body.product.repeatable === "true") {
+          newproduct.repeatable = req.body.product.repeatable;
+        }
+        
+        const errors = req.validationErrors();
+        if (errors) {
+          res.render('dashboard/dashboard_new', {
+            user: req.user,
+            errors: errors,
+          });
+        } else {
+          await User.findById(req.user._id, (err, user) => {
+            if (err) {
+              req.flash('error', 'An error has occured. (Could not find user)');
+              res.redirect('back');
+            } else {
+              const feat_1 = {};
+              const feat_2 = {};
+              let k = 0;
+              if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+                if ( user.feature_tokens >= 20 ) {
+                  feat_1.status = true;
+                  feat_1.expiry_date = Date.now() + feature1_time;
+                  feat_2.status = true;
+                  feat_2.expiry_date = Date.now() + feature2_time;
+                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                  newproduct.feat_1 = feat_1;
+                  newproduct.feat_2 = feat_2;
+                  k = 1;
+                } else {
+                  req.flash('error', 'Not enough tokens to promote product.');
+                  res.redirect('back');
                 }
               }
-            });
-    
-            const product = await Product.create(newproduct);
-            res.redirect(`/products/${product._id}/view`);
-          }
-        }    
+              if (( req.body.product.feat_1 )  && ( k === 0 )) {
+                if ( user.feature_tokens >= 5 ) {
+                  feat_1.status = true;
+                  feat_1.expiry_date = Date.now() + feature1_time;
+                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                  newproduct.feat_1 = feat_1;
+                } else {
+                  req.flash('error', 'Not enough tokens to promote product.');
+                  res.redirect('back');
+                }
+              }
+              if (( req.body.product.feat_2 )  && ( k === 0 )) {
+                if (user.feature_tokens >= 15) {
+                  feat_2.status = true;
+                  feat_2.expiry_date = Date.now() + feature2_time;
+                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                  newproduct.feat_2 = feat_2;
+                } else {
+                  req.flash('error', 'Not enough tokens to promote product.');
+                  res.redirect('back');
+                }
+              }
+            }
+          });
+  
+          const product = await Product.create(newproduct);
+          res.redirect(`/products/${product._id}/view`);
+        } 
       }
   },
   // Products Show
@@ -997,7 +690,7 @@ module.exports = {
       }
     }
     // Look into which symbols are security threats - product name, product description
-    req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z ]+$/i).notEmpty();
+    req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/i).notEmpty();
     req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
     req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
@@ -1005,117 +698,116 @@ module.exports = {
     req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
     req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
     req.check('product[description]', 'The product must have a valid description.').notEmpty();
-    let accepted = [];
+    req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+    req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+    req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+    req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+    req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
+    let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
+    let nrOptions = 0;
+    if (req.body.product.city === "true") {
+      req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      deliveryOptions.city.valid=true;
+      deliveryOptions.city.cost=req.body.product.cityTransport;
+      if (deliveryOptions.city.cost == "paid") {
+        req.check('product[cityTransportPercent]', 'The same city transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+        deliveryOptions.city.percent = req.body.product.cityTransportPercent;
+      } else {
+        deliveryOptions.city.percent = 0;
+      }
+      nrOptions += 1;
+    } else {
+      deliveryOptions.city.valid=false;
+      deliveryOptions.city.percent = 0;
+      deliveryOptions.city.cost = 'No delivery';
+    }
+    if (req.body.product.state === "true") {
+      req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      deliveryOptions.state.valid=true;
+      deliveryOptions.state.cost=req.body.product.stateTransport;
+      if (deliveryOptions.state.cost == "paid") {
+        req.check('product[stateTransportPercent]', 'The same state transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+        deliveryOptions.state.percent = req.body.product.stateTransportPercent;
+      } else {
+        deliveryOptions.state.percent = 0;
+      }
+      nrOptions += 1;
+    } else {
+      deliveryOptions.state.valid=false;
+      deliveryOptions.state.percent = 0;
+      deliveryOptions.state.cost = 'No delivery';
+    }
+    if (req.body.product.country === "true") {
+      req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      deliveryOptions.country.valid=true;
+      deliveryOptions.country.cost=req.body.product.countryTransport;
+      if (deliveryOptions.country.cost == "paid") {
+        req.check('product[countryTransportPercent]', 'The same country transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+        deliveryOptions.country.percent = req.body.product.countryTransportPercent;
+      } else {
+        deliveryOptions.country.percent = 0;
+      }
+      nrOptions += 1;
+    } else {
+      deliveryOptions.country.valid=false;
+      deliveryOptions.country.percent = 0;
+      deliveryOptions.country.cost = 'No delivery';
+    }
+    if (req.body.product.worldwide === "true") {
+      req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      deliveryOptions.worldwide.valid=true;
+      deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
+      if (deliveryOptions.worldwide.cost == "paid") {
+        req.check('product[worldwideTransportPercent]', 'The worldwide transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
+        deliveryOptions.worldwide.percent = req.body.product.worldwideTransportPercent;
+      } else {
+        deliveryOptions.worldwide.percent = 0;
+      }
+      nrOptions += 1;
+    } else {
+      deliveryOptions.worldwide.valid=false;
+      deliveryOptions.worldwide.percent = 0;
+      deliveryOptions.worldwide.cost = 'No delivery';
+    }
+    if (nrOptions === 0) {
+        req.flash('error', 'The product must have a delivery method.');
+        res.redirect('back');
+    }
     let price = [];
     let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
-    if (req.body.product.acc_btc === "true") {
-      req.check('product[btc_price]', 'You must input a Bitcoin price.').matches(/^[0-9.]+$/).notEmpty();
-      accepted[0]=true;
-      price[0]=req.body.product.btc_price;
-      btcPrice=price[0];
-      if (product.tags.indexOf('btc') === -1) {
-        product.tags.push('btc');
+    req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
+    price[0]=req.body.product.btc_price;
+    btcPrice=price[0];
+    if (product.tags.indexOf('btc') === -1) {
+      product.tags.push('btc');
+    } 
+    const errors = req.validationErrors();
+    if (errors) {
+      res.render('dashboard/dashboard_edit', {
+        user: req.user,
+        errors: errors,
+        product
+      });
+    } else {
+      if (req.body.product.repeatable === "true") {
+        product.repeatable = req.body.product.repeatable;
       }
-    }
-    if (req.body.product.acc_btc === null) {
-      accepted[0]=false;
-      if (product.tags.indexOf('btc') !== -1) {
-        product.tags.splice(product.tags.indexOf('btc'));
-      }
-    }
-    if (req.body.product.acc_bch === "true") {
-      req.check('product[bch_price]', 'You must input a Bitcoin Cash price.').matches(/^[0-9.]+$/).notEmpty();
-      accepted[1]=true;
-      price[1]=req.body.product.bch_price;
-      bchPrice=price[1];
-      if (product.tags.indexOf('bch') === -1) {
-        product.tags.push('bch');
-      }
-    }
-    if (req.body.product.acc_bch === null) {
-      accepted[1]=false;
-      if (product.tags.indexOf('bch') !== -1) {
-        product.tags.splice(product.tags.indexOf('bch'));
-      }
-    }
-    if (req.body.product.acc_eth === "true") {
-      req.check('product[eth_price]', 'You must input an Ethereum price.').matches(/^[0-9.]+$/).notEmpty();
-      accepted[2]=true;
-      price[2]=req.body.product.eth_price;
-      ethPrice=price[2];
-      if (product.tags.indexOf('eth') === -1) {
-        product.tags.push('eth');
-      }
-    }
-    if (req.body.product.acc_eth === null) {
-      accepted[2]=false;
-      if (product.tags.indexOf('eth') !== -1) {
-        product.tags.splice(product.tags.indexOf('eth'));
-      }
-    }
-    if (req.body.product.acc_ltc === "true") {
-      req.check('product[ltc_price]', 'You must input a Litecoin price.').matches(/^[0-9.]+$/).notEmpty();
-      accepted[3]=true;
-      price[3]=req.body.product.ltc_price;
-      ltcPrice=price[3];
-      if (product.tags.indexOf('ltc') === -1) {
-        product.tags.push('ltc');
-      }
-    }
-    if (req.body.product.acc_ltc === null) {
-      accepted[3]=false;
-      if (product.tags.indexOf('ltc') !== -1) {
-        product.tags.splice(product.tags.indexOf('ltc'));
-      }
-    }
-    if (req.body.product.acc_dash === "true") {
-      req.check('product[dash_price]', 'You must input a DASH price.').matches(/^[0-9.]+$/).notEmpty();
-      accepted[4]=true;
-      price[4]=req.body.product.dash_price;
-      dashPrice=price[4];
-      if (product.tags.indexOf('dash') === -1) {
-        product.tags.push('dash');
-      }
-    }
-    if (req.body.product.acc_dash === null) {
-      accepted[4]=false;
-      if (product.tags.indexOf('dash') !== -1) {
-        product.tags.splice(product.tags.indexOf('dash'));
-      }
-    }
-    if ((accepted.length === 0 ) || (price.length === 0 )) {
-      req.flash('error', 'Your product must have a price.');
-      res.redirect('back');
-    } else {     
-      const errors = req.validationErrors();
-      if (errors) {
-        res.render('dashboard/dashboard_edit', {
-          user: req.user,
-          errors: errors,
-          product
-        });
-      } else {
-        // Everything is stored in constants so we can protect against
-        // people making fields in the DevTools
-        // update the product with any new properties
-        product.name = req.body.product.name;
-        product.description = req.body.product.description;
-        product.condition = req.body.product.condition;
-        product.category[1] = req.body.product.category[0];
-        product.category[2] = req.body.product.category[1];
-        product.category[3] = req.body.product.category[2];
-        product.price = price;
-        product.accepted = accepted;
-        product.btcPrice = btcPrice;
-        product.bchPrice = bchPrice;
-        product.ethPrice = ethPrice;
-        product.ltcPrice = ltcPrice;
-        product.dashPrice = dashPrice;
-        // save the updated product into the db
-        await product.save();
-        // redirect to show page
-        res.redirect(`/products/${product.id}/view`);
-      }
+      // Everything is stored in constants so we can protect against
+      // people making fields in the DevTools
+      // update the product with any new properties
+      product.name = req.body.product.name;
+      product.description = req.body.product.description;
+      product.condition = req.body.product.condition;
+      product.category[1] = req.body.product.category[0];
+      product.category[2] = req.body.product.category[1];
+      product.category[3] = req.body.product.category[2];
+      product.price = price;
+      product.btcPrice = btcPrice;
+      product.deliveryOptions = deliveryOptions;
+      // save the updated product into the db
+      await product.save();
+      // redirect to show page
+      res.redirect(`/products/${product.id}/view`);
     }
   },
   // Feature product

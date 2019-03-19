@@ -16,22 +16,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  const prices = document.querySelectorAll('.prices');
-  const priceItems = [].slice.call(prices);
-  priceItems.forEach((item) => {
-    item.addEventListener('click', (event) => {
-      event.stopPropagation();
-      item.classList.add('pricesChecked');
-      if (document.getElementById('buyBtn').disabled) {
-        document.getElementById('buyBtn').disabled = false;
-        document.getElementById('currencyWarn').classList.add('currency-input');
-      }
-      for (let j = 0; j < priceItems.length; j += 1) {
-        if ((item !== priceItems[j]) && (priceItems[j].classList.contains('pricesChecked'))) {
-          priceItems[j].classList.remove('pricesChecked');
-        }
-      }
-    })
-  })
 });

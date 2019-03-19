@@ -88,22 +88,11 @@
                                 <p class="title is-5"><%= product.name %> </p>
                             </div>
                         </div>
-                        <div class="accepted_currencies">
-                            <% if (product.accepted[0]) { %>
-                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                            <% } %>
-                            <% if (product.accepted[1]) { %>
-                            <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                            <% } %>
-                            <% if (product.accepted[2]) { %>
-                            <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                            <% } %>
-                            <% if (product.accepted[3]) { %>
-                            <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                            <% } %>
-                            <% if (product.accepted[4]) { %>
-                            <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                            <% } %>
+                        <div class="accepted_currencies frame">
+                            <!-- <div class="currency dropdown-item"> -->
+                                <p class="curr_text" id="btc_curr"><%= product.btcPrice %></p>
+                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            <!-- </div> -->
                         </div>
                     </div> 
                 </a>      
