@@ -85,7 +85,7 @@ module.exports = {
                 req.check('city', 'Please select a city.').notEmpty();
                 req.check('address1', 'Please input a valid first address.').matches(/^[a-zA-Z0-9., ]+$/i).notEmpty();
                 req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-zA-Z0-9., ]+$/i);
-                req.check('zip', 'Please specify a numeric zip code.').notEmpty().isNumeric();
+                req.check('zip', 'Please specify an alphanumeric zip code.').notEmpty().matches(/^[a-z0-9 ]+$/i);
                 user.full_name = req.body.name;
                 if (user.country != req.body.country) {
                   user.country = req.body.country;
@@ -128,6 +128,7 @@ module.exports = {
                     'product.author.address.zip': user.zip
                   } 
                 });
+                req.flash('success', 'Successfully updated your profile!');
                 res.redirect(`/profile/${user._id}`);
                 }
             }

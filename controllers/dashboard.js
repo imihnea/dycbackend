@@ -224,7 +224,7 @@ module.exports = {
     console.log(amount);
     client.getAccount('primary', function(err, account) {
       if(err) {
-        req.flash('error', err.message + '- prima eroare'); // Don't show this error to the user
+        req.flash('error', 'There was a problem with your request, please try again.');
         res.redirect('back');
       } else {
         if(req.user.btcbalance >= amount) {
@@ -234,7 +234,7 @@ module.exports = {
             'currency': 'BTC'
             }, function(err, tx) {
               if(err) {
-                req.flash('error', err.message  + '- a doua eroare'); // Don't show this one either
+                req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                 res.redirect('back');
               } else {
                 console.log(tx);

@@ -195,11 +195,11 @@ hr{
 }
 
 .panel-block:hover{
-    background-color: #565f6d !important;
+    background-color: #d6d8d0 !important;
 }
 
 .active-page{
-    background-color: #565f6d !important;
+    background-color: #d6d8d0 !important;
 }
 
 .messageItem{

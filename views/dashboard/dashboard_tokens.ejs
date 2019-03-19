@@ -5,8 +5,8 @@
 <div class="columns">
     <% include ../partials/sidebar %>
 
-    <div class="column" >
-        <div class="container is-fluid" style="margin-top: 1vh;">
+    <div class="column dashboard-right" >
+        <div class="container is-fluid">
             <% if(errors){ %>
                 <div class="notification is-danger" role="alert"> 
                 <% errors.forEach(function( err){ %>
@@ -34,7 +34,7 @@
                             <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
                                 min="0" max="500" required style="margin-top: 3vh;">
                             <p style="padding-top: 3vh;">Total price: <span id="btcPrice" class="tPrice">0</span> BTC</p>
-                            <button class="button is-primary" style="margin-top: 3vh;">Buy</button>
+                            <button class="button is-primary is-rounded" style="margin-top: 3vh;">Purchase Tokens</button>
                         </div>
                     </form>
                 </div>

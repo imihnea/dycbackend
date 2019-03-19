@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const Review = require('./review');
 const Schema = mongoose.Schema;
 
@@ -18,12 +17,7 @@ const UserSchema = new Schema({
   username: { type: String, set: toLower },
   avatar: { url: {type: String, default: 'https://res.cloudinary.com/dxbujmytn/image/upload/v1548677272/gbjahfrfhjyh0clslkux.png' /* Modify with something else */}, public_id: String },
   password: String,
-  currency: { type: [ Number ], default: 0 },
   btcbalance: Number,
-  ltcbalance: Number,
-  bchbalance: Number,
-  ethbalance: Number,
-  dashbalance: Number,
   full_name: String,
   number: Number,
   twofactor: Boolean,
@@ -33,7 +27,7 @@ const UserSchema = new Schema({
   continent: String,
   address1: String,
   address2: String,
-  zip: Number,
+  zip: String,
   accountType: { type: String, default: 'Standard' },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
@@ -42,10 +36,6 @@ const UserSchema = new Schema({
   facebookId: String,
   googleId: String,
   btcadr: String,
-  bchadr: String,
-  ethadr: String,
-  ltcadr: String,
-  dashadr: String,
   feature_tokens: { type: Number, default: 0 },
   nrSold: { type: Number, default: 0 },
   reviews: [

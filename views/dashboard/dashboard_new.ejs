@@ -22,6 +22,7 @@
                                 </div>
                             <% } %>
                         </div>
+                        <br>
                         <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                             <input class="input" style="width: 90%; " name="product[name]" placeholder="Name" type="text" required />
@@ -396,7 +397,8 @@
                                         <td>14 days</td>
                                         <td>5 tokens</td>
                                         <td>
-                                            <input name="product[feat_1]" type="checkbox" value="1">
+                                            <input name="product[feat_1]" type="checkbox" id="feat_1" class="is-checkradio is-info is-large" value="1">
+                                            <label for="feat_1"></label>
                                         </td>
                                     </tr>
                                     <tr>
@@ -405,7 +407,8 @@
                                         <td>7 days</td>
                                         <td>15 tokens</td>
                                         <td>
-                                            <input name="product[feat_2]" type="checkbox" value="2">
+                                            <input name="product[feat_2]" type="checkbox" id="feat_2" class="is-checkradio is-info is-large" value="2">
+                                            <label for="feat_2"></label>
                                         </td>
                                     </tr>
                                 </tbody>
