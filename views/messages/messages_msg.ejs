@@ -1,214 +1,146 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
-<a href="/messages" class="button is-primary" style="margin-top: 1vh; margin-left: 1vw;">Back to Dashboard</a>
-<div class="columns" style="color: orange; margin-top: 1vh;">
-    <div class="column is-one-fifth">
-        <div>
-            <div class="messageProfile frame" style="margin-top: 0;">
-                <div class="">
-                    <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
-                        <%= chat.user1.avatarUrl %>
-                    <% } else { %>
-                        <%= chat.user2.avatarUrl %>
-                    <% } %>" class="open-img ">
-                </div>
-                <br>
-                <div class=" prod_info ">
-                    <p class="title is-5 messageProfileText">Full Name: <%= user2.full_name %></p>
-                    <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
-                    <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
-                    <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
-                    <button href="" class="button is-danger report">Report</button>
-                    <div class="modal modalReport">
-                        <div class="modal-background"></div>
-                            <div class="modal-card">
-                                <header class="modal-card-head">
-                                <p class="modal-card-title">Report User</p>
-                                <button class="delete deleteReport" aria-label="close"></button>
-                                </header>
-                                <section class="modal-card-body">
-                                <form class="modal-form" action="/products/<%= chat._id %>/report" method="POST" style="display: block;">
-                                    <input type="text" name="userid" value="<%= user2.id %>" hidden>
-                                    <div class="field select cont-select smmargin">
-                                        <select name="topic" style="width: 100%;">
-                                            <option value="" selected disabled>Reason</option>
-                                            <option value="Fake">Fake product</option>
-                                            <option value="Scam">Scamming attempt</option>
-                                            <option value="Harassment">Harassment</option>
-                                        </select>
-                                    </div>
-                                    <div class="field" style="margin-top: 3px;">
-                                        <div class="control">
-                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+<div class="container is-fluid">
+    <a href="/messages" class="button is-primary" style="margin-top: 5vh; margin-left: 5vw;">Back to Dashboard</a>
+    <div class="columns" style="color: orange; margin-top: 1vh;">
+        <div class="column is-one-fifth">
+            <div>
+                <div class="messageProfile frame" style="margin-top: 0;">
+                    <div class="">
+                        <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                            <%= chat.user1.avatarUrl %>
+                        <% } else { %>
+                            <%= chat.user2.avatarUrl %>
+                        <% } %>" class="open-img ">
+                    </div>
+                    <br>
+                    <div class=" prod_info ">
+                        <p class="title is-5 messageProfileText">Full Name: <%= user2.full_name %></p>
+                        <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
+                        <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
+                        <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
+                        <button href="" class="button is-danger report">Report</button>
+                        <div class="modal modalReport">
+                            <div class="modal-background"></div>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                    <p class="modal-card-title">Report User</p>
+                                    <button class="delete deleteReport" aria-label="close"></button>
+                                    </header>
+                                    <section class="modal-card-body">
+                                    <form class="modal-form" action="/products/<%= chat._id %>/report" method="POST" style="display: block;">
+                                        <input type="text" name="userid" value="<%= user2.id %>" hidden>
+                                        <div class="field select cont-select smmargin">
+                                            <select name="topic" style="width: 100%;">
+                                                <option value="" selected disabled>Reason</option>
+                                                <option value="Fake">Fake product</option>
+                                                <option value="Scam">Scamming attempt</option>
+                                                <option value="Harassment">Harassment</option>
+                                            </select>
                                         </div>
-                                    </div>
-                                    <button class="button is-primary">Send</button>
-                                </form>
-                                </section>
-                                <footer class="modal-card-foot">
-                                    <button class="button is-danger cancelReport">Cancel</button>
-                                </footer>
-                            </div>
+                                        <div class="field" style="margin-top: 3px;">
+                                            <div class="control">
+                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                            </div>
+                                        </div>
+                                        <button class="button is-primary">Send</button>
+                                    </form>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-danger cancelReport">Cancel</button>
+                                    </footer>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
-        <div>
-            <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
-                <% if (chat.messageCount === 0) { %>
-                    <div class="level topFirst" >
-                        <div>
-                            <p class="is-5">This is the beginning of the conversation</p>
-                            <p class="is-6">Start by saying hi!</p>
-                        </div>
-                    </div>
-                <% } else { %>
-                    <div class="level topWarn">
-                        <div>
-                            <p class="is-5">Be mindful of the information you send</p>
-                        </div>
-                    </div>
-                <% } %>
-                <% chat.messages.forEach((message) => { %>
-                    <% if (message.sender.toString() != user._id.toString()) { %>
-                        <div class="level" style="margin-top: -15px;">
-                            <div class="level-left leftlv">
-                                <div class="recmsg msg frame">
-                                    <p class="recName"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
-                                    <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                    <time class="recDate">
-                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                        /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                        <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                    </time>
-                                </div>
+        <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
+            <div>
+                <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
+                    <% if (chat.messageCount === 0) { %>
+                        <div class="level topFirst" >
+                            <div>
+                                <p class="is-5">This is the beginning of the conversation</p>
+                                <p class="is-6">Start by saying hi!</p>
                             </div>
                         </div>
-                    <% } else if (message.sender.toString() == user._id.toString()) { %>
-                        <div class="level" style="display: block;">
-                            <div class="level-right">
-                                <div class="sentmsg msg frame">
-                                    <p class="sentName">You</p>
-                                    <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                    <time class="sentDate">
-                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                        /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                        <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                    </time>
-                                </div>
-                            </div>      
+                    <% } else { %>
+                        <div class="level topWarn">
+                            <div>
+                                <p class="is-5">Be mindful of the information you send</p>
+                            </div>
                         </div>
                     <% } %>
-                <% }); %>
-            </div>
-            <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
-                <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
-                    <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
-                    <button class="button is-primary">Send</button>
-                </form>
+                    <% chat.messages.forEach((message) => { %>
+                        <% if (message.sender.toString() != user._id.toString()) { %>
+                            <div class="level" style="margin-top: -15px;">
+                                <div class="level-left leftlv">
+                                    <div class="recmsg msg frame">
+                                        <p class="recName"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
+                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
+                                        <time class="recDate">
+                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                        </time>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } else if (message.sender.toString() == user._id.toString()) { %>
+                            <div class="level" style="display: block;">
+                                <div class="level-right">
+                                    <div class="sentmsg msg frame">
+                                        <p class="sentName">You</p>
+                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
+                                        <time class="sentDate">
+                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
+                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
+                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                        </time>
+                                    </div>
+                                </div>      
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+                <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
+                    <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
+                        <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
+                        <button class="button is-primary">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="column is-one-fifth">
-        <div class="productSide" style="margin-top: 0;">
-            <div class="messageProfile frame" style="margin-top: 0;">
-                <div>
-                    <img src="<%= chat.product.imageUrl %>"  class="open-img">
-                </div>
-                <br>
-                <div class=" prod_info ">  
-                    <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>
-                    <% if ((chat.product.price[0] != 0) && (chat.product.accepted[0])) { %>
+    
+        <div class="column is-one-fifth">
+            <div class="productSide" style="margin-top: 0;">
+                <div class="messageProfile frame" style="margin-top: 0;">
+                    <div>
+                        <img src="<%= chat.product.imageUrl %>"  class="open-img">
+                    </div>
+                    <br>
+                    <div class=" prod_info ">  
+                        <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
                         <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.price[0] + product.price[0]*product.deliveryOptions.city.percent/100 %>
+                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.city.percent/100 %>
                             <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.price[0] + product.price[0]*product.deliveryOptions.state.percent/100 %>
+                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.state.percent/100 %>
                             <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.price[0] + product.price[0]*product.deliveryOptions.country.percent/100 %>
+                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.country.percent/100 %>
                             <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.price[0] + (product.price[0]*product.deliveryOptions.worldwide.percent*0.01) %>
+                                <%= product.btcPrice + (product.btcPrice*product.deliveryOptions.worldwide.percent*0.01) %>
                             <% } else { %>
-                                <%= product.price[0] %>
+                                <%= product.btcPrice %>
                             <% } %></p>
                         </div>
-                    <% } 
-                        if ((chat.product.price[1] != 0) && (chat.product.accepted[1])) {
-                    %>
-                        <div class="prices msgPrices frame">
-                            <span class="price_img"><img src="../../dist/img/bitcoincash.png" alt="BitcoinCash"></span>
-                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.price[1] + product.price[1]*product.deliveryOptions.city.percent/100 %>
-                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.price[1] + product.price[1]*product.deliveryOptions.state.percent/100 %>
-                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.price[1] + product.price[1]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.price[1] + (product.price[1]*product.deliveryOptions.worldwide.percent*0.01) %>
-                            <% }else { %>
-                                <%= product.price[1] %>
-                            <% } %></p>
-                        </div>
-                    <% } 
-                        if ((chat.product.price[2] != 0) && (chat.product.accepted[2])) {
-                    %>
-                        <div class="prices msgPrices frame">
-                            <span class="price_img"><img src="../../dist/img/ethereum.png" alt="Ethereum"></span>
-                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.price[2] + product.price[2]*product.deliveryOptions.city.percent/100 %>
-                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.price[2] + product.price[2]*product.deliveryOptions.state.percent/100 %>
-                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.price[2] + product.price[2]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.price[2] + (product.price[2]*product.deliveryOptions.worldwide.percent*0.01) %>
-                            <% }else { %>
-                                <%= product.price[2] %>
-                            <% } %></p>
-                        </div>
-                    <% } 
-                        if ((chat.product.price[3] != 0) && (chat.product.accepted[3])) {
-                    %>
-                        <div class="prices msgPrices frame">
-                            <span class="price_img"><img src="../../dist/img/litecoin.png" alt="Litecoin"></span>
-                            <p class="price_text"><% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.price[3] + product.price[3]*product.deliveryOptions.city.percent/100 %>
-                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.price[3] + product.price[3]*product.deliveryOptions.state.percent/100 %>
-                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.price[3] + product.price[3]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.price[3] + (product.price[3]*product.deliveryOptions.worldwide.percent*0.01) %>
-                            <% }else { %>
-                                <%= product.price[3] %>
-                            <% } %></p>
-                        </div>
-                    <% } 
-                        if ((chat.product.price[4] != 0) && (chat.product.accepted[4])) {
-                    %>
-                        <div class="prices msgPrices frame">
-                            <span class="price_img"><img src="../../dist/img/dash.png" alt="DASH"></span> 
-                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.price[4] + product.price[4]*product.deliveryOptions.city.percent/100 %>
-                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.price[4] + product.price[4]*product.deliveryOptions.state.percent/100 %>
-                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.price[4] + product.price[4]*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.price[4] + (product.price[4]*product.deliveryOptions.worldwide.percent*0.01) %>
-                            <% }else { %>
-                                <%= product.price[4] %>
-                            <% } %></p>
-                        </div>
-                    <% } %>
-                    <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>
+                        <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>
+                    </div>
                 </div>
             </div>
         </div>

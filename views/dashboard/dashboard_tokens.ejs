@@ -18,22 +18,22 @@
         <div class="dashTop column">
             <h2 class="title">Tokens</h2>
         </div>
-        <div class="columns">
-            <div class="column">
+        <div class="columns container">
+            <div class="column is-one-third">
                 <div class="feature-div frame">
-                    <h2>You have <%= user.feature_tokens %> Tokens</h2>
-                    <div class="sel_curr" style="padding-top: 3vh;">
-                        <label class="img-check ">
-                            <img src="../../dist/img/bitcoin.png" alt="Bitcoin" class="token-currency" id="btcimg">
-                            <input id="btc-check" type="radio" name="currency" class="curr_checkbox" value="0" checked required>
-                        </label>
-                    </div>
+                    <h2 class="title is-3" style="font-weight: 600;">You have <%= user.feature_tokens %> Tokens</h2>
                     <form action="/dashboard/tokens/0" method="POST">
                         <div id="btc-fields" class="fields">
-                            <p style="padding-top: 3vh;">Price per token: <span id="btcTokenPrice"><%= tokenPrices[0] %></span> BTC</p>
+                            <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
+                                <p>Price per token: <span id="btcTokenPrice"><%= tokenPrices[0] %></span></p>
+                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
                             <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
                                 min="0" max="500" required style="margin-top: 3vh;">
-                            <p style="padding-top: 3vh;">Total price: <span id="btcPrice" class="tPrice">0</span> BTC</p>
+                            <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
+                                <p>Total price: <span id="btcPrice" class="tPrice">0</span></p>
+                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>                            
                             <button class="button is-primary is-rounded" style="margin-top: 3vh;">Purchase Tokens</button>
                         </div>
                     </form>

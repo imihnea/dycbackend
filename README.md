@@ -14,6 +14,7 @@ Frontend:
          Make everything responsive (see comments in css files)
          Make an email template
          Better email wording
+         Product => Similar products needs fixing
 
 
 Backend:
@@ -40,6 +41,7 @@ Backend:
       
 After Launch:
 
-   Users => Create premium/business user who can access product and search data 
-   Data => Create another Elastic instance for premium/business user data
-        => Make a page where they can query that instance => Data compiled into charts 
+      Users => Create premium/business user who can access product and search data 
+      
+      Data => Create another Elastic instance for premium/business user data
+           => Make a page where they can query that instance => Data compiled into charts 

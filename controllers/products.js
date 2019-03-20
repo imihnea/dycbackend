@@ -21,14 +21,13 @@ module.exports = {
             },
         });
         // Find similar products
+        // Doesn't always show the products - needs further work
         let similar = [];
         await Product.findRandom({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] }}, {}, { limit: 4 }, async (err, result) => {
             if (err) {
                 console.log(err);
-            } else {
-                if (result != undefined) {
-                    await similar.push(result);
-                }
+            } else if (result != undefined) {
+                await similar.push(result);
             }
         });
         const reviews = await Review.paginate({ product: req.params.id },{
