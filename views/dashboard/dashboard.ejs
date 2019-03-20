@@ -23,9 +23,12 @@
                             <% } %>
                         </div>
                         <div class="column is-three-fifths" style="margin: auto;">
-                            <div class="level">
-                                <input class="input" name="name" placeholder="Full Name*" type="text"
-                                <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
+                            <div class="level control has-icons-left">
+                                    <input class="input" name="name" placeholder="Full Name*" type="text"
+                                    <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user-tie"></i>
+                                    </span>
                             </div>
                             <div class="level" style="flex-wrap: wrap;">
                                 <div class="column select cont-select" style="padding: 0 !important">
