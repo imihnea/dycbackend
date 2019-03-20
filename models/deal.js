@@ -5,14 +5,48 @@ const mongoosePaginate = require('mongoose-paginate');
 
 const DealSchema = new Schema({
     status: { type: String, default: 'Processing' },
-    product: { id: Schema.Types.ObjectId, name: String, imageUrl: String,
-         author: { id: { type: Schema.Types.ObjectId, ref: 'User' }, username: String },
-        price: { type: Array, default: [0, 0, 0, 0, 0] }, accepted: { type: Array, default: [0, 0, 0, 0, 0] } },
-    buyer: { id: Schema.Types.ObjectId, name: String, avatarUrl: String, address: { country: String, state: String, city: String, continent: String, address1: String, address2: String, zip: Number } },
-    boughtWith: Number,
+    product: { 
+        id: Schema.Types.ObjectId, 
+        name: String, 
+        imageUrl: String,
+        author: { 
+            id: { 
+                type: Schema.Types.ObjectId, 
+                ref: 'User' 
+            }, 
+            username: String 
+        },
+        price: Number,
+    },
+    buyer: { 
+        id: Schema.Types.ObjectId, 
+        name: String, 
+        avatarUrl: String, 
+        address: { 
+            country: String, 
+            state: String, 
+            city: String, 
+            continent: String, 
+            address1: String, 
+            address2: String, 
+            zip: Number 
+        } 
+    },
     price: Number,
     chat: Schema.Types.ObjectId,
-    refund: { reason: String, message: String, option: String, status: { type: String, default: 'Not requested' }, timeOfRequest: Date, sellerReason: String, sellerMessage: String, sellerOption: String },
+    refund: { 
+        reason: String, 
+        message: String, 
+        option: String, 
+        status: { 
+            type: String, 
+            default: 'Not requested' 
+        }, 
+        timeOfRequest: Date, 
+        sellerReason: String, 
+        sellerMessage: String, 
+        sellerOption: String 
+    },
     createdAt: { type: Date, default: Date.now },
     completedAt: Date,
     refundableUntil: Date,

@@ -20,6 +20,17 @@ module.exports = {
               model: 'User',
             },
         });
+        // Find similar products
+        let similar = [];
+        await Product.findRandom({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] }}, {}, { limit: 4 }, async (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if (result != undefined) {
+                    await similar.push(result);
+                }
+            }
+        });
         const reviews = await Review.paginate({ product: req.params.id },{
             sort: { createdAt: -1 },
             populate: 'product',
@@ -35,9 +46,9 @@ module.exports = {
                     reviewed = true;
                 }
             });
-            res.render('products/product_view', { product, floorRating, reviews, reviewed, user: req.user });
+            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
         } else {
-            res.render('products/product_view', { product, floorRating, reviews, reviewed: true, user: false });
+            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
         }
     },
     postReport(req, res) {

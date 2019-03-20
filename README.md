@@ -7,7 +7,6 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
-         Product => Similar products
 
     Low Priority:
 

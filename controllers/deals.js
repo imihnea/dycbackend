@@ -25,7 +25,7 @@ module.exports = {
         const buyer = await User.findById(deal.buyer.id);
         const output = `
         <h1>Deal Status Changed: Pending Delivery</h1>
-        <p>${req.user.full_name} has accepted your deal request for ${product.name}.</p>
+        <p>${req.user.full_name} has accepted your deal request for ${deal.product.name}.</p>
         <p>The product is being delivered. The deal cannot be cancelled anymore and the shipping address cannot be changed.</p>
         <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to see the deal.</p>
         `;
@@ -123,7 +123,7 @@ module.exports = {
         }
         const buyer = await User.findById(deal.buyer.id);
         // Buyer email
-        const output = `
+        let output = `
         <h1>Deal Status Changed: Completed</h1>
         <p>Deal: ${product.name}</p>
         <p>Price: ${deal.price}</p>
@@ -157,7 +157,7 @@ module.exports = {
             });
         });
         // Seller email
-        const output = `
+        output = `
         <h1>Deal Status Changed: Completed</h1>
         <p>Deal: ${product.name}</p>
         <p>Price: ${deal.price}</p>

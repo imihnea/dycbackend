@@ -203,9 +203,9 @@
                 </tbody>
             </table>
         </div> 
-        <hr class="smallerCenter">
         <div class="column">
             <% if (reviews.total > 0) { %>
+                <hr class="smallerCenter">
                 <p class="productSubTitleText">Reviews</p>
                 <br>
                 <% reviews.docs.forEach(function(review, index) { %>
@@ -339,12 +339,11 @@
                             <% } %>
                         <% } %>
                     </div>
-                    
                     <% if (index < reviews.total - 1) { %><hr  class="smallerCenter"><% } %>
                 <% }); %>
             <% } %>
             <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                <% if (reviews.total > 0) { %><hr  class="smallerCenter"><% } %>
+                <hr class="smallerCenter">
                 <p class="productSubTitleText" >Write a Review</p>
                 <form action="/products/<%= product.id %>/reviews" method="POST" class="detailsContainer">
                     <textarea class="textarea" name="review[body]" required></textarea>
@@ -368,113 +367,38 @@
                         <input class="button is-primary" type="submit">    
                     </div>
                 </form>
-                <% } %>
-        </div>
-        <% if (currentUser) { %>
-            <% if (currentUser._id.toString() !== product.author.id.toString()) { %>
-                <hr  class="smallerCenter">
-            <% } else if ( reviews.total > 0 ) { %>
-                <hr  class="smallerCenter">
             <% } %>
-        <% } %>
-        <p class="productSubTitleText">Similar products</p>
-        <div class="column detailsContainer">    
-            <!-- Add a few products from the same category -->
-            <div class="columns" style="justify-content: center;">
-                <div class="column card feat_card" style="max-width: 250px;">
-                    <a href="">
-                        <div class="card-image">
-                            <figure class="image profileProducts">
-                                <img src="../../dist/img/blanc.jpg" class="featimgs">
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
+        </div>
+
+        <% if (similar.length > 0) { %>
+            <p class="productSubTitleText">Similar products</p>
+            <div class="column detailsContainer">    
+                <div class="columns" style="justify-content: center;">
+                    <% similar[0].forEach((sim) => { %>
+                        <div class="column card feat_card frame" style="flex-grow: 0;">
+                            <a href="/products/<%= sim._id %>/view">
+                                <div class="card-image">
+                                    <figure class="image featimg">
+                                        <img src="<%= sim.images[0].url %>" class="featimgs">
+                                    </figure>
                                 </div>
-                            </div>
-                            <div class="accepted_currencies">
-                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                            </div>
-                        </div> 
-                    </a>                       
-                </div>
-                <div class="column card feat_card">
-                    <a href="">
-                        <div class="card-image">
-                            <figure class="image profileProducts">
-                                <img src="../../dist/img/blanc.jpg" class="featimgs">
-                            </figure>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p class="title is-5"><%= sim.name %> </p>
+                                        </div>
+                                    </div>
+                                    <div class="accepted_currencies frame">
+                                            <p class="curr_text" id="btc_curr"><%= sim.btcPrice %></p>
+                                            <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                    </div>
+                                </div> 
+                            </a>      
                         </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
-                                </div>
-                            </div>
-                            <div class="accepted_currencies">
-                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                            </div>
-                        </div> 
-                    </a>                       
-                </div>
-                <div class="column card feat_card">
-                    <a href="">
-                        <div class="card-image">
-                            <figure class="image profileProducts">
-                                <img src="../../dist/img/blanc.jpg" class="featimgs">
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
-                                </div>
-                            </div>
-                            <div class="accepted_currencies">
-                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                            </div>
-                        </div> 
-                    </a>                       
-                </div>
-                <div class="column card feat_card">
-                    <a href="">
-                        <div class="card-image">
-                            <figure class="image profileProducts">
-                                <img src="../../dist/img/blanc.jpg" class="featimgs">
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-5">asdfadsfd fdafdsafa das fdsa dsa dsa da </p>
-                                </div>
-                            </div>
-                            <div class="accepted_currencies">
-                                <img src="../../dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
-                                <img src="../../dist/img/bitcoincash.png" class="curr_img"  alt="Bitcoin Cash">
-                                <img src="../../dist/img/ethereum.png" class="curr_img"  alt="Ethereum">
-                                <img src="../../dist/img/litecoin.png" class="curr_img"  alt="Litecoin">
-                                <img src="../../dist/img/dash.png" class="curr_img"  alt="DASH">
-                            </div>
-                        </div> 
-                    </a>                       
+                    <% }); %>  
                 </div>
             </div>
-        </div>
+        <% } %>
     </div>    
 </div>
 

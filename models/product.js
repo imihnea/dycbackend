@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const mongoosastic = require('mongoosastic');
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
+const random = require('mongoose-simple-random');
 const Review = require('./review');
 
 
@@ -12,12 +13,7 @@ const ProductSchema = new Schema({
   condition: { type: String, es_indexed: true, es_type: 'text' },
   description: { type: String, es_indexed: true, es_type: 'text' },
   status: { type: String, es_indexed: true, es_type: 'text' },
-  price: { type: Array, default: [0, 0, 0, 0, 0] },
   btcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  bchPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  ethPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  ltcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  dashPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
@@ -83,6 +79,7 @@ ProductSchema.methods.calculateAvgRating = function() {
 };
 
 ProductSchema.plugin(mongoosePaginate);
+ProductSchema.plugin(random);
 
 // For local ElasticSearch
 ProductSchema.plugin(mongoosastic);
