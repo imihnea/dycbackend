@@ -21,7 +21,7 @@
                                 <div class="column">
                                     <div class="address">
                                         <label class="label adrlabel">Current<br/>  Withdrawal Address</label>
-                                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" disabled />
+                                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" readonly />
                                     </div>
                                     <form action="/dashboard/addresses" method="POST">
                                         <div class="address">
@@ -32,7 +32,7 @@
                                     </form>    
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" disabled />
+                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
                                     </div>
                                     <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                                     <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -145,7 +145,7 @@
                                                                 <div class="field-body">
                                                                 <div class="field">
                                                                     <div class="control">
-                                                                        <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" disabled/>
+                                                                        <input class="input" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" readonly/>
                                                                     </div>
                                                                 </div>
                                                                 </div>

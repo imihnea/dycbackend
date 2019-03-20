@@ -111,3 +111,69 @@ div.latest-details{
     margin-right: 2em !important;
     width: 125px !important;
 }
+
+/* Preloader start */
+
+.noscroll {
+    position: fixed;
+    overflow: hidden;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #333;
+}
+
+#spinner {
+    display: none;
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
+    text-align:center;
+    z-index: 101;
+    color:#888888;
+}
+
+.path {
+    stroke-dasharray: 2110;
+    stroke-dashoffset: 2110;
+    stroke-width:2;
+    stroke-linecap:round;
+    animation: dash 6s linear infinite;
+    fill-opacity:0;
+    stroke:orange;
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dashoffset: 2110;
+      opacity:0;
+      stroke:orange;
+    }
+    15%{
+      opacity:1;
+      stroke:orange;
+    }
+    70%{
+      opacity:1;
+      stroke:orange;
+    }
+    100%{
+      stroke-dashoffset:0;
+      opacity:0;
+      stroke:yellow;
+    }
+  }
+
+/* Preloader end */

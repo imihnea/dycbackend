@@ -77,28 +77,12 @@ module.exports = {
         if(!error && response.statusCode == 200) {
             var json = JSON.parse(body);
             var data = json.data;
-            var ltcrate = data.ltc.rate;
             var btcrate = data.btc.rate;
-            var bchrate = data.bch.rate;
-            var ethrate = data.eth.rate;
-            var dashrate = data.dash.rate;
-            var maxConfirmationsLTC = data.ltc.maxConfirmations;
             var maxConfirmationsBTC = data.btc.maxConfirmations;
-            var maxConfirmationsBCH = data.bch.maxConfirmations;
-            var maxConfirmationsETH = data.eth.maxConfirmations;
-            var maxConfirmationsDASH = data.dash.maxConfirmations;
             res.render('dashboard/dashboard_addr', 
             { user: req.user,
-              ltcrate,
               btcrate,
-              bchrate,
-              ethrate,
-              dashrate,
-              maxConfirmationsLTC,
               maxConfirmationsBTC,
-              maxConfirmationsBCH,
-              maxConfirmationsETH,
-              maxConfirmationsDASH
             });
         }
     });
