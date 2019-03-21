@@ -9,6 +9,15 @@
             <h2 class="title">Addresses</h2>
         </div>
         <br>
+        <div class="container is-fluid" style="margin-bottom: 3vh;">
+            <% if(errors){ %>
+                <div class="notification is-danger" role="alert"> 
+                <% errors.forEach(function( err){ %>
+                    <%= err.msg %><br>
+                <% }) %>
+                </div>
+            <% } %>
+        </div>
         <div class="columns">
             <div class="column is-four-fifths" style="margin: auto;">
                 <div class="columns">

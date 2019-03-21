@@ -83,6 +83,7 @@ module.exports = {
             { user: req.user,
               btcrate,
               maxConfirmationsBTC,
+              errors: false
             });
         }
     });
@@ -176,16 +177,37 @@ module.exports = {
   // Get address modifications
   async addAddresses(req, res) {
     const query = { _id: req.user._id };
-    const name = req.body.btcadr;
-    if (name === req.body.btcadr) {
-      await User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
-        if (err) {
-          req.flash('error', err.message);
-        } else {
-          req.flash('success', 'Successfully updated address!');
-          res.redirect('/dashboard/addresses');
+    req.check('btcadr', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]$/g).notEmpty();
+    req.check('btcadr', 'Invalid address format').isLength({ min: 26, max: 35 });
+    const errors = req.validationErrors();
+    if (errors) {
+      var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+      request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var btcrate = data.btc.rate;
+            var maxConfirmationsBTC = data.btc.maxConfirmations;
+            res.render('dashboard/dashboard_addr', 
+            { user: req.user,
+              btcrate,
+              maxConfirmationsBTC,
+              errors
+            });
         }
       });
+    } else {
+      const name = req.body.btcadr;
+      if (name === req.body.btcadr) {
+        await User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
+          if (err) {
+            req.flash('error', err.message);
+          } else {
+            req.flash('success', 'Successfully updated address!');
+            res.redirect('/dashboard/addresses');
+          }
+        });
+      }
     }
   },
   async topUp(req, res) {

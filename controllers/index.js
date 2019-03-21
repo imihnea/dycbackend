@@ -22,7 +22,7 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 
 module.exports = {
   getRegister(req, res) {
-    res.render('index/register', {errors: false});
+    res.render('index/register', {errors: false, regErrors: false});
   },
   // POST /register
   async postRegister(req, res) {
@@ -40,17 +40,28 @@ module.exports = {
         errors.msg = 'Captcha verification failed. Please try again.';
         return res.render('index/register', {errors});
       }
-      const newUser = new User({ email: req.body.email, username: req.body.username });
-      try {
-        await User.register(newUser, req.body.password);
-      } catch (error) {
-        req.flash('error', error.message);
-        return res.redirect('back');
+      req.check('email', 'The email address is invalid').isEmail().notEmpty();
+      req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]$/g).notEmpty();
+      req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
+      req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
+      req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
+      req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
+      const regErrors = req.validationErrors();
+      if (regErrors) {
+        res.render('index/register', {errors: false, regErrors});
+      } else {
+        const newUser = new User({ email: req.body.email, username: req.body.username });
+        try {
+          await User.register(newUser, req.body.password);
+        } catch (error) {
+          req.flash('error', error.message);
+          return res.redirect('back');
+        }
+        passport.authenticate('local')(req, res, () => {
+          req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
+          res.redirect('/');
+        }); 
       }
-      passport.authenticate('local')(req, res, () => {
-        req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
-        res.redirect('/');
-      }); 
     });
   },
   postVerify(req, res) {

@@ -1,0 +1,48 @@
+.registerTooltip{
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .registerTooltip::before {
+    position: absolute;
+    top: -35px;
+    left: 38px;
+    background-color: white;
+    border-radius: 5px;
+    color: #fff;
+    content: attr(aria-label);
+    padding: 1rem;
+    text-transform: none;
+    transition: all 0.3s ease;
+    width: 160px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important; 
+  }
+  
+  .registerTooltip::after {
+    position: absolute;
+    top: -0px;
+    left: 32px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid #2B222A;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+    margin-left: -5px;
+    width: 0; 
+  }
+  
+  .registerTooltip::before, .registerTooltip::after {
+    color: black;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+    opacity: 0;
+    pointer-events: none;
+    text-align: center; 
+  }
+  
+  .registerTooltip:focus::before, .registerTooltip:focus::after, .registerTooltip:hover::before, .registerTooltip:hover::after {
+    opacity: 1;
+    transition: all 0.5s ease;
+  }

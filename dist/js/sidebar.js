@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#addresses').classList.add('active-page');
       break;
     }
+    case ('/dashboard/addresses/btc'): {
+      document.querySelector('#addresses').classList.add('active-page');
+      break;
+    }
     case ('/messages/'): {
       document.querySelector('#messages').classList.add('active-page');
       break;
