@@ -9,6 +9,7 @@ const searchTerm = require('../models/searchTerm');
 const Nexmo = require('nexmo');
 const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
+const jwt = require('jsonwebtoken');
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -19,6 +20,9 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
+const EMAIL_SECRET = 'monkaS';
+const SECRET = 'monkaMega';
+const SECRET2 = 'monkaGiga';
 
 module.exports = {
   getRegister(req, res) {
@@ -41,7 +45,7 @@ module.exports = {
         return res.render('index/register', {errors});
       }
       req.check('email', 'The email address is invalid').isEmail().notEmpty();
-      req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]$/g).notEmpty();
+      req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
       req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
@@ -53,14 +57,61 @@ module.exports = {
         const newUser = new User({ email: req.body.email, username: req.body.username });
         try {
           await User.register(newUser, req.body.password);
+          const token = jwt.sign({
+              user: newUser._id
+            }, 
+            SECRET, 
+            { expiresIn: '1h' }
+          );
+          const output = `
+          <h1>Please confirm your email</h1>
+          <p>An account was created using this email address. Click <a href="localhost:8080/confirmation/${token}">here</a> in order to confirm it.</p>
+          <p>Ignore this message if you did not request the account creation.</p>
+          `;
+          nodemailer.createTestAccount(() => {
+          // create reusable transporter object using the default SMTP transport
+              const transporter = nodemailer.createTransport({
+                  host: EMAIL_HOST,
+                  port: EMAIL_PORT,
+                  auth: {
+                      user: EMAIL_USER,
+                      pass: EMAIL_API_KEY,
+                  },
+              });
+              // setup email data with unicode symbols
+              const mailOptions = {
+                  from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                  to: `${newUser.email}`, // list of receivers
+                  subject: 'Email Confirmation Required', // Subject line
+                  html: output, // html body
+              };
+              // send mail with defined transport object
+              transporter.sendMail(mailOptions, (error) => {
+                  if (error) {
+                  console.log(error);
+                  }
+              });
+          });
         } catch (error) {
           req.flash('error', error.message);
           return res.redirect('back');
         }
-        passport.authenticate('local')(req, res, () => {
-          req.flash('success', `Successfully signed up! Nice to meet you ${req.body.username}`);
-          res.redirect('/');
+        passport.authenticate('local', { session: false })(req, res, () => {
+          req.flash('success', `Successfully signed up! Please confirm your email address.`);
+          res.redirect('/login');
         }); 
+      }
+    });
+  },
+  async confirmEmail(req, res) {
+    const user = jwt.verify(req.params.token, SECRET);
+    await User.findByIdAndUpdate(user.user, { confirmed: true }, async (err) => {
+      if (err) {
+        req.flash('error', err.message);
+        res.render('/login');
+      } else {
+        req.flash('success', 'You have successfully confirmed your email. You can now log in!');
+        res.redirect('/login');
       }
     });
   },

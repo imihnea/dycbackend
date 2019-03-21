@@ -14,6 +14,7 @@ const UserSchema = new Schema({
     type: String,
     set: toLower,
   },
+  confirmed: { type: Boolean, default: false },
   username: { type: String, set: toLower },
   avatar: { url: {type: String, default: 'https://res.cloudinary.com/dxbujmytn/image/upload/v1548677272/gbjahfrfhjyh0clslkux.png' /* Modify with something else */}, public_id: String },
   password: String,

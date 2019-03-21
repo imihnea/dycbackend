@@ -210,18 +210,6 @@ module.exports = {
       }
     }
   },
-  async topUp(req, res) {
-    // Take the currency from a wallet before this happens
-    const user = await User.findById(req.user._id);
-    if (user.currency[req.params.id]) {
-      user.currency[req.params.id] += Number(req.body.value);
-    } else {
-      user.currency[req.params.id] = Number(req.body.value);
-    }
-    user.markModified('currency');
-    await user.save();
-    res.redirect('/dashboard/addresses');
-  },
   //Withdraw BTC from Coinbase
   async withdraw(req, res) {
     var address = req.body.address;

@@ -6,6 +6,7 @@ const passport = require('passport');
 const {
   getRegister,
   postRegister,
+  confirmEmail,
   getLogin,
   postLogin,
   getLogout,
@@ -54,6 +55,8 @@ router.get('/register', getRegister);
 
 //  handle sign up logic
 router.post('/register', asyncErrorHandler(postRegister));
+
+router.get('/confirmation/:token', asyncErrorHandler(confirmEmail));
 
 router.post('/verify', isLoggedIn, postVerify);
 
