@@ -137,8 +137,9 @@ div.latest-details{
     height: 80px;
     top: 50%;
     left: 50%;
-    margin-top: -5%;
-    margin-left: -3%;
+    /* need to make different margins for each screen dimension */
+    margin-top: -2.5%;
+    margin-left: -1.5%;
     text-align:center;
     z-index: 101;
     color:#888888;
