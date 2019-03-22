@@ -24,6 +24,41 @@ const EMAIL_SECRET = 'monkaS';
 const SECRET = 'monkaMega';
 const SECRET2 = 'monkaGiga';
 
+function sendConfirmationEmail(userid, useremail) {
+  const token = jwt.sign({
+    user: userid
+  }, 
+  SECRET, 
+  { expiresIn: '10m' }
+  );
+  const output = `
+  <h1>Please confirm your email</h1>
+  <p>An account was created using this email address. Click <a href="localhost:8080/confirmation/${token}">here</a> in order to confirm it.</p>
+  <p>Ignore this message if you did not request the account creation.</p>
+  `;
+  nodemailer.createTestAccount(() => {
+    const transporter = nodemailer.createTransport({
+        host: EMAIL_HOST,
+        port: EMAIL_PORT,
+        auth: {
+            user: EMAIL_USER,
+            pass: EMAIL_API_KEY,
+        },
+    });
+    const mailOptions = {
+        from: `Deal Your Crypto <noreply@dyc.com>`,
+        to: `${useremail}`,
+        subject: 'Email Confirmation Required',
+        html: output,
+    };
+    transporter.sendMail(mailOptions, (error) => {
+        if (error) {
+          console.log(error);
+        }
+    });
+  });
+};
+
 module.exports = {
   getRegister(req, res) {
     res.render('index/register', {errors: false, regErrors: false});
@@ -57,61 +92,43 @@ module.exports = {
         const newUser = new User({ email: req.body.email, username: req.body.username });
         try {
           await User.register(newUser, req.body.password);
-          const token = jwt.sign({
-              user: newUser._id
-            }, 
-            SECRET, 
-            { expiresIn: '1h' }
-          );
-          const output = `
-          <h1>Please confirm your email</h1>
-          <p>An account was created using this email address. Click <a href="localhost:8080/confirmation/${token}">here</a> in order to confirm it.</p>
-          <p>Ignore this message if you did not request the account creation.</p>
-          `;
-          nodemailer.createTestAccount(() => {
-          // create reusable transporter object using the default SMTP transport
-              const transporter = nodemailer.createTransport({
-                  host: EMAIL_HOST,
-                  port: EMAIL_PORT,
-                  auth: {
-                      user: EMAIL_USER,
-                      pass: EMAIL_API_KEY,
-                  },
-              });
-              // setup email data with unicode symbols
-              const mailOptions = {
-                  from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                  to: `${newUser.email}`, // list of receivers
-                  subject: 'Email Confirmation Required', // Subject line
-                  html: output, // html body
-              };
-              // send mail with defined transport object
-              transporter.sendMail(mailOptions, (error) => {
-                  if (error) {
-                  console.log(error);
-                  }
-              });
-          });
+          sendConfirmationEmail(newUser._id, newUser.email, SECRET);
         } catch (error) {
           req.flash('error', error.message);
           return res.redirect('back');
         }
         passport.authenticate('local', { session: false })(req, res, () => {
           req.flash('success', `Successfully signed up! Please confirm your email address.`);
-          res.redirect('/login');
+          res.render('index/confirmEmail', {user: newUser});
         }); 
       }
     });
   },
   async confirmEmail(req, res) {
-    const user = jwt.verify(req.params.token, SECRET);
-    await User.findByIdAndUpdate(user.user, { confirmed: true }, async (err) => {
+    let uuser;
+    jwt.verify(req.params.token, SECRET, async (err) => {
       if (err) {
-        req.flash('error', err.message);
-        res.render('/login');
+        if (err.message.match(/Invalid/i)) {
+          req.flash('error', 'Invalid link.');
+          res.render('/login');
+        }
+        if (err.message.match(/Expired/i)) {
+          req.flash('error', 'The link has expired. You should receive another email shortly.');
+          const id = jwt.decode(req.params.token);
+          uuser = await User.findById(id.user);
+          sendConfirmationEmail(uuser._id, uuser.email, SECRET);
+          res.redirect('/login');
+        }
       } else {
-        req.flash('success', 'You have successfully confirmed your email. You can now log in!');
-        res.redirect('/login');
+        const user = jwt.decode(req.params.token);
+        uuser = await User.findByIdAndUpdate(user.user, { confirmed: true }, async (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            req.flash('success', 'You have successfully confirmed your email. You can now log in!');
+            res.redirect('/login');
+          }
+        });
       }
     });
   },
@@ -221,33 +238,43 @@ module.exports = {
         errors.msg = 'Invalid user/password combination or the user does not exist.';
         return res.render('index/login', {errors});
       }
-      if (user.twofactor === true) {
-        nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
-          if(err) {
-            let errors = { msg: String };
-            errors.msg = err.message;
-            return res.render('index/login', {errors});
-          } else {
-            let requestId = result.request_id;
-            if(result.status == '0') {
-              res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
-            } else {
-              let errors = { msg: String };
-              errors.msg = 'Something went wrong. Please try again.';
-              return res.render('index/login', {errors});
-            }
-          }
-        });
+      if ((!user.confirmed) && (!user.googleId) && (!user.facebookId)){
+        res.render('index/confirmEmail', {user});
       } else {
-        passport.authenticate('local',
-        {
-          successFlash: 'Welcome to Deal Your Crypto!',
-          successRedirect: '/',
-          failureRedirect: '/login',
-          failureFlash: true,
-        })(req, res, next);
+        if (user.twofactor === true) {
+          nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+            if(err) {
+              let errors = { msg: String };
+              errors.msg = err.message;
+              return res.render('index/login', {errors});
+            } else {
+              let requestId = result.request_id;
+              if(result.status == '0') {
+                res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
+              } else {
+                let errors = { msg: String };
+                errors.msg = 'Something went wrong. Please try again.';
+                return res.render('index/login', {errors});
+              }
+            }
+          });
+        } else {
+          passport.authenticate('local',
+          {
+            successFlash: 'Welcome to Deal Your Crypto!',
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true,
+          })(req, res, next);
+        }
       }
     });
+  },
+  async resendEmail(req, res) {
+    const user = await User.findById(req.params.id);
+    sendConfirmationEmail(user._id, user.email);
+    req.flash('success', 'Confirmation email resent. Please check your inbox.');
+    res.redirect('/login');
   },
   postVerifyLogin(req, res, next) {
     let pin = req.body.pin;

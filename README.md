@@ -25,10 +25,7 @@ Backend:
       Security => Validate and sanitize every user input
                => Anti DDOS
       Email verification => Error path @confirmEmail doesn't render error
-                         => Block login from users with unconfirmed emails => Ask to resend email
-                         => Register page leads to "check your email" page from where you can resend email
                          => Delete users who didn't confirm their email a few days after account creation
-                         => OAuth users => Create accounts with already confirmed emails
 
    Low Priority:
 

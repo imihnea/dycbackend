@@ -7,6 +7,7 @@ const {
   getRegister,
   postRegister,
   confirmEmail,
+  resendEmail,
   getLogin,
   postLogin,
   getLogout,
@@ -57,6 +58,8 @@ router.get('/register', getRegister);
 router.post('/register', asyncErrorHandler(postRegister));
 
 router.get('/confirmation/:token', asyncErrorHandler(confirmEmail));
+
+router.post('/resend/:id', asyncErrorHandler(resendEmail));
 
 router.post('/verify', isLoggedIn, postVerify);
 

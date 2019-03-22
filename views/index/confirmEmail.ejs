@@ -1,0 +1,19 @@
+<% include ../partials/header %>
+<link rel="stylesheet" href="../../dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">    
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <h1>You have signed up successfully!</h1>
+                <h3>Please confirm your email address.</h3>
+                <br>
+                <p>Make sure to check your spam folder too.</p>
+                <br>
+                <form action="/resend/<%= user._id %>" method="POST">
+                    <button class="button is-primary">Resend confirmation email</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>
