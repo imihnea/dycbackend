@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="column is-one-quarter">
-                <p class="productUserText">Sold by: <a class="productUserLink" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
+                <p class="productUserText">Sold by: <a class="productUserLink link" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
                     <!-- display a full star -->
@@ -164,10 +164,10 @@
                     <% } else if (user.username === product.author.username) { %>
                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
                         <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
-                    <% } else if ( ((user.city == product.author.city) && (product.deliveryOptions.city.valid == true)) ||
-                                   ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) ||
-                                   ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) ||
-                                   (product.deliveryOptions.worldwide.valid == true) ) { %>
+                    <% } else if ( ((user.city == product.author.city) && (product.deliveryOptions.city.valid == true)) && (user.btcbalance >= product.btcPrice) ||
+                                   ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) && (user.btcbalance >= product.btcPrice) ||
+                                   ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) && (user.btcbalance >= product.btcPrice) ||
+                                   (product.deliveryOptions.worldwide.valid == true) && (user.btcbalance >= product.btcPrice) ) { %>
                         <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
                             <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
                             <form action="/messages/<%= product._id %>/createChat" method="POST">
@@ -175,8 +175,9 @@
                             </form>
                         </div>
                 <% } else { %>
-                    <p class="subtitle is-6">The seller does not deliver in your area</p>
+                    <p class="subtitle is-6">The seller does not deliver in your area or you don't have enough balance.</p>
                     <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
+                    <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
                 <% } %>
             </div>                
         </div>  
