@@ -4,11 +4,18 @@
 <div class="hero-body">
     <div class="container content">
         
-        <div class="columns toptitle">
-            <div class="column">
+        <div class="columns toptitle" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <div class="field">
                 <h1>Forgot Password</h1>
+                </div>
                 <form action="/forgot" method="POST">
-                    <input class="input smmargin" name="email" placeholder="Email" type="email" required />
+                    <p class="control has-icons-left">
+                    <input class="input" name="email" placeholder="Email" type="email" required />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    </p>
                     <div class="control smmargin">
                         <button class="button is-primary">Reset Password</button>
                     </div>

@@ -4,12 +4,24 @@
 <div class="hero-body">
     <div class="container content">
         
-        <div class="columns toptitle">
-            <div class="column">
+        <div class="columns toptitle" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <div class="field">
                 <h1>Reset Your Password</h1>
+                </div>
                 <form action="/resetemail/<%= token %>" method="POST">
-                    <input class="input smmargin" name="password" placeholder="New password" type="password" required autofocus />
-                    <input class="input smmargin" name="confirm" placeholder="Confirm Password" type="password" required />
+                    <p class="control has-icons-left">
+                    <input class="input" name="password" placeholder="New password" type="password" required autofocus />
+                    <span class="icon is-small is-left">
+                            <i class="fas fa-key"></i>
+                    </span>
+                    </p>
+                    <p class="control has-icons-left">
+                    <input class="input" name="confirm" placeholder="Confirm Password" type="password" required />
+                    <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        </p>
                     <div class="control smmargin">
                         <button class="button is-primary">Update Password</button>
                     </div>
