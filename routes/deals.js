@@ -42,28 +42,4 @@ router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal),
 // review product
 router.get('/:id/review', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
 
-setInterval(async () => {
-    // get deals that need to be paid
-    let deal = await Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }});
-        deal.forEach(async (item) => {
-            // get user who has to be paid
-            let seller = await User.findById(item.product.author.id);
-            // pay user
-            switch(seller.accountType) {
-                case 'Standard':
-                    seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
-                    break;
-                case 'Partner':
-                    seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
-                    break;
-                default:
-                    break;
-            }
-            seller.save();
-            // set deal as paid  
-            item.paid = true;
-            item.save();
-        });
-  }, 1000);
-
 module.exports = router;

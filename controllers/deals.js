@@ -424,3 +424,33 @@ module.exports = {
         }
     },   
 };
+
+// Pay deals which cannot be refunded anymore
+setInterval(async () => {
+    // get deals that need to be paid
+    let deal = await Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }});
+    deal.forEach((item) => {
+        // get user who has to be paid
+        User.findById(item.product.author.id, (err, seller) => {
+            if (err) {
+                console.log(err);
+            } else {
+                // pay user
+                switch(seller.accountType) {
+                    case 'Standard':
+                        seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+                        break;
+                    case 'Partner':
+                        seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
+                        break;
+                    default:
+                        break;
+                }
+                seller.save();
+                // set deal as paid  
+                item.paid = true;
+                item.save();
+            }
+        });
+    });
+  }, 1000);

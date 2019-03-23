@@ -24,8 +24,6 @@ Backend:
       Dashboard => Add balance route
       Security => Validate and sanitize every user input
                => Anti DDOS
-      Email verification => Error path @confirmEmail doesn't render error
-                         => Delete users who didn't confirm their email a few days after account creation
 
    Low Priority:
 
@@ -38,6 +36,7 @@ Backend:
       Logs => Log errors
            => Log deal status changes
            => Log user changes
+      Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
       Data => Save product data
       

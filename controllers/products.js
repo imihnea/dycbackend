@@ -207,4 +207,26 @@ module.exports = {
             }
         // }
     }
-}
+};
+
+// Remove expired feature fields
+
+// setInterval(() => {
+//   Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       // console.log(result);
+//     }
+//   });
+// }, 300000);
+
+// setInterval(() => {
+//   Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       // console.log(result);
+//     }
+//   });
+// }, 300000);

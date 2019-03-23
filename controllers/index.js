@@ -98,7 +98,6 @@ module.exports = {
           return res.redirect('back');
         }
         passport.authenticate('local', { session: false })(req, res, () => {
-          req.flash('success', `Successfully signed up! Please confirm your email address.`);
           res.render('index/confirmEmail', {user: newUser});
         }); 
       }
@@ -1042,3 +1041,12 @@ module.exports = {
     res.render('privacy-policy');
   },
 };
+
+// Delete non-OAuth users who didn't confirm their email
+setInterval(() => {
+  User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+}, 60000);
