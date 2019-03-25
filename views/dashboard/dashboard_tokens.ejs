@@ -1,6 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
 <link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
 <!-- <script src="../../dist/js/tokens.js"></script> -->
 <div class="columns">
     <% include ../partials/sidebar %>
@@ -25,8 +26,11 @@
                     <form action="/dashboard/tokens/0" method="POST">
                         <div id="btc-fields" class="fields">
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
-                                <p>Price per token: <span id="btcTokenPrice"><%= tokenPrices[0] %></span></p>
+                                <p>Price per token: <span id="btcTokenPrice"><%= tokenprice.toFixed(5) %></span></p>
                                 <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                            <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
+                                <p>Aproximatively $0.99 USD</p>
                             </div>
                             <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
                                 min="0" max="500" required style="margin-top: 3vh;">
@@ -55,7 +59,77 @@
                     <h4 class="title is-5">Yes, we offer category and search promotion and front-page promotion</h4>
                 </div>
             </div>
-        </div>     
+        </div>
+        <div class="pricing-table is-comparative" style="padding-right:2vw;">
+            <div class="pricing-plan is-features">
+              <div class="plan-header">Token Packs</div>
+              <div class="plan-price"><span class="plan-price-amount">&nbsp;</span></div>
+              <div class="plan-items">
+                <div class="plan-item">Tokens</div>
+                <div class="plan-item">Bonus Tokens</div>
+                <div class="plan-item">(%) Saved</div>
+                <div class="plan-item">Premium Membership</div>
+              </div>
+              <div class="plan-footer">
+          
+              </div>
+            </div>
+            <div class="pricing-plan">
+              <div class="plan-header">Basic</div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>19.99</span></div>
+              <div class="plan-items">
+                <div class="plan-item" data-feature="Tokens">21.5</div>
+                <div class="plan-item" data-feature="Bonus Tokens">1.5</div>
+                <div class="plan-item" data-feature="(%) Saved">7.5%</div>
+                <div class="plan-item" data-feature="Premium Membership">-</div>
+              </div>
+              <div class="plan-footer">
+                <button class="button is-fullwidth">Choose</button>
+              </div>
+            </div>
+          
+            <div class="pricing-plan is-warning">
+              <div class="plan-header">Enthusiast</div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>39.99</span></div>
+              <div class="plan-items">
+                <div class="plan-item" data-feature="Tokens">43.5</div>
+                <div class="plan-item" data-feature="Bonus Tokens">3.5</div>
+                <div class="plan-item" data-feature="(%) Saved">8.75%</div>
+                <div class="plan-item" data-feature="Premium Membership">1 Month</div>
+              </div>
+              <div class="plan-footer">
+                <button class="button is-fullwidth">Choose</button>
+              </div>
+            </div>
+          
+            <div class="pricing-plan is-active">
+              <div class="plan-header">Visionary</div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>59.99</span></div>
+              <div class="plan-items">
+                <div class="plan-item" data-feature="Tokens">67</div>
+                <div class="plan-item" data-feature="Bonus Tokens">7</div>
+                <div class="plan-item" data-feature="(%) Saved">11.66%</div>
+                <div class="plan-item" data-feature="Premium Membership">2 Months</div>
+              </div>
+              <div class="plan-footer">
+                <button class="button is-fullwidth">Choose</button>
+              </div>
+            </div>
+          
+            <div class="pricing-plan is-danger">
+              <div class="plan-header">Enterprise</div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>99.99</span></div>
+              <div class="plan-items">
+                <div class="plan-item" data-feature="Tokens">115</div>
+                <div class="plan-item" data-feature="Bonus Tokens">15</div>
+                <div class="plan-item" data-feature="(%) Saved">15%</div>
+                <div class="plan-item" data-feature="Premium Membership">3 Months</div>
+              </div>
+              <div class="plan-footer">
+                <button class="button is-fullwidth">Choose</button>
+              </div>
+            </div>
+          </div>
     </div>
 </div>
 

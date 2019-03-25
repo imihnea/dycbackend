@@ -25,6 +25,7 @@
                         <div class="adr">
                             <div class="currency"> 
                                 <img src="../../dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
+                                <p class="title"> = $<%= btcrate %> USD</p>
                             </div>
                             <div class="columns">
                                 <div class="column">
@@ -41,7 +42,7 @@
                                     </form>    
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
+                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC = $<%= user.btcbalance %>*<%= btcrate %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
                                     </div>
                                     <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                                     <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -337,103 +338,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <br>
-                <div class="columns">
-                    <div class="column frame">
-                        <h4 class="new-text">Payments Received</h4>
-                        <br>
-                        <% if (dealsSold.length == 0) { %>
-                            <p>You haven't sold any products yet.</p>
-                        <% } else { %>
-                            <table class="table is-hoverable is-bordered new-table">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Product</th>
-                                        <th>Buyer</th>
-                                        <th>Paid On</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% dealsSold.forEach( (deal, index) => { %>
-                                        <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
-                                            <td><a href="/profile/<%= deal.buyer.id %>" class="link"><%= deal.buyer.name %></a></td>
-                                            <td><%= deal.refundableUntil.toUTCString() %></td>
-                                            <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
-                                        </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        <% } %>
-                    </div>
-                </div>
-                <br>
-                <div class="columns">
-                    <div class="column frame">
-                        <h4 class="new-text">Payments Sent</h4>
-                        <br>
-                        <% if (dealsBought.length == 0) { %>
-                            <p>You haven't made any payments yet.</p>
-                        <% } else { %>
-                            <table class="table is-hoverable is-bordered new-table">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Product</th>
-                                        <th>Seller</th>
-                                        <th>Paid On</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% dealsBought.forEach( (deal, index) => { %>
-                                        <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
-                                            <td><a href="/profile/<%= deal.product.author.id %>" class="link"><%= deal.product.author.name%></a></td>
-                                            <td><%= deal.createdAt.toUTCString() %></td>
-                                            <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
-                                        </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        <% } %>
-                    </div>
-                </div>
-                <br>
-                <div class="columns">
-                    <div class="column frame">
-                        <h4 class="new-text">Withdraw History</h4>
-                        <br>
-                        <% if (dealsBought.length == 0) { %>
-                            <p>You haven't made any withdrawals yet.</p>
-                        <% } else { %>
-                            <table class="table is-hoverable is-bordered new-table">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Address</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% user.withdrawal.forEach( (withdrawal, index) => { %>
-                                        <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><%= withdrawal.sentTo %></td>
-                                            <td><%= withdrawal.amount %></td>
-                                            <td><%= withdrawal.createdAt.toUTCString() %></td>
-                                        </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        <% } %>
                     </div>
                 </div>
             </div>  

@@ -17,6 +17,7 @@
                         </div>
                     <% } %>
                 </div>
+                <br>
                 <div class="frame">
                     <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                     <input class="input smmargin" style="width: 90%;" name="product[name]" value="<%= product.name %>" type="text" required />
@@ -157,7 +158,7 @@
                     <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
                         <div class="field">
                             <p class="control has-icons-left smmargin" style="margin: auto;">
-                                <input class="input" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step=any value="<%= product.price[0] %>" />
+                                <input class="input" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step=any value="<%= product.btcPrice %>" />
                                 <span class="icon is-small is-left">
                                     <i class="fab fa-bitcoin" style="color: orange;"></i>
                                 </span>

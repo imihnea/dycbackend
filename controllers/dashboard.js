@@ -391,8 +391,22 @@ module.exports = {
     }, 1000 * 60);
   },
   // Get tokens page
-  getTokens(req, res) {
-    res.render('dashboard/dashboard_tokens', { user: req.user, tokenPrices, errors: req.session.errors });
+  async getTokens(req, res) {
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, async function(error, response, body){
+        if(!error && response.statusCode == 200) {
+            var json = JSON.parse(body);
+            var data = json.data;
+            var btcrate = data.btc.rate;
+            var tokenprice = 1/btcrate; // 5 USD
+            res.render('dashboard/dashboard_tokens', { 
+              user: req.user,
+              btcrate,
+              tokenprice,
+              errors: req.session.errors,
+            });
+        }
+    });
   },
   // Buy Tokens
   async buyTokens(req, res) {
@@ -416,7 +430,7 @@ module.exports = {
             req.flash('success', 'Tokens purchased successfully!');
             res.redirect('back');
         } else {
-            req.flash('error', 'Not enough currency.');
+            req.flash('error', 'Insufficient balance.');
             res.redirect('back');
         }
     }
@@ -429,7 +443,7 @@ module.exports = {
   async productCreate(req, res) {
     if ( req.files.length === 0 ){
       req.flash('error', 'You need to upload at least one image.');
-      res.redirect('dashboard/dashboard_new');
+      res.redirect('/dashboard/new');
     } else {
       req.body.product.images = [];
       for (const file of req.files) {
@@ -456,7 +470,7 @@ module.exports = {
       req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
-      req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
       req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
@@ -694,8 +708,7 @@ module.exports = {
     req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
-    req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
-    req.check('product[description]', 'The product must have a valid description.').notEmpty();
+    req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
     req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);

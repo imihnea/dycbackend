@@ -72,7 +72,7 @@ router.post('/addresses/altcoins/poll', asyncErrorHandler(CoinSwitchPoll));
 router.post('/addresses/withdrawBTC', isLoggedIn, asyncErrorHandler(withdraw));
 
 // Dashboard tokens route; gets current number of tokens
-router.get('/tokens', isLoggedIn, getTokens);
+router.get('/tokens', isLoggedIn, asyncErrorHandler(getTokens));
 
 // Buy tokens route
 router.post('/tokens/:id', isLoggedIn, asyncErrorHandler(buyTokens));
