@@ -43,11 +43,40 @@ module.exports = {
                     console.log(err);
                     res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed, user: req.user });
                 } else {
+                    let similar = [];
                     if (result != undefined) {
-                        let similar = Array.from(result);
-                        res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+                        similar = Array.from(result);
+                    }
+                    let ids = [ req.params.id ];
+                    if (similar.length > 0) {
+                        similar.forEach((sim) => {
+                            ids.push(sim._id);
+                        });
+                    }
+                    if (similar.length < 4) {
+                        Product.findRandom({ _id: { $nin: ids }, 'category.2': { $eq: product.category[2] }}, {}, { limit: 4 - similar.length }, (err, result) => {
+                            if (err) {
+                                console.log(err);
+                                if (similar.length > 0) {
+                                    res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+                                } else {
+                                    res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed, user: req.user });
+                                }
+                            } else {
+                                if (result != undefined) {
+                                    Array.from(result).forEach((res) => {
+                                        similar.push(res);
+                                    });
+                                }
+                                res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+                            }
+                        });
                     } else {
-                        res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                        if (similar.length > 0) {
+                            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+                        } else {
+                            res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed, user: req.user });
+                        }
                     }
                 }
             });
@@ -57,11 +86,40 @@ module.exports = {
                     console.log(err);
                     res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
                 } else {
+                    let similar = [];
                     if (result != undefined) {
-                        let similar = Array.from(result);
-                        res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+                        similar = Array.from(result);
+                    }
+                    if (similar.length < 4) {
+                        let ids = [ req.params.id ];
+                        if (similar.length > 0) {
+                            similar.forEach((sim) => {
+                                ids.push(sim._id);
+                            });
+                        }
+                        Product.findRandom({ _id: { $nin: ids }, 'category.2': { $eq: product.category[2] }}, {}, { limit: 4 - similar.length }, (err, result) => {
+                            if (err) {
+                                console.log(err);
+                                if (similar.length > 0) {
+                                    res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+                                } else {
+                                    res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                                }
+                            } else {
+                                if (result != undefined) {
+                                    Array.from(result).forEach((res) => {
+                                        similar.push(res);
+                                    });
+                                }
+                                res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+                            }
+                        });
                     } else {
-                        res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                        if (similar.length > 0) {
+                            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+                        } else {
+                            res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                        }
                     }
                 }
             });
