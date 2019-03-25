@@ -8,6 +8,11 @@ const Deal = require('../models/deal');
 var request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
+const nodemailer = require('nodemailer');
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
@@ -27,8 +32,8 @@ cloudinary.config({
 var Client = require('coinbase').Client;
 
 var client = new Client({
-  'apiKey': 'ClTJkzAmtBDFy8UI',
-  'apiSecret': 'aCcx6OQysmYOWvUgOGj2ZhenpXqj1Upm',
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
 });
 
 module.exports = {
@@ -238,6 +243,39 @@ module.exports = {
                 console.log(tx);
                 var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } } );
                 query_btc.then(function(doc) {
+                  const withdrawal = {
+                    amount,
+                    sentTo: address
+                  };
+                  query_btc.withdrawal.push(withdrawal);
+                  query_btc.save();
+                  const output = `
+                  <h1>Withdrawal Sent Successfully</h1>
+                  <p>${amount} BTC has been sent to ${address}.</p>
+                  <p>Click <a href="http://${req.headers.host}/dashboard/address">here</a> to see more information.</p>
+                  `;
+                  nodemailer.createTestAccount(() => {
+                      const transporter = nodemailer.createTransport({
+                          host: EMAIL_HOST,
+                          port: EMAIL_PORT,
+                          auth: {
+                              user: EMAIL_USER,
+                              pass: EMAIL_API_KEY,
+                          },
+                      });
+                      const mailOptions = {
+                          from: `Deal Your Crypto <noreply@dyc.com>`,
+                          to: `${user.email}`,
+                          subject: 'Currency withdrawn successfully',
+                          html: output,
+                      };
+                      // send mail with defined transport object
+                      transporter.sendMail(mailOptions, (error) => {
+                          if (error) {
+                          console.log(error);
+                          }
+                      });
+                  });
                   req.flash('success', `Successfully withdrawn ${amount} BTC!`);
                   res.redirect('back');
                   console.log(`Withdrawn ${amount} BTC successfully.`);

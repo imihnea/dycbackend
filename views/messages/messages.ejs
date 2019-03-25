@@ -24,7 +24,7 @@
                 <% } %>
                 <div class="columns">
                     <div class="column">
-                        <% for (let i = 0; i < chats.docs.length - 1; i += 2) { %>
+                        <% for (let i = 0; i < chats.docs.length; i += 2) { %>
                             <div class="columns messageObj frame">
                                 <% if (!chats.docs[i].deal) { %>
                                     <form action="/messages/<%= chats.docs[i]._id %>?_method=PUT" method="POST" class="updMsg">

@@ -121,10 +121,22 @@ module.exports = {
             // Find the seller
             const user2 = await User.findById( product.author.id );
             const newChat = {
-                user1: { id: req.user._id, fullname: req.user.full_name, avatarUrl: req.user.avatar.url },
-                user2: { id: user2.id, fullname: user2.full_name, avatarUrl: user2.avatar.url },
-                product: { id: product._id, name: product.name, imageUrl: product.images[0].url, price: product.price,
-                    accepted: product.accepted },
+                user1: { 
+                    id: req.user._id, 
+                    fullname: req.user.full_name, 
+                    avatarUrl: req.user.avatar.url 
+                },
+                user2: { 
+                    id: user2.id, 
+                    fullname: user2.full_name, 
+                    avatarUrl: user2.avatar.url 
+                },
+                product: { 
+                    id: product._id, 
+                    name: product.name, 
+                    imageUrl: product.images[0].url, 
+                    price: product.price,
+                },
                     deal: req.params.dealid 
                 };
             chat = await Chat.create(newChat);
