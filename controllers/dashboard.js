@@ -73,17 +73,21 @@ module.exports = {
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
+    request(url, async function(error, response, body){
         if(!error && response.statusCode == 200) {
             var json = JSON.parse(body);
             var data = json.data;
             var btcrate = data.btc.rate;
             var maxConfirmationsBTC = data.btc.maxConfirmations;
-            res.render('dashboard/dashboard_addr', 
-            { user: req.user,
+            const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed'});
+            const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed'});
+            res.render('dashboard/dashboard_addr', { 
+              user: req.user,
               btcrate,
               maxConfirmationsBTC,
-              errors: false
+              errors: false,
+              dealsSold,
+              dealsBought
             });
         }
     });

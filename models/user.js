@@ -14,11 +14,35 @@ const UserSchema = new Schema({
     type: String,
     set: toLower,
   },
-  confirmed: { type: Boolean, default: false },
-  username: { type: String, set: toLower },
-  avatar: { url: {type: String, default: 'https://res.cloudinary.com/dxbujmytn/image/upload/v1548677272/gbjahfrfhjyh0clslkux.png' /* Modify with something else */}, public_id: String },
+  confirmed: { 
+    type: Boolean, 
+    default: false 
+  },
+  username: { 
+    type: String, 
+    set: toLower 
+  },
+  avatar: { 
+    url: { 
+      type: String, 
+      default: 'https://res.cloudinary.com/dxbujmytn/image/upload/v1548677272/gbjahfrfhjyh0clslkux.png' /* Modify with something else */
+    }, 
+    public_id: String 
+  },
   password: String,
   btcbalance: Number,
+  withdrawal: [{ 
+    createdAt: { 
+      type: Date, 
+      default: Date.now 
+    }, 
+    amount: Number, 
+    currency: { 
+      type: String, 
+      default: 'BTC' 
+    },
+    sentTo: String
+  }],
   full_name: String,
   number: Number,
   twofactor: Boolean,
@@ -29,7 +53,10 @@ const UserSchema = new Schema({
   address1: String,
   address2: String,
   zip: String,
-  accountType: { type: String, default: 'Standard' },
+  accountType: { 
+    type: String, 
+    default: 'Standard' 
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   resetEmailToken: String,
@@ -37,8 +64,14 @@ const UserSchema = new Schema({
   facebookId: String,
   googleId: String,
   btcadr: String,
-  feature_tokens: { type: Number, default: 0 },
-  nrSold: { type: Number, default: 0 },
+  feature_tokens: { 
+    type: Number, 
+    default: 0 
+  },
+  nrSold: { 
+    type: Number, 
+    default: 0 
+  },
   reviews: [
     {
       type: Schema.Types.ObjectId,
