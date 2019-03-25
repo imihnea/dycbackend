@@ -16,7 +16,8 @@ const UserSchema = new Schema({
   },
   confirmed: { 
     type: Boolean, 
-    default: false 
+    default: false,
+    index: true
   },
   username: { 
     type: String, 
@@ -61,8 +62,14 @@ const UserSchema = new Schema({
   resetPasswordExpires: Date,
   resetEmailToken: String,
   resetEmailExpires: Date,
-  facebookId: String,
-  googleId: String,
+  facebookId: { 
+    type: String,
+    index: true
+  },
+  googleId: {
+    type: String,
+    index: true
+  },
   btcadr: String,
   feature_tokens: { 
     type: Number, 
@@ -106,5 +113,8 @@ UserSchema.methods.calculateAvgRating = function() {
 
 UserSchema.plugin(findOrCreate);
 UserSchema.plugin(passportLocalMongoose);
+
+// Fix this
+// UserSchema.index({createdAt: 1}, {expireAfterSeconds: 10, partialFilterExpression: {confirmed: false, googleId: {$exists: false}, facebookId: {$exists: false} }});
 
 module.exports = mongoose.model('User', UserSchema);

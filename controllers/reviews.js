@@ -37,7 +37,7 @@ module.exports = {
 		const author = await User.findById(product.author.id);
         const output = `
         <h1>${product.name} has a new review!</h1>
-        <p>Click <a href="${req.headers.host}/products/${product._id}">here</a> to check it out.</p>
+        <p>Click <a href="http://${req.headers.host}/products/${product._id}">here</a> to check it out.</p>
         `;
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
@@ -112,7 +112,7 @@ module.exports = {
 		// let the user know of the new review
         const output = `
         <h1>You have a new review!</h1>
-        <p>Click <a href="${req.headers.host}/profile/${user._id}">here</a> to check it out.</p>
+        <p>Click <a href="http://${req.headers.host}/profile/${user._id}">here</a> to check it out.</p>
         `;
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
