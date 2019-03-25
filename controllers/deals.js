@@ -27,7 +27,7 @@ module.exports = {
         <h1>Deal Status Changed: Pending Delivery</h1>
         <p>${req.user.full_name} has accepted your deal request for ${deal.product.name}.</p>
         <p>The product is being delivered. The deal cannot be cancelled anymore and the shipping address cannot be changed.</p>
-        <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to see the deal.</p>
+        <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to see the deal.</p>
         `;
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
@@ -128,7 +128,7 @@ module.exports = {
         <p>Deal: ${product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Completed</p>
-        <p>The refund term is 14 days. Access this <a href="localhost:8080/deals/${deal._id}">link</a> to request a refund.</p>
+        <p>The refund term is 14 days. Access this <a href="${req.headers.host}/deals/${deal._id}">link</a> to request a refund.</p>
         `;
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
@@ -294,7 +294,7 @@ module.exports = {
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Denied</p>
             <p>A moderator will check if the refund was denied for a good reason.</p>
-            <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to view the deal.</p>
+            <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to view the deal.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing
@@ -354,7 +354,7 @@ module.exports = {
             <p>Deal: ${product.name}</p>
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Requested</p>
-            <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to view the full details of the request.</p>
+            <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to view the full details of the request.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing

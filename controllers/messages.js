@@ -155,7 +155,7 @@ module.exports = {
             const output = `
             <h1>You have a new conversation</h1>
             <p>${req.user.full_name} is interested in ${product.name}.</p>
-            <p>Click <a href="localhost:8080/messages/${chat._id}">here</a> to see the conversation.</p>
+            <p>Click <a href="${req.headers.host}/messages/${chat._id}">here</a> to see the conversation.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing

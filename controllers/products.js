@@ -171,7 +171,7 @@ module.exports = {
                 const output = `
                 <h1>You have a new deal request</h1>
                 <p>${req.user.full_name} wants to buy ${product.name}.</p>
-                <p>Click <a href="localhost:8080/deals/${deal._id}">here</a> to see the deal request and decide whether to accept or deny it.</p>
+                <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to see the deal request and decide whether to accept or deny it.</p>
                 `;
                 // Generate test SMTP service account from ethereal.email
                 // Only needed if you don't have a real mail account for testing
