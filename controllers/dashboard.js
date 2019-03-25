@@ -488,13 +488,13 @@ module.exports = {
       };
       req.body.product.author = author;
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 .,!"]+$/g).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
       req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
-      req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!"]+$/g).notEmpty();
       req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
@@ -809,11 +809,9 @@ module.exports = {
         req.flash('error', 'The product must have a delivery method.');
         res.redirect('back');
     }
-    let price = [];
-    let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
+    let btcPrice;
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
-    price[0]=req.body.product.btc_price;
-    btcPrice=price[0];
+    btcPrice = req.body.product.btc_price;
     if (product.tags.indexOf('btc') === -1) {
       product.tags.push('btc');
     } 
@@ -837,7 +835,6 @@ module.exports = {
       product.category[1] = req.body.product.category[0];
       product.category[2] = req.body.product.category[1];
       product.category[3] = req.body.product.category[2];
-      product.price = price;
       product.btcPrice = btcPrice;
       product.deliveryOptions = deliveryOptions;
       // save the updated product into the db

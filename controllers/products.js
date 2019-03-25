@@ -22,14 +22,7 @@ module.exports = {
         });
         // Find similar products
         // Doesn't always show the products - needs further work
-        let similar = [];
-        await Product.findRandom({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] }}, {}, { limit: 4 }, async (err, result) => {
-            if (err) {
-                console.log(err);
-            } else if (result != undefined) {
-                await similar.push(result);
-            }
-        });
+
         const reviews = await Review.paginate({ product: req.params.id },{
             sort: { createdAt: -1 },
             populate: 'product',
@@ -45,9 +38,33 @@ module.exports = {
                     reviewed = true;
                 }
             });
-            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+            Product.findRandom({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] }}, {}, { limit: 4 }, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed, user: req.user });
+                } else {
+                    if (result != undefined) {
+                        let similar = Array.from(result);
+                        res.render('products/product_view', { product, similar, floorRating, reviews, reviewed, user: req.user });
+                    } else {
+                        res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                    }
+                }
+            });
         } else {
-            res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+            Product.findRandom({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] }}, {}, { limit: 4 }, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                } else {
+                    if (result != undefined) {
+                        let similar = Array.from(result);
+                        res.render('products/product_view', { product, similar, floorRating, reviews, reviewed: true, user: false });
+                    } else {
+                        res.render('products/product_view', { product, similar: false, floorRating, reviews, reviewed: true, user: false });
+                    }
+                }
+            });
         }
     },
     postReport(req, res) {

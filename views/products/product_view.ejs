@@ -371,12 +371,12 @@
             <% } %>
         </div>
 
-        <% if (similar.length > 0) { %>
+        <% if (similar) { %>
             <hr class="smallerCenter">
             <p class="productSubTitleText">Similar products</p>
             <div class="column detailsContainer">    
                 <div class="columns" style="justify-content: center;">
-                    <% similar[0].forEach((sim) => { %>
+                    <% similar.forEach((sim) => { %>
                         <div class="column card feat_card frame" style="flex-grow: 0;">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
@@ -391,8 +391,8 @@
                                         </div>
                                     </div>
                                     <div class="accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr"><%= sim.btcPrice %></p>
-                                            <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        <p class="curr_text" id="btc_curr"><%= sim.btcPrice %></p>
+                                        <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
                                 </div> 
                             </a>      

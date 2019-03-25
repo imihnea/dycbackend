@@ -85,6 +85,9 @@ module.exports = {
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
+      // Uncomment when testing is done
+      // const password = new RegExp(req.body.password, "g");
+      // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
       const regErrors = req.validationErrors();
       if (regErrors) {
         res.render('index/register', {errors: false, regErrors});
@@ -310,7 +313,17 @@ module.exports = {
       limit: 20,
     });
     products.page = Number(products.page);
-    res.render('index', { currentUser: req.user, products, errors: false });
+    if (products.docs.length < 20) {
+      Product.findRandom({_id: {$exists: true}}, {name: 1, images: 1, btcPrice: 1, _id: 1}, { limit: 20 - products.docs.length }, (err, result) => {
+        if (!err) {
+          let fillProducts = Array.from(result);
+          res.render('index', { currentUser: req.user, products, fillProducts, errors: false });
+        } else {
+          console.log(err);
+          res.render('index', { currentUser: req.user, products, 'fillProducts.length': 0, errors: false });
+        }
+      });
+    }
   },
   getForgot(req, res) {
     res.render('index/forgot');

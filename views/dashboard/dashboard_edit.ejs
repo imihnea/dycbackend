@@ -1,8 +1,440 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="../../dist/css/products.css">
 <div class="columns">
     <% include ../partials/sidebar %>
     
-    <% include ../partials/edit %>
+    <div class="column dashboard-right">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-three-fifths">
+                <div class="dashTop column">
+                    <h1 class="title">Edit Product</h1>
+                </div>
+                <br>
+                <form action="/dashboard/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                    <div class="container is-fluid">
+                        <% if(errors){ %>
+                            <div class="notification is-danger" role="alert"> 
+                            <% errors.forEach(function( err){ %>
+                                <%= err.msg %><br>
+                            <% }) %>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="frame">
+                        <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
+                        <input class="input smmargin" style="width: 90%;" name="product[name]" value="<%= product.name %>" type="text" required />
+                        <div style="display: flex; width:90%; margin:auto;">
+                            <div class="select cont-select catSelectLeft">
+                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
+                                    <option disabled>Main Category</option>
+                                    <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
+                                    <option value="Electronics" <% if (product.category[1] == 'Electronics') { %> selected <% } %>>Electronics</option>
+                                    <option value="Fashion & Beauty" <% if (product.category[1] == 'Fashion & Beauty') { %> selected <% } %>>Fashion & Beauty</option>
+                                    <option value="Home Improvement" <% if (product.category[1] == 'Home Improvement') { %> selected <% } %>>Home Improvement</option>
+                                    <option value="Leisure Time" <% if (product.category[1] == 'Leisure Time') { %> selected <% } %>>Leisure Time</option>
+                                    <option value="Mothers & Babies" <% if (product.category[1] == 'Mothers & Babies') { %> selected <% } %>>Mothers & Babies</option>
+                                    <option value="Pet Supplies" <% if (product.category[1] == 'Pet Supplies') { %> selected <% } %>>Pet Supplies</option>
+                                    <option value="Real Estate" <% if (product.category[1] == 'Real Estate') { %> selected <% } %>>Real Estate</option>
+                                    <option value="Sports & Outdoors" <% if (product.category[1] == 'Sports & Outdoors') { %> selected <% } %>>Sports & Outdoors</option>
+                                    <option value="Vehicles" <% if (product.category[1] == 'Vehicles') { %> selected <% } %>>Vehicles</option>
+                                </select>
+                            </div>
+                            <div class="select cont-select catSelectCenter">
+                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
+                                    <option value="<%= product.category[2] %>" selected><%= product.category[2] %></option>
+                                </select>
+                            </div>
+                            <div class="select cont-select catSelectRight">
+                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
+                                    <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="select cont-select">
+                            <select type="text" name="product[condition]" style="width: 100%" required>
+                                <option disabled>Condition</option>
+                                <option value="Not Specified" <% if (product.condition == 'Not Specified') { %> selected <% } %> >Not Specified</option>
+                                <option value="Brand New" <% if (product.condition == 'Brand New') { %> selected <% } %> >Brand New</option>
+                                <option value="Like New" <% if (product.condition == 'Like New') { %> selected <% } %>>Like New</option>
+                                <option value="Refurbished" <% if (product.condition == 'Refurbished') { %> selected <% } %>>Refurbished</option>
+                                <option value="Used" <% if (product.condition == 'Used') { %> selected <% } %>>Used</option>
+                                <option value="Broken" <% if (product.condition == 'Broken') { %> selected <% } %>>Broken</option>
+                            </select>
+                        </div>
+                        <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
+                        <br>     
+                        <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center;">
+                            <div>
+                                <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x <% if (product.repeatable) { %>green<% } else { %>normal<% } %>"></i></label>
+                                <input id="repeatable" name="product[repeatable]" type="checkbox" value="true" <% if (product.repeatable) { %>checked<% } %> hidden>
+                            </div>
+                            <div>
+                                <p class="title is-4" style="font-weight: 100;">Repeatable Deal</p>
+                                <p class="subtitle is-6">The product won't disappear from the market once you sell it once.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="frame">
+                        <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
+                        <div class="file-upload">
+                            <div>
+                                <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                    <span style="font-size: 5rem;">
+                                        <i class="far fa-plus-square square <% if (product.images[0]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images[0]) { %> hide <% } %>"></i>
+                                    </span>
+                                </label>
+                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                    <% if (product.images[0]) { %> value="<%= product.images[0].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images[0]) { %> hide <% } %>">
+                                    <span>
+                                        <i class="far fa-trash-alt"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                    <span style="font-size: 5rem;">
+                                        <i class="far fa-plus-square square <% if (product.images[1]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images[1]) { %> hide <% } %>"></i>
+                                    </span>
+                                </label>
+                                <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                    <% if (product.images[1]) { %> value="<%= product.images[1].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images[1]) { %> hide <% } %>">
+                                    <span>
+                                        <i class="far fa-trash-alt"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                    <span style="font-size: 5rem;">
+                                        <i class="far fa-plus-square square <% if (product.images[2]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images[2]) { %> hide <% } %>"></i>
+                                    </span>
+                                </label>
+                                <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                    <% if (product.images[2]) { %> value="<%= product.images[2].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images[2]) { %> hide <% } %>">
+                                    <span>
+                                        <i class="far fa-trash-alt"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                    <span style="font-size: 5rem;">
+                                        <i class="far fa-plus-square square <% if (product.images[3]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images[3]) { %> hide <% } %>"></i>
+                                    </span>
+                                </label>
+                                <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                    <% if (product.images[3]) { %> value="<%= product.images[3].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images[3]) { %> hide <% } %>">
+                                    <span>
+                                        <i class="far fa-trash-alt"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                    <span style="font-size: 5rem;">
+                                        <i class="far fa-plus-square square <% if (product.images[4]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images[4]) { %> hide <% } %>"></i>
+                                    </span>
+                                </label>
+                                <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                    <% if (product.images[4]) { %> value="<%= product.images[4].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images[4]) { %> hide <% } %>">
+                                    <span>
+                                        <i class="far fa-trash-alt"></i>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>                                     
+                    </div>
+                    <br>
+                    <div class="frame">
+                        <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
+                        <div class="field">
+                            <p class="control has-icons-left smmargin" style="margin: auto;">
+                                <input class="input" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step=any value="<%= product.btcPrice %>" />
+                                <span class="icon is-small is-left">
+                                    <i class="fab fa-bitcoin" style="color: orange;"></i>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="frame">
+                        <div style="margin-bottom: 3vh;">
+                            <h4 class="new-text">Delivery</h4>
+                            <sub class="subtitle" >Select all that apply</sub>
+                        </div>
+                        <br>
+                        <div class="columns">
+                            <div class="column">
+                               <div style="display: flex; justify-content: space-evenly">
+                                    <label class="img-check ">
+                                        <div id="cityDiv" class="columns options <% if (product.deliveryOptions.city.valid) { %> optionsChecked <% } else { %> optionsUnchecked <% } %>">
+                                            <div class="column is-half"><i class="fas fa-city fa-3x delivery"></i></div>
+                                            <div class="column">
+                                                <p class="delivery">Same city delivery</p>
+                                            </div>
+                                        </div>
+                                        <input id="city" type="checkbox" name="product[city]" class="curr_checkbox" value="true" <% if (product.deliveryOptions.city.valid) { %> checked <% } %> >
+                                    </label>
+                                </div> 
+                                <br>
+                                <div style="display: flex; justify-content: space-evenly">
+                                    <label class="img-check ">
+                                        <div id="stateDiv" class="columns options <% if (product.deliveryOptions.state.valid) { %> optionsChecked <% } else { %> optionsUnchecked <% } %>">
+                                            <div class="column is-half"><i class="fas fa-map-marked-alt fa-3x delivery"></i></div>
+                                            <div class="column">
+                                                <p class="delivery">Same state delivery</p>
+                                            </div>
+                                        </div>
+                                        <input id="state" type="checkbox" name="product[state]" class="curr_checkbox" value="true" <% if (product.deliveryOptions.state.valid) { %> checked <% } %>>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div style="display: flex; justify-content: space-evenly">
+                                    <label class="img-check ">
+                                        <div id="countryDiv" class="columns options <% if (product.deliveryOptions.country.valid) { %> optionsChecked <% } else { %> optionsUnchecked <% } %>">
+                                            <div class="column is-half"><i class="fas fa-flag fa-3x delivery"></i></div>
+                                            <div class="column">
+                                                <p class="delivery">Same country delivery</p>
+                                            </div>
+                                        </div>
+                                        <input id="country" type="checkbox" name="product[country]" class="curr_checkbox" value="true" <% if (product.deliveryOptions.country.valid) { %> checked <% } %>>
+                                    </label>
+                                </div>
+                                <br>
+                                <div style="display: flex; justify-content: space-evenly">
+                                    <label class="img-check ">
+                                        <div id="worldwideDiv" class="columns options <% if (product.deliveryOptions.worldwide.valid) { %> optionsChecked <% } else { %> optionsUnchecked <% } %>">
+                                            <div class="column is-half"><i class="fas fa-globe-americas fa-3x delivery" ></i></div>
+                                            <div class="column">
+                                                <p class="delivery">Worldwide delivery</p>
+                                            </div>
+                                        </div>
+                                        <input id="worldwide" type="checkbox" name="product[worldwide]" class="curr_checkbox" value="true" <% if (product.deliveryOptions.worldwide.valid) { %> checked <% } %>>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="deliveryVal" type="number" value="0" hidden>
+                    </div>
+                    <br>
+                    <div class="hide frame" id="transport">
+                        <h4 class="new-text" style="margin-bottom: 3vh;">Transport Fees</h4>
+                        <div id="cityDeliv" class="hide frame smallerCenter">
+                                <p class="subtitle is-5">Same city delivery</p>
+                                <br>
+                                <div class="columns">
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="freeCityOpt" class="columns options <% if (product.deliveryOptions.city.cost == 'free') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-thumbs-up fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Free Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="freeCity" type="radio" name="product[cityTransport]" class="curr_checkbox" value="free" <% if (product.deliveryOptions.city.cost == 'free') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="paidCityOpt" class="columns options <% if (product.deliveryOptions.city.cost == 'paid') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-handshake fa-3x delivery" ></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Paid Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="paidCity" type="radio" name="product[cityTransport]"  class="curr_checkbox" value="paid" <% if (product.deliveryOptions.city.cost == 'paid') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                </div>
+                             
+                                <div id="cityTransportDiv" class="<% if (product.deliveryOptions.city.cost != 'paid') { %> hide <% } %> transportFee">
+                                    <input id="cityTransport" name="product[cityTransportPercent]" class="input" style="width: 80%;" type="number" placeholder="Transport fee (%)" min="0" step="0.01" value="<%= product.deliveryOptions.city.percent %>">
+                                </div>
+                            </div>
+                            <br>
+                            <div id="stateDeliv" class="hide frame smallerCenter">
+                                <p class="subtitle is-5">Same state delivery</p> 
+                                <br>
+                                <div class="columns">
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="freeStateOpt" class="columns options <% if (product.deliveryOptions.state.cost == 'free') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-thumbs-up fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Free Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="freeState" type="radio" name="product[stateTransport]" class="curr_checkbox" value="free" <% if (product.deliveryOptions.state.cost == 'free') { %> checked <% } %> >
+                                        </label>
+                                    </div>
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="paidStateOpt" class="columns options <% if (product.deliveryOptions.state.cost == 'paid') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-handshake fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Paid Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="paidState" type="radio" name="product[stateTransport]"  class="curr_checkbox" value="paid" <% if (product.deliveryOptions.state.cost == 'paid') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                </div>     
+                                               
+                                <div id="stateTransportDiv"  class="<% if (product.deliveryOptions.state.cost != 'paid') { %> hide <% } %> transportFee" >
+                                    <input id="stateTransport" name="product[stateTransportPercent]" class="input" style="width: 80%;" type="number" placeholder="Transport fee (%)" min="0" step="0.01" value="<%= product.deliveryOptions.state.percent %>" >
+                                </div>
+                            </div>
+                            <br>
+                            <div id="countryDeliv" class="hide frame smallerCenter">                           
+                                <p class="subtitle is-5">Same country delivery</p>
+                                <br>
+                                <div class="columns">
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="freeCountryOpt" class="columns options <% if (product.deliveryOptions.country.cost == 'free') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-thumbs-up fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Free Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="freeCountry" type="radio" name="product[countryTransport]" class="curr_checkbox" value="free"  <% if (product.deliveryOptions.country.cost == 'free') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="paidCountryOpt" class="columns options <% if (product.deliveryOptions.country.cost == 'paid') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-handshake fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Paid Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="paidCountry" type="radio" name="product[countryTransport]"  class="curr_checkbox" value="paid" <% if (product.deliveryOptions.country.cost == 'paid') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                </div>
+                              
+                                <div id="countryTransportDiv" class="<% if (product.deliveryOptions.country.cost != 'paid') { %> hide <% } %> transportFee">
+                                    <input id="countryTransport" name="product[countryTransportPercent]" class="input" style="width: 80%;" type="number" placeholder="Transport fee (%)" min="0" step="0.01" value="<%= product.deliveryOptions.country.percent %>" >
+                                </div>
+                            </div>
+                            <br>
+                            <div id="worldwideDeliv" class="hide frame smallerCenter">
+                                <p class="subtitle is-5">Worldwide delivery</p>
+                                <br>
+                                <div class="columns">
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div  id="freeWorldwideOpt"class="columns options <% if (product.deliveryOptions.worldwide.cost == 'free') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-thumbs-up fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Free Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="freeWorldwide" type="radio" name="product[worldwideTransport]" class="curr_checkbox" value="free" <% if (product.deliveryOptions.worldwide.cost == 'free') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                    <div class="column"style="display: flex; justify-content: space-evenly">
+                                        <label class="img-check ">
+                                            <div id="paidWorldwideOpt" class="columns options <% if (product.deliveryOptions.worldwide.cost == 'paid') { %> delivOptionsChecked <% } else { %> delivOptionsUnchecked <% } %>">
+                                                <div class="column">
+                                                    <i class="fas fa-handshake fa-3x delivery"></i>
+                                                </div>
+                                                <div class="column">
+                                                    <p class="delivery">Paid Transport</p>
+                                                </div>
+                                            </div>
+                                            <input id="paidWorldwide" type="radio" name="product[worldwideTransport]"  class="curr_checkbox" value="paid" <% if (product.deliveryOptions.worldwide.cost == 'paid') { %> checked <% } %>>
+                                        </label>
+                                    </div>
+                                </div>    
+                                <div id="worldwideTransportDiv" class="<% if (product.deliveryOptions.worldwide.cost != 'paid') { %> hide <% } %> transportFee">
+                                    <input id="worldwideTransport" name="product[worldwideTransportPercent]" class="input" style="width: 80%;" type="number" placeholder="Transport fee (%)" min="0" step="0.01" value="<%= product.deliveryOptions.worldwide.percent %>">
+                                </div>
+                            </div>
+                                       
+                    </div>
+    
+                    <div class="control smmargin" style="margin: auto !important; margin-top: 2vh !important;">
+                        <button class="button is-primary">Update</button>
+                    </div>
+                </form>
+                <br>
+                <div class="frame">
+                    <h4 class="new-text">Feature your deal</h4>
+                    <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
+                    <table class="table is-hoverable is-bordered new-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Duration</th>
+                                <th>Cost</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Subcategory feature</td>
+                                <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
+                                <td>14 days</td>
+                                <td>5 Tokens</td>
+                                <td style="padding-top: 0;">
+                                    <form action="/dashboard/<%= product._id %>/edit/1?_method=PUT" method="POST" style="padding: inherit;">
+                                        <div class="control smmargin">
+                                            <button class="button is-primary">Feature</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Front-page feature</td>
+                                <td>The deal will be shown on the front-page of the website.</td>
+                                <td>7 days</td>
+                                <td>15 Tokens</td>
+                                <td style="padding-top: 0;">
+                                    <form action="/dashboard/<%= product._id %>/edit/2?_method=PUT" method="POST" style="padding: inherit;">
+                                        <div class="control smmargin">
+                                            <button class="button is-primary">Feature</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div>
 </div>
 <% include ../partials/footer %>
+<script src="../../dist/js/editTransport.js"></script>
+<script src="../../dist/js/dashboard_new.js"></script>
