@@ -68,7 +68,7 @@ module.exports = {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
       let errors = { msg: String };
       errors.msg = 'Please complete the captcha.';
-      return res.render('index/register', {errors} );
+      return res.render('index/register', {errors, regErrors: false} );
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
@@ -77,7 +77,7 @@ module.exports = {
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
         errors.msg = 'Captcha verification failed. Please try again.';
-        return res.render('index/register', {errors});
+        return res.render('index/register', {errors, regErrors: false});
       }
       req.check('email', 'The email address is invalid').isEmail().notEmpty();
       req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
