@@ -194,7 +194,7 @@ a:hover {
 .currency{
     display: flex !important;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     color: black !important;
 }
 

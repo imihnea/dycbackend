@@ -33,7 +33,7 @@ function sendConfirmationEmail(req, userid, useremail) {
   );
   const output = `
   <h1>Please confirm your email</h1>
-  <p>An account was created using this email address. Click <a href="http://${req.headers.host}/confirmation/${token}">here</a> in order to confirm it.</p>
+  <p>An account was created using this email address. Click <a href="http://${req.headers.host}/confirmation/${token}" target="_blank">here</a> in order to confirm it.</p>
   <p>Ignore this message if you did not request the account creation.</p>
   `;
   nodemailer.createTestAccount(() => {
