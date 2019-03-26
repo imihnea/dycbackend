@@ -150,6 +150,12 @@ module.exports = {
     },
     // Create Message
     async newMessage(req, res) {
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+            req.flash('The message contains illegal characters.');
+            return res.redirect('back');
+        }
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
@@ -199,6 +205,15 @@ module.exports = {
         res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+            const deal = await Deal.findById(req.params.dealid);
+            const seller = await User.findById(deal.product.author.id);
+            const buyer = await User.findById(deal.buyer.id);
+            const chat = await Chat.findById(deal.chat);
+            return res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+        }
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message

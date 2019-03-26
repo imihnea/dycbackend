@@ -35,6 +35,8 @@ Backend:
       Logs => Log errors
            => Log deal status changes
            => Log user changes
+      Search => Delete tag paths
+      Product => Delete tags
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
       Data => Save product data

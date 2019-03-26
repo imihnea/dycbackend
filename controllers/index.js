@@ -20,7 +20,6 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
-const EMAIL_SECRET = 'monkaS';
 const SECRET = 'monkaMega';
 const SECRET2 = 'monkaGiga';
 
@@ -85,8 +84,8 @@ module.exports = {
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
-      req.check('password', 'The password must contain at least one special character (".", ",", "?", "!").').matches(/(.|,|!|\?)/g);
-      req.check('password', 'The password can contain only alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 .,?!]+$/g);
+      req.check('password', 'The password must contain at least one special character (".", ",", "?", "!").').matches(/(\.|,|!|\?)/g);
+      req.check('password', 'The password can contain only alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 \.,?!]+$/g);
       // Uncomment when testing is done
       // const password = new RegExp(req.body.password, "g");
       // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
@@ -416,6 +415,12 @@ module.exports = {
         });
       },
       (token, done) => {
+        req.check('email', 'Invalid email address.').isEmail().notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+          req.flash('error', 'Invalid email address.');
+          return res.redirect('/forgot');
+        }
         User.findOne({ email: req.body.email }, (err, user) => {
           if (!user) {
             req.flash('error', 'No account with that email address exists.');
@@ -461,8 +466,8 @@ module.exports = {
       let currency = [];
       let secCat = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
-      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 .,!?]+$/g);
+      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z ]+$/g).notEmpty();
       if (req.body.from) {
         req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty();
         from = req.body.from;
@@ -948,10 +953,10 @@ module.exports = {
         errors.msg = 'Captcha verification failed. Please try again.';
         return res.render('index/contact', {errors});
       }
-      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z ]$/g).trim().notEmpty();
+      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z \-]+$/g).trim().notEmpty();
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty().trim();
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestion)$/g).notEmpty();
-      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.!? ]$/).trim().notEmpty();
+      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
       const validationErrors = req.validationErrors();
       if (validationErrors) {
         res.render('index/contact', {
@@ -1012,6 +1017,12 @@ module.exports = {
         });
       },
       (token, done) => {
+        req.check('email', 'Invalid email address.').isEmail().notEmpty();
+        const errors = req.validationErrors();
+        if (errors) {
+          req.flash('error', 'Invalid email address.');
+          return res.redirect('/dashboard');
+        }
         User.findOne({ email: req.body.email }, (err, user) => {
           if (!user) {
             req.flash('error', 'No account with that email address exists.');

@@ -1,17 +1,16 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
-<div class="container is-fluid">
+<div class="container is-fluid">    
     <% if(errors){ %>
-        <div class="notification is-danger" role="alert"> 
+        <br>
+        <div class="notification is-danger" role="alert" style="margin-bottom: 0;"> 
         <% errors.forEach(function( err){ %>
             <%= err.msg %><br>
         <% }) %>
         </div>
     <% } %>
-</div>
-<div class="container is-fluid">
-    <a href="/dashboard/ongoing" class="button is-primary" style="margin-top: 5vh; margin-left: 5vw;">Back to Dashboard</a>
+    <a href="/dashboard/ongoing" class="button is-primary" style="margin-top: <% if(errors){ %> 1vh <% } else { %>5vh<% } %>; margin-left: 5vw;">Back to Dashboard</a>
     <div class="columns" style="color: orange;">
         <% if (user._id.toString() === seller._id.toString()) { %>
             <div class="column is-one-fifth">
@@ -190,7 +189,7 @@
                             <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
                             <div class="prices openPrices frame" style="width: 80% !important;">
                                 <p class="price_text"> <%= deal.price %></p>
-                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
@@ -363,4 +362,4 @@
 
 
 <% include ../partials/footer %>
-<script src="../../dist/js/deal.js"></script>
+<script src="/dist/js/deal.js"></script>

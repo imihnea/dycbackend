@@ -80,11 +80,11 @@ module.exports = {
                     }
                 }
                 req.check('name', 'Name must be between 3 and 40 letters.').matches(/^[a-zA-Z ]+$/i).notEmpty().isLength({ min: 3, max: 40 });
-                req.check('country', 'Please select a country.').notEmpty();
-                req.check('state', 'Please select a state.').notEmpty();
-                req.check('city', 'Please select a city.').notEmpty();
-                req.check('address1', 'Please input a valid first address.').matches(/^[a-zA-Z0-9., ]+$/i).notEmpty();
-                req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-zA-Z0-9., ]+$/i);
+                req.check('country', 'Please select a country.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('state', 'Please select a state.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('city', 'Please select a city.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('address1', 'Please input a valid first address.').matches(/^[a-z0-9., \-]+$/i).notEmpty();
+                req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-z0-9., \-]+$/i);
                 req.check('zip', 'Please specify an alphanumeric zip code.').notEmpty().matches(/^[a-z0-9 ]+$/i);
                 user.full_name = req.body.name;
                 if (user.country != req.body.country) {
