@@ -29,7 +29,7 @@ function sendConfirmationEmail(req, userid, useremail) {
     user: userid
   }, 
   SECRET, 
-  { expiresIn: '10m' }
+  { expiresIn: '1h' }
   );
   const output = `
   <h1>Please confirm your email</h1>
@@ -85,6 +85,8 @@ module.exports = {
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
+      req.check('password', 'The password must contain at least one special character (".", ",", "?", "!").').matches(/(.|,|!|\?)/g);
+      req.check('password', 'The password can contain only alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 .,?!]+$/g);
       // Uncomment when testing is done
       // const password = new RegExp(req.body.password, "g");
       // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
@@ -137,22 +139,31 @@ module.exports = {
   postVerify(req, res) {
     let pin = req.body.pin;
     let requestId = req.body.requestId;
-    let phoneNumber = req.body.number;
-   
+
     nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
       if(err) {
         req.flash('error', err.message);
         return res.redirect('back');
       } else {
         if(result && result.status == '0') { // Success!
-          User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
-            if (err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            }
-          });
-          req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
-          res.redirect('/dashboard')
+          req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty();
+          const errors = req.validationErrors();
+          if (errors) {
+            res.render('dashboard/dashboard', {
+              user: req.user,
+              errors: errors
+            });
+          } else {
+            let phoneNumber = req.body.number;
+            User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
+              if (err) {
+                req.flash('error', err.message);
+                res.redirect('back');
+              }
+            });
+            req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
+            res.redirect('/dashboard');
+          }
         } else {
           req.flash('error', 'Wrong PIN code, please try again.');
           return res.redirect('back');
@@ -164,36 +175,96 @@ module.exports = {
     res.render('index/2factor')
   },
   async post2factor(req, res) {
-    let phoneNumber = req.body.number;
-    const user = await User.findOne({number: phoneNumber});
-    if (user) {
-      req.flash('error', 'Phone number already used. Please try again using another number.');
-      res.redirect('/2factor');
-    } else {
-      nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
-        if(err) {
-          req.flash('error', err.message);
-          res.redirect('back');
-        } else {
-          let requestId = result.request_id;
-          if(result.status == '0') {
-            res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
-          } else {
-            req.flash('error', 'Something went wrong, please try again.');
-            res.redirect('back');
-          }
-        }
+    req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+      res.render('dashboard/dashboard', {
+        user: req.user,
+        errors: errors
       });
+    } else {
+      let phoneNumber = req.body.number;
+      const user = await User.findOne({number: phoneNumber});
+      if (user) {
+        req.flash('error', 'Phone number already used. Please try again using another number.');
+        res.redirect('/2factor');
+      } else {
+        nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+          if(err) {
+            req.flash('error', err.message);
+            res.redirect('back');
+          } else {
+            let requestId = result.request_id;
+            if(result.status == '0') {
+              res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
+            } else {
+              req.flash('error', 'Something went wrong, please try again.');
+              res.redirect('back');
+            }
+          }
+        });
+      }
     }
   },
-  postdisable2factor(req, res) {
-    User.findByIdAndUpdate(req.user._id, { number: undefined, twofactor: false }, (err) => { // Change number: null to delete number completely
+  postDisable2FactorRequest(req, res) {
+    const token = jwt.sign({
+      user: req.user._id
+    }, 
+    SECRET2, 
+    { expiresIn: '1h' }
+    );
+    const output = `
+    <h1>Disable two-factor authentication</h1>
+    <p>A request to disable two-factor authentication has been received from an account associated with this email address.</p>
+    <p>Click <a href="http://${req.headers.host}/disable2factor/${token}" target="_blank">here</a> in order to disable it.</p>
+    <p>Ignore this message and change your account's password if you did not make the request.</p>
+    `;
+    nodemailer.createTestAccount(() => {
+      const transporter = nodemailer.createTransport({
+          host: EMAIL_HOST,
+          port: EMAIL_PORT,
+          auth: {
+              user: EMAIL_USER,
+              pass: EMAIL_API_KEY,
+          },
+      });
+      const mailOptions = {
+          from: `Deal Your Crypto <noreply@dyc.com>`,
+          to: `${req.user.email}`,
+          subject: 'Disable two-factor authentication',
+          html: output,
+      };
+      transporter.sendMail(mailOptions, (error) => {
+          if (error) {
+            console.log(error);
+          }
+      });
+    });
+    req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
+    res.redirect('back');
+  },
+  postDisable2Factor(req, res) {
+    jwt.verify(req.params.token, SECRET2, async (err) => {
       if (err) {
-        req.flash('error', err.message);
-        res.redirect('back');
+        if (err.message.match(/Invalid/i)) {
+          req.flash('error', 'Invalid link.');
+          res.redirect('/');
+        }
+        if (err.message.match(/Expired/i)) {
+          req.flash('error', 'The link has expired. Please try again.');
+          res.redirect('/');
+        }
       } else {
-        req.flash('success', 'Successfully disabled 2-Factor authentication.');
-        res.redirect('back');
+        const user = jwt.decode(req.params.token);
+        User.findByIdAndUpdate(user.user, { number: undefined, twofactor: false }, (err) => {
+          if (err) {
+            req.flash('error', err.message);
+            res.redirect('/');
+          } else {
+            req.flash('success', 'Successfully disabled 2-Factor authentication.');
+            res.redirect('/');
+          }
+        });
       }
     });
   },
@@ -229,48 +300,56 @@ module.exports = {
     } else {
       req.session.cookie.expires = false; // Cookie expires at end of session
     }
-    User.findOne({ username: req.body.username }, (err, user) => {
-      if(err) {
-        let errors = { msg: String };
-        errors.msg = err.message;
-        return res.render('index/login', {errors});
-      }
-      if(!user) {
-        let errors = { msg: String };
-        errors.msg = 'Invalid user/password combination or the user does not exist.';
-        return res.render('index/login', {errors});
-      }
-      if ((!user.confirmed) && (!user.googleId) && (!user.facebookId)){
-        res.render('index/confirmEmail', {user});
-      } else {
-        if (user.twofactor === true) {
-          nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
-            if(err) {
-              let errors = { msg: String };
-              errors.msg = err.message;
-              return res.render('index/login', {errors});
-            } else {
-              let requestId = result.request_id;
-              if(result.status == '0') {
-                res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
-              } else {
-                let errors = { msg: String };
-                errors.msg = 'Something went wrong. Please try again.';
-                return res.render('index/login', {errors});
-              }
-            }
-          });
-        } else {
-          passport.authenticate('local',
-          {
-            successFlash: 'Welcome to Deal Your Crypto!',
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true,
-          })(req, res, next);
+    req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+      let err = { msg: String };
+      err.msg = 'The username must contain only alphanumeric characters';
+      return res.render('index/login', {errors: err});
+    } else {
+      User.findOne({ username: req.body.username }, (err, user) => {
+        if(err) {
+          let errors = { msg: String };
+          errors.msg = err.message;
+          return res.render('index/login', {errors});
         }
-      }
-    });
+        if(!user) {
+          let errors = { msg: String };
+          errors.msg = 'Invalid user/password combination or the user does not exist.';
+          return res.render('index/login', {errors});
+        }
+        if ((!user.confirmed) && (!user.googleId) && (!user.facebookId)){
+          res.render('index/confirmEmail', {user});
+        } else {
+          if (user.twofactor === true) {
+            nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+              if(err) {
+                let errors = { msg: String };
+                errors.msg = err.message;
+                return res.render('index/login', {errors});
+              } else {
+                let requestId = result.request_id;
+                if(result.status == '0') {
+                  res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
+                } else {
+                  let errors = { msg: String };
+                  errors.msg = 'Something went wrong. Please try again.';
+                  return res.render('index/login', {errors});
+                }
+              }
+            });
+          } else {
+            passport.authenticate('local',
+            {
+              successFlash: 'Welcome to Deal Your Crypto!',
+              successRedirect: '/',
+              failureRedirect: '/login',
+              failureFlash: true,
+            })(req, res, next);
+          }
+        }
+      });
+    }
   },
   async resendEmail(req, res) {
     const user = await User.findById(req.params.id);
@@ -368,7 +447,7 @@ module.exports = {
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
-          req.flash('success', `An e-mail has been sent to ${user.email} with further instructions.`);
+          req.flash('success', `An e-mail with further instructions has been sent to ${user.email}.`);
           done(err, 'done');
         });
       },
@@ -964,7 +1043,7 @@ module.exports = {
             + 'If you did not request this, please ignore this email and your email will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
-          req.flash('success', `An e-mail has been sent to ${user.email} with further instructions.`);
+          req.flash('success', `An e-mail with further instructions has been sent to ${user.email}.`);
           done(err, 'done');
         });
       },

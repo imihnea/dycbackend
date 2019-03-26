@@ -122,7 +122,9 @@
                         </div>
                         <% if(currentUser.twofactor === true) { %> 
                         <div class="column chemail">
-                            <button class="button is-primary deactivate is-rounded">Deactivate Two-Factor Authentication</button>
+                            <div class="control smmargin">
+                                <button class="button is-primary deactivate is-rounded">Deactivate Two-Factor Authentication</button>
+                            </div>
                             <div class="modal modalDeactivate">
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
@@ -136,7 +138,7 @@
                                         <br>
                                         <form class="modal-form" action="/disable2factor" method="POST">
                                             <div class="control smmargin">
-                                                <button class="button is-danger is-rounded">Deactivate Two-Factor Authentication</button>
+                                                <button class="button is-primary is-rounded">Deactivate Two-Factor Authentication</button>
                                             </div>
                                         </form>
                                     </section>

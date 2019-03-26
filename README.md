@@ -14,7 +14,6 @@ Frontend:
          Make everything responsive (see comments in css files)
          Make an email template
          Better email wording
-         Product => Similar products needs fixing
 
 
 Backend:

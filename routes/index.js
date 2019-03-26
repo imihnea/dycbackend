@@ -27,7 +27,8 @@ const {
   postVerify,
   get2factor,
   post2factor,
-  postdisable2factor,
+  postDisable2FactorRequest,
+  postDisable2Factor,
   postVerifyLogin,
   firstCategSearch,
   secondCategSearch,
@@ -68,7 +69,9 @@ router.get('/2factor', isLoggedIn, get2factor);
 
 router.post('/2factor', isLoggedIn, asyncErrorHandler(post2factor));
 
-router.post('/disable2factor', isLoggedIn, postdisable2factor);
+router.get('/disable2factor/:token', postDisable2Factor);
+
+router.post('/disable2factor', isLoggedIn, postDisable2FactorRequest);
 
 //  show login form
 router.get('/login', getLogin);

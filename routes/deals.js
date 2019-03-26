@@ -11,10 +11,6 @@ const middleware = require('../middleware/index');
 
 const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal } = middleware; // destructuring assignment
 
-// Deal payout fees (%)
-const standardAccountFee = 15;
-const partnerAccountFee = 10;
-
 // show deal
 router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
 

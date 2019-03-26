@@ -448,7 +448,6 @@ module.exports = {
   },
   // Buy Tokens
   async buyTokens(req, res) {
-    const user = await User.findById(req.user._id);
     req.check('tokensNr','The number of tokens must be an integer number.').matches(/^[0-9]+$/g).notEmpty();
     const errors = req.validationErrors();
     if (errors) {
@@ -457,7 +456,8 @@ module.exports = {
           tokenPrices,
           errors: errors,
         });
-    } else {
+      } else {
+        const user = await User.findById(req.user._id);
         const tokens = Number(req.body.tokensNr);
         const totalPrice = tokens * tokenPrices[req.params.id];
         if (user.btcbalance >= totalPrice) {
@@ -502,7 +502,7 @@ module.exports = {
       };
       req.body.product.author = author;
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 .,!"]+$/g).notEmpty();
+      req.check('product[name]', 'The name of the product must contain alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
       req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
@@ -584,25 +584,24 @@ module.exports = {
           req.flash('error', 'The product must have a delivery method.');
           res.redirect('back');
       }
-      let price = [];
-      let btcPrice, bchPrice, ethPrice, ltcPrice, dashPrice;
-        req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
-        price[0]=Number(req.body.product.btc_price);
-        btcPrice=price[0];
+      let btcPrice;
+      req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
+      const errors = req.validationErrors();
+      if (errors) {
+        res.render('dashboard/dashboard_new', {
+          user: req.user,
+          errors: errors,
+        });
+      } else {
+        btcPrice=Number(req.body.product.btc_price);
         tags.push('btc');  
-        // Everything is stored in constants so we can protect against
-        // people making fields in the DevTools
-        const name = req.body.product.name;
-        const description = req.body.product.description;
         const category = [ 'all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
-        const condition = req.body.product.condition;
         const newproduct = {
-          name: name,
+          name: req.body.product.name,
           images: req.body.product.images,
           category,
-          condition,
-          description,
-          price,
+          condition: req.body.product.condition,
+          description: req.body.product.description,
           btcPrice,
           author,
           deliveryOptions,
@@ -611,78 +610,69 @@ module.exports = {
         if (req.body.product.repeatable === "true") {
           newproduct.repeatable = req.body.product.repeatable;
         }
-        
-        const errors = req.validationErrors();
-        if (errors) {
-          res.render('dashboard/dashboard_new', {
-            user: req.user,
-            errors: errors,
-          });
-        } else {
-          await User.findById(req.user._id, (err, user) => {
-            if (err) {
-              req.flash('error', 'An error has occured. (Could not find user)');
-              res.redirect('back');
-            } else {
-              const feat_1 = {};
-              const feat_2 = {};
-              let k = 0;
-              if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
-                if ( user.feature_tokens >= 20 ) {
-                  feat_1.status = true;
-                  feat_1.expiry_date = Date.now() + feature1_time;
-                  feat_2.status = true;
-                  feat_2.expiry_date = Date.now() + feature2_time;
-                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-                  newproduct.feat_1 = feat_1;
-                  newproduct.feat_2 = feat_2;
-                  k = 1;
-                } else {
-                  req.flash('error', 'Not enough tokens to promote product.');
-                  res.redirect('back');
-                }
-              }
-              if (( req.body.product.feat_1 )  && ( k === 0 )) {
-                if ( user.feature_tokens >= 5 ) {
-                  feat_1.status = true;
-                  feat_1.expiry_date = Date.now() + feature1_time;
-                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-                  newproduct.feat_1 = feat_1;
-                } else {
-                  req.flash('error', 'Not enough tokens to promote product.');
-                  res.redirect('back');
-                }
-              }
-              if (( req.body.product.feat_2 )  && ( k === 0 )) {
-                if (user.feature_tokens >= 15) {
-                  feat_2.status = true;
-                  feat_2.expiry_date = Date.now() + feature2_time;
-                  User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-                  newproduct.feat_2 = feat_2;
-                } else {
-                  req.flash('error', 'Not enough tokens to promote product.');
-                  res.redirect('back');
-                }
+        await User.findById(req.user._id, (err, user) => {
+          if (err) {
+            req.flash('error', 'An error has occured. (Could not find user)');
+            res.redirect('back');
+          } else {
+            const feat_1 = {};
+            const feat_2 = {};
+            let k = 0;
+            if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+              if ( user.feature_tokens >= 20 ) {
+                feat_1.status = true;
+                feat_1.expiry_date = Date.now() + feature1_time;
+                feat_2.status = true;
+                feat_2.expiry_date = Date.now() + feature2_time;
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                newproduct.feat_1 = feat_1;
+                newproduct.feat_2 = feat_2;
+                k = 1;
+              } else {
+                req.flash('error', 'Not enough tokens to promote product.');
+                res.redirect('back');
               }
             }
-          });
-  
-          const product = await Product.create(newproduct);
-          res.redirect(`/products/${product._id}/view`);
-        } 
-      }
+            if (( req.body.product.feat_1 )  && ( k === 0 )) {
+              if ( user.feature_tokens >= 5 ) {
+                feat_1.status = true;
+                feat_1.expiry_date = Date.now() + feature1_time;
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                newproduct.feat_1 = feat_1;
+              } else {
+                req.flash('error', 'Not enough tokens to promote product.');
+                res.redirect('back');
+              }
+            }
+            if (( req.body.product.feat_2 )  && ( k === 0 )) {
+              if (user.feature_tokens >= 15) {
+                feat_2.status = true;
+                feat_2.expiry_date = Date.now() + feature2_time;
+                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                newproduct.feat_2 = feat_2;
+              } else {
+                req.flash('error', 'Not enough tokens to promote product.');
+                res.redirect('back');
+              }
+            }
+          }
+        });
+        const product = await Product.create(newproduct);
+        res.redirect(`/products/${product._id}/view`);
+      } 
+    }
   },
   // Products Show
   async productShow(req, res) {
@@ -838,6 +828,8 @@ module.exports = {
     } else {
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
+      } else {
+        product.repeatable = "false";
       }
       // Everything is stored in constants so we can protect against
       // people making fields in the DevTools

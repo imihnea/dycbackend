@@ -10,6 +10,11 @@ const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 const refundTimer = 60000;
 
+// Deal payout fees (%)
+const standardAccountFee = 15;
+const premiumAccountFee = 10;
+const partnerAccountFee = 10;
+
 module.exports = {
     async getDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -439,9 +444,18 @@ setInterval(async () => {
                 switch(seller.accountType) {
                     case 'Standard':
                         seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+                        // Withdraw to our wallet
+                        // withdrawAmount = item.price * standardAccountFee * 0.01;
+                        break;
+                    case 'Premium':
+                        seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
+                        // Withdraw to our wallet
+                        // withdrawAmount = item.price * premiumAccountFee * 0.01;
                         break;
                     case 'Partner':
                         seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
+                        // Withdraw to our wallet
+                        // withdrawAmount = item.price * partnerAccountFee * 0.01;
                         break;
                     default:
                         break;
