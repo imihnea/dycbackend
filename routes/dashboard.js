@@ -38,7 +38,13 @@ const upload = multer({
 
 // Dashboard index route
 router.get('/', isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard', { user: req.user, errors: req.session.errors });
+  res.render('dashboard/dashboard', { 
+    user: req.user, 
+    errors: req.session.errors,
+    pageTitle: 'Dashboard - Deal Your Crypto',
+    pageDescription: 'Description',
+    pageKeywords: 'Keywords'
+  });
 });
 
 // Show all addresses for withdraw

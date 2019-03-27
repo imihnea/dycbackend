@@ -42,7 +42,7 @@
                                     </form>    
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC = $<%= user.btcbalance %>*<%= btcrate %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
+                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
                                     </div>
                                     <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                                     <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>

@@ -384,7 +384,6 @@ hr{
 
 .is-danger{
     color: white !important;
-    border-color: black !important;
 }
 
 .is-danger:hover{

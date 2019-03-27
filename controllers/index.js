@@ -60,14 +60,26 @@ function sendConfirmationEmail(req, userid, useremail) {
 
 module.exports = {
   getRegister(req, res) {
-    res.render('index/register', {errors: false, regErrors: false});
+    res.render('index/register', {
+      errors: false, 
+      regErrors: false,
+      pageTitle: 'Register - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   // POST /register
   async postRegister(req, res) {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
       let errors = { msg: String };
       errors.msg = 'Please complete the captcha.';
-      return res.render('index/register', {errors, regErrors: false} );
+      return res.render('index/register', {
+        errors, 
+        regErrors: false,
+        pageTitle: 'Register - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      } );
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
@@ -76,7 +88,13 @@ module.exports = {
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
         errors.msg = 'Captcha verification failed. Please try again.';
-        return res.render('index/register', {errors, regErrors: false});
+        return res.render('index/register', {
+          errors, 
+          regErrors: false,
+          pageTitle: 'Register - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       }
       req.check('email', 'The email address is invalid').isEmail().notEmpty();
       req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
@@ -91,7 +109,13 @@ module.exports = {
       // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
       const regErrors = req.validationErrors();
       if (regErrors) {
-        res.render('index/register', {errors: false, regErrors});
+        res.render('index/register', {
+          errors: false, 
+          regErrors,
+          pageTitle: 'Register - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       } else {
         const newUser = new User({ email: req.body.email, username: req.body.username });
         try {
@@ -102,7 +126,12 @@ module.exports = {
           return res.redirect('back');
         }
         passport.authenticate('local', { session: false })(req, res, () => {
-          res.render('index/confirmEmail', {user: newUser});
+          res.render('index/confirmEmail', {
+            user: newUser,
+            pageTitle: 'Confirm Email - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         }); 
       }
     });
@@ -150,7 +179,10 @@ module.exports = {
           if (errors) {
             res.render('dashboard/dashboard', {
               user: req.user,
-              errors: errors
+              errors: errors,
+              pageTitle: 'Dashboard - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
             });
           } else {
             let phoneNumber = req.body.number;
@@ -171,7 +203,11 @@ module.exports = {
     });
   },
   get2factor(req, res) {
-    res.render('index/2factor')
+    res.render('index/2factor',{
+      pageTitle: 'Two-Factor - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    })
   },
   async post2factor(req, res) {
     req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty();
@@ -179,7 +215,10 @@ module.exports = {
     if (errors) {
       res.render('dashboard/dashboard', {
         user: req.user,
-        errors: errors
+        errors: errors,
+        pageTitle: 'Dashboard - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
       });
     } else {
       let phoneNumber = req.body.number;
@@ -195,7 +234,13 @@ module.exports = {
           } else {
             let requestId = result.request_id;
             if(result.status == '0') {
-              res.render('index/verify', { number: phoneNumber, requestId: requestId }); // Success! Now, have your user enter the PIN
+              res.render('index/verify', { 
+                number: phoneNumber, 
+                requestId: requestId,
+                pageTitle: 'Verify - Deal Your Crypto',
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+              }); // Success! Now, have your user enter the PIN
             } else {
               req.flash('error', 'Something went wrong, please try again.');
               res.redirect('back');
@@ -269,9 +314,20 @@ module.exports = {
   },
   getLogin(req, res) {
     if ( req.user ) {
-      res.render('index/login', { user: req.user, errors: false });
+      res.render('index/login', { 
+        user: req.user, 
+        errors: false,
+        pageTitle: 'Login - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
     } else {
-      res.render('index/login', { errors: false });
+      res.render('index/login', { 
+        errors: false,
+        pageTitle: 'Login - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+       });
     }
   },
   // POST /login
@@ -281,7 +337,12 @@ module.exports = {
       if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
         let errors = { msg: String };
         errors.msg = 'Please complete the captcha.';
-        return res.render('index/login', {errors} );
+        return res.render('index/login', {
+          errors,
+          pageTitle: 'Login - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       }
       const secretKey = "6LdvYJcUAAAAABRACFNVD7CyVxgDa3M04i1_aGs5";
       const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
@@ -290,7 +351,12 @@ module.exports = {
         if (body.success !== undefined && !body.success) {
           let errors = { msg: String };
           errors.msg = 'Captcha verification failed. Please try again.';
-          return res.render('index/login', {errors});
+          return res.render('index/login', {
+            errors,
+            pageTitle: 'Login - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         } 
       });
     }
@@ -304,36 +370,73 @@ module.exports = {
     if (errors) {
       let err = { msg: String };
       err.msg = 'The username must contain only alphanumeric characters';
-      return res.render('index/login', {errors: err});
+      return res.render('index/login', {
+        errors: err,
+        pageTitle: 'Login - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
     } else {
       User.findOne({ username: req.body.username }, (err, user) => {
         if(err) {
           let errors = { msg: String };
           errors.msg = err.message;
-          return res.render('index/login', {errors});
+          return res.render('index/login', {
+            errors,
+            pageTitle: 'Login - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         }
         if(!user) {
           let errors = { msg: String };
           errors.msg = 'Invalid user/password combination or the user does not exist.';
-          return res.render('index/login', {errors});
+          return res.render('index/login', {
+            errors,
+            pageTitle: 'Login - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         }
         if ((!user.confirmed) && (!user.googleId) && (!user.facebookId)){
-          res.render('index/confirmEmail', {user});
+          res.render('index/confirmEmail', {
+            user,
+            pageTitle: 'Confirm Email - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         } else {
           if (user.twofactor === true) {
             nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
               if(err) {
                 let errors = { msg: String };
                 errors.msg = err.message;
-                return res.render('index/login', {errors});
+                return res.render('index/login', {
+                  errors,
+                  pageTitle: 'Login - Deal Your Crypto',
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               } else {
                 let requestId = result.request_id;
                 if(result.status == '0') {
-                  res.render('index/verifylogin', { username: req.body.username, password: req.body.password, requestId: requestId }); // Success! Now, have your user enter the PIN
+                  res.render('index/verifylogin', { 
+                    username: req.body.username, 
+                    password: req.body.password, 
+                    requestId: requestId,
+                    pageTitle: 'Verify Login - Deal Your Crypto',
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                   }); // Success! Now, have your user enter the PIN
                 } else {
                   let errors = { msg: String };
                   errors.msg = 'Something went wrong. Please try again.';
-                  return res.render('index/login', {errors});
+                  return res.render('index/login', {
+                    errors,
+                    pageTitle: 'Login - Deal Your Crypto',
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                  });
                 }
               }
             });
@@ -341,7 +444,7 @@ module.exports = {
             passport.authenticate('local',
             {
               successFlash: 'Welcome to Deal Your Crypto!',
-              successRedirect: '/',
+              successRedirect: '/dashboard',
               failureRedirect: '/login',
               failureFlash: true,
             })(req, res, next);
@@ -399,15 +502,35 @@ module.exports = {
       Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total).exec((err, result) => {
         if (err) {
           console.log(err);
-          res.render('index', { currentUser: req.user, products, 'fillProducts.length': 0, errors: false});
+          res.render('index', { 
+            currentUser: req.user, 
+            products, 
+            'fillProducts.length': 0, 
+            errors: false, 
+            pageTitle: 'Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
         } else {
-          res.render('index', { currentUser: req.user, products, fillProducts: result, errors: false});
+          res.render('index', { 
+            currentUser: req.user, 
+            products, 
+            fillProducts: result, 
+            errors: false, 
+            pageTitle: 'Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+           });
         }
       });
     }
   },
   getForgot(req, res) {
-    res.render('index/forgot');
+    res.render('index/forgot', {
+      pageTitle: 'Forgot Password - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   postForgot(req, res, next) {
     async.waterfall([
@@ -506,7 +629,10 @@ module.exports = {
         res.render('index', {
           user: req.user,
           errors,
-          products
+          products,
+          pageTitle: 'Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         if (from === 0) {
@@ -565,7 +691,21 @@ module.exports = {
                     secCat = item.opt;
                   }
                 });
-                res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchFirstCateg', { 
+                  products: products.hits.hits, 
+                  total: products.hits.total, 
+                  from, 
+                  searchName: req.body.searchName, 
+                  searchCateg: req.body.category, 
+                  secCat, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                 });
               }
             }
           );
@@ -591,7 +731,21 @@ module.exports = {
                     secCat = item.opt;
                   }
                 });
-                res.render('index/searchFirstCateg', { products: products.hits.hits, total: products.hits.total, from, searchName: req.body.searchName, searchCateg: req.body.category, secCat, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchFirstCateg', { 
+                  products: products.hits.hits, 
+                  total: products.hits.total, 
+                  from, 
+                  searchName: req.body.searchName, 
+                  searchCateg: req.body.category, 
+                  secCat, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               }
             }
           );
@@ -641,7 +795,10 @@ module.exports = {
         res.render('index', {
           user: req.user,
           errors,
-          products
+          products,
+          pageTitle: 'Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         if (from === 0) {
@@ -703,7 +860,22 @@ module.exports = {
                     thiCat = item.opt;
                   }
                 });
-                res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchSecondCateg', { 
+                  products: products.hits.hits, 
+                  searchName: req.body.searchName, 
+                  total: products.hits.total, 
+                  from, 
+                  searchCateg: req.body.searchCateg, 
+                  secondSearchCateg: req.body.category, 
+                  thiCat, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               }
             }
           );
@@ -730,7 +902,22 @@ module.exports = {
                     thiCat = item.opt;
                   }
                 });
-                res.render('index/searchSecondCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.category, thiCat, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchSecondCateg', { 
+                  products: products.hits.hits, 
+                  searchName: req.body.searchName, 
+                  total: products.hits.total, 
+                  from, 
+                  searchCateg: req.body.searchCateg, 
+                  secondSearchCateg: req.body.category, 
+                  thiCat, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               }
             }
           );
@@ -780,7 +967,10 @@ module.exports = {
         res.render('index', {
           user: req.user,
           errors,
-          products
+          products,
+          pageTitle: 'Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         if (from === 0) {
@@ -840,7 +1030,22 @@ module.exports = {
               if (err) {
                 console.log(err);
               } else {
-                res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchThirdCateg', { 
+                  products: products.hits.hits, 
+                  searchName: req.body.searchName, 
+                  total: products.hits.total, 
+                  from, 
+                  searchCateg: req.body.searchCateg, 
+                  secondSearchCateg: req.body.secondSearchCateg, 
+                  thirdSearchCateg: req.body.category, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               }
             }
           );
@@ -863,7 +1068,22 @@ module.exports = {
               if (err) {
                 console.log(err);
               } else {
-                res.render('index/searchThirdCateg', { products: products.hits.hits, searchName: req.body.searchName, total: products.hits.total, from, searchCateg: req.body.searchCateg, secondSearchCateg: req.body.secondSearchCateg, thirdSearchCateg: req.body.category, currency: req.body.currency, continent, avgRating, condition });
+                res.render('index/searchThirdCateg', { 
+                  products: products.hits.hits, 
+                  searchName: req.body.searchName, 
+                  total: products.hits.total, 
+                  from, 
+                  searchCateg: req.body.searchCateg, 
+                  secondSearchCateg: req.body.secondSearchCateg, 
+                  thirdSearchCateg: req.body.category, 
+                  currency: req.body.currency, 
+                  continent, 
+                  avgRating, 
+                  condition,
+                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                });
               }
             }
           );
@@ -880,7 +1100,12 @@ module.exports = {
           req.flash('error', 'Password reset token is invalid or has expired.');
           return res.redirect('/forgot');
         }
-        res.render('index/reset', { token: req.params.token });
+        res.render('index/reset', { 
+          token: req.params.token,
+          pageTitle: 'Reset Password - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       },
     );
   },
@@ -939,13 +1164,25 @@ module.exports = {
     });
   },
   getContact(req, res) {
-    res.render('index/contact', {errors: false, validationErrors: false});
+    res.render('index/contact', {
+      errors: false, 
+      validationErrors: false,
+      pageTitle: 'Contact - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   postContact(req, res) {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
       let errors = { msg: String };
       errors.msg = 'Please complete the captcha.';
-      return res.render('index/contact', {errors, validationErrors: false} );
+      return res.render('index/contact', {
+        errors, 
+        validationErrors: false,
+        pageTitle: 'Contact - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
@@ -954,7 +1191,12 @@ module.exports = {
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
         errors.msg = 'Captcha verification failed. Please try again.';
-        return res.render('index/contact', {errors});
+        return res.render('index/contact', {
+          errors,
+          pageTitle: 'Contact - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       }
       req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z \-]+$/g).trim().notEmpty();
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty().trim();
@@ -965,7 +1207,10 @@ module.exports = {
         res.render('index/contact', {
           user: req.user,
           validationErrors,
-          errors: false
+          errors: false,
+          pageTitle: 'Contact - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         const output = `
@@ -1002,7 +1247,7 @@ module.exports = {
           transporter.sendMail(mailOptions, (error) => {
             if (error) {
               req.flash('error', `${error.message}`);
-              res.render('back', { error: error.message });
+              res.redirect('back', { error: error.message });
             }
             req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
             res.redirect('/contact');
@@ -1076,7 +1321,12 @@ module.exports = {
           req.flash('error', 'Email reset token is invalid or has expired.');
           return res.redirect('/resetemail');
         }
-        res.render('index/resetemail', { token: req.params.token });
+        res.render('index/resetemail', { 
+          token: req.params.token,
+          pageTitle: 'Reset Email - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+         });
       },
     );
   },
@@ -1135,16 +1385,32 @@ module.exports = {
     });
   },
   getFaq(req, res) {
-    res.render('faq');
+    res.render('faq', {
+      pageTitle: 'Frequently Asked Questions - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   getGdpr(req, res) {
-    res.render('gdpr');
+    res.render('gdpr', {
+      pageTitle: 'General Data Protection - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   getTos(req, res) {
-    res.render('terms-of-service');
+    res.render('terms-of-service', {
+      pageTitle: 'Terms of Service - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   getPrivPol(req, res) {
-    res.render('privacy-policy');
+    res.render('privacy-policy', {
+      pageTitle: 'Privacy Policy - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
 };
 
