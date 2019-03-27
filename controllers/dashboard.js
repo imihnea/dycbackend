@@ -46,6 +46,7 @@ module.exports = {
     products.page = Number(products.page);
     res.render('dashboard/dashboard_open', { 
       products,
+      user: req.user,
       pageTitle: 'Open Deals - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -59,6 +60,7 @@ module.exports = {
     products.page = Number(products.page);
     res.render('dashboard/dashboard_closed', { 
       products,
+      user: req.user,
       pageTitle: 'Closed Deals - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -72,6 +74,7 @@ module.exports = {
     deals.page = Number(deals.page);
     res.render('dashboard/dashboard_purchases', { 
       deals,
+      user: req.user,
       pageTitle: 'Purchases - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -90,6 +93,7 @@ module.exports = {
     deals.page = Number(deals.page);
     res.render('dashboard/dashboard_ongoing', { 
       deals,
+      user: req.user,
       pageTitle: 'Ongoing Deals - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -160,6 +164,7 @@ module.exports = {
             var maxConfirmationsBTC = data.btc.maxConfirmations;
             res.render('savvy/btc', { 
               btcrate, 
+              user: req.user,
               maxConfirmationsBTC,
               pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
               pageDescription: 'Description',
@@ -212,6 +217,7 @@ module.exports = {
                 address, 
                 coinsValue , 
                 maxConfirmationsBTC,
+                user: req.user,
                 pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
                 pageDescription: 'Description',
                 pageKeywords: 'Keywords'

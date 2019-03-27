@@ -19,7 +19,10 @@
               <span class="panel-icon">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
               </span>
-              Messages
+              <span>
+                Messages
+                <% if (user.unreadMessages > 0) { %><span style="color: red;">!!!</span><% } %>
+              </span>
             </a>
             <a id="tokens" class="panel-block" href="/dashboard/tokens">
               <span class="panel-icon">

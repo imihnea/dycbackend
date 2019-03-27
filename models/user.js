@@ -54,6 +54,7 @@ const UserSchema = new Schema({
   address1: String,
   address2: String,
   zip: String,
+  unreadMessages: Number,
   accountType: { 
     type: String, 
     default: 'Standard' 

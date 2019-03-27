@@ -59,9 +59,18 @@ module.exports = {
     // Update "read" field
     async updateMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
-        await chat.messages.forEach((message) => {
-            if ( message.sender.toString() !== req.user._id.toString() ) {
+        await chat.messages.forEach(async (message) => {
+            let messagesRead = 0;
+            if (( message.sender.toString() !== req.user._id.toString()) && (message.read == false) ) {
                 message.read = true;
+                messagesRead += 1;
+            }
+            if (messagesRead != 0) {
+                await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
             }
         });
         await chat.save();
@@ -69,9 +78,18 @@ module.exports = {
     },
     async updateMessagesDeal(req, res) {
         const chat = await Chat.findById( req.params.id );
-        await chat.messages.forEach((message) => {
-            if ( message.sender.toString() !== req.user._id.toString() ) {
+        await chat.messages.forEach(async (message) => {
+            let messagesRead = 0;
+            if (( message.sender.toString() !== req.user._id.toString()) && (message.read == false) ) {
                 message.read = true;
+                messagesRead += 1;
+            }
+            if (messagesRead != 0) {
+                await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
             }
         });
         await chat.save();
@@ -182,6 +200,19 @@ module.exports = {
         chat.messages.push(newMessage);
         chat.messageCount += 1;
         await chat.save();
+        if (chat.user1.id.toString() != req.user._id) {
+            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        } else if (chat.user2.id.toString() != req.user._id) {
+            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
         // Send an email if it was the first message of the conversation    
         if (chat.messageCount == 1) {      
             const user2 = await User.findById(chat.user2.id);
@@ -250,6 +281,19 @@ module.exports = {
         chat.messages.push(newMessage);
         chat.messageCount += 1;
         await chat.save();
+        if (chat.user1.id.toString() != req.user._id) {
+            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        } else if (chat.user2.id.toString() != req.user._id) {
+            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
         res.redirect(`/deals/${req.params.dealid}`);
     },    
 };
