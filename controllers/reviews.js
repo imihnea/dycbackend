@@ -12,7 +12,7 @@ module.exports = {
 	async reviewCreate(req, res, next) {
 		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
-		const errors = req.validateErrors();
+		const errors = req.validationErrors();
 		if (errors) {
 			req.session.error = 'Something went wrong or the message contains illegal characters.';
 			return res.redirect('back');
@@ -80,7 +80,7 @@ module.exports = {
 	async reviewUpdate(req, res, next) {
 		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
-		const errors = req.validateErrors();
+		const errors = req.validationErrors();
 		if (errors) {
 			req.session.error = 'Something went wrong or the message contains illegal characters.';
 			return res.redirect(`/products/${req.params.id}/view`);
@@ -109,7 +109,7 @@ module.exports = {
 	async reviewCreateUser(req, res, next) {
 		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
-		const errors = req.validateErrors();
+		const errors = req.validationErrors();
 		if (errors) {
 			req.session.error = 'Something went wrong or the message contains illegal characters.';
 			return res.redirect(`/profile/${user.id}`);
@@ -176,7 +176,7 @@ module.exports = {
 	async reviewUpdateUser(req, res, next) {
 		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
-		const errors = req.validateErrors();
+		const errors = req.validationErrors();
 		if (errors) {
 			req.session.error = 'Something went wrong or the message contains illegal characters.';
 			return res.redirect(`/profile/${user.id}`);

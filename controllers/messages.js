@@ -183,7 +183,7 @@ module.exports = {
     },
     // Create Message
     async newMessage(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?\r\n|\r|\n]+$/g).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             req.flash('The message contains illegal characters.');
@@ -251,7 +251,7 @@ module.exports = {
         res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?\r\n|\r|\n]+$/g).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             const deal = await Deal.findById(req.params.dealid);

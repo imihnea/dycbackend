@@ -255,7 +255,7 @@ module.exports = {
     },
     async refundDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        req.check('refundOption', 'Something went wrong. Please try again.').matches(/^(Money Back|New Object)$/).notEmpty();
+        req.check('refundOption', 'Something went wrong. Please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             const seller = await User.findById(deal.product.author.id);
@@ -367,8 +367,8 @@ module.exports = {
         const deal = await Deal.findById( req.params.id );
         // Create the refund request
         req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Product hasn't arrived)$/).notEmpty();
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! ]+$/gm).notEmpty();
-        req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Object)$/).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! \r\n|\r|\n]+$/gm).notEmpty();
+        req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             const seller = await User.findById(deal.product.author.id);
