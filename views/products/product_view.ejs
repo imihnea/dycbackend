@@ -289,7 +289,7 @@
                                                 <button class="delete deleteEdit" aria-label="close"></button>
                                             </header>
                                             <section class="modal-card-foot" style="display: block;">
-                                                <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                                                <form action="/productsReview/<%= product.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
                                                     <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
                                                     <fieldset class="starability-basic" style="    margin-top: 1vh;
                                                     margin-bottom: 1vh;
@@ -329,7 +329,7 @@
                                         </header>
                                         <section class=" modal-card-foot" style="display: block;">
                                             <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                            <form action="/products/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                            <form action="/productsReview/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
                                                 <input class="button is-danger noborder" type="submit" value="Delete">
                                             </form>
                                         </section>
@@ -346,7 +346,7 @@
             <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
                 <hr class="smallerCenter">
                 <p class="productSubTitleText" >Write a Review</p>
-                <form action="/products/<%= product.id %>/reviews" method="POST" class="detailsContainer">
+                <form action="/productsReview/<%= product.id %>/reviews" method="POST" class="detailsContainer">
                     <textarea class="textarea" name="review[body]" required></textarea>
                     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                         <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
@@ -371,7 +371,7 @@
             <% } %>
         </div>
 
-        <% if (similar) { %>
+        <% if (similar.length > 0) { %>
             <hr class="smallerCenter">
             <p class="productSubTitleText">Similar products</p>
             <div class="column detailsContainer">    

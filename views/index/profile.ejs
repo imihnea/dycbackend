@@ -85,7 +85,7 @@
             <% if((currentUser) && (currentUser._id.toString() !== user._id.toString()) && (reviewed === false)) { %>
                 <div class="frame smallerCenter">
                     <p class="subtitle" style="text-align: center;" >Leave a Review</p>
-                    <form action="/profile/<%= user._id %>/reviews" method="POST" class="smallerCenter">
+                    <form action="/profileReview/<%= user._id %>/reviews" method="POST" class="smallerCenter">
                         <textarea class="textarea" name="review[body]" required></textarea>
                         <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                             <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">

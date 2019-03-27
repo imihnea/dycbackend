@@ -101,7 +101,7 @@
                                         <button class="delete deleteEdit" aria-label="close"></button>
                                     </header>
                                     <section class="modal-card-foot" style="display: block;">
-                                        <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                                        <form action="/profileReview/<%= user.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
                                             <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
                                             <fieldset class="starability-basic" style="margin-top: 1vh;
                                                 margin-bottom: 1vh;
@@ -135,7 +135,7 @@
                                     </header>
                                     <section class=" modal-card-foot" style="display: block;">
                                         <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                        <form action="/profile/<%= user.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                        <form action="/profileReview/<%= user.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
                                             <input class="button is-danger noborder" type="submit" value="Delete">
                                         </form>
                                     </section>

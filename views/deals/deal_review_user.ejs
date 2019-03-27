@@ -16,7 +16,7 @@
             </div>
         </div>
         <p class="title is-3" style="margin-top: 3vh;">Leave a Review</p>
-        <form action="/profile/<%= user.id %>/reviews" method="POST">
+        <form action="/profileReview/<%= seller._id %>/reviews" method="POST">
             <textarea class="textarea" name="review[body]" placeholder="What a great seller!" required></textarea>
             <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                 <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
