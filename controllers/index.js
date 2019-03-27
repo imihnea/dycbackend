@@ -391,14 +391,17 @@ module.exports = {
       limit: 20,
     });
     products.page = Number(products.page);
+    let ids = [];
+    products.docs.forEach((product) => {
+      ids.push(product._id);
+    });
     if (products.docs.length < 20) {
-      Product.findRandom({_id: {$exists: true}}, {name: 1, images: 1, btcPrice: 1, _id: 1}, { limit: 20 - products.docs.length }, (err, result) => {
-        if (!err) {
-          let fillProducts = Array.from(result);
-          res.render('index', { currentUser: req.user, products, fillProducts, errors: false });
-        } else {
+      Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total).exec((err, result) => {
+        if (err) {
           console.log(err);
-          res.render('index', { currentUser: req.user, products, 'fillProducts.length': 0, errors: false });
+          res.render('index', { currentUser: req.user, products, 'fillProducts.length': 0, errors: false});
+        } else {
+          res.render('index', { currentUser: req.user, products, fillProducts: result, errors: false});
         }
       });
     }

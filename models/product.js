@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const mongoosastic = require('mongoosastic');
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
-const random = require('mongoose-simple-random');
 const Review = require('./review');
 
 
@@ -79,7 +78,6 @@ ProductSchema.methods.calculateAvgRating = function() {
 };
 
 ProductSchema.plugin(mongoosePaginate);
-ProductSchema.plugin(random);
 
 // For local ElasticSearch
 ProductSchema.plugin(mongoosastic);
