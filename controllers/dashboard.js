@@ -44,7 +44,12 @@ module.exports = {
       limit: 10,
     });
     products.page = Number(products.page);
-    res.render('dashboard/dashboard_open', { products });
+    res.render('dashboard/dashboard_open', { 
+      products,
+      pageTitle: 'Open Deals - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   async closedProductIndex(req, res) {
     const products = await Product.paginate({ available: "Closed", 'author.id': req.user._id }, {
@@ -52,7 +57,12 @@ module.exports = {
       limit: 10,
     });
     products.page = Number(products.page);
-    res.render('dashboard/dashboard_closed', { products });
+    res.render('dashboard/dashboard_closed', { 
+      products,
+      pageTitle: 'Closed Deals - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   async purchasedProductIndex(req, res) {
     const deals = await Deal.paginate({ 'buyer.id': req.user._id }, {
@@ -60,7 +70,12 @@ module.exports = {
       limit: 10,
     });
     deals.page = Number(deals.page);
-    res.render('dashboard/dashboard_purchases', { deals });
+    res.render('dashboard/dashboard_purchases', { 
+      deals,
+      pageTitle: 'Purchases - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   async ongoingProductIndex(req, res) {
     const deals = await Deal.paginate({ $and:[ 
@@ -73,7 +88,12 @@ module.exports = {
       limit: 10,
     });
     deals.page = Number(deals.page);
-    res.render('dashboard/dashboard_ongoing', { deals });
+    res.render('dashboard/dashboard_ongoing', { 
+      deals,
+      pageTitle: 'Ongoing Deals - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   // Show address page
   async getAddresses(req, res) {
@@ -92,7 +112,10 @@ module.exports = {
               maxConfirmationsBTC,
               errors: false,
               dealsSold,
-              dealsBought
+              dealsBought,
+              pageTitle: 'Addresses - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
             });
         }
     });
@@ -135,7 +158,13 @@ module.exports = {
             var data = json.data;
             var btcrate = data.btc.rate;
             var maxConfirmationsBTC = data.btc.maxConfirmations;
-            res.render('savvy/btc', { btcrate, maxConfirmationsBTC });
+            res.render('savvy/btc', { 
+              btcrate, 
+              maxConfirmationsBTC,
+              pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
+            });
         }
     });
   },
@@ -177,7 +206,16 @@ module.exports = {
               res.redirect('back');
             } else {
               console.log(orderId);
-              res.render('savvy/btc', { btcrate, orderId, address, coinsValue , maxConfirmationsBTC })
+              res.render('savvy/btc', { 
+                btcrate, 
+                orderId, 
+                address, 
+                coinsValue , 
+                maxConfirmationsBTC,
+                pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+              })
             }
           });
         }
@@ -201,7 +239,10 @@ module.exports = {
             { user: req.user,
               btcrate,
               maxConfirmationsBTC,
-              errors
+              errors,
+              pageTitle: 'Addresses - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
             });
         }
       });
@@ -442,6 +483,9 @@ module.exports = {
               btcrate,
               tokenprice,
               errors: req.session.errors,
+              pageTitle: 'Tokens - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
             });
         }
     });
@@ -455,6 +499,9 @@ module.exports = {
           user: req.user,
           tokenPrices,
           errors: errors,
+          pageTitle: 'Tokens - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         const user = await User.findById(req.user._id);
@@ -475,7 +522,13 @@ module.exports = {
   },
   // Show new product form
   newProduct(req, res) {
-    res.render('dashboard/dashboard_new', {user: req.user, errors: req.session.errors});
+    res.render('dashboard/dashboard_new', {
+      user: req.user, 
+      errors: req.session.errors,
+      pageTitle: 'New Deal - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   // Products New
   async productCreate(req, res) {
@@ -591,6 +644,9 @@ module.exports = {
         res.render('dashboard/dashboard_new', {
           user: req.user,
           errors: errors,
+          pageTitle: 'New Deal - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
         });
       } else {
         btcPrice=Number(req.body.product.btc_price);
@@ -685,12 +741,25 @@ module.exports = {
       },
     });
     const floorRating = product.calculateAvgRating();
-    res.render('products/product_view', { product, floorRating });
+    res.render('products/product_view', { 
+      product, 
+      floorRating,
+      pageTitle: `${product.name} - Deal Your Crypto`,
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
-    res.render('dashboard/dashboard_edit', { product: product, user: req.user, errors: req.session.errors });
+    res.render('dashboard/dashboard_edit', { 
+      product: product, 
+      user: req.user, 
+      errors: req.session.errors,
+      pageTitle: `${product.name} - Deal Your Crypto`,
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   },
   // Products Update
   async productUpdate(req, res) {
@@ -823,7 +892,10 @@ module.exports = {
       res.render('dashboard/dashboard_edit', {
         user: req.user,
         errors: errors,
-        product
+        product,
+        pageTitle: `${product.name} - Deal Your Crypto`,
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
       });
     } else {
       if (req.body.product.repeatable === "true") {

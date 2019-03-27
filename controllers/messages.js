@@ -20,7 +20,13 @@ module.exports = {
                     limit: 10,
                 });
         chats.page = Number(chats.page);
-        res.render('messages/messages', { chats, user: req.user });
+        res.render('messages/messages', { 
+            chats, 
+            user: req.user,
+            pageTitle: 'Messages - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+        });
     },
     // Get Messages
     async getMessages(req, res) {
@@ -39,7 +45,16 @@ module.exports = {
             buyer = user2;
         }
         const product = await Product.findById(chat.product.id);
-        res.render('messages/messages_msg', { chat, user: req.user, user2, buyer, product });
+        res.render('messages/messages_msg', { 
+            chat, 
+            user: req.user, 
+            user2, 
+            buyer, 
+            product,
+            pageTitle: 'Messages - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+        });
     },
     // Update "read" field
     async updateMessages(req, res) {
@@ -173,7 +188,7 @@ module.exports = {
             const output = `
             <h1>You have a new conversation</h1>
             <p>${req.user.full_name} is interested in ${product.name}.</p>
-            <p>Click <a href="${req.headers.host}/messages/${chat._id}">here</a> to see the conversation.</p>
+            <p>Click <a href="http://${req.headers.host}/messages/${chat._id}">here</a> to see the conversation.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing
@@ -212,7 +227,17 @@ module.exports = {
             const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
             const chat = await Chat.findById(deal.chat);
-            return res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+            return res.render('deals/deal', { 
+                deal, 
+                seller, 
+                buyer, 
+                user: req.user, 
+                chat, 
+                errors,
+                pageTitle: `${deal.product.name} Message - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         }
         // Find the chat
         const chat = await Chat.findById( req.params.id );

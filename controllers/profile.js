@@ -45,9 +45,27 @@ module.exports = {
                 reviewed = true;
             }
         });
-        res.render('index/profile', { user, products, floorRating, reviews, reviewed });
+        res.render('index/profile', { 
+          user, 
+          products, 
+          floorRating, 
+          reviews, 
+          reviewed,
+          pageTitle: 'Profile - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       } else {
-        res.render('index/profile', {user, products, floorRating, reviews, reviewed: true});
+        res.render('index/profile', {
+          user, 
+          products, 
+          floorRating, 
+          reviews, 
+          reviewed: true,
+          pageTitle: 'Profile - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
       }
     },
     async getReviews(req, res){
@@ -58,7 +76,14 @@ module.exports = {
         limit: 5,
       });
       reviews.page = Number(reviews.page);
-      res.render('partials/userReviews', {user: req.user, reviewedUser: req.params.id, reviews});
+      res.render('partials/userReviews', {
+        user: req.user, 
+        reviewedUser: req.params.id,
+        reviews,
+        pageTitle: 'User Reviews - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
     },
     // Profile Update
     async profileUpdate(req, res) {
@@ -113,6 +138,9 @@ module.exports = {
                   res.render('dashboard/dashboard', {
                     user: req.user,
                     errors: errors,
+                    pageTitle: 'Dashboard - Deal Your Crypto',
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
                   });
                 } else {
                 await user.save();

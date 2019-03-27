@@ -21,7 +21,17 @@ module.exports = {
         const seller = await User.findById(deal.product.author.id);
         const buyer = await User.findById(deal.buyer.id);
         const chat = await Chat.findById(deal.chat);
-        res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors: false });
+        res.render('deals/deal', { 
+            deal, 
+            seller, 
+            buyer, 
+            user: req.user, 
+            chat, 
+            errors: false,
+            pageTitle: `${deal.product.name} - Deal Your Crypto`,
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+        });
     },
     async acceptDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -32,7 +42,7 @@ module.exports = {
         <h1>Deal Status Changed: Pending Delivery</h1>
         <p>${req.user.full_name} has accepted your deal request for ${deal.product.name}.</p>
         <p>The product is being delivered. The deal cannot be cancelled anymore and the shipping address cannot be changed.</p>
-        <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to see the deal.</p>
+        <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to see the deal.</p>
         `;
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
@@ -251,7 +261,17 @@ module.exports = {
             const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
             const chat = await Chat.findById(deal.chat);
-            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+            res.render('deals/deal', { 
+                deal, 
+                seller, 
+                buyer, 
+                user: req.user, 
+                chat, 
+                errors,
+                pageTitle: `${deal.product.name} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         } else {
             if (req.body.refundOption === 'Money Back') {
                 // Find user
@@ -286,7 +306,17 @@ module.exports = {
             const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
             const chat = await Chat.findById(deal.chat);
-            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+            res.render('deals/deal', { 
+                deal, 
+                seller, 
+                buyer, 
+                user: req.user, 
+                chat, 
+                errors,
+                pageTitle: `${deal.product.name} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         } else {
             deal.sellerReason = req.body.reason;
             deal.sellerMessage = req.body.message;
@@ -299,7 +329,7 @@ module.exports = {
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Denied</p>
             <p>A moderator will check if the refund was denied for a good reason.</p>
-            <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to view the deal.</p>
+            <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to view the deal.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing
@@ -344,7 +374,17 @@ module.exports = {
             const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
             const chat = await Chat.findById(deal.chat);
-            res.render('deals/deal', { deal, seller, buyer, user: req.user, chat, errors });
+            res.render('deals/deal', { 
+                deal, 
+                seller, 
+                buyer, 
+                user: req.user, 
+                chat, 
+                errors,
+                pageTitle: `${deal.product.name} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         } else {
             deal.refund.status = 'Not fulfilled';
             deal.refund.timeOfRequest = Date.now();
@@ -359,7 +399,7 @@ module.exports = {
             <p>Deal: ${product.name}</p>
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Requested</p>
-            <p>Click <a href="${req.headers.host}/deals/${deal._id}">here</a> to view the full details of the request.</p>
+            <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to view the full details of the request.</p>
             `;
             // Generate test SMTP service account from ethereal.email
             // Only needed if you don't have a real mail account for testing
@@ -408,7 +448,13 @@ module.exports = {
                 req.flash('success', 'Deal completed successfully.');
                 return res.redirect(`/deals/${deal.id}`);
             } else {
-                res.render('deals/deal_review', { user: req.user, deal: deal });
+                res.render('deals/deal_review', { 
+                    user: req.user, 
+                    deal: deal,
+                    pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                });
             }
         } else {
             // find the user by its id and populate reviews
@@ -424,7 +470,14 @@ module.exports = {
                 req.flash('success', 'Deal completed successfully.');
                 return res.redirect(`/deals/${deal.id}`);
             } else {
-                res.render('deals/deal_review_user', { user: req.user, seller: user, deal });
+                res.render('deals/deal_review_user', { 
+                    user: req.user, 
+                    seller: user, 
+                    deal,
+                    pageTitle: `${deal.product.name} - Deal Your Crypto`,
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                });
             }
         }
     },   
