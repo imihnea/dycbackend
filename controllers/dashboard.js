@@ -81,12 +81,37 @@ module.exports = {
     });
   },
   async ongoingProductIndex(req, res) {
-    const deals = await Deal.paginate({ $and:[ 
-      {$or:
-         [{refundableUntil: {$exists: true, $gt: Date.now()}}, {refundableUntil: {$exists: false}}]}, 
-      {$or:
-         [{'buyer.id': req.user._id}, {'product.author.id': req.user._id}]},
-      {status: {$nin: ['Cancelled', 'Refunded', 'Declined']}}]}, {
+    const deals = await Deal.paginate(
+      { 
+        $and:[ 
+          {
+            $or:[ 
+            {
+              refundableUntil: {
+                $exists: true, 
+                $gt: Date.now()
+                }
+              }, {
+                refundableUntil: {
+                  $exists: false
+                }
+              }
+            ]
+          }, {
+            $or:[
+              {
+                'buyer.id': req.user._id
+              }, {
+                'product.author.id': req.user._id
+              }
+            ]
+          }, {
+            status: {
+              $nin: ['Cancelled', 'Refunded', 'Declined']
+            }
+          }
+      ]
+    }, {
       page: req.query.page || 1,
       limit: 10,
     });

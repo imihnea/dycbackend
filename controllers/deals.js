@@ -396,7 +396,7 @@ module.exports = {
             const seller = await User.findById(deal.product.author.id);
             const output = `
             <h1>Deal Status Changed: Refund Requested</h1>
-            <p>Deal: ${product.name}</p>
+            <p>Deal: ${deal.product.name}</p>
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Requested</p>
             <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to view the full details of the request.</p>

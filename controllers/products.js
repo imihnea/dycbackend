@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const ObjectID = require("bson-objectid");
 
 const Product = require('../models/product');
 const User = require('../models/user');
@@ -20,8 +21,7 @@ module.exports = {
               model: 'User',
             },
         });
-        // Find similar products
-        // Doesn't always show the products - needs further work
+
 
         const reviews = await Review.paginate({ product: req.params.id },{
             sort: { createdAt: -1 },
@@ -38,7 +38,8 @@ module.exports = {
                     reviewed = true;
                 }
             });
-            Product.aggregate().match({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] } }).sample(4).exec((err, result) => {
+            // Find similar products
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
                 if (err) {
                   console.log(err);
                   res.render('products/product_view', { 
@@ -55,13 +56,13 @@ module.exports = {
                 } else {
                   let similar = result;
                   if (similar.length < 4) {
-                    let ids = [ req.params.id ];
+                    let ids = [ ObjectID(req.params.id) ];
                     if (similar.length > 0) {
                         similar.forEach((sim) => {
-                            ids.push(sim._id);
+                            ids.push(ObjectID(sim._id));
                         });
                     }
-                    Product.aggregate().match({ _id: { $nin: ids }, 'category.2': { $eq: product.category[2] } }).sample(4 - similar.length).exec((err, result) => {
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
                             console.log(err);
                             if (similar.length > 0) {
@@ -136,7 +137,7 @@ module.exports = {
                 }
             });
         } else {
-            Product.aggregate().match({ _id: { $ne: req.params.id }, 'category.3': { $eq: product.category[3] } }).sample(4).exec((err, result) => {
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
                 if (err) {
                     console.log(err);
                     res.render('products/product_view', { 
@@ -153,13 +154,13 @@ module.exports = {
                 } else {
                   let similar = result;
                   if (similar.length < 4) {
-                    let ids = [ req.params.id ];
+                    let ids = [ ObjectID(req.params.id) ];
                     if (similar.length > 0) {
                         similar.forEach((sim) => {
-                            ids.push(sim._id);
+                            ids.push(ObjectID(sim._id));
                         });
                     }
-                    Product.aggregate().match({ _id: { $nin: ids }, 'category.2': { $eq: product.category[2] } }).sample(4 - similar.length).exec((err, result) => {
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
                             console.log(err);
                             if (similar.length > 0) {
@@ -230,7 +231,7 @@ module.exports = {
                             pageKeywords: 'Keywords'
                         });
                     }
-                  }
+                  } 
                 }
             });
         }

@@ -8,13 +8,13 @@ const {
 } = require('../controllers/reviews');
 
 /* review reviews create /posts/:id/reviews */
-router.post('/', isLoggedIn, hasCompleteProfile, asyncErrorHandler(reviewCreateUser));
+router.post('/:id/reviews', isLoggedIn, hasCompleteProfile, asyncErrorHandler(reviewCreateUser));
 
 /* PUT reviews update /posts/:id/reviews/:review_id */
-router.put('/:review_id', isLoggedIn, isReviewAuthor, asyncErrorHandler(reviewUpdateUser));
+router.put('/:id/reviews/:review_id', isLoggedIn, isReviewAuthor, asyncErrorHandler(reviewUpdateUser));
 
 /* DELETE reviews destroy /posts/:id/reviews/:review_id */
-router.delete('/:review_id', isLoggedIn, isReviewAuthor, asyncErrorHandler(reviewDestroyUser));
+router.delete('/:id/reviews/:review_id', isLoggedIn, isReviewAuthor, asyncErrorHandler(reviewDestroyUser));
 
 
 module.exports = router;
