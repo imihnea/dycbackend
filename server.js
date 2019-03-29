@@ -12,6 +12,26 @@ const expressValidator = require('express-validator');
 
 app.use(expressValidator());
 
+const rateLimit = require("express-rate-limit");
+ 
+// app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  message: "Too many attempts to register from this IP, please try again in an hour."
+});
+// only apply to register requests
+app.use("/register", registerLimiter);
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: "Too many login attempts from this IP, please try again in an hour."
+});
+// only apply to login requests
+app.use("/login", loginLimiter);
+
 const mongoose = require('mongoose');
 
 const passport = require('passport');
@@ -21,6 +41,49 @@ const flash = require('connect-flash');
 const helmet = require('helmet');
 
 app.use(helmet());
+
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 7.3.3'}));
+
+app.use(helmet.ieNoOpen());
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    // defaultSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
+    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com']
+  }
+}));
+
+app.use(helmet.noSniff());
+
+app.use(helmet.frameguard({ action: 'sameorigin' }));
+
+app.use(helmet.xssFilter());
+
+// Need SSL set up for these
+
+// app.use(helmet.hsts({
+//   maxAge: 31536000,
+//   includeSubDomains: true,
+//   preload: true
+// }));
+
+// const hpkp = require('hpkp');
+
+// const ninetyDaysInSeconds = 7776000
+// app.use(hpkp({
+//   maxAge: ninetyDaysInSeconds,
+//   sha256s: ['AbCdEf123=', 'ZyXwVu456='],
+//   includeSubDomains: true,         // optional
+//   reportUri: 'http://example.com', // optional
+//   reportOnly: false,               // optional
+ 
+//   // Set the header based on a condition.
+//   // This is optional.
+//   setIf: function (req, res) {
+//     return req.secure
+//   }
+// }));
 
 const LocalStrategy = require('passport-local');
 

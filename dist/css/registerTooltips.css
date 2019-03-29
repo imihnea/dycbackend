@@ -14,8 +14,9 @@
     padding: 1rem;
     text-transform: none;
     transition: all 0.3s ease;
-    width: 160px;
+    width: 200px;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important; 
+    white-space: pre-wrap;
   }
   
   .registerTooltip::after {
@@ -36,7 +37,7 @@
   .registerTooltip::before, .registerTooltip::after {
     color: black;
     font-family: 'Titillium Web', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0;
     pointer-events: none;
     text-align: center; 

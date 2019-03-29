@@ -579,6 +579,7 @@ module.exports = {
       const author = {
         id: req.user._id,
         username: req.user.username,
+        name: req.user.full_name,
         city: req.user.city,
         state: req.user.state,
         country: req.user.country,

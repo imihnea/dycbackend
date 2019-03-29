@@ -38,6 +38,7 @@ const ProductSchema = new Schema({
       es_type: 'text'
     },
     username: { type: String, es_type: 'text'},
+    name: {type: String, es_type: 'text'},
     city: { type: String, es_type: 'text'},
     country: { type: String, es_type: 'text'},
     state: { type: String, es_type: 'text'},

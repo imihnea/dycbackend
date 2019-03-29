@@ -390,6 +390,10 @@ hr{
     color: white !important;
 }
 
+.button.is-danger{
+    border-color: black !important;
+}
+
 .title{
     color: black !important;
 }

@@ -114,12 +114,14 @@ module.exports = {
                 const newChat = {
                     user1: { 
                         id: req.user._id, 
-                        fullname: req.user.full_name, 
+                        fullname: req.user.full_name,
+                        username: req.user.username,
                         avatarUrl: req.user.avatar.url 
                     },
                     user2: { 
                         id: user2.id, 
                         fullname: user2.full_name, 
+                        username: user2.username,
                         avatarUrl: user2.avatar.url 
                     },
                     product: { 
@@ -156,12 +158,14 @@ module.exports = {
             const newChat = {
                 user1: { 
                     id: req.user._id, 
-                    fullname: req.user.full_name, 
+                    fullname: req.user.full_name,
+                    username: req.user.username,
                     avatarUrl: req.user.avatar.url 
                 },
                 user2: { 
                     id: user2.id, 
-                    fullname: user2.full_name, 
+                    fullname: user2.full_name,
+                    username: user2.username,
                     avatarUrl: user2.avatar.url 
                 },
                 product: { 
