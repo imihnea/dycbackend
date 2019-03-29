@@ -176,8 +176,13 @@
                         </div>
                 <% } else { %>
                     <p class="subtitle is-6">The seller does not deliver in your area or you don't have enough balance.</p>
+                    <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
                     <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
                     <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
+                    <form action="/messages/<%= product._id %>/createChat" method="POST">
+                        <button class="productContactLink button is-primary">Contact</button>
+                    </form>
+                </div>
                 <% } %>
             </div>                
         </div>  

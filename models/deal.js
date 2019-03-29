@@ -31,7 +31,7 @@ const DealSchema = new Schema({
             continent: String, 
             address1: String, 
             address2: String, 
-            zip: Number 
+            zip: String,
         } 
     },
     price: Number,
