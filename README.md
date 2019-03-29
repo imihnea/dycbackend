@@ -7,6 +7,7 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
+            => Buy product => Checkout page
          Reviews => Only create product reviews, show them on the profile page
 
     Low Priority:

@@ -348,32 +348,6 @@
                     <% if (index < reviews.total - 1) { %><hr  class="smallerCenter"><% } %>
                 <% }); %>
             <% } %>
-            <% if((currentUser) && (currentUser._id.toString() != product.author.id.toString()) && (reviewed === false)) { %>
-                <hr class="smallerCenter">
-                <p class="productSubTitleText" >Write a Review</p>
-                <form action="/productsReview/<%= product.id %>/reviews" method="POST" class="detailsContainer">
-                    <textarea class="textarea" name="review[body]" required></textarea>
-                    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                        <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
-                            <fieldset class="starability-basic" style="margin: auto;">
-                                <legend class="productDescriptionText">Rating:</legend>
-                                <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                                <input type="radio" id="rate1" name="review[rating]" value="1" />
-                                <label for="rate1" title="Terrible">1 star</label>
-                                <input type="radio" id="rate2" name="review[rating]" value="2" />
-                                <label for="rate2" title="Not good">2 stars</label>
-                                <input type="radio" id="rate3" name="review[rating]" value="3" />
-                                <label for="rate3" title="Average">3 stars</label>
-                                <input type="radio" id="rate4" name="review[rating]" value="4" />
-                                <label for="rate4" title="Very good">4 stars</label>
-                                <input type="radio" id="rate5" name="review[rating]" value="5" />
-                                <label for="rate5" title="Amazing">5 stars</label>
-                            </fieldset>
-                        </div>
-                        <input class="button is-primary" type="submit">    
-                    </div>
-                </form>
-            <% } %>
         </div>
 
         <% if (similar.length > 0) { %>

@@ -16,22 +16,6 @@ const rateLimit = require("express-rate-limit");
  
 // app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 
-const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10,
-  message: "Too many attempts to register from this IP, please try again in an hour."
-});
-// only apply to register requests
-app.use("/register", registerLimiter);
-
-const loginLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
-  message: "Too many login attempts from this IP, please try again in an hour."
-});
-// only apply to login requests
-app.use("/login", loginLimiter);
-
 const mongoose = require('mongoose');
 
 const passport = require('passport');
@@ -213,6 +197,28 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   next();
 });
+
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  handler: (req, res) => {
+    req.flash('error', 'Too many register attempts from this IP, please try again in an hour.');
+    res.redirect('/');
+  },
+});
+// only apply to register requests
+app.use("/register", registerLimiter);
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  handler: (req, res) => {
+    req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
+    res.redirect('/');
+  },
+});
+// only apply to login requests
+app.use("/login", loginLimiter);
 
 // refactored routes
 app.use('/', indexRoutes);
