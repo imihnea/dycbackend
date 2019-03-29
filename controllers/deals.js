@@ -82,7 +82,7 @@ module.exports = {
         await buyer.save();
         const output = `
         <h1>Deal Status Changed: Declined</h1>
-        <p>${req.user.full_name} has declined your deal request for ${product.name}.</p>
+        <p>${req.user.full_name} has declined your deal request for ${deal.product.name}.</p>
         <p>Your currency has been returned to your account.</p>
         `;
         // Generate test SMTP service account from ethereal.email
@@ -140,7 +140,7 @@ module.exports = {
         // Buyer email
         let output = `
         <h1>Deal Status Changed: Completed</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Completed</p>
         <p>The refund term is 14 days. Access this <a href="${req.headers.host}/deals/${deal._id}">link</a> to request a refund.</p>
@@ -174,7 +174,7 @@ module.exports = {
         // Seller email
         output = `
         <h1>Deal Status Changed: Completed</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Completed</p>
         <p>The refund term is 14 days. The currency will be available for withdrawal once the refund term ends.</p>
@@ -219,7 +219,7 @@ module.exports = {
         const seller = await User.findById(deal.product.author.id);
         const output = `
         <h1>Deal Status Changed: Cancelled</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Cancelled</p>
         <p>The buyer has cancelled the deal.</p>
@@ -325,7 +325,7 @@ module.exports = {
             const buyer = await User.findById(deal.buyer.id);
             const output = `
             <h1>Deal Status Changed: Refund Denied</h1>
-            <p>Deal: ${product.name}</p>
+            <p>Deal: ${deal.product.name}</p>
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Denied</p>
             <p>A moderator will check if the refund was denied for a good reason.</p>
