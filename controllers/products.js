@@ -293,26 +293,6 @@ module.exports = {
         //     res.redirect('back');
         // } else {
             let totalPrice = product.btcPrice;
-            if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) {
-                if (product.deliveryOptions.city.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.city.percent/100;
-                }
-            } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) {
-                if (product.deliveryOptions.state.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.state.percent/100;
-                }
-            } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) {
-                if (product.deliveryOptions.country.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.state.percent/100;
-                }
-            } else if ((product.deliveryOptions.worldwide.valid === true)) {
-                if (product.deliveryOptions.worldwide.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.worldwide.percent/100;
-                }
-            } else {
-                req.flash('error', 'The seller does not deliver in your area.');
-                res.redirect('back');
-            }
             if ( user.btcbalance >= totalPrice)  {
                 // Create deal
                 let deal = {

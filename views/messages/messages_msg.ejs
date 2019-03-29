@@ -127,17 +127,7 @@
                         <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
                         <div class="prices msgPrices frame">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            <p class="price_text"> <% if ((buyer.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.city.percent/100 %>
-                            <% } else if ((buyer.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.state.percent/100 %>
-                            <% } else if ((buyer.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                <%= product.btcPrice + product.btcPrice*product.deliveryOptions.country.percent/100 %>
-                            <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                <%= product.btcPrice + (product.btcPrice*product.deliveryOptions.worldwide.percent*0.01) %>
-                            <% } else { %>
-                                <%= product.btcPrice %>
-                            <% } %></p>
+                            <p class="price_text"><%= product.btcPrice %></p>
                         </div>
                         <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>
                     </div>

@@ -136,54 +136,37 @@
                         <label class="img-check ">
                             <div class="prices frame openPrices">
                                 <p class="price_text">
-                                    <% if (user) { %>
-                                        <% if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true) && (product.deliveryOptions.city.cost === 'paid')) { %> 
-                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.city.percent/100) %>
-                                        <% } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true) && (product.deliveryOptions.state.cost === 'paid')) { %>
-                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.state.percent/100) %>
-                                        <% } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true) && (product.deliveryOptions.country.cost === 'paid')) { %>
-                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.country.percent/100) %>
-                                        <% } else if ((product.deliveryOptions.worldwide.valid === true ) && (product.deliveryOptions.worldwide.cost === 'paid')) { %>
-                                            <%= Number(product.btcPrice) + Number(product.btcPrice*product.deliveryOptions.worldwide.percent/100) %>
-                                        <% } else { %>
-                                            <%= product.btcPrice %>
-                                        <% } %>
-                                    <% } else { %>
-                                        <%= product.btcPrice %>
-                                    <% } %>
+                                    <%= product.btcPrice %>
                                 </p>
                                 <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                         </label>
                     </div>
-                    <p><sub>Transportation costs included</sub></p>
+                    <!-- <p><sub>Transportation costs included</sub></p> Insert shipping fees here --> 
                     <br>   
                 </form>
                 <% if (!user) { %> 
-                    <a href="/login" class="button is-primary">Login to buy</a>
+                    <a href="/login" class="button is-primary is-rounded">Login to buy</a>
                     <% } else if (user.username === product.author.username) { %>
-                        <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
+                        <a href="/dashboard/<%= product._id %>/edit" class="button is-primary is-rounded">Update</a>
                         <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
-                    <% } else if ( ((user.city == product.author.city) && (product.deliveryOptions.city.valid == true)) && (user.btcbalance >= product.btcPrice) ||
-                                   ((user.state == product.author.state) && (product.deliveryOptions.state.valid == true)) && (user.btcbalance >= product.btcPrice) ||
-                                   ((user.country == product.author.country) && (product.deliveryOptions.country.valid == true)) && (user.btcbalance >= product.btcPrice) ||
-                                   (product.deliveryOptions.worldwide.valid == true) && (user.btcbalance >= product.btcPrice) ) { %>
+                    <% } else if (user.btcbalance >= product.btcPrice) { %>
                         <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
                             <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
                             <form action="/messages/<%= product._id %>/createChat" method="POST">
-                                <button class="productContactLink button is-primary">Contact</button>
+                                <button class="productContactLink button is-primary">Contact Seller</button>
                             </form>
                         </div>
-                <% } else { %>
-                    <p class="subtitle is-6">The seller does not deliver in your area or you don't have enough balance.</p>
-                    <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
-                    <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
-                    <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
-                    <form action="/messages/<%= product._id %>/createChat" method="POST">
-                        <button class="productContactLink button is-primary">Contact</button>
-                    </form>
-                </div>
-                <% } %>
+                    <% } else { %>
+                        <p class="subtitle is-6">You don't have enough balance.</p>
+                        <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
+                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
+                        <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
+                        <form action="/messages/<%= product._id %>/createChat" method="POST">
+                            <button class="productContactLink button is-primary">Contact Seller</button>
+                        </form>
+                    </div>
+                    <% } %>
             </div>                
         </div>  
         <hr  class="smallerCenter">

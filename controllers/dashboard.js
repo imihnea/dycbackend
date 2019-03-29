@@ -593,81 +593,7 @@ module.exports = {
       req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
       req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
-      req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
-      let nrOptions = 0;
-      if (req.body.product.city === "true") {
-        req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-        deliveryOptions.city.valid=true;
-        deliveryOptions.city.cost=req.body.product.cityTransport;
-        if (deliveryOptions.city.cost == "paid") {
-          req.check('product[cityTransportPercent]', 'The same city transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-          deliveryOptions.city.percent = req.body.product.cityTransportPercent;
-        } else {
-          deliveryOptions.city.percent = 0;
-        }
-        nrOptions += 1;
-      } else {
-        deliveryOptions.city.valid=false;
-        deliveryOptions.city.percent = 0;
-        deliveryOptions.city.cost = 'No delivery';
-      }
-      if (req.body.product.state === "true") {
-        req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-        deliveryOptions.state.valid=true;
-        deliveryOptions.state.cost=req.body.product.stateTransport;
-        if (deliveryOptions.state.cost == "paid") {
-          req.check('product[stateTransportPercent]', 'The same state transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-          deliveryOptions.state.percent = req.body.product.stateTransportPercent;
-        } else {
-          deliveryOptions.state.percent = 0;
-        }
-        nrOptions += 1;
-      } else {
-        deliveryOptions.state.valid=false;
-        deliveryOptions.state.percent = 0;
-        deliveryOptions.state.cost = 'No delivery';
-      }
-      if (req.body.product.country === "true") {
-        req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-        deliveryOptions.country.valid=true;
-        deliveryOptions.country.cost=req.body.product.countryTransport;
-        if (deliveryOptions.country.cost == "paid") {
-          req.check('product[countryTransportPercent]', 'The same country transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-          deliveryOptions.country.percent = req.body.product.countryTransportPercent;
-        } else {
-          deliveryOptions.country.percent = 0;
-        }
-        nrOptions += 1;
-      } else {
-        deliveryOptions.country.valid=false;
-        deliveryOptions.country.percent = 0;
-        deliveryOptions.country.cost = 'No delivery';
-      }
-      if (req.body.product.worldwide === "true") {
-        req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-        deliveryOptions.worldwide.valid=true;
-        deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
-        if (deliveryOptions.worldwide.cost == "paid") {
-          req.check('product[worldwideTransportPercent]', 'The worldwide transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-          deliveryOptions.worldwide.percent = req.body.product.worldwideTransportPercent;
-        } else {
-          deliveryOptions.worldwide.percent = 0;
-        }
-        nrOptions += 1;
-      } else {
-        deliveryOptions.worldwide.valid=false;
-        deliveryOptions.worldwide.percent = 0;
-        deliveryOptions.worldwide.cost = 'No delivery';
-      }
-      if (nrOptions === 0) {
-          req.flash('error', 'The product must have a delivery method.');
-          res.redirect('back');
-      }
       let btcPrice;
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
       const errors = req.validationErrors();
@@ -691,7 +617,6 @@ module.exports = {
           description: req.body.product.description,
           btcPrice,
           author,
-          deliveryOptions,
           tags
         };
         if (req.body.product.repeatable === "true") {
@@ -837,81 +762,7 @@ module.exports = {
     req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
     req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
-    req.check('product[city]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    req.check('product[state]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
-    let nrOptions = 0;
-    if (req.body.product.city === "true") {
-      req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-      deliveryOptions.city.valid=true;
-      deliveryOptions.city.cost=req.body.product.cityTransport;
-      if (deliveryOptions.city.cost == "paid") {
-        req.check('product[cityTransportPercent]', 'The same city transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-        deliveryOptions.city.percent = req.body.product.cityTransportPercent;
-      } else {
-        deliveryOptions.city.percent = 0;
-      }
-      nrOptions += 1;
-    } else {
-      deliveryOptions.city.valid=false;
-      deliveryOptions.city.percent = 0;
-      deliveryOptions.city.cost = 'No delivery';
-    }
-    if (req.body.product.state === "true") {
-      req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-      deliveryOptions.state.valid=true;
-      deliveryOptions.state.cost=req.body.product.stateTransport;
-      if (deliveryOptions.state.cost == "paid") {
-        req.check('product[stateTransportPercent]', 'The same state transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-        deliveryOptions.state.percent = req.body.product.stateTransportPercent;
-      } else {
-        deliveryOptions.state.percent = 0;
-      }
-      nrOptions += 1;
-    } else {
-      deliveryOptions.state.valid=false;
-      deliveryOptions.state.percent = 0;
-      deliveryOptions.state.cost = 'No delivery';
-    }
-    if (req.body.product.country === "true") {
-      req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-      deliveryOptions.country.valid=true;
-      deliveryOptions.country.cost=req.body.product.countryTransport;
-      if (deliveryOptions.country.cost == "paid") {
-        req.check('product[countryTransportPercent]', 'The same country transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-        deliveryOptions.country.percent = req.body.product.countryTransportPercent;
-      } else {
-        deliveryOptions.country.percent = 0;
-      }
-      nrOptions += 1;
-    } else {
-      deliveryOptions.country.valid=false;
-      deliveryOptions.country.percent = 0;
-      deliveryOptions.country.cost = 'No delivery';
-    }
-    if (req.body.product.worldwide === "true") {
-      req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
-      deliveryOptions.worldwide.valid=true;
-      deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
-      if (deliveryOptions.worldwide.cost == "paid") {
-        req.check('product[worldwideTransportPercent]', 'The worldwide transport fee must be a number.').matches(/^[0-9.]+$/g).notEmpty();
-        deliveryOptions.worldwide.percent = req.body.product.worldwideTransportPercent;
-      } else {
-        deliveryOptions.worldwide.percent = 0;
-      }
-      nrOptions += 1;
-    } else {
-      deliveryOptions.worldwide.valid=false;
-      deliveryOptions.worldwide.percent = 0;
-      deliveryOptions.worldwide.cost = 'No delivery';
-    }
-    if (nrOptions === 0) {
-        req.flash('error', 'The product must have a delivery method.');
-        res.redirect('back');
-    }
     let btcPrice;
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
     btcPrice = req.body.product.btc_price;
@@ -944,7 +795,6 @@ module.exports = {
       product.category[2] = req.body.product.category[1];
       product.category[3] = req.body.product.category[2];
       product.btcPrice = btcPrice;
-      product.deliveryOptions = deliveryOptions;
       // save the updated product into the db
       await product.save();
       // redirect to show page

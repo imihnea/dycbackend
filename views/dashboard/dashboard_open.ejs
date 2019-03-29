@@ -70,41 +70,6 @@
                                             </footer>
                                             </div>
                                     </div>
-                                    <div style="display: flex; margin-top: 1vh;">
-                                        <% let k = 0; %>
-                                        <% if (product.deliveryOptions.city.valid) { %>
-                                            <div class="label">
-                                                <span class="tooltip-toggle" aria-label="Same City Delivery" tabindex="0">
-                                                    <i class="fa fa-city fa-2x" style="color: green;"></i>
-                                                </span>
-                                            </div>
-                                            <% k += 1; %>
-                                        <% } %>
-                                        <% if (product.deliveryOptions.state.valid) { %>
-                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
-                                                <span class="tooltip-toggle" aria-label="Same State Delivery" tabindex="0">
-                                                    <i class="fa fa-map-marked-alt fa-2x" style="color: green;"></i>
-                                                </span>
-                                            </div>
-                                            <% k += 1; %>
-                                        <% } %>
-                                        <% if (product.deliveryOptions.country.valid) { %>
-                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
-                                                <span class="tooltip-toggle" aria-label="Same Country Delivery" tabindex="0">
-                                                    <i class="fa fa-flag fa-2x" style="color: green;"></i>
-                                                </span>
-                                            </div>
-                                            <% k += 1; %>
-                                        <% } %>
-                                        <% if (product.deliveryOptions.worldwide.valid) { %>
-                                            <div class="label" <% if (k!=0) { %> style="margin-left: 1vw;" <% } %>>
-                                                <span class="tooltip-toggle" aria-label="Worldwide Delivery" tabindex="0">
-                                                    <i class="fa fa-globe-americas fa-2x" style="color: green;"></i>
-                                                </span>
-                                            </div>
-                                            <% k += 1; %>
-                                        <% } %>
-                                    </div>
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
                                     <div class="prices openPrices frame">
