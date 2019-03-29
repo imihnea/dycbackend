@@ -32,21 +32,32 @@
                             </div>
                             <div class="level" style="flex-wrap: wrap;">
                                 <div class="column select cont-select" style="padding: 0 !important">
-                                    <select name="country" class="countries" id="countryId" style="width: 100%;">
-                                        <option <% if (user.country) { %> value="<%= user.country %>" <% } %>>Select Country</option>
+                                    <select name="country" class="countries" id="countryId" style="width: 100%;" required>
+                                        <% if (user.country) { %>
+                                        <option value="<%= user.country %>" selected><%= user.country %></option>
+                                        <% } else { %>
+                                        <option value="">Select Country</option>
+                                        <% } %>                                        
                                     </select>
                                 </div>
                                 <div class="column select dash-select" style="padding-top: 0 !important">
-                                    <select name="state" class="states" id="stateId" style="width: 100%;">
-                                        <option <% if (user.state) { %> value="<%= user.state %>" <% } %>>Select State</option>
+                                    <select name="state" class="states" id="stateId" style="width: 100%;" required>
+                                        <% if (user.country) { %>
+                                        <option value="<%= user.state %>"><%= user.state %></option>
+                                        <% } else { %>
+                                        <option value="">Select State</option>
+                                        <% } %>   
                                     </select>
                                 </div>
                                 <div class="column select cont-select" style="padding: 0 !important">
-                                    <select name="city" class="cities" id="cityId" style="width: 100%;">
-                                    <option <% if (user.city) { %> value="<%= user.city %>" <% } %>>Select City</option>
+                                    <select name="city" class="cities" id="cityId" style="width: 100%;" required>
+                                        <% if (user.country) { %>
+                                        <option value="<%= user.city %>"><%= user.city %></option>
+                                        <% } else { %>
+                                        <option value="">Select City</option>
+                                        <% } %>   
                                     </select>
                                 </div>
-                                <sub class="subWarning">Do not modify if not changed</sub>
                             </div>
                         <div class="level">
                                 <div class="columns level-item">

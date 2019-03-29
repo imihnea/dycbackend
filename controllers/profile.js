@@ -120,7 +120,7 @@ module.exports = {
                   user.state = req.body.state;
                   await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.state': user.state}});
                 }
-                if (user.state != req.body.city) {
+                if (user.city != req.body.city) {
                   user.city = req.body.city;
                   await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
                 }
