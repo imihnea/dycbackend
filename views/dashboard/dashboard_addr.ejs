@@ -42,7 +42,7 @@
                                     </form>    
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
+                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance.toFixed(8) %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
                                     </div>
                                     <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
                                     <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
@@ -363,7 +363,7 @@
                                         <tr>
                                             <td><%= index + 1 %></td>
                                             <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
-                                            <td><a href="/profile/<%= deal.buyer.id %>" class="link"><%= deal.buyer.name %></a></td>
+                                            <td><a href="/profile/<%= deal.buyer.id %>" class="link"><%= deal.buyer.username %></a></td>
                                             <td><%= deal.refundableUntil.toUTCString() %></td>
                                             <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
                                         </tr>
@@ -396,7 +396,7 @@
                                         <tr>
                                             <td><%= index + 1 %></td>
                                             <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
-                                            <td><a href="/profile/<%= deal.product.author.id %>" class="link"><%= deal.product.author.name%></a></td>
+                                            <td><a href="/profile/<%= deal.product.author.id %>" class="link"><%= deal.product.author.username %></a></td>
                                             <td><%= deal.createdAt.toUTCString() %></td>
                                             <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
                                         </tr>

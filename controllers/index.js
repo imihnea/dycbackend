@@ -102,8 +102,8 @@ module.exports = {
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
-      req.check('password', 'The password must contain at least one special character (".", ",", "?", "!").').matches(/(\.|,|!|\?)/g);
-      req.check('password', 'The password can contain only alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 \.,?!]+$/g);
+      req.check('password', 'The password must contain at least one special character (" . ", " , ", " ? ", " ! ").').matches(/(\.|,|!|\?)/g);
+      req.check('password', 'The password can contain only alphanumeric and " . ", " , ", " ? ", " ! " characters.').matches(/^[a-zA-Z0-9 \.,?!]+$/g);
       // Uncomment when testing is done
       // const password = new RegExp(req.body.password, "g");
       // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();

@@ -305,7 +305,8 @@ module.exports = {
                     },
                     buyer: {
                         id: user._id,
-                        name: user.username,
+                        username: user.username,
+                        name: user.full_name,
                         avatarUrl: user.avatar.url,
                         'address.city': user.city,
                         'address.state': user.state,

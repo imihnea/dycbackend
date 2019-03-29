@@ -16,7 +16,7 @@
                     </div>
                     <br>
                     <div class=" prod_info ">
-                        <p class="title is-5 messageProfileText">Full Name: <%= user2.full_name %></p>
+                        <p class="title is-5 messageProfileText">Name: <%= user2.username %></p>
                         <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
                         <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
                         <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
@@ -78,7 +78,7 @@
                             <div class="level" style="margin-top: -15px;">
                                 <div class="level-left leftlv">
                                     <div class="recmsg msg frame">
-                                        <p class="recName"> <% if (message.sender._id === chat.user1.id) { %><%= chat.user1.fullname %> <% } else { %> <%= chat.user2.fullname %> <% } %></p>
+                                        <p class="recName"> <% if (message.sender.toString() === chat.user1.id.toString()) { %><%= chat.user1.username %> <% } else { %> <%= chat.user2.username %> <% } %></p>
                                         <span style="white-space: pre-line"><p><%= message.message %></p></span>
                                         <time class="recDate">
                                             <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>

@@ -14,13 +14,15 @@ const DealSchema = new Schema({
                 type: Schema.Types.ObjectId, 
                 ref: 'User' 
             }, 
-            username: String 
+            username: String,
+            name: String
         },
         price: Number,
     },
     buyer: { 
         id: Schema.Types.ObjectId, 
         name: String, 
+        username: String,
         avatarUrl: String, 
         address: { 
             country: String, 

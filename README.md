@@ -7,6 +7,7 @@ Frontend:
     High Priority:
 
          UI => New product => Feature deal
+         Reviews => Only create product reviews, show them on the profile page
 
     Low Priority:
 
@@ -23,7 +24,7 @@ Backend:
       Dashboard => Add balance route
       Security => Validate and sanitize every user input
                => Anti DDOS
-
+      Reviews => Only create product reviews, show them on the profile page
    Low Priority:
 
       Login => Link accounts facebook, gmail etc to original

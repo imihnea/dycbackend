@@ -48,9 +48,9 @@
                                 </div>
                                 <div class="column prod_info ">
                                     <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.fullname %>
+                                        <%= chats.docs[i].user1.username %>
                                     <% } else { %>
-                                        <%= chats.docs[i].user2.fullname %>
+                                        <%= chats.docs[i].user2.username %>
                                     <% } %></p>
                                     <p class="title is-5 messageProfileText">Deal: <%= chats.docs[i].product.name %></p>
                                     <p class="subtitle messageProfileText">Last message: <br>
@@ -92,9 +92,9 @@
                                 </div>
                                 <div class="column prod_info ">
                                     <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.fullname %>
+                                        <%= chats.docs[i].user1.username %>
                                     <% } else { %>
-                                        <%= chats.docs[i].user2.fullname %>
+                                        <%= chats.docs[i].user2.username %>
                                     <% } %></p>
                                     <p class="title is-5 messageProfileText">Deal: <%= chats.docs[i].product.name %></p>
                                     <p class="subtitle messageProfileText">Last message: <br>

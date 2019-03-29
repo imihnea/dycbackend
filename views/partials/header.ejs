@@ -479,7 +479,7 @@
                             <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
                                <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                 <div class="currency dropdown-item">
-                                    <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance %> <%  } else { %>0.00000<% } %></p>
+                                    <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
                                     <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                 </div>
                                 <hr class="dropdown-divider">
