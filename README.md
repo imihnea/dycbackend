@@ -8,7 +8,8 @@ Frontend:
 
          UI => New product => Feature deal
             => Buy product => Checkout page
-         Reviews => Only create product reviews, show them on the profile page
+         Reviews => Editing reviews from profile => redirect to profile; same for product page
+                 => Put products in Iframe if editing/deleting the reviews doesn't refresh/redirect the parent window
 
     Low Priority:
 

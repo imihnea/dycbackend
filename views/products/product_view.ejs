@@ -334,7 +334,7 @@
                                         </header>
                                         <section class=" modal-card-foot" style="display: block;">
                                             <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                            <form action="/productsReview/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                            <form action="/reviews/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
                                                 <input class="button is-danger noborder" type="submit" value="Delete">
                                             </form>
                                         </section>

@@ -433,52 +433,22 @@ module.exports = {
     },
     async reviewProduct(req, res) {
         const deal = await Deal.findById(req.params.id);
-        // find the product by its id and populate reviews
         let product = await Product.findById(deal.product.id);
-        if (product.repeatable) {
-            product = await Product.findById(deal.product.id).populate('reviews').exec();
-            // filter product.reviews to see if any of the reviews were created by logged in user
-            // .filter() returns a new array, so use .length to see if array is empty or not
-            let haveReviewed = product.reviews.filter(review => {
-                return review.author.equals(req.user._id);
-            }).length;
-            // check if haveReviewed is 0 (false) or 1 (true)
-            if(haveReviewed) {
-                // redirect back to deal
-                req.flash('success', 'Deal completed successfully.');
-                return res.redirect(`/deals/${deal.id}`);
-            } else {
-                res.render('deals/deal_review', { 
-                    user: req.user, 
-                    deal: deal,
-                    pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                });
-            }
+        product = await Product.findById(deal.product.id).populate('reviews').exec();
+        let haveReviewed = product.reviews.filter(review => {
+            return review.author.equals(req.user._id);
+        }).length;
+        if(haveReviewed) {
+            req.flash('success', 'Deal completed successfully.');
+            return res.redirect(`/deals/${deal.id}`);
         } else {
-            // find the user by its id and populate reviews
-            let user = await User.findById(product.author.id).populate('reviews').exec();
-            // filter user.reviews to see if any of the reviews were created by logged in user
-            // .filter() returns a new array, so use .length to see if array is empty or not
-            let haveReviewed = user.reviews.filter(review => {
-                return review.author.equals(req.user._id);
-            }).length;
-            // check if haveReviewed is 0 (false) or 1 (true)
-            if(haveReviewed) {
-                // flash an error and redirect back to user
-                req.flash('success', 'Deal completed successfully.');
-                return res.redirect(`/deals/${deal.id}`);
-            } else {
-                res.render('deals/deal_review_user', { 
-                    user: req.user, 
-                    seller: user, 
-                    deal,
-                    pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                });
-            }
+            res.render('deals/deal_review', { 
+                user: req.user, 
+                deal: deal,
+                pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         }
     },   
 };

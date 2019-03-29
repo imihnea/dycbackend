@@ -38,40 +38,20 @@ module.exports = {
         limit: 12,
       });
       products.page = Number(products.page);
-      if (req.user) {
-        let reviewed = false;
-        reviews.docs.forEach((review) => {
-            if (review.author.toString() === req.user._id.toString()) {
-                reviewed = true;
-            }
-        });
-        res.render('index/profile', { 
-          user, 
-          products, 
-          floorRating, 
-          reviews, 
-          reviewed,
-          pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      } else {
-        res.render('index/profile', {
-          user, 
-          products, 
-          floorRating, 
-          reviews, 
-          reviewed: true,
-          pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      }
+      res.render('index/profile', { 
+        user, 
+        products, 
+        floorRating, 
+        reviews, 
+        pageTitle: 'Profile - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
     },
     async getReviews(req, res){
       const reviews = await Review.paginate({ user: req.params.id },{
         sort: { createdAt: -1 },
-        populate: 'user',
+        populate: ['user', 'product'],
         page: req.query.page || 1,
         limit: 5,
       });
