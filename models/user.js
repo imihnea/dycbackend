@@ -31,7 +31,7 @@ const UserSchema = new Schema({
     public_id: String 
   },
   password: String,
-  btcbalance: Number,
+  btcbalance: { type: Number, default: 0 },
   withdrawal: [{ 
     createdAt: { 
       type: Date, 

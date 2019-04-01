@@ -50,7 +50,7 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     // defaultSrc: ["'self'"],
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
-    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com']
+    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions']
   }
 }));
 
@@ -111,8 +111,6 @@ const profileRoutes = require('./routes/profile');
 const messagesRoutes = require('./routes/messages');
 
 const reviewsRoutes = require('./routes/reviews');
-
-const reviewsRoutesUser = require('./routes/reviewsusers');
 
 const dealsRoutes = require('./routes/deals');
 
@@ -214,6 +212,28 @@ app.use((req, res, next) => {
   next();
 });
 
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  handler: (req, res) => {
+    req.flash('error', 'Too many register attempts from this IP, please try again in an hour.');
+    res.redirect('/');
+  },
+});
+// only apply to register requests
+app.use("/register", registerLimiter);
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  handler: (req, res) => {
+    req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
+    res.redirect('/');
+  },
+});
+// only apply to login requests
+app.use("/login", loginLimiter);
+
 // refactored routes
 app.use('/', indexRoutes);
 app.use('/', savvycallbackRoutes);
@@ -223,8 +243,7 @@ app.use('/dashboard', dashboardRoutes); // by saying this we write shorter code 
 app.use('/products', productRoutes);
 app.use('/profile', profileRoutes);
 app.use('/messages', messagesRoutes);
-app.use('/productsReview', reviewsRoutes);
-app.use('/profileReview', reviewsRoutesUser);
+app.use('/reviews', reviewsRoutes);
 app.use('/deals', dealsRoutes);
 
 // error 404 page

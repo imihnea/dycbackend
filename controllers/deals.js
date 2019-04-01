@@ -93,7 +93,7 @@ module.exports = {
         await buyer.save();
         const output = `
         <h1>Deal Status Changed: Declined</h1>
-        <p>${req.user.full_name} has declined your deal request for ${product.name}.</p>
+        <p>${req.user.full_name} has declined your deal request for ${deal.product.name}.</p>
         <p>Your currency has been returned to your account.</p>
         `;
         // Generate test SMTP service account from ethereal.email
@@ -151,7 +151,7 @@ module.exports = {
         // Buyer email
         let output = `
         <h1>Deal Status Changed: Completed</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Completed</p>
         <p>The refund term is 14 days. Access this <a href="${req.headers.host}/deals/${deal._id}">link</a> to request a refund.</p>
@@ -185,7 +185,7 @@ module.exports = {
         // Seller email
         output = `
         <h1>Deal Status Changed: Completed</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Completed</p>
         <p>The refund term is 14 days. The currency will be available for withdrawal once the refund term ends.</p>
@@ -230,7 +230,7 @@ module.exports = {
         const seller = await User.findById(deal.product.author.id);
         const output = `
         <h1>Deal Status Changed: Cancelled</h1>
-        <p>Deal: ${product.name}</p>
+        <p>Deal: ${deal.product.name}</p>
         <p>Price: ${deal.price}</p>
         <p>Status: Cancelled</p>
         <p>The buyer has cancelled the deal.</p>
@@ -336,7 +336,7 @@ module.exports = {
             const buyer = await User.findById(deal.buyer.id);
             const output = `
             <h1>Deal Status Changed: Refund Denied</h1>
-            <p>Deal: ${product.name}</p>
+            <p>Deal: ${deal.product.name}</p>
             <p>Price: ${deal.price}</p>
             <p>Status: Refund Denied</p>
             <p>A moderator will check if the refund was denied for a good reason.</p>
@@ -444,52 +444,22 @@ module.exports = {
     },
     async reviewProduct(req, res) {
         const deal = await Deal.findById(req.params.id);
-        // find the product by its id and populate reviews
         let product = await Product.findById(deal.product.id);
-        if (product.repeatable) {
-            product = await Product.findById(deal.product.id).populate('reviews').exec();
-            // filter product.reviews to see if any of the reviews were created by logged in user
-            // .filter() returns a new array, so use .length to see if array is empty or not
-            let haveReviewed = product.reviews.filter(review => {
-                return review.author.equals(req.user._id);
-            }).length;
-            // check if haveReviewed is 0 (false) or 1 (true)
-            if(haveReviewed) {
-                // redirect back to deal
-                req.flash('success', 'Deal completed successfully.');
-                return res.redirect(`/deals/${deal.id}`);
-            } else {
-                res.render('deals/deal_review', { 
-                    user: req.user, 
-                    deal: deal,
-                    pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                });
-            }
+        product = await Product.findById(deal.product.id).populate('reviews').exec();
+        let haveReviewed = product.reviews.filter(review => {
+            return review.author.equals(req.user._id);
+        }).length;
+        if(haveReviewed) {
+            req.flash('success', 'Deal completed successfully.');
+            return res.redirect(`/deals/${deal.id}`);
         } else {
-            // find the user by its id and populate reviews
-            let user = await User.findById(product.author.id).populate('reviews').exec();
-            // filter user.reviews to see if any of the reviews were created by logged in user
-            // .filter() returns a new array, so use .length to see if array is empty or not
-            let haveReviewed = user.reviews.filter(review => {
-                return review.author.equals(req.user._id);
-            }).length;
-            // check if haveReviewed is 0 (false) or 1 (true)
-            if(haveReviewed) {
-                // flash an error and redirect back to user
-                req.flash('success', 'Deal completed successfully.');
-                return res.redirect(`/deals/${deal.id}`);
-            } else {
-                res.render('deals/deal_review_user', { 
-                    user: req.user, 
-                    seller: user, 
-                    deal,
-                    pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                });
-            }
+            res.render('deals/deal_review', { 
+                user: req.user, 
+                deal: deal,
+                pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
         }
     },   
 };

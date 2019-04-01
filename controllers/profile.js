@@ -27,60 +27,19 @@ module.exports = {
       });
       const reviews = await Review.paginate({ user: req.params.id },{
         sort: { createdAt: -1 },
-        populate: 'user',
+        populate: ['user', 'product'],
         page: req.query.page || 1,
         limit: 5,
       });
       reviews.page = Number(reviews.page);
       const floorRating = user.calculateAvgRating();
-      const products = await Product.paginate({ available: "True", 'author.id': req.params.id }, {
-        page: req.query.page || 1,
-        limit: 12,
-      });
-      products.page = Number(products.page);
-      if (req.user) {
-        let reviewed = false;
-        reviews.docs.forEach((review) => {
-            if (review.author.toString() === req.user._id.toString()) {
-                reviewed = true;
-            }
-        });
-        res.render('index/profile', { 
-          user, 
-          products, 
-          floorRating, 
-          reviews, 
-          reviewed,
-          pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      } else {
-        res.render('index/profile', {
-          user, 
-          products, 
-          floorRating, 
-          reviews, 
-          reviewed: true,
-          pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      }
-    },
-    async getReviews(req, res){
-      const reviews = await Review.paginate({ user: req.params.id },{
-        sort: { createdAt: -1 },
-        populate: 'user',
-        page: req.query.page || 1,
-        limit: 5,
-      });
-      reviews.page = Number(reviews.page);
-      res.render('partials/userReviews', {
-        user: req.user, 
-        reviewedUser: req.params.id,
-        reviews,
-        pageTitle: 'User Reviews - Deal Your Crypto',
+      const products = await Product.find({ available: "True", 'author.id': req.params.id });
+      res.render('index/profile', { 
+        user, 
+        products, 
+        floorRating, 
+        reviews, 
+        pageTitle: 'Profile - Deal Your Crypto',
         pageDescription: 'Description',
         pageKeywords: 'Keywords'
       });
