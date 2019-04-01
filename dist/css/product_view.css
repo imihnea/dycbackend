@@ -78,11 +78,6 @@
 	background-color: #d0b94f !important;
 }
 
-.hidden {
-	display: none;
-	visibility: hidden;
-}
-
 .prices {
 	/* width: 55% !important; */
 	margin-top: 1vh;

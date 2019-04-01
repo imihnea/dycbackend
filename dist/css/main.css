@@ -417,7 +417,9 @@ hr{
 
 .productDescriptionText{
 	color: black !important;
-	text-align: left;
+    text-align: left;
+    margin-top: 1vh; 
+    word-wrap: break-word;
 }
 
 .open-img{

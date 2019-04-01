@@ -32,10 +32,6 @@ input[type=checkbox].curr_checkbox{
 	filter: url('../svg/desaturate.svg#greyscale');
 }
 
-.cccy{
-    /* width: 15%; */
-}
-
 .curr-filter{
     display: flex;
     align-items: baseline;
@@ -77,17 +73,19 @@ input[type=checkbox].curr_checkbox{
 }
 
 .modal-card-head{
-    background-color: black !important;
-    color: orange !important;
-    border: 1px solid orange;
+    border-bottom: 1px solid #dbdbdb;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
 }
 
-.modal-card-title{
-    color: orange !important;
-}
-
-.delete::before, .modal-close::before, .delete::after, .modal-close::after{
-    background-color: orange !important;
+.modal-card-head, .modal-card-foot{
+    align-items: center;
+    background-color: whitesmoke;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    padding: 20px;
+    position: relative;
 }
 
 .modal-card-body{
@@ -95,14 +93,6 @@ input[type=checkbox].curr_checkbox{
     border-right: 1px solid orange;
     border-bottom: 1px solid orange;
     background-color: black !important;
-}
-
-.modal-card-foot{
-    background-color: black !important;
-    border-top: 0;
-    border-left: 1px solid orange;
-    border-right: 1px solid orange;
-    border-bottom: 1px solid orange;
 }
 
 .modal-section-title{

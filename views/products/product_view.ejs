@@ -280,11 +280,11 @@
                             <% } %>
                             </div>
                             <br>
-                            <p class="productDescriptionText" style="margin-top: 1vh;" ><%= review.body %></p>
+                            <p class="productDescriptionText"><%= review.body %></p>
                         </div>
                         <% if(currentUser){ %>
                             <% if(review.author.equals(currentUser._id)) { %>
-                            <div class="column is-one-fifth" style="position: absolute; right: -1%; top: 3%;">
+                            <div class="column is-one-fifth reviewAuthorButtons">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
                                     <div class="modal-background"></div>
@@ -294,23 +294,20 @@
                                                 <button class="delete deleteEdit" aria-label="close"></button>
                                             </header>
                                             <section class="modal-card-foot" style="display: block;">
-                                                <form action="/productsReview/<%= product.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+                                                <form action="/reviews/<%= product.id %>/reviews/<%= review.id %>?_method=PUT&from=product" method="POST" class="edit-review-form">
                                                     <textarea class="textarea" name="review[body]" required><%= review.body %></textarea>
-                                                    <fieldset class="starability-basic" style="    margin-top: 1vh;
-                                                    margin-bottom: 1vh;
-                                                    margin-left: auto;
-                                                    margin-right: auto;">
+                                                    <fieldset class="starability-basic reviewRating">
                                                         <legend>Rating:</legend>
-                                                        <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
-                                                        <input type="radio" id="edit-rate1" name="review[rating]" value="1" />
+                                                        <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" <% if (review.rating == 1) { %> checked <% } %> aria-label="No rating." />
+                                                        <input type="radio" id="edit-rate1" name="review[rating]" value="1" <% if (review.rating == 1) { %> checked <% } %> />
                                                         <label for="edit-rate1" title="Terrible">1 star</label>
-                                                        <input type="radio" id="edit-rate2" name="review[rating]" value="2" />
+                                                        <input type="radio" id="edit-rate2" name="review[rating]" value="2" <% if (review.rating == 2) { %> checked <% } %> />
                                                         <label for="edit-rate2" title="Not good">2 stars</label>
-                                                        <input type="radio" id="edit-rate3" name="review[rating]" value="3" />
+                                                        <input type="radio" id="edit-rate3" name="review[rating]" value="3"  <% if (review.rating == 3) { %> checked <% } %>/>
                                                         <label for="edit-rate3" title="Average">3 stars</label>
-                                                        <input type="radio" id="edit-rate4" name="review[rating]" value="4" />
+                                                        <input type="radio" id="edit-rate4" name="review[rating]" value="4" <% if (review.rating == 4) { %> checked <% } %> />
                                                         <label for="edit-rate4" title="Very good">4 stars</label>
-                                                        <input type="radio" id="edit-rate5" name="review[rating]" value="5" />
+                                                        <input type="radio" id="edit-rate5" name="review[rating]" value="5" <% if (review.rating == 5) { %> checked <% } %> />
                                                         <label for="edit-rate5" title="Amazing">5 stars</label>
                                                     </fieldset>
                         
@@ -318,12 +315,7 @@
                                                 </form>
                                             </section>
                                         </div>
-                                </div>
-
-                                <script>
-                                    $('#edit-rate<%= review.rating %>').prop('checked', true);
-                                </script>
-        
+                                </div>        
                                 <button class="button is-danger del">Delete</button>
                                 <div class="modal modalDelete">
                                     <div class="modal-background"></div>
@@ -334,7 +326,7 @@
                                         </header>
                                         <section class=" modal-card-foot" style="display: block;">
                                             <p class="title is-5">This action is irrevocable and will remove the review permanently.</p>
-                                            <form action="/reviews/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST">
+                                            <form action="/reviews/<%= product.id %>/reviews/<%= review.id %>?_method=DELETE&from=product" method="POST">
                                                 <input class="button is-danger noborder" type="submit" value="Delete">
                                             </form>
                                         </section>

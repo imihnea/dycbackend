@@ -112,6 +112,23 @@ div.latest-details{
     width: 125px !important;
 }
 
+.hidden {
+    display: none;
+}
+
+.reviewAuthorButtons{
+    position: absolute; 
+    right: -1%; 
+    top: 3%;
+}
+
+.reviewRating{
+    margin-top: 1vh; 
+    margin-bottom: 1vh; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+
 /* Preloader start */
 
 .noscroll {

@@ -81,34 +81,55 @@ module.exports = {
 	},
 	// Reviews Update
 	async reviewUpdate(req, res, next) {
-		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
-		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
-		const errors = req.validationErrors();
-		if (errors) {
-			req.session.error = 'Something went wrong or the message contains illegal characters.';
-			return res.redirect(`/products/${req.params.id}/view`);
+		if (req.query.from.match(/(user|product)/g) != null) {
+			req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
+			req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
+			const errors = req.validationErrors();
+			if (errors) {
+				req.session.error = 'Something went wrong or the message contains illegal characters.';
+				return res.redirect(`/products/${req.params.id}/view`);
+			}
+			await Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, review) => {
+				if (err) {
+					req.flash('error', 'Something went wrong. Please try again.');
+					res.redirect('back');
+				} else {
+					req.flash('success', 'Review updated successfully!');
+					if (req.query.from == 'user') {
+						res.redirect(`/profile/${review.user}`);
+					} else {
+						res.redirect(`/products/${req.params.id}/view`);
+					}
+				}
+			});
+		} else {
+			req.flash('error', 'Something went wrong. Please try again.');
+			res.redirect('back');
 		}
-		await Review.findByIdAndUpdate(req.params.review_id, req.body.review);
-		req.session.success = 'Review updated successfully!';
-		res.redirect(`/products/${req.params.id}/view`);
 	},
 	// Reviews Destroy
 	async reviewDestroy(req, res, next) {
-		const review = await Review.findById(req.params.review_id);
-		// Verify if the user is the author of the review
-		if (review.author.toString() == req.user._id.toString()) {
-			await review.remove();		
-			await Product.findByIdAndUpdate(req.params.id, {
-				$pull: { reviews: req.params.review_id }
-			});
-			await User.findByIdAndUpdate(review.user, {
-				$pull: { reviews: req.params.review_id }
-			});
-			req.session.success = 'Review deleted successfully!';
-			res.redirect(`/products/${req.params.id}/view`);
+		if (req.query.from.match(/(user|product)/g) != null) {
+			const review = await Review.findById(req.params.review_id);
+			// Verify if the user is the author of the review
+			if (review.author.toString() == req.user._id.toString()) {
+				await review.remove();		
+				await Product.findByIdAndUpdate(req.params.id, {
+					$pull: { reviews: req.params.review_id }
+				});
+				await User.findByIdAndUpdate(review.user, {
+					$pull: { reviews: req.params.review_id }
+				});
+				req.flash('success', 'Review deleted successfully!');
+				res.redirect(`/products/${req.params.id}/view`);
+			} else {
+				req.flash('error', 'An error has occurred. Please try again.');
+				res.redirect(`/products/${req.params.id}/view`);
+			}
 		} else {
-			req.session.error = 'An error has occurred. Please try again.';
-			res.redirect(`/products/${req.params.id}/view`);
+			req.flash('error', 'Something went wrong. Please try again.');
+			res.redirect('back');
 		}
+
 	},
 }
