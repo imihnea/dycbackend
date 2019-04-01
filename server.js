@@ -13,24 +13,6 @@ const expressValidator = require('express-validator');
 app.use(expressValidator());
 
 const rateLimit = require("express-rate-limit");
- 
-// app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-
-const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10,
-  message: "Too many attempts to register from this IP, please try again in an hour."
-});
-// only apply to register requests
-app.use("/register", registerLimiter);
-
-const loginLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 500,
-  message: "Too many login attempts from this IP, please try again in an hour."
-});
-// only apply to login requests
-app.use("/login", loginLimiter);
 
 const mongoose = require('mongoose');
 
@@ -225,7 +207,7 @@ app.use("/register", registerLimiter);
 
 const loginLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
+  max: 500,
   handler: (req, res) => {
     req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
     res.redirect('/');
