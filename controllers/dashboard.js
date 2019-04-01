@@ -21,7 +21,6 @@ const feature1_time = 60000;
 const feature2_time = 120000;
 const feature1_cost = -5;
 const feature2_cost = -15;
-const tokenPrices = [/* BTC */ 0.5];
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -528,7 +527,8 @@ module.exports = {
     if (errors) {
         res.render('dashboard/dashboard_tokens', {
           user: req.user,
-          tokenPrices,
+          btcrate,
+          tokenprice,
           errors: errors,
           pageTitle: 'Tokens - Deal Your Crypto',
           pageDescription: 'Description',
@@ -537,7 +537,8 @@ module.exports = {
       } else {
         const user = await User.findById(req.user._id);
         const tokens = Number(req.body.tokensNr);
-        const totalPrice = tokens * tokenPrices[req.params.id];
+        const tokenprice = Number(req.body.tokenprice);
+        const totalPrice = tokens * tokenprice;
         if (user.btcbalance >= totalPrice) {
             user.btcbalance -= totalPrice;
             user.feature_tokens += tokens;

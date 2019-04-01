@@ -33,6 +33,17 @@ module.exports = {
             pageKeywords: 'Keywords'
         });
     },
+    async getBuyDeal(req, res) {
+        const product = await Product.findById(req.params.id);
+        res.render('deals/deal_buy', { 
+            user: req.user,
+            errors: false,
+            product: product,
+            pageTitle: `Buy ${product.name} - Deal Your Crypto`,
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+        });
+    },
     async acceptDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
         deal.status = 'Pending Delivery';

@@ -26,7 +26,7 @@ app.use("/register", registerLimiter);
 
 const loginLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
+  max: 500,
   message: "Too many login attempts from this IP, please try again in an hour."
 });
 // only apply to login requests
