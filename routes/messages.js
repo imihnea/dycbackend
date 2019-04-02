@@ -10,6 +10,15 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
+const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
+    },
+});
+
 // Time interval between unread message mails
 const mailInterval = 4 * 60 * 60 * 1000; // 4 hours
 
@@ -53,25 +62,13 @@ setInterval(async () => {
                 if (lastMsg.sender.toString() == item.user1.id.toString()) {
                     // send email to user2
                     const user2 = await User.findById(item.user2.id);
+
                     const output = `
                     <h1>You have an unread message</h1>
                     <p>Sender: ${item.user1.fullname}</p>
                     <p>Product: ${item.product.name}</p>
                     <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
                     `;
-                    // Generate test SMTP service account from ethereal.email
-                    // Only needed if you don't have a real mail account for testing
-                    nodemailer.createTestAccount(() => {
-                    // create reusable transporter object using the default SMTP transport
-                        const transporter = nodemailer.createTransport({
-                            host: EMAIL_HOST,
-                            port: EMAIL_PORT,
-                            auth: {
-                                user: EMAIL_USER,
-                                pass: EMAIL_API_KEY,
-                            },
-                        });
-                        // setup email data with unicode symbols
                         const mailOptions = {
                             from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                             to: `${user2.full_name} <${user2.email}>`, // list of receivers
@@ -86,29 +83,17 @@ setInterval(async () => {
                                 console.log('Mail sent');
                             }
                         });
-                    });
+
                 } else {
                     // send email to user1
                     const user1 = await User.findById(item.user1.id);
+
                     const output = `
                     <h1>You have an unread message</h1>
                     <p>Sender: ${item.user2.fullname}</p>
                     <p>Product: ${item.product.name}</p>
                     <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
                     `;
-                    // Generate test SMTP service account from ethereal.email
-                    // Only needed if you don't have a real mail account for testing
-                    nodemailer.createTestAccount(() => {
-                    // create reusable transporter object using the default SMTP transport
-                        const transporter = nodemailer.createTransport({
-                            host: EMAIL_HOST,
-                            port: EMAIL_PORT,
-                            auth: {
-                                user: EMAIL_USER,
-                                pass: EMAIL_API_KEY,
-                            },
-                        });
-                        // setup email data with unicode symbols
                         const mailOptions = {
                             from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                             to: `${user1.full_name} <${user1.email}>`, // list of receivers
@@ -123,7 +108,7 @@ setInterval(async () => {
                                 console.log('Mail sent');
                             }
                         });
-                    });
+                        
                 }
             }
         });

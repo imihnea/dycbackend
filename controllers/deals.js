@@ -15,6 +15,15 @@ const standardAccountFee = 15;
 const premiumAccountFee = 10;
 const partnerAccountFee = 10;
 
+let transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
+    },
+});
+
 module.exports = {
     async getDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -49,38 +58,25 @@ module.exports = {
         deal.status = 'Pending Delivery';
         await deal.save();
         const buyer = await User.findById(deal.buyer.id);
+
         const output = `
         <h1>Deal Status Changed: Pending Delivery</h1>
         <p>${req.user.full_name} has accepted your deal request for ${deal.product.name}.</p>
         <p>The product is being delivered. The deal cannot be cancelled anymore and the shipping address cannot be changed.</p>
         <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to see the deal.</p>
         `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-        // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-                host: EMAIL_HOST,
-                port: EMAIL_PORT,
-                auth: {
-                    user: EMAIL_USER,
-                    pass: EMAIL_API_KEY,
-                },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${buyer.email}`, // list of receivers
                 subject: 'Deal Status Changed', // Subject line
                 html: output, // html body
             };
-            // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                 console.log(error);
                 }
             });
-        });
+
         req.flash('success', 'Deal accepted successfully.');
         res.redirect('back');
     },
@@ -91,37 +87,24 @@ module.exports = {
         await deal.save();
         buyer.btcbalance += deal.price;
         await buyer.save();
+
         const output = `
         <h1>Deal Status Changed: Declined</h1>
         <p>${req.user.full_name} has declined your deal request for ${deal.product.name}.</p>
         <p>Your currency has been returned to your account.</p>
         `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-        // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-                host: EMAIL_HOST,
-                port: EMAIL_PORT,
-                auth: {
-                    user: EMAIL_USER,
-                    pass: EMAIL_API_KEY,
-                },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${buyer.email}`, // list of receivers
                 subject: 'Deal Status Changed', // Subject line
                 html: output, // html body
             };
-            // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                 console.log(error);
                 }
             });
-        });
+            
         req.flash('success', 'Deal denied successfully.');
         res.redirect('back');
     },
@@ -156,32 +139,17 @@ module.exports = {
         <p>Status: Completed</p>
         <p>The refund term is 14 days. Access this <a href="${req.headers.host}/deals/${deal._id}">link</a> to request a refund.</p>
         `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-        // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-                host: EMAIL_HOST,
-                port: EMAIL_PORT,
-                auth: {
-                    user: EMAIL_USER,
-                    pass: EMAIL_API_KEY,
-                },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${buyer.email}`, // list of receivers
                 subject: 'Deal Status Changed', // Subject line
                 html: output, // html body
             };
-            // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                 console.log(error);
                 }
             });
-        });
         // Seller email
         output = `
         <h1>Deal Status Changed: Completed</h1>
@@ -190,32 +158,17 @@ module.exports = {
         <p>Status: Completed</p>
         <p>The refund term is 14 days. The currency will be available for withdrawal once the refund term ends.</p>
         `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-        // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-                host: EMAIL_HOST,
-                port: EMAIL_PORT,
-                auth: {
-                    user: EMAIL_USER,
-                    pass: EMAIL_API_KEY,
-                },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${seller.email}`, // list of receivers
                 subject: 'Deal Status Changed', // Subject line
                 html: output, // html body
             };
-            // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                 console.log(error);
                 }
             });
-        });
         res.redirect(`/deals/${deal._id}/review`);
     },
     async cancelDeal(req, res) {
@@ -235,19 +188,6 @@ module.exports = {
         <p>Status: Cancelled</p>
         <p>The buyer has cancelled the deal.</p>
         `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-        // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-                host: EMAIL_HOST,
-                port: EMAIL_PORT,
-                auth: {
-                    user: EMAIL_USER,
-                    pass: EMAIL_API_KEY,
-                },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${seller.email}`, // list of receivers
@@ -260,7 +200,6 @@ module.exports = {
                 console.log(error);
                 }
             });
-        });
         req.flash('success', 'Deal cancelled successfully.');
         res.redirect('back');
     },
@@ -342,32 +281,17 @@ module.exports = {
             <p>A moderator will check if the refund was denied for a good reason.</p>
             <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to view the deal.</p>
             `;
-            // Generate test SMTP service account from ethereal.email
-            // Only needed if you don't have a real mail account for testing
-            nodemailer.createTestAccount(() => {
-            // create reusable transporter object using the default SMTP transport
-                const transporter = nodemailer.createTransport({
-                    host: EMAIL_HOST,
-                    port: EMAIL_PORT,
-                    auth: {
-                        user: EMAIL_USER,
-                        pass: EMAIL_API_KEY,
-                    },
-                });
-                // setup email data with unicode symbols
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                     to: `${buyer.email}`, // list of receivers
                     subject: 'Deal Status Changed', // Subject line
                     html: output, // html body
                 };
-                // send mail with defined transport object
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                     console.log(error);
                     }
                 });
-            });
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
             res.redirect('back');
         }
@@ -412,19 +336,6 @@ module.exports = {
             <p>Status: Refund Requested</p>
             <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to view the full details of the request.</p>
             `;
-            // Generate test SMTP service account from ethereal.email
-            // Only needed if you don't have a real mail account for testing
-            nodemailer.createTestAccount(() => {
-            // create reusable transporter object using the default SMTP transport
-                const transporter = nodemailer.createTransport({
-                    host: EMAIL_HOST,
-                    port: EMAIL_PORT,
-                    auth: {
-                        user: EMAIL_USER,
-                        pass: EMAIL_API_KEY,
-                    },
-                });
-                // setup email data with unicode symbols
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                     to: `${seller.email}`, // list of receivers
@@ -437,7 +348,6 @@ module.exports = {
                     console.log(error);
                     }
                 });
-            });
             req.flash('success', 'Refund request sent.');
             res.redirect(`/deals/${deal._id}`);
         }

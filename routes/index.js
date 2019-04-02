@@ -114,7 +114,7 @@ router.get('/logout', getLogout);
 router.get('/contact', getContact);
 
 // POST Contact route
-router.post('/contact/send', postContact);
+router.post('/contact/send', asyncErrorHandler(postContact));
 
 // POST Forgot email route
 router.post('/forgotemail', postForgotEmail);

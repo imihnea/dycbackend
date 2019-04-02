@@ -35,6 +35,15 @@ var client = new Client({
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
 
+const transporter = nodemailer.createTransport({
+  host: EMAIL_HOST,
+  port: EMAIL_PORT,
+  auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_API_KEY,
+  },
+});
+
 module.exports = {
   // Products Indexes
   async openProductIndex(req, res) {
@@ -320,33 +329,24 @@ module.exports = {
                   };
                   query_btc.withdrawal.push(withdrawal);
                   query_btc.save();
+
                   const output = `
                   <h1>Withdrawal Sent Successfully</h1>
                   <p>${amount} BTC has been sent to ${address}.</p>
                   <p>Click <a href="http://${req.headers.host}/dashboard/address">here</a> to see more information.</p>
                   `;
-                  nodemailer.createTestAccount(() => {
-                      const transporter = nodemailer.createTransport({
-                          host: EMAIL_HOST,
-                          port: EMAIL_PORT,
-                          auth: {
-                              user: EMAIL_USER,
-                              pass: EMAIL_API_KEY,
-                          },
-                      });
                       const mailOptions = {
                           from: `Deal Your Crypto <noreply@dyc.com>`,
                           to: `${user.email}`,
                           subject: 'Currency withdrawn successfully',
                           html: output,
                       };
-                      // send mail with defined transport object
                       transporter.sendMail(mailOptions, (error) => {
                           if (error) {
                           console.log(error);
                           }
                       });
-                  });
+                      
                   req.flash('success', `Successfully withdrawn ${amount} BTC!`);
                   res.redirect('back');
                   console.log(`Withdrawn ${amount} BTC successfully.`);

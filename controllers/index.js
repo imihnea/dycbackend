@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 const passport = require('passport');
+const ejs = require('ejs');
+const path = require('path');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const crypto = require('crypto');
@@ -23,6 +25,15 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 const SECRET = 'monkaMega';
 const SECRET2 = 'monkaGiga';
 
+let transporter = nodemailer.createTransport({
+  host: EMAIL_HOST,
+  port: EMAIL_PORT,
+  auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_API_KEY,
+  },
+});
+
 function sendConfirmationEmail(req, userid, useremail) {
   const token = jwt.sign({
     user: userid
@@ -35,15 +46,6 @@ function sendConfirmationEmail(req, userid, useremail) {
   <p>An account was created using this email address. Click <a href="http://${req.headers.host}/confirmation/${token}" target="_blank">here</a> in order to confirm it.</p>
   <p>Ignore this message if you did not request the account creation.</p>
   `;
-  nodemailer.createTestAccount(() => {
-    const transporter = nodemailer.createTransport({
-        host: EMAIL_HOST,
-        port: EMAIL_PORT,
-        auth: {
-            user: EMAIL_USER,
-            pass: EMAIL_API_KEY,
-        },
-    });
     const mailOptions = {
         from: `Deal Your Crypto <noreply@dyc.com>`,
         to: `${useremail}`,
@@ -55,7 +57,6 @@ function sendConfirmationEmail(req, userid, useremail) {
           console.log(error);
         }
     });
-  });
 };
 
 module.exports = {
@@ -257,21 +258,13 @@ module.exports = {
     SECRET2, 
     { expiresIn: '1h' }
     );
+
     const output = `
     <h1>Disable two-factor authentication</h1>
     <p>A request to disable two-factor authentication has been received from an account associated with this email address.</p>
     <p>Click <a href="http://${req.headers.host}/disable2factor/${token}" target="_blank">here</a> in order to disable it.</p>
     <p>Ignore this message and change your account's password if you did not make the request.</p>
     `;
-    nodemailer.createTestAccount(() => {
-      const transporter = nodemailer.createTransport({
-          host: EMAIL_HOST,
-          port: EMAIL_PORT,
-          auth: {
-              user: EMAIL_USER,
-              pass: EMAIL_API_KEY,
-          },
-      });
       const mailOptions = {
           from: `Deal Your Crypto <noreply@dyc.com>`,
           to: `${req.user.email}`,
@@ -283,7 +276,7 @@ module.exports = {
             console.log(error);
           }
       });
-    });
+
     req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
     res.redirect('back');
   },
@@ -1172,7 +1165,7 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
-  postContact(req, res) {
+  async postContact(req, res) {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
       let errors = { msg: String };
       errors.msg = 'Please complete the captcha.';
@@ -1200,7 +1193,7 @@ module.exports = {
       }
       req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z \-]+$/g).trim().notEmpty();
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty().trim();
-      req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestion)$/g).notEmpty();
+      req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
       req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
       const validationErrors = req.validationErrors();
       if (validationErrors) {
@@ -1213,37 +1206,22 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       } else {
-        const output = `
-        <h1>Contact Request - Deal Your Crypto</h1>
-        <h3>Contact Details</h3>
-        <ul>
-          <li>Name: ${req.body.name}</li>
-          <li>Email: ${req.body.email}</li>
-          <li>Topic: ${req.body.topic}</li>
-        </ul>
-        <h3>Message</h3>
-        <p>${req.body.message}</p>
-        `;
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-          // create reusable transporter object using the default SMTP transport
-          const transporter = nodemailer.createTransport({
-            host: EMAIL_HOST,
-            port: EMAIL_PORT,
-            auth: {
-              user: EMAIL_USER,
-              pass: EMAIL_API_KEY,
-            },
-          });
-          // setup email data with unicode symbols
+        ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
+          name: req.body.name,
+          email: req.body.email,
+          topic: req.body.topic,
+          message: req.body.message,
+          subject: 'Deal Your Crypto - Contact Request',
+        }, function (err, data) {
+          if (err) {
+              console.log(err);
+          } else {
           const mailOptions = {
             from: `${req.body.name} <${req.body.email}>`, // sender address
-            to: 'support@dyc.com', // list of receivers
+            to: 'ionitamihneadjgogu@gmail.com', // list of receivers
             subject: 'Deal Your Crypto - Contact Request', // Subject line
-            html: output, // html body
+            html: data, // html body
           };
-          // send mail with defined transport object
           transporter.sendMail(mailOptions, (error) => {
             if (error) {
               req.flash('error', `${error.message}`);
@@ -1252,7 +1230,8 @@ module.exports = {
             req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
             res.redirect('/contact');
           });
-        });
+        }
+       });
       }
     });
   },
