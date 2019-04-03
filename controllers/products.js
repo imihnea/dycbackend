@@ -279,16 +279,13 @@ module.exports = {
 
     },
     async buyProduct(req, res) {
-        // Get the user, the product and the currency the user buys with
+        // Get the user and the product
         const user  = await User.findById(req.user._id);
         const product = await Product.findById(req.params.id);
-
-        // Unable to buy your own products - Uncomment after testing is done 
-
-        // if ( user._id.toString() === product.author.id ) {
-        //     req.flash('error', 'You cannot purchase your own product.');
-        //     res.redirect('back');
-        // } else {
+        if ( user._id.toString() === product.author.id.toString() ) {
+            req.flash('error', 'You cannot purchase your own product.');
+            res.redirect('back');
+        } else {
             let totalPrice = product.btcPrice;
             if ( user.btcbalance >= totalPrice)  {
                 // Create deal
@@ -357,7 +354,7 @@ module.exports = {
                 req.flash('error', 'You do not have enough currency to purchase this product.');
                 res.redirect('back');
             }
-        // }
+        }
     }
 };
 

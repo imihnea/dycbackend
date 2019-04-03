@@ -6,7 +6,7 @@ const { getProduct, postReport, buyProduct } = require('../controllers/products'
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, hasCompleteProfile } = middleware;
+const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, verifyCookie } = middleware;
 
 // Get product
 router.get('/:id/view', asyncErrorHandler(getProduct));
@@ -15,6 +15,6 @@ router.get('/:id/view', asyncErrorHandler(getProduct));
 router.post('/:id/report', isLoggedIn, postReport);
 
 // Buy products
-router.put('/:id/buy', isLoggedIn, hasCompleteProfile, asyncErrorHandler(buyProduct));
+router.put('/:id/buy', verifyCookie, isLoggedIn, hasCompleteProfile, asyncErrorHandler(buyProduct));
 
 module.exports = router;

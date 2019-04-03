@@ -10,6 +10,12 @@ const app = express();
 
 const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
 const expressValidator = require('express-validator');
 
 app.use(expressValidator());

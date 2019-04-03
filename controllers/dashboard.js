@@ -56,7 +56,6 @@ module.exports = {
       limit: 10,
     });
     products.page = Number(products.page);
-    console.log(req.body.csrfSecret);
     res.render('dashboard/dashboard_open', {
       products,
       user: req.user,
@@ -754,7 +753,8 @@ module.exports = {
       product: product, 
       user: req.user, 
       errors: req.session.errors,
-      csrfToken: req.body.csrfSecret,
+      csrfToken: req.cookies._csrf,
+      csrfSecret: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
       pageDescription: 'Description',
       pageKeywords: 'Keywords'

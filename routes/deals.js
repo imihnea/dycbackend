@@ -2,21 +2,18 @@ const express = require('express');
 
 const router = express.Router();
 
-const Deal = require('../models/deal');
-const User = require('../models/user');
-
 const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie } = middleware; // destructuring assignment
 
 // show deal
 router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
 
 // show interface after pressing buy on a product
 
-router.post('/:id/buy', isLoggedIn, asyncErrorHandler(getBuyDeal));
+router.get('/:id/buy', assignCookie, isLoggedIn, asyncErrorHandler(getBuyDeal));
 
 // cancel deal
 router.put('/:id/cancel', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(cancelDeal));

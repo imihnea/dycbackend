@@ -103,7 +103,6 @@ module.exports = {
       }
       jwt.verify(req.params._csrf, result.decoder, (err) => {
         if (err) {
-          console.log(err);
           req.flash('error', 'Something went wrong. Please try again.');
           return res.redirect('/dashboard');
         }

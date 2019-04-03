@@ -49,6 +49,7 @@ module.exports = {
             user: req.user,
             errors: false,
             product: product,
+            csrfToken: req.body.csrfSecret,
             pageTitle: `Buy ${product.name} - Deal Your Crypto`,
             pageDescription: 'Description',
             pageKeywords: 'Keywords'

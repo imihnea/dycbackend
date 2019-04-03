@@ -5,14 +5,6 @@ const multer = require('multer');
 
 const router = express.Router();
 
-const bodyParser = require('body-parser');
-
-router.use(bodyParser.urlencoded({ extended: false }));
-
-const cookieParser = require('cookie-parser');
-
-router.use(cookieParser());
-
 const { getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
@@ -43,11 +35,12 @@ const upload = multer({
 });
 
 // Dashboard index route
-router.get('/', isLoggedIn, (req, res) => {
+router.get('/', assignCookie, isLoggedIn, (req, res) => {
   res.render('dashboard/dashboard', { 
     user: req.user, 
     errors: req.session.errors,
-    // csrfToken: req.cookies._csrf,
+    csrfToken: req.cookies._csrf,
+    csrfSecret: req.body.csrfSecret,
     pageTitle: 'Dashboard - Deal Your Crypto',
     pageDescription: 'Description',
     pageKeywords: 'Keywords'

@@ -131,7 +131,7 @@
                     <% } %>
                 <% } %>
                 <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
-                <form action="/deals/<%= product.id %>/buy" id="buyForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                <form action="/deals/<%= product.id %>/buy" id="buyForm" method="GET" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
                     <div class="column prod_info" style="padding: 0;">
                         <label class="img-check ">
                             <div class="prices frame openPrices">
@@ -139,7 +139,7 @@
                                     <%= product.btcPrice %>
                                 </p>
                                 <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                <input type="hidden" name="productName" value="<%= product.name %>">
+                                <!-- <input type="hidden" name="productName" value="<%= product.name %>"> -->
                             </div>
                         </label>
                     </div>

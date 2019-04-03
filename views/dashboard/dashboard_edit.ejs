@@ -12,8 +12,7 @@
                     <h1 class="title">Edit Product</h1>
                 </div>
                 <br>
-                <form action="/dashboard/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data">
                     <div class="container is-fluid">
                         <% if(errors){ %>
                             <div class="notification is-danger" role="alert"> 

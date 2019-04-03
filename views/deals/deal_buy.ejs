@@ -92,11 +92,12 @@
                     </div>
                     <br>
                         <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="column prod_info" style="padding: 0;">
                                 <label class="img-check ">
                                     <div class="prices frame openPrices">
                                         <p class="price_text">
-                                                Price: <%= product.btcPrice %> Bitcoin
+                                            Price: <%= product.btcPrice %> Bitcoin
                                         </p>
                                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
