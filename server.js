@@ -1,5 +1,7 @@
 const express = require('express');
 
+const ejs = require('ejs');
+
 const path = require('path');
 
 const compression = require('compression');
@@ -12,10 +14,7 @@ const expressValidator = require('express-validator');
 
 app.use(expressValidator());
 
-const rateLimit = require('express-rate-limit');
-
-// only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-// app.enable("trust proxy");
+const rateLimit = require("express-rate-limit");
 
 const mongoose = require('mongoose');
 
@@ -35,8 +34,8 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     // defaultSrc: ["'self'"],
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
-    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions', 'https://www.gstatic.com', 'https://www.google.com'],
-  },
+    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions', 'https://www.gstatic.com', 'https://www.google.com']
+  }
 }));
 
 app.use(helmet.noSniff());
@@ -141,6 +140,7 @@ app.use(flash());
 app.use(bodyParser.json()); // for parsing POST req
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.engine('html', ejs.__express);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -217,7 +217,7 @@ app.use("/register", registerLimiter);
 
 const loginLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
+  max: 500,
   handler: (req, res) => {
     req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
     res.redirect('/');

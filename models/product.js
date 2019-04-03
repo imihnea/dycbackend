@@ -16,11 +16,6 @@ const ProductSchema = new Schema({
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
-  deliveryOptions: { city: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }}, 
-                     state: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }},
-                     country: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }}, 
-                     worldwide: {valid: {type: Boolean, default: false, es_indexed: true }, cost: String, percent: { type: Number, default: 0 }} 
-                    },
   createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
   nrBought: Number,
   feat_1: {

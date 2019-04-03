@@ -11,6 +11,15 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
+const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
+    },
+    });
+
 module.exports = {
     async getProduct(req, res) {
         const product = await Product.findById(req.params.id).populate({
@@ -237,6 +246,7 @@ module.exports = {
         }
     },
     postReport(req, res) {
+
       const output = `
       <h1>Contact Request - User Report - Deal Your Crypto</h1>
       <h3>Contact Details</h3>
@@ -251,19 +261,6 @@ module.exports = {
       <h3>Message</h3>
       <p>${req.body.message}</p>
       `;
-       // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        nodemailer.createTestAccount(() => {
-            // create reusable transporter object using the default SMTP transport
-            const transporter = nodemailer.createTransport({
-            host: EMAIL_HOST,
-            port: EMAIL_PORT,
-            auth: {
-                user: EMAIL_USER,
-                pass: EMAIL_API_KEY,
-            },
-            });
-            // setup email data with unicode symbols
             const mailOptions = {
                 from: `${req.body.name} <${req.body.email}>`, // sender address
                 to: 'support@dyc.com', // list of receivers
@@ -278,8 +275,8 @@ module.exports = {
                 }
                 req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
                 res.redirect('back');
-            }); 
-        });
+            });
+
     },
     async buyProduct(req, res) {
         // Get the user, the product and the currency the user buys with
@@ -293,26 +290,6 @@ module.exports = {
         //     res.redirect('back');
         // } else {
             let totalPrice = product.btcPrice;
-            if ((user.city === product.author.city) && (product.deliveryOptions.city.valid === true)) {
-                if (product.deliveryOptions.city.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.city.percent/100;
-                }
-            } else if ((user.state === product.author.state) && (product.deliveryOptions.state.valid === true)) {
-                if (product.deliveryOptions.state.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.state.percent/100;
-                }
-            } else if ((user.country === product.author.country) && (product.deliveryOptions.country.valid === true)) {
-                if (product.deliveryOptions.country.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.state.percent/100;
-                }
-            } else if ((product.deliveryOptions.worldwide.valid === true)) {
-                if (product.deliveryOptions.worldwide.cost === 'paid') {
-                    totalPrice += product.btcPrice*product.deliveryOptions.worldwide.percent/100;
-                }
-            } else {
-                req.flash('error', 'The seller does not deliver in your area.');
-                res.redirect('back');
-            }
             if ( user.btcbalance >= totalPrice)  {
                 // Create deal
                 let deal = {
@@ -355,24 +332,12 @@ module.exports = {
                 await user.save();
                 // Send an email to the seller letting them know about the deal request
                 const user2 = await User.findById(product.author.id);
+                
                 const output = `
                 <h1>You have a new deal request</h1>
                 <p>${req.user.full_name} wants to buy ${product.name}.</p>
                 <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to see the deal request and decide whether to accept or deny it.</p>
                 `;
-                // Generate test SMTP service account from ethereal.email
-                // Only needed if you don't have a real mail account for testing
-                nodemailer.createTestAccount(() => {
-                // create reusable transporter object using the default SMTP transport
-                    const transporter = nodemailer.createTransport({
-                        host: EMAIL_HOST,
-                        port: EMAIL_PORT,
-                        auth: {
-                            user: EMAIL_USER,
-                            pass: EMAIL_API_KEY,
-                        },
-                    });
-                    // setup email data with unicode symbols
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                         to: `${user2.email}`, // list of receivers
@@ -385,7 +350,7 @@ module.exports = {
                         console.log(error);
                         }
                     });
-                });
+
                 // Link chat to deal
                 res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
             } else {

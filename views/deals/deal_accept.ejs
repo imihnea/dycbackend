@@ -1,0 +1,130 @@
+<% include ../partials/header %>
+<div class="column" style="padding-left: 5vw; padding-right: 5vw;">
+<div class="hero-body">
+    <div class="container content">    
+            <div class="columns" style="justify-content: center">
+                <div class="column is-three-fifths frame">
+                        <div class="column">
+                                <h1 class="title">Transaction Details</h2>
+                        </div>
+                        <br>
+                        <div class="field">
+                            <p class="control">
+                                <img class="mainImg" src="<%= product.images[0].url %>" alt=""/>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="orderId" value="Product name: <%= product.name %> " required readonly />
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-cart-plus"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="coinsValue" value="Seller: <%= product.author.username %> " required readonly/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user-tie"></i>
+                                </span>
+                            </p>
+                        </div>
+                    <div class="field select cont-select">
+                        <select id="deliverySelect" style="width: 100vw;" onchange="Select()">
+                            <option value="" selected>Delivery method</option>
+                            <option value="Face to Face">Face to Face</option>
+                            <option value="Shipping">Delivery</option>
+                        </select>
+                    </div>
+                    <div id="facetoface" class="field" style="display: none;">
+                            <h2 class="subtitle">Face to Face Details</h2>
+                                <p class="control has-icons-left">
+                                    <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone" required/>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                </p>
+                        </div>
+                    <div id="shipping" class="field" style="display: none;">
+                        <h2 class="subtitle">Delivery Details</h2>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryCountry" type="text" placeholder="Country" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-flag"></i>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryCity" type="text" placeholder="City" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-city"></i>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryState" type="text" placeholder="State or County" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-globe-americas"></i>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryStreet" type="text" placeholder="Street" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-road"></i>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-sort-numeric-down"></i>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone" required/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                            </p>
+                        <p class="control has-icons-left">
+                            <input class="input" name="deliveryFee" value="Shipping fees: FETCH VALUE WITH JS" required/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-shuttle-van"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <br>
+                        <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                            <div class="column prod_info" style="padding: 0;">
+                                <label class="img-check ">
+                                    <div class="prices frame openPrices">
+                                        <p class="price_text">
+                                                Price: <%= product.btcPrice %> Bitcoin
+                                        </p>
+                                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                    </div>
+                                </label>
+                                <br>
+                                <button class="button is-primary is-rounded" >Send Buy Request</button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+
+<script>
+function Select(){
+    var getValue = document.getElementById("deliverySelect").value;
+    if(getValue == 'Shipping') {
+        document.getElementById("shipping").style.display = "block";
+        document.getElementById("facetoface").style.display = "none";
+    } else if(getValue == 'Face to Face') {
+        document.getElementById("shipping").style.display = "none";
+        document.getElementById("facetoface").style.display = "block";
+    } else {
+        document.getElementById("shipping").style.display = "none";
+        document.getElementById("facetoface").style.display = "none";
+    }
+};
+</script>
+
+<% include ../partials/footer %>

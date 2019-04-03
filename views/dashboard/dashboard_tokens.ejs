@@ -35,6 +35,7 @@
                             </div>
                             <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
                                 min="0" max="500" required style="margin-top: 3vh;">
+                            <input type="hidden" name="tokenprice" value="<%= tokenprice.toFixed(5) %>">
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
                                 <p>Total price: <span id="btcPrice" class="tPrice">0</span></p>
                                 <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
