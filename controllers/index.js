@@ -42,22 +42,26 @@ function sendConfirmationEmail(req, userid, useremail) {
   SECRET, 
   { expiresIn: '1h' }
   );
-  const output = `
-  <h1>Please confirm your email</h1>
-  <p>An account was created using this email address. Click <a href="http://${req.headers.host}/confirmation/${token}" target="_blank">here</a> in order to confirm it.</p>
-  <p>Ignore this message if you did not request the account creation.</p>
-  `;
+  ejs.renderFile(path.join(__dirname, "../views/email_templates/register.ejs"), {
+    link: `http://${req.headers.host}/confirmation/${token}`,
+    subject: 'Confirm Your Email - Deal Your Crypto',
+  }, function (err, data) {
+    if (err) {
+        console.log(err);
+    } else {
     const mailOptions = {
         from: `Deal Your Crypto <noreply@dyc.com>`,
         to: `${useremail}`,
         subject: 'Email Confirmation Required',
-        html: output,
+        html: data,
     };
     transporter.sendMail(mailOptions, (error) => {
         if (error) {
           console.log(error);
         }
-    });
+      });
+    }
+  });
 };
 
 module.exports = {
@@ -259,27 +263,28 @@ module.exports = {
     SECRET2, 
     { expiresIn: '1h' }
     );
-
-    const output = `
-    <h1>Disable two-factor authentication</h1>
-    <p>A request to disable two-factor authentication has been received from an account associated with this email address.</p>
-    <p>Click <a href="http://${req.headers.host}/disable2factor/${token}" target="_blank">here</a> in order to disable it.</p>
-    <p>Ignore this message and change your account's password if you did not make the request.</p>
-    `;
+    ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
+      link: `http://${req.headers.host}/disable2factor/${token}`,
+      subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
+    }, function (err, data) {
+      if (err) {
+          console.log(err);
+      } else {
       const mailOptions = {
           from: `Deal Your Crypto <noreply@dyc.com>`,
           to: `${req.user.email}`,
           subject: 'Disable two-factor authentication',
-          html: output,
+          html: data,
       };
       transporter.sendMail(mailOptions, (error) => {
           if (error) {
             console.log(error);
           }
       });
-
     req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
     res.redirect('back');
+      }
+    });
   },
   postDisable2Factor(req, res) {
     jwt.verify(req.params.token, SECRET2, async (err) => {

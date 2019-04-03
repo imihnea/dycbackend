@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const ObjectID = require("bson-objectid");
-
+const ejs = require('ejs');
+const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
@@ -246,26 +247,25 @@ module.exports = {
         }
     },
     postReport(req, res) {
-
-      const output = `
-      <h1>Contact Request - User Report - Deal Your Crypto</h1>
-      <h3>Contact Details</h3>
-      <ul>
-        <li>Id: ${req.user._id}</li>
-        <li>Name: ${req.user.full_name}</li>
-        <li>Email: ${req.user.email}</li>
-        <li>Reported user ID: ${req.body.userid}</li>
-        <li>Chat user was reported from: ${req.params.id}</li> 
-        <li>Topic: ${req.body.topic}</li>
-      </ul>
-      <h3>Message</h3>
-      <p>${req.body.message}</p>
-      `;
+      ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
+        link: `http://${req.headers.host}/dashboard`,
+        id: req.user._id,
+        name: req.user.full_name,
+        email: req.user.email,
+        userid: req.body.userid,
+        from: req.params.id,
+        topic: req.body.topic,
+        message: req.body.message,
+        subject: `New report - Deal Your Crypto`,
+      }, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
             const mailOptions = {
                 from: `${req.body.name} <${req.body.email}>`, // sender address
                 to: 'support@dyc.com', // list of receivers
-                subject: 'Deal Your Crypto - User Report - Contact Request', // Subject line
-                html: output, // html body
+                subject: 'User Report - Deal Your Crypto', // Subject line
+                html: data, // html body
             };
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
@@ -276,7 +276,7 @@ module.exports = {
                 req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
                 res.redirect('back');
             });
-
+        }});
     },
     async buyProduct(req, res) {
         // Get the user and the product
@@ -329,17 +329,20 @@ module.exports = {
                 await user.save();
                 // Send an email to the seller letting them know about the deal request
                 const user2 = await User.findById(product.author.id);
-                
-                const output = `
-                <h1>You have a new deal request</h1>
-                <p>${req.user.full_name} wants to buy ${product.name}.</p>
-                <p>Click <a href="http://${req.headers.host}/deals/${deal._id}">here</a> to see the deal request and decide whether to accept or deny it.</p>
-                `;
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                    link: `http://${req.headers.host}/deals/${deal._id}`,
+                    name: product.name,
+                    buyer: req.user.full_name,
+                    subject: `New buy request - Deal Your Crypto`,
+                  }, function (err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                         to: `${user2.email}`, // list of receivers
-                        subject: `New Deal Request`, // Subject line
-                        html: output, // html body
+                        subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                        html: data, // html body
                     };
                     // send mail with defined transport object
                     transporter.sendMail(mailOptions, (error) => {
@@ -347,7 +350,7 @@ module.exports = {
                         console.log(error);
                         }
                     });
-
+                }});
                 // Link chat to deal
                 res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
             } else {

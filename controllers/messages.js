@@ -1,4 +1,6 @@
 const Chat = require('../models/chat');
+const ejs = require('ejs');
+const path = require('path');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Deal = require('../models/deal');
@@ -230,17 +232,20 @@ module.exports = {
         // Send an email if it was the first message of the conversation    
         if (chat.messageCount == 1) {      
             const user2 = await User.findById(chat.user2.id);
-
-            const output = `
-            <h1>You have a new conversation</h1>
-            <p>${req.user.full_name} is interested in ${chat.product.name}.</p>
-            <p>Click <a href="http://${req.headers.host}/messages/${chat._id}">here</a> to see the conversation.</p>
-            `;
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
+                link: `http://${req.headers.host}/messages/${chat._id}`,
+                buyer: req.user.full_name,
+                name: chat.product.name,
+                subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
+              }, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                     to: `${user2.email}`, // list of receivers
                     subject: 'New Conversation Started', // Subject line
-                    html: output, // html body
+                    html: data, // html body
                 };
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, (error) => {
@@ -248,7 +253,7 @@ module.exports = {
                     console.log(error);
                     }
                 });
-                
+            }});  
         }
         res.redirect(`/messages/${chat._id}`);
     },
