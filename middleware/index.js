@@ -3,6 +3,8 @@ const Review = require('../models/review');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
 
+const jwt = require('jsonwebtoken');
+
 module.exports = {
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -40,8 +42,8 @@ module.exports = {
     return res.redirect('back');
   },
   hasCompleteProfile(req, res, next) {
-    if ((req.user.full_name) && (req.user.country) && (req.user.state) &&
-    (req.user.city) && (req.user.zip) && (req.user.address1)) {
+    if ((req.user.full_name) && (req.user.country) && (req.user.state) 
+    && (req.user.city) && (req.user.zip) && (req.user.address1)) {
       return next();
     } else {
       req.flash('error', 'Please complete your profile first.');
@@ -65,5 +67,48 @@ module.exports = {
       req.flash('error', 'There has been an error.');
       return res.redirect('/dashboard');
     }
+  },
+  assignCookie: (req, res, next) => {
+    if (req.user) {
+      const secret = `${process.env.CSRF_SECRET_1}`;
+      res.cookie('_csrf', jwt.sign({ user: req.user._id }, secret, { expiresIn: '1h' }));
+      // make a jwt out of the secret to confuse hackers
+      const secret2 = `${process.env.CSRF_SECRET_2}`;
+      req.body.csrfSecret = jwt.sign({decoder: secret}, secret2, {expiresIn: '1h'});
+    }
+    return next();
+  },
+  verifyCookie: (req, res, next) => {
+    // decode the secret
+    jwt.verify(req.body._csrf, `${process.env.CSRF_SECRET_2}`, (err, result) => {
+      if (err) {
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('/dashboard');
+      }
+      // verify the jwt
+      jwt.verify(req.cookies._csrf, result.decoder, (err) => {
+        if (err) {
+          req.flash('error', 'Something went wrong. Please try again.');
+          return res.redirect('/dashboard');
+        }
+        return next();
+      });
+    });
+  },
+  verifyParam: (req, res, next) => {
+    jwt.verify(req.params.csrfSecret, `${process.env.CSRF_SECRET_2}`, (err, result) => {
+      if (err) {
+        req.flash('error', 'Something went wrong1. Please try again.');
+        return res.redirect('/dashboard');
+      }
+      jwt.verify(req.params._csrf, result.decoder, (err) => {
+        if (err) {
+          console.log(err);
+          req.flash('error', 'Something went wrong. Please try again.');
+          return res.redirect('/dashboard');
+        }
+        return next();
+      });
+    });
   }
 };

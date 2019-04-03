@@ -1,27 +1,31 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable no-undef */
+
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
-var request = require("request");
+const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
-var SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
+const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 // Constants for quick modification
 const feature1_time = 60000;
 const feature2_time = 120000;
 const feature1_cost = -5;
 const feature2_cost = -15;
-const tokenPrices = [/* BTC */ 0.5];
+const tokenPrices = [/* BTC */0.5];
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -29,9 +33,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-var Client = require('coinbase').Client;
+const Client = require('coinbase').Client;
 
-var client = new Client({
+const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
@@ -44,9 +48,11 @@ module.exports = {
       limit: 10,
     });
     products.page = Number(products.page);
-    res.render('dashboard/dashboard_open', { 
+    console.log(req.body.csrfSecret);
+    res.render('dashboard/dashboard_open', {
       products,
       user: req.user,
+      csrfToken: req.body.csrfSecret,
       pageTitle: 'Open Deals - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -58,7 +64,7 @@ module.exports = {
       limit: 10,
     });
     products.page = Number(products.page);
-    res.render('dashboard/dashboard_closed', { 
+    res.render('dashboard/dashboard_closed', {
       products,
       user: req.user,
       pageTitle: 'Closed Deals - Deal Your Crypto',
@@ -72,7 +78,7 @@ module.exports = {
       limit: 10,
     });
     deals.page = Number(deals.page);
-    res.render('dashboard/dashboard_purchases', { 
+    res.render('dashboard/dashboard_purchases', {
       deals,
       user: req.user,
       pageTitle: 'Purchases - Deal Your Crypto',
@@ -82,14 +88,14 @@ module.exports = {
   },
   async ongoingProductIndex(req, res) {
     const deals = await Deal.paginate(
-      { 
-        $and:[ 
+      {
+        $and: [
           {
-            $or:[ 
-            {
-              refundableUntil: {
-                $exists: true, 
-                $gt: Date.now()
+            $or: [
+              {
+                refundableUntil: {
+                  $exists: true,
+                  $gt: Date.now()
                 }
               }, {
                 refundableUntil: {
@@ -98,7 +104,7 @@ module.exports = {
               }
             ]
           }, {
-            $or:[
+            $or: [
               {
                 'buyer.id': req.user._id
               }, {
@@ -110,15 +116,17 @@ module.exports = {
               $nin: ['Cancelled', 'Refunded', 'Declined']
             }
           }
-      ]
-    }, {
-      page: req.query.page || 1,
-      limit: 10,
-    });
+        ]
+      }, {
+        page: req.query.page || 1,
+        limit: 10,
+      }
+    );
     deals.page = Number(deals.page);
     res.render('dashboard/dashboard_ongoing', { 
       deals,
       user: req.user,
+      csrfToken: req.body.csrfSecret,
       pageTitle: 'Ongoing Deals - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -127,26 +135,27 @@ module.exports = {
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var btcrate = data.btc.rate;
-            var maxConfirmationsBTC = data.btc.maxConfirmations;
-            const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed'});
-            const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed'});
-            res.render('dashboard/dashboard_addr', { 
-              user: req.user,
-              btcrate,
-              maxConfirmationsBTC,
-              errors: false,
-              dealsSold,
-              dealsBought,
-              pageTitle: 'Addresses - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
-            });
-        }
+    request(url, async function (error, response, body){
+      if (!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        var btcrate = data.btc.rate;
+        var maxConfirmationsBTC = data.btc.maxConfirmations;
+        const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed'});
+        const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed'});
+        res.render('dashboard/dashboard_addr', { 
+          user: req.user,
+          btcrate,
+          maxConfirmationsBTC,
+          errors: false,
+          dealsSold,
+          dealsBought,
+          csrfToken: req.body.csrfSecret,
+          pageTitle: 'Addresses - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
     });
   },
   async savvyStatus(req, res) {
@@ -182,20 +191,21 @@ module.exports = {
   getBTC(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
     request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var btcrate = data.btc.rate;
-            var maxConfirmationsBTC = data.btc.maxConfirmations;
-            res.render('savvy/btc', { 
-              btcrate, 
-              user: req.user,
-              maxConfirmationsBTC,
-              pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
-            });
-        }
+      if(!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        var btcrate = data.btc.rate;
+        var maxConfirmationsBTC = data.btc.maxConfirmations;
+        res.render('savvy/btc', { 
+          btcrate, 
+          user: req.user,
+          maxConfirmationsBTC,
+          csrfToken: req.body.csrfSecret,
+          pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
     });
   },
   postBTC(req, res) {
@@ -209,47 +219,48 @@ module.exports = {
     var coinsValue = req.body.coinsValue;
     request.get({
       url: url 
-      }, function(error, response, body) {
-        if(error) {
-          req.flash('error', error.message);
-          res.redirect('back');
-        } else {
-          console.log(body);
-          var json = JSON.parse(body);
-          var invoice = json.data.invoice;
-          var address = json.data.address;
-          console.log(invoice);
-          console.log(address);
-          Checkout.create({
-            user: req.user,
-            invoice: invoice,
-            coin: 'BTC',
-            address: address,
-            orderId: orderId,
-            confirmations: 0,
-            maxConfirmations: maxConfirmationsBTC,
-            orderTotal: coinsValue,
-            paid: false
-          }, (err) => {
-            if(err) {
-              req.flash('error', err.message);
-              res.redirect('back');
-            } else {
-              console.log(orderId);
-              res.render('savvy/btc', { 
-                btcrate, 
-                orderId, 
-                address, 
-                coinsValue , 
-                maxConfirmationsBTC,
-                user: req.user,
-                pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
-              })
-            }
-          });
-        }
+    }, function(error, response, body) {
+      if(error) {
+        req.flash('error', error.message);
+        res.redirect('back');
+      } else {
+        console.log(body);
+        var json = JSON.parse(body);
+        var invoice = json.data.invoice;
+        var address = json.data.address;
+        console.log(invoice);
+        console.log(address);
+        Checkout.create({
+          user: req.user,
+          invoice: invoice,
+          coin: 'BTC',
+          address: address,
+          orderId: orderId,
+          confirmations: 0,
+          maxConfirmations: maxConfirmationsBTC,
+          orderTotal: coinsValue,
+          paid: false
+        }, (err) => {
+          if(err) {
+            req.flash('error', err.message);
+            res.redirect('back');
+          } else {
+            console.log(orderId);
+            res.render('savvy/btc', { 
+              btcrate, 
+              orderId, 
+              address, 
+              coinsValue, 
+              maxConfirmationsBTC,
+              user: req.user,
+              csrfToken: req.body.csrfSecret,
+              pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
+            })
+          }
+        });
+      }
     });
   },
   // Get address modifications
@@ -262,15 +273,17 @@ module.exports = {
       var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
       request(url, function(error, response, body){
         if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var btcrate = data.btc.rate;
-            var maxConfirmationsBTC = data.btc.maxConfirmations;
-            res.render('dashboard/dashboard_addr', 
-            { user: req.user,
+          var json = JSON.parse(body);
+          var data = json.data;
+          var btcrate = data.btc.rate;
+          var maxConfirmationsBTC = data.btc.maxConfirmations;
+          res.render('dashboard/dashboard_addr', 
+            { 
+              user: req.user,
               btcrate,
               maxConfirmationsBTC,
               errors,
+              csrfToken: req.body.csrfSecret,
               pageTitle: 'Addresses - Deal Your Crypto',
               pageDescription: 'Description',
               pageKeywords: 'Keywords'
@@ -304,16 +317,17 @@ module.exports = {
       } else {
         if(req.user.btcbalance >= amount) {
           account.sendMoney(
-            {'to': address,
-            'amount': amount,
-            'currency': 'BTC'
+            {
+              'to': address,
+              'amount': amount,
+              'currency': 'BTC'
             }, function(err, tx) {
               if(err) {
                 req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                 res.redirect('back');
               } else {
                 console.log(tx);
-                var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } } );
+                var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } });
                 query_btc.then(function(doc) {
                   const withdrawal = {
                     amount,
@@ -327,33 +341,34 @@ module.exports = {
                   <p>Click <a href="http://${req.headers.host}/dashboard/address">here</a> to see more information.</p>
                   `;
                   nodemailer.createTestAccount(() => {
-                      const transporter = nodemailer.createTransport({
-                          host: EMAIL_HOST,
-                          port: EMAIL_PORT,
-                          auth: {
-                              user: EMAIL_USER,
-                              pass: EMAIL_API_KEY,
-                          },
-                      });
-                      const mailOptions = {
-                          from: `Deal Your Crypto <noreply@dyc.com>`,
-                          to: `${user.email}`,
-                          subject: 'Currency withdrawn successfully',
-                          html: output,
-                      };
-                      // send mail with defined transport object
-                      transporter.sendMail(mailOptions, (error) => {
-                          if (error) {
-                          console.log(error);
-                          }
-                      });
+                    const transporter = nodemailer.createTransport({
+                      host: EMAIL_HOST,
+                      port: EMAIL_PORT,
+                      auth: {
+                        user: EMAIL_USER,
+                        pass: EMAIL_API_KEY,
+                      },
+                    });
+                    const mailOptions = {
+                      from: `Deal Your Crypto <noreply@dyc.com>`,
+                      to: `${user.email}`,
+                      subject: 'Currency withdrawn successfully',
+                      html: output,
+                    };
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, (error) => {
+                      if (error) {
+                        console.log(error);
+                      }
+                    });
                   });
                   req.flash('success', `Successfully withdrawn ${amount} BTC!`);
                   res.redirect('back');
                   console.log(`Withdrawn ${amount} BTC successfully.`);
                 });
               }
-          });
+            }
+          );
         } else {
           req.flash('error', `Insufficient funds to withdraw.`);
           res.redirect('back');
@@ -363,45 +378,53 @@ module.exports = {
   },
   //Displays available pairs for BTC
   async CoinSwitchPair(req, res) {
-    var options = { method: 'POST',
-    url: 'https://api.coinswitch.co/v2/pairs',
-    headers: 
-     { 'x-user-ip': '1.1.1.1',
+    var options = { 
+      method: 'POST',
+      url: 'https://api.coinswitch.co/v2/pairs',
+      headers: 
+     { 
+       'x-user-ip': '1.1.1.1',
        'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-       'content-type': 'application/json' },
-    body: '{"destinationCoin":"btc"}' };
+       'content-type': 'application/json' 
+     },
+      body: '{"destinationCoin":"btc"}' 
+    };
   
-  request(options, function (error, response, body) {
-    if(!error && response.statusCode == 200) {
-      var json = JSON.parse(body);
-      var data = json.data;
-      console.log(data);
-      //Add Check for isActive: true
-      res.send(data);
-    }
-  });
+    request(options, function (error, response, body) {
+      if(!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        console.log(data);
+        //Add Check for isActive: true
+        res.send(data);
+      }
+    });
   },
   //Checks rate for a pair
   async CoinSwitchRate(req, res) {
     console.log(req.body.counter);
     const deposit = req.body.counter;
-    var options = { method: 'POST',
-    url: 'https://api.coinswitch.co/v2/rate',
-    headers:
-     { 'x-user-ip': '1.1.1.1',
+    var options = { 
+      method: 'POST',
+      url: 'https://api.coinswitch.co/v2/rate',
+      headers:
+     { 
+       'x-user-ip': '1.1.1.1',
        'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-       'content-type': 'application/json' },
-       body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` };
+       'content-type': 'application/json' 
+     },
+      body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` 
+    };
   
-  request(options, function (error, response, body) {
-    if(!error && response.statusCode == 200) {
-      var json = JSON.parse(body);
-      var data = json.data;
-      console.log(data);
-      //Add Check for isActive: true
-      res.send(data);
-    }
-  });
+    request(options, function (error, response, body) {
+      if(!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        console.log(data);
+        //Add Check for isActive: true
+        res.send(data);
+      }
+    });
   },
   //Route to start an order on CoinSwitch
   async CoinSwitchDeposit(req, res) {
@@ -411,44 +434,52 @@ module.exports = {
     const refund = req.body.refund;
     const user = req.body.user;
     const coin = req.body.depositCoin;
-    var options = { method: 'POST',
-    url: 'https://api.coinswitch.co/v2/order',
-    headers: 
-    { 'x-user-ip': '1.1.1.1',
+    var options = { 
+      method: 'POST',
+      url: 'https://api.coinswitch.co/v2/order',
+      headers: 
+    { 
+      'x-user-ip': '1.1.1.1',
       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
-      'content-type': 'application/json' },
-    body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` };
+      'content-type': 'application/json' 
+    },
+      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
+    };
   
-  request(options, function (error, response, body) {
-    if(!error && response.statusCode == 200) {
-      console.log(body);
-      var json = JSON.parse(body);
-      var data = json.data;
-      Checkout.create({
-        user: user.username,
-        coin: coin,
-        address: data.exchangeAddress.address,
-        orderId: data.orderId,
-      }, (err) => {
-        if(err) {
-          res.send(err);
-        } else {
-          console.log('created deposit')
-          res.send(data);
-        }
-      });
-    }
-  });
+    request(options, function (error, response, body) {
+      if(!error && response.statusCode == 200) {
+        console.log(body);
+        var json = JSON.parse(body);
+        var data = json.data;
+        Checkout.create({
+          user: user.username,
+          coin: coin,
+          address: data.exchangeAddress.address,
+          orderId: data.orderId,
+        }, (err) => {
+          if(err) {
+            res.send(err);
+          } else {
+            console.log('created deposit')
+            res.send(data);
+          }
+        });
+      }
+    });
   },
   //Get request to check order status, hit on final step
   async CoinSwitchStatus(req, res) {
     console.log(req.body);
     const orderId = req.body.orderId;
-    var options = { method: 'GET',
-    url: `https://api.coinswitch.co/v2/order/${orderId}`,
-    headers: 
-    { 'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'}};
+    var options = { 
+      method: 'GET',
+      url: `https://api.coinswitch.co/v2/order/${orderId}`,
+      headers: 
+    { 
+      'x-user-ip': '1.1.1.1',
+      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'
+    }
+    };
     request(options, function (error, response, body) {
       if(!error && response.statusCode == 200) {
         console.log(body);
@@ -462,16 +493,20 @@ module.exports = {
   async CoinSwitchPoll(req, res) {
     console.log(req.body);
     const orderId = req.body.orderId;
-    var options = { method: 'GET',
-    url: `https://api.coinswitch.co/v2/order/${orderId}`,
-    headers: 
-    { 'x-user-ip': '1.1.1.1',
+    var options = { 
+      method: 'GET',
+      url: `https://api.coinswitch.co/v2/order/${orderId}`,
+      headers: 
+    { 
+      'x-user-ip': '1.1.1.1',
       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
       "Content-Type": "application/json",
-      Accept: 'application/json',}};
+      Accept: 'application/json'
+    }
+    };
     // Down code needs testing before production
     var i = setInterval(function() {
-    request(options, function (error, response, body) {
+      request(options, function (error, response, body) {
         if(!error && response.statusCode == 200) {
           console.log(body);
           var json = JSON.parse(body);
@@ -484,7 +519,7 @@ module.exports = {
               }
               if(checkout !== null) {
                 var user = checkout.user;
-                var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } } );
+                var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } });
                 query_btc.then(function(doc) {
                   console.log("Deposit arrived!");
                   var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
@@ -504,51 +539,53 @@ module.exports = {
   async getTokens(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
     request(url, async function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            var json = JSON.parse(body);
-            var data = json.data;
-            var btcrate = data.btc.rate;
-            var tokenprice = 1/btcrate; // 5 USD
-            res.render('dashboard/dashboard_tokens', { 
-              user: req.user,
-              btcrate,
-              tokenprice,
-              errors: req.session.errors,
-              pageTitle: 'Tokens - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
-            });
-        }
-    });
-  },
-  // Buy Tokens
-  async buyTokens(req, res) {
-    req.check('tokensNr','The number of tokens must be an integer number.').matches(/^[0-9]+$/g).notEmpty();
-    const errors = req.validationErrors();
-    if (errors) {
-        res.render('dashboard/dashboard_tokens', {
+      if(!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        var btcrate = data.btc.rate;
+        var tokenprice = 1/btcrate; // 5 USD
+        res.render('dashboard/dashboard_tokens', { 
           user: req.user,
-          tokenPrices,
-          errors: errors,
+          btcrate,
+          tokenprice,
+          errors: req.session.errors,
+          csrfToken: req.body.csrfSecret,
           pageTitle: 'Tokens - Deal Your Crypto',
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
         });
+      }
+    });
+  },
+  // Buy Tokens
+  async buyTokens(req, res) {
+    req.check('tokensNr', 'The number of tokens must be an integer number.').matches(/^[0-9]+$/g).notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+      res.render('dashboard/dashboard_tokens', {
+        user: req.user,
+        tokenPrices,
+        errors: errors,
+        csrfToken: req.body.csrfSecret,
+        pageTitle: 'Tokens - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    } else {
+      const user = await User.findById(req.user._id);
+      const tokens = Number(req.body.tokensNr);
+      const totalPrice = tokens * tokenPrices[req.params.id];
+      if (user.btcbalance >= totalPrice) {
+        user.btcbalance -= totalPrice;
+        user.feature_tokens += tokens;
+        user.markModified('currency');
+        await user.save();
+        req.flash('success', 'Tokens purchased successfully!');
+        res.redirect('back');
       } else {
-        const user = await User.findById(req.user._id);
-        const tokens = Number(req.body.tokensNr);
-        const totalPrice = tokens * tokenPrices[req.params.id];
-        if (user.btcbalance >= totalPrice) {
-            user.btcbalance -= totalPrice;
-            user.feature_tokens += tokens;
-            user.markModified('currency');
-            await user.save();
-            req.flash('success', 'Tokens purchased successfully!');
-            res.redirect('back');
-        } else {
-            req.flash('error', 'Insufficient balance.');
-            res.redirect('back');
-        }
+        req.flash('error', 'Insufficient balance.');
+        res.redirect('back');
+      }
     }
   },
   // Show new product form
@@ -556,6 +593,8 @@ module.exports = {
     res.render('dashboard/dashboard_new', {
       user: req.user, 
       errors: req.session.errors,
+      csrfToken: req.cookies._csrf,
+      csrfSecret: req.body.csrfSecret,
       pageTitle: 'New Deal - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -563,7 +602,7 @@ module.exports = {
   },
   // Products New
   async productCreate(req, res) {
-    if ( req.files.length === 0 ){
+    if (req.files.length === 0){
       req.flash('error', 'You need to upload at least one image.');
       res.redirect('/dashboard/new');
     } else {
@@ -575,7 +614,7 @@ module.exports = {
           public_id: image.public_id,
         });
       }
-      let tags = ["abcd"];
+      const tags = ["abcd"];
       const author = {
         id: req.user._id,
         username: req.user.username,
@@ -599,10 +638,15 @@ module.exports = {
       req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-      let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
+      const deliveryOptions = {
+        city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+        state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+        country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+        worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}
+      };
       let nrOptions = 0;
       if (req.body.product.city === "true") {
-        req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        req.check('product[cityTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
         deliveryOptions.city.valid=true;
         deliveryOptions.city.cost=req.body.product.cityTransport;
         if (deliveryOptions.city.cost == "paid") {
@@ -618,7 +662,7 @@ module.exports = {
         deliveryOptions.city.cost = 'No delivery';
       }
       if (req.body.product.state === "true") {
-        req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        req.check('product[stateTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
         deliveryOptions.state.valid=true;
         deliveryOptions.state.cost=req.body.product.stateTransport;
         if (deliveryOptions.state.cost == "paid") {
@@ -634,7 +678,7 @@ module.exports = {
         deliveryOptions.state.cost = 'No delivery';
       }
       if (req.body.product.country === "true") {
-        req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        req.check('product[countryTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
         deliveryOptions.country.valid=true;
         deliveryOptions.country.cost=req.body.product.countryTransport;
         if (deliveryOptions.country.cost == "paid") {
@@ -650,7 +694,7 @@ module.exports = {
         deliveryOptions.country.cost = 'No delivery';
       }
       if (req.body.product.worldwide === "true") {
-        req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+        req.check('product[worldwideTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
         deliveryOptions.worldwide.valid=true;
         deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
         if (deliveryOptions.worldwide.cost == "paid") {
@@ -666,8 +710,8 @@ module.exports = {
         deliveryOptions.worldwide.cost = 'No delivery';
       }
       if (nrOptions === 0) {
-          req.flash('error', 'The product must have a delivery method.');
-          res.redirect('back');
+        req.flash('error', 'The product must have a delivery method.');
+        res.redirect('back');
       }
       let btcPrice;
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
@@ -676,6 +720,7 @@ module.exports = {
         res.render('dashboard/dashboard_new', {
           user: req.user,
           errors: errors,
+          csrfToken: req.body.csrfSecret,
           pageTitle: 'New Deal - Deal Your Crypto',
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
@@ -683,7 +728,7 @@ module.exports = {
       } else {
         btcPrice=Number(req.body.product.btc_price);
         tags.push('btc');  
-        const category = [ 'all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
+        const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const newproduct = {
           name: req.body.product.name,
           images: req.body.product.images,
@@ -706,7 +751,7 @@ module.exports = {
             const feat_1 = {};
             const feat_2 = {};
             let k = 0;
-            if (( req.body.product.feat_1 ) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+            if ((req.body.product.feat_1) && ( req.body.product.feat_2 ) && ( k === 0 )) {
               if ( user.feature_tokens >= 20 ) {
                 feat_1.status = true;
                 feat_1.expiry_date = Date.now() + feature1_time;
@@ -725,7 +770,7 @@ module.exports = {
                 res.redirect('back');
               }
             }
-            if (( req.body.product.feat_1 )  && ( k === 0 )) {
+            if (( req.body.product.feat_1 ) && ( k === 0 )) {
               if ( user.feature_tokens >= 5 ) {
                 feat_1.status = true;
                 feat_1.expiry_date = Date.now() + feature1_time;
@@ -740,7 +785,7 @@ module.exports = {
                 res.redirect('back');
               }
             }
-            if (( req.body.product.feat_2 )  && ( k === 0 )) {
+            if (( req.body.product.feat_2 ) && ( k === 0 )) {
               if (user.feature_tokens >= 15) {
                 feat_2.status = true;
                 feat_2.expiry_date = Date.now() + feature2_time;
@@ -776,6 +821,7 @@ module.exports = {
     res.render('products/product_view', { 
       product, 
       floorRating,
+      csrfToken: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -788,6 +834,7 @@ module.exports = {
       product: product, 
       user: req.user, 
       errors: req.session.errors,
+      csrfToken: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
@@ -843,10 +890,15 @@ module.exports = {
     req.check('product[country]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[worldwide]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    let deliveryOptions = {city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}};
+    const deliveryOptions = {
+      city: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+      state: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+      country: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}, 
+      worldwide: {valid: Boolean, cost: String, percent: { type: Number, default: 0 }}
+    };
     let nrOptions = 0;
     if (req.body.product.city === "true") {
-      req.check('product[cityTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      req.check('product[cityTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
       deliveryOptions.city.valid=true;
       deliveryOptions.city.cost=req.body.product.cityTransport;
       if (deliveryOptions.city.cost == "paid") {
@@ -862,7 +914,7 @@ module.exports = {
       deliveryOptions.city.cost = 'No delivery';
     }
     if (req.body.product.state === "true") {
-      req.check('product[stateTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      req.check('product[stateTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
       deliveryOptions.state.valid=true;
       deliveryOptions.state.cost=req.body.product.stateTransport;
       if (deliveryOptions.state.cost == "paid") {
@@ -878,7 +930,7 @@ module.exports = {
       deliveryOptions.state.cost = 'No delivery';
     }
     if (req.body.product.country === "true") {
-      req.check('product[countryTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      req.check('product[countryTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
       deliveryOptions.country.valid=true;
       deliveryOptions.country.cost=req.body.product.countryTransport;
       if (deliveryOptions.country.cost == "paid") {
@@ -894,7 +946,7 @@ module.exports = {
       deliveryOptions.country.cost = 'No delivery';
     }
     if (req.body.product.worldwide === "true") {
-      req.check('product[worldwideTransport]','Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
+      req.check('product[worldwideTransport]', 'Something went wrong. Please try again.').matches(/^(free|paid)$/g).notEmpty();
       deliveryOptions.worldwide.valid=true;
       deliveryOptions.worldwide.cost=req.body.product.worldwideTransport;
       if (deliveryOptions.worldwide.cost == "paid") {
@@ -910,12 +962,11 @@ module.exports = {
       deliveryOptions.worldwide.cost = 'No delivery';
     }
     if (nrOptions === 0) {
-        req.flash('error', 'The product must have a delivery method.');
-        res.redirect('back');
+      req.flash('error', 'The product must have a delivery method.');
+      res.redirect('back');
     }
-    let btcPrice;
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
-    btcPrice = req.body.product.btc_price;
+    const btcPrice = req.body.product.btc_price;
     if (product.tags.indexOf('btc') === -1) {
       product.tags.push('btc');
     } 
@@ -925,6 +976,7 @@ module.exports = {
         user: req.user,
         errors: errors,
         product,
+        csrfToken: req.body.csrfSecret,
         pageTitle: `${product.name} - Deal Your Crypto`,
         pageDescription: 'Description',
         pageKeywords: 'Keywords'
@@ -963,20 +1015,20 @@ module.exports = {
             req.flash('error', 'An error has occured. (Could not find user)');
             res.redirect('back');
           } else {
-              if ( user.feature_tokens >= 5 ) {
-                product.feat_1.status = true;
-                product.feat_1.expiry_date = Date.now() + feature1_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-                product.save();
-                res.redirect(`/products/${product.id}/view`);
-              } else {
-                req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
-              }
+            if ( user.feature_tokens >= 5 ) {
+              product.feat_1.status = true;
+              product.feat_1.expiry_date = Date.now() + feature1_time;
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              product.save();
+              res.redirect(`/products/${product.id}/view`);
+            } else {
+              req.flash('error', 'Not enough tokens to promote product.');
+              res.redirect('back');
+            }
           }
         });
         break;
@@ -987,27 +1039,26 @@ module.exports = {
             req.flash('error', 'An error has occured. (Could not find user)');
             res.redirect('back');
           } else {
-              if (user.feature_tokens >= 15) {
-                product.feat_2.status = true;
-                product.feat_2.expiry_date = Date.now() + feature2_time;
-                User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-                product.save();
-                res.redirect(`/products/${product.id}/view`);
-              } else {
-                req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
-              }
+            if (user.feature_tokens >= 15) {
+              product.feat_2.status = true;
+              product.feat_2.expiry_date = Date.now() + feature2_time;
+              User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              product.save();
+              res.redirect(`/products/${product.id}/view`);
+            } else {
+              req.flash('error', 'Not enough tokens to promote product.');
+              res.redirect('back');
+            }
           }
         });
         break;
       
       default:
-        break;
-      
+        break;  
     }
   },
   // Products Destroy
@@ -1018,14 +1069,14 @@ module.exports = {
     }
     product.unIndex((err) => {
       if (err) {
-          console.log('Error while unindexing document.');
-          console.log(err);
+        console.log('Error while unindexing document.');
+        console.log(err);
       } else {
-          console.log('Document unindexed successfully.');
+        console.log('Document unindexed successfully.');
       }
     });
     await product.remove();
-    req.session.success = 'Product deleted successfully!';
+    req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
   },
 };

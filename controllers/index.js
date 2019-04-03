@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-undef */
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const async = require('async');
@@ -549,7 +550,7 @@ module.exports = {
         }
         User.findOne({ email: req.body.email }, (err, user) => {
           if (!user) {
-            req.flash('error', 'No account with that email address exists.');
+            req.flash('error', 'An email was sent to that address if it is linked with an account.');
             return res.redirect('/forgot');
           }
           user.resetPasswordToken = token;
@@ -1273,7 +1274,7 @@ module.exports = {
         }
         User.findOne({ email: req.body.email }, (err, user) => {
           if (!user) {
-            req.flash('error', 'No account with that email address exists.');
+            req.flash('error', 'An email was sent to that address if it is linked with an account.');
             return res.redirect('/dashboard');
           }
           user.resetEmailToken = token;

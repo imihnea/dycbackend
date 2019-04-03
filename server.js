@@ -12,9 +12,10 @@ const expressValidator = require('express-validator');
 
 app.use(expressValidator());
 
-const rateLimit = require("express-rate-limit");
- 
-// app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+const rateLimit = require('express-rate-limit');
+
+// only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// app.enable("trust proxy");
 
 const mongoose = require('mongoose');
 
@@ -26,7 +27,7 @@ const helmet = require('helmet');
 
 app.use(helmet());
 
-app.use(helmet.hidePoweredBy({ setTo: 'PHP 7.3.3'}));
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 7.3.3' }));
 
 app.use(helmet.ieNoOpen());
 
@@ -34,8 +35,8 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     // defaultSrc: ["'self'"],
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
-    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions']
-  }
+    scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions', 'https://www.gstatic.com', 'https://www.google.com'],
+  },
 }));
 
 app.use(helmet.noSniff());
@@ -61,7 +62,7 @@ app.use(helmet.xssFilter());
 //   includeSubDomains: true,         // optional
 //   reportUri: 'http://example.com', // optional
 //   reportOnly: false,               // optional
- 
+
 //   // Set the header based on a condition.
 //   // This is optional.
 //   setIf: function (req, res) {
@@ -125,6 +126,10 @@ app.use(require('express-session')({
   secret: SECRET,
   resave: true,
   saveUninitialized: true,
+  // these need SSL
+  // secure: true,
+  // httpOnly: true,
+  maxAge: 2 * 60 * 60 * 1000,
 }));
 
 app.use('/dist', express.static(path.join(__dirname, '/dist')));
@@ -191,6 +196,9 @@ passport.deserializeUser((id, done) => {
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  // if (req.cookies._csrf){
+  //   res.locals.csrfToken = req.cookies._csrf;
+  // }
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
   next();
@@ -218,6 +226,26 @@ const loginLimiter = rateLimit({
 // only apply to login requests
 app.use("/login", loginLimiter);
 
+const forgotEmailLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  handler: (req, res) => {
+    req.flash('error', 'Too many email reset attempts from ths IP, please try again in an hour.');
+    res.redirect('/');
+  }
+});
+app.use("/forgotemail", forgotEmailLimiter);
+
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  handler: (req, res) => {
+    req.flash('error', 'Too many password reset attempts from this IP, please try again in an hour.');
+    res.redirect('/');
+  }
+});
+app.use("/forgot", forgotPasswordLimiter);
+
 // refactored routes
 app.use('/', indexRoutes);
 app.use('/', savvycallbackRoutes);
@@ -236,7 +264,7 @@ app.get('*', (req, res) => {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // // set locals, only providing error in development
   // res.locals.message = err.message;
   // res.locals.error = req.app.get('env') === 'development' ? err : {};

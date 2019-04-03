@@ -3,6 +3,7 @@ const Deal = require('../models/deal');
 const Product = require('../models/product');
 const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
+
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
@@ -435,7 +436,7 @@ module.exports = {
         const deal = await Deal.findById(req.params.id);
         let product = await Product.findById(deal.product.id);
         product = await Product.findById(deal.product.id).populate('reviews').exec();
-        let haveReviewed = product.reviews.filter(review => {
+        const haveReviewed = product.reviews.filter((review) => {
             return review.author.equals(req.user._id);
         }).length;
         if(haveReviewed) {
@@ -456,7 +457,7 @@ module.exports = {
 // Pay deals which cannot be refunded anymore
 setInterval(async () => {
     // get deals that need to be paid
-    let deal = await Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }});
+    const deal = await Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }});
     deal.forEach((item) => {
         // get user who has to be paid
         User.findById(item.product.author.id, (err, seller) => {

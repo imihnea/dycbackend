@@ -24,7 +24,8 @@ Backend:
       Dashboard => Add balance route
       Security => Validate and sanitize every user input
                => Anti DDOS
-      Reviews => Only create product reviews, show them on the profile page
+      Reviews  => Middleware that checks if the user bought the product
+      
    Low Priority:
 
       Login => Link accounts facebook, gmail etc to original
@@ -46,5 +47,5 @@ After Launch:
 
       Users => Create premium/business user who can access product and search data 
       
-      Data => Create another Elastic instance for premium/business user data
+      Data => Create another Elastic instance for premium/business user data (if needed)
            => Make a page where they can query that instance => Data compiled into charts 

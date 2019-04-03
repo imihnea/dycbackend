@@ -11,7 +11,7 @@ const { profileUpdate, getProfile } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, checkUserproduct, asyncErrorHandler } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, verifyParam } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + file.originalname);
   },
 });
-  
+
 const imageFilter = (req, file, cb) => {
   // accept image files only
   if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
@@ -31,7 +31,7 @@ const imageFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: imageFilter,
-  onError : function(err, next) {
+  onError: (err, next) => {
     console.log('error', err);
     next(err);
   },
@@ -43,6 +43,6 @@ router.get('/:id', asyncErrorHandler(getProfile));
 
 // PUT Profile route
 
-router.put('/:id/update', isLoggedIn, upload.single('avatar'), asyncErrorHandler(profileUpdate));
+router.put('/:id/update/:_csrf/:csrfSecret', verifyParam, isLoggedIn, upload.single('avatar'), asyncErrorHandler(profileUpdate));
 
 module.exports = router;

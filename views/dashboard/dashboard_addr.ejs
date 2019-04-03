@@ -38,6 +38,7 @@
                                             <label class="label adrlabel">New <br/> Withdrawal Address</label>
                                             <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                                         </div>
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <button class="button is-primary">Change Address</button>
                                     </form>    
                                     <div class="address">
@@ -70,6 +71,7 @@
                                                     <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
                                                     <label class="label adrlabel">Value</label>
                                                     <input class="input adradr" name="coinsValue" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                                     <button class="button is-primary">Continue</button>
                                                 </form>
                                             </section>
