@@ -2,6 +2,8 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const cloudinary = require('cloudinary');
+const ejs = require('ejs');
+const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
@@ -329,27 +331,31 @@ module.exports = {
                   };
                   query_btc.withdrawal.push(withdrawal);
                   query_btc.save();
-
-                  const output = `
-                  <h1>Withdrawal Sent Successfully</h1>
-                  <p>${amount} BTC has been sent to ${address}.</p>
-                  <p>Click <a href="http://${req.headers.host}/dashboard/address">here</a> to see more information.</p>
-                  `;
+                  ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+                    link: `http://${req.headers.host}/dashboard/address`,
+                    amount: amount,
+                    address: address,
+                    subject: 'Withdraw request success - Deal Your Crypto',
+                  }, function (err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
                       const mailOptions = {
                           from: `Deal Your Crypto <noreply@dyc.com>`,
                           to: `${user.email}`,
                           subject: 'Currency withdrawn successfully',
-                          html: output,
+                          html: data,
                       };
                       transporter.sendMail(mailOptions, (error) => {
                           if (error) {
                           console.log(error);
                           }
+                          req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                          res.redirect('back');
+                          console.log(`Withdrawn ${amount} BTC successfully.`);
                       });
-                      
-                  req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-                  res.redirect('back');
-                  console.log(`Withdrawn ${amount} BTC successfully.`);
+                    }
+                  });
                 });
               }
           });
@@ -800,6 +806,7 @@ module.exports = {
       // save the updated product into the db
       await product.save();
       // redirect to show page
+      req.flash('success', 'Product updated successfully!');
       res.redirect(`/products/${product.id}/view`);
     }
   },

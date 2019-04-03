@@ -16,7 +16,7 @@ router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncError
 
 // show interface after pressing buy on a product
 
-router.post('/:id/buy', isLoggedIn, asyncErrorHandler(getBuyDeal));
+router.get('/:id/buy', isLoggedIn, asyncErrorHandler(getBuyDeal));
 
 // cancel deal
 router.put('/:id/cancel', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(cancelDeal));

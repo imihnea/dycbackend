@@ -2,6 +2,8 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Review = require('../models/review');
 const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
@@ -54,21 +56,26 @@ module.exports = {
 		const author = await User.findById(product.author.id);
 		author.reviews.push(review);
 		author.save();
-        const output = `
-        <h1>${product.name} has a new review!</h1>
-        <p>Click <a href="http://${req.headers.host}/products/${product._id}">here</a> to check it out.</p>
-        `;
+		ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
+			link: `http://${req.headers.host}/products/${product._id}`,
+			name: product.name,
+			subject: `New review for ${product.name} - Deal Your Crypto`,
+		  }, function (err, data) {
+			if (err) {
+				console.log(err);
+			} else {
             const mailOptions = {
                 from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
                 to: `${author.email}`, // list of receivers
                 subject: 'Your product has been reviewed', // Subject line
-                html: output, // html body
+                html: data, // html body
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
                 console.log(error);
                 }
-            });
+			});
+		}});
 		// redirect to the product
 		req.session.success = 'Review created successfully!';
 		res.redirect(`/products/${product.id}/view`);
