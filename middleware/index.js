@@ -1,4 +1,4 @@
-const product = require('../models/product');
+const Product = require('../models/product');
 const Review = require('../models/review');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
@@ -14,7 +14,7 @@ module.exports = {
     res.redirect('/login');
   },
   checkUserproduct(req, res, next) {
-    product.findById(req.params.id, (err, foundproduct) => {
+    Product.findById(req.params.id, (err, foundproduct) => {
       if (err || !foundproduct) {
         req.flash('error', 'Sorry, that product does not exist!');
         res.redirect('/categories/products');
@@ -39,6 +39,15 @@ module.exports = {
       return next();
     }
     req.session.error = 'There was an error with your request, please try again';
+    return res.redirect('back');
+  },
+  isBuyer: async (req, res, next) => {
+    const deal = await Deal.find({'buyer.id': req.user._id, 'product.id': req.params.id, status: 'Completed'});
+    if ( (Array.isArray(deal)) || (deal.length) ) {
+      // The user is the buyer and the deal is completed
+      return next();
+    }
+    req.flash('error', 'There was an error with your request, please try again');
     return res.redirect('back');
   },
   hasCompleteProfile(req, res, next) {

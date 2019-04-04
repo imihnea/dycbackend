@@ -21,11 +21,12 @@ const transporter = nodemailer.createTransport({
 module.exports = {
 	// Reviews Create
 	async reviewCreate(req, res, next) {
-		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
-		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
+		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
+		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g).notEmpty();
 		const errors = req.validationErrors();
 		if (errors) {
-			req.session.error = 'Something went wrong or the message contains illegal characters.';
+			console.log(errors);
+			req.flash('error', 'Something went wrong or the message contains illegal characters.');
 			return res.redirect('back');
 		}
 		// find the product by its id and populate reviews
@@ -38,7 +39,7 @@ module.exports = {
 		// check if haveReviewed is 0 (false) or 1 (true)
 		if(haveReviewed) {
 			// flash an error and redirect back to product
-			req.session.error = 'Sorry, you can only create one review per product.';
+			req.flash('error', 'Sorry, you can only create one review per product.');
 			return res.redirect(`/products/${product.id}/view`);
 		}
 		// create the review
@@ -57,25 +58,27 @@ module.exports = {
 		author.reviews.push(review);
 		author.save();
 		ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
-			link: `http://${req.headers.host}/products/${product._id}`,
-			name: product.name,
-			subject: `New review for ${product.name} - Deal Your Crypto`,
-		  }, function (err, data) {
+				link: `http://${req.headers.host}/products/${product._id}`,
+				name: product.name,
+				subject: `New review for ${product.name} - Deal Your Crypto`,
+		}, 
+		function (err, data) {
 			if (err) {
 				console.log(err);
 			} else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${author.email}`, // list of receivers
-                subject: 'Your product has been reviewed', // Subject line
-                html: data, // html body
-            };
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                console.log(error);
-                }
-			});
-		}});
+				const mailOptions = {
+						from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+						to: `${author.email}`, // list of receivers
+						subject: 'Your product has been reviewed', // Subject line
+						html: data, // html body
+				};
+				transporter.sendMail(mailOptions, (error) => {
+						if (error) {
+							console.log(error);
+						}
+				});
+		}
+	});
 		// redirect to the product
 		req.session.success = 'Review created successfully!';
 		res.redirect(`/products/${product.id}/view`);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const { asyncErrorHandler, isLoggedIn, isReviewAuthor, hasCompleteProfile } = require('../middleware');
+const { asyncErrorHandler, isLoggedIn, isReviewAuthor, isBuyer } = require('../middleware');
 const {
 	reviewCreate,
 	reviewUpdate,
@@ -8,7 +8,7 @@ const {
 } = require('../controllers/reviews');
 
 /* review reviews create /posts/:id/reviews */
-router.post('/:id/reviews', isLoggedIn, hasCompleteProfile, asyncErrorHandler(reviewCreate));
+router.post('/:id/reviews', isLoggedIn, isBuyer, asyncErrorHandler(reviewCreate));
 
 /* PUT reviews update /posts/:id/reviews/:review_id */
 router.put('/:id/reviews/:review_id', isLoggedIn, isReviewAuthor, asyncErrorHandler(reviewUpdate));

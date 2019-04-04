@@ -24,7 +24,6 @@ Backend:
       Dashboard => Add balance route
       Security => Validate and sanitize every user input
                => Anti DDOS
-      Reviews  => Middleware that checks if the user bought the product
       
    Low Priority:
 

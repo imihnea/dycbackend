@@ -275,8 +275,8 @@ module.exports = {
   // Get address modifications
   async addAddresses(req, res) {
     const query = { _id: req.user._id };
-    req.check('btcadr', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]$/g).notEmpty();
-    req.check('btcadr', 'Invalid address format').isLength({ min: 26, max: 35 });
+    req.check('btcadr', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
+    req.check('btcadr', 'Invalid address format').isLength({ min: 26, max: 80 });
     const errors = req.validationErrors();
     if (errors) {
       var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
