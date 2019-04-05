@@ -253,7 +253,8 @@ module.exports = {
                     console.log(error);
                     }
                 });
-            }});  
+            } 
+            });  
         }
         res.redirect(`/messages/${chat._id}`);
     },

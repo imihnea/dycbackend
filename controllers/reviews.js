@@ -4,6 +4,7 @@ const Review = require('../models/review');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
+
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';

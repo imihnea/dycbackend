@@ -5,10 +5,11 @@ const multer = require('multer');
 
 const router = express.Router();
 
-const { getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
+const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
-        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus } = require('../controllers/dashboard');
+        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
+        subscriptionCreate, subscriptionCancel } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -35,17 +36,7 @@ const upload = multer({
 });
 
 // Dashboard index route
-router.get('/', assignCookie, isLoggedIn, (req, res) => {
-  res.render('dashboard/dashboard', { 
-    user: req.user, 
-    errors: req.session.errors,
-    csrfToken: req.cookies._csrf,
-    csrfSecret: req.body.csrfSecret,
-    pageTitle: 'Dashboard - Deal Your Crypto',
-    pageDescription: 'Description',
-    pageKeywords: 'Keywords'
-  });
-});
+router.get('/', assignCookie, isLoggedIn, asyncErrorHandler(getDashboardIndex));
 
 // Show all addresses for withdraw
 router.get('/addresses', assignCookie, isLoggedIn, asyncErrorHandler(getAddresses));
@@ -94,6 +85,14 @@ router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
+
+// POST Subscription create
+
+router.post('/:id/subscription', isLoggedIn, asyncErrorHandler(subscriptionCreate));
+
+// POST Subscription cancel
+
+router.post('/:id/subscription/cancel', isLoggedIn, asyncErrorHandler(subscriptionCancel));
 
 // NEW - show form to create new product
 router.get('/new', assignCookie, isLoggedIn, hasCompleteProfile, newProduct);

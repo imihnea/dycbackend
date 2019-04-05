@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Review = require('./review');
+const Subscription = require('./subscription');
+
 const Schema = mongoose.Schema;
 
 function toLower(str) {
@@ -55,10 +57,6 @@ const UserSchema = new Schema({
   address2: String,
   zip: String,
   unreadMessages: Number,
-  accountType: { 
-    type: String, 
-    default: 'Standard' 
-  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   resetEmailToken: String,

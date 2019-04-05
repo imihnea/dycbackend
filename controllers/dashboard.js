@@ -9,6 +9,7 @@ const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Subscription = require('../models/subscription');
 const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
@@ -51,6 +52,28 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports = {
+  async getDashboardIndex(req, res) {
+  let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+    if(err) {
+      console.log('Failed to retrieve subscription.');
+    }
+  });
+  if(premium) {
+    premium = true;
+  } else {
+    premium = false;
+  }
+    res.render('dashboard/dashboard', { 
+      user: req.user,
+      premium: premium,
+      errors: req.session.errors,
+      csrfToken: req.cookies._csrf,
+      csrfSecret: req.body.csrfSecret,
+      pageTitle: 'Dashboard - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   // Products Indexes
   async openProductIndex(req, res) {
     const products = await Product.paginate({ available: "True", 'author.id': req.user._id }, {
@@ -925,5 +948,34 @@ module.exports = {
     await product.remove();
     req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
+  },
+	// Subscription Create
+	async subscriptionCreate(req, res) {
+    let CurrentUser = await User.findById(req.params.id);
+    Subscription.create({
+      userid: CurrentUser._id,
+      username: CurrentUser.username,
+    }, (err, sub) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      } else {
+        req.flash('success', 'Subscription created successfully!');
+        return res.redirect(`/dashboard`);
+      }
+    })
+	},
+	// Reviews Update
+	async subscriptionCancel(req, res, next) {
+    let CurrentUser = await User.findById(req.params.id);
+    Subscription.findOneAndRemove({userid: CurrentUser}, (err) => {
+      if(err) {
+        req.flash('error', 'There was an error cancelling your subscription.');
+        return res.redirect('back');
+      } else {
+        req.flash('success', 'Subscription cancelled successfully, we\'re sad to see you go!');
+        return res.redirect('back');
+      }
+    });
   },
 };

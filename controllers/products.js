@@ -276,7 +276,8 @@ module.exports = {
                 req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
                 res.redirect('back');
             });
-        }});
+        }
+    });
     },
     async buyProduct(req, res) {
         // Get the user and the product
@@ -350,7 +351,8 @@ module.exports = {
                         console.log(error);
                         }
                     });
-                }});
+                }
+            });
                 // Link chat to deal
                 res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
             } else {

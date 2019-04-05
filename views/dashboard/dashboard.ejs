@@ -12,6 +12,11 @@
             <div class="column is-four-fifths">
                 <div class="frame">
                     <form action="/profile/<%= user._id %>/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                        <% if(premium !== true) { %>
+                            <h1 class="title">Standard Account</h1>
+                        <% } else { %>
+                            <h1 class="title">Premium Account</h1>
+                        <% } %>
                         <p class="subtitle">Personal Details</p>
                         <div class="container is-fluid">
                             <% if(errors){ %>
@@ -109,12 +114,23 @@
     
                         </div>       
                     </form>
-                    <a href="/profile/<%= user._id %>"><button class="button is-primary is-rounded">View Profile</button></a>
+                    <div class="buttons is-centered">
+                            <a href="/profile/<%= user._id %>"><button class="button is-primary smmargin is-rounded">View Profile</button></a>
+                        <% if(premium !== true) { %>
+                            <form action="/dashboard/<%= user._id %>/subscription" method="POST">
+                                <button class="button is-primary smmargin is-rounded">Upgrade Account</button>
+                            </form>
+                        <% } else { %>
+                            <form action="/dashboard/<%= user._id %>/subscription/cancel" method="POST">
+                                <button class="button is-primary smmargin is-rounded">Cancel Premium</button>
+                            </form>
+                        <% } %>
+                    </div>
                 </div>
                 <br>
                 <div class="frame">
                     <h2 class="subtitle">Credentials</h2>
-                    <div class="columns">
+                    <div class="columns buttons">
                         <div class="column chpw">
                             <form action="/forgot" method="POST">
                                 <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />

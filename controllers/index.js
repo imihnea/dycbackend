@@ -40,8 +40,7 @@ function sendConfirmationEmail(req, userid, useremail) {
     user: userid
   }, 
   SECRET, 
-  { expiresIn: '1h' }
-  );
+  { expiresIn: '1h' });
   ejs.renderFile(path.join(__dirname, "../views/email_templates/register.ejs"), {
     link: `http://${req.headers.host}/confirmation/${token}`,
     subject: 'Confirm Your Email - Deal Your Crypto',
@@ -261,8 +260,7 @@ module.exports = {
       user: req.user._id
     }, 
     SECRET2, 
-    { expiresIn: '1h' }
-    );
+    { expiresIn: '1h' });
     ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
       link: `http://${req.headers.host}/disable2factor/${token}`,
       subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
@@ -498,7 +496,8 @@ module.exports = {
       ids.push(product._id);
     });
     if (products.docs.length < 20) {
-      Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total).exec((err, result) => {
+      Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total)
+      .exec((err, result) => {
         if (err) {
           console.log(err);
           res.render('index', { 
@@ -1198,7 +1197,8 @@ module.exports = {
         });
       }
       req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z \-]+$/g).trim().notEmpty();
-      req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty().trim();
+      req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
+      .trim();
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
       req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
       const validationErrors = req.validationErrors();

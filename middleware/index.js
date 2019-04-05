@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const Review = require('../models/review');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
+const Subscription = require('../models/subscription');
 
 const jwt = require('jsonwebtoken');
 
@@ -13,6 +14,17 @@ module.exports = {
     req.flash('error', 'You must be signed in to do that!');
     res.redirect('/login');
   },
+  // isSubscribed(req, res, next) {
+  //   Subscription.findById(req.params.id, (err, user) => {
+  //     if(err || !user) {
+  //       req.flash('error', 'You must be a Premium User to do that.')
+  //       res.redirect('back');
+  //     } else if (user.userid.equals(req.user._id)) {
+  //       req.subscription = user;
+  //       next();
+  //     }
+  //   });
+  // },
   checkUserproduct(req, res, next) {
     Product.findById(req.params.id, (err, foundproduct) => {
       if (err || !foundproduct) {
