@@ -86,6 +86,13 @@ require('dotenv').config();
 
 const User = require('./models/user');
 
+const logController = require('./controllers/logs');
+
+// Uploads logs to Google Drive and clears them - Runs once a day
+setInterval(() => {
+  logController.uploadLog();
+}, 24* 60 * 60 * 1000);
+
 // requiring routes
 
 const indexRoutes = require('./routes/index');
