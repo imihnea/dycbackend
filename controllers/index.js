@@ -594,7 +594,6 @@ module.exports = {
     });
   },
     async firstCategSearch(req, res) {
-      let tags = [];
       let currency = [];
       let secCat = [];
       let from = 0;
@@ -613,7 +612,6 @@ module.exports = {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
-        tags.push(currency[0]);
       }
       let condition = '';
       if (req.body.condition) {
@@ -672,94 +670,48 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        if (tags.length > 0) {
-          await Product.search(
-            {
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.category}`}},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-                "filter": [
-                  { "terms": { "tags": tags }}
-                ]
-              }
-            }, 
-            { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                Categories.forEach((item) => {
-                  if (req.body.category == item.name) {
-                    secCat = item.opt;
-                  }
-                });
-                res.render('index/searchFirstCateg', { 
-                  products: products.hits.hits, 
-                  total: products.hits.total, 
-                  from, 
-                  searchName: req.body.searchName, 
-                  searchCateg: req.body.category, 
-                  secCat, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                 });
-              }
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.category}` }},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
             }
-          );
-        } else {
-          await Product.search(
-            { 
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.category}` }},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-              }
-            }, 
-            { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                Categories.forEach((item) => {
-                  if (req.body.category == item.name) {
-                    secCat = item.opt;
-                  }
-                });
-                res.render('index/searchFirstCateg', { 
-                  products: products.hits.hits, 
-                  total: products.hits.total, 
-                  from, 
-                  searchName: req.body.searchName, 
-                  searchCateg: req.body.category, 
-                  secCat, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              }
+          }, 
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              Categories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  secCat = item.opt;
+                }
+              });
+              res.render('index/searchFirstCateg', { 
+                products: products.hits.hits, 
+                total: products.hits.total, 
+                from, 
+                searchName: req.body.searchName, 
+                searchCateg: req.body.category, 
+                secCat, 
+                currency: req.body.currency, 
+                continent, 
+                avgRating, 
+                condition,
+                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+              });
             }
-          );
-        }
+          }
+        ); 
       }
     },
     async secondCategSearch(req, res) {
-      let tags = [];
       let currency = [];
       let thiCat = [];
       let from = 0;
@@ -779,7 +731,6 @@ module.exports = {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
-        tags.push(currency[0]);
       }
       let condition = '';
       if (req.body.condition) {
@@ -840,98 +791,50 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        if (tags.length > 0) {
-          await Product.search(
-            {
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.searchCateg}`}},
-                  { "match": { "category": `${req.body.category}`}},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-                "filter": [
-                  { "terms": { "tags": tags }}
-                ]
-              }
-            }, 
-            { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                secCategories.forEach((item) => {
-                  if (req.body.category == item.name) {
-                    thiCat = item.opt;
-                  }
-                });
-                res.render('index/searchSecondCateg', { 
-                  products: products.hits.hits, 
-                  searchName: req.body.searchName, 
-                  total: products.hits.total, 
-                  from, 
-                  searchCateg: req.body.searchCateg, 
-                  secondSearchCateg: req.body.category, 
-                  thiCat, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              }
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
             }
-          );
-        } else {
-          await Product.search(
-            { 
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.searchCateg}`}},
-                  { "match": { "category": `${req.body.category}`}},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-              }
-            }, 
-            { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                secCategories.forEach((item) => {
-                  if (req.body.category == item.name) {
-                    thiCat = item.opt;
-                  }
-                });
-                res.render('index/searchSecondCateg', { 
-                  products: products.hits.hits, 
-                  searchName: req.body.searchName, 
-                  total: products.hits.total, 
-                  from, 
-                  searchCateg: req.body.searchCateg, 
-                  secondSearchCateg: req.body.category, 
-                  thiCat, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              }
+          }, 
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              secCategories.forEach((item) => {
+                if (req.body.category == item.name) {
+                  thiCat = item.opt;
+                }
+              });
+              res.render('index/searchSecondCateg', { 
+                products: products.hits.hits, 
+                searchName: req.body.searchName, 
+                total: products.hits.total, 
+                from, 
+                searchCateg: req.body.searchCateg, 
+                secondSearchCateg: req.body.category, 
+                thiCat, 
+                currency: req.body.currency, 
+                continent, 
+                avgRating, 
+                condition,
+                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+              });
             }
-          );
-        }
+          }
+        );
       }
     },
     async thirdCategSearch(req, res){
-      let tags = [];
       let currency = [];
       let from = 0;
       req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
@@ -951,7 +854,6 @@ module.exports = {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
-        tags.push(currency[0]);
       }
       let condition = '';
       if (req.body.condition) {
@@ -1014,86 +916,43 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        if (tags.length > 0) {
-          await Product.search(
-            {
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.searchCateg}`}},
-                  { "match": { "category": `${req.body.secondSearchCateg}`}},
-                  { "match": { "category": `${req.body.category}`}},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-                "filter": [
-                  { "terms": { "tags": tags }}
-                ]
-              }
-            }, 
-            { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                res.render('index/searchThirdCateg', { 
-                  products: products.hits.hits, 
-                  searchName: req.body.searchName, 
-                  total: products.hits.total, 
-                  from, 
-                  searchCateg: req.body.searchCateg, 
-                  secondSearchCateg: req.body.secondSearchCateg, 
-                  thirdSearchCateg: req.body.category, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              }
+        await Product.search(
+          { 
+            "bool": { 
+              "must": [
+                { "wildcard": { "name": `*${req.body.searchName}*` }},
+                { "match": { "category": `${req.body.searchCateg}`}},
+                { "match": { "category": `${req.body.secondSearchCateg}`}},
+                { "match": { "category": `${req.body.category}`}},
+                { "wildcard": { "author.continent": `*${continent}*`}},
+                { "wildcard": {"condition": `*${condition}*`}}
+              ],
             }
-          );
-        } else {
-          await Product.search(
-            { 
-              "bool": { 
-                "must": [
-                  { "wildcard": { "name": `*${req.body.searchName}*` }},
-                  { "match": { "category": `${req.body.searchCateg}`}},
-                  { "match": { "category": `${req.body.secondSearchCateg}`}},
-                  { "match": { "category": `${req.body.category}`}},
-                  { "wildcard": { "author.continent": `*${continent}*`}},
-                  { "wildcard": {"condition": `*${condition}*`}}
-                ],
-              }
-            }, 
-            { from: from, size: 10, sort: [`avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-            (err, products) => {
-              if (err) {
-                console.log(err);
-              } else {
-                res.render('index/searchThirdCateg', { 
-                  products: products.hits.hits, 
-                  searchName: req.body.searchName, 
-                  total: products.hits.total, 
-                  from, 
-                  searchCateg: req.body.searchCateg, 
-                  secondSearchCateg: req.body.secondSearchCateg, 
-                  thirdSearchCateg: req.body.category, 
-                  currency: req.body.currency, 
-                  continent, 
-                  avgRating, 
-                  condition,
-                  pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              }
+          }, 
+          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
+          (err, products) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index/searchThirdCateg', { 
+                products: products.hits.hits, 
+                searchName: req.body.searchName, 
+                total: products.hits.total, 
+                from, 
+                searchCateg: req.body.searchCateg, 
+                secondSearchCateg: req.body.secondSearchCateg, 
+                thirdSearchCateg: req.body.category, 
+                currency: req.body.currency, 
+                continent, 
+                avgRating, 
+                condition,
+                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+              });
             }
-          );
-        }
+          }
+        );
       }
     },
   getReset(req, res) {

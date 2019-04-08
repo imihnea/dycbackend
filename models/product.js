@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosastic = require('mongoosastic');
+
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 const Review = require('./review');
@@ -47,7 +48,6 @@ const ProductSchema = new Schema({
     },
   ],
   avgRating: { type: Number, default: 0, es_indexed: true },
-  tags: { type: Array, es_indexed: true, es_type: 'keyword' }
 });
 
 ProductSchema.pre('remove', async () => {
@@ -109,7 +109,7 @@ mongoose.model('Product', ProductSchema).esTruncate((err) => {
 let stream = mongoose.model('Product', ProductSchema).synchronize();
 let count = 0;
 stream.on('data', function(err, doc){
-  count++;
+  count += 1;
 });
 stream.on('close', function(){
   console.log('indexed ' + count + ' documents!');

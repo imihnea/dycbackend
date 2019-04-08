@@ -752,7 +752,6 @@ module.exports = {
           public_id: image.public_id,
         });
       }
-      const tags = ["abcd"];
       const author = {
         id: req.user._id,
         username: req.user.username,
@@ -785,7 +784,6 @@ module.exports = {
         });
       } else {
         const btcPrice=Number(req.body.product.btc_price);
-        tags.push('btc');  
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const newproduct = {
           name: req.body.product.name,
@@ -794,8 +792,7 @@ module.exports = {
           condition: req.body.product.condition,
           description: req.body.product.description,
           btcPrice,
-          author,
-          tags
+          author
         };
         if (req.body.product.repeatable === "true") {
           newproduct.repeatable = req.body.product.repeatable;
@@ -960,9 +957,6 @@ module.exports = {
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
     const btcPrice = req.body.product.btc_price;
-    if (product.tags.indexOf('btc') === -1) {
-      product.tags.push('btc');
-    } 
     const errors = req.validationErrors();
     if (errors) {
       res.render('dashboard/dashboard_edit', {

@@ -50,6 +50,55 @@ input{
     border-width: 0.5px;
 }
 
+.navbar-item.navbar-center{
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.navbar-menu.is-active{
+    background-color: rgb(39, 88, 173);
+}
+
+.searchbarInput{
+    width: 70% !important;
+    border-top-right-radius: 0px !important; 
+    border-bottom-right-radius: 0px !important;
+}
+
+@media only screen and (max-width: 1087px) {
+    /* This is the breakpoint where the navbar burger appears */
+
+    .hideOnBurger{
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1087px) {
+    .searchbarInput{
+        width: 90% !important;
+    }
+}
+
+
+@media only screen and (min-width: 512px) and (max-width: 768px) {
+    .searchbarInput{
+        width: 75% !important;
+    }
+}
+
+@media only screen and (min-width: 375px) and (max-width: 512px) {
+    .searchbarInput{
+        width: 60% !important;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 375px) {
+    .searchbarInput{
+        width: 40% !important;
+    }
+}
+
 .level-left{
     padding-left: 1vw;
 }
@@ -115,7 +164,12 @@ input, select, .dd-btn{
 }
 
 .white-text{
-    color: white;
+    color: white !important;
+}
+
+.white-text:hover{
+    color: #9da9bd !important;
+    background-color: transparent !important;
 }
 
 .searchbar{
@@ -213,10 +267,6 @@ a:hover {
 @media screen and (max-width: 768px){
     .field.has-addons{
         display: block !important;
-    }
-
-    .dropdown.categ{
-        display: none;
     }
 
     .search{
