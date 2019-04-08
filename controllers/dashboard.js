@@ -1026,7 +1026,7 @@ module.exports = {
         req.flash('error', err.message);
         return res.redirect('back');
       } else {
-        createUserLog(req.user._id, 'Dashboard', req.router.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
+        createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
         req.flash('success', 'Subscription created successfully!');
         return res.redirect(`/dashboard`);
       }
@@ -1040,7 +1040,7 @@ module.exports = {
         req.flash('error', 'There was an error cancelling your subscription.');
         return res.redirect('back');
       } else {
-        createUserLog(req.user._id, 'Dashboard', req.router.path, Object.keys(req.route.methods)[0], 'subscriptionCancel');
+        createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCancel');
         req.flash('success', 'Subscription cancelled successfully, we\'re sad to see you go!');
         return res.redirect('back');
       }

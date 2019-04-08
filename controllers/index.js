@@ -280,7 +280,7 @@ module.exports = {
               console.log(error);
             }
         });
-        createUserLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postDisable2FactorRequest');
+        createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postDisable2FactorRequest');
         req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
         res.redirect('back');
       }
@@ -304,7 +304,7 @@ module.exports = {
             req.flash('error', err.message);
             res.redirect('/');
           } else {
-            createUserLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postDisable2Factor');
+            createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postDisable2Factor');
             req.flash('success', 'Successfully disabled 2-Factor authentication.');
             res.redirect('/');
           }
@@ -379,7 +379,7 @@ module.exports = {
     } else {
       User.findOne({ username: req.body.username }, (err, user) => {
         if(err) {
-          createErrorLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postLogin', err);
+          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postLogin', err);
           let errors = { msg: String };
           errors.msg = err.message;
           return res.render('index/login', {
@@ -410,7 +410,7 @@ module.exports = {
           if (user.twofactor === true) {
             nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
               if(err) {
-                createErrorLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postLogin', err);
+                createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postLogin', err);
                 let errors = { msg: String };
                 errors.msg = err.message;
                 return res.render('index/login', {
@@ -466,7 +466,7 @@ module.exports = {
     let requestId = req.body.requestId;
     nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
       if(err) {
-        createErrorLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postVerifyLogin', err);
+        createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postVerifyLogin', err);
         req.flash('error', err.message);
         return res.redirect('back');
       } else {
@@ -505,7 +505,7 @@ module.exports = {
       Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total)
       .exec((err, result) => {
         if (err) {
-          createErrorLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'getIndex', err);
+          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getIndex', err);
           console.log(err);
           res.render('index', { 
             currentUser: req.user, 
@@ -583,7 +583,7 @@ module.exports = {
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
-          createUserLog(req.user._id, 'Index', req.router.path, Object.keys(req.route.methods)[0], 'postForgot');
+          createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postForgot');
           req.flash('success', `An e-mail with further instructions has been sent to ${user.email}.`);
           done(err, 'done');
         });
