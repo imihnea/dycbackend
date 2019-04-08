@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Log = require('../models/log');
+const { createDealErrorLog, createDealLog } = require('../models/log');
 const ejs = require('ejs');
 const path = require('path');
 const Product = require('../models/product');
@@ -61,6 +63,7 @@ module.exports = {
         const deal = await Deal.findById(req.params.id);
         deal.status = 'Pending Delivery';
         await deal.save();
+        createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'acceptDeal');
         const buyer = await User.findById(deal.buyer.id);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
             link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
@@ -91,6 +94,7 @@ module.exports = {
         const buyer = await User.findById(deal.buyer.id);
         deal.status = 'Declined';
         await deal.save();
+        createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'declineDeal');
         buyer.btcbalance += deal.price;
         await buyer.save();
         ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
@@ -157,7 +161,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
-                console.log(error);
+                    console.log(error);
                 }
             });
         }});
@@ -178,10 +182,11 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
-                console.log(error);
+                    console.log(error);
                 }
             });
         }});
+        createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'completeDeal');
         res.redirect(`/deals/${deal._id}/review`);
     },
     async cancelDeal(req, res) {
@@ -211,8 +216,9 @@ module.exports = {
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
-                console.log(error);
+                    console.log(error);
                 }
+                createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'cancelDeal');
                 req.flash('success', 'Deal cancelled successfully.');
                 res.redirect('back');
             });
@@ -249,6 +255,7 @@ module.exports = {
                 await deal.save();
                 buyer.btcbalance += deal.price;
                 await buyer.save();
+                createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'refundDeal');
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 res.redirect('back');
             } else {
@@ -256,6 +263,7 @@ module.exports = {
                 deal.refund.status = 'Pending Delivery';
                 deal.refund.sellerOption = req.body.refundOption;
                 await deal.save();
+                createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'refundDeal');
                 req.flash('success', 'Refund status updated: Deal refund pending.');
                 res.redirect('back');
             }
@@ -304,10 +312,11 @@ module.exports = {
                 };
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
-                    console.log(error);
+                        console.log(error);
                     }
                 });
             }});
+            createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'refundDeny');
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
             res.redirect('back');
         }
@@ -362,10 +371,11 @@ module.exports = {
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
-                    console.log(error);
+                        console.log(error);
                     }
                 });
             }});
+            createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'refundRequest');
             req.flash('success', 'Refund request sent.');
             res.redirect(`/deals/${deal._id}`);
         }
@@ -378,6 +388,7 @@ module.exports = {
             return review.author.equals(req.user._id);
         }).length;
         if(haveReviewed) {
+            createDealLog(req.user._id, deal._id, 'Deals', req.router.path, Object.keys(req.route.methods)[0], 'reviewProduct');
             req.flash('success', 'Deal completed successfully.');
             return res.redirect(`/deals/${deal.id}`);
         } else {
@@ -429,4 +440,16 @@ setInterval(async () => {
             }
         });
     });
+    if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'Server',
+          message: 'Deals were paid',
+          sentFromFile: `Deals Controller`,
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
   }, 1000);

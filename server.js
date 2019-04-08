@@ -86,6 +86,17 @@ require('dotenv').config();
 
 const User = require('./models/user');
 
+const Log = require('./models/log');
+
+const logController = require('./controllers/logs');
+
+// Uploads logs to Google Drive and clears them - Runs every hour
+setInterval(() => {
+  if (process.env.NODE_ENV === 'production') {
+    logController.uploadLog();
+  }
+}, 60 * 60 * 1000);
+
 // requiring routes
 
 const indexRoutes = require('./routes/index');
@@ -282,4 +293,16 @@ app.use((err, req, res, next) => {
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');
+  if (process.env.NODE_ENV === 'production') {
+    const log = {
+      logType: 'Server',
+      message: 'Server started',
+      sentFromFile: `Server`,
+    };
+    Log.create(log, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
 });

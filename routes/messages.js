@@ -56,63 +56,71 @@ router.put('/:dealid/:id/sendMessageDeal', isLoggedIn, asyncErrorHandler(checkIf
 setInterval(async () => {
     // get chats with messages
     let chat = await Chat.find({"messageCount": { $gt: 0 }});
-        chat.forEach(async (item) => {
-            // get last message and verify if it was read
-            const lastMsg = item.messages[item.messages.length - 1];
-            if (!lastMsg.read) {
-                if (lastMsg.sender.toString() == item.user1.id.toString()) {
-                    // send email to user2
-                    const user2 = await User.findById(item.user2.id);
-
-                    const output = `
-                    <h1>You have an unread message</h1>
-                    <p>Sender: ${item.user1.fullname}</p>
-                    <p>Product: ${item.product.name}</p>
-                    <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
-                    `;
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                            to: `${user2.full_name} <${user2.email}>`, // list of receivers
-                            subject: 'You have an unread message', // Subject line
-                            html: output, // html body
-                        };
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                                console.log(error);
-                            } else {
-                                console.log('Mail sent');
-                            }
-                        });
-
-                } else {
-                    // send email to user1
-                    const user1 = await User.findById(item.user1.id);
-
-                    const output = `
-                    <h1>You have an unread message</h1>
-                    <p>Sender: ${item.user2.fullname}</p>
-                    <p>Product: ${item.product.name}</p>
-                    <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
-                    `;
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                            to: `${user1.full_name} <${user1.email}>`, // list of receivers
-                            subject: 'You have an unread message', // Subject line
-                            html: output, // html body
-                        };
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                                console.log(error);
-                            } else {
-                                console.log('Mail sent');
-                            }
-                        });
-                        
-                }
+    chat.forEach(async (item) => {
+        // get last message and verify if it was read
+        const lastMsg = item.messages[item.messages.length - 1];
+        if (!lastMsg.read) {
+            if (lastMsg.sender.toString() == item.user1.id.toString()) {
+                // send email to user2
+                const user2 = await User.findById(item.user2.id);
+                const output = `
+                <h1>You have an unread message</h1>
+                <p>Sender: ${item.user1.fullname}</p>
+                <p>Product: ${item.product.name}</p>
+                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
+                `;
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${user2.full_name} <${user2.email}>`, // list of receivers
+                    subject: 'You have an unread message', // Subject line
+                    html: output, // html body
+                };
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Mail sent');
+                    }
+                });
+            } else {
+                // send email to user1
+                const user1 = await User.findById(item.user1.id);
+                const output = `
+                <h1>You have an unread message</h1>
+                <p>Sender: ${item.user2.fullname}</p>
+                <p>Product: ${item.product.name}</p>
+                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
+                `;
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${user1.full_name} <${user1.email}>`, // list of receivers
+                    subject: 'You have an unread message', // Subject line
+                    html: output, // html body
+                };
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Mail sent');
+                    }
+                });
+            }
+        }
+    });
+    if (process.env.NODE_ENV === 'production') {
+        const log = {
+            logType: 'Server',
+            message: 'New message emails sent',
+            sentFromFile: `Messages Router`,
+        };
+        Log.create(log, (err) => {
+            if (err) {
+            console.log(err);
             }
         });
+    }
   }, mailInterval);
 
 module.exports = router;

@@ -6,6 +6,7 @@ const Product = require('../models/product');
 const Deal = require('../models/deal');
 const User = require('../models/user');
 const Review = require('../models/review');
+const Log = require('../models/log');
 const { Regions } = require('../dist/js/regions');
 
 cloudinary.config({
@@ -63,60 +64,74 @@ module.exports = {
                         return res.redirect('back');
                     }
                 }
-                req.check('name', 'Name must be between 3 and 40 letters.').matches(/^[a-zA-Z ]+$/i).notEmpty().isLength({ min: 3, max: 40 });
-                req.check('country', 'Please select a country.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('state', 'Please select a state.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('city', 'Please select a city.').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('address1', 'Please input a valid first address.').matches(/^[a-z0-9., -]+$/i).notEmpty();
-                req.check('address2', 'Please input a valid second address line.').matches(/^$|[a-z0-9., -]+$/i);
-                req.check('zip', 'Please specify an alphanumeric zip code.').notEmpty().matches(/^[a-z0-9 ]+$/i);
-                user.full_name = req.body.name;
-                if (user.country != req.body.country) {
-                  user.country = req.body.country;
-                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.country': user.country}});
-                }
-                if (user.state != req.body.state) {
-                  user.state = req.body.state;
-                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.state': user.state}});
-                }
-                if (user.city != req.body.city) {
-                  user.city = req.body.city;
-                  await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
-                }
-                Regions.forEach(async (region) => {
-                  if ((user.country == region.country) && (user.continent != region.continent)) {
-                    user.continent = region.continent;
-                    await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.continent': user.continent}});
-                  }
-                });
-                user.address1 = req.body.address1;
-                user.zip = req.body.zip;
-                user.address2 = req.body.address2;
+                req.check('name', 'Name must be between 3 and 40 letters').matches(/^[a-zA-Z ]+$/i).notEmpty().isLength({ min: 3, max: 40 });
+                req.check('country', 'Please select a country').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('state', 'Please select a state').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('city', 'Please select a city').matches(/^[a-zA-Z \-,]+$/).notEmpty();
+                req.check('address1', 'Please input a valid first address').matches(/^[a-z0-9., -]+$/i).notEmpty();
+                req.check('address2', 'Please input a valid second address line').matches(/^$|[a-z0-9., -]+$/i);
+                req.check('zip', 'Please specify an alphanumeric zip code').notEmpty().matches(/^[a-z0-9 ]+$/i);
                 const errors = req.validationErrors();
                 if (errors) {
-                  res.render('dashboard/dashboard', {
-                    user: req.user,
-                    errors: errors,
-                    pageTitle: 'Dashboard - Deal Your Crypto',
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                  errors.forEach((error) => {
+                    req.flash('error', error.msg);
                   });
+                  res.redirect('back');
                 } else {
-                await user.save();
-                await Deal.updateMany({'buyer.id': user._id, 'status': 'Processing'},
-                 { 
-                   $set: { 
-                    'product.author.address.country': user.country, 
-                    'product.author.address.state': user.state, 
-                    'product.author.address.city': user.city, 
-                    'product.author.address.continent': user.continent,
-                    'product.author.address.address1': user.address1,
-                    'product.author.address.address2': user.address2,
-                    'product.author.address.zip': user.zip
-                  } 
-                });
-                req.flash('success', 'Successfully updated your profile!');
-                res.redirect(`/profile/${user._id}`);
+                  if (process.env.NODE_ENV === 'production') {
+                    const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
+                    const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];
+                    const log = {
+                      logType: 'Change',
+                      message: 'User changed personal details',
+                      data: { oldData, newData },
+                      sentFromUser: req.user._id,
+                      sentFromFile: 'Profile controller',
+                      sentFromMethod: 'profileUpdate'
+                    };
+                    Log.create(log, (err) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    });
+                  }
+                  user.full_name = req.body.name;
+                  if (user.country != req.body.country) {
+                    user.country = req.body.country;
+                    await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.country': user.country}});
+                  }
+                  if (user.state != req.body.state) {
+                    user.state = req.body.state;
+                    await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.state': user.state}});
+                  }
+                  if (user.city != req.body.city) {
+                    user.city = req.body.city;
+                    await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
+                  }
+                  Regions.forEach(async (region) => {
+                    if ((user.country == region.country) && (user.continent != region.continent)) {
+                      user.continent = region.continent;
+                      await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.continent': user.continent}});
+                    }
+                  });
+                  user.address1 = req.body.address1;
+                  user.zip = req.body.zip;
+                  user.address2 = req.body.address2;
+                  await user.save();
+                  await Deal.updateMany({'buyer.id': user._id, 'status': 'Processing'},
+                  { 
+                    $set: { 
+                      'product.author.address.country': user.country, 
+                      'product.author.address.state': user.state, 
+                      'product.author.address.city': user.city, 
+                      'product.author.address.continent': user.continent,
+                      'product.author.address.address1': user.address1,
+                      'product.author.address.address2': user.address2,
+                      'product.author.address.zip': user.zip
+                    } 
+                  });
+                  req.flash('success', 'Successfully updated your profile!');
+                  res.redirect(`/profile/${user._id}`);
                 }
             }
         });

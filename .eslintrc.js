@@ -64,7 +64,13 @@ module.exports = {
         "key-spacing": "off",
         "comma-spacing": "off",
         "array-bracket-spacing": "off",
-        "no-multi-spaces": "off"
+        "no-multi-spaces": "off",
+        "block-spacing": "off",
+        "function-paren-newline": "off",
+        "camelcase": "off",
+        "no-use-before-define": "off",
+        "array-callback-return": "off",
+        "brace-style": "off"
     },
     "plugins": [
         "security"
