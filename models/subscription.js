@@ -9,7 +9,11 @@ const SubscriptionSchema = new Schema({
   },
   username: { type: String },
   createdAt: { type: Date, default: Date.now },
-  expires: { type: Date, expires: 2592000 }
+  expireDate: { type: Date },
+  expires1: { type: Date, index: { expires: '30d' } },
+  expires3: { type: Date, index: { expires: '90d' } },
+  expires6: { type: Date, index: { expires: '180d' } },
+  expires12: { type: Date, index: { expires: '360d' } },
 });
 
 module.exports = mongoose.model('Subscription', SubscriptionSchema);

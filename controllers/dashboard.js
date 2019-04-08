@@ -14,6 +14,7 @@ const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 const jwt = require('jsonwebtoken');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
@@ -58,6 +59,10 @@ module.exports = {
       console.log('Failed to retrieve subscription.');
     }
   });
+  let date = premium.expireDate;
+  let dateObj = new Date(date);
+  var momentObj = moment(dateObj);
+  var expireDate = momentObj.format('MM-DD-YYYY');
   if(premium) {
     premium = true;
   } else {
@@ -66,6 +71,7 @@ module.exports = {
     res.render('dashboard/dashboard', { 
       user: req.user,
       premium: premium,
+      expireDate: expireDate,
       errors: req.session.errors,
       csrfToken: req.cookies._csrf,
       csrfSecret: req.body.csrfSecret,
@@ -570,7 +576,7 @@ module.exports = {
         var json = JSON.parse(body);
         var data = json.data;
         var btcrate = data.btc.rate;
-        var tokenprice = 1/btcrate; // 5 USD
+        var tokenprice = 1/btcrate; // 1 USD
         res.render('dashboard/dashboard_tokens', { 
           user: req.user,
           btcrate,
@@ -607,7 +613,6 @@ module.exports = {
         if (user.btcbalance >= totalPrice) {
             user.btcbalance -= totalPrice;
             user.feature_tokens += tokens;
-            user.markModified('currency');
             await user.save();
             req.flash('success', 'Tokens purchased successfully!');
             res.redirect('back');
@@ -615,6 +620,62 @@ module.exports = {
             req.flash('error', 'Insufficient balance.');
             res.redirect('back');
         }
+    }
+  },
+  // Buy Token Packs
+  async buyTokenPacks(req, res) {
+    let CurrentUser = await User.findById(req.params.id);
+    let tokenCost = req.body.tokenCost;
+    let tokens = Number(req.body.pack);
+    if(CurrentUser.btcbalance >= tokenCost) {
+      if(tokens === 21.5) {
+        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
+          if(err) {
+            req.flash('error', 'There was an error updating your balance, please try again.');
+            return res.redirect('back');
+          } else {
+            console.log(`Successfully purchased Basic pack.`)
+            req.flash('success', 'Successfully purchased Basic pack! Enjoy!');
+            return res.redirect(`back`);
+          }
+        });
+      } else if (tokens === 43.5) {
+        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
+          if(err) {
+            req.flash('error', 'There was an error updating your balance, please try again.');
+            return res.redirect('back');
+          } else {
+            console.log(`Successfully purchased Enthusiast pack.`)
+            req.flash('success', 'Successfully purchased Enthusiast pack! Enjoy!');
+            return res.redirect(`back`);
+          }
+        });
+      } else if (tokens === 67) {
+        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
+          if(err) {
+            req.flash('error', 'There was an error updating your balance, please try again.');
+            return res.redirect('back');
+          } else {
+            console.log(`Successfully purchased Visionary pack.`)
+            req.flash('success', 'Successfully purchased Visionary pack! Enjoy!');
+            return res.redirect(`back`);
+          }
+        });
+      } else if (tokens === 115) {
+        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
+          if(err) {
+            req.flash('error', 'There was an error updating your balance, please try again.');
+            return res.redirect('back');
+          } else {
+            console.log(`Successfully purchased Enterprise pack.`)
+            req.flash('success', 'Successfully purchased Enterprise pack! Enjoy!');
+            return res.redirect(`back`);
+          }
+        });
+      } else {
+        req.flash('error', `Not enough balance, please add ${tokenCost} more.`)
+        return res.redirect('/dashboard/addresses');
+      }
     }
   },
   // Show new product form
@@ -949,21 +1010,167 @@ module.exports = {
     req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
   },
+  // Subscription page with details
+  async subscriptionPage(req, res) {
+    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      if(err) {
+        console.log('Failed to retrieve subscription.');
+      }
+    });
+    if(premium) {
+      premium = true;
+    } else {
+      premium = false;
+    }
+    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, async function(error, response, body){
+      if(!error && response.statusCode == 200) {
+        var json = JSON.parse(body);
+        var data = json.data;
+        var btcrate = data.btc.rate;
+        var tokenprice = 1/btcrate; // 1 USD
+      res.render('dashboard/subscription', { 
+        user: req.user,
+        premium: premium,
+        tokenprice,
+        errors: req.session.errors,
+        pageTitle: 'Subscription - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+      }
+    });
+  },
+    // Subscription cancel page with details
+    async subscriptionCancelPage(req, res) {
+      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+        if(err) {
+          console.log('Failed to retrieve subscription.');
+        }
+      });
+      if(premium) {
+        premium = true;
+      } else {
+        premium = false;
+      }
+        res.render('dashboard/subscription-cancel', { 
+          user: req.user,
+          premium: premium,
+          errors: req.session.errors,
+          pageTitle: 'Cancel Subscription - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+    },
 	// Subscription Create
 	async subscriptionCreate(req, res) {
     let CurrentUser = await User.findById(req.params.id);
-    Subscription.create({
-      userid: CurrentUser._id,
-      username: CurrentUser.username,
-    }, (err, sub) => {
-      if(err) {
-        req.flash('error', err.message);
-        return res.redirect('back');
+    let subscriptionCost = req.body.subscriptionCost;
+    let expireDate = moment().add(req.body.days,"days").toISOString();
+    let days = Number(req.body.days);
+    console.log(`asta e days: ${expireDate}`);
+    if(CurrentUser.btcbalance >= subscriptionCost) {
+      let today = Date.now();
+      if(days === 30) {
+          Subscription.create({
+          userid: CurrentUser._id,
+          username: CurrentUser.username,
+          expireDate: expireDate,
+          expires1: today,
+        }, (err, sub) => {
+          if(err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          } else {
+            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +5 } }, (err) => {
+              if(err) {
+                req.flash('error', 'There was an error updating your balance, please try again.');
+                return res.redirect('back');
+              } else {
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
+                req.flash('success', 'Subscription created successfully!');
+                return res.redirect(`/dashboard`);
+              }
+            });
+          }
+        })
+      } else if (days === 90) {
+        let today = Date.now();
+        Subscription.create({
+          userid: CurrentUser._id,
+          username: CurrentUser.username,
+          expireDate: expireDate,
+          expires2: today,
+        }, (err, sub) => {
+          if(err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          } else {
+            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +15 } }, (err) => {
+              if(err) {
+                req.flash('error', 'There was an error updating your balance, please try again.');
+                return res.redirect('back');
+              } else {
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
+                req.flash('success', 'Subscription created successfully!');
+                return res.redirect(`/dashboard`);
+              }
+            });
+          }
+        })
+      } else if (days === 180) {
+        let today = Date.now();
+        Subscription.create({
+          userid: CurrentUser._id,
+          username: CurrentUser.username,
+          expireDate: expireDate,
+          expires3: today,
+        }, (err, sub) => {
+          if(err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          } else {
+            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +30 } }, (err) => {
+              if(err) {
+                req.flash('error', 'There was an error updating your balance, please try again.');
+                return res.redirect('back');
+              } else {
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
+                req.flash('success', 'Subscription created successfully!');
+                return res.redirect(`/dashboard`);
+              }
+            });
+          }
+        })
+      } else if (days === 360) {
+        let today = Date.now();
+        Subscription.create({
+          userid: CurrentUser._id,
+          username: CurrentUser.username,
+          expireDate: expireDate,
+          expires4: today,
+        }, (err, sub) => {
+          if(err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          } else {
+            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +60 } }, (err) => {
+              if(err) {
+                req.flash('error', 'There was an error updating your balance, please try again.');
+                return res.redirect('back');
+              } else {
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
+                req.flash('success', 'Subscription created successfully!');
+                return res.redirect(`/dashboard`);
+              }
+            });
+          }
+        })
       } else {
-        req.flash('success', 'Subscription created successfully!');
-        return res.redirect(`/dashboard`);
+        req.flash('error', `Not enough balance, please add ${subscriptionCost} more.`)
+        return res.redirect('/dashboard/addresses');
       }
-    })
+    }
 	},
 	// Reviews Update
 	async subscriptionCancel(req, res, next) {

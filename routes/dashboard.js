@@ -5,11 +5,11 @@ const multer = require('multer');
 
 const router = express.Router();
 
-const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, 
+const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
         productDestroy, productEdit, productUpdate, productFeature, 
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
-        subscriptionCreate, subscriptionCancel } = require('../controllers/dashboard');
+        subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -74,6 +74,10 @@ router.get('/tokens', assignCookie, isLoggedIn, asyncErrorHandler(getTokens));
 // Buy tokens route
 router.post('/tokens/:id', verifyCookie, isLoggedIn, asyncErrorHandler(buyTokens));
 
+// Buy token packs
+
+router.post('/tokens/:id/packs', isLoggedIn, asyncErrorHandler(buyTokenPacks))
+
 // Show all open offers
 router.get('/open', assignCookie, isLoggedIn, asyncErrorHandler(openProductIndex));
 
@@ -85,6 +89,14 @@ router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
+
+// GET Subscription Page
+
+router.get('/subscription', isLoggedIn, asyncErrorHandler(subscriptionPage));
+
+// GET Cancel Subscription Page
+
+router.get('/subscription-cancel', isLoggedIn, asyncErrorHandler(subscriptionCancelPage))
 
 // POST Subscription create
 

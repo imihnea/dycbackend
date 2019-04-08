@@ -67,10 +67,10 @@
               <div class="plan-header">Token Packs</div>
               <div class="plan-price"><span class="plan-price-amount">&nbsp;</span></div>
               <div class="plan-items">
+                <div class="plan-item">USD Equivalent</div>
                 <div class="plan-item">Tokens</div>
                 <div class="plan-item">Bonus Tokens</div>
                 <div class="plan-item">(%) Saved</div>
-                <div class="plan-item">Premium Membership</div>
               </div>
               <div class="plan-footer">
           
@@ -78,57 +78,73 @@
             </div>
             <div class="pricing-plan">
               <div class="plan-header">Basic</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>19.99</span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*19.99).toFixed(5) %></span></div>
               <div class="plan-items">
+                <div class="plan-item" data-feature="USD Equivalent">$19.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">21.5</div>
                 <div class="plan-item" data-feature="Bonus Tokens">1.5</div>
                 <div class="plan-item" data-feature="(%) Saved">7.5%</div>
-                <div class="plan-item" data-feature="Premium Membership">-</div>
               </div>
               <div class="plan-footer">
-                <button class="button is-fullwidth">Choose</button>
+                  <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
+                    <input type="hidden" name="pack" value="21.5" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*19.99).toFixed(5) %>" />
+                    <button class="button is-fullwidth">Choose</button>
+                </form>
               </div>
             </div>
           
             <div class="pricing-plan is-warning">
               <div class="plan-header">Enthusiast</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>39.99</span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*39.99).toFixed(5) %></span></div>
               <div class="plan-items">
+                <div class="plan-item" data-feature="USD Equivalent">$39.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">43.5</div>
                 <div class="plan-item" data-feature="Bonus Tokens">3.5</div>
                 <div class="plan-item" data-feature="(%) Saved">8.75%</div>
-                <div class="plan-item" data-feature="Premium Membership">1 Month</div>
               </div>
               <div class="plan-footer">
-                <button class="button is-fullwidth">Choose</button>
+                  <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
+                    <input type="hidden" name="pack" value="43.5" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*39.99).toFixed(5) %>" />
+                    <button class="button is-fullwidth">Choose</button>
+                </form>
               </div>
             </div>
           
             <div class="pricing-plan is-active">
               <div class="plan-header">Visionary</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>59.99</span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*59.99).toFixed(5) %></span></div>
               <div class="plan-items">
+                <div class="plan-item" data-feature="USD Equivalent">$59.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">67</div>
                 <div class="plan-item" data-feature="Bonus Tokens">7</div>
                 <div class="plan-item" data-feature="(%) Saved">11.66%</div>
-                <div class="plan-item" data-feature="Premium Membership">2 Months</div>
               </div>
               <div class="plan-footer">
-                <button class="button is-fullwidth">Choose</button>
+                  <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
+                    <input type="hidden" name="pack" value="67" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*59.99).toFixed(5) %>" />
+                    <button class="button is-fullwidth">Choose</button>
+                </form>
               </div>
             </div>
           
             <div class="pricing-plan is-danger">
               <div class="plan-header">Enterprise</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">$</span>99.99</span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*99.99).toFixed(5) %></span></div>
               <div class="plan-items">
+                <div class="plan-item" data-feature="USD Equivalent">$99.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">115</div>
                 <div class="plan-item" data-feature="Bonus Tokens">15</div>
                 <div class="plan-item" data-feature="(%) Saved">15%</div>
-                <div class="plan-item" data-feature="Premium Membership">3 Months</div>
               </div>
               <div class="plan-footer">
-                <button class="button is-fullwidth">Choose</button>
+                  <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
+                    <input type="hidden" name="pack" value="115" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*99.99).toFixed(5) %>" />
+                    <button class="button is-fullwidth">Choose</button>
+                </form>
               </div>
             </div>
           </div>

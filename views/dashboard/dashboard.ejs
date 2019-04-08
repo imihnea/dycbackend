@@ -16,6 +16,7 @@
                             <h1 class="title">Standard Account</h1>
                         <% } else { %>
                             <h1 class="title">Premium Account</h1>
+                            <p class="subtitle">Expires on: <%= expireDate %></p>
                         <% } %>
                         <p class="subtitle">Personal Details</p>
                         <div class="container is-fluid">
@@ -86,7 +87,11 @@
                                 <div class="columns level-item">
                                     <div class="column">
                                         <!-- Every user will have a default profile pic  -->
+                                        <% if(premium !== true) { %>
                                         <img src="<%= user.avatar.url %>" class="profilepic">
+                                        <% } else { %>
+                                        <img src="<%= user.avatar.url %>" class="premium">
+                                        <% } %>
                                     </div>
                                     <div class="column">
                                         <div class="file-upload">
@@ -117,13 +122,7 @@
                     <div class="buttons is-centered">
                             <a href="/profile/<%= user._id %>"><button class="button is-primary smmargin is-rounded">View Profile</button></a>
                         <% if(premium !== true) { %>
-                            <form action="/dashboard/<%= user._id %>/subscription" method="POST">
-                                <button class="button is-primary smmargin is-rounded">Upgrade Account</button>
-                            </form>
-                        <% } else { %>
-                            <form action="/dashboard/<%= user._id %>/subscription/cancel" method="POST">
-                                <button class="button is-primary smmargin is-rounded">Cancel Premium</button>
-                            </form>
+                            <a href="/dashboard/subscription"><button class="button is-primary smmargin is-rounded">Upgrade Account</button></a>
                         <% } %>
                     </div>
                 </div>
@@ -186,9 +185,6 @@
             </div>
             <div class="column"></div>
         </div>
-        
-
-        
     </div>
 </div>
 
