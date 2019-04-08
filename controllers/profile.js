@@ -78,21 +78,23 @@ module.exports = {
                   });
                   res.redirect('back');
                 } else {
-                  const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
-                  const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];
-                  const log = {
-                    logType: 'Change',
-                    message: 'User changed personal details',
-                    data: { oldData, newData },
-                    sentFromUser: req.user._id,
-                    sentFromFile: 'Profile controller',
-                    sentFromMethod: 'profileUpdate'
-                  };
-                  Log.create(log, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
+                  if (process.env.NODE_ENV === 'production') {
+                    const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
+                    const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];
+                    const log = {
+                      logType: 'Change',
+                      message: 'User changed personal details',
+                      data: { oldData, newData },
+                      sentFromUser: req.user._id,
+                      sentFromFile: 'Profile controller',
+                      sentFromMethod: 'profileUpdate'
+                    };
+                    Log.create(log, (err) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    });
+                  }
                   user.full_name = req.body.name;
                   if (user.country != req.body.country) {
                     user.country = req.body.country;

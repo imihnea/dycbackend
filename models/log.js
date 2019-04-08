@@ -15,7 +15,20 @@ const LogSchema = new Schema({
     },
     sentFromFile: String,
     sentFromMethod: String,
-    createdAt: { type: Date, default: Date.now }
+    deal: {     
+        type: Schema.Types.ObjectId,
+        ref: 'Deal' 
+    },
+    chat: {
+        type: Schema.Types.ObjectId,
+        ref: 'Chat'
+    },
+    product:  {     
+        type: Schema.Types.ObjectId,
+        ref: 'Product' 
+    },
+    createdAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date, default: Date.now() + 90 * 60 * 1000 } // 90 min; logs get sent every 60 mins
 });
 
 module.exports = mongoose.model('Log', LogSchema);

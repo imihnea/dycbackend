@@ -4,6 +4,7 @@ const path = require('path');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Deal = require('../models/deal');
+const { createChatErrorLog, createDealLog } = require('./logs');
 const nodemailer = require('nodemailer');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
@@ -80,6 +81,7 @@ module.exports = {
             if (messagesRead != 0) {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
+                        createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'updateMessages', err);
                         console.log(err);
                     }
                 });
@@ -99,6 +101,7 @@ module.exports = {
             if (messagesRead != 0) {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
+                        createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'updateMessagesDeal', err);
                         console.log(err);
                     }
                 });
@@ -144,7 +147,6 @@ module.exports = {
                     }
                 };
                 chat = await Chat.create(newChat);
-                
                 res.redirect(`/messages/${chat._id}`);
             }
         }        
@@ -220,12 +222,14 @@ module.exports = {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
+                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessage', err);
                 }
             });
         } else if (chat.user2.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
+                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessage', err);
                 }
             });
         }
@@ -250,7 +254,7 @@ module.exports = {
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
-                    console.log(error);
+                        console.log(error);
                     }
                 });
             } 
@@ -292,12 +296,14 @@ module.exports = {
         if (chat.user1.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
+                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessageDeal', err);
                     console.log(err);
                 }
             });
         } else if (chat.user2.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
+                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessageDeal', err);
                     console.log(err);
                 }
             });

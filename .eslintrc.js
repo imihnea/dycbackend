@@ -69,7 +69,8 @@ module.exports = {
         "function-paren-newline": "off",
         "camelcase": "off",
         "no-use-before-define": "off",
-        "array-callback-return": "off"
+        "array-callback-return": "off",
+        "brace-style": "off"
     },
     "plugins": [
         "security"

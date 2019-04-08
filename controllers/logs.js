@@ -77,75 +77,157 @@ async function uploadLog(auth) {
         version: 'v3', 
         auth
     });
-    
-    Log.find({createdAt: { $lt: Date.now() }}, (err, logs) => {
-        if (err) {
-          const log = {
-            logType: 'Error',
-            message: err,
-            sentFromFile: 'Server',
-            sentFromMethod: 'Find Old Logs'
-          };
-          Log.create(log, (err) => {
-            if (err) {
-              console.log(err);
-            }
-          });
-        } else {
-          if (logs.length > 0) {
-            let csv;
-            try {
-              const parser = new Parser(opts);
-              csv = parser.parse(logs);            
-              const dateTime = moment().format('DD-MM-YYYY');
-              const filePath = path.join(__dirname, "..", "logs", "Log " + dateTime + ".csv");
-            
-              fs.writeFile(filePath, csv, async function (err) {
-                if (err) {
-                  return console.log(err);
-                } else {
-                  await drive.files.create({
-                      requestBody: {
-                          name: `Log ${moment().format('DD-MM-YYYY')}`,
-                          mimeType: 'text/csv'    
-                      },
-                      media: {
-                          mimeType: 'text/csv',
-                          body: fs.createReadStream(filePath)
-                      }
-                  }, (err) => {
+    if (process.env.NODE_ENV === 'production') {
+      Log.find({createdAt: { $lt: Date.now() }}, (err, logs) => {
+          if (err) {
+            const log = {
+              logType: 'Error',
+              message: err,
+              sentFromFile: 'Server',
+              sentFromMethod: 'Find Old Logs'
+            };
+            Log.create(log, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          } else {
+            if (logs.length > 0) {
+              let csv;
+              try {
+                const parser = new Parser(opts);
+                csv = parser.parse(logs);            
+                const dateTime = moment().format('DD-MM-YYYY-hh');
+                const filePath = path.join(__dirname, "..", "logs", "Log " + dateTime + ".csv");
+              
+                fs.writeFile(filePath, csv, async function (err) {
+                  if (err) {
+                    return console.log(err);
+                  } else {
+                    await drive.files.create({
+                        requestBody: {
+                            name: `Log ${moment().format('DD-MM-YYYY-hh')}`,
+                            mimeType: 'text/csv'    
+                        },
+                        media: {
+                            mimeType: 'text/csv',
+                            body: fs.createReadStream(filePath)
+                        }
+                    }, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                    fs.unlinkSync(filePath); // delete file
+                    Log.deleteMany({createdAt: { $lt: Date.now() }}, (err) => {
                       if (err) {
                           console.log(err);
                       }
-                  });
-                  fs.unlinkSync(filePath); // delete file
-                  Log.deleteMany({createdAt: { $lt: Date.now() }}, (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                  });
-                  return console.log('Log file upload sequence finished.');
-                }
-              });
-            } catch (err) {
-              const log = {
-                logType: 'Error',
-                message: err,
-                sentFromFile: 'Server',
-                sentFromMethod: 'Convert to CSV'
-              };
-              Log.create(log, (err) => {
-                if (err) {
-                  console.log(err);
-                }
-              });
+                    });
+                    return console.log('Log file upload sequence finished.');
+                  }
+                });
+              } catch (err) {
+                const log = {
+                  logType: 'Error',
+                  message: err,
+                  sentFromFile: 'Server',
+                  sentFromMethod: 'Convert to CSV'
+                };
+                Log.create(log, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+              }
             }
           }
-        }
-    });
+      });
+    }
 }
 
 module.exports = {
     SCOPES,
     uploadLog,
+    createErrorLog(user, controller, path, method, action, err) {
+      if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'Error',
+          message: err.message,
+          sentFromFile: `${controller} Controller - ${method} ${path}`,
+          sentFromMethod: `${action}`,
+          sentFromUser: user
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    },
+    createDealLog(user, deal, controller, path, method, action) {
+      if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'Deal',
+          deal: `${deal}`,
+          sentFromFile: `${controller} Controller - ${method} ${path}`,
+          sentFromMethod: `${action}`,
+          sentFromUser: user
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    },
+    createDealErrorLog(user, controller, path, method, action, err, deal) {
+      if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'Error',
+          deal: `${deal}`,
+          message: err.message,
+          sentFromFile: `${controller} Controller - ${method} ${path}`,
+          sentFromMethod: `${action}`,
+          sentFromUser: user
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    },
+    createUserLog(user, controller, path, method, action) {
+      if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'User',
+          sentFromFile: `${controller} Controller - ${method} ${path}`,
+          sentFromMethod: `${action}`,
+          sentFromUser: user
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    },
+    createChatErrorLog(user, chat, controller, path, method, action, err) {
+      if (process.env.NODE_ENV === 'production') {
+        const log = {
+          logType: 'Error',
+          chat: `${chat}`,
+          message: err.message,
+          sentFromFile: `${controller} Controller - ${method} ${path}`,
+          sentFromMethod: `${action}`,
+          sentFromUser: user
+        };
+        Log.create(log, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    },
 };

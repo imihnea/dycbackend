@@ -135,6 +135,5 @@ module.exports = {
 			req.flash('error', 'Something went wrong. Please try again.');
 			res.redirect('back');
 		}
-
 	},
 }
