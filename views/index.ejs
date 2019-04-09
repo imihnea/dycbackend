@@ -72,6 +72,8 @@
         <% products.docs.forEach((product) => { %>
             <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= product._id %>/view">
+                    <span style="width: 83px; height: 84px; left: 0; bottom: 0; top: 0; z-index: 2; position: absolute;
+                    background: url('../dist/img/featured.png') no-repeat;"></span>
                     <div class="card-image">
                         <figure class="image featimg">
                             <img src="<%= product.images[0].url %>" class="featimgs">
@@ -80,7 +82,7 @@
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
-                                <p class="title is-5"><%= product.name %> </p>
+                                <p class="title is-5" style="overflow: hidden;"><%= product.name %> </p>
                             </div>
                         </div>
                         <div class="accepted_currencies frame">
@@ -96,6 +98,8 @@
         <% fillProducts.forEach((fillProduct) => { %>
             <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= fillProduct._id %>/view">
+                    <span style="width: 83px; height: 84px; left: 0; bottom: 0; top: 0; z-index: 2; position: absolute;
+                    background: url('../dist/img/featured.png') no-repeat;"></span>
                     <div class="card-image">
                         <figure class="image featimg">
                             <img src="<%= fillProduct.images[0].url %>" class="featimgs">
@@ -104,7 +108,7 @@
                     <div class="card-content">
                         <div class="media">
                             <div class="media-content">
-                                <p class="title is-5"><%= fillProduct.name %> </p>
+                                <p class="title is-5" style="overflow: hidden;"><%= fillProduct.name %> </p>
                             </div>
                         </div>
                         <div class="accepted_currencies frame">
