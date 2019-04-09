@@ -126,7 +126,7 @@ input, select, .dd-btn{
 }
 
 .dash-select:not(.is-multiple):not(.is-loading)::after {
-    right: 2em !important;
+    right: 1em !important;
 }
 
 .dash-select{
@@ -355,7 +355,7 @@ div.content{
 .dashTop{
     background: -webkit-linear-gradient(to right, #3269ca, #4f38a4);
     background: linear-gradient(to right, #3269ca, #4f38a4);
-    width: 30vw;
+    width: 70%;
     margin: auto;
 }
 
@@ -365,6 +365,17 @@ div.content{
     box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
     padding-top: 2vh !important;
     padding-bottom: 2vh !important;
+}
+
+.featured{
+    width: 83px; 
+    height: 84px; 
+    left: 0; 
+    bottom: 0; 
+    top: 0; 
+    z-index: 2; 
+    position: absolute;
+    background: url('../img/featured.png') no-repeat;
 }
 
 .smallerCenter{
@@ -502,6 +513,20 @@ hr{
 
 .card-content{
     padding-top: 0 !important;
+    padding-left: 0.5vw !important;
+    padding-right: 0.5vw !important;
+}
+
+
+
+@media only screen and (max-width: 1087px ) {
+    .dashboard-menu{
+        display: none;
+    }
+
+    .dashboard-menu.is-active{
+        display: block !important;
+    }
 }
 
 .featimgs{

@@ -50,17 +50,21 @@ a.panel-block:hover{
 
 .address{
     display: flex;
+    justify-content: space-evenly;
 }
 
 .adrlabel{
-    width: 11%;
-    /* TODO: Breakpoints */
     margin-top: 0.75vh;
 }
 
 .adradr{
-    width: 80%;
-    margin-left: 1vw;
+    width: 70% !important;
+    /* margin-left: 1vw; */
+}
+
+#repeatableLabel:hover{
+    cursor: pointer;
+    color: green;
 }
 
 .filencat{
@@ -277,7 +281,7 @@ hr{
 }
 
 .cont-select{
-    width: 90% !important;
+    width: 100% !important;
     margin-top: 1vh !important;
 }
 

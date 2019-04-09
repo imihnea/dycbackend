@@ -26,34 +26,32 @@
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                         <input class="input smmargin" style="width: 90%;" name="product[name]" value="<%= product.name %>" type="text" required />
-                        <div style="display: flex; width:90%; margin:auto;">
-                            <div class="select cont-select catSelectLeft">
-                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
-                                    <option disabled>Main Category</option>
-                                    <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
-                                    <option value="Electronics" <% if (product.category[1] == 'Electronics') { %> selected <% } %>>Electronics</option>
-                                    <option value="Fashion & Beauty" <% if (product.category[1] == 'Fashion & Beauty') { %> selected <% } %>>Fashion & Beauty</option>
-                                    <option value="Home Improvement" <% if (product.category[1] == 'Home Improvement') { %> selected <% } %>>Home Improvement</option>
-                                    <option value="Leisure Time" <% if (product.category[1] == 'Leisure Time') { %> selected <% } %>>Leisure Time</option>
-                                    <option value="Mothers & Babies" <% if (product.category[1] == 'Mothers & Babies') { %> selected <% } %>>Mothers & Babies</option>
-                                    <option value="Pet Supplies" <% if (product.category[1] == 'Pet Supplies') { %> selected <% } %>>Pet Supplies</option>
-                                    <option value="Real Estate" <% if (product.category[1] == 'Real Estate') { %> selected <% } %>>Real Estate</option>
-                                    <option value="Sports & Outdoors" <% if (product.category[1] == 'Sports & Outdoors') { %> selected <% } %>>Sports & Outdoors</option>
-                                    <option value="Vehicles" <% if (product.category[1] == 'Vehicles') { %> selected <% } %>>Vehicles</option>
-                                </select>
-                            </div>
-                            <div class="select cont-select catSelectCenter">
-                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
-                                    <option value="<%= product.category[2] %>" selected><%= product.category[2] %></option>
-                                </select>
-                            </div>
-                            <div class="select cont-select catSelectRight">
-                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
-                                    <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
-                                </select>
-                            </div>
+                        <div class="select cont-select catSelectLeft">
+                            <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
+                                <option disabled>Main Category</option>
+                                <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
+                                <option value="Electronics" <% if (product.category[1] == 'Electronics') { %> selected <% } %>>Electronics</option>
+                                <option value="Fashion & Beauty" <% if (product.category[1] == 'Fashion & Beauty') { %> selected <% } %>>Fashion & Beauty</option>
+                                <option value="Home Improvement" <% if (product.category[1] == 'Home Improvement') { %> selected <% } %>>Home Improvement</option>
+                                <option value="Leisure Time" <% if (product.category[1] == 'Leisure Time') { %> selected <% } %>>Leisure Time</option>
+                                <option value="Mothers & Babies" <% if (product.category[1] == 'Mothers & Babies') { %> selected <% } %>>Mothers & Babies</option>
+                                <option value="Pet Supplies" <% if (product.category[1] == 'Pet Supplies') { %> selected <% } %>>Pet Supplies</option>
+                                <option value="Real Estate" <% if (product.category[1] == 'Real Estate') { %> selected <% } %>>Real Estate</option>
+                                <option value="Sports & Outdoors" <% if (product.category[1] == 'Sports & Outdoors') { %> selected <% } %>>Sports & Outdoors</option>
+                                <option value="Vehicles" <% if (product.category[1] == 'Vehicles') { %> selected <% } %>>Vehicles</option>
+                            </select>
                         </div>
-                        <div class="select cont-select">
+                        <div class="select cont-select catSelectCenter">
+                            <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
+                                <option value="<%= product.category[2] %>" selected><%= product.category[2] %></option>
+                            </select>
+                        </div>
+                        <div class="select cont-select catSelectRight">
+                            <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
+                                <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
+                            </select>
+                        </div>
+                        <div class="select cont-select" style="width: 90% !important;">
                             <select type="text" name="product[condition]" style="width: 100%" required>
                                 <option disabled>Condition</option>
                                 <option value="Not Specified" <% if (product.condition == 'Not Specified') { %> selected <% } %> >Not Specified</option>

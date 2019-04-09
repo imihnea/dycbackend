@@ -72,8 +72,7 @@
         <% products.docs.forEach((product) => { %>
             <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= product._id %>/view">
-                    <span style="width: 83px; height: 84px; left: 0; bottom: 0; top: 0; z-index: 2; position: absolute;
-                    background: url('../dist/img/featured.png') no-repeat;"></span>
+                    <span class="featured"></span>
                     <div class="card-image">
                         <figure class="image featimg">
                             <img src="<%= product.images[0].url %>" class="featimgs">
@@ -98,8 +97,9 @@
         <% fillProducts.forEach((fillProduct) => { %>
             <div class="column card feat_card frame" style="flex-grow: 0;">
                 <a href="/products/<%= fillProduct._id %>/view">
-                    <span style="width: 83px; height: 84px; left: 0; bottom: 0; top: 0; z-index: 2; position: absolute;
-                    background: url('../dist/img/featured.png') no-repeat;"></span>
+                    <!-- Just for testing -->
+                    <span class="featured"></span>
+                    <!-- For testing -->
                     <div class="card-image">
                         <figure class="image featimg">
                             <img src="<%= fillProduct.images[0].url %>" class="featimgs">

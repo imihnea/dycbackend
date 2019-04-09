@@ -10,7 +10,7 @@
         <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
-                <div class="frame">
+                <div class="frame smallerCenter">
                     <form action="/profile/<%= user._id %>/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data">
                         <% if(premium !== true) { %>
                             <h1 class="title">Standard Account</h1>
@@ -36,80 +36,78 @@
                                         <i class="fas fa-user-tie"></i>
                                     </span>
                             </div>
-                            <div class="level" style="flex-wrap: wrap;">
-                                <div class="column select cont-select" style="padding: 0 !important">
-                                    <select name="country" class="countries" id="countryId" style="width: 100%;" required>
-                                        <% if (user.country) { %>
-                                        <option value="<%= user.country %>" selected><%= user.country %></option>
-                                        <% } else { %>
-                                        <option value="">Select Country</option>
-                                        <% } %>                                        
-                                    </select>
-                                </div>
-                                <div class="column select dash-select" style="padding-top: 0 !important">
-                                    <select name="state" class="states" id="stateId" style="width: 100%;" required>
-                                        <% if (user.country) { %>
-                                        <option value="<%= user.state %>"><%= user.state %></option>
-                                        <% } else { %>
-                                        <option value="">Select State</option>
-                                        <% } %>   
-                                    </select>
-                                </div>
-                                <div class="column select cont-select" style="padding: 0 !important">
-                                    <select name="city" class="cities" id="cityId" style="width: 100%;" required>
-                                        <% if (user.country) { %>
-                                        <option value="<%= user.city %>"><%= user.city %></option>
-                                        <% } else { %>
-                                        <option value="">Select City</option>
-                                        <% } %>   
-                                    </select>
-                                </div>
+                            <div class="level column select cont-select" style="padding: 0 !important; margin-left: auto; margin-right: auto;">
+                                <select name="country" class="countries" id="countryId" style="width: 100%;" required>
+                                    <% if (user.country) { %>
+                                    <option value="<%= user.country %>" selected><%= user.country %></option>
+                                    <% } else { %>
+                                    <option value="">Select Country</option>
+                                    <% } %>                                        
+                                </select>
                             </div>
-                        <div class="level">
-                                <div class="columns level-item">
-                                    <div class="column is-three-fifths">
-                                        <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
-                                        <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
-                                    </div>
-                                    <div class="column">
-                                        <input class="input" name="zip" type="text" placeholder="ZIP Code*"
-                                        <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
-                                    </div>
-                                </div>   
-                        </div>
+                            <div class="level column select dash-select" style="padding-top: 0 !important; width: 100%; margin-left: auto; margin-right: auto; padding-left: 0; padding-right: 0;">
+                                <select name="state" class="states" id="stateId" style="width:100%;" required>
+                                    <% if (user.country) { %>
+                                    <option value="<%= user.state %>"><%= user.state %></option>
+                                    <% } else { %>
+                                    <option value="">Select State</option>
+                                    <% } %>   
+                                </select>
+                            </div>
+                            <div class="level column select cont-select" style="padding: 0 !important; margin-left: auto; margin-right: auto;">
+                                <select name="city" class="cities" id="cityId" style="width: 100%;" required>
+                                    <% if (user.country) { %>
+                                    <option value="<%= user.city %>"><%= user.city %></option>
+                                    <% } else { %>
+                                    <option value="">Select City</option>
+                                    <% } %>   
+                                </select>
+                            </div>
+                            <div class="columns level">
+                                <div class="column is-three-fifths">
+                                    <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
+                                    <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
+                                </div>
+                                <div class="column">
+                                    <input class="input" name="zip" type="text" placeholder="ZIP Code*"
+                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
+                                </div>
+                            </div>  
                                         
                             <div class="level">
                                 <input class="input" name="address2" placeholder="Address Line 2" type="text"
                                 <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
                             </div>
     
-                            <div class="level">
-                                <div class="columns level-item">
-                                    <div class="column">
-                                        <!-- Every user will have a default profile pic  -->
-                                        <% if(premium !== true) { %>
-                                        <img src="<%= user.avatar.url %>" class="profilepic">
-                                        <% } else { %>
-                                        <img src="<%= user.avatar.url %>" class="premium">
-                                        <% } %>
-                                    </div>
-                                    <div class="column">
-                                        <div class="file-upload">
-                                            <div>
-                                                <label for="upload[0]" class="file-upload__label">
-                                                    <span style="font-size: 5rem;">
-                                                        <i class="far fa-plus-square square"></i>
-                                                        <i class="far fa-check-square hide"></i>
-                                                    </span>
-                                                </label>
-                                                <p>New profile picture</p>
-                                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
-                                                <label class="file-delete__label hide">
-                                                    <span>
-                                                        <i class="far fa-trash-alt"></i>
-                                                    </span>
-                                                </label>
-                                            </div>
+                            <div class="columns level">
+                                <div class="column">
+                                    <!-- Every user will have a default profile pic  -->
+                                    <% if(premium !== true) { %>
+                                        <figure class="image">
+                                            <img src="<%= user.avatar.url %>" class="profilepic">
+                                        </figure>
+                                    <% } else { %>
+                                        <figure class="image">
+                                            <img src="<%= user.avatar.url %>" class="premium">
+                                        </figure>
+                                    <% } %>
+                                </div>
+                                <div class="column">
+                                    <div class="file-upload">
+                                        <div>
+                                            <label for="upload[0]" class="file-upload__label">
+                                                <span style="font-size: 5rem;">
+                                                    <i class="far fa-plus-square square"></i>
+                                                    <i class="far fa-check-square hide"></i>
+                                                </span>
+                                            </label>
+                                            <p>New profile picture</p>
+                                            <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="avatar">
+                                            <label class="file-delete__label hide">
+                                                <span>
+                                                    <i class="far fa-trash-alt"></i>
+                                                </span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -127,10 +125,10 @@
                     </div>
                 </div>
                 <br>
-                <div class="frame">
+                <div class="frame smallerCenter">
                     <h2 class="subtitle">Credentials</h2>
-                    <div class="columns buttons">
-                        <div class="column chpw">
+                    <div class="buttons" style="justify-content: space-evenly;">
+                        <div class="chpw">
                             <form action="/forgot" method="POST">
                                 <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
                                 <div class="control smmargin">
@@ -138,7 +136,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="column chemail">
+                        <div class="chemail">
                             <form action="/forgotemail" method="POST">
                                 <input class="input smmargin" name="email" value="<%= user.email %>" type="hidden" required />
                                 <div class="control smmargin">
@@ -147,7 +145,7 @@
                             </form>
                         </div>
                         <% if(currentUser.twofactor === true) { %> 
-                        <div class="column chemail">
+                        <div class="chemail">
                             <div class="control smmargin">
                                 <button class="button is-primary deactivate is-rounded">Deactivate Two-Factor Authentication</button>
                             </div>
@@ -172,7 +170,7 @@
                             </div>
                         </div>
                         <% } else { %>
-                            <div class="column chemail">
+                            <div class="chemail">
                                 <form action="/2factor">
                                     <div class="control smmargin">
                                         <button class="button is-primary is-rounded">Activate Two-Factor Authentication</button>

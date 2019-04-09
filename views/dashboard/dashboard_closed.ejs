@@ -22,17 +22,17 @@
                         <main id="hits" style="width: 85%; margin: auto;">
                         <% products.docs.forEach((product) => { %>
                             <article class="hit columns frame">
-                                <div class="column is-one-fifth product-picture-wrapper">
+                                <div class="column product-picture-wrapper">
+                                    <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <div class="product-picture">
-                                        <img src="<%= product.images[0].url %>">
+                                        <figure class="image is-square">
+                                            <img src="<%= product.images[0].url %>" style="margin: auto;">
+                                        </figure>
                                     </div>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
                                         <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
-                                        <% if (product.feat_1.status === true) { %>
-                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
-                                        <% } %>
                                         <p>
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product.avgRating)) { %>
@@ -51,8 +51,8 @@
                                     </div>
                                 </div>
                                 <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
-                                    <div class="prices openPrices frame">
-                                        <p class="price_text"> <%= product.btcPrice %></p>
+                                    <div class="prices openPrices frame" style="width: 100%;">
+                                        <p class="price_text"><%= product.btcPrice %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
                                 </div>

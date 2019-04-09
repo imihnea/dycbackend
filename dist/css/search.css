@@ -177,6 +177,16 @@ aside .facet-count {
   min-width: 120px;
 }
 
+.product-picture-wrapper{
+  background: #6f7566a3;
+  margin-bottom: 1vh !important;
+  overflow: hidden;
+}
+
+.price-text{
+  margin-left: 1vw;
+}
+
 .input-group {
   width: auto;
 }

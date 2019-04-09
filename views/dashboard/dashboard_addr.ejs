@@ -30,12 +30,12 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="address">
-                                        <label class="label adrlabel">Current<br/>  Withdrawal Address</label>
+                                        <label class="label adrlabel">Current<br/> Address</label>
                                         <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" readonly />
                                     </div>
                                     <form action="/dashboard/addresses" method="POST">
                                         <div class="address">
-                                            <label class="label adrlabel">New <br/> Withdrawal Address</label>
+                                            <label class="label adrlabel">New <br/> Address</label>
                                             <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
                                         </div>
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">

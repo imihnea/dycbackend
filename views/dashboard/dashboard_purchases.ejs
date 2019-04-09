@@ -24,9 +24,11 @@
                         <main id="hits" style="width: 85%; margin: auto;">
                             <% deals.docs.forEach((deal) => { %>
                                 <article class="hit columns frame">
-                                        <div class="column is-one-fifth product-picture-wrapper">
+                                        <div class="column product-picture-wrapper">
                                             <div class="product-picture">
-                                                <img src="<%= deal.product.imageUrl %>">
+                                                <figure class="image is-square">
+                                                    <img src="<%= deal.product.imageUrl %>">
+                                                </figure>
                                             </div>
                                         </div>
                                         <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -43,8 +45,8 @@
                                             </div>
                                         </div>
                                         <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
-                                            <div class="prices openPrices frame">
-                                                <p class="price_text"> <%= deal.price %></p>
+                                            <div class="prices openPrices frame" style="width: 100%;">
+                                                <p class="price_text"><%= deal.price %></p>
                                                 <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
 
                                             </div>

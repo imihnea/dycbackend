@@ -26,34 +26,32 @@
                         <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                             <input class="input" style="width: 90%; " name="product[name]" placeholder="Name" type="text" required />
-                            <div style="display: flex; width:90%; margin:auto;">
-                                <div class="select cont-select catSelectLeft">
-                                    <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
-                                        <option disabled selected>Main Category</option>
-                                        <option value="Collectibles & Art">Collectibles & Art</option>
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Fashion & Beauty">Fashion & Beauty</option>
-                                        <option value="Home Improvement">Home Improvement</option>
-                                        <option value="Leisure Time">Leisure Time</option>
-                                        <option value="Mothers & Babies">Mothers & Babies</option>
-                                        <option value="Pet Supplies">Pet Supplies</option>
-                                        <option value="Real Estate">Real Estate</option>
-                                        <option value="Sports & Outdoors">Sports & Outdoors</option>
-                                        <option value="Vehicles">Vehicles</option>
-                                    </select>
-                                </div>
-                                <div class="select cont-select catSelectCenter">
-                                    <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
-                                        <option disabled selected>Secondary Category</option>
-                                    </select>
-                                </div>
-                                <div class="select cont-select catSelectRight">
-                                    <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
-                                        <option disabled selected>Tertiary Category</option>
-                                    </select>
-                                </div>
+                            <div class="select cont-select catSelectLeft">
+                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
+                                    <option disabled selected>Main Category</option>
+                                    <option value="Collectibles & Art">Collectibles & Art</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Fashion & Beauty">Fashion & Beauty</option>
+                                    <option value="Home Improvement">Home Improvement</option>
+                                    <option value="Leisure Time">Leisure Time</option>
+                                    <option value="Mothers & Babies">Mothers & Babies</option>
+                                    <option value="Pet Supplies">Pet Supplies</option>
+                                    <option value="Real Estate">Real Estate</option>
+                                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                                    <option value="Vehicles">Vehicles</option>
+                                </select>
                             </div>
-                            <div class="select cont-select">
+                            <div class="select cont-select catSelectCenter">
+                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
+                                    <option disabled selected>Secondary Category</option>
+                                </select>
+                            </div>
+                            <div class="select cont-select catSelectRight">
+                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
+                                    <option disabled selected>Tertiary Category</option>
+                                </select>
+                            </div>
+                            <div class="select cont-select" style="width: 90% !important;">
                                 <select type="text" name="product[condition]" style="width: 100%" required>
                                     <option value="Not Specified" disabled selected>Condition</option>
                                     <option value="Brand New">Brand New</option>
