@@ -123,8 +123,9 @@
                                                 <button class="delete deleteCoinswitch is-large" aria-label="close"></button>
                                             </header>
                                             <section class="modal-card-body">
+                                                    <div class="lds-roller" id="altcoinsSpinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                                     <div class="steps" id="stepsDemo">
-                                                        <div class="step-item is-active is-success">
+                                                        <div class="step-item is-active">
                                                             <div class="step-marker">1</div>
                                                             <div class="step-details">
                                                             <p class="step-title">Pair</p>
@@ -150,31 +151,31 @@
                                                         </div>
                                                         <div class="steps-content">
                                                             <div class="step-content has-text-centered is-active">
-                                                            <div class="field is-horizontal">
-                                                                <div class="field-label is-normal">
-                                                                <label class="label">Receive BTC</label>
-                                                                </div>
-                                                                <div class="field-body">
-                                                                <div class="field">
-                                                                    <div class="control">
-                                                                        <input class="input" name="btc_value" placeholder="Balance: <% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" readonly/>
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Receive BTC</label>
+                                                                    </div>
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <input class="input" name="btc_value" placeholder="Balance: <% if (user.btcbalance) { %><%= user.btcbalance %> BTC<% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly data-validate="require" readonly/>
+                                                                        </div>
+                                                                    </div>
                                                                     </div>
                                                                 </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="field is-horizontal">
-                                                                <div class="field-label is-normal">
-                                                                <label class="label">Deposit With</label>
-                                                                </div>
-                                                                <div class="field-body">
-                                                                <div class="field">
-                                                                    <div class="control">
-                                                                        <select name="counter" class="select" id="counter" style="width: 100%;" data-validate="require">
-                                                                        </select>
+                                                                <div class="field is-horizontal">
+                                                                    <div class="field-label is-normal">
+                                                                    <label class="label">Deposit With</label>
+                                                                    </div>
+                                                                    <div class="field-body">
+                                                                    <div class="field">
+                                                                        <div class="control">
+                                                                            <select name="counter" class="select" id="counter" style="width: 100%;" data-validate="require">
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
                                                                     </div>
                                                                 </div>
-                                                                </div>
-                                                            </div>
                                                             </div>
                                                             <div class="step-content has-text-centered">
                                                             <div class="field is-horizontal">

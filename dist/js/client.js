@@ -19,7 +19,8 @@ function populateSelect(target, min, max, data){
 
 const button = document.getElementById('myButton');
 button.addEventListener('click', function(e) {
-  console.log('button was clicked');
+  document.getElementById('altcoinsSpinner').style.display = 'inline-block';
+  document.getElementById('stepsDemo').style.display = 'none';
   fetch('/dashboard/addresses/altcoins/pair', {method: 'GET'})
   .then(function(response) {
     if(response.ok) {
@@ -29,6 +30,8 @@ button.addEventListener('click', function(e) {
     throw new Error('Request failed.');
   })
   .then(function(data) {
+    document.getElementById('altcoinsSpinner').style.display = 'none';
+    document.getElementById('stepsDemo').style.display = 'flex';
     populateSelect('counter', '0', data.length-1, data)
   })
   .catch(function(error) {
