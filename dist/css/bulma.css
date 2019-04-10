@@ -4454,11 +4454,11 @@ a.list-item {
 
 html.has-navbar-fixed-top,
 body.has-navbar-fixed-top {
-  padding-top: 4.5rem; }
+  padding-top: 3.33rem; }
 
 html.has-navbar-fixed-bottom,
 body.has-navbar-fixed-bottom {
-  padding-bottom: 4.5rem; }
+  padding-bottom: 3.33rem; }
 
 .navbar-brand,
 .navbar-tabs {
@@ -4618,10 +4618,10 @@ a.navbar-item,
     overflow: auto; }
   html.has-navbar-fixed-top-touch,
   body.has-navbar-fixed-top-touch {
-    padding-top: 4.5rem; }
+    padding-top: 3.33rem; }
   html.has-navbar-fixed-bottom-touch,
   body.has-navbar-fixed-bottom-touch {
-    padding-bottom: 4.5rem; } }
+    padding-bottom: 3.33rem; } }
 
 @media screen and (min-width: 1088px) {
   .navbar,
@@ -4745,10 +4745,10 @@ a.navbar-item,
     top: 0; }
   html.has-navbar-fixed-top-desktop,
   body.has-navbar-fixed-top-desktop {
-    padding-top: 4.5rem; }
+    padding-top: 3.33rem; }
   html.has-navbar-fixed-bottom-desktop,
   body.has-navbar-fixed-bottom-desktop {
-    padding-bottom: 4.5rem; }
+    padding-bottom: 3.33rem; }
   html.has-spaced-navbar-fixed-top,
   body.has-spaced-navbar-fixed-top {
     padding-top: 5.25rem; }

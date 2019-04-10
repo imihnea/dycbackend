@@ -4,7 +4,7 @@
 <script type="text/javascript" src="/dist/js/bulma-steps.min.js"></script>
 <div class="columns">
     <% include ../partials/sidebar %>
-    <div class="column dashboard-right">
+    <div class="column dashboard-right smallerCenter">
         <div class="dashTop column">
             <h2 class="title">Addresses</h2>
         </div>
@@ -351,12 +351,13 @@
                         <% if (dealsSold.length == 0) { %>
                             <p>You haven't sold any products yet.</p>
                         <% } else { %>
-                            <table class="table is-hoverable is-bordered new-table">
+                            <table class="">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
                                         <th>Product</th>
                                         <th>Buyer</th>
+                                        <th>Amount</th>
                                         <th>Paid On</th>
                                         <th>Status</th>
                                     </tr>
@@ -367,6 +368,7 @@
                                             <td><%= index + 1 %></td>
                                             <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
                                             <td><a href="/profile/<%= deal.buyer.id %>" class="link"><%= deal.buyer.username %></a></td>
+                                            <td><%= deal.price %></td>
                                             <td><%= deal.refundableUntil.toUTCString() %></td>
                                             <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
                                         </tr>
@@ -390,6 +392,7 @@
                                         <th>No.</th>
                                         <th>Product</th>
                                         <th>Seller</th>
+                                        <th>Amount</th>
                                         <th>Paid On</th>
                                         <th>Status</th>
                                     </tr>
@@ -400,6 +403,7 @@
                                             <td><%= index + 1 %></td>
                                             <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
                                             <td><a href="/profile/<%= deal.product.author.id %>" class="link"><%= deal.product.author.username %></a></td>
+                                            <td><%= deal.price %></td>
                                             <td><%= deal.createdAt.toUTCString() %></td>
                                             <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
                                         </tr>
@@ -414,7 +418,7 @@
                     <div class="column frame">
                         <h4 class="new-text">Withdraw History</h4>
                         <br>
-                        <% if (dealsBought.length == 0) { %>
+                        <% if (user.withdrawal.length == 0) { %>
                             <p>You haven't made any withdrawals yet.</p>
                         <% } else { %>
                             <table class="table is-hoverable is-bordered new-table">

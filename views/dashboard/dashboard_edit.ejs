@@ -4,7 +4,7 @@
 <div class="columns">
     <% include ../partials/sidebar %>
     
-    <div class="column dashboard-right">
+    <div class="column dashboard-right smallerCenter">
         <div class="columns">
             <div class="column"></div>
             <div class="column is-three-fifths">
@@ -64,7 +64,7 @@
                         </div>
                         <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
                         <br>     
-                        <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center;">
+                        <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
                             <div>
                                 <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x <% if (product.repeatable) { %>green<% } else { %>normal<% } %>"></i></label>
                                 <input id="repeatable" name="product[repeatable]" type="checkbox" value="true" <% if (product.repeatable) { %>checked<% } %> hidden>
@@ -177,7 +177,7 @@
                 <div class="frame">
                     <h4 class="new-text">Feature your deal</h4>
                     <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
-                    <table class="table is-hoverable is-bordered new-table">
+                    <table class="new-table">
                         <thead>
                             <tr>
                                 <th>Type</th>
