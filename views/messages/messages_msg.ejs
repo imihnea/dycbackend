@@ -1,62 +1,65 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
-<div class="container is-fluid">
-    <a href="/messages" class="button is-primary" style="margin-top: 5vh; margin-left: 5vw;">Back to Dashboard</a>
-    <div class="columns" style="color: orange; margin-top: 1vh;">
+<div class="container is-fluid" style="overflow: hidden;">
+    <div class="columns" style="margin-top: 4vh;">
         <div class="column is-one-fifth">
+            <a href="/messages" class="button is-primary showLater smallerCenter">To Dashboard</a>
             <div>
-                <div class="messageProfile frame" style="margin-top: 0;">
-                    <div class="">
-                        <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
-                            <%= chat.user1.avatarUrl %>
-                        <% } else { %>
-                            <%= chat.user2.avatarUrl %>
-                        <% } %>" class="open-img ">
+                <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                    <div>
+                        <figure class="image" style="background: #6f7566a3; margin: 5%; padding: 5%;">
+                            <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                <%= chat.user1.avatarUrl %>
+                            <% } else { %>
+                                <%= chat.user2.avatarUrl %>
+                            <% } %>" class="open-img" style="margin: auto;">
+                        </figure>
                     </div>
                     <br>
-                    <div class=" prod_info ">
+                    <div class="prod_info ">
                         <p class="title is-5 messageProfileText">Name: <%= user2.username %></p>
                         <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
                         <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
-                        <a href="/profile/<%= user2.id %>" class="button is-primary">View Profile</a>
-                        <button href="" class="button is-danger report">Report</button>
+                        <a href="/profile/<%= user2.id %>" class="button is-primary" style="margin-top: 1vh;">View Profile</a>
+                        <button class="button is-danger report" style="margin-top: 1vh;">Report</button>
                         <div class="modal modalReport">
                             <div class="modal-background"></div>
-                                <div class="modal-card">
-                                    <header class="modal-card-head">
-                                    <p class="modal-card-title">Report User</p>
-                                    <button class="delete deleteReport" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                    <form class="modal-form" action="/products/<%= chat._id %>/report" method="POST" style="display: block;">
-                                        <input type="text" name="userid" value="<%= user2.id %>" hidden>
-                                        <div class="field select cont-select smmargin">
-                                            <select name="topic" style="width: 100%;">
-                                                <option value="" selected disabled>Reason</option>
-                                                <option value="Fake">Fake product</option>
-                                                <option value="Scam">Scamming attempt</option>
-                                                <option value="Harassment">Harassment</option>
-                                            </select>
+                            <div class="modal-card">
+                                <header class="modal-card-head">
+                                <p class="modal-card-title">Report User</p>
+                                <button class="delete deleteReport" aria-label="close"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                <form class="modal-form" action="/products/<%= chat._id %>/report" method="POST" style="display: block;">
+                                    <input type="text" name="userid" value="<%= user2.id %>" hidden>
+                                    <div class="field select cont-select smmargin">
+                                        <select name="topic" style="width: 100%;">
+                                            <option value="" selected disabled>Reason</option>
+                                            <option value="Fake">Fake product</option>
+                                            <option value="Scam">Scamming attempt</option>
+                                            <option value="Harassment">Harassment</option>
+                                        </select>
+                                    </div>
+                                    <div class="field" style="margin-top: 3px;">
+                                        <div class="control">
+                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                         </div>
-                                        <div class="field" style="margin-top: 3px;">
-                                            <div class="control">
-                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                            </div>
-                                        </div>
-                                        <button class="button is-primary">Send</button>
-                                    </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger cancelReport">Cancel</button>
-                                    </footer>
-                                </div>
+                                    </div>
+                                    <button class="button is-primary">Send</button>
+                                </form>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button class="button is-danger cancelReport">Cancel</button>
+                                </footer>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <a href="/messages" class="button is-primary hideLater smallerCenter">To Dashboard</a>
             </div>
         </div>
-        <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
+        <div class="column smallerCenter">
             <div>
                 <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
                     <% if (chat.messageCount === 0) { %>
@@ -68,42 +71,40 @@
                         </div>
                     <% } else { %>
                         <div class="level topWarn">
-                            <div>
-                                <p class="is-5">Be mindful of the information you send</p>
+                            <div class="scrolling-limit">
+                                <div class="scrolling">
+                                    <p>Be careful when sending sensitive information</p>
+                                </div>
                             </div>
                         </div>
                     <% } %>
                     <% chat.messages.forEach((message) => { %>
                         <% if (message.sender.toString() != user._id.toString()) { %>
-                            <div class="level" style="margin-top: -15px;">
-                                <div class="level-left leftlv">
-                                    <div class="recmsg msg frame">
-                                        <p class="recName"> <% if (message.sender.toString() === chat.user1.id.toString()) { %><%= chat.user1.username %> <% } else { %> <%= chat.user2.username %> <% } %></p>
-                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                        <time class="recDate">
-                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                        </time>
-                                    </div>
+                            <article class="message rec" style="margin-right: 55%;">
+                                <div class="message-header recMsg">
+                                    <p><% if (message.sender.toString() === chat.user1.id.toString()) { %><%= chat.user1.username %> <% } else { %> <%= chat.user2.username %> <% } %></p>
+                                    <time class="recDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>/<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
                                 </div>
-                            </div>
+                                <div class="message-body">
+                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                </div>
+                            </article>
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
-                            <div class="level" style="display: block;">
-                                <div class="level-right">
-                                    <div class="sentmsg msg frame">
-                                        <p class="sentName">You</p>
-                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                        <time class="sentDate">
-                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                        </time>
-                                    </div>
-                                </div>      
-                            </div>
+                            <article class="message sent" style="margin-left: 55%;">
+                                <div class="message-header sentMsg">
+                                    <p>You</p>
+                                    <time class="sentDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>/<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
+                                </div>
+                                <div class="message-body">
+                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                </div>
+                            </article>
                         <% } %>
                     <% }); %>
                 </div>
@@ -118,18 +119,20 @@
     
         <div class="column is-one-fifth">
             <div class="productSide" style="margin-top: 0;">
-                <div class="messageProfile frame" style="margin-top: 0;">
+                <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 1vh;">
                     <div>
-                        <img src="<%= chat.product.imageUrl %>"  class="open-img">
+                        <figure class="image" style="background: #6f7566a3; margin: 5%; padding: 5%;">
+                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto;">
+                        </figure>
                     </div>
                     <br>
                     <div class=" prod_info ">  
                         <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
-                        <div class="prices msgPrices frame">
+                        <div class="prices msgPrices accepted_currencies frame">
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             <p class="price_text"><%= product.btcPrice %></p>
                         </div>
-                        <a href="/products/<%= chat.product.id %>/view" class="button is-primary">View Product</a>
+                        <a href="/products/<%= chat.product.id %>/view" class="button is-primary" style="margin-top: 1vh;">View Product</a>
                     </div>
                 </div>
             </div>

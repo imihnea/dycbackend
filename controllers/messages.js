@@ -143,7 +143,7 @@ module.exports = {
                         id: product._id, 
                         name: product.name, 
                         imageUrl: product.images[0].url, 
-                        price: product.price
+                        price: product.btcPrice
                     }
                 };
                 chat = await Chat.create(newChat);

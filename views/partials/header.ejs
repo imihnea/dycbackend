@@ -64,7 +64,8 @@
                     <span aria-hidden="true"></span>
                 </a>
             </div>
-            <div class="categ dropdown is-hoverable navbar-dropdown">
+            <div style="display: flex; align-items: center;">
+                <div class="categ dropdown is-hoverable navbar-dropdown">
                     <div class="dropdown-trigger">
                         <button class="button dd-btn" aria-haspopup="true" aria-controls="dropdown-menu">
                         <span>Categories</span>
@@ -149,7 +150,7 @@
                                         <button class="searchBtn">Art</button>
                                     </form>           
                                 </div>
-
+    
                                 <div class="column sec-categ" style="display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -188,7 +189,7 @@
                                         <button class="searchBtn">Other Devices</button>
                                     </form>           
                                 </div>
-
+    
                                 <div class="column sec-categ" style="display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -233,7 +234,7 @@
                                         <button class="searchBtn">Other Products</button>
                                     </form>
                                 </div>
-
+    
                                 <div class="column sec-categ" style="display: none;" id="collectibles-sec">
                                         <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                             <input type="text" name="searchName" value="" hidden="">
@@ -266,7 +267,7 @@
                                             <button class="searchBtn">Other Home Products</button>
                                         </form>
                                     </div>
-
+    
                                 <div class="column sec-categ" style="display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -293,7 +294,7 @@
                                         <button class="searchBtn">Other Leisure Products</button>
                                     </form>
                                 </div>
-
+    
                                 <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -332,7 +333,7 @@
                                         <button class="searchBtn">Other Baby Products</button>
                                     </form>
                                 </div>
-
+    
                                 <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -365,7 +366,7 @@
                                         <button class="searchBtn">Other Pets</button>
                                     </form>
                                 </div>
-
+    
                                 <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -386,7 +387,7 @@
                                         <button class="searchBtn">Other Estates</button>
                                     </form>
                                 </div>
-
+    
                                 <div class="column sec-categ" style=" display: none;" id="collectibles-sec">
                                     <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
                                         <input type="text" name="searchName" value="" hidden="">
@@ -437,6 +438,32 @@
                             </div>                                               
                         </div>
                     </div>
+                </div>
+                <% if (currentUser) { %>
+                <div class="dropdown categ is-hoverable navbar-dropdown">
+                    <div class="dropdown-trigger">
+                        <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span>Balance</span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
+                        <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
+                            <div class="currency dropdown-item">
+                                <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
+                                <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                            <hr class="dropdown-divider">
+                            <div class="dropdown-item">
+                                <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Top-up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
             </div>
             <div class="navbar-menu" id="navbarMenu">
                 <div class="navbar-start">
@@ -841,7 +868,7 @@
                         <a href="/login" class="navbar-item white-text">Login</a>
                         <a href="/register" class="navbar-item white-text">Register</a>
                     <% } else { %>
-                        <div class=" navbar-item dropdown categ is-hoverable">
+                        <div class="navbar-item dropdown categ is-hoverable hideOnBurger">
                             <div class="dropdown-trigger">
                                 <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu">
                                     <span>Balance</span>

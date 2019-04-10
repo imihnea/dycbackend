@@ -39,12 +39,14 @@
                                         </button>
                                     </form>
                                 <% } %>
-                                <div class="column">
-                                    <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.avatarUrl %>
-                                    <% } else { %>
-                                        <%= chats.docs[i].user2.avatarUrl %>
-                                    <% } %>" class="open-img msgImg">
+                                <div class="column" style="background: #6f7566a3; margin: 1%;">
+                                    <figure class="image">
+                                        <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
+                                            <%= chats.docs[i].user1.avatarUrl %>
+                                        <% } else { %>
+                                            <%= chats.docs[i].user2.avatarUrl %>
+                                        <% } %>" class="open-img msgImg" style="margin: auto;">
+                                    </figure>
                                 </div>
                                 <div class="column prod_info ">
                                     <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
@@ -83,12 +85,14 @@
                                         </button>
                                     </form>
                                 <% } %>
-                                <div class="column">
-                                    <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.avatarUrl %>
-                                    <% } else { %>
-                                        <%= chats.docs[i].user2.avatarUrl %>
-                                    <% } %>" class="open-img msgImg">
+                                <div class="column" style="background: #6f7566a3; margin: 1%;">
+                                    <figure class="image">
+                                        <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
+                                            <%= chats.docs[i].user1.avatarUrl %>
+                                        <% } else { %>
+                                            <%= chats.docs[i].user2.avatarUrl %>
+                                        <% } %>" class="open-img msgImg" style="margin: auto;">
+                                    </figure>
                                 </div>
                                 <div class="column prod_info ">
                                     <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
