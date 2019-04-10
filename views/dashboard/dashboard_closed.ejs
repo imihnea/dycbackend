@@ -22,18 +22,16 @@
                         <main id="hits" style="width: 85%; margin: auto;">
                         <% products.docs.forEach((product) => { %>
                             <article class="hit columns frame">
-                                <div class="column product-picture-wrapper">
+                                <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
-                                    <div class="product-picture">
-                                        <figure class="image is-square">
-                                            <img src="<%= product.images[0].url %>" style="margin: auto;">
-                                        </figure>
-                                    </div>
+                                    <figure class="image is-128x128" style="margin: auto; padding: 5%;">
+                                        <img src="<%= product.images[0].url %>" style="margin: auto; height: 100%;">
+                                    </figure>                                  
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
                                         <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
-                                        <p>
+                                        <p style="margin-top: 0.5vh; margin-bottom: 0.5vh;">
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product.avgRating)) { %>
                                                 <!-- display a full star -->

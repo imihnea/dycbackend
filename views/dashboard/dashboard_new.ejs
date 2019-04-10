@@ -4,7 +4,7 @@
 
     <div class="columns">
             <% include ../partials/sidebar %>
-            <div class="column dashboard-right">
+            <div class="column dashboard-right smallerCenter">
                 <div class="columns">
                    <div class="column"></div>
                 <div class="column is-three-fifths">
@@ -63,7 +63,7 @@
                             </div>
                             <textarea name="product[description]" class="textarea" placeholder="Description"></textarea>
                             <br>     
-                            <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center;">
+                            <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
                                 <div>
                                     <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x"></i></label>
                                     <input id="repeatable" name="product[repeatable]" type="checkbox" value="true" hidden>
@@ -166,7 +166,7 @@
                         <div class="frame">
                             <h4 class="new-text">Promote your deal</h4>
                             <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
-                            <table class="table is-hoverable is-bordered new-table">
+                            <table class="new-table">
                                 <thead>
                                     <tr>
                                         <th>Type</th>
@@ -184,7 +184,7 @@
                                         <td>5 tokens</td>
                                         <td>
                                             <input name="product[feat_1]" type="checkbox" id="feat_1" class="is-checkradio is-info is-large" value="1">
-                                            <label for="feat_1"></label>
+                                            <label for="feat_1" style="padding-left: 2rem !important;"></label>
                                         </td>
                                     </tr>
                                     <tr>
@@ -193,8 +193,8 @@
                                         <td>7 days</td>
                                         <td>15 tokens</td>
                                         <td>
-                                            <input name="product[feat_2]" type="checkbox" id="feat_2" class="is-checkradio is-info is-large" value="2">
-                                            <label for="feat_2"></label>
+                                            <input name="product[feat_2]" type="checkbox" id="feat_2" class="is-checkradio is-info is-large"value="2">
+                                            <label for="feat_2" style="padding-left: 2rem !important;" ></label>
                                         </td>
                                     </tr>
                                 </tbody>
