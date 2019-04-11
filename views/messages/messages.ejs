@@ -39,13 +39,13 @@
                                         </button>
                                     </form>
                                 <% } %>
-                                <div class="column" style="background: #6f7566a3; margin: 1%;">
-                                    <figure class="image">
+                                <div class="column">
+                                    <figure class="image is-128x128" style="margin:auto;">
                                         <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
                                             <%= chats.docs[i].user1.avatarUrl %>
                                         <% } else { %>
                                             <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg" style="margin: auto;">
+                                        <% } %>" class="open-img msgImg" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
                                     </figure>
                                 </div>
                                 <div class="column prod_info ">
@@ -85,13 +85,13 @@
                                         </button>
                                     </form>
                                 <% } %>
-                                <div class="column" style="background: #6f7566a3; margin: 1%;">
-                                    <figure class="image">
+                                <div class="column">
+                                    <figure class="image is-128x128" style="margin:auto;">
                                         <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
                                             <%= chats.docs[i].user1.avatarUrl %>
                                         <% } else { %>
                                             <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg" style="margin: auto;">
+                                        <% } %>" class="open-img msgImg" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
                                     </figure>
                                 </div>
                                 <div class="column prod_info ">

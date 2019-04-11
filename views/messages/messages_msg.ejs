@@ -2,18 +2,18 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
 <div class="container is-fluid" style="overflow: hidden;">
-    <div class="columns" style="margin-top: 4vh;">
+    <div class="columns" style="margin-top: 5vh;">
         <div class="column is-one-fifth">
             <a href="/messages" class="button is-primary showLater smallerCenter">To Dashboard</a>
             <div>
                 <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
                     <div>
-                        <figure class="image" style="background: #6f7566a3; margin: 5%; padding: 5%;">
+                        <figure class="image is-128x128" style="margin:auto;">
                             <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                                 <%= chat.user1.avatarUrl %>
                             <% } else { %>
                                 <%= chat.user2.avatarUrl %>
-                            <% } %>" class="open-img" style="margin: auto;">
+                            <% } %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
                         </figure>
                     </div>
                     <br>
@@ -121,16 +121,16 @@
             <div class="productSide" style="margin-top: 0;">
                 <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 1vh;">
                     <div>
-                        <figure class="image" style="background: #6f7566a3; margin: 5%; padding: 5%;">
-                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto;">
+                        <figure class="image is-128x128" style="margin:auto;">
+                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
                         </figure>
                     </div>
                     <br>
                     <div class=" prod_info ">  
                         <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
-                        <div class="prices msgPrices accepted_currencies frame">
-                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            <p class="price_text"><%= product.btcPrice %></p>
+                        <div class="prices openPrices frame" style="width: 80% !important; background-color: #c1c7c7 !important;">
+                            <p class="price_text" style="padding-left: 10px;"> <%= chat.product.price %></p>
+                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
                         <a href="/products/<%= chat.product.id %>/view" class="button is-primary" style="margin-top: 1vh;">View Product</a>
                     </div>

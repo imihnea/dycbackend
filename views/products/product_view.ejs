@@ -44,76 +44,78 @@
         </div>
         <hr  class="smallerCenter">
         <div class="columns detailsContainer">
-            <div class="column ">
-                <div class="thumbnails" style="margin-left: 1vw;">
-                    <div class="level">
-                        <input type="radio" name="slide_switch" id="id1" checked="checked"/>
-                        <label for="id1">
-                            <img class="thumbnail" src="<%= product.images[0].url %>"/>
-                        </label>
-                    </div>
-                    <% if (product.images[1]) { %>
-                    <div class="level">
-                        <input type="radio" name="slide_switch" id="id2"/>
-                        <label for="id2">
-                            <img class="thumbnail" src="<%= product.images[1].url %>"/>
-                        </label>
-                    </div>
-                    <% } %>
-                    <% if (product.images[2]) { %>
-                    <div class="level">
-                        <input type="radio" name="slide_switch" id="id3"/>
-                        <label for="id3">
-                            <img class="thumbnail" src="<%= product.images[2].url %>"/>
-                        </label>
-                    </div>
-                    <% } %>
-                    <% if (product.images[3]) { %>
-                    <div class="level">
-                        <input type="radio" name="slide_switch" id="id4"/>
-                        <label for="id4">
-                            <img class="thumbnail" src="<%= product.images[3].url %>"/>
-                        </label>
-                    </div>
-                    <% } %>
-                    <% if (product.images[4]) { %>
-                    <div class="level">
-                        <input type="radio" name="slide_switch" id="id5"/>
-                        <label for="id5">
-                            <img class="thumbnail" src="<%= product.images[4].url %>"/>
-                        </label>
-                    </div> 
-                    <% } %>                
-                </div>
-            </div>
-            <div class="column is-three-fifths">
+            <div class="column">
                 <div class="slider">
-                    <img class="mainImg " src="<%= product.images[0].url %>"/>
+                    <figure class="image is-16by9 sliderFig">
+                        <img class="mainImg " src="<%= product.images[0].url %>"/>
+                        <img class="mImg"  src="<%= product.images[0].url %>"/>
+                    </figure>
                     <% if (product.images[1]) { %>
-                    <img class="mainImg hiddenImg" src="<%= product.images[1].url %>"/>
+                        <figure class="image is-16by9 sliderFig hiddenFig">
+                            <img class="mainImg hiddenImg" src="<%= product.images[1].url %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[1].url %>"/>
+                        </figure>
                     <% } %>
                     <% if (product.images[2]) { %>
-                    <img class="mainImg hiddenImg" src="<%= product.images[2].url %>"/>
+                        <figure class="image is-16by9 sliderFig hiddenFig">
+                            <img class="mainImg hiddenImg" src="<%= product.images[2].url %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[2].url %>"/>
+                        </figure>
                     <% } %>
                     <% if (product.images[3]) { %>
-                    <img class="mainImg hiddenImg" src="<%= product.images[3].url %>"/>
+                        <figure class="image is-16by9 sliderFig hiddenFig">
+                            <img class="mainImg hiddenImg" src="<%= product.images[3].url %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[3].url %>"/>
+                        </figure>
                     <% } %>
                     <% if (product.images[4]) { %>
-                    <img class="mainImg hiddenImg" src="<%= product.images[4].url %>"/>
+                        <figure class="image is-16by9 sliderFig hiddenFig">
+                            <img class="mainImg hiddenImg" src="<%= product.images[4].url %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[4].url %>"/>
+                        </figure>
                     <% } %>
-                    <img class="mImg"  src="<%= product.images[0].url %>"/>
-                    <% if (product.images[1]) { %>
-                    <img class="mImg noDisp" src="<%= product.images[1].url %>"/>
-                    <% } %>
-                    <% if (product.images[2]) { %>
-                    <img class="mImg noDisp" src="<%= product.images[2].url %>"/>
-                    <% } %>
-                    <% if (product.images[3]) { %>
-                    <img class="mImg noDisp" src="<%= product.images[3].url %>"/>
-                    <% } %>
-                    <% if (product.images[4]) { %>
-                    <img class="mImg noDisp" src="<%= product.images[4].url %>"/>
-                    <% } %>
+                </div>
+                <div class="thumbnails">
+                    <div class="thumbnailsDiv">
+                        <div class="">
+                            <input type="radio" name="slide_switch" id="id1" checked="checked"/>
+                            <label for="id1">
+                                <img class="thumbnail" src="<%= product.images[0].url %>"/>
+                            </label>
+                        </div>
+                        <% if (product.images[1]) { %>
+                        <div class="">
+                            <input type="radio" name="slide_switch" id="id2"/>
+                            <label for="id2">
+                                <img class="thumbnail" src="<%= product.images[1].url %>"/>
+                            </label>
+                        </div>
+                        <% } %>
+                        <% if (product.images[2]) { %>
+                        <div class="">
+                            <input type="radio" name="slide_switch" id="id3"/>
+                            <label for="id3">
+                                <img class="thumbnail" src="<%= product.images[2].url %>"/>
+                            </label>
+                        </div>
+                        <% } %>
+                        <% if (product.images[3]) { %>
+                        <div class="">
+                            <input type="radio" name="slide_switch" id="id4"/>
+                            <label for="id4">
+                                <img class="thumbnail" src="<%= product.images[3].url %>"/>
+                            </label>
+                        </div>
+                        <% } %>
+                        <% if (product.images[4]) { %>
+                        <div class="">
+                            <input type="radio" name="slide_switch" id="id5"/>
+                            <label for="id5">
+                                <img class="thumbnail" src="<%= product.images[4].url %>"/>
+                            </label>
+                        </div> 
+                        <% } %>                
+                    </div>
                 </div>
             </div>
             <div class="column is-one-quarter">

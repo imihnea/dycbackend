@@ -11,11 +11,14 @@
     margin-right: auto;
 	top: 0;
 	max-width: 50vw;
-    max-height: 55vh;
+	max-height: 55vh;
+	border-style: solid;
+	border-radius: 10px;
 }
 
 .mImg{
 	position: relative;
+	visibility: hidden;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -33,6 +36,10 @@
 	visibility: hidden;
 }
 
+.hiddenFig{
+	display: none;
+}
+
 .thumbnail{
 	width: 50px;
 	height: 50px;
@@ -42,6 +49,23 @@
 	display: none;
 }
 
+.thumbnails{
+	display: flex;
+	justify-content: space-around;
+	margin-top: 1vh;
+}
+
+.thumbnailsDiv{
+	margin: auto; 
+	background-color: #d6dada;
+	border-radius: 5px; 
+	display: flex; 
+	padding: 20px; 
+	justify-content: space-evenly;
+	width: 300px;
+	border-style: solid;
+}
+
 .thumbnails label {
 	/* margin: 18px 0 0 18px; */
 	border: 2px solid #3269ca;
@@ -49,6 +73,12 @@
 	float: left;
 	transition: all 0.5s;
 	opacity: 0.6;
+}
+
+.thumbnails label:hover {
+	transition: all 0.5s;
+	opacity: 1;
+	cursor: pointer;
 }
 
 .thumbnails label img{

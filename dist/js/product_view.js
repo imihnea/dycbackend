@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const thumbnails = document.querySelectorAll('.thumbnail');
   const thumbnailItems = [].slice.call(thumbnails);
+  const figure = document.querySelectorAll('.sliderFig');
+  const figureItems = [].slice.call(figure);
   const main = document.querySelectorAll('.mainImg');
   const mainItems = [].slice.call(main);
   const heightImgs = document.querySelectorAll('.mImg');
@@ -12,10 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!mainItems[j].classList.contains('hiddenImg')) {
           mainItems[j].classList.add('hiddenImg');
           heightItems[j].classList.add('noDisp');
+          figureItems[j].classList.add('hiddenFig');
         }
       }
       mainItems[i].classList.remove('hiddenImg');
       heightItems[i].classList.remove('noDisp');
+      figureItems[i].classList.remove('hiddenFig');
     });
   });
 

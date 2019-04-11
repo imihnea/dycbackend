@@ -10,15 +10,16 @@
         <% }) %>
         </div>
     <% } %>
-    <a href="/dashboard/ongoing" class="button is-primary" style="margin-top: <% if(errors){ %> 1vh <% } else { %>5vh<% } %>; margin-left: 5vw;">Back to Dashboard</a>
-    <div class="columns">
+    <div class="columns" style="margin-top: 5vh;">
         <% if (user._id.toString() === seller._id.toString()) { %>
             <div class="column is-one-fifth">
+                <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
-                    <div class="messageProfile frame">
-                        <p class="title is-5">Buyer</p>
-                        <div class="">
-                            <img src="<%= buyer.avatar.url %>" class="open-img ">
+                    <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                        <div>
+                            <figure class="image is-128x128" style="margin:auto;">
+                                <img src="<%= buyer.avatar.url %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                            </figure>
                         </div>
                         <br>
                         <div class=" prod_info ">
@@ -66,13 +67,13 @@
                         </div>
                     </div>
                 </div>
+                <a href="/messages" class="button is-primary hideLater smallerCenter">To Dashboard</a>
             </div>
         <% } %>
         <% if (user._id.toString() === buyer._id.toString()) { %>
             <div class="column is-one-fifth">
                 <div>
                     <div class="messageProfile frame">
-                        <p class="title is-5">Seller</p>
                         <div class="">
                             <img src="<%= seller.avatar.url %>" class="open-img ">
                         </div>
@@ -120,10 +121,10 @@
             </div>
         <% } %>
         <% if ((user._id.toString() === buyer._id.toString()) || (user._id.toString() === seller._id.toString())) { %>
-            <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
+            <div class="column smallerCenter">
                 <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
                     <% if (chat.messageCount === 0) { %>
-                        <div class="level topFirst">
+                        <div class="level topFirst" >
                             <div>
                                 <p class="is-5">This is the beginning of the conversation</p>
                                 <p class="is-6">Start by saying hi!</p>
@@ -131,44 +132,42 @@
                         </div>
                     <% } else { %>
                         <div class="level topWarn">
-                            <div>
-                                <p class="is-5">Be mindful of the information you send</p>
+                            <div class="scrolling-limit">
+                                <div class="scrolling">
+                                    <p>Be careful when sending sensitive information</p>
+                                </div>
                             </div>
                         </div>
                     <% } %>
                     <% chat.messages.forEach((message) => { %>
                         <% if (message.sender.toString() != user._id.toString()) { %>
-                            <div class="level" style="margin-top: -15px;">
-                                <div class="level-left leftlv">
-                                    <div class="recmsg msg frame" style="background-color: #5f91e8 !important;">
-                                        <p class="recName"> <% if (message.sender.toString() === chat.user1.id.toString()) { %>Buyer<% } else { %>Seller<% } %></p>
-                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                        <time class="recDate">
-                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                        </time>
-                                    </div>
+                            <article class="message rec" style="margin-right: 55%;">
+                                <div class="message-header recMsg">
+                                    <p><% if (message.sender.toString() === chat.user1.id.toString()) { %><%= chat.user1.username %> <% } else { %> <%= chat.user2.username %> <% } %></p>
+                                    <time class="recDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>/<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
                                 </div>
-                            </div>
+                                <div class="message-body">
+                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                </div>
+                            </article>
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
-                            <div class="level" style="display: block;">
-                                <div class="level-right">
-                                    <div class="sentmsg msg frame" style="background-color: #a7abab !important;">
-                                        <p class="sentName">You</p>
-                                        <span style="white-space: pre-line"><p><%= message.message %></p></span>
-                                        <time class="sentDate">
-                                            <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>
-                                            /<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
-                                            <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %> :
-                                            <%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
-                                        </time>
-                                    </div>
-                                </div>      
-                            </div>
+                            <article class="message sent" style="margin-left: 55%;">
+                                <div class="message-header sentMsg">
+                                    <p>You</p>
+                                    <time class="sentDate">
+                                        <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>/<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
+                                        <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
+                                    </time>
+                                </div>
+                                <div class="message-body">
+                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                </div>
+                            </article>
                         <% } %>
-                    <% }); %>    
+                    <% }); %>
                 </div>
                 <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
                     <form action="/messages/<%= deal._id %>/<%= chat._id %>/sendMessageDeal?_method=PUT" method="POST" class="msgbox">
@@ -179,25 +178,24 @@
             </div>
             <div class="column is-one-fifth">
                 <div class="">
-                    <div class="messageProfile frame productFrame">
-                        <div>
-                            <p class="title is-5">Product</p>                      
-                            <img src="<%= deal.product.imageUrl %>"  class="open-img">
+                    <div class="messageProfile frame productFrame smallerCenter" style="margin:auto; margin-bottom: 1vh;">
+                        <div>                   
+                            <figure class="image is-128x128" style="margin:auto;">
+                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                            </figure>
                         </div>
                         <br>
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
-                            <div class="prices openPrices frame" style="width: 80% !important;">
-                                <p class="price_text"> <%= deal.price %></p>
-                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            </div>
+                            <div class="prices openPrices frame" style="width: 80% !important; background-color: #c1c7c7 !important;">
+                                    <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
+                                    <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                </div>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
-                                <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; margin-bottom: 1vh;">
-                                    <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST"><button class="button is-success">Accept Deal</button></form>
-                                    <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
-                                </div>
+                                <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-success">Accept Deal</button></form>
+                                <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-danger">Decline Deal</button></form>
                             <% } %>
                             
                             <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>

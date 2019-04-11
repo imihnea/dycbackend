@@ -82,15 +82,14 @@
                             <div class="columns level">
                                 <div class="column">
                                     <!-- Every user will have a default profile pic  -->
-                                    <% if(premium !== true) { %>
-                                        <figure class="image">
+                                    <figure class="image is-128x128" style="margin: auto;">
+                                        <% if(premium !== true) { %>
                                             <img src="<%= user.avatar.url %>" class="profilepic">
-                                        </figure>
-                                    <% } else { %>
-                                        <figure class="image">
-                                            <img src="<%= user.avatar.url %>" class="premium">
-                                        </figure>
-                                    <% } %>
+                                        <% } else { %>
+                                            <img src="<%= user.avatar.url %>" class="premiumImg">
+                                            <span class="premium"></span>
+                                        <% } %>
+                                    </figure>
                                 </div>
                                 <div class="column">
                                     <div class="file-upload">

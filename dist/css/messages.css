@@ -223,25 +223,6 @@ time{
     justify-content: space-evenly;
 }
 
-.showLater{
-    display: none;
-}
-
-.hideLater{
-    display: block;
-}
-
-@media only screen and (max-width: 768px) {
-    .showLater{
-        display: block;
-        margin-bottom: 1vh;
-    }
-
-    .hideLater{
-        display: none;
-    }
-}
-
 .scrolling-limit{
     overflow: hidden;
     white-space: nowrap;

@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Log = require('../models/log');
-const { createDealErrorLog, createDealLog } = require('../models/log');
+const { createDealErrorLog, createDealLog } = require('../controllers/logs');
 const ejs = require('ejs');
 const path = require('path');
 const Product = require('../models/product');

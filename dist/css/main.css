@@ -393,6 +393,27 @@ div.content{
 	margin-right: auto;
 }
 
+.showLater{
+    display: none !important;
+    margin-bottom: 1vh !important;
+}
+
+.hideLater{
+    display: block !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .showLater{
+        display: block !important;
+        margin-bottom: 2vh !important;
+    }
+    
+    .hideLater{
+        display: none !important;
+    }
+}
+
+
 .input, .textarea, select, .dd-btn{
     background-color: white !important;
     border-style: double !important;
