@@ -178,6 +178,7 @@ input, select, .dd-btn{
 
 .white-text:hover{
     color: #9da9bd !important;
+    cursor: pointer;
     background-color: transparent !important;
 }
 

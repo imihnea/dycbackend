@@ -47,7 +47,7 @@ const UserSchema = new Schema({
     sentTo: String
   }],
   full_name: String,
-  number: Number,
+  number: String,
   twofactor: Boolean,
   country: String,
   state: String,
