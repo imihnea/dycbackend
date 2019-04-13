@@ -23,14 +23,7 @@
                         </div>
                         <br>
                         <div class=" prod_info ">
-                            <p class="title is-5 messageProfileText">Full Name: <%= buyer.full_name %></p>
-                            <p class="title is-5 messageProfileText">Country: <%= deal.buyer.address.country %></p>
-                            <p class="title is-5 messageProfileText">City: <%= deal.buyer.address.city %></p>
-                            <p class="title is-5 messageProfileText">Address Line 1: <%= deal.buyer.address.address1 %></p>
-                            <% if (deal.buyer.address.address2) { %>
-                                <p class="title is-5 messageProfileText">Address Line 2: <%= deal.buyer.address.address2 %></p>
-                            <% } %>
-                            <p class="title is-5 messageProfileText">Zip Code: <%= deal.buyer.address.zip %></p>
+                            <p class="title is-5 messageProfileText">Username: <%= buyer.username %></p>
                             <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
                             <button href="" class="button is-danger report">Report</button>
                             <div class="modal modalReport">
@@ -56,11 +49,12 @@
                                                     <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                                 </div>
                                             </div>
-                                            <button class="button is-primary">Send</button>
+                                            <button class="button is-primary is-fullwidth">Send</button>
                                         </form>
                                         </section>
                                         <footer class="modal-card-foot">
                                             <button class="button is-danger cancelReport">Cancel</button>
+                                            <p class="subtitle">We will check the your report as soon as possible!</p>
                                         </footer>
                                     </div>
                             </div>
@@ -79,9 +73,7 @@
                         </div>
                         <br>
                         <div class=" prod_info ">
-                            <p class="title is-5 messageProfileText">Full Name: <%= seller.full_name %></p>
-                            <p class="title is-5 messageProfileText">Country: <%= seller.country %></p>
-                            <p class="title is-5 messageProfileText">City: <%= seller.city %></p>
+                            <p class="title is-5 messageProfileText">Username: <%= seller.username %></p>
                             <a href="/profile/<%= seller.id %>" class="button is-primary">View Profile</a>
                             <button href="" class="button is-danger report">Report</button>
                             <div class="modal modalReport">
@@ -112,6 +104,7 @@
                                         </section>
                                         <footer class="modal-card-foot">
                                             <button class="button is-danger cancelReport">Cancel</button>
+                                            <p class="subtitle">We will check the your report as soon as possible!</p>
                                         </footer>
                                     </div>
                             </div>
@@ -185,7 +178,44 @@
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
-                                <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-success">Accept Deal</button></form>
+                                <button class="button is-success accept">Accept deal</button>
+                                <div class="modal modalAccept">
+                                    <div class="modal-background"></div>
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Buyer details</p>
+                                            <button class="delete deleteAccept is-large" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body">
+                                            <% if(deal.buyer.delivery.shipping === 'FaceToFace') { %>
+                                            <p class="title is-5 modal-section-title">Face-to-Face Delivery Instructions</p>
+                                            <div style="text-align: left;">
+                                                <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
+                                                <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
+                                                <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
+                                            </div>
+                                            <% } else { %>
+                                                <p class="title is-5 modal-section-title">Shipping instructions</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">Name: <%= deal.buyer.name %></p>
+                                                    <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
+                                                    <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
+                                                    <p class="subtitle">Country: <%= deal.buyer.delivery.country %></p>
+                                                    <p class="subtitle">State: <%= deal.buyer.delivery.state %></p>
+                                                    <p class="subtitle">City: <%= deal.buyer.delivery.city %></p>
+                                                    <p class="subtitle">Street: <%= deal.buyer.delivery.street1 %></p>
+                                                    <p class="subtitle">Zip: <%= deal.buyer.delivery.zip %></p>
+                                                </div>
+                                            <% } %>
+                                            <br>
+                                            <form action="/deals/<%= deal._id %>/accept?_method=PUT" method="POST"><button class="button is-success is-fullwidth">Accept Deal</button></form>
+                                        </section>
+                                        <footer class="modal-card-foot">
+                                            <button class="button is-danger cancelAccept">Cancel</button>
+                                            <p class="subtitle">After accepting the deal you are free to meet the buyer or wait for the delivery company to pick-up your package.</p>
+                                        </footer>
+                                    </div>
+                                </div>
                                 <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-danger">Decline Deal</button></form>
                             <% } %>
                             
@@ -349,6 +379,5 @@
     </div>
 </div>
 
-
-<% include ../partials/footer %>
 <script src="/dist/js/deal.js"></script>
+<% include ../partials/footer %>

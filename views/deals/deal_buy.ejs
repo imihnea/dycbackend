@@ -36,61 +36,151 @@
         </div>
         <div id="facetoface" class="field" style="display: none;">
                 <h2 class="subtitle">Face to Face Details</h2>
-                    <p class="control has-icons-left">
-                        <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone" required/>
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-phone"></i>
-                        </span>
-                    </p>
+                <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <% if(user.number) { %>
+                                <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
+                            <% } else { %>
+                                <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone Number" required/>
+                            <% } %>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-phone"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <% if(user.full_name) { %>
+                                <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
+                            <% } else { %>
+                                <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                            <% } %>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user-tie"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <% if(user.email) { %>
+                                <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
+                            <% } else { %>
+                                <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
+                            <% } %>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <br>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="deliveryShipping" value="FaceToFace">
+                    <div class="column prod_info" style="padding: 0;">
+                        <label class="img-check ">
+                            <div class="prices frame openPrices">
+                                <p class="price_text">
+                                    Price: <%= product.btcPrice %> Bitcoin
+                                </p>
+                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                        </label>
+                        <br>
+                        <button class="button is-primary is-rounded" >Send Buy Request</button>
+                    </div>
+                </form>
             </div>
         <div id="shipping" class="field" style="display: none;">
             <h2 class="subtitle">Delivery Details</h2>
+            <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+            <div class="field">
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryCountry" type="text" placeholder="Country" required/>
                     <span class="icon is-small is-left">
                         <i class="fas fa-flag"></i>
                     </span>
                 </p>
+            </div>
+            <div class="field">
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryCity" type="text" placeholder="City" required/>
                     <span class="icon is-small is-left">
                         <i class="fas fa-city"></i>
                     </span>
                 </p>
+            </div>
+            <div class="field">
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryState" type="text" placeholder="State or County" required/>
                     <span class="icon is-small is-left">
                         <i class="fas fa-globe-americas"></i>
                     </span>
                 </p>
+            </div>
+            <div class="field">
                 <p class="control has-icons-left">
-                    <input class="input" name="deliveryStreet" type="text" placeholder="Street" required/>
+                    <input class="input" name="deliveryStreet1" type="text" placeholder="Street" required/>
                     <span class="icon is-small is-left">
                         <i class="fas fa-road"></i>
                     </span>
                 </p>
+            </div>
+            <div class="field">
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" required/>
                     <span class="icon is-small is-left">
                         <i class="fas fa-sort-numeric-down"></i>
                     </span>
                 </p>
+            </div>
+            <div class="field">
                 <p class="control has-icons-left">
-                    <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone" required/>
+                    <% if(user.number) { %>
+                        <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
+                    <% } else { %>
+                        <input class="input" name="deliveryPhone" type="tel" placeholder="Contact Phone Number" required/>
+                    <% } %>
                     <span class="icon is-small is-left">
                         <i class="fas fa-phone"></i>
                     </span>
                 </p>
-            <p class="control has-icons-left">
-                <input class="input" name="deliveryFee" value="Shipping fees: FETCH VALUE WITH JS" required/>
-                <span class="icon is-small is-left">
-                    <i class="fas fa-shuttle-van"></i>
-                </span>
-            </p>
-        </div>
-        <br>
-        <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+            </div>
+            <div class="field">
+                <p class="control has-icons-left">
+                    <% if(user.full_name) { %>
+                        <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
+                    <% } else { %>
+                        <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                    <% } %>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user-tie"></i>
+                    </span>
+                </p>
+            </div>
+            <div class="field">
+                <p class="control has-icons-left">
+                    <% if(user.email) { %>
+                        <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
+                    <% } else { %>
+                        <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
+                    <% } %>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                </p>
+            </div>
+
+            <!-- <div class="field">
+                <p class="control has-icons-left">
+                    <input class="input" name="deliveryFee" value="Shipping fees: FETCH VALUE WITH JS" required/>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-shuttle-van"></i>
+                    </span>
+                </p>
+            </div> -->
+            <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="deliveryShipping" value="Shipping">
             <div class="column prod_info" style="padding: 0;">
                 <label class="img-check ">
                     <div class="prices frame openPrices">
@@ -103,7 +193,8 @@
                 <br>
                 <button class="button is-primary is-rounded" >Send Buy Request</button>
             </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 </div>
