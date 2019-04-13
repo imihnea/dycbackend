@@ -62,22 +62,13 @@
         <div class="column smallerCenter">
             <div>
                 <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
-                    <% if (chat.messageCount === 0) { %>
-                        <div class="level topFirst" >
-                            <div>
-                                <p class="is-5">This is the beginning of the conversation</p>
-                                <p class="is-6">Start by saying hi!</p>
+                    <div class="level topWarn">
+                        <div class="scrolling-limit">
+                            <div class="scrolling">
+                                <p>Be careful when sending sensitive information</p>
                             </div>
                         </div>
-                    <% } else { %>
-                        <div class="level topWarn">
-                            <div class="scrolling-limit">
-                                <div class="scrolling">
-                                    <p>Be careful when sending sensitive information</p>
-                                </div>
-                            </div>
-                        </div>
-                    <% } %>
+                    </div>
                     <% chat.messages.forEach((message) => { %>
                         <% if (message.sender.toString() != user._id.toString()) { %>
                             <article class="message rec" style="margin-right: 55%;">
