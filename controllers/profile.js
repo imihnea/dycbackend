@@ -7,6 +7,7 @@ const Deal = require('../models/deal');
 const User = require('../models/user');
 const Review = require('../models/review');
 const Log = require('../models/log');
+const Subscription = require('../models/subscription');
 const { Regions } = require('../dist/js/regions');
 
 cloudinary.config({
@@ -35,15 +36,35 @@ module.exports = {
       reviews.page = Number(reviews.page);
       const floorRating = user.calculateAvgRating();
       const products = await Product.find({ available: "True", 'author.id': req.params.id });
-      res.render('index/profile', { 
-        user, 
-        products, 
-        floorRating, 
-        reviews,
-        pageTitle: 'Profile - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+        if(err) {
+          console.log('Failed to retrieve subscription.');
+          createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+        }
       });
+      if (premium) {
+        res.render('index/profile', { 
+          user, 
+          products, 
+          floorRating, 
+          reviews,
+          premium,
+          pageTitle: 'Profile - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      } else {
+        res.render('index/profile', { 
+          user, 
+          products, 
+          floorRating, 
+          reviews,
+          premium: false,
+          pageTitle: 'Profile - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
     },
     // Profile Update
     async profileUpdate(req, res) {

@@ -98,6 +98,7 @@ module.exports = {
     const products = await Product.paginate({ available: "True", 'author.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
+      sort: {createdAt: -1}
     });
     products.page = Number(products.page);
     res.render('dashboard/dashboard_open', {
@@ -113,6 +114,7 @@ module.exports = {
     const products = await Product.paginate({ available: "Closed", 'author.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
+      sort: {createdAt: -1}
     });
     products.page = Number(products.page);
     res.render('dashboard/dashboard_closed', {
@@ -127,6 +129,7 @@ module.exports = {
     const deals = await Deal.paginate({ 'buyer.id': req.user._id }, {
       page: req.query.page || 1,
       limit: 10,
+      sort: {createdAt: -1}
     });
     deals.page = Number(deals.page);
     res.render('dashboard/dashboard_purchases', {
@@ -171,6 +174,7 @@ module.exports = {
       }, {
         page: req.query.page || 1,
         limit: 10,
+        sort: {createdAt: -1}
       }
     );
     deals.page = Number(deals.page);
@@ -192,8 +196,8 @@ module.exports = {
         var data = json.data;
         var btcrate = data.btc.rate;
         var maxConfirmationsBTC = data.btc.maxConfirmations;
-        const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed'});
-        const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed'});
+        const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
+        const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
         res.render('dashboard/dashboard_addr', { 
           user: req.user,
           btcrate,

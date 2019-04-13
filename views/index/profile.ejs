@@ -1,14 +1,18 @@
 <% include ../partials/header %>
-<link rel="stylesheet" href="../../dist/css/index.css">  
 <link rel="stylesheet" href="../../dist/css/starability-basic.min.css">
 <div class="hero-body">
     <div class="container content frame">
         <div class="columns" style="margin-top: 1vh;">
             <div class="column is-two-fifths">
-                <img src="<%= user.avatar.url %>" class="avatar">
+                <figure class="image" style="width: 200px; margin: auto;">
+                    <img src="<%= user.avatar.url %>" class="avatar premiumImg" style="width: 200px; margin: auto; border-radius: 10px; border-style: solid;">
+                    <% if (premium) { %>
+                        <span class="premium"></span>    
+                    <% } %>
+                </figure>
             </div>
             <div class="column"></div>
-            <div class="column frame">
+            <div class="column frame smallerCenter">
                 <p class="subtitle"><%= user.username %></p>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
@@ -34,15 +38,15 @@
             </div> 
         <% } else { %>
             <div class="deals smallerCenter frame" >
-                <p class="subtitle" style="text-align: center;">Active Deals</p>
+                <p class="subtitle" style="text-align: center; margin-bottom: 3vh;">Active Deals</p>
                 <div class="columns" style="justify-content: center; flex-wrap: wrap;">
                     <%  let i = 0;
                         while ((i < products.length) && (i < 4)) { %>
-                            <div class="column card feat_card frame" style="max-width: 250px;">
+                            <div class="column card feat_card frame activeDealProduct">
                                 <a href="/products/<%= products[i].id %>/view">
                                     <div class="card-image">
-                                        <figure class="image profileProducts">
-                                            <img src="<%= products[i].images[0].url %>" class="featimgs">
+                                        <figure class="image featimg is-16by9" style="width: auto !important;">
+                                            <img src="<%= products[i].images[0].url %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -62,10 +66,10 @@
                          ++i; 
                         }
                         while (i < products.length) { %>
-                            <div class="column card feat_card frame noLoad hidden" style="max-width: 250px;">
+                            <div class="column card feat_card frame activeDealProduct noLoad hidden">
                                 <a href="/products/<%= products[i].id %>/view">
                                     <div class="card-image">
-                                        <figure class="image profileProducts">
+                                        <figure class="image">
                                             <img src="" data-src="<%= products[i].images[0].url %>" class="featimgs noImg">
                                         </figure>
                                     </div>
@@ -103,9 +107,12 @@
                 <% } %>
                 <!-- display all reviews -->
                 <% reviews.docs.forEach(function(review, index) { %>
-                    <div class="columns container is-fluid frame" style="display: flex; margin-bottom: 1vh; padding: 2%; background-color: white;">
-                        <div>
-                            <a href="/profile/<%= review.author %>" style="margin-left: 1vw; margin-right: 1vw;"><img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px;"></a>
+                    <div class="columns container is-fluid frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
+                        <div class="buttonsSpace">
+                            <a href="/profile/<%= review.author %>" style="margin-left: 1vw; margin-right: 1vw;">
+                                <figure class="image" style="margin-bottom: 0; margin-top: 0;">
+                                    <img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px; margin: auto; border-style: solid; border-width: 1px; border-radius: 5px; border-color: black;"></a>
+                                </figure>
                             <a href="/profile/<%= review.author %>" class="link"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                             <% if (review.createdAt) { %>
                             <p class="productDescriptionText" style="text-align:center !important;" >
@@ -147,9 +154,7 @@
                                     Dec
                                     <% break; } %>
                                     <% default: { break; }%>
-                                <% } %>
-                                <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
-                                <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
+                                <% } %>/<%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>/<%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
                             <% } %>
                         </div>
                         <div style="padding-left: 2vw; max-width: 80%;">
@@ -164,12 +169,12 @@
                                 <% } %>
                             </div>
                             <br>
-                            <p class="productDescriptionText"><%= review.body %></p>
-                            <sub>Review for: <a href="/products/<%= review.product._id %>/view" target="_top" class="link"><%= review.product.name %></a></sub>
+                            <p class="productDescriptionText profileReview"><%= review.body %></p>
+                            <sub style="position: absolute; bottom: 6%;">Review for: <a href="/products/<%= review.product._id %>/view" target="_top" class="link"><%= review.product.name %></a></sub>
                         </div>
                         <% if(currentUser){ %>
                             <% if(review.author.equals(currentUser._id)) { %>
-                            <div class="column is-one-fifth">
+                            <div class="reviewAuthor">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
                                     <div class="modal-background"></div>

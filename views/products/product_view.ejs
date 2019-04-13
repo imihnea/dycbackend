@@ -202,9 +202,13 @@
                 <% reviews.docs.forEach(function(review, index) { %>
                     <div class="columns container is-fluid frame" style="display: flex;
                     margin-bottom: 1vh;
-                    padding: 2%;">
+                    padding: 2%; overflow: hidden;">
                         <div>
-                            <a href="/profile/<%= review.author %>"><img src="<%= review.avatarUrl %>"" style="width: 75px; height: 75px;"></a>
+                            <a href="/profile/<%= review.author %>">
+                                <figure class="image">
+                                    <img src="<%= review.avatarUrl %>" style="width: 75px; height: 75px; margin: auto; border-style: solid; border-width: 1px; border-radius: 5px; border-color: black;">
+                                </figure>
+                            </a>
                             <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                             <% if (review.createdAt) { %>
                             <p class="productDescriptionText" style="text-align:center !important;" >
@@ -246,9 +250,7 @@
                                     Dec
                                     <% break; } %>
                                     <% default: { break; }%>
-                                <% } %>
-                                <%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>
-                                <%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
+                                <% } %>/<%= (( review.createdAt.getDate()) < 10) ? '0' + ( review.createdAt.getDate()) : ( review.createdAt.getDate()) %>/<%= 1900 + Number((( review.createdAt.getYear()) < 10) ? '0' + ( review.createdAt.getYear()) : ( review.createdAt.getYear())) %></p>
                             <% } %>
                         </div>
                         
@@ -333,17 +335,20 @@
             <div class="column detailsContainer">    
                 <div class="columns" style="justify-content: center;">
                     <% similar.forEach((sim) => { %>
-                        <div class="column card feat_card frame" style="flex-grow: 0;">
+                        <div class="column card feat_card frame smallerCenter similarProducts">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
                                     <figure class="image featimg">
                                         <img src="<%= sim.images[0].url %>" class="featimgs">
+                                        <% if (sim.feat_1.status == true) { %>
+                                            <span class="featured"></span>    
+                                        <% } %>
                                     </figure>
                                 </div>
                                 <div class="card-content">
                                     <div class="media">
                                         <div class="media-content">
-                                            <p class="title is-5"><%= sim.name %> </p>
+                                            <p class="title is-5" style="overflow: hidden;"><%= sim.name %> </p>
                                         </div>
                                     </div>
                                     <div class="accepted_currencies frame">

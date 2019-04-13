@@ -47,3 +47,20 @@
     opacity: 1;
     transition: all 0.5s ease;
   }
+
+  @media only screen and (max-width: 768px){
+    .registerTooltip::before{
+      top: -110px !important;
+      left: -151px;
+      z-index: 10;
+    }
+
+    .registerTooltip::after{
+      top: -15px !important;
+      left: 16px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid black;
+      border-bottom: 5px solid transparent;
+    }
+  }

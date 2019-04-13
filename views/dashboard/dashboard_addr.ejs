@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
 <script type="text/javascript" src="/dist/js/bulma-steps.min.js"></script>
-<div class="columns">
+<div class="columns" style="overflow: hidden; margin: auto;">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right smallerCenter">
         <div class="dashTop column">
@@ -346,7 +346,7 @@
                 <br>
                 <div class="columns">
                     <div class="column frame">
-                        <h4 class="new-text">Payments Received</h4>
+                        <h4 class="new-text">Payments received in the last 30 days</h4>
                         <br>
                         <% if (dealsSold.length == 0) { %>
                             <p>You haven't sold any products yet.</p>
@@ -381,7 +381,7 @@
                 <br>
                 <div class="columns">
                     <div class="column frame">
-                        <h4 class="new-text">Payments Sent</h4>
+                        <h4 class="new-text">Payments sent in the last 30 days</h4>
                         <br>
                         <% if (dealsBought.length == 0) { %>
                             <p>You haven't made any payments yet.</p>
@@ -416,7 +416,7 @@
                 <br>
                 <div class="columns">
                     <div class="column frame">
-                        <h4 class="new-text">Withdraw History</h4>
+                        <h4 class="new-text">Withdraw history for the past 30 days</h4>
                         <br>
                         <% if (user.withdrawal.length == 0) { %>
                             <p>You haven't made any withdrawals yet.</p>

@@ -14,6 +14,7 @@ const Nexmo = require('nexmo');
 const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
 const jwt = require('jsonwebtoken');
+const ObjectID = require("bson-objectid");
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -492,43 +493,59 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
-    const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
-      page: req.query.page || 1,
-      limit: 20,
-    });
-    products.page = Number(products.page);
-    let ids = [];
-    products.docs.forEach((product) => {
-      ids.push(product._id);
-    });
-    if (products.docs.length < 20) {
-      Product.aggregate().match({ _id: { $nin: ids } }).project( {name: 1, images: 1, btcPrice: 1, _id: 1}).sample(20 - products.total)
-      .exec((err, result) => {
+    await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
         if (err) {
-          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getIndex', err);
-          console.log(err);
-          res.render('index', { 
+          return res.render('index', { 
             currentUser: req.user, 
-            products, 
-            'fillProducts.length': 0, 
-            errors: false, 
+            'products.length': 0, 
+            errors: false,
             pageTitle: 'Deal Your Crypto',
             pageDescription: 'Description',
             pageKeywords: 'Keywords'
           });
         } else {
-          res.render('index', { 
-            currentUser: req.user, 
-            products, 
-            fillProducts: result, 
-            errors: false, 
-            pageTitle: 'Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
-           });
+          let products = result;
+          if (products.length < 20) {
+            let ids = [];
+            products.forEach((product) => {
+              ids.push(ObjectID(product._id));
+            });
+            Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(20 - products.length).exec((err, result) => {
+              if (err) {
+                return res.render('index', { 
+                  currentUser: req.user, 
+                  products,
+                  errors: false,
+                  pageTitle: 'Deal Your Crypto',
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                }); 
+              } else {
+                Array.from(result).forEach((res) => {
+                  products.push(res);
+                });
+                return res.render('index', { 
+                  currentUser: req.user, 
+                  products,
+                  errors: false,
+                  pageTitle: 'Deal Your Crypto',
+                  pageDescription: 'Description',
+                  pageKeywords: 'Keywords'
+                }); 
+              }
+            });
+          } else {
+            return res.render('index', { 
+              currentUser: req.user, 
+              products,
+              errors: false,
+              pageTitle: 'Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
+            });
+          }
         }
-      });
-    }
+    });
   },
   getForgot(req, res) {
     res.render('index/forgot', {

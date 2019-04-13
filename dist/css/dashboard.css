@@ -298,6 +298,22 @@ hr{
     justify-content: space-evenly;
 }
 
+@media only screen and (max-width: 768px) {
+    .file-upload {
+        display: block;
+    }
+
+    .mobileUpload{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .file-delete__label{
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+}
+
 @keyframes colorchange-orange{
     from { color: black; }
     to { color: green; }

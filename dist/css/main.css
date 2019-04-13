@@ -39,6 +39,17 @@ input{
     text-shadow: 0.4px 0.4px black;
 }
 
+.hero-body{
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+    .g-recaptcha{
+        transform: scale(0.77);
+        transform-origin: 50%;
+    }
+}
+
 /* Header */
 .navi{
     padding-top: 1vh;
@@ -376,8 +387,48 @@ div.content{
     padding-bottom: 2vh !important;
 }
 
+.similarProducts{
+    flex-grow: 0 !important; 
+    margin-bottom: 1vh !important;
+}
+
+.activeDealProduct{ 
+    margin-top: 1vh !important;
+}
+
+.reviewAuthor{
+    position: absolute; 
+    bottom: 3%; 
+    right: 3%;
+}
+
+@media only screen and (max-width: 768px) {
+    .similarProducts{
+        margin: auto !important;
+        margin-bottom: 1vh !important;
+    }
+    
+    .activeDealProduct{
+        margin: auto !important;
+        margin-top: 1vh !important;
+    }
+    
+    .profileReview{
+        margin-bottom: 4vh !important;
+    }
+
+    .reviewAuthor{
+        top: 3% !important;
+        bottom: 0 !important;
+    }
+
+    .buttonsSpace{
+        margin-top: 2vh !important;
+    }
+}
+
 .featured{
-    width: 83px; 
+    width: 83px;
     height: 84px; 
     left: 0; 
     bottom: 0; 

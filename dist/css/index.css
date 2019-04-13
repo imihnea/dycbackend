@@ -54,7 +54,7 @@ figure.latestimg{
 
 .media, .media-content{
     text-align: center !important;
-    padding-top: 7%;
+    padding-top: 3%;
 }
 
 .title.is-5{
@@ -126,9 +126,9 @@ div.latest-details{
 }
 
 .reviewAuthorButtons{
-    position: absolute; 
-    right: -1%; 
-    top: 3%;
+    position: absolute;  
+    bottom: 0%;
+    right: 0%;
 }
 
 .reviewRating{
@@ -136,6 +136,10 @@ div.latest-details{
     margin-bottom: 1vh; 
     margin-left: auto; 
     margin-right: auto;
+}
+
+.lazyLoad{
+    display: none;
 }
 
 /* Preloader start */

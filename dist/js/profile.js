@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imgs.forEach((img) => {
             img.src = img.dataset.src;
         });
-        ++i;
+        i += 1;
         if (i % 2 == 0) {
             showMore.innerHTML = 'Show more';
         } else {

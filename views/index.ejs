@@ -61,71 +61,68 @@
 </div>
 
 <div class="hero-body hero-content">
-    <% if (products.total > 20) { %>
-        <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
-            <% include ./partials/paginateIndex %>
+
+    
+    <div class="container columns products" style="flex-wrap: wrap; justify-content: space-evenly; width: 50vw;"> 
+    <% if (products.length != 0) { %>
+        <% let i = 0;
+            while ((i < 20) && (i < products.length)) { %>
+                <div class="column card feat_card frame" style="flex-grow: 0;">
+                    <a href="/products/<%= products[i]._id %>/view">
+                        <% if (products[i].feat_2.status == true) { %><span class="featured"></span><% } %>
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="<%= products[i].images[0].url %>" class="featimgs" alt="<%= products[i].name %>">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5" style="overflow: hidden;"><%= products[i].name %> </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies frame">
+                                <p class="curr_text" id="btc_curr"><%= products[i].btcPrice %></p>
+                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                        </div> 
+                    </a>      
+                </div>    
+            <% ++i; } %>
+            <% while (i < products.length) { %>
+                <div class="column card feat_card frame lazyLoad" style="flex-grow: 0;">
+                    <a href="/products/<%= products[i]._id %>/view">
+                        <% if (products[i].feat_2.status == true) { %><span class="featured"></span><% } %>
+                        <div class="card-image">
+                            <figure class="image featimg">
+                                <img src="#nothing" data-src="<%= products[i].images[0].url %>" class="featimgs lazyLoadImg" alt="<%= products[i].name %>">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-5" style="overflow: hidden;"><%= products[i].name %> </p>
+                                </div>
+                            </div>
+                            <div class="accepted_currencies frame">
+                                <p class="curr_text" id="btc_curr"><%= products[i].btcPrice %></p>
+                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
+                        </div> 
+                    </a>      
+                </div>
+            <% ++i; }%>
+        
+    <% } %>
+    <% if (products.length > 20) { %>
+        <div class="buttons">
+            <button class="button is-primary showMore">Show More</button>
+            <button class="button is-primary showLess hidden">Show Less</button>
         </div>
     <% } %>
     
-    <div class="container columns" style="flex-wrap: wrap; justify-content: space-evenly; width: 50vw;"> 
-    <% if (products.total != 0) { %>
-        <% products.docs.forEach((product) => { %>
-            <div class="column card feat_card frame" style="flex-grow: 0;">
-                <a href="/products/<%= product._id %>/view">
-                    <span class="featured"></span>
-                    <div class="card-image">
-                        <figure class="image featimg">
-                            <img src="<%= product.images[0].url %>" class="featimgs">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-5" style="overflow: hidden;"><%= product.name %> </p>
-                            </div>
-                        </div>
-                        <div class="accepted_currencies frame">
-                                <p class="curr_text" id="btc_curr"><%= product.btcPrice %></p>
-                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                        </div>
-                    </div> 
-                </a>      
-            </div>
-        <% }); %>
-    <% } %>
-    <% if (fillProducts.length > 0) { %>
-        <% fillProducts.forEach((fillProduct) => { %>
-            <div class="column card feat_card frame" style="flex-grow: 0;">
-                <a href="/products/<%= fillProduct._id %>/view">
-                    <!-- Just for testing -->
-                    <span class="featured"></span>
-                    <!-- For testing -->
-                    <div class="card-image">
-                        <figure class="image featimg">
-                            <img src="<%= fillProduct.images[0].url %>" class="featimgs">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-5" style="overflow: hidden;"><%= fillProduct.name %> </p>
-                            </div>
-                        </div>
-                        <div class="accepted_currencies frame">
-                            <p class="curr_text" id="btc_curr"><%= fillProduct.btcPrice %></p>
-                            <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
-                        </div>
-                    </div> 
-                </a>      
-            </div>
-        <% }); %>
-    <% } %>
     </div>
-    <% if (products.total > 20) { %>
-        <div style="display: flex; justify-content: center; margin-bottom: 2vh;">
-            <% include ./partials/paginateIndex %>
-        </div>
-    <% } %>
+
 </div>
 
 <% include partials/footer %>
