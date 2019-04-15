@@ -8,6 +8,7 @@ const async = require('async');
 const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
+const Subscription = require('../models/subscription');
 const searchTerm = require('../models/searchTerm');
 const { createErrorLog, createUserLog } = require('./logs');
 const Nexmo = require('nexmo');
@@ -1045,14 +1046,34 @@ module.exports = {
       res.redirect('/');
     });
   },
-  getContact(req, res) {
-    res.render('index/contact', {
-      errors: false, 
-      validationErrors: false,
-      pageTitle: 'Contact - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
-    });
+  async getContact(req, res) {
+    if (req.user) {
+      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+        if(err) {
+          console.log('Failed to retrieve subscription.');
+          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+        }
+      });
+      res.render('index/contact', {
+        user: req.user,
+        premium,
+        errors: false, 
+        validationErrors: false,
+        pageTitle: 'Contact - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    } else {
+      res.render('index/contact', {
+        user: false,
+        premium: false,
+        errors: false, 
+        validationErrors: false,
+        pageTitle: 'Contact - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    }
   },
   async postContact(req, res) {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
@@ -1122,6 +1143,119 @@ module.exports = {
           });
         }
        });
+      }
+    });
+  },
+  async postContactUser(req, res) {
+    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+      let errors = { msg: String };
+      errors.msg = 'Please complete the captcha.';
+      return res.render('index/contact', {
+        errors, 
+        validationErrors: false,
+        pageTitle: 'Contact - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    }
+    const secretKey = RECAPTCHA_SECRET;
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    request(verificationURL, async (error, response, body) => {
+      body = JSON.parse(body);
+      if (body.success !== undefined && !body.success) {
+        let errors = { msg: String };
+        errors.msg = 'Captcha verification failed. Please try again.';
+        return res.render('index/contact', {
+          errors,
+          pageTitle: 'Contact - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
+      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty();
+      req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
+      .trim();
+      req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
+      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
+      const validationErrors = req.validationErrors();
+      if (validationErrors) {
+        let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+          if(err) {
+            console.log('Failed to retrieve subscription.');
+            createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+          }
+        });
+        res.render('index/contact', {
+          user: req.user,
+          premium,
+          validationErrors,
+          errors: false,
+          pageTitle: 'Contact - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      } else {
+        let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+          if(err) {
+            console.log('Failed to retrieve subscription.');
+            createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+          }
+        });
+        if (!premium) {
+          ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
+            name: req.body.name,
+            email: req.body.email,
+            topic: req.body.topic,
+            message: req.body.message,
+            subject: 'Deal Your Crypto - Contact Request',
+          }, function (err, data) {
+            if (err) {
+              console.log(err);
+            } else {
+            const mailOptions = {
+              from: `${req.body.name} <${req.body.email}>`, // sender address
+              to: 'adrianpopa97@gmail.com', // list of receivers
+              subject: 'Deal Your Crypto - Contact Request', // Subject line
+              html: data, // html body
+            };
+            transporter.sendMail(mailOptions, (error) => {
+              if (error) {
+                req.flash('error', `${error.message}`);
+                res.redirect('back', { error: error.message });
+              }
+              req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
+              res.redirect('/contact');
+            });
+          }
+         });
+        } else {
+          ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
+            name: req.body.name,
+            email: req.body.email,
+            topic: req.body.topic,
+            message: req.body.message,
+            subject: 'Deal Your Crypto - Priority Contact Request',
+          }, function (err, data) {
+            if (err) {
+              console.log(err);
+            } else {
+            const mailOptions = {
+              from: `${req.body.name} <${req.body.email}>`, // sender address
+              to: 'adrianpopa97@gmail.com', // list of receivers
+              subject: 'Deal Your Crypto - Priority Contact Request', // Subject line
+              html: data, // html body
+            };
+            transporter.sendMail(mailOptions, (error) => {
+              if (error) {
+                req.flash('error', `${error.message}`);
+                res.redirect('back', { error: error.message });
+              }
+              req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
+              res.redirect('/contact');
+            });
+          }
+         });
+        }
       }
     });
   },

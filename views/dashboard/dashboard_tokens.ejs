@@ -27,7 +27,7 @@
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <div id="btc-fields" class="fields">
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
-                                <p>Price per token: <span id="btcTokenPrice"><%= tokenprice.toFixed(5) %></span></p>
+                                <p>Price per token: <span id="btcTokenPrice"><%= Number(tokenprice.toFixed(8)) %></span></p>
                                 <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
@@ -35,7 +35,7 @@
                             </div>
                             <input class="input inputTokens" id="btc-tokens" type="number" name="tokensNr" placeholder="Number of tokens"
                                 min="0" max="500" required style="margin-top: 3vh;">
-                            <input type="hidden" name="tokenprice" value="<%= tokenprice.toFixed(5) %>">
+                            <input type="hidden" name="tokenprice" value="<%= Number(tokenprice.toFixed(8)) %>">
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
                                 <p>Total price: <span id="btcPrice" class="tPrice">0</span></p>
                                 <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
@@ -78,7 +78,7 @@
             </div>
             <div class="pricing-plan">
               <div class="plan-header">Basic</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*19.99).toFixed(5) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*19.99).toFixed(8)) %></span></div>
               <div class="plan-items">
                 <div class="plan-item" data-feature="USD Equivalent">$19.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">21.5</div>
@@ -96,7 +96,7 @@
           
             <div class="pricing-plan is-warning">
               <div class="plan-header">Enthusiast</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*39.99).toFixed(5) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*39.99).toFixed(8)) %></span></div>
               <div class="plan-items">
                 <div class="plan-item" data-feature="USD Equivalent">$39.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">43.5</div>
@@ -114,7 +114,7 @@
           
             <div class="pricing-plan is-active">
               <div class="plan-header">Visionary</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*59.99).toFixed(5) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*59.99).toFixed(8)) %></span></div>
               <div class="plan-items">
                 <div class="plan-item" data-feature="USD Equivalent">$59.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">67</div>
@@ -132,7 +132,7 @@
           
             <div class="pricing-plan is-danger">
               <div class="plan-header">Enterprise</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*99.99).toFixed(5) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*99.99).toFixed(8)) %></span></div>
               <div class="plan-items">
                 <div class="plan-item" data-feature="USD Equivalent">$99.99 USD</div>
                 <div class="plan-item" data-feature="Tokens">115</div>

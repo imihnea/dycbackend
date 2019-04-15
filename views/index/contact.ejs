@@ -22,42 +22,89 @@
             <div class="column"></div>
             <div class="column is-three-fifths frame" >
                 <p class="title">Contact</p>
-                <form action="/contact/send" method="POST">
-                    <div class="field">
-                        <p class="control has-icons-left">
-                            <input class="input" name="name" placeholder="Your name" type="text" required  autofocus/>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-user-tie"></i>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="field">
-                        <p class="control has-icons-left">
-                            <input class="input" name="email" placeholder="your@email.com" type="email" required />
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="field select cont-select">
-                        <select name="topic" style="width: 100vw;">
-                            <option value="General">General</option>
-                            <option value="Payments">Payments</option>
-                            <option value="Delivery">Delivery</option>
-                            <option value="Bugs">Bugs</option>
-                            <option value="Suggestions">Suggestions</option>
-                        </select>
-                    </div>
-                    <div class="field" >
-                        <div class="control">
-                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                <% if (!user) { %>
+                    <form action="/contact/send" method="POST">
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="name" placeholder="Your name" type="text" required  autofocus/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user-tie"></i>
+                                </span>
+                            </p>
                         </div>
-                    </div>
-                    <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
-                    <div class="control smmargin" style="margin: auto; margin-top: 1vh;">
-                        <button class="button is-primary is-large is-fullwidth">Send</button>
-                    </div>
-                </form>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="email" placeholder="your@email.com" type="email" required />
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field select cont-select">
+                            <select name="topic" style="width: 100vw;">
+                                <option value="General">General</option>
+                                <option value="Payments">Payments</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Bugs">Bugs</option>
+                                <option value="Suggestions">Suggestions</option>
+                            </select>
+                        </div>
+                        <div class="field" >
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                            </div>
+                        </div>
+                        <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
+                        <div class="control smmargin" style="margin: auto; margin-top: 1vh;">
+                            <button class="button is-primary is-large is-fullwidth">Send</button>
+                        </div>
+                    </form>
+                <% } else { %>
+                    <form action="/contact/sendUser" method="POST">
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="name" placeholder="Your name" type="text" value="<%= user.name %>" required autofocus/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user-tie"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" name="email" placeholder="your@email.com" type="email" value="<%= user.email %>" required />
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input name="premium" type="text" value="<% if (premium) { %>Premium user - Support priority enabled<% } else { %>Standard user - No support priority<% } %>" class="input" required readonly>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-award"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field select cont-select">
+                            <select name="topic" style="width: 100vw;">
+                                <option value="General">General</option>
+                                <option value="Payments">Payments</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Bugs">Bugs</option>
+                                <option value="Suggestions">Suggestions</option>
+                            </select>
+                        </div>
+                        <div class="field" >
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                            </div>
+                        </div>
+                        <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
+                        <div class="control smmargin" style="margin: auto; margin-top: 1vh;">
+                            <button class="button is-primary is-large is-fullwidth">Send</button>
+                        </div>
+                    </form>
+                <% } %>
                 <p style="margin: auto; margin-top: 1.5vh;">Make sure to check our FAQ out <a class="link" href="/faq">here</a>.</p>
             </div>
             <div class="column"></div>

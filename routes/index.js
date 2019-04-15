@@ -17,6 +17,7 @@ const {
   postReset,
   getContact,
   postContact,
+  postContactUser,
   postForgotEmail,
   getResetEmail,
   postResetEmail,
@@ -115,6 +116,9 @@ router.get('/contact', getContact);
 
 // POST Contact route
 router.post('/contact/send', asyncErrorHandler(postContact));
+
+// POST Contact User route
+router.post('/contact/sendUser', asyncErrorHandler(postContactUser));
 
 // POST Forgot email route
 router.post('/forgotemail', postForgotEmail);

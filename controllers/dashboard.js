@@ -646,89 +646,102 @@ module.exports = {
       } else {
         const user = await User.findById(req.user._id);
         const tokens = Number(req.body.tokensNr);
-        const tokenprice = Number(req.body.tokenprice);
-        const totalPrice = tokens * tokenprice;
-        if (user.btcbalance >= totalPrice) {
-            user.btcbalance -= totalPrice;
-            user.feature_tokens += tokens;
-            await user.save();
-            if (process.env.NODE_ENV === 'production') {
-              const log = {
-                logType: 'User',
-                message: `User spent ${totalPrice} to buy ${tokens} tokens`,
-                sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
-                sentFromMethod: 'buyTokens',
-                sentFromUser: req.user._id
-              };
-              Log.create(log, (err) => {
-                if (err) {
-                  console.log(err);
-                }
-              });
-            }
-            req.flash('success', 'Tokens purchased successfully!');
-            res.redirect('back');
-        } else {
-            req.flash('error', 'Insufficient balance.');
-            res.redirect('back');
+        const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+        request(url, async function(error, response, body){
+        if(!error && response.statusCode == 200) {
+          const json = JSON.parse(body);
+          const data = json.data;
+          const btcrate = data.btc.rate;
+          const tokenprice = 1/btcrate; // 1 USD
+          const totalPrice = tokens * tokenprice;
+          if (user.btcbalance >= totalPrice) {
+              user.btcbalance -= totalPrice;
+              user.feature_tokens += tokens;
+              await user.save();
+              if (process.env.NODE_ENV === 'production') {
+                const log = {
+                  logType: 'User',
+                  message: `User spent ${totalPrice} to buy ${tokens} tokens`,
+                  sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
+                  sentFromMethod: 'buyTokens',
+                  sentFromUser: req.user._id
+                };
+                Log.create(log, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+              }
+              req.flash('success', 'Tokens purchased successfully!');
+              res.redirect('back');
+          } else {
+              req.flash('error', 'Insufficient balance.');
+              res.redirect('back');
+          }
         }
+      });
     }
   },
   // Buy Token Packs
   async buyTokenPacks(req, res) {
-    let CurrentUser = await User.findById(req.params.id);
-    let tokenCost = req.body.tokenCost;
-    let tokens = Number(req.body.pack);
-    if(CurrentUser.btcbalance >= tokenCost) {
-      if(tokens === 21.5) {
-        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
-          if(err) {
-            req.flash('error', 'There was an error updating your balance, please try again.');
-            return res.redirect('back');
-          } else {
-            console.log(`Successfully purchased Basic pack.`)
-            req.flash('success', 'Successfully purchased Basic pack! Enjoy!');
-            return res.redirect(`back`);
+    const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, async function(error, response, body){
+      if(!error && response.statusCode == 200) {
+        const json = JSON.parse(body);
+        const data = json.data;
+        const btcrate = data.btc.rate;
+        const tokenprice = 1/btcrate; // 1 USD
+        const tokens = Number(req.body.pack);
+        if ([21.5, 43.5, 67, 115].includes(tokens)) {
+          const tokenCost = tokens * tokenprice;
+          let CurrentUser = await User.findById(req.params.id);
+          if(CurrentUser.btcbalance >= tokenCost) {
+            CurrentUser.btcbalance -= tokenCost;
+            CurrentUser.feature_tokens += tokens;
+            await CurrentUser.save((err, result) => {
+              if(err) {
+                req.flash('error', 'There was an error updating your balance, please try again.');
+                return res.redirect('back');
+              } else {
+                if (process.env.NODE_ENV === 'production') {
+                  const log = {
+                    logType: 'User',
+                    message: `User spent ${tokenCost} to buy ${tokens} pack`,
+                    sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
+                    sentFromMethod: 'buyTokenPacks',
+                    sentFromUser: req.user._id
+                  };
+                  Log.create(log, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                }
+                switch(tokens) {
+                  case 21.5: 
+                    req.flash('success', 'Successfully purchased the basic pack! Enjoy!');
+                    break;
+                  case 43.5:
+                    req.flash('success', 'Successfully purchased the enthusiast pack! Enjoy!');
+                    break;
+                  case 67:
+                    req.flash('success', 'Successfully purchased the visionary pack! Enjoy!');
+                    break;
+                  case 115:
+                    req.flash('success', 'Successfully purchased the enterprise pack! Enjoy!');
+                    break;
+                  default: break;
+                }
+                return res.redirect(`back`);
+              }
+            });
           }
-        });
-      } else if (tokens === 43.5) {
-        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
-          if(err) {
-            req.flash('error', 'There was an error updating your balance, please try again.');
-            return res.redirect('back');
-          } else {
-            console.log(`Successfully purchased Enthusiast pack.`)
-            req.flash('success', 'Successfully purchased Enthusiast pack! Enjoy!');
-            return res.redirect(`back`);
-          }
-        });
-      } else if (tokens === 67) {
-        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
-          if(err) {
-            req.flash('error', 'There was an error updating your balance, please try again.');
-            return res.redirect('back');
-          } else {
-            console.log(`Successfully purchased Visionary pack.`)
-            req.flash('success', 'Successfully purchased Visionary pack! Enjoy!');
-            return res.redirect(`back`);
-          }
-        });
-      } else if (tokens === 115) {
-        User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -tokenCost, feature_tokens: +tokens } }, (err) => {
-          if(err) {
-            req.flash('error', 'There was an error updating your balance, please try again.');
-            return res.redirect('back');
-          } else {
-            console.log(`Successfully purchased Enterprise pack.`)
-            req.flash('success', 'Successfully purchased Enterprise pack! Enjoy!');
-            return res.redirect(`back`);
-          }
-        });
-      } else {
-        req.flash('error', `Not enough balance, please add ${tokenCost} more.`)
-        return res.redirect('/dashboard/addresses');
+        } else {
+          req.flash('error', `Not enough balance, please add ${tokenCost} more.`)
+          return res.redirect('/dashboard/addresses');
+        }
       }
-    }
+    });
   },
   // Show new product form
   newProduct(req, res) {

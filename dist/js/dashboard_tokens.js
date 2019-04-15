@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tPriceItems = [].slice.call(tPrice);
     inputTokenItems.forEach((item, i) => {
         item.addEventListener('change', () => {
-            tPriceItems[i].innerHTML = prices[i] * Number(item.value);
+            tPriceItems[i].innerHTML = Number((prices[i] * Number(item.value)).toFixed(8));
         });
     });
 });
