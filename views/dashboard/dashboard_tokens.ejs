@@ -2,7 +2,6 @@
 <link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
 <link rel="stylesheet" href="../../dist/css/products.css">
 <link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
-<!-- <script src="../../dist/js/tokens.js"></script> -->
 <div class="columns" style="overflow: hidden; margin: auto;">
     <% include ../partials/sidebar %>
 
@@ -27,7 +26,7 @@
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <div id="btc-fields" class="fields">
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
-                                <p>Price per token: <span id="btcTokenPrice"><%= Number(tokenprice.toFixed(8)) %></span></p>
+                                <p>Price per token: <span id="btcTokenPrice"><%= tokenprice.toFixed(8) %></span></p>
                                 <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                             <div class="currency" style="padding-top: 3vh; justify-content: center !important;">
@@ -70,6 +69,7 @@
                 <div class="plan-item">USD Equivalent</div>
                 <div class="plan-item">Tokens</div>
                 <div class="plan-item">Bonus Tokens</div>
+                <div class="plan-item">Total Tokens</div>
                 <div class="plan-item">(%) Saved</div>
               </div>
               <div class="plan-footer">
@@ -78,17 +78,18 @@
             </div>
             <div class="pricing-plan">
               <div class="plan-header">Basic</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*19.99).toFixed(8)) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= (tokenprice*20).toFixed(8) %></span></div>
               <div class="plan-items">
-                <div class="plan-item" data-feature="USD Equivalent">$19.99 USD</div>
-                <div class="plan-item" data-feature="Tokens">21.5</div>
+                <div class="plan-item" data-feature="USD Equivalent">$19.8 USD</div>
+                <div class="plan-item" data-feature="Tokens">20</div>
                 <div class="plan-item" data-feature="Bonus Tokens">1.5</div>
+                <div class="plan-item" data-feature="Total Tokens">21.5</div>
                 <div class="plan-item" data-feature="(%) Saved">7.5%</div>
               </div>
               <div class="plan-footer">
                   <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
                     <input type="hidden" name="pack" value="21.5" />
-                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*19.99).toFixed(5) %>" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*20).toFixed(5) %>" /> 
                     <button class="button is-fullwidth">Choose</button>
                 </form>
               </div>
@@ -96,17 +97,18 @@
           
             <div class="pricing-plan is-warning">
               <div class="plan-header">Enthusiast</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*39.99).toFixed(8)) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*40).toFixed(8)) %></span></div>
               <div class="plan-items">
-                <div class="plan-item" data-feature="USD Equivalent">$39.99 USD</div>
-                <div class="plan-item" data-feature="Tokens">43.5</div>
+                <div class="plan-item" data-feature="USD Equivalent">$39.6 USD</div>
+                <div class="plan-item" data-feature="Tokens">40</div>
                 <div class="plan-item" data-feature="Bonus Tokens">3.5</div>
+                <div class="plan-item" data-feature="Total Tokens">43.5</div>
                 <div class="plan-item" data-feature="(%) Saved">8.75%</div>
               </div>
               <div class="plan-footer">
                   <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
                     <input type="hidden" name="pack" value="43.5" />
-                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*39.99).toFixed(5) %>" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*40).toFixed(5) %>" />
                     <button class="button is-fullwidth">Choose</button>
                 </form>
               </div>
@@ -114,17 +116,18 @@
           
             <div class="pricing-plan is-active">
               <div class="plan-header">Visionary</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*59.99).toFixed(8)) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*60).toFixed(8)) %></span></div>
               <div class="plan-items">
-                <div class="plan-item" data-feature="USD Equivalent">$59.99 USD</div>
-                <div class="plan-item" data-feature="Tokens">67</div>
+                <div class="plan-item" data-feature="USD Equivalent">$59.4 USD</div>
+                <div class="plan-item" data-feature="Tokens">60</div>
                 <div class="plan-item" data-feature="Bonus Tokens">7</div>
+                <div class="plan-item" data-feature="Total Tokens">67</div>
                 <div class="plan-item" data-feature="(%) Saved">11.66%</div>
               </div>
               <div class="plan-footer">
                   <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
                     <input type="hidden" name="pack" value="67" />
-                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*59.99).toFixed(5) %>" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*60).toFixed(5) %>" />
                     <button class="button is-fullwidth">Choose</button>
                 </form>
               </div>
@@ -132,17 +135,18 @@
           
             <div class="pricing-plan is-danger">
               <div class="plan-header">Enterprise</div>
-              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*99.99).toFixed(8)) %></span></div>
+              <div class="plan-price"><span class="plan-price-amount"><span class="plan-price-currency">BTC</span><%= Number((tokenprice*100).toFixed(8)) %></span></div>
               <div class="plan-items">
-                <div class="plan-item" data-feature="USD Equivalent">$99.99 USD</div>
-                <div class="plan-item" data-feature="Tokens">115</div>
+                <div class="plan-item" data-feature="USD Equivalent">$99 USD</div>
+                <div class="plan-item" data-feature="Tokens">100</div>
                 <div class="plan-item" data-feature="Bonus Tokens">15</div>
+                <div class="plan-item" data-feature="Total Tokens">115</div>
                 <div class="plan-item" data-feature="(%) Saved">15%</div>
               </div>
               <div class="plan-footer">
                   <form action="/dashboard/tokens/<%= user._id %>/packs" method="POST">
                     <input type="hidden" name="pack" value="115" />
-                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*99.99).toFixed(5) %>" />
+                    <input type="hidden" name="tokenCost" value="<%= (tokenprice*100).toFixed(5) %>" />
                     <button class="button is-fullwidth">Choose</button>
                 </form>
               </div>

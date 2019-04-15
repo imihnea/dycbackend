@@ -692,12 +692,26 @@ module.exports = {
         const btcrate = data.btc.rate;
         const tokenprice = 1/btcrate; // 1 USD
         const tokens = Number(req.body.pack);
-        if ([21.5, 43.5, 67, 115].includes(tokens)) {
+        if ([20, 40, 60, 100].includes(tokens)) {
           const tokenCost = tokens * tokenprice;
           let CurrentUser = await User.findById(req.params.id);
           if(CurrentUser.btcbalance >= tokenCost) {
             CurrentUser.btcbalance -= tokenCost;
-            CurrentUser.feature_tokens += tokens;
+            switch(tokens) {
+              case 20: 
+                CurrentUser.feature_tokens += tokens + 1.5;
+                break;
+              case 40:
+                CurrentUser.feature_tokens += tokens + 3.5; 
+                break;
+              case 60: 
+                CurrentUser.feature_tokens += tokens + 7;
+                break;
+              case 100: 
+                CurrentUser.feature_tokens += tokens + 15;
+                break;
+              default: break;
+            }
             await CurrentUser.save((err, result) => {
               if(err) {
                 req.flash('error', 'There was an error updating your balance, please try again.');
@@ -706,7 +720,7 @@ module.exports = {
                 if (process.env.NODE_ENV === 'production') {
                   const log = {
                     logType: 'User',
-                    message: `User spent ${tokenCost} to buy ${tokens} pack`,
+                    message: `User spent ${tokenCost} to buy ${tokens} tokens pack`,
                     sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
                     sentFromMethod: 'buyTokenPacks',
                     sentFromUser: req.user._id
@@ -718,16 +732,16 @@ module.exports = {
                   });
                 }
                 switch(tokens) {
-                  case 21.5: 
+                  case 20: 
                     req.flash('success', 'Successfully purchased the basic pack! Enjoy!');
                     break;
-                  case 43.5:
+                  case 40:
                     req.flash('success', 'Successfully purchased the enthusiast pack! Enjoy!');
                     break;
-                  case 67:
+                  case 60:
                     req.flash('success', 'Successfully purchased the visionary pack! Enjoy!');
                     break;
-                  case 115:
+                  case 100:
                     req.flash('success', 'Successfully purchased the enterprise pack! Enjoy!');
                     break;
                   default: break;
@@ -1262,7 +1276,6 @@ module.exports = {
       }
     }
   },
-	// Reviews Update
 	async subscriptionCancel(req, res, next) {
     let CurrentUser = await User.findById(req.params.id);
     Subscription.findOneAndRemove({userid: CurrentUser}, (err) => {
@@ -1276,4 +1289,21 @@ module.exports = {
       }
     });
   },
+  // Get premium page
+  async getPremium(req, res) {
+    const premium = await Subscription.find({userid: req.user._id}, (err) => {
+      if (err) {
+        req.flash('error', 'There was an error. Please try again.');
+        return res.redirect('back');
+      }
+    });
+    res.render('dashboard/dashboard_premium', {
+      user: req.user,
+      premium,
+      errors: req.session.errors,
+      pageTitle: 'Premium - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  }
 };

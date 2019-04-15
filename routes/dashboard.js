@@ -6,7 +6,7 @@ const multer = require('multer');
 const router = express.Router();
 
 const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
-        productDestroy, productEdit, productUpdate, productFeature, 
+        productDestroy, productEdit, productUpdate, productFeature, getPremium,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage } = require('../controllers/dashboard');
@@ -89,6 +89,9 @@ router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
+
+// Show premium page
+router.get('/premium', isLoggedIn, asyncErrorHandler(getPremium));
 
 // GET Subscription Page
 

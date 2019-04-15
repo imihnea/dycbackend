@@ -1,0 +1,22 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
+<link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
+<div class="columns" style="overflow: hidden; margin: auto;">
+    <% include ../partials/sidebar %>
+
+    <div class="column dashboard-right" >
+        <div class="container is-fluid">
+            <% if(errors){ %>
+                <div class="notification is-danger" role="alert"> 
+                <% errors.forEach(function( err){ %>
+                    <%= err.msg %><br>
+                <% }) %>
+                </div>
+            <% } %>
+        </div>
+        <div class="dashTop column">
+            <h2 class="title">Premium</h2>
+        </div>
+    </div>
+</div>
