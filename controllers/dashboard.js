@@ -1042,6 +1042,7 @@ module.exports = {
                 }
               });
               product.save();
+              req.flash('success', 'Your product has been promoted successfully.');
               res.redirect(`/products/${product.id}/view`);
             } else {
               req.flash('error', 'Not enough tokens to promote product.');
@@ -1066,6 +1067,7 @@ module.exports = {
                 }
               });
               product.save();
+              req.flash('success', 'Your product has been promoted successfully.');
               res.redirect(`/products/${product.id}/view`);
             } else {
               req.flash('error', 'Not enough tokens to promote product.');
