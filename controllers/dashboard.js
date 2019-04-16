@@ -12,12 +12,14 @@ const Deal = require('../models/deal');
 const Log = require('../models/log');
 const { createErrorLog, createUserLog } =  require('./logs');
 const Subscription = require('../models/subscription');
+const SearchTerm = require('../models/searchTerm');
 const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -1303,9 +1305,55 @@ module.exports = {
       user: req.user,
       premium,
       errors: req.session.errors,
+      csrfToken: req.cookies._csrf,
+      csrfSecret: req.body.csrfSecret,
       pageTitle: 'Premium - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
+  },
+  async getSearchData(req, res) {
+    req.check('firstCat').matches(/^[a-z &]+$/ig);
+    req.check('secondCat').matches(/^[a-z &]+$/ig);
+    req.check('timeframe').matches(/(7|14|30|90|All)/g);
+    const errors = req.validationErrors();
+    if (errors) {
+      return res.send(errors);
+    } else {
+      let searchQueries = [];
+      if ([7, 14, 30, 90].includes(Number(req.params.timeframe))) {
+        if (req.params.firstCat === 'all') {
+          searchQueries = await SearchTerm.find({createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}});        
+        } else {
+          if (req.params.secondCat != 'All') {
+            searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat, 'queryFilters.secondCategory': req.params.secondCat, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}});
+          } else {
+            searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}});
+          }
+        }
+      } else {
+        if (req.params.firstCat === 'all') {
+          searchQueries = await SearchTerm.find({});        
+        } else {
+          if (req.params.secondCat != 'All') {
+            searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat, 'queryFilters.secondCategory': req.params.secondCat});      
+          } else {
+            searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat});
+          }
+        }
+      }
+      let result = {};
+      if (req.params.firstCat === 'all') {
+        result = _.countBy(searchQueries, function(obj){
+          return obj.queryFilters.category.replace('all', 'All');
+        }); 
+      } else {
+        result = _.countBy(searchQueries, function(obj) {
+          return obj.queryFilters.secondCategory;
+        });
+        delete Object.assign(result, {[`${req.params.firstCat}`]: result[undefined] })[undefined]; 
+      }
+      return res.send(result);
+    }
   }
 };

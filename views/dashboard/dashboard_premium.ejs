@@ -2,10 +2,12 @@
 <link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
 <link rel="stylesheet" href="../../dist/css/products.css">
 <link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
+<link rel="stylesheet" href="../../dist/css/chartist.min.css">
+<link rel="stylesheet" href="../../dist/css/chartistOverride.css">
 <div class="columns" style="overflow: hidden; margin: auto;">
     <% include ../partials/sidebar %>
 
-    <div class="column dashboard-right" >
+    <div class="column dashboard-right smallerCenter" >
         <div class="container is-fluid">
             <% if(errors){ %>
                 <div class="notification is-danger" role="alert"> 
@@ -15,8 +17,70 @@
                 </div>
             <% } %>
         </div>
-        <div class="dashTop column">
-            <h2 class="title">Premium</h2>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-three-fifths">
+                <div class="dashTop column">
+                    <h2 class="title">Premium</h2>
+                </div>
+                <br>
+                <% if (premium) { %>
+                    <div class="frame smallerCenter">
+                        <div class="tabs is-centered is-boxed">
+                            <ul>
+                                <li class="is-active"><a class="link">Category popularity</a></li>
+                                <li><a class="link">Product popularity</a></li>
+                            </ul>
+                        </div>
+                        <div class="select cont-select catSelectLeft premiumSelect">
+                            <select type="text" name="firstCategory" id="firstCategory" style="width: 100%;" required>
+                                <option disabled selected>Main Category</option>
+                                <option value="all">All Categories</option>
+                                <option value="Collectibles & Art">Collectibles & Art</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Fashion & Beauty">Fashion & Beauty</option>
+                                <option value="Home Improvement">Home Improvement</option>
+                                <option value="Leisure Time">Leisure Time</option>
+                                <option value="Mothers & Babies">Mothers & Babies</option>
+                                <option value="Pet Supplies">Pet Supplies</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Sports & Outdoors">Sports & Outdoors</option>
+                                <option value="Vehicles">Vehicles</option>
+                            </select>
+                        </div>
+                        <div class="select cont-select catSelectLeft premiumSelect">
+                            <select type="text" name="secondCategory" id="secondCategory" style="width: 100%;" required>
+                                <option disabled selected>Secondary Category</option>
+                            </select>
+                        </div>
+                        <div class="select cont-select catSelectLeft premiumSelect">
+                            <select type="text" name="timeFrame" id="timeframe" style="width: 100%;" required>
+                                <option disabled selected>Time Frame</option>
+                                <option value="7">7 days</option>
+                                <option value="14">14 days</option>
+                                <option value="30">One month</option>
+                                <option value="90">3 months</option>
+                                <option value="All">All-time</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="_csrf" id="csrfToken" value="<%= csrfToken %>">
+                        <input type="hidden" name="csrfSecret" id="csrfSecret" value="<%= csrfSecret %>">
+                        <br>
+                        <button class="button is-primary" id="search">Search</button>
+                        <div class="ct-chart ct-perfect-fourth hide" id="chart" style="width: 90%; margin: auto;"></div>
+                    </div>
+                <% } else { %>
+                    <div class="frame smallerCenter">
+                        Sellout here
+                    </div>
+                <% } %>
+            </div>
+            <div class="column"></div>
         </div>
+
     </div>
 </div>
+
+<% include ../partials/footer %>
+<script src="../../dist/js/dashboard_premium.js"></script>
+<script src="../../dist/js/chartist.min.js"></script>

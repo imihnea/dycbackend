@@ -671,3 +671,8 @@ body {
       border-bottom: 0;
     }
   }
+
+.premiumSelect{
+    margin: auto;
+    display: block;
+}
