@@ -132,15 +132,6 @@ input, select, .dd-btn{
     width: 70%;
 }
 
-.select select:not([multiple]) {
-    padding-right: 0!important;
-}
-
-.select:not(.is-multiple):not(.is-loading)::after {
-    right: 3em !important;
-    border-color: black !important;
-}
-
 .cont-select:not(.is-multiple):not(.is-loading)::after {
     right: 1em !important;
 }

@@ -18,7 +18,6 @@
                             <h1 class="title">Premium Account</h1>
                             <p class="subtitle">Expires on: <%= expireDate %></p>
                         <% } %>
-                        <p class="subtitle">Personal Details</p>
                         <div class="container is-fluid">
                             <% if(errors){ %>
                                 <div class="notification is-danger" role="alert"> 
@@ -28,57 +27,91 @@
                                 </div>
                             <% } %>
                         </div>
+                        <p class="subtitle">Personal Details</p>
                         <div class="column is-three-fifths" style="margin: auto;">
-                            <div class="level control has-icons-left">
+                            <div class="field">
+                                <div class="control has-icons-left">
                                     <input class="input" name="name" placeholder="Full Name*" type="text"
                                     <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user-tie"></i>
                                     </span>
+                                </div>
                             </div>
-                            <div class="level column select cont-select" style="padding: 0 !important; margin-left: auto; margin-right: auto;">
-                                <select name="country" class="countries" id="countryId" style="width: 100%;" required>
-                                    <% if (user.country) { %>
-                                    <option value="<%= user.country %>" selected><%= user.country %></option>
-                                    <% } else { %>
-                                    <option value="">Select Country</option>
-                                    <% } %>                                        
-                                </select>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <div class="select is-fullwidth">
+                                        <select name="country" class="countries" id="countryId" required>
+                                            <% if (user.country) { %>
+                                            <option value="<%= user.country %>" selected><%= user.country %></option>
+                                            <% } else { %>
+                                            <option value="">Select Country</option>
+                                            <% } %>                                        
+                                        </select>
+                                        <span class="icon is-large is-left">
+                                            <i class="fas fa-flag"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="level column select dash-select" style="padding-top: 0 !important; width: 100%; margin-left: auto; margin-right: auto; padding-left: 0; padding-right: 0;">
-                                <select name="state" class="states" id="stateId" style="width:100%;" required>
-                                    <% if (user.country) { %>
-                                    <option value="<%= user.state %>"><%= user.state %></option>
-                                    <% } else { %>
-                                    <option value="">Select State</option>
-                                    <% } %>   
-                                </select>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <div class="select is-fullwidth">
+                                        <select name="state" class="states" id="stateId" style="width:100%;" required>
+                                            <% if (user.country) { %>
+                                            <option value="<%= user.state %>"><%= user.state %></option>
+                                            <% } else { %>
+                                            <option value="">Select State</option>
+                                            <% } %>   
+                                        </select>
+                                        <span class="icon is-large is-left">
+                                            <i class="fas fa-globe-americas"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="level column select cont-select" style="padding: 0 !important; margin-left: auto; margin-right: auto;">
-                                <select name="city" class="cities" id="cityId" style="width: 100%;" required>
-                                    <% if (user.country) { %>
-                                    <option value="<%= user.city %>"><%= user.city %></option>
-                                    <% } else { %>
-                                    <option value="">Select City</option>
-                                    <% } %>   
-                                </select>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <div class="select is-fullwidth">
+                                        <select name="city" class="cities" id="cityId" style="width: 100%;" required>
+                                            <% if (user.country) { %>
+                                            <option value="<%= user.city %>"><%= user.city %></option>
+                                            <% } else { %>
+                                            <option value="">Select City</option>
+                                            <% } %>   
+                                        </select>
+                                        <span class="icon is-large is-left">
+                                            <i class="fas fa-city"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="columns level">
-                                <div class="column is-three-fifths">
+                            <div class="field is-horizontal has-addons">
+                                <p class="control has-icons-left is-expanded">
                                     <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
                                     <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
-                                </div>
-                                <div class="column">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-road"></i>
+                                    </span>
+                                </p>
+                                <p class="control has-icons-left is-expanded">
                                     <input class="input" name="zip" type="text" placeholder="ZIP Code*"
                                     <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
-                                </div>
-                            </div>  
-                                        
-                            <div class="level">
-                                <input class="input" name="address2" placeholder="Address Line 2" type="text"
-                                <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-sort-numeric-down"></i>
+                                    </span>
+                                </p>
                             </div>
-    
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input class="input" name="address2" placeholder="Address Line 2" type="text"
+                                    <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-road"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
                             <div class="columns level">
                                 <div class="column">
                                     <!-- Every user will have a default profile pic  -->

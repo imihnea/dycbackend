@@ -7,6 +7,7 @@ const path = require('path');
 const Product = require('../models/product');
 const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
+const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -63,6 +64,53 @@ module.exports = {
         const deal = await Deal.findById(req.params.id);
         deal.status = 'Pending Delivery';
         await deal.save();
+        var addressFrom  = {
+            "name":req.body.name,
+            "street1":req.body.street1,
+            "city":req.body.city,
+            "state":req.body.state,
+            "zip":req.body.zip,
+            "country":req.body.country, // iso2 country code
+            "phone":req.body.phone,
+            "email":req.body.email,
+            'test':true,
+        };
+        
+        var addressTo = {
+            "name":deal.buyer.delivery.name,
+            "street1":deal.buyer.delivery.street1,
+            "city":deal.buyer.delivery.city,
+            "state":deal.buyer.delivery.state,
+            "zip":deal.buyer.delivery.zip,
+            "country":deal.buyer.delivery.country, // iso2 country code
+            "phone":deal.buyer.delivery.phone,
+            "email":deal.buyer.delivery.email,
+            'test':true,
+        };
+        
+        var parcel = {
+            "length": req.body.parcel_length,
+            "width": req.body.parcel_width,
+            "height": req.body.parcel_height,
+            "distance_unit": req.body.parcel_distance_unit,
+            "weight": req.body.parcel_weight,
+            "mass_unit": req.body.parcel_weight_unit,
+            'test':true,
+        };
+        
+        shippo.shipment.create({
+            "address_from": addressFrom,
+            "address_to": addressTo,
+            "parcels": [parcel],
+            "async": false,
+            'test':true,
+        }, function(err, shipment){
+            if(err) {
+                console.log(err);
+            }
+            // asynchronously called
+            console.log(shipment);
+        });
         createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'acceptDeal');
         const buyer = await User.findById(deal.buyer.id);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
