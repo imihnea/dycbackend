@@ -122,7 +122,7 @@ router.get('/:id/edit', assignCookie, isLoggedIn, checkUserproduct, asyncErrorHa
 router.put('/:id/:_csrf/:csrfSecret', verifyParam, upload.array('images', 5), checkUserproduct, asyncErrorHandler(productUpdate));
 
 // PUT - features the product
-router.put('/:id/edit/:feature_id', verifyCookie, isLoggedIn, checkUserproduct, asyncErrorHandler(productFeature));
+router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, checkUserproduct, asyncErrorHandler(productFeature));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', verifyCookie, asyncErrorHandler(productDestroy));

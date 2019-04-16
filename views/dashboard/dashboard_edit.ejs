@@ -194,7 +194,7 @@
                                 <td>14 days</td>
                                 <td>5 Tokens</td>
                                 <td style="padding-top: 0;">
-                                    <form action="/dashboard/<%= product._id %>/edit/1?_method=PUT" method="POST" style="padding: inherit;">
+                                    <form action="/dashboard/<%= product._id %>/edit/1/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
                                         <div class="control smmargin">
                                             <button class="button is-primary">Feature</button>
                                         </div>
@@ -207,7 +207,7 @@
                                 <td>7 days</td>
                                 <td>15 Tokens</td>
                                 <td style="padding-top: 0;">
-                                    <form action="/dashboard/<%= product._id %>/edit/2?_method=PUT" method="POST" style="padding: inherit;">
+                                    <form action="/dashboard/<%= product._id %>/edit/2/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
                                         <div class="control smmargin">
                                             <button class="button is-primary">Feature</button>
                                         </div>
