@@ -6,7 +6,7 @@ const multer = require('multer');
 const router = express.Router();
 
 const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
-        productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData,
+        productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage } = require('../controllers/dashboard');
@@ -93,7 +93,11 @@ router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));
 // Show premium page
 router.get('/premium', isLoggedIn, assignCookie, asyncErrorHandler(getPremium));
 
-router.get('/premium/getData/:_csrf/:csrfSecret/:firstCat/:secondCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getSearchData));
+router.get('/premium/getData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getSearchData));
+
+router.get('/premium/getProductData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getProductData));
+
+router.get('/premium/getProductSoldData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getProductSoldData));
 
 // GET Subscription Page
 

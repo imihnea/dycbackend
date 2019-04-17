@@ -18,7 +18,8 @@ const ProductSchema = new Schema({
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
-  nrBought: Number,
+  views: { type: Number, default: 0 },
+  nrBought: {type: Number, default: 0 },
   feat_1: {
     status: { type: Boolean, default: false, es_indexed: true, es_type: 'boolean' },
     expiry_date: Date

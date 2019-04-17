@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     async getProduct(req, res) {
-        const product = await Product.findById(req.params.id).populate({
+        const product = await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } }).populate({
             path: 'reviews',
             options: { sort: { _id: -1 } },
             populate: {
@@ -31,8 +31,6 @@ module.exports = {
               model: 'User',
             },
         });
-
-
         const reviews = await Review.paginate({ product: req.params.id },{
             sort: { createdAt: -1 },
             populate: 'product',
