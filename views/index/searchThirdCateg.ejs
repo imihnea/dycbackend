@@ -3,99 +3,112 @@
 <link rel="stylesheet" href="../../dist/css/products.css">
 <link rel="stylesheet" href="../../dist/css/tooltips.css">
 <div id="results" class="container-fluid">  
-    <div class="content-wrapper">
-        <aside class="products">            
-            <section class="facet-wrapper">
-                <div class="facet-category-title" class="facet">
-                    Categories
-                </div>
-                <div id="categories">
-                    <form action="/secondCategSearch" method="POST">
-                        <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                        <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
-                        <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
-                        <input type="text" name="currency" value="<%= currency %>" hidden>
-                        <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-                        <input type="text" name="continent" value="<%= continent %>" hidden>
-                        <button class="searchBtn searchCategBtn"><i class="fas fa-caret-left"></i> <%= thirdSearchCateg %></button>
-                    </form>
-                </div>
-            </section>
-    
-            <form action="/thirdCategSearch" method="POST" id="searchForm">
-                <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
-                <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
-                <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
-                <% include ../partials/filterSort %>      
-            </form>
-            <div class="spacing">
-                <button class="button is-primary" form="searchForm">Filter</button>
-                <form action="/thirdCategSearch" method="POST" id="resetForm">
+    <div class="columns content-wrapper">
+        <div class="searchSidebar column is-one-fifth frame products">    
+            <div>
+                <p style="font-size: 1.2rem; text-align: center;">Filters</p>
+                <a role="button" class="navbar-burger filtersBurger burger" aria-label="menu" aria-expanded="false" data-target="filtersMenu" style="width: auto;">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>     
+            <div class="filters-menu" id="filtersMenu">
+                <section class="facet-wrapper">
+                    <div class="facet-category-title" class="facet">
+                        Categories
+                    </div>
+                    <div id="categories">
+                        <form action="/secondCategSearch" method="POST">
+                            <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                            <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                            <input type="text" name="category" value="<%= secondSearchCateg %>" hidden>
+                            <input type="text" name="currency" value="<%= currency %>" hidden>
+                            <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                            <input type="text" name="continent" value="<%= continent %>" hidden>
+                            <button class="searchBtn searchCategBtn"><i class="fas fa-caret-left"></i> <%= thirdSearchCateg %></button>
+                        </form>
+                    </div>
+                </section>
+        
+                <form action="/thirdCategSearch" method="POST" id="searchForm">
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
                     <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
                     <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
-                    <button class="button is-primary">Reset Filter</button>
-                </form>        
-            </div>
+                    <% include ../partials/filterSort %>      
+                </form>
+                <div class="spacing">
+                    <button class="button is-primary" form="searchForm">Filter</button>
+                    <form action="/thirdCategSearch" method="POST" id="resetForm">
+                        <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                        <input type="text" name="searchCateg" value="<%= searchCateg %>" hidden>
+                        <input type="text" name="secondSearchCateg" value="<%= secondSearchCateg %>" hidden>
+                        <input type="text" name="category" value="<%= thirdSearchCateg %>" hidden>
+                        <button class="button is-primary">Reset Filter</button>
+                    </form>        
+                </div>
+            </div>   
 
-        </aside>
-
-        <div class="results-wrapper">
-            <section id="paginationTop" class="paginationU"><% include ../partials/paginateThirdSearch %></section>
-            <section id="results-topbar">
-                <div id="stats" class="text-muted"></div>
-            </section>
-
-            <main id="hits" style="width: 85%; margin-left: 5vw;">
-                <%  if (products.length > 0) {
-                        products.forEach((product) => { %>
-                            <article class="hit columns frame">
-                                <div class="product-picture-wrapper">
-                                    <figure class="image is-128x128" style="margin:auto;">
-                                        <img src="<%= product._source.images[0].url %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
-                                    </figure>
-                                </div>
-                                <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
-                                    <div class="product-name">
-                                        <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
-                                        <% if (product._source.feat_1.status === true) { %>
-                                            <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
-                                        <% } %>
-                                        <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
-                                        <p>
-                                            <% for(let i = 0; i < 5; i++) { %>
-                                                <% if(i < Math.floor(product._source.avgRating)) { %>
-                                                <!-- display a full star -->
-                                                <i class="fas fa-star" style="color: orange;"></i>
-                                                <% } else if((product._source.avgRating - i) > 0 && (product._source.avgRating - i) < 1) { %>
-                                                <!-- display a half star -->
-                                                <i class="fas fa-star-half-alt" style="color: orange;"></i>
-                                                <% } else { %>
-                                                <!-- display an empty star -->
-                                                <i class="far fa-star" style="color: orange;"></i>
-                                                <% } %>
+        </div>
+        <div class="columns column">
+            <div class="column"></div>
+            <div class="column is-three-fifths results-wrapper">
+                <section id="paginationTop" class="paginationU"><% include ../partials/paginateThirdSearch %></section>
+                <section id="results-topbar">
+                    <div id="stats" class="text-muted"></div>
+                </section>
+                <main id="hits" style="width: 85%; margin-left: 5vw;">
+                    <%  if (products.length > 0) {
+                            products.forEach((product) => { %>
+                                <article class="hit columns frame">
+                                    <div class="product-picture-wrapper">
+                                        <% if (product._source.feat_1.status === true) { %><span class="featured"></span><% } %>
+                                        <figure class="image is-128x128" style="margin:auto;">
+                                            <img src="<%= product._source.images[0].url %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
+                                        </figure>
+                                    </div>
+                                    <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                        <div class="product-name">
+                                            <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                            <% if (product._source.feat_1.status === true) { %>
+                                                <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
                                             <% } %>
-                                        </p>
-                                        <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                            <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
+                                            <p>
+                                                <% for(let i = 0; i < 5; i++) { %>
+                                                    <% if(i < Math.floor(product._source.avgRating)) { %>
+                                                    <!-- display a full star -->
+                                                    <i class="fas fa-star" style="color: orange;"></i>
+                                                    <% } else if((product._source.avgRating - i) > 0 && (product._source.avgRating - i) < 1) { %>
+                                                    <!-- display a half star -->
+                                                    <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                                                    <% } else { %>
+                                                    <!-- display an empty star -->
+                                                    <i class="far fa-star" style="color: orange;"></i>
+                                                    <% } %>
+                                                <% } %>
+                                            </p>
+                                            <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
-                                    <div class="prices openPrices frame">
-                                        <p class="price_text"> <%= product._source.btcPrice %></p>
-                                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.btcPrice %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
                                     </div>
-                                </div>
-                            </article>
-                    <% }); } else { %> 
-                        <p class="title is-4">No products found.</p>
-                <% } %>
-            </main>
-            <section id="paginationBottom" class="paginationU paginationD"><% include ../partials/paginateThirdSearch %></section>
+                                </article>
+                        <% }); } else { %> 
+                            <p class="title is-4">No products found.</p>
+                    <% } %>
+                </main>
+                <section id="paginationBottom" class="paginationU paginationD"><% include ../partials/paginateThirdSearch %></section>
+            </div>
+            <div class="column"></div>
         </div>
     </div>
 </div>
 
 <% include ../partials/footer %>
-<script src="../../dist/js/categname.js"></script>
+<script src="../../dist/js/search.js"></script>

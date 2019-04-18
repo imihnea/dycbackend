@@ -478,7 +478,7 @@ div.content{
 }
 
 div.column{
-    text-align: center !important;
+    text-align: center;
 }
 
 .prices{
@@ -602,11 +602,11 @@ hr{
 
 
 @media only screen and (max-width: 1087px ) {
-    .dashboard-menu{
+    .dashboard-menu, .filters-menu{
         display: none;
     }
 
-    .dashboard-menu.is-active{
+    .dashboard-menu.is-active, .filters-menu.is-active{
         display: block !important;
     }
 }

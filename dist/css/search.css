@@ -1,70 +1,75 @@
 .content-wrapper {
     margin: 0 -15px;
-    min-width: 620px;
+    /* min-width: 620px; */
     position: relative;
+    margin: auto;
+    margin-top: 2vh;
+    overflow: hidden;
   }
 
-aside.products {
-  position: absolute;
+.searchSidebar.products {
+  /* position: absolute; */
   overflow-y: auto;
-  top: 0;
-  left: 0;
-  width: 17vw;
+  /* top: 0; */
+  /* left: 0; */
+  /* width: 17vw; */
+  height: fit-content;
   padding: 30px;
   border-right: 1px solid #4a4a4a;
   background: white;
+  text-align: left;
   /* height: 100%; */
 }
-aside .facet-category-title {
+.searchSidebar .facet-category-title {
   font-size: 1.2em;
   font-weight: 600;
   color: black;
   margin: 0 0 8px;
 }
-aside .facet-wrapper {
+.searchSidebar .facet-wrapper {
   padding-bottom: 12px;
   border-bottom: solid 1px black;
   margin-bottom: 12px;
   font-size: 0.87em;
 }
-aside .facet {
+.searchSidebar .facet {
   margin-bottom: 16px;
 }
-aside .facet-title {
+.searchSidebar .facet-title {
   font-weight: bold;
   margin: 4px 0;
 }
-aside .facet-item,
-aside a {
+.searchSidebar .facet-item,
+.searchSidebar a {
   color: black;
 }
-aside .facet-item:hover,
-aside a:hover {
+.searchSidebar .facet-item:hover,
+.searchSidebar a:hover {
   color: grey;
   text-decoration: none;
 }
-aside .facet-item.active,
-aside a.active {
+.searchSidebar .facet-item.active,
+.searchSidebar a.active {
   font-weight: bold;
 }
-aside .facet-item input,
-aside a input {
+.searchSidebar .facet-item input,
+.searchSidebar a input {
   margin-right: 4px;
 }
-aside .facet-name {
+.searchSidebar .facet-name {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   display: inline-block;
 }
-aside .facet-count {
+.searchSidebar .facet-count {
   margin-left: 4px;
   color: #888;
 }
 
 .results-wrapper {
-  padding: 2vh 2vw 2vh 18vw;
+  /* padding: 2vh 2vw 2vh 18vw; */
 }
 
 #results-topbar {
