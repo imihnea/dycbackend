@@ -279,86 +279,117 @@ module.exports = {
     },
     async buyProduct(req, res) {
         // Get the user and the product
-        const user  = await User.findById(req.user._id);
         const product = await Product.findById(req.params.id);
-        if ( user._id.toString() === product.author.id.toString() ) {
-            req.flash('error', 'You cannot purchase your own product.');
+        req.check('deliveryShipping', 'Something went wrong, please try again.').matches(/(FaceToFace|Shipping)/);
+        let errors = req.validationErrors();
+        if (errors) {
+            req.flash('error', errors[0].msg);
             res.redirect('back');
         } else {
-            let totalPrice = product.btcPrice;
-            if ( user.btcbalance >= totalPrice)  {
-                // Create deal
-                let deal = {
-                    product: {
-                        id: product._id,
-                        name: product.name,
-                        imageUrl: product.images[0].url,
-                        author: product.author,
-                        price: product.btcPrice,
-                    },
-                    buyer: {
-                        id: user._id,
-                        username: user.username,
-                        name: user.full_name,
-                        avatarUrl: user.avatar.url,
-                        'delivery.shipping': req.body.deliveryShipping,
-                        'delivery.name': req.body.deliveryName,
-                        'delivery.street1': req.body.deliveryStreet1,
-                        'delivery.city': req.body.deliveryCity,
-                        'delivery.state': req.body.deliveryState,
-                        'delivery.zip': req.body.deliveryZip,
-                        'delivery.country': req.body.deliveryCountry,
-                        'delivery.phone': req.body.deliveryPhone,
-                        'delivery.email': req.body.deliveryEmail,
-                    },
-                    price: totalPrice
-                };
-                deal = await Deal.create(deal); 
-                // Update product and user
-                user.btcbalance -= totalPrice;
-                // The product will remain available if it's repeatable
-                if ( !product.repeatable ) {
-                    product.available = "Closed";
-                }
-                if (product.nrBought) {
-                    product.nrBought += 1;
+            req.check('deliveryName', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3 }).trim();
+            req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+            req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().trim();
+            req.check('deliveryPhone', 'Please specify a valid phone number').notEmpty().matches(/^[0-9+ -]+$/g).trim();
+            if (req.body.deliveryShipping == 'Shipping') {
+                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).trim();
+                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
+                req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
+                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
+                req.check('deliveryZip', 'Please specify an alphanumeric zip code').notEmpty().isAlphanumeric().trim();
+            }
+            errors = req.validationErrors();
+            if (errors) {
+                res.render('deals/deal_buy', { 
+                    user: req.user,
+                    errors: errors,
+                    product: product,
+                    csrfToken: req.body.csrfSecret,
+                    pageTitle: `Buy ${product.name} - Deal Your Crypto`,
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                });
+            } else {
+                const user  = await User.findById(req.user._id);
+                if ( user._id.toString() === product.author.id.toString() ) {
+                    req.flash('error', 'You cannot purchase your own product.');
+                    res.redirect('back');
                 } else {
-                    product.nrBought = 1;
-                }
-                product.markModified('buyers');
-                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
-                await product.save();
-                await user.save();
-                // Send an email to the seller letting them know about the deal request
-                const user2 = await User.findById(product.author.id);
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                    link: `http://${req.headers.host}/deals/${deal._id}`,
-                    name: product.name,
-                    buyer: req.user.full_name,
-                    subject: `New buy request - Deal Your Crypto`,
-                  }, function (err, data) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                            to: `${user2.email}`, // list of receivers
-                            subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                            html: data, // html body
+                    let totalPrice = product.btcPrice;
+                    if ( user.btcbalance >= totalPrice)  {
+                        // Create deal
+                        let deal = {
+                            product: {
+                                id: product._id,
+                                name: product.name,
+                                imageUrl: product.images[0].url,
+                                author: product.author,
+                                price: product.btcPrice,
+                            },
+                            buyer: {
+                                id: user._id,
+                                username: user.username,
+                                name: user.full_name,
+                                avatarUrl: user.avatar.url,
+                                'delivery.shipping': req.body.deliveryShipping,
+                                'delivery.name': req.body.deliveryName,
+                                'delivery.street1': req.body.deliveryStreet1,
+                                'delivery.city': req.body.deliveryCity,
+                                'delivery.state': req.body.deliveryState,
+                                'delivery.zip': req.body.deliveryZip,
+                                'delivery.country': req.body.deliveryCountry,
+                                'delivery.phone': req.body.deliveryPhone,
+                                'delivery.email': req.body.deliveryEmail,
+                            },
+                            price: totalPrice
                         };
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                            console.log(error);
+                        deal = await Deal.create(deal); 
+                        // Update product and user
+                        user.btcbalance -= totalPrice;
+                        // The product will remain available if it's repeatable
+                        if ( !product.repeatable ) {
+                            product.available = "Closed";
+                        }
+                        if (product.nrBought) {
+                            product.nrBought += 1;
+                        } else {
+                            product.nrBought = 1;
+                        }
+                        product.markModified('buyers');
+                        await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
+                        await product.save();
+                        await user.save();
+                        // Send an email to the seller letting them know about the deal request
+                        const user2 = await User.findById(product.author.id);
+                        ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                            link: `http://${req.headers.host}/deals/${deal._id}`,
+                            name: product.name,
+                            buyer: req.user.full_name,
+                            subject: `New buy request - Deal Your Crypto`,
+                          }, function (err, data) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                    to: `${user2.email}`, // list of receivers
+                                    subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                                    html: data, // html body
+                                };
+                                // send mail with defined transport object
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                    console.log(error);
+                                    }
+                                });
                             }
                         });
+                        // Link chat to deal
+                        res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                    } else {
+                        req.flash('error', 'You do not have enough currency to purchase this product.');
+                        res.redirect('back');
                     }
-                });
-                // Link chat to deal
-                res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
-            } else {
-                req.flash('error', 'You do not have enough currency to purchase this product.');
-                res.redirect('back');
+                }
             }
         }
     }

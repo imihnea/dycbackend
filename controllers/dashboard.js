@@ -58,12 +58,12 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
   async getDashboardIndex(req, res) {
-  let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
-    if(err) {
-      console.log('Failed to retrieve subscription.');
-      createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
-    }
-  });
+    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      if(err) {
+        console.log('Failed to retrieve subscription.');
+        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+      }
+    });
     if(premium) {
       let date = premium.expireDate;
       let dateObj = new Date(date);
