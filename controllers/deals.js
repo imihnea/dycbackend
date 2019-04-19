@@ -64,6 +64,7 @@ module.exports = {
         deal.status = 'Pending Delivery';
         await deal.save();
         createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'acceptDeal');
+        await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         const buyer = await User.findById(deal.buyer.id);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
             link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
@@ -95,6 +96,7 @@ module.exports = {
         deal.status = 'Declined';
         await deal.save();
         createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'declineDeal');
+        await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         buyer.btcbalance += deal.price;
         await buyer.save();
         ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
@@ -197,6 +199,7 @@ module.exports = {
         await deal.save();
         buyer.btcbalance += deal.price;
         await buyer.save();
+        await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         // Seller email
         const seller = await User.findById(deal.product.author.id);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/cancelDeal.ejs"), {

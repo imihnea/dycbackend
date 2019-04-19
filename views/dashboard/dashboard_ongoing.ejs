@@ -29,7 +29,7 @@
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                         <div class="product-name">
                                             <p class="title is-6"><%= deal.product.name %></p>
-                                            <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Status: <%= deal.status %></sub></p>
+                                            <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub <% if (deal.status == 'Processing') { %>style="color: red;" <% } %>>Status: <%= deal.status %></sub></p>
                                             <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
                                                 <button class="button view-btn is-primary">View Deal</button>
                                             </form>

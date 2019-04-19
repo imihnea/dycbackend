@@ -326,6 +326,7 @@ module.exports = {
                     product.nrBought = 1;
                 }
                 product.markModified('buyers');
+                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
                 await product.save();
                 await user.save();
                 // Send an email to the seller letting them know about the deal request
@@ -339,20 +340,20 @@ module.exports = {
                     if (err) {
                         console.log(err);
                     } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                        to: `${user2.email}`, // list of receivers
-                        subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                        html: data, // html body
-                    };
-                    // send mail with defined transport object
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                        console.log(error);
-                        }
-                    });
-                }
-            });
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                            to: `${user2.email}`, // list of receivers
+                            subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                            html: data, // html body
+                        };
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                            console.log(error);
+                            }
+                        });
+                    }
+                });
                 // Link chat to deal
                 res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
             } else {

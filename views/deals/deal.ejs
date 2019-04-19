@@ -66,10 +66,13 @@
         <% } %>
         <% if (user._id.toString() === buyer._id.toString()) { %>
             <div class="column is-one-fifth">
+                <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
-                    <div class="messageProfile frame">
-                        <div class="">
-                            <img src="<%= seller.avatar.url %>" class="open-img ">
+                    <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                        <div>
+                            <figure class="image is-128x128" style="margin:auto;">
+                                <img src="<%= seller.avatar.url %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                            </figure>
                         </div>
                         <br>
                         <div class=" prod_info ">
@@ -111,6 +114,7 @@
                         </div>
                     </div>
                 </div>
+                <a href="/messages" class="button is-primary hideLater smallerCenter">To Dashboard</a>
             </div>
         <% } %>
         <% if ((user._id.toString() === buyer._id.toString()) || (user._id.toString() === seller._id.toString())) { %>
@@ -165,7 +169,7 @@
                     <div class="messageProfile frame productFrame smallerCenter" style="margin:auto; margin-bottom: 1vh;">
                         <div>                   
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px; height: inherit;">
                             </figure>
                         </div>
                         <br>
@@ -212,7 +216,7 @@
                                         </section>
                                         <footer class="modal-card-foot">
                                             <button class="button is-danger cancelAccept">Cancel</button>
-                                            <p class="subtitle">After accepting the deal you are free to meet the buyer or wait for the delivery company to pick-up your package.</p>
+                                            <p class="subtitle"><% if (deal.shipping = 'FaceToFace') { %>You are free to meet the buyer after accepting the deal.<% } else { %>Wait for the delivery company to pick-up your package after accepting the deal.<% } %></p>
                                         </footer>
                                     </div>
                                 </div>
