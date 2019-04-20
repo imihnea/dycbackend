@@ -43,6 +43,6 @@ router.get('/:id', asyncErrorHandler(getProfile));
 
 // PUT Profile route
 
-router.put('/:id/update/:_csrf/:csrfSecret', verifyParam, isLoggedIn, upload.single('avatar'), asyncErrorHandler(profileUpdate));
+router.put('/update/:_csrf/:csrfSecret', verifyParam, isLoggedIn, upload.single('avatar'), asyncErrorHandler(profileUpdate));
 
 module.exports = router;

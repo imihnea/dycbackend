@@ -27,6 +27,8 @@ Backend:
       
    Low Priority:
 
+      Service worker subscriptions => Notifications
+
       Login => Link accounts facebook, gmail etc to original
       
       Dashboard 
@@ -35,3 +37,14 @@ Backend:
                => 2 Factor when withdrawing                      
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
+
+Optimization:
+
+   Index => Users
+         => Products
+
+   Caching => Redis
+
+   Logs => Use Winston instead of db logging
+
+   HTTP/2 => SPDY
