@@ -117,3 +117,14 @@
 	width: 90%;
     margin: auto;
 }
+
+#share-buttons img {
+padding: 5px;
+border: 0;
+box-shadow: 0;
+display: inline;
+}
+
+#share-buttons img:hover {
+	animation: pulse 1s;
+}
