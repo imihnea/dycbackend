@@ -23,6 +23,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     async getProduct(req, res) {
+        var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         const product = await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } }).populate({
             path: 'reviews',
             options: { sort: { _id: -1 } },
@@ -31,181 +32,173 @@ module.exports = {
               model: 'User',
             },
         });
-        if (product) {
-            const reviews = await Review.paginate({ product: req.params.id },{
-                sort: { createdAt: -1 },
-                populate: 'product',
-                page: req.query.page || 1,
-                limit: 5,
-              });
-            reviews.page = Number(reviews.page);
-            const floorRating = product.calculateAvgRating();
-            if (req.user) {
-                let reviewed = false;
-                reviews.docs.forEach((review) => {
-                    if (review.author.toString() === req.user._id.toString()) {
-                        reviewed = true;
+        const reviews = await Review.paginate({ product: req.params.id },{
+            sort: { createdAt: -1 },
+            populate: 'product',
+            page: req.query.page || 1,
+            limit: 5,
+          });
+        reviews.page = Number(reviews.page);
+        const floorRating = product.calculateAvgRating();
+        if (req.user) {
+            let reviewed = false;
+            reviews.docs.forEach((review) => {
+                if (review.author.toString() === req.user._id.toString()) {
+                    reviewed = true;
+                }
+            });
+            // Find similar products
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
+                if (err) {
+                  console.log(err);
+                  res.render('products/product_view', { 
+                    product, 
+                    similar: false, 
+                    floorRating, 
+                    reviews, 
+                    reviewed,
+                    fullUrl,
+                    user: req.user,
+                    pageTitle: `${product.name} - Deal Your Crypto`,
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                  });
+                } else {
+                  let similar = result;
+                  if (similar.length < 4) {
+                    let ids = [ ObjectID(req.params.id) ];
+                    if (similar.length > 0) {
+                        similar.forEach((sim) => {
+                            ids.push(ObjectID(sim._id));
+                        });
                     }
-                });
-                // Find similar products
-                Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
-                    if (err) {
-                      console.log(err);
-                      res.render('products/product_view', { 
-                        product, 
-                        similar: false, 
-                        floorRating, 
-                        reviews, 
-                        reviewed, 
-                        user: req.user,
-                        pageTitle: `${product.name} - Deal Your Crypto`,
-                        pageDescription: 'Description',
-                        pageKeywords: 'Keywords'
-                      });
-                    } else {
-                      let similar = result;
-                      if (similar.length < 4) {
-                        let ids = [ ObjectID(req.params.id) ];
-                        if (similar.length > 0) {
-                            similar.forEach((sim) => {
-                                ids.push(ObjectID(sim._id));
-                            });
-                        }
-                        Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
-                            if (err) {
-                                console.log(err);
-                                if (similar.length > 0) {
-                                    res.render('products/product_view', { 
-                                        product, 
-                                        similar, 
-                                        floorRating, 
-                                        reviews, 
-                                        reviewed, 
-                                        user: req.user,
-                                        pageTitle: `${product.name} - Deal Your Crypto`,
-                                        pageDescription: 'Description',
-                                        pageKeywords: 'Keywords'
-                                    });
-                                } else {
-                                    res.render('products/product_view', { 
-                                        product, 
-                                        similar: false, 
-                                        floorRating, 
-                                        reviews, 
-                                        reviewed, 
-                                        user: req.user,
-                                        pageTitle: `${product.name} - Deal Your Crypto`,
-                                        pageDescription: 'Description',
-                                        pageKeywords: 'Keywords'
-                                    });
-                                }
-                            } else {
-                                Array.from(result).forEach((res) => {
-                                    similar.push(res);
-                                });
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
+                        if (err) {
+                            console.log(err);
+                            if (similar.length > 0) {
                                 res.render('products/product_view', { 
                                     product, 
                                     similar, 
                                     floorRating, 
                                     reviews, 
-                                    reviewed, 
+                                    reviewed,
+                                    fullUrl,
+                                    user: req.user,
+                                    pageTitle: `${product.name} - Deal Your Crypto`,
+                                    pageDescription: 'Description',
+                                    pageKeywords: 'Keywords'
+                                });
+                            } else {
+                                res.render('products/product_view', { 
+                                    product, 
+                                    similar: false, 
+                                    floorRating, 
+                                    reviews, 
+                                    reviewed,
+                                    fullUrl,
                                     user: req.user,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
                                     pageKeywords: 'Keywords'
                                 });
                             }
-                        });
-                      } else {
-                        if (similar.length > 0) {
+                        } else {
+                            Array.from(result).forEach((res) => {
+                                similar.push(res);
+                            });
                             res.render('products/product_view', { 
                                 product, 
                                 similar, 
                                 floorRating, 
                                 reviews, 
-                                reviewed, 
-                                user: req.user,
-                                pageTitle: `${product.name} - Deal Your Crypto`,
-                                pageDescription: 'Description',
-                                pageKeywords: 'Keywords'
-                            });
-                        } else {
-                            res.render('products/product_view', { 
-                                product, 
-                                similar: false, 
-                                floorRating, 
-                                reviews, 
-                                reviewed, 
+                                reviewed,
+                                fullUrl,
                                 user: req.user,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: 'Description',
                                 pageKeywords: 'Keywords'
                             });
                         }
-                      }
-                    }
-                });
-            } else {
-                Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
-                    if (err) {
-                        console.log(err);
+                    });
+                  } else {
+                    if (similar.length > 0) {
                         res.render('products/product_view', { 
                             product, 
-                            similar: false, 
+                            similar, 
                             floorRating, 
                             reviews, 
-                            reviewed: true, 
-                            user: false,
+                            reviewed,
+                            fullUrl,
+                            user: req.user,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
                             pageKeywords: 'Keywords'
                         });
                     } else {
-                      let similar = result;
-                      if (similar.length < 4) {
-                        let ids = [ ObjectID(req.params.id) ];
-                        if (similar.length > 0) {
-                            similar.forEach((sim) => {
-                                ids.push(ObjectID(sim._id));
-                            });
-                        }
-                        Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
-                            if (err) {
-                                console.log(err);
-                                if (similar.length > 0) {
-                                    res.render('products/product_view', { 
-                                        product, 
-                                        similar, 
-                                        floorRating, 
-                                        reviews, 
-                                        reviewed: true, 
-                                        user: false,
-                                        pageTitle: `${product.name} - Deal Your Crypto`,
-                                        pageDescription: 'Description',
-                                        pageKeywords: 'Keywords'
-                                    });
-                                } else {
-                                    res.render('products/product_view', { 
-                                        product, 
-                                        similar: false, 
-                                        floorRating, 
-                                        reviews, 
-                                        reviewed: true, 
-                                        user: false,
-                                        pageTitle: `${product.name} - Deal Your Crypto`,
-                                        pageDescription: 'Description',
-                                        pageKeywords: 'Keywords'
-                                    });
-                                }
-                            } else {
-                                Array.from(result).forEach((res) => {
-                                    similar.push(res);
-                                });
+                        res.render('products/product_view', { 
+                            product, 
+                            similar: false, 
+                            floorRating, 
+                            reviews, 
+                            reviewed,
+                            fullUrl,
+                            user: req.user,
+                            pageTitle: `${product.name} - Deal Your Crypto`,
+                            pageDescription: 'Description',
+                            pageKeywords: 'Keywords'
+                        });
+                    }
+                  }
+                }
+            });
+        } else {
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.render('products/product_view', { 
+                        product, 
+                        similar: false, 
+                        floorRating, 
+                        reviews,
+                        fullUrl,
+                        reviewed: true, 
+                        user: false,
+                        pageTitle: `${product.name} - Deal Your Crypto`,
+                        pageDescription: 'Description',
+                        pageKeywords: 'Keywords'
+                    });
+                } else {
+                  let similar = result;
+                  if (similar.length < 4) {
+                    let ids = [ ObjectID(req.params.id) ];
+                    if (similar.length > 0) {
+                        similar.forEach((sim) => {
+                            ids.push(ObjectID(sim._id));
+                        });
+                    }
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
+                        if (err) {
+                            console.log(err);
+                            if (similar.length > 0) {
                                 res.render('products/product_view', { 
                                     product, 
                                     similar, 
                                     floorRating, 
-                                    reviews, 
+                                    reviews,
+                                    fullUrl,
+                                    reviewed: true, 
+                                    user: false,
+                                    pageTitle: `${product.name} - Deal Your Crypto`,
+                                    pageDescription: 'Description',
+                                    pageKeywords: 'Keywords'
+                                });
+                            } else {
+                                res.render('products/product_view', { 
+                                    product, 
+                                    similar: false, 
+                                    floorRating, 
+                                    reviews,
+                                    fullUrl,
                                     reviewed: true, 
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
@@ -213,26 +206,16 @@ module.exports = {
                                     pageKeywords: 'Keywords'
                                 });
                             }
-                        });
-                      } else {
-                        if (similar.length > 0) {
+                        } else {
+                            Array.from(result).forEach((res) => {
+                                similar.push(res);
+                            });
                             res.render('products/product_view', { 
                                 product, 
                                 similar, 
                                 floorRating, 
-                                reviews, 
-                                reviewed: true, 
-                                user: false,
-                                pageTitle: `${product.name} - Deal Your Crypto`,
-                                pageDescription: 'Description',
-                                pageKeywords: 'Keywords'
-                            });
-                        } else {
-                            res.render('products/product_view', { 
-                                product, 
-                                similar: false, 
-                                floorRating, 
-                                reviews, 
+                                reviews,
+                                fullUrl,
                                 reviewed: true, 
                                 user: false,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
@@ -240,13 +223,38 @@ module.exports = {
                                 pageKeywords: 'Keywords'
                             });
                         }
-                      } 
+                    });
+                  } else {
+                    if (similar.length > 0) {
+                        res.render('products/product_view', { 
+                            product, 
+                            similar, 
+                            floorRating, 
+                            reviews,
+                            fullUrl,
+                            reviewed: true, 
+                            user: false,
+                            pageTitle: `${product.name} - Deal Your Crypto`,
+                            pageDescription: 'Description',
+                            pageKeywords: 'Keywords'
+                        });
+                    } else {
+                        res.render('products/product_view', { 
+                            product, 
+                            similar: false, 
+                            floorRating, 
+                            reviews,
+                            fullUrl,
+                            reviewed: true, 
+                            user: false,
+                            pageTitle: `${product.name} - Deal Your Crypto`,
+                            pageDescription: 'Description',
+                            pageKeywords: 'Keywords'
+                        });
                     }
-                });
-            }
-        } else {
-            req.flash('error', 'There is no such product.');
-            res.redirect('back');
+                  } 
+                }
+            });
         }
     },
     postReport(req, res) {
