@@ -11,7 +11,7 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div class="frame smallerCenter">
-                    <form action="/profile/<%= user._id %>/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                    <form action="/profile/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="changeDetails">
                         <% if(premium !== true) { %>
                             <h1 class="title">Standard Account</h1>
                         <% } else { %>
@@ -25,6 +25,7 @@
                                     <%= err.msg %><br>
                                 <% }) %>
                                 </div>
+                                <br>
                             <% } %>
                         </div>
                         <p class="subtitle">Personal Details</p>
@@ -145,14 +146,14 @@
                                 </div>
                             </div>
                             
-                        <button class="button is-primary is-rounded">Submit</button>
-    
+                            
                         </div>       
                     </form>
                     <div class="buttons is-centered">
-                            <a href="/profile/<%= user._id %>"><button class="button is-primary smmargin is-rounded">View Profile</button></a>
+                        <button type="submit" class="button is-primary is-rounded" form="changeDetails">Submit</button>
+                        <a href="/profile/<%= user._id %>"><button class="button is-primary smmargin is-rounded" style="margin-top: 0;">View Profile</button></a>
                         <% if(premium !== true) { %>
-                            <a href="/dashboard/subscription"><button class="button is-primary smmargin is-rounded">Upgrade Account</button></a>
+                            <a href="/dashboard/subscription"><button class="button is-primary smmargin is-rounded" style="margin-top: 0;">Upgrade Account</button></a>
                         <% } %>
                     </div>
                 </div>

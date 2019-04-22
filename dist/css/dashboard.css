@@ -1,6 +1,5 @@
 .sidebar{
     padding-left: 1vw;
-    /* TODO: Breakpoints */
     margin-top: 3vh !important;
 }
 
@@ -671,3 +670,8 @@ body {
       border-bottom: 0;
     }
   }
+
+.premiumSelect{
+    margin: auto;
+    display: block;
+}

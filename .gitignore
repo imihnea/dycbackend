@@ -63,3 +63,8 @@ typings/
 # Google credentials
 credentials.json
 token.json
+
+# Certificates
+*.pem
+*.crt
+*.key

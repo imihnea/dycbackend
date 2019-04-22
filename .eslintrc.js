@@ -70,7 +70,8 @@ module.exports = {
         "camelcase": "off",
         "no-use-before-define": "off",
         "array-callback-return": "off",
-        "brace-style": "off"
+        "brace-style": "off",
+        "no-new": "off"
     },
     "plugins": [
         "security"

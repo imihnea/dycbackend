@@ -27,6 +27,8 @@ Backend:
       
    Low Priority:
 
+      Service worker subscriptions => Notifications
+
       Login => Link accounts facebook, gmail etc to original
       
       Dashboard 
@@ -35,11 +37,14 @@ Backend:
                => 2 Factor when withdrawing                      
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
-      Data => Save product data
-      
-After Launch:
 
-      Users => Create premium/business user who can access product and search data 
-      
-      Data => Create another Elastic instance for premium/business user data (if needed)
-           => Make a page where they can query that instance => Data compiled into charts 
+Optimization:
+
+   Index => Users
+         => Products
+
+   Caching => Redis
+
+   Logs => Use Winston instead of db logging
+
+   HTTP/2 => SPDY

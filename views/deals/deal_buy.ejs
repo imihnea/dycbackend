@@ -1,6 +1,14 @@
 <% include ../partials/header %>
 <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
 <div class="hero-body">
+    <% if(errors){ %>
+        <div class="notification is-danger" role="alert" style="margin-bottom: 0;"> 
+        <% errors.forEach(function( err){ %>
+            <%= err.msg %><br>
+        <% }) %>
+        </div>
+    <% } %>
+    <br>
     <div class="column is-two-fifths frame smallerCenter">
         <div class="column">
                 <h1 class="title">Transaction Details</h2>

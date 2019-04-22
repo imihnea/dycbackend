@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#ongoing').classList.add('active-page');
       break;
     }
+    case ('/dashboard/premium'): {
+      document.querySelector('#premium').classList.add('active-page');
+      break;
+    }
     default: {
       break;
     }

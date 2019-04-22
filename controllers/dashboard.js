@@ -12,12 +12,14 @@ const Deal = require('../models/deal');
 const Log = require('../models/log');
 const { createErrorLog, createUserLog } =  require('./logs');
 const Subscription = require('../models/subscription');
+const SearchTerm = require('../models/searchTerm');
 const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -56,12 +58,12 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
   async getDashboardIndex(req, res) {
-  let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
-    if(err) {
-      console.log('Failed to retrieve subscription.');
-      createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
-    }
-  });
+    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      if(err) {
+        console.log('Failed to retrieve subscription.');
+        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+      }
+    });
     if(premium) {
       let date = premium.expireDate;
       let dateObj = new Date(date);
@@ -1303,9 +1305,96 @@ module.exports = {
       user: req.user,
       premium,
       errors: req.session.errors,
+      csrfToken: req.cookies._csrf,
+      csrfSecret: req.body.csrfSecret,
       pageTitle: 'Premium - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
+  },
+  async getSearchData(req, res) {
+    req.check('firstCat').matches(/^[a-z &]+$/ig);
+    req.check('timeframe').matches(/(7|14|30|90|All)/g);
+    const errors = req.validationErrors();
+    if (errors) {
+      return res.send(errors);
+    } else {
+      let searchQueries = [];
+      if ([7, 14, 30, 90].includes(Number(req.params.timeframe))) {
+        if (req.params.firstCat === 'all') {
+          searchQueries = await SearchTerm.find({createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}});        
+        } else {
+          searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}});
+        }
+      } else {
+        if (req.params.firstCat === 'all') {
+          searchQueries = await SearchTerm.find({});        
+        } else {
+          searchQueries = await SearchTerm.find({'queryFilters.category': req.params.firstCat});
+        }
+      }
+      let result = {};
+      if (req.params.firstCat === 'all') {
+        result = _.countBy(searchQueries, function(obj){
+          return obj.queryFilters.category.replace('all', 'No subcategory');
+        }); 
+      } else {
+        result = _.countBy(searchQueries, function(obj) {
+          return obj.queryFilters.secondCategory;
+        });
+        delete Object.assign(result, {[`${req.params.firstCat}`]: result[undefined] })[undefined]; 
+      }
+      return res.send(result);
+    }
+  },
+  async getProductData(req, res) {
+    req.check('firstCat').matches(/^[a-z &]+$/ig);
+    req.check('timeframe').matches(/(7|14|30|90|All)/g);
+    const errors = req.validationErrors();
+    if (errors) {
+      return res.send(errors);
+    } else {
+      let products = {};
+      if ([7, 14, 30, 90].includes(Number(req.params.timeframe))) {
+        if (req.params.firstCat == 'all') {
+          products = await Product.find({'author.id': req.user._id, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}}).select('name views');
+        } else {
+          products = await Product.find({'author.id': req.user._id, 'category.1': req.params.firstCat, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}}).select('name views');
+        }
+      } else {
+        if (req.params.firstCat == 'all') {
+          products = await Product.find({'author.id': req.user._id}).select('name views');
+        } else {
+          products = await Product.find({'author.id': req.user._id, 'category.1': req.params.firstCat}).select('name views');
+        }
+      }
+      const result = Object.assign({}, ...(products.map(item => ({ [item.name]: item.views }) )));
+      return res.send(result);
+    }
+  },
+  async getProductSoldData(req, res) {
+    req.check('firstCat').matches(/^[a-z &]+$/ig);
+    req.check('timeframe').matches(/(7|14|30|90|All)/g);
+    const errors = req.validationErrors();
+    if (errors) {
+      return res.send(errors);
+    } else {
+      let products = {};
+      if ([7, 14, 30, 90].includes(Number(req.params.timeframe))) {
+        if (req.params.firstCat == 'all') {
+          products = await Product.find({'author.id': req.user._id, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}}).select('name nrBought');
+        } else {
+          products = await Product.find({'author.id': req.user._id, 'category.1': req.params.firstCat, createdAt: {$gte: new Date((new Date().getTime() - (req.params.timeframe * 24 * 60 * 60 * 1000)))}}).select('name nrBought');
+        }
+      } else {
+        if (req.params.firstCat == 'all') {
+          products = await Product.find({'author.id': req.user._id}).select('name nrBought');
+        } else {
+          products = await Product.find({'author.id': req.user._id, 'category.1': req.params.firstCat}).select('name nrBought');
+        }
+      }
+      const result = Object.assign({}, ...(products.map(item => ({ [item.name]: item.nrBought }) )));
+      return res.send(result);
+    }
   }
 };

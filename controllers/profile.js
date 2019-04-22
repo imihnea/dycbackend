@@ -9,6 +9,7 @@ const Review = require('../models/review');
 const Log = require('../models/log');
 const Subscription = require('../models/subscription');
 const { Regions } = require('../dist/js/regions');
+const moment = require('moment');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -85,19 +86,52 @@ module.exports = {
                         return res.redirect('back');
                     }
                 }
-                req.check('name', 'Name must be between 3 and 40 letters').matches(/^[a-zA-Z ]+$/i).notEmpty().isLength({ min: 3, max: 40 });
-                req.check('country', 'Please select a country').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('state', 'Please select a state').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('city', 'Please select a city').matches(/^[a-zA-Z \-,]+$/).notEmpty();
-                req.check('address1', 'Please input a valid first address').matches(/^[a-z0-9., -]+$/i).notEmpty();
-                req.check('address2', 'Please input a valid second address line').matches(/^$|[a-z0-9., -]+$/i);
-                req.check('zip', 'Please specify an alphanumeric zip code').notEmpty().matches(/^[a-z0-9 ]+$/i);
+                req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3 });
+                req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+                req.check('country', 'Please select a country').notEmpty().matches(/^[a-z .\-,]+$/gi);
+                req.check('state', 'Please select a state').notEmpty().matches(/^[a-z .\-,]+$/gi);
+                req.check('city', 'Please select a city').notEmpty().matches(/^[a-z .\-,]+$/gi);
+                req.check('address1', 'Please input a valid first address').notEmpty().matches(/^[a-z0-9., -]+$/gi).trim();
+                req.check('address2', 'Please input a valid second address line').matches(/^$|[a-z0-9., -]+$/gi).trim();
+                req.check('zip', 'Please specify an alphanumeric zip code').notEmpty().isAlphanumeric().trim();
                 const errors = req.validationErrors();
                 if (errors) {
-                  errors.forEach((error) => {
-                    req.flash('error', error.msg);
-                  });
-                  res.redirect('back');
+                    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+                      if(err) {
+                        console.log('Failed to retrieve subscription.');
+                        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+                      }
+                    });
+                    if(premium) {
+                      let date = premium.expireDate;
+                      let dateObj = new Date(date);
+                      let momentObj = moment(dateObj);
+                      let expireDate = momentObj.format('MM-DD-YYYY');
+                      premium = true;
+                      res.render('dashboard/dashboard', { 
+                        user: req.user,
+                        premium,
+                        expireDate: expireDate,
+                        errors,
+                        csrfToken: req.cookies._csrf,
+                        csrfSecret: req.body.csrfSecret,
+                        pageTitle: 'Dashboard - Deal Your Crypto',
+                        pageDescription: 'Description',
+                        pageKeywords: 'Keywords'
+                      });
+                    } else {
+                      premium = false;
+                      res.render('dashboard/dashboard', { 
+                        user: req.user,
+                        premium,
+                        errors,
+                        csrfToken: req.cookies._csrf,
+                        csrfSecret: req.body.csrfSecret,
+                        pageTitle: 'Dashboard - Deal Your Crypto',
+                        pageDescription: 'Description',
+                        pageKeywords: 'Keywords'
+                      });
+                    }
                 } else {
                   if (process.env.NODE_ENV === 'production') {
                     const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
