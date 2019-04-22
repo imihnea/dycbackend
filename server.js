@@ -26,6 +26,8 @@ const passport = require('passport');
 
 const flash = require('connect-flash');
 
+const winston = require('./config/winston');
+
 const helmet = require('helmet');
 
 app.use(helmet());
@@ -288,6 +290,7 @@ app.use((err, req, res, next) => {
   // res.status(err.status || 500);
   // res.render('error');
   req.session.error = req.flash('error', err.message);
+  winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
   res.redirect('back');
 });
 
