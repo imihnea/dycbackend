@@ -49,6 +49,10 @@ module.exports = {
         });
     },
     async getBuyDeal(req, res) {
+        shippo.carrieraccount.list({results:10})
+        .then(function(carrieraccount){
+            console.log(carrieraccount);
+        });
         const product = await Product.findById(req.params.id);
         res.render('deals/deal_buy', { 
             user: req.user,
@@ -98,45 +102,96 @@ module.exports = {
             'test':true,
         };
         
-        shippo.shipment.create({
+        var shipment = {
             "address_from": addressFrom,
             "address_to": addressTo,
             "parcels": [parcel],
-            "async": false,
-            'test':true,
-        }, function(err, shipment){
+            'test': true,
+        };
+
+        // shippo.shipment.create({
+        //     "address_from": addressFrom,
+        //     "address_to": addressTo,
+        //     "parcels": [parcel],
+        //     "async": false,
+        //     'test':true,
+        // }, function(err, shipment){
+        //     if(err) {
+        //         console.log(err);
+        //     }
+        //     // asynchronously called
+        //     console.log(shipment);
+        // });
+
+        shippo.transaction.create({
+            "shipment": shipment,
+            "carrier_account": "32e1acf739a94a7f86cd168d63bc2df1",
+            "servicelevel_token": "usps_priority",
+            "label_file_type": "PDF"
+        }, async function(err, transaction) {
+            // asynchronously called
             if(err) {
                 console.log(err);
             }
-            // asynchronously called
-            console.log(shipment);
-        });
-        createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'acceptDeal');
-        await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
-        const buyer = await User.findById(deal.buyer.id);
-        ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
-            link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
-            name: deal.product.name,
-            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-          }, function (err, data) {
-            if (err) {
-                console.log(err);
+            const result = JSON.stringify(transaction);
+            console.log(`Full transaction details: ${result}`);
+            if(result.status === 'ERROR') {
+                req.flash('error', 'Eroare');
+                return res.redirect('back');
             } else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${buyer.email}`, // list of receivers
-                subject: 'Deal Status Changed', // Subject line
-                html: data, // html body
-            };
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    console.log(error);
+            createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'acceptDeal');
+            await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+            const buyer = await User.findById(deal.buyer.id);
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
+                link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
+                name: deal.product.name,
+                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+              }, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${buyer.email}`, // list of receivers
+                    subject: 'Deal Status Changed', // Subject line
+                    html: data, // html body
+                };
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                        req.flash('success', 'Deal accepted successfully.');
+                        res.redirect('back');
+                    });
                 }
-                    req.flash('success', 'Deal accepted successfully.');
-                    res.redirect('back');
-                });
+            });
             }
         });
+        
+        
+        // )
+        // .then(function(transaction) {
+        //     shippo.transaction.list({
+        //       "rate": transaction.rate
+        //     })
+        //     .then(function(mpsTransactions) {
+        //         mpsTransactions.results.forEach(function(mpsTransaction){
+        //             if(mpsTransaction.object_status == "SUCCESS") {
+        //                 console.log("Label URL: %s", mpsTransaction.label_url);
+        //                 console.log("Tracking Number: %s", mpsTransaction.tracking_number);
+        //                 console.log("E-Mail: %s", mpsTransaction.object_owner);
+        //                 console.log(mpsTransaction.object_status);
+        //                 console.log("Label can be found under: " + mpsTransaction.label_url);
+        //             } else {
+        //                 // hanlde error transactions
+        //                 console.log("Error Message: %s", mpsTransactions.messages);
+        //             }
+        //         });
+        //     })
+        // }, function(err) {
+        //     // Deal with an error
+        //     console.log("There was an error creating transaction : %s", err.detail);
+        // });
     },
     async declineDeal(req, res) {
         const deal = await Deal.findById(req.params.id);

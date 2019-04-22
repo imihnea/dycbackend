@@ -231,10 +231,10 @@ time{
 
 .scrolling{
     position: relative;
-    -webkit-animation: scroll 7s infinite linear;;
-    -moz-animation: scroll 7s infinite linear;
-    -o-animation: scroll 7s infinite linear;
-    animation: scroll 7s infinite linear;
+    -webkit-animation: scroll 15s infinite linear;;
+    -moz-animation: scroll 15s infinite linear;
+    -o-animation: scroll 15s infinite linear;
+    animation: scroll 15s infinite linear;
 }
 
 @keyframes scroll{
