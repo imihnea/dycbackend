@@ -69,7 +69,7 @@ module.exports = {
     },
     // Profile Update
     async profileUpdate(req, res) {
-        User.findById(req.params.id, async (err, user) => {
+        User.findById(req.user._id, async (err, user) => {
             if (err) {
               req.flash('error', err.message);
               res.redirect('back');
