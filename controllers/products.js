@@ -6,6 +6,8 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Review = require('../models/review');
+const moment = require('moment');
+const { errorLogger, userLogger } = require('../config/winston');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -50,7 +52,8 @@ module.exports = {
             // Find similar products
             Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
                 if (err) {
-                  console.log(err);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                console.log(err);
                   res.render('products/product_view', { 
                     product, 
                     similar: false, 
@@ -75,6 +78,7 @@ module.exports = {
                     Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
                             console.log(err);
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             if (similar.length > 0) {
                                 res.render('products/product_view', { 
                                     product, 
@@ -154,6 +158,7 @@ module.exports = {
         } else {
             Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
                 if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                     res.render('products/product_view', { 
                         product, 
@@ -178,6 +183,7 @@ module.exports = {
                     }
                     Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             console.log(err);
                             if (similar.length > 0) {
                                 res.render('products/product_view', { 
@@ -270,6 +276,7 @@ module.exports = {
         subject: `New report - Deal Your Crypto`,
       }, function (err, data) {
         if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             console.log(err);
         } else {
             const mailOptions = {
@@ -281,8 +288,9 @@ module.exports = {
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
-                req.flash('error', `${error.message}`);
-                res.redirect('back', { error: error.message });
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    req.flash('error', `${error.message}`);
+                    res.redirect('back', { error: error.message });
                 }
                 req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
                 res.redirect('back');
@@ -381,6 +389,7 @@ module.exports = {
                           }, function (err, data) {
                             if (err) {
                                 console.log(err);
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 const mailOptions = {
                                     from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
@@ -391,11 +400,13 @@ module.exports = {
                                 // send mail with defined transport object
                                 transporter.sendMail(mailOptions, (error) => {
                                     if (error) {
-                                    console.log(error);
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        console.log(error);
                                     }
                                 });
                             }
                         });
+                        userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         // Link chat to deal
                         res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                     } else {
@@ -415,6 +426,7 @@ module.exports = {
 //     if (err) {
 //       console.log(err);
 //     } else {
+        // logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 //       // console.log(result);
 //     }
 //   });
@@ -425,6 +437,7 @@ module.exports = {
 //     if (err) {
 //       console.log(err);
 //     } else {
+        // logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 //       // console.log(result);
 //     }
 //   });

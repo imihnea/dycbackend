@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
-const Log = require('../models/log');
-const { createDealErrorLog, createDealLog } = require('../controllers/logs');
+const { logger, dealLogger, errorLogger } = require('../config/winston');
+const moment = require('moment');
 const ejs = require('ejs');
 const path = require('path');
 const Product = require('../models/product');
@@ -107,11 +107,12 @@ module.exports = {
         }, function(err, shipment){
             if(err) {
                 console.log(err);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
             // asynchronously called
             console.log(shipment);
         });
-        createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'acceptDeal');
+        dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         const buyer = await User.findById(deal.buyer.id);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
@@ -120,6 +121,7 @@ module.exports = {
             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
           }, function (err, data) {
             if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
             const mailOptions = {
@@ -143,7 +145,7 @@ module.exports = {
         const buyer = await User.findById(deal.buyer.id);
         deal.status = 'Declined';
         await deal.save();
-        createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'declineDeal');
+        dealLogger.info(`Message: Deal ${deal._id} declined\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         buyer.btcbalance += deal.price;
         await buyer.save();
@@ -153,6 +155,7 @@ module.exports = {
             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
           }, function (err, data) {
             if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
             const mailOptions = {
@@ -163,6 +166,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(error);
                 }
                     req.flash('success', 'Deal denied successfully.');
@@ -187,6 +191,7 @@ module.exports = {
             product.unIndex((err) => {
                 if (err) {
                     console.log('Error while unindexing document.');
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 } else {
                     console.log('Document unindexed successfully.');
@@ -211,6 +216,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(error);
                 }
             });
@@ -222,6 +228,7 @@ module.exports = {
             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
           }, function (err, data) {
             if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
             const mailOptions = {
@@ -232,11 +239,12 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(error);
                 }
             });
         }});
-        createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'completeDeal');
+        dealLogger.info(`Message: Deal ${deal._id} completed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         res.redirect(`/deals/${deal._id}/review`);
     },
     async cancelDeal(req, res) {
@@ -256,6 +264,7 @@ module.exports = {
             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
           }, function (err, data) {
             if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
             const mailOptions = {
@@ -267,9 +276,10 @@ module.exports = {
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error) => {
                 if (error) {
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(error);
                 }
-                createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'cancelDeal');
+                dealLogger.info(`Message: Deal ${deal._id} cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Deal cancelled successfully.');
                 res.redirect('back');
             });
@@ -306,7 +316,7 @@ module.exports = {
                 await deal.save();
                 buyer.btcbalance += deal.price;
                 await buyer.save();
-                createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'refundDeal');
+                dealLogger.info(`Message: Deal ${deal._id} refunded - money back\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 res.redirect('back');
             } else {
@@ -314,7 +324,7 @@ module.exports = {
                 deal.refund.status = 'Pending Delivery';
                 deal.refund.sellerOption = req.body.refundOption;
                 await deal.save();
-                createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'refundDeal');
+                dealLogger.info(`Message: Deal ${deal._id} refunded - replacement\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Refund status updated: Deal refund pending.');
                 res.redirect('back');
             }
@@ -353,6 +363,7 @@ module.exports = {
                 subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
               }, function (err, data) {
                 if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 } else {
                 const mailOptions = {
@@ -363,11 +374,12 @@ module.exports = {
                 };
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         console.log(error);
                     }
                 });
             }});
-            createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'refundDeny');
+            dealLogger.info(`Message: Deal ${deal._id} - refund denied\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
             res.redirect('back');
         }
@@ -411,6 +423,7 @@ module.exports = {
                 subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
               }, function (err, data) {
                 if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 } else {
                 const mailOptions = {
@@ -422,11 +435,12 @@ module.exports = {
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         console.log(error);
                     }
                 });
             }});
-            createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'refundRequest');
+            dealLogger.info(`Message: Deal ${deal._id} - refund requested\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund request sent.');
             res.redirect(`/deals/${deal._id}`);
         }
@@ -439,7 +453,7 @@ module.exports = {
             return review.author.equals(req.user._id);
         }).length;
         if(haveReviewed) {
-            createDealLog(req.user._id, deal._id, 'Deals', req.route.path, Object.keys(req.route.methods)[0], 'reviewProduct');
+            dealLogger.info(`Message: Deal ${deal._id} - product ${product._id} reviewed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Deal completed successfully.');
             return res.redirect(`/deals/${deal.id}`);
         } else {
@@ -462,6 +476,7 @@ setInterval(async () => {
         // get user who has to be paid
         User.findById(item.product.author.id, (err, seller) => {
             if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
                 // pay user
@@ -492,15 +507,6 @@ setInterval(async () => {
         });
     });
     if (process.env.NODE_ENV === 'production') {
-        const log = {
-          logType: 'Server',
-          message: 'Deals were paid',
-          sentFromFile: `Deals Controller`,
-        };
-        Log.create(log, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+        logger.info(`Deals were paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
   }, 1000);

@@ -9,8 +9,6 @@ const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
-const Log = require('../models/log');
-const { createErrorLog, createUserLog } =  require('./logs');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
 const request = require("request");
@@ -20,6 +18,7 @@ const nodemailer = require('nodemailer');
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const { errorLogger, userLogger, productLogger } = require('../config/winston');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -61,7 +60,7 @@ module.exports = {
     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
       if(err) {
         console.log('Failed to retrieve subscription.');
-        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
     });
     if(premium) {
@@ -278,7 +277,7 @@ module.exports = {
       url: url 
     }, function(error, response, body) {
       if(error) {
-        createErrorLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'postBTC', error);
+        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', error.message);
         res.redirect('back');
       } else {
@@ -300,7 +299,7 @@ module.exports = {
           paid: false
         }, (err) => {
           if(err) {
-            createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'postBTC', err);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
             res.redirect('back');
           } else {
@@ -354,7 +353,7 @@ module.exports = {
       if (name === req.body.btcadr) {
         await User.findByIdAndUpdate(query, { btcadr: name }, (err) => {
           if (err) {
-            createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'addAddresses', err);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'Something went wrong. Please try again.');
             res.redirect('/dashboard/addresses');
           } else {
@@ -373,7 +372,7 @@ module.exports = {
     console.log(amount);
     client.getAccount('primary', function(err, account) {
       if(err) {
-        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'Withdraw', err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', 'There was a problem with your request, please try again.');
         res.redirect('back');
       } else {
@@ -385,7 +384,7 @@ module.exports = {
               'currency': 'BTC'
             }, function(err, tx) {
               if(err) {
-                createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'Withdraw', err);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                 res.redirect('back');
               } else {
@@ -416,21 +415,10 @@ module.exports = {
                       transporter.sendMail(mailOptions, (error) => {
                           if (error) {
                             console.log(error);
-                            createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'Withdraw', error);
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           }
                           if (process.env.NODE_ENV === 'production') {
-                            const log = {
-                              logType: 'User',
-                              message: `User withdrawed ${amount}`,
-                              sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
-                              sentFromMethod: `${Withdraw}`,
-                              sentFromUser: req.user._id
-                            };
-                            Log.create(log, (err) => {
-                              if (err) {
-                                console.log(err);
-                              }
-                            });
+                            userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           }
                           req.flash('success', `Successfully withdrawn ${amount} BTC!`);
                           res.redirect('back');
@@ -661,18 +649,7 @@ module.exports = {
               user.feature_tokens += tokens;
               await user.save();
               if (process.env.NODE_ENV === 'production') {
-                const log = {
-                  logType: 'User',
-                  message: `User spent ${totalPrice} to buy ${tokens} tokens`,
-                  sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
-                  sentFromMethod: 'buyTokens',
-                  sentFromUser: req.user._id
-                };
-                Log.create(log, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
+                userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               }
               req.flash('success', 'Tokens purchased successfully!');
               res.redirect('back');
@@ -720,18 +697,7 @@ module.exports = {
                 return res.redirect('back');
               } else {
                 if (process.env.NODE_ENV === 'production') {
-                  const log = {
-                    logType: 'User',
-                    message: `User spent ${tokenCost} to buy ${tokens} tokens pack`,
-                    sentFromFile: `Dashboard Controller - ${Object.keys(req.route.methods)[0]} ${req.route.path}`,
-                    sentFromMethod: 'buyTokenPacks',
-                    sentFromUser: req.user._id
-                  };
-                  Log.create(log, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
+                  userLogger.info(`Message: User spent ${tokenCost} to buy ${tokens} tokens pack\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
                 switch(tokens) {
                   case 20: 
@@ -846,7 +812,7 @@ module.exports = {
                 feat_2.expiry_date = Date.now() + feature2_time;
                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
                   if (err) {
-                    createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'productCreate', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
                 });
                 newproduct.feat_1 = feat_1;
@@ -863,7 +829,7 @@ module.exports = {
                 feat_1.expiry_date = Date.now() + feature1_time;
                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
                   if (err) {
-                    createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'productCreate', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
                 });
                 newproduct.feat_1 = feat_1;
@@ -878,7 +844,7 @@ module.exports = {
                 feat_2.expiry_date = Date.now() + feature2_time;
                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
                   if (err) {
-                    createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'productCreate', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
                 });
                 newproduct.feat_2 = feat_2;
@@ -891,18 +857,7 @@ module.exports = {
         });
         const product = await Product.create(newproduct);
         if (process.env.NODE_ENV === 'production') {
-          const log = {
-            logType: 'Product',
-            message: `User created a new product - ${product._id}`,
-            sentFromFile: 'Dashboard Controller',
-            sentFromMethod: 'productCreate',
-            sentFromUser: req.user._id
-          };
-          Log.create(log, (err) => {
-            if (err) {
-              console.log(err);
-            }
-          });
+          productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
         res.redirect(`/products/${product._id}/view`);
       } 
@@ -1040,7 +995,7 @@ module.exports = {
               product.feat_1.expiry_date = Date.now() + feature1_time;
               User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
                 if (err) {
-                  createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'productFeature', err);
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
               });
               product.save();
@@ -1065,7 +1020,7 @@ module.exports = {
               product.feat_2.expiry_date = Date.now() + feature2_time;
               User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
                 if (err) {
-                  createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'productFeature', err);
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
               });
               product.save();
@@ -1099,18 +1054,7 @@ module.exports = {
     const id = product._id;
     await product.remove();
     if (process.env.NODE_ENV === 'production') {
-      const log = {
-        logType: 'Product',
-        message: `Product ${id} was deleted.`,
-        sentFromFile: 'Dashboard Controller',
-        sentFromMethod: 'productDestroy',
-        sentFromUser: req.user._id
-      };
-      Log.create(log, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
     req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
@@ -1191,8 +1135,8 @@ module.exports = {
                 req.flash('error', 'There was an error updating your balance, please try again.');
                 return res.redirect('back');
               } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
-                createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Subscription created successfully!');
                 return res.redirect(`/dashboard`);
               }
@@ -1216,8 +1160,8 @@ module.exports = {
                 req.flash('error', 'There was an error updating your balance, please try again.');
                 return res.redirect('back');
               } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
-                createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Subscription created successfully!');
                 return res.redirect(`/dashboard`);
               }
@@ -1241,8 +1185,8 @@ module.exports = {
                 req.flash('error', 'There was an error updating your balance, please try again.');
                 return res.redirect('back');
               } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
-                createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Subscription created successfully!');
                 return res.redirect(`/dashboard`);
               }
@@ -1266,8 +1210,8 @@ module.exports = {
                 req.flash('error', 'There was an error updating your balance, please try again.');
                 return res.redirect('back');
               } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`)
-                createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCreate');
+                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Subscription created successfully!');
                 return res.redirect(`/dashboard`);
               }
@@ -1287,7 +1231,7 @@ module.exports = {
         req.flash('error', 'There was an error cancelling your subscription.');
         return res.redirect('back');
       } else {
-        createUserLog(req.user._id, 'Dashboard', req.route.path, Object.keys(req.route.methods)[0], 'subscriptionCancel');
+        userLogger.info(`Message: Subscription cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('success', 'Subscription cancelled successfully, we\'re sad to see you go!');
         return res.redirect('back');
       }

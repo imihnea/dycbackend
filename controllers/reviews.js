@@ -4,6 +4,8 @@ const Review = require('../models/review');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
+const { errorLogger, userLogger, reviewLogger } = require('../config/winston');
+const moment = require('moment');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -54,6 +56,7 @@ module.exports = {
 		product.reviews.push(review);
 		// save the product
 		product.save();
+		userLogger.info(`Message: Review created - ${review._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 		// let the author know of the new review
 		const author = await User.findById(product.author.id);
 		author.reviews.push(review);
@@ -66,6 +69,7 @@ module.exports = {
 		function (err, data) {
 			if (err) {
 				console.log(err);
+				errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 			} else {
 				const mailOptions = {
 						from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
@@ -76,10 +80,11 @@ module.exports = {
 				transporter.sendMail(mailOptions, (error) => {
 						if (error) {
 							console.log(error);
+							errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 						}
 				});
-		}
-	});
+			}
+		});
 		// redirect to the product
 		req.session.success = 'Review created successfully!';
 		res.redirect(`/products/${product.id}/view`);
@@ -96,9 +101,11 @@ module.exports = {
 			}
 			await Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, review) => {
 				if (err) {
+					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 					req.flash('error', 'Something went wrong. Please try again.');
 					res.redirect('back');
 				} else {
+					reviewLogger.info(`Message: Review updated - ${review._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 					req.flash('success', 'Review updated successfully!');
 					if (req.query.from == 'user') {
 						res.redirect(`/profile/${review.user}`);
@@ -125,6 +132,7 @@ module.exports = {
 				await User.findByIdAndUpdate(review.user, {
 					$pull: { reviews: req.params.review_id }
 				});
+				reviewLogger.info(`Review deleted ${req.params.review_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 				req.flash('success', 'Review deleted successfully!');
 				res.redirect(`/products/${req.params.id}/view`);
 			} else {

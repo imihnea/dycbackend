@@ -26,7 +26,7 @@ const passport = require('passport');
 
 const flash = require('connect-flash');
 
-const winston = require('./config/winston');
+const {errorLogger, logger, warnLogger, authorizeUpload} = require('./config/winston');
 
 const helmet = require('helmet');
 
@@ -88,16 +88,12 @@ require('dotenv').config();
 
 const User = require('./models/user');
 
-const Log = require('./models/log');
-
-const logController = require('./controllers/logs');
-
-// Uploads logs to Google Drive and clears them - Runs every hour
+// Uploads logs to Google Drive and clears them - Runs on server boot and once a week
 setInterval(() => {
   if (process.env.NODE_ENV === 'production') {
-    logController.uploadLog();
+    authorizeUpload();
   }
-}, 60 * 60 * 1000);
+}, 7 * 24 * 60 * 60 * 1000);
 
 // requiring routes
 
@@ -225,6 +221,7 @@ const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 10,
   handler: (req, res) => {
+    warnLogger.warn(`Message: Too many register requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many register attempts from this IP, please try again in an hour.');
     res.redirect('/');
   },
@@ -236,6 +233,7 @@ const loginLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 500,
   handler: (req, res) => {
+    warnLogger.warn(`Message: Too many login requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
     res.redirect('/');
   },
@@ -247,6 +245,7 @@ const forgotEmailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,
   handler: (req, res) => {
+    warnLogger.warn(`Message: Too many email reset requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many email reset attempts from ths IP, please try again in an hour.');
     res.redirect('/');
   }
@@ -257,6 +256,7 @@ const forgotPasswordLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 3,
   handler: (req, res) => {
+    warnLogger.warn(`Message: Too many password reset requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many password reset attempts from this IP, please try again in an hour.');
     res.redirect('/');
   }
@@ -290,22 +290,14 @@ app.use((err, req, res, next) => {
   // res.status(err.status || 500);
   // res.render('error');
   req.session.error = req.flash('error', err.message);
-  winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
   res.redirect('back');
 });
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');
   if (process.env.NODE_ENV === 'production') {
-    const log = {
-      logType: 'Server',
-      message: 'Server started',
-      sentFromFile: `Server`,
-    };
-    Log.create(log, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    authorizeUpload();
+    logger.info(`Server started on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
   }
 });

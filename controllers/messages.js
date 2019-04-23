@@ -4,8 +4,9 @@ const path = require('path');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Deal = require('../models/deal');
-const { createChatErrorLog, createDealLog } = require('./logs');
+const { errorLogger } = require('../config/winston');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -81,7 +82,7 @@ module.exports = {
             if (messagesRead != 0) {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
-                        createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'updateMessages', err);
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         console.log(err);
                     }
                 });
@@ -101,7 +102,7 @@ module.exports = {
             if (messagesRead != 0) {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
-                        createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'updateMessagesDeal', err);
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         console.log(err);
                     }
                 });
@@ -222,14 +223,14 @@ module.exports = {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
-                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessage', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         } else if (chat.user2.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
-                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessage', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         }
@@ -296,14 +297,14 @@ module.exports = {
         if (chat.user1.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
-                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessageDeal', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 }
             });
         } else if (chat.user2.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
                 if (err) {
-                    createChatErrorLog(req.user._id, chat._id, 'Messages', req.route.path, Object.keys(req.route.methods)[0], 'newMessageDeal', err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 }
             });

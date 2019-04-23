@@ -10,7 +10,8 @@ const User = require('../models/user');
 const Product = require('../models/product');
 const Subscription = require('../models/subscription');
 const searchTerm = require('../models/searchTerm');
-const { createErrorLog, createUserLog } = require('./logs');
+const { errorLogger, userLogger } = require('../config/winston');
+const moment = require('moment');
 const Nexmo = require('nexmo');
 const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
@@ -50,6 +51,7 @@ function sendConfirmationEmail(req, userid, useremail) {
   }, function (err, data) {
     if (err) {
         console.log(err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     } else {
     const mailOptions = {
         from: `Deal Your Crypto <noreply@dyc.com>`,
@@ -60,6 +62,7 @@ function sendConfirmationEmail(req, userid, useremail) {
     transporter.sendMail(mailOptions, (error) => {
         if (error) {
           console.log(error);
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
     }
@@ -130,6 +133,7 @@ module.exports = {
           await User.register(newUser, req.body.password);
           sendConfirmationEmail(req, newUser._id, newUser.email, SECRET);
         } catch (error) {
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           req.flash('error', error.message);
           return res.redirect('back');
         }
@@ -164,6 +168,7 @@ module.exports = {
         uuser = await User.findByIdAndUpdate(user.user, { confirmed: true }, async (err) => {
           if (err) {
             console.log(err);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           } else {
             req.flash('success', 'You have successfully confirmed your email. You can now log in!');
             res.redirect('/login');
@@ -178,6 +183,7 @@ module.exports = {
 
     nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
       if(err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', err.message);
         return res.redirect('back');
       } else {
@@ -196,6 +202,7 @@ module.exports = {
             let phoneNumber = req.body.number;
             User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
               if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', err.message);
                 res.redirect('back');
               }
@@ -237,6 +244,7 @@ module.exports = {
       } else {
         nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
           if(err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
             res.redirect('back');
           } else {
@@ -269,7 +277,8 @@ module.exports = {
       subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
     }, function (err, data) {
       if (err) {
-          console.log(err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        console.log(err);
       } else {
         const mailOptions = {
             from: `Deal Your Crypto <noreply@dyc.com>`,
@@ -280,9 +289,10 @@ module.exports = {
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
               console.log(error);
+              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
         });
-        createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postDisable2FactorRequest');
+        userLogger.info(`Message: User requested 2F disable\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
         res.redirect('back');
       }
@@ -303,10 +313,11 @@ module.exports = {
         const user = jwt.decode(req.params.token);
         User.findByIdAndUpdate(user.user, { number: undefined, twofactor: false }, (err) => {
           if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
             res.redirect('/');
           } else {
-            createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postDisable2Factor');
+            userLogger.info(`Message: User disabled 2F\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Successfully disabled 2-Factor authentication.');
             res.redirect('/');
           }
@@ -381,7 +392,7 @@ module.exports = {
     } else {
       User.findOne({ username: req.body.username }, (err, user) => {
         if(err) {
-          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postLogin', err);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           let errors = { msg: String };
           errors.msg = err.message;
           return res.render('index/login', {
@@ -412,7 +423,7 @@ module.exports = {
           if (user.twofactor === true) {
             nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
               if(err) {
-                createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postLogin', err);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 let errors = { msg: String };
                 errors.msg = err.message;
                 return res.render('index/login', {
@@ -468,7 +479,7 @@ module.exports = {
     let requestId = req.body.requestId;
     nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
       if(err) {
-        createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postVerifyLogin', err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', err.message);
         return res.redirect('back');
       } else {
@@ -496,6 +507,7 @@ module.exports = {
   async getIndex(req, res) {
     await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
         if (err) {
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           return res.render('index', { 
             currentUser: req.user, 
             'products.length': 0, 
@@ -513,6 +525,7 @@ module.exports = {
             });
             Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(20 - products.length).exec((err, result) => {
               if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 return res.render('index', { 
                   currentUser: req.user, 
                   products,
@@ -601,7 +614,7 @@ module.exports = {
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
-          createUserLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'postForgot');
+          userLogger.info(`Message: User requested a password reset\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           req.flash('success', `An e-mail with further instructions has been sent to ${user.email}.`);
           done(err, 'done');
         });
@@ -702,6 +715,7 @@ module.exports = {
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               console.log(err);
             } else {
               Categories.forEach((item) => {
@@ -824,6 +838,7 @@ module.exports = {
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               console.log(err);
             } else {
               secCategories.forEach((item) => {
@@ -950,6 +965,7 @@ module.exports = {
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               console.log(err);
             } else {
               res.render('index/searchThirdCateg', { 
@@ -1051,7 +1067,7 @@ module.exports = {
       let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
         if(err) {
           console.log('Failed to retrieve subscription.');
-          createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
       res.render('index/contact', {
@@ -1125,6 +1141,7 @@ module.exports = {
           subject: 'Deal Your Crypto - Contact Request',
         }, function (err, data) {
           if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             console.log(err);
           } else {
           const mailOptions = {
@@ -1135,6 +1152,7 @@ module.exports = {
           };
           transporter.sendMail(mailOptions, (error) => {
             if (error) {
+              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               req.flash('error', `${error.message}`);
               res.redirect('back', { error: error.message });
             }
@@ -1182,7 +1200,7 @@ module.exports = {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
           if(err) {
             console.log('Failed to retrieve subscription.');
-            createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           }
         });
         res.render('index/contact', {
@@ -1198,7 +1216,7 @@ module.exports = {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
           if(err) {
             console.log('Failed to retrieve subscription.');
-            createErrorLog(req.user._id, 'Index', req.route.path, Object.keys(req.route.methods)[0], 'getContact', err);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           }
         });
         if (!premium) {
@@ -1210,6 +1228,7 @@ module.exports = {
             subject: 'Deal Your Crypto - Contact Request',
           }, function (err, data) {
             if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               console.log(err);
             } else {
             const mailOptions = {
@@ -1220,6 +1239,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
               if (error) {
+                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', `${error.message}`);
                 res.redirect('back', { error: error.message });
               }
@@ -1237,6 +1257,7 @@ module.exports = {
             subject: 'Deal Your Crypto - Priority Contact Request',
           }, function (err, data) {
             if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);              
               console.log(err);
             } else {
             const mailOptions = {
@@ -1247,6 +1268,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error) => {
               if (error) {
+                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', `${error.message}`);
                 res.redirect('back', { error: error.message });
               }
@@ -1422,6 +1444,7 @@ setInterval(() => {
   User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
     if (err) {
       console.log(err);
+      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deleting users who didn't confirm their email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
   });
 }, 60000);

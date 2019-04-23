@@ -6,7 +6,7 @@ const Product = require('../models/product');
 const Deal = require('../models/deal');
 const User = require('../models/user');
 const Review = require('../models/review');
-const Log = require('../models/log');
+const { errorLogger, userLogger } = require('../config/winston');
 const Subscription = require('../models/subscription');
 const { Regions } = require('../dist/js/regions');
 const moment = require('moment');
@@ -40,7 +40,7 @@ module.exports = {
       let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
         if(err) {
           console.log('Failed to retrieve subscription.');
-          createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
       if (premium) {
@@ -99,7 +99,7 @@ module.exports = {
                     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
                       if(err) {
                         console.log('Failed to retrieve subscription.');
-                        createErrorLog(req.user._id, 'Dashboard',req.route.path, Object.keys(req.route.methods)[0], 'getDashboardIndex', err);
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       }
                     });
                     if(premium) {
@@ -136,19 +136,7 @@ module.exports = {
                   if (process.env.NODE_ENV === 'production') {
                     const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
                     const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];
-                    const log = {
-                      logType: 'Change',
-                      message: 'User changed personal details',
-                      data: { oldData, newData },
-                      sentFromUser: req.user._id,
-                      sentFromFile: 'Profile controller',
-                      sentFromMethod: 'profileUpdate'
-                    };
-                    Log.create(log, (err) => {
-                      if (err) {
-                        console.log(err);
-                      }
-                    });
+                    userLogger.info(`Message: User details changed\r\nOld Data: ${oldData}\r\nNew Data: ${newData}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                    
                   }
                   user.full_name = req.body.name;
                   if (user.country != req.body.country) {
