@@ -505,6 +505,7 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
+    let onlyFeatured = false;
     await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
         if (err) {
           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -512,6 +513,7 @@ module.exports = {
             currentUser: req.user, 
             'products.length': 0, 
             errors: false,
+            onlyFeatured,
             pageTitle: 'Deal Your Crypto',
             pageDescription: 'Description',
             pageKeywords: 'Keywords'
@@ -530,6 +532,7 @@ module.exports = {
                   currentUser: req.user, 
                   products,
                   errors: false,
+                  onlyFeatured,
                   pageTitle: 'Deal Your Crypto',
                   pageDescription: 'Description',
                   pageKeywords: 'Keywords'
@@ -538,21 +541,37 @@ module.exports = {
                 Array.from(result).forEach((res) => {
                   products.push(res);
                 });
-                return res.render('index', { 
-                  currentUser: req.user, 
-                  products,
-                  errors: false,
-                  pageTitle: 'Deal Your Crypto',
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                }); 
+                if ((result.length < (20 - products.length)) && (result.length != 0)) {
+                  return res.render('index', { 
+                    currentUser: req.user, 
+                    products,
+                    errors: false,
+                    onlyFeatured,
+                    pageTitle: 'Deal Your Crypto',
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                  }); 
+                } else {
+                  onlyFeatured = true;
+                  return res.render('index', { 
+                    currentUser: req.user, 
+                    products,
+                    errors: false,
+                    onlyFeatured,
+                    pageTitle: 'Deal Your Crypto',
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                  }); 
+                }
               }
             });
           } else {
+            onlyFeatured = true;
             return res.render('index', { 
               currentUser: req.user, 
               products,
               errors: false,
+              onlyFeatured,
               pageTitle: 'Deal Your Crypto',
               pageDescription: 'Description',
               pageKeywords: 'Keywords'

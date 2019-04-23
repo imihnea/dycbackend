@@ -40,11 +40,9 @@ Backend:
 
 Optimization:
 
-   Index => Users
-         => Products
+   Index (research more before doing this) => Users
+                                           => Products
 
    Caching => Redis
-
-   Logs => Use Winston instead of db logging
 
    HTTP/2 => SPDY
