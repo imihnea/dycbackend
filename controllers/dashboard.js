@@ -1245,16 +1245,39 @@ module.exports = {
         return res.redirect('back');
       }
     });
-    res.render('dashboard/dashboard_premium', {
-      user: req.user,
-      premium,
-      errors: req.session.errors,
-      csrfToken: req.cookies._csrf,
-      csrfSecret: req.body.csrfSecret,
-      pageTitle: 'Premium - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+    if (premium.length > 0) {
+      res.render('dashboard/dashboard_premium', {
+        user: req.user,
+        premium: true,
+        errors: req.session.errors,
+        csrfToken: req.cookies._csrf,
+        csrfSecret: req.body.csrfSecret,
+        pageTitle: 'Premium - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    } else {
+      const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+      request(url, async function(error, response, body){
+      if(!error && response.statusCode == 200) {
+        const json = JSON.parse(body);
+        const data = json.data;
+        const btcrate = data.btc.rate;
+        const tokenprice = 1/btcrate; // 1 USD
+        res.render('dashboard/dashboard_premium', {
+          user: req.user,
+          premium: false,
+          tokenprice,
+          errors: req.session.errors,
+          csrfToken: req.cookies._csrf,
+          csrfSecret: req.body.csrfSecret,
+          pageTitle: 'Premium - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
     });
+    }
   },
   async getSearchData(req, res) {
     req.check('firstCat').matches(/^[a-z &]+$/ig);

@@ -5,7 +5,7 @@
         <div class="columns" style="margin-top: 1vh;">
             <div class="column is-two-fifths">
                 <figure class="image" style="width: 200px; margin: auto;">
-                    <img src="<%= user.avatar.url %>" class="avatar premiumImg" style="width: 200px; margin: auto; border-radius: 10px; border-style: solid;">
+                    <img src="<%= user.avatar.url %>" class="avatar <% if (premium) { %>premiumImg<% } %>" style="width: 200px; margin: auto; border-radius: 10px; border-style: solid;">
                     <% if (premium) { %>
                         <span class="premium"></span>    
                     <% } %>

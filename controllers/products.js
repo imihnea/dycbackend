@@ -7,7 +7,7 @@ const User = require('../models/user');
 const Deal = require('../models/deal');
 const Review = require('../models/review');
 const moment = require('moment');
-const { errorLogger, userLogger } = require('../config/winston');
+const { errorLogger, userLogger, dealLogger } = require('../config/winston');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 module.exports = {
     async getProduct(req, res) {
         var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-        const product = await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } }).populate({
+        const product = await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, $push: { viewDates: Date.now() } }).populate({
             path: 'reviews',
             options: { sort: { _id: -1 } },
             populate: {
@@ -408,6 +408,7 @@ module.exports = {
                                 });
                             }
                         });
+                        dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         // Link chat to deal
                         res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
@@ -428,6 +429,7 @@ module.exports = {
 //     if (err) {
 //       console.log(err);
 //     } else {
+        // productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         // logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 //       // console.log(result);
 //     }
@@ -439,6 +441,7 @@ module.exports = {
 //     if (err) {
 //       console.log(err);
 //     } else {
+        // productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         // logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 //       // console.log(result);
 //     }
