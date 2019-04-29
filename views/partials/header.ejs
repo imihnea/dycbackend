@@ -55,416 +55,62 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
-                    <img src="/dist/img/rollo.png" width="100px" height="30px">
+                    <img src="/dist/img/rollo.png" width="112px" height="28px">
                 </a>
-
+                <div style="display: flex; align-items: right;">
+                        <% if (currentUser) { %>
+                        <div class="dropdown is-right is-hoverable navbar-dropdown">
+                                <div class="dropdown-trigger">
+                                    <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                        <span style="padding-right: 0.5vh;">
+                                            <%= user.username %>
+                                        </span>
+                                        <a href="/dashboard">
+                                            <div class="image is-24x24">
+                                                <img class="is-rounded" src="<%= user.avatar.url %>">
+                                            </div>
+                                        </a>
+                                    </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                    <div class="dropdown-content">
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/addresses" class="dropdown-item link"><strong>Balance</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/tokens" class="dropdown-item link"><strong>Tokens</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/premium" class="dropdown-item link"><strong>Premium</strong></a>
+                                        </div>
+                                        <hr class="dropdown-divider">
+                                        <div class="dropdown-item">
+                                            <a href="/logout" class="dropdown-item link"><strong>Log out</strong></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
-            <div style="display: flex; align-items: center;">
-                <div class="categ dropdown is-hoverable navbar-dropdown">
-                    <div class="dropdown-trigger">
-                        <button class="button dd-btn" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span>Categories</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                        </button>
-                    </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content frame">
-                            <div class="columns">
-                                <div class="column" style="min-width: 200px;">
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Collectibles and Art" hidden="">
-                                        <button class="searchBtn">Collectibles and Art</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ" >
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Electronics" hidden="">
-                                        <button class="searchBtn">Electronics</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Fashion and Beauty" hidden="">
-                                        <button class="searchBtn">Fashion and Beauty</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Home Improvement" hidden="">
-                                        <button class="searchBtn">Home Improvement</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Leisure Time" hidden="">
-                                        <button class="searchBtn">Leisure Time</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Mothers and Babies" hidden="">
-                                        <button class="searchBtn">Mothers and Babies</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Pet Supplies" hidden="">
-                                        <button class="searchBtn">Pet Supplies</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Real Estate" hidden="">
-                                        <button class="searchBtn">Real Estate</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Sports and Outdoors" hidden="">
-                                        <button class="searchBtn">Sports and Outdoors</button>
-                                    </form>
-                                    <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="category" value="Vehicles" hidden="">
-                                        <button class="searchBtn">Vehicles</button>
-                                    </form>
-                                </div>
-                                
-                                <div class="column sec-categ" style="display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Collectibles and Art" hidden="">
-                                        <input type="text" name="category" value="Collectibles" hidden="">
-                                        <button class="searchBtn">Collectibles</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Collectibles and Art" hidden="">
-                                        <input type="text" name="category" value="Antiques" hidden="">
-                                        <button class="searchBtn">Antiques</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Collectibles and Art" hidden="">
-                                        <input type="text" name="category" value="Art" hidden="">
-                                        <button class="searchBtn">Art</button>
-                                    </form>           
-                                </div>
-    
-                                <div class="column sec-categ" style="display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="Computers and Laptops" hidden="">
-                                        <button class="searchBtn">Computers and Laptops</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="Cameras" hidden="">
-                                        <button class="searchBtn">Cameras</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="TV and Audio" hidden="">
-                                        <button class="searchBtn">TV and Audio</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="Phones and Tablets" hidden="">
-                                        <button class="searchBtn">Phones and Tablets</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="Consoles and Games" hidden="">
-                                        <button class="searchBtn">Consoles and Games</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Electronics" hidden="">
-                                        <input type="text" name="category" value="Other Devices" hidden="">
-                                        <button class="searchBtn">Other Devices</button>
-                                    </form>           
-                                </div>
-    
-                                <div class="column sec-categ" style="display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Female Clothes" hidden="">
-                                        <button class="searchBtn">Female Clothes</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Female Shoes" hidden="">
-                                        <button class="searchBtn">Female Shoes</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Male Clothes" hidden="">
-                                        <button class="searchBtn">Male Clothes</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Male Shoes" hidden="">
-                                        <button class="searchBtn">Male Shoes</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Accessories" hidden="">
-                                        <button class="searchBtn">Accessories</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Jewellry" hidden="">
-                                        <button class="searchBtn">Jewellry</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Fashion and Beauty" hidden="">
-                                        <input type="text" name="category" value="Other Products" hidden="">
-                                        <button class="searchBtn">Other Products</button>
-                                    </form>
-                                </div>
-    
-                                <div class="column sec-categ" style="display: none;" >
-                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                            <input type="text" name="searchName" value="" hidden="">
-                                            <input type="text" name="searchCateg" value="Home Improvement" hidden="">
-                                            <input type="text" name="category" value="Furniture" hidden="">
-                                            <button class="searchBtn">Furniture</button>
-                                        </form>
-                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                            <input type="text" name="searchName" value="" hidden="">
-                                            <input type="text" name="searchCateg" value="Home Improvement" hidden="">
-                                            <input type="text" name="category" value="Decoration" hidden="">
-                                            <button class="searchBtn">Decoration</button>
-                                        </form>
-                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                            <input type="text" name="searchName" value="" hidden="">
-                                            <input type="text" name="searchCateg" value="Home Improvement" hidden="">
-                                            <input type="text" name="category" value="Garden" hidden="">
-                                            <button class="searchBtn">Garden</button>
-                                        </form>
-                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                            <input type="text" name="searchName" value="" hidden="">
-                                            <input type="text" name="searchCateg" value="Home Improvement" hidden="">
-                                            <input type="text" name="category" value="Hardware and Tools" hidden="">
-                                            <button class="searchBtn">Hardware and Tools</button>
-                                        </form>
-                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                            <input type="text" name="searchName" value="" hidden="">
-                                            <input type="text" name="searchCateg" value="Home Improvement" hidden="">
-                                            <input type="text" name="category" value="Other Home Products" hidden="">
-                                            <button class="searchBtn">Other Home Products</button>
-                                        </form>
-                                    </div>
-    
-                                <div class="column sec-categ" style="display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Leisure Time" hidden="">
-                                        <input type="text" name="category" value="Books" hidden="">
-                                        <button class="searchBtn">Books</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Leisure Time" hidden="">
-                                        <input type="text" name="category" value="Movies and Television" hidden="">
-                                        <button class="searchBtn">Movies and Television</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Leisure Time" hidden="">
-                                        <input type="text" name="category" value="Music" hidden="">
-                                        <button class="searchBtn">Music</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Leisure Time" hidden="">
-                                        <input type="text" name="category" value="Other Leisure Products" hidden="">
-                                        <button class="searchBtn">Other Leisure Products</button>
-                                    </form>
-                                </div>
-    
-                                <div class="column sec-categ" style=" display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Clothes" hidden="">
-                                        <button class="searchBtn">Clothes</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Strollers" hidden="">
-                                        <button class="searchBtn">Strollers</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Baby Care" hidden="">
-                                        <button class="searchBtn">Baby Care</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Safety" hidden="">
-                                        <button class="searchBtn">Safety</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Toys" hidden="">
-                                        <button class="searchBtn">Toys</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Mothers and Babies" hidden="">
-                                        <input type="text" name="category" value="Other Baby Products" hidden="">
-                                        <button class="searchBtn">Other Baby Products</button>
-                                    </form>
-                                </div>
-    
-                                <div class="column sec-categ" style=" display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Pet Supplies" hidden="">
-                                        <input type="text" name="category" value="Aquatic Pets" hidden="">
-                                        <button class="searchBtn">Aquatic Pets</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Pet Supplies" hidden="">
-                                        <input type="text" name="category" value="Birds" hidden="">
-                                        <button class="searchBtn">Birds</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Pet Supplies" hidden="">
-                                        <input type="text" name="category" value="Cats" hidden="">
-                                        <button class="searchBtn">Cats</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Pet Supplies" hidden="">
-                                        <input type="text" name="category" value="Dogs" hidden="">
-                                        <button class="searchBtn">Dogs</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Pet Supplies" hidden="">
-                                        <input type="text" name="category" value="Other Pets" hidden="">
-                                        <button class="searchBtn">Other Pets</button>
-                                    </form>
-                                </div>
-    
-                                <div class="column sec-categ" style=" display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Real Estate" hidden="">
-                                        <input type="text" name="category" value="Apartments" hidden="">
-                                        <button class="searchBtn">Apartments</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Real Estate" hidden="">
-                                        <input type="text" name="category" value="Houses" hidden="">
-                                        <button class="searchBtn">Houses</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Real Estate" hidden="">
-                                        <input type="text" name="category" value="Other Estates" hidden="">
-                                        <button class="searchBtn">Other Estates</button>
-                                    </form>
-                                </div>
-    
-                                <div class="column sec-categ" style=" display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Sports and Outdoors" hidden="">
-                                        <input type="text" name="category" value="Sports and Fitness" hidden="">
-                                        <button class="searchBtn">Sports and Fitness</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Sports and Outdoors" hidden="">
-                                        <input type="text" name="category" value="Outdoor" hidden="">
-                                        <button class="searchBtn">Outdoor</button>
-                                    </form>
-                                </div>
-                                
-                                <div class="column sec-categ" style=" display: none;" >
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Vehicles" hidden="">
-                                        <input type="text" name="category" value="Automobiles" hidden="">
-                                        <button class="searchBtn">Automobiles</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Vehicles" hidden="">
-                                        <input type="text" name="category" value="Trucks and Trailers" hidden="">
-                                        <button class="searchBtn">Trucks and Trailers</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Vehicles" hidden="">
-                                        <input type="text" name="category" value="Motorcycles and ATVs" hidden="">
-                                        <button class="searchBtn">Motorcycles and ATVs</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Vehicles" hidden="">
-                                        <input type="text" name="category" value="Boats" hidden="">
-                                        <button class="searchBtn">Boats</button>
-                                    </form>
-                                    <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown">
-                                        <input type="text" name="searchName" value="" hidden="">
-                                        <input type="text" name="searchCateg" value="Vehicles" hidden="">
-                                        <input type="text" name="category" value="Other Vehicles" hidden="">
-                                        <button class="searchBtn">Other Vehicles</button>
-                                    </form>
-                                </div>
-                            </div>                                               
-                        </div>
-                    </div>
-                </div>
-                <% if (currentUser) { %>
-                <div class="dropdown categ is-hoverable navbar-dropdown">
-                    <div class="dropdown-trigger">
-                        <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span>Balance</span>
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
-                        <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
-                            <div class="currency dropdown-item">
-                                <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
-                                <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
-                            </div>
-                            <hr class="dropdown-divider">
-                            <div class="dropdown-item">
-                                <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Top-up</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-            </div>
+
             <div class="navbar-menu" id="navbarMenu">
                 <div class="navbar-start">
                     <div class="dropdown categ is-hoverable navbar-item hideOnBurger">
@@ -865,36 +511,93 @@
                 </div>
                 <div class="navbar-end">
                     <% if(!currentUser){ %>
-                        <a href="/login" class="navbar-item white-text">Login</a>
-                        <a href="/register" class="navbar-item white-text">Register</a>
+                        <div class="navbar-item">
+                            <a href="/login" class="white-text">Login</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/register" class="white-text">Register</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/contact" class="white-text">Contact</a>
+                        </div>
                     <% } else { %>
-                        <div class="navbar-item dropdown categ is-hoverable hideOnBurger">
-                            <div class="dropdown-trigger">
-                                <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu">
-                                    <span>Balance</span>
-                                    <span class="icon is-small">
-                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
-                                <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
-                                    <div class="currency dropdown-item">
-                                        <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
-                                        <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                    </div>
-                                    <hr class="dropdown-divider">
-                                    <div class="dropdown-item">
-                                        <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Top-up</a>
+                        <div class="navbar-item">
+                            <div class="dropdown categ is-hoverable hideOnBurger">
+                                <div class="dropdown-trigger">
+                                    <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu">
+                                        <span>Balance</span>
+                                        <span class="icon is-small">
+                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                    <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
+                                    <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
+                                        <div class="currency dropdown-item">
+                                            <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
+                                            <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
+                                        <hr class="dropdown-divider">
+                                        <div class="dropdown-item">
+                                            <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Top-up</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a href="/dashboard" class="navbar-item white-text">Dashboard</a>
-                        <a href="/logout" class="navbar-item white-text">Logout</a>
+                        <div class="navbar-item showOnBurger">
+                            <a href="/categories" class="white-text showOnBurger">Browse Categories</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/contact" class="white-text">Contact</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/dashboard/new" class="white-text">New Deal</a>
+                        </div>
+                        <div class="navbar-item">
+                            <div class="dropdown is-right is-hoverable hideOnBurger">
+                                <div class="dropdown-trigger">
+                                    <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                        <span class="icon is-small" style="padding-bottom: 1vh;">
+                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                        <span style="padding-right: 0.5vh; padding-bottom: 1vh;">
+                                            <%= user.username %>
+                                        </span>
+                                        <a href="/dashboard">
+                                            <div class="image is-32x32">
+                                                <img class="is-rounded" src="<%= user.avatar.url %>">
+                                            </div>
+                                        </a>
+                                    </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                    <div class="dropdown-content">
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/tokens" class="dropdown-item link"><strong>Tokens</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/premium" class="dropdown-item link"><strong>Premium</strong></a>
+                                        </div>
+                                        <hr class="dropdown-divider">
+                                        <div class="dropdown-item">
+                                            <a href="/logout" class="dropdown-item link"><strong>Log out</strong></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <% } %>
-                    <a href="/contact" class="navbar-item white-text">Contact</a>
                 </div>
             </div>
         </div>

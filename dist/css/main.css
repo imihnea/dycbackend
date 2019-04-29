@@ -77,6 +77,10 @@ input{
     border-bottom-right-radius: 0px !important;
 }
 
+.showOnBurger {
+    display: none !important;
+}
+
 @media only screen and (min-width: 1920px) {
     .featimg{
         width: 8vw !important;
@@ -91,6 +95,9 @@ input{
     }
     .hideOnBurger{
         display: none !important;
+    }
+    .showOnBurger {
+        display: block !important;
     }
 }
 

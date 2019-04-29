@@ -510,7 +510,7 @@ module.exports = {
         if (err) {
           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           return res.render('index', { 
-            currentUser: req.user, 
+            user: req.user, 
             'products.length': 0, 
             errors: false,
             onlyFeatured,
@@ -529,7 +529,7 @@ module.exports = {
               if (err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 return res.render('index', { 
-                  currentUser: req.user, 
+                  user: req.user, 
                   products,
                   errors: false,
                   onlyFeatured,
@@ -543,7 +543,7 @@ module.exports = {
                 });
                 if ((result.length < (20 - products.length)) && (result.length != 0)) {
                   return res.render('index', { 
-                    currentUser: req.user, 
+                    user: req.user, 
                     products,
                     errors: false,
                     onlyFeatured,
@@ -554,7 +554,7 @@ module.exports = {
                 } else {
                   onlyFeatured = true;
                   return res.render('index', { 
-                    currentUser: req.user, 
+                    user: req.user, 
                     products,
                     errors: false,
                     onlyFeatured,
@@ -568,7 +568,7 @@ module.exports = {
           } else {
             onlyFeatured = true;
             return res.render('index', { 
-              currentUser: req.user, 
+              user: req.user, 
               products,
               errors: false,
               onlyFeatured,
