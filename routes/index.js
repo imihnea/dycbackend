@@ -22,6 +22,9 @@ const {
   postForgotEmail,
   getResetEmail,
   postResetEmail,
+  getAbout,
+  getTeam,
+  getServices,
   getFaq,
   getGdpr,
   getTos,
@@ -129,6 +132,12 @@ router.get('/resetemail/:token', getResetEmail);
 
 // POST Reset email route
 router.post('/resetemail/:token', postResetEmail);
+
+router.get('/about', getAbout);
+
+router.get('/team', getTeam);
+
+router.get('/services', getServices);
 
 router.get('/faq', getFaq);
 

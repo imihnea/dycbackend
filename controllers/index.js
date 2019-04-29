@@ -1428,6 +1428,27 @@ module.exports = {
       res.redirect('/');
     });
   },
+  getAbout(req, res) {
+    res.render('about', {
+      pageTitle: 'About - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
+  getTeam(req, res) {
+    res.render('team', {
+      pageTitle: 'Our Team - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
+  getServices(req, res) {
+    res.render('services', {
+      pageTitle: 'Services - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   getFaq(req, res) {
     res.render('faq', {
       pageTitle: 'Frequently Asked Questions - Deal Your Crypto',

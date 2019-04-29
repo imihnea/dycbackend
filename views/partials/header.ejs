@@ -57,53 +57,51 @@
                 <a class="navbar-item" href="/">
                     <img src="/dist/img/rollo.png" width="112px" height="28px">
                 </a>
-                <div style="display: flex; align-items: right;">
-                        <% if (currentUser) { %>
-                        <div class="dropdown is-right is-hoverable navbar-dropdown">
-                                <div class="dropdown-trigger">
-                                    <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                        <span style="padding-right: 0.5vh;">
-                                            <%= user.username %>
-                                        </span>
-                                        <a href="/dashboard">
-                                            <div class="image is-24x24">
-                                                <img class="is-rounded" src="<%= user.avatar.url %>">
-                                            </div>
-                                        </a>
-                                    </button>
-                                </div>
-                                <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-                                    <div class="dropdown-content">
-                                        <div class="dropdown-item">
-                                            <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/dashboard/addresses" class="dropdown-item link"><strong>Balance</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/dashboard/tokens" class="dropdown-item link"><strong>Tokens</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/dashboard/premium" class="dropdown-item link"><strong>Premium</strong></a>
-                                        </div>
-                                        <hr class="dropdown-divider">
-                                        <div class="dropdown-item">
-                                            <a href="/logout" class="dropdown-item link"><strong>Log out</strong></a>
-                                        </div>
+                <% if (currentUser) { %>
+                    <div class="dropdown is-hoverable navbar-dropdown">
+                        <div class="dropdown-trigger">
+                            <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                                <span style="padding-right: 0.5vh;">
+                                    <%= user.username %>
+                                </span>
+                                <a href="/dashboard">
+                                    <div class="image is-24x24">
+                                        <img class="is-rounded" src="<%= user.avatar.url %>">
                                     </div>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                            <div class="dropdown-content">
+                                <div class="dropdown-item">
+                                    <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/addresses" class="dropdown-item link"><strong>Balance</strong></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/tokens" class="dropdown-item link"><strong>Tokens</strong></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/premium" class="dropdown-item link"><strong>Premium</strong></a>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="dropdown-item">
+                                    <a href="/logout" class="dropdown-item link"><strong>Log out</strong></a>
                                 </div>
                             </div>
-                        <% } %>
+                        </div>
                     </div>
+                <% } %>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
