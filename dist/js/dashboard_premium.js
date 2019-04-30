@@ -4,9 +4,11 @@
    let ctx = document.getElementById('categChart');
    let ctxProd = document.getElementById('prodChart');
    let ctxProdSold = document.getElementById('prodSoldChart');
+   let ctxProdViews = document.getElementById('prodViewsChart');
    let categChart = null;
    let prodChart = null;
    let prodSoldChart = null;
+   let prodViewsChart = null;
    
     const triggers = document.querySelectorAll('.tabTrigger');
     const triggerItems = [].slice.call(triggers);
@@ -39,7 +41,7 @@
     searchCategBtn.addEventListener('click', () => {
       let firstCat = document.getElementById('firstCategory');
       let timeframe = document.getElementById('timeframe');
-      fetch(`http://localhost:8080/dashboard/premium/getData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
+      fetch(`${window.location.href}/getData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
           method: "GET",
       })
       .then(async (response) => {
@@ -120,7 +122,7 @@
     searchProdBtn.addEventListener('click', () => {
       let firstCat = document.getElementById('firstCategoryProd');
       let timeframe = document.getElementById('timeframeProd');
-      fetch(`http://localhost:8080/dashboard/premium/getProductData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
+      fetch(`${window.location.href}/getProductData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
             method: "GET",
         })
         .then(async (response) => {
@@ -197,7 +199,7 @@
             throw new Error('Request failed.');
         });
 
-      fetch(`http://localhost:8080/dashboard/premium/getProductSoldData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
+      fetch(`${window.location.href}/getProductSoldData/${csrfToken.value}/${csrfSecret.value}/${firstCat.value}/${timeframe.value}`, {
           method: "GET",
       })
       .then(async (response) => {
@@ -268,6 +270,86 @@
                       }
                   }
                 });
+              }
+              return
+          }
+          throw new Error('Request failed.');
+      });
+    });
+
+    const searchProdViewsBtn = document.getElementById('searchProdViews');
+    searchProdViewsBtn.addEventListener('click', () => {
+      let product = document.getElementById('product');
+      fetch(`${window.location.href}/getProductViews/${csrfToken.value}/${csrfSecret.value}/${product.value}`, {
+          method: "GET",
+      })
+      .then(async (response) => {
+          if(response.ok) {
+              const res = await response.clone().json();  
+              const labels = Object.keys(res);
+              const series = Object.values(res);
+              let colors = [];
+              series.forEach(() => {
+                colors.push(randomColors());
+              });
+              if (prodViewsChart == null) {
+                prodViewsChart = new Chart(ctxProdViews, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [{
+                            data: series,
+                            backgroundColor: colors,
+                            borderColor: 'rgba(200, 200, 200, 0.75)',
+                            hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                        }]
+                    },
+                    options: {
+                        legend: {
+                          display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 10
+                                }
+                            }]
+                        }
+                    }
+                });
+              } else {
+                document.getElementById('prodViewsChart').remove();
+                document.getElementById('prodViewsCanvasContainer').innerHTML = '<canvas id="prodViewsChart" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>';
+                ctxProdViews = document.getElementById('prodViewsChart');
+                prodViewsChart = new Chart(ctxProdViews, {
+                  type: 'bar',
+                  data: {
+                      labels,
+                      datasets: [{
+                          data: series,
+                          backgroundColor: colors,
+                          borderColor: 'rgba(200, 200, 200, 0.75)',
+                          hoverBorderColor: 'rgba(200, 200, 200, 1)',
+                      }]
+                  },
+                  options: {
+                      legend: {
+                        display: false
+                      },
+                      scales: {
+                          yAxes: [{
+                              ticks: {
+                                  beginAtZero: true,
+                                  stepSize: 10
+                              }
+                          }]
+                      }
+                  }
+                });
+              }
+              if (ctxProdViews.classList.contains('hide')) {
+                ctxProdViews.classList.remove('hide');
               }
               return
           }
