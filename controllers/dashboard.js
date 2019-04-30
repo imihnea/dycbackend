@@ -717,10 +717,13 @@ module.exports = {
                 return res.redirect(`back`);
               }
             });
+          } else {
+            req.flash('error', `Not enough balance, please add ${tokenCost.toFixed(8)} more.`);
+            return res.redirect('/dashboard/addresses');
           }
         } else {
-          req.flash('error', `Not enough balance, please add ${tokenCost} more.`)
-          return res.redirect('/dashboard/addresses');
+          req.flash('error', 'Something went wrong, please try again.');
+          res.redirect('back');
         }
       }
     });
