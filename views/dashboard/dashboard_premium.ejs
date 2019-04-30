@@ -29,6 +29,7 @@
                             <ul>
                                 <li class="tabTrigger is-active" id="categoryPopularityTrigger"><a class="link">Category popularity</a></li>
                                 <li class="tabTrigger" id="productPopularityTrigger"><a class="link">Product popularity</a></li>
+                                <li class="tabTrigger" id="productPopularityEvolutionTrigger"><a class="link">Product popularity evolution</a></li>
                             </ul>
                         </div>
                         <div class="analytics">
@@ -104,6 +105,24 @@
                             <p class="title is-5 hide" id="prodSoldText" style="margin-top: 2vh;">Products sold</p>
                             <div id="prodSoldCanvasContainer">
                                 <canvas id="prodSoldChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
+                            </div>
+                        </div>
+                        <div class="analytics hide">
+                            <p class="title is-5 smallerCenter">See how your product's view count evolves</p>
+                            <p class="title is-5 smallerCenter">Choose a product and click search</p>
+                            <div class="select cont-select catSelectLeft premiumSelect">
+                                <select type="text" name="product" id="product" style="width: 100%;" required>
+                                    <option disabled selected>Products</option>
+                                    <% products.forEach(product => { %>
+                                        <option value="<%= product._id %>"><%= product.name %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <br>
+                            <button class="button is-primary" id="searchProdViews" style="margin: auto;">Search</button>
+                            <p class="title is-5 hide" id="prodText" style="margin-top: 2vh;">Product views (per week)</p>
+                            <div id="prodViewsCanvasContainer">
+                                <canvas id="prodViewsChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
                             </div>
                         </div>
                     </div>

@@ -1246,8 +1246,10 @@ module.exports = {
       }
     });
     if (premium.length > 0) {
+      const products = await Product.find({available: 'True', 'author.id': req.user._id}).select('_id name');
       res.render('dashboard/dashboard_premium', {
         user: req.user,
+        products,
         premium: true,
         errors: req.session.errors,
         csrfToken: req.cookies._csrf,
@@ -1361,6 +1363,36 @@ module.exports = {
         }
       }
       const result = Object.assign({}, ...(products.map(item => ({ [item.name]: item.nrBought }) )));
+      return res.send(result);
+    }
+  },
+  async getProductViews(req, res) {
+    req.check('product').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+    const errors = req.validationErrors();
+    if (errors) {
+      return req.send(errors);
+    } else {
+      const product = await Product.findById(req.params.product);
+      const oneWeek = 7 * 24 * 60 * 60 * 1000;
+      let views = [0, 0, 0, 0];
+      product.viewDates.forEach((view) => {
+        const distance = (new Date()) - view;
+        if (distance < oneWeek) {
+          views[0] += 1;
+        } else if ((distance > oneWeek) && (distance < 2 * oneWeek)) {
+          views[1] += 1;
+        } else if ((distance > 2 * oneWeek) && (distance < 3 * oneWeek)) {
+          views[2] += 1;
+        } else if ((distance > 3 * oneWeek) && (distance < 4 * oneWeek)) {
+          views[3] += 1;
+        }
+      });
+      const result = {
+        'Three weeks ago': views[3],
+        'Two weeks ago': views[2],
+        'One week ago': views[1],
+        'This week': views[0]
+      };
       return res.send(result);
     }
   }
