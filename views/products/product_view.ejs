@@ -304,8 +304,8 @@
                             <br>
                             <p class="productDescriptionText"><%= review.body %></p>
                         </div>
-                        <% if(currentUser){ %>
-                            <% if(review.author.equals(currentUser._id)) { %>
+                        <% if(user){ %>
+                            <% if(review.author.equals(user._id)) { %>
                             <div class="column is-one-fifth reviewAuthorButtons">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">

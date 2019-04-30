@@ -1,0 +1,74 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<div class="columns" style="overflow: hidden; margin: auto;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+        <div class="dashTop column">
+            <h2 class="title">Email Notifications</h2>
+        </div>
+        <br>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div class="frame smallerCenter">
+                    <div class="column is-three-fifths" style="margin: auto;">
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <% if(user.email_notifications.deal === true) { %>
+                                    <input class="input" name="name" value="Deal Emails are enabled ✔️" type="text" readonly>
+                                <% } else { %>
+                                    <input class="input" name="name" value="Deal Emails are disabled ❌" type="text" readonly> 
+                                <% } %>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </span>
+                            </div>
+                            <p class="help">Deal emails include status updates, refunds and completion. </p>
+                        </div>
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <% if(user.email_notifications.message === true) { %>
+                                    <input class="input" name="name" placeholder="Message Emails are enabled ✔️" type="text">
+                                <% } else { %>
+                                    <input class="input" name="name" placeholder="Message Emails are disabled ❌" type="text">
+                                <% } %>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                </span>
+                            </div>
+                            <p class="help">Message emails include direct messages and contact requests.</p>
+                        </div>
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <% if(user.email_notifications.user === true) { %>
+                                    <input class="input" name="name" placeholder="User Emails are enabled ✔️" type="text">
+                                <% } else { %>
+                                    <input class="input" name="name" placeholder="User Emails are disabled ❌" type="text">
+                                <% } %>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                            </div>
+                            <p class="help">User emails include reviews, withdrawal and account related issues.</p>
+                        </div>
+                        <br>
+                        <div class="buttons has-addons is-centered">
+                            <a href="#" class="button is-danger is-rounded">
+                                Disable Deal Emails
+                            </a>
+                            <a href="#" class="button is-danger is-rounded">
+                                Disable Message Emails
+                            </a>
+                            <a href="#" class="button is-danger is-rounded">
+                                Disable User Emails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div> 
+</div>
+
+<% include ../partials/footer %>

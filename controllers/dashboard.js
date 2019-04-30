@@ -1363,5 +1363,13 @@ module.exports = {
       const result = Object.assign({}, ...(products.map(item => ({ [item.name]: item.nrBought }) )));
       return res.send(result);
     }
-  }
+  },
+  async getNotifications(req, res) {
+    res.render('dashboard/dashboard_notifications', {
+      user: req.user,
+      pageTitle: 'Notifications - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
 };

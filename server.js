@@ -208,7 +208,7 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.user = req.user;
   // if (req.cookies._csrf){
   //   res.locals.csrfToken = req.cookies._csrf;
   // }

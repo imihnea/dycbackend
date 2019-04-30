@@ -9,7 +9,8 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyT
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
-        subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage } = require('../controllers/dashboard');
+        subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
+        getNotifications, postNotifications } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -75,7 +76,6 @@ router.get('/tokens', assignCookie, isLoggedIn, asyncErrorHandler(getTokens));
 router.post('/tokens/:id', verifyCookie, isLoggedIn, asyncErrorHandler(buyTokens));
 
 // Buy token packs
-
 router.post('/tokens/:id/packs', isLoggedIn, asyncErrorHandler(buyTokenPacks))
 
 // Show all open offers
@@ -98,6 +98,12 @@ router.get('/premium/getData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyPar
 router.get('/premium/getProductData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getProductData));
 
 router.get('/premium/getProductSoldData/:_csrf/:csrfSecret/:firstCat/:timeframe', verifyParam, isLoggedIn, asyncErrorHandler(getProductSoldData));
+
+// GET Email-notifications page
+router.get('/notifications', isLoggedIn, asyncErrorHandler(getNotifications));
+
+// POST Email-notifications page
+router.post('/notifications', isLoggedIn, asyncErrorHandler(postNotifications));
 
 // GET Subscription Page
 
