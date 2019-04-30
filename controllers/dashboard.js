@@ -774,6 +774,7 @@ module.exports = {
       req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
       req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
+      req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
       const errors = req.validationErrors();
       if (errors) {
         res.render('dashboard/dashboard_new', {
@@ -787,6 +788,7 @@ module.exports = {
       } else {
         const btcPrice=Number(req.body.product.btc_price);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
+        const tags = req.body.product.tags.trim().split(' ');
         const newproduct = {
           name: req.body.product.name,
           images: req.body.product.images,
@@ -794,6 +796,7 @@ module.exports = {
           condition: req.body.product.condition,
           description: req.body.product.description,
           btcPrice,
+          tags,
           author
         };
         if (req.body.product.repeatable === "true") {
@@ -947,6 +950,7 @@ module.exports = {
     req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
+    req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
     const btcPrice = req.body.product.btc_price;
     const errors = req.validationErrors();
     if (errors) {
@@ -975,6 +979,8 @@ module.exports = {
       product.category[2] = req.body.product.category[1];
       product.category[3] = req.body.product.category[2];
       product.btcPrice = btcPrice;
+      const tags = req.body.product.tags.trim().split(' ');
+      product.tags = tags;
       // save the updated product into the db
       await product.save();
       // redirect to show page

@@ -12,7 +12,7 @@
                         <h1 class="title">New Deal</h1>
                     </div>
                     <br>
-                    <form action="/dashboard/new/<%= csrfToken %>/<%= csrfSecret %>" method="POST" enctype="multipart/form-data">
+                    <form action="/dashboard/new/<%= csrfToken %>/<%= csrfSecret %>" method="POST" enctype="multipart/form-data" id="newProductForm">
                         <div class="container is-fluid">
                             <% if(errors){ %>
                                 <div class="notification is-danger" role="alert"> 
@@ -62,7 +62,11 @@
                                 </select>
                             </div>
                             <textarea name="product[description]" class="textarea" placeholder="Description"></textarea>
-                            <br>     
+                            <br>
+                            <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
+                            <input type="text" name="product[tags]" id="tags" hidden required>
+                            <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;"></div>
+                            <br>
                             <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
                                 <div>
                                     <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x"></i></label>
@@ -201,7 +205,7 @@
                             </table>
                         </div>
                         <div class="control smmargin" style="margin: auto; margin-top: 2vh;">
-                            <button class="button is-primary">Create</button>
+                            <button type="submit" form="newProductForm" class="button is-primary">Create</button>
                         </div>
                     </form>                
                 </div>

@@ -135,8 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   secondCat.addEventListener('change', () => {
-    thirdCat.innerHTML = 
-    '<option disabled selected>Tertiary Category</option>';
+    thirdCat.innerHTML = '<option disabled selected>Tertiary Category</option>';
     secCategories.forEach((item) => {
       if (secondCat.value == item.name) {
         item.opt.forEach((option) => {
@@ -145,4 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  const tagInput = document.getElementById('tagInput');
+  let tags = document.getElementById('tags');
+  const tagsControl = document.getElementById('tagsControl');
+  let deleteTagBtns = document.querySelectorAll('.deleteTag');
+  let deleteTagItems = [].slice.call(deleteTagBtns);
+  // Check if the last character was the comma
+  tagInput.addEventListener('keypress', () => {
+    if (tagInput.value.substr(tagInput.value.length - 1) == ',') {
+      if (tagInput.value.length > 1) {
+        // Add the tag to tag input that gets sent
+        tags.value += ' ' + tagInput.value.substring(0, tagInput.value.length - 1);
+        // Create the tag element
+        tagsControl.innerHTML += `<span class="tag is-link is-medium">${tagInput.value.substring(0, tagInput.value.length - 1)}<button type="button" class="delete deleteTag is-small"></button></span>`;
+        // Clean the input
+        tagInput.value = '';
+        // Remake the array of delete buttons with the new tag
+        deleteTagBtns = document.querySelectorAll('.deleteTag');
+        deleteTagItems = [].slice.call(deleteTagBtns);
+        // Create the tag deletion event
+        deleteTagItems.forEach((item) => {
+          item.addEventListener('click', () => {
+            const text = item.parentElement.innerText;
+            const regex = new RegExp('\\b' + text + '\\b');
+            // Remove the tag
+            tags.value = tags.value.replace(regex, '');
+            // Remove extra spaces
+            tags.value = tags.value.replace(/\s+/g, ' ').trim();
+            item.parentElement.remove();
+          });
+        });
+      } else {
+        tagInput.value = '';
+      }
+    }
+  });
+
+
 });

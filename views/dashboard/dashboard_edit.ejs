@@ -12,7 +12,7 @@
                     <h1 class="title">Edit Product</h1>
                 </div>
                 <br>
-                <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="editProductForm">
                     <div class="container is-fluid">
                         <% if(errors){ %>
                             <div class="notification is-danger" role="alert"> 
@@ -63,6 +63,17 @@
                             </select>
                         </div>
                         <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
+                        <br>
+                        <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
+                        <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden required>
+                        <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;">
+                            <% product.tags.forEach(tag => { %>
+                                <span class="tag is-link is-medium">
+                                    <%= tag %>
+                                    <button type="button" class="delete deleteTag is-small"></button>
+                                </span>
+                            <% }); %>
+                        </div>
                         <br>     
                         <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
                             <div>
@@ -170,7 +181,7 @@
                     </div>
                     <br>
                     <div class="control smmargin" style="margin: auto !important; margin-top: 2vh !important;">
-                        <button class="button is-primary">Update</button>
+                        <button form="editProductForm" class="button is-primary">Update</button>
                     </div>
                 </form>
                 <br>

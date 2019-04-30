@@ -17,6 +17,7 @@ const ProductSchema = new Schema({
   accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
+  tags: [ String ],
   createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
   views: { type: Number, default: 0, es_indexed: true, es_type: 'long'},
   viewDates: [ Date ],
