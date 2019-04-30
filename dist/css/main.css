@@ -237,6 +237,14 @@ a:hover {
     color: black !important;
 }
 
+.secCategDropdown{
+    text-align: right;
+}
+
+.secCategSearchBtn{
+    text-align: right;
+}
+
 .categorySelect:not(.is-multiple):not(.is-loading)::after{
     right: 1rem !important;
     border-color: black;

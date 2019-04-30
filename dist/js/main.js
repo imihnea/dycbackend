@@ -37,23 +37,34 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('mouseover', (event) => {
       event.stopPropagation();
       secCategItems[i].style.display = 'block';
+      secCategItems.forEach((item, j) => {
+        if (j != i) {
+          item.style.display = 'none';
+        }
+      });
     });
-    item.addEventListener('mouseout', (event) => {
-      event.stopPropagation();
-      secCategItems[i].style.display = 'none';
-    });
+    // item.addEventListener('mouseout', (event) => {
+    //   event.stopPropagation();
+    //   secCategItems[i].style.display = 'none';
+    // });
   });
   secCategItems.forEach((item, i) => {
     item.addEventListener('mouseover', (event) => {
       event.stopPropagation();
       secCategItems[i].style.display = 'block';
       mainCategItems[i].classList.add('active');
+      secCategItems.forEach((item, j) => {
+        if (j != i) {
+          item.style.display = 'none';
+          mainCategItems[j].classList.remove('active');
+        }
+      });
     });
-    item.addEventListener('mouseout', (event) => {
-      event.stopPropagation();
-      secCategItems[i].style.display = 'none';
-      mainCategItems[i].classList.remove('active');
-    });
+    // item.addEventListener('mouseout', (event) => {
+    //   event.stopPropagation();
+    //   secCategItems[i].style.display = 'none';
+    //   mainCategItems[i].classList.remove('active');
+    // });
   });
 });
 
@@ -78,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function readCookie(name) {
       var nameEQ = name + "=";
       var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
+      for(var i = 0; i < ca.length; i += 1) {
           var c = ca[i];
           while (c.charAt(0) === ' ') {
               c = c.substring(1,c.length);
