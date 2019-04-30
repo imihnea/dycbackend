@@ -35,6 +35,7 @@ const {
   postDisable2FactorRequest,
   postDisable2Factor,
   postVerifyLogin,
+  getCategories,
   firstCategSearch,
   secondCategSearch,
   thirdCategSearch
@@ -103,6 +104,10 @@ router.get('/auth/google/callback',
   (req, res) => {
     res.redirect('/dashboard');
   });
+
+// GET Categories page
+
+router.get('/categories', getCategories);
 
 // POST Search
 

@@ -201,16 +201,6 @@ input, select, .dd-btn{
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }
 
-.categDropdown:hover {
-    background-color: rgb(167,219,216) !important;
-    border-right-color: rgb(250, 105, 0);
-}
-
-.categDropdown.active {
-    background-color: rgb(167,219,216) !important;
-    border-right-color: rgb(250, 105, 0);
-}
-
 .dropdown-item{
     text-align: center;
     padding: 0.2rem 1rem !important;
@@ -332,13 +322,13 @@ body{
     border-color: black !important;
 }
 
-.searchBtn{
+.searchBtn, .categoryBtn{
     border-color: transparent;
     background-color: transparent;
     color: black;
     cursor: pointer;
     margin-bottom: 0.3vh;
-    width: 100%;
+    /* width: fit-content; */
     text-shadow: 0.3px 0.3px black;
 }
 
@@ -350,6 +340,11 @@ body{
 
 .searchBtn:focus{
     outline: transparent;
+}
+
+.categoryBtn:hover {
+    background-color: grey;
+    width: fit-content;
 }
 
 /* Make .columns margin-left and right disappear for <= 768px */

@@ -643,6 +643,14 @@ module.exports = {
       res.redirect('back');
     });
   },
+  getCategories(req, res) {
+    res.render('index/categories',{
+      errors: false, 
+      pageTitle: 'Categories - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
     async firstCategSearch(req, res) {
       let currency = [];
       let secCat = [];

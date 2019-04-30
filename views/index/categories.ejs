@@ -1,0 +1,604 @@
+<% include ../partials/header %>
+
+<div class="hero-body">
+    <div class="columns">
+        <div class="column">
+            <form action="/firstCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Collectibles and Art" hidden>
+                <button class="categoryBtn button">Collectibles and Art</button>
+            </form>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Collectibles" hidden>
+                <button class="categoryBtn">Collectibles</button>
+            </form>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Antiques" hidden>
+                <button class="categoryBtn">Antiques</button>
+            </form>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Art" hidden>
+                <button class="categoryBtn">Art</button>
+            </form>  
+        </div>
+    
+        <div class="column">
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Collectibles" hidden>
+                <button class="categoryBtn">Collectibles</button>
+            </form>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Antiques" hidden>
+                <button class="categoryBtn">Antiques</button>
+            </form>
+            <form action="/secondCategSearch" method="POST">
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Collectibles and Art" hidden>
+                <input type="text" name="category" value="Art" hidden>
+                <button class="categoryBtn">Art</button>
+            </form>   -->
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            Insert img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Computers and Laptops" hidden>
+                <button class="categoryBtn">Computers and Laptops</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Cameras" hidden>
+                <button class="categoryBtn">Cameras</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="TV and Audio" hidden>
+                <button class="categoryBtn">TV and Audio</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Phones and Tablets" hidden>
+                <button class="categoryBtn">Phones and Tablets</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Consoles and Games" hidden>
+                <button class="categoryBtn">Consoles and Games</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Other Devices" hidden>
+                <button class="categoryBtn">Other Devices</button>
+            </form>   -->
+        </div>
+        <div class="column">            
+            <form action="/firstCategSearch" method="POST"  >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Electronics" hidden>
+                <button class="categoryBtn button">Electronics</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Computers and Laptops" hidden>
+                <button class="categoryBtn">Computers and Laptops</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Cameras" hidden>
+                <button class="categoryBtn">Cameras</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="TV and Audio" hidden>
+                <button class="categoryBtn">TV and Audio</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Phones and Tablets" hidden>
+                <button class="categoryBtn">Phones and Tablets</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Consoles and Games" hidden>
+                <button class="categoryBtn">Consoles and Games</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Electronics" hidden>
+                <input type="text" name="category" value="Other Devices" hidden>
+                <button class="categoryBtn">Other Devices</button>
+            </form>   
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Fashion and Beauty" hidden>
+                <button class="categoryBtn button">Fashion and Beauty</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Female Clothes" hidden>
+                <button class="categoryBtn">Female Clothes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Female Shoes" hidden>
+                <button class="categoryBtn">Female Shoes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Male Clothes" hidden>
+                <button class="categoryBtn">Male Clothes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Male Shoes" hidden>
+                <button class="categoryBtn">Male Shoes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Accessories" hidden>
+                <button class="categoryBtn">Accessories</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Jewellry" hidden>
+                <button class="categoryBtn">Jewellry</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Other Products" hidden>
+                <button class="categoryBtn">Other Products</button>
+            </form>
+        </div>
+        <div class="column">
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Female Clothes" hidden>
+                <button class="categoryBtn">Female Clothes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Female Shoes" hidden>
+                <button class="categoryBtn">Female Shoes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Male Clothes" hidden>
+                <button class="categoryBtn">Male Clothes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Male Shoes" hidden>
+                <button class="categoryBtn">Male Shoes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Accessories" hidden>
+                <button class="categoryBtn">Accessories</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Jewellry" hidden>
+                <button class="categoryBtn">Jewellry</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Fashion and Beauty" hidden>
+                <input type="text" name="category" value="Other Products" hidden>
+                <button class="categoryBtn">Other Products</button>
+            </form> -->
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">         
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Furniture" hidden>
+                <button class="categoryBtn">Furniture</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Decoration" hidden>
+                <button class="categoryBtn">Decoration</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Garden" hidden>
+                <button class="categoryBtn">Garden</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Hardware and Tools" hidden>
+                <button class="categoryBtn">Hardware and Tools</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Other Home Products" hidden>
+                <button class="categoryBtn">Other Home Products</button>
+            </form> -->
+        </div>
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Home Improvement" hidden>
+                <button class="categoryBtn button">Home Improvement</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Furniture" hidden>
+                <button class="categoryBtn">Furniture</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Decoration" hidden>
+                <button class="categoryBtn">Decoration</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Garden" hidden>
+                <button class="categoryBtn">Garden</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Hardware and Tools" hidden>
+                <button class="categoryBtn">Hardware and Tools</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Home Improvement" hidden>
+                <input type="text" name="category" value="Other Home Products" hidden>
+                <button class="categoryBtn">Other Home Products</button>
+            </form>   
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Leisure Time" hidden>
+                <button class="categoryBtn button">Leisure Time</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Books" hidden>
+                <button class="categoryBtn">Books</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Movies and Television" hidden>
+                <button class="categoryBtn">Movies and Television</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Music" hidden>
+                <button class="categoryBtn">Music</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Other Leisure Products" hidden>
+                <button class="categoryBtn">Other Leisure Products</button>
+            </form>
+        </div>
+        <div class="column">
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Books" hidden>
+                <button class="categoryBtn">Books</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Movies and Television" hidden>
+                <button class="categoryBtn">Movies and Television</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Music" hidden>
+                <button class="categoryBtn">Music</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Leisure Time" hidden>
+                <input type="text" name="category" value="Other Leisure Products" hidden>
+                <button class="categoryBtn">Other Leisure Products</button>
+            </form> -->
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            Insert Img
+        </div>
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Mothers and Babies" hidden>
+                <button class="categoryBtn button">Mothers and Babies</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Clothes" hidden>
+                <button class="categoryBtn">Clothes</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Strollers" hidden>
+                <button class="categoryBtn">Strollers</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Baby Care" hidden>
+                <button class="categoryBtn">Baby Care</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Safety" hidden>
+                <button class="categoryBtn">Safety</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Toys" hidden>
+                <button class="categoryBtn">Toys</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Mothers and Babies" hidden>
+                <input type="text" name="category" value="Other Baby Products" hidden>
+                <button class="categoryBtn">Other Baby Products</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Pet Supplies" hidden>
+                <button class="categoryBtn button">Pet Supplies</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Aquatic Pets" hidden>
+                <button class="categoryBtn">Aquatic Pets</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Birds" hidden>
+                <button class="categoryBtn">Birds</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Cats" hidden>
+                <button class="categoryBtn">Cats</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Dogs" hidden>
+                <button class="categoryBtn">Dogs</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Other Pets" hidden>
+                <button class="categoryBtn">Other Pets</button>
+            </form>
+        </div>
+        <div class="column">
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Aquatic Pets" hidden>
+                <button class="categoryBtn">Aquatic Pets</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Birds" hidden>
+                <button class="categoryBtn">Birds</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Cats" hidden>
+                <button class="categoryBtn">Cats</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Dogs" hidden>
+                <button class="categoryBtn">Dogs</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Pet Supplies" hidden>
+                <input type="text" name="category" value="Other Pets" hidden>
+                <button class="categoryBtn">Other Pets</button>
+            </form> -->
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            Insert Img
+        </div>
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Real Estate" hidden>
+                <button class="categoryBtn button">Real Estate</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Real Estate" hidden>
+                <input type="text" name="category" value="Apartments" hidden>
+                <button class="categoryBtn">Apartments</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Real Estate" hidden>
+                <input type="text" name="category" value="Houses" hidden>
+                <button class="categoryBtn">Houses</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Real Estate" hidden>
+                <input type="text" name="category" value="Other Estates" hidden>
+                <button class="categoryBtn">Other Estates</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Sports and Outdoors" hidden>
+                <button class="categoryBtn button">Sports and Outdoors</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Sports and Outdoors" hidden>
+                <input type="text" name="category" value="Sports and Fitness" hidden>
+                <button class="categoryBtn">Sports and Fitness</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Sports and Outdoors" hidden>
+                <input type="text" name="category" value="Outdoor" hidden>
+                <button class="categoryBtn">Outdoor</button>
+            </form>
+        </div>
+        <div class="column">
+            Insert Img
+            <!-- <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Sports and Outdoors" hidden>
+                <input type="text" name="category" value="Sports and Fitness" hidden>
+                <button class="categoryBtn">Sports and Fitness</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Sports and Outdoors" hidden>
+                <input type="text" name="category" value="Outdoor" hidden>
+                <button class="categoryBtn">Outdoor</button>
+            </form> -->
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            Insert Img
+        </div>
+        <div class="column">
+            <form action="/firstCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="category" value="Vehicles" hidden>
+                <button class="categoryBtn button">Vehicles</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Vehicles" hidden>
+                <input type="text" name="category" value="Automobiles" hidden>
+                <button class="categoryBtn">Automobiles</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Vehicles" hidden>
+                <input type="text" name="category" value="Trucks and Trailers" hidden>
+                <button class="categoryBtn">Trucks and Trailers</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Vehicles" hidden>
+                <input type="text" name="category" value="Motorcycles and ATVs" hidden>
+                <button class="categoryBtn">Motorcycles and ATVs</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Vehicles" hidden>
+                <input type="text" name="category" value="Boats" hidden>
+                <button class="categoryBtn">Boats</button>
+            </form>
+            <form action="/secondCategSearch" method="POST" >
+                <input type="text" name="searchName" value="" hidden>
+                <input type="text" name="searchCateg" value="Vehicles" hidden>
+                <input type="text" name="category" value="Other Vehicles" hidden>
+                <button class="categoryBtn">Other Vehicles</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
