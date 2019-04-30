@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Review = require('./review');
-const Subscription = require('./subscription');
 
 const Schema = mongoose.Schema;
 
@@ -28,11 +27,25 @@ const UserSchema = new Schema({
   avatar: { 
     url: { 
       type: String, 
-      default: 'https://res.cloudinary.com/dxbujmytn/image/upload/v1548677272/gbjahfrfhjyh0clslkux.png' /* Modify with something else */
+      default: '/dist/img/avatar.png'
     }, 
     public_id: String 
   },
   password: String,
+  email_notifications : {
+    deal: { // Includes mail for status updates and refunds
+      type: Boolean,
+      default: true,
+    },
+    message: { // Includes mails for contact requests and messages
+      type: Boolean,
+      default: true,
+    },
+    user: { // Includs mails for reviews, withdrawal and 2Factor
+      type: Boolean,
+      default: true,
+    }
+  },
   btcbalance: { type: Number, default: 0 },
   withdrawal: [{ 
     createdAt: { 
