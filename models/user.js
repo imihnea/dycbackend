@@ -41,7 +41,7 @@ const UserSchema = new Schema({
       type: Boolean,
       default: true,
     },
-    user: { // Includs mails for reviews, withdrawal and 2Factor
+    user: { // Includs mails for reviews, withdrawal and account related issues
       type: Boolean,
       default: true,
     }

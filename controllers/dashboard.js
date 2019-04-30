@@ -1375,6 +1375,14 @@ module.exports = {
       return res.send(result);
     }
   },
+  async getNotifications(req, res) {
+    res.render('dashboard/dashboard_notifications', {
+      user: req.user,
+      pageTitle: 'Notifications - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   async getProductViews(req, res) {
     req.check('product').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
     const errors = req.validationErrors();

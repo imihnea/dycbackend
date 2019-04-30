@@ -58,7 +58,7 @@
                 <a class="navbar-item" href="/">
                     <img src="/dist/img/logo.png" width="112px" height="28px">
                 </a>
-                <% if (currentUser) { %>
+                <% if (user) { %>
                     <div class="dropdown is-hoverable navbar-dropdown">
                         <div class="dropdown-trigger">
                             <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
@@ -509,7 +509,7 @@
                     </form>
                 </div>
                 <div class="navbar-end">
-                    <% if(!currentUser){ %>
+                    <% if(!user){ %>
                         <div class="navbar-item">
                             <a href="/login" class="white-text">Login</a>
                         </div>
@@ -534,7 +534,7 @@
                                     <div class="dropdown-content frame" style="padding-top: 1vh !important; padding-bottom: 1vh !important;">
                                     <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                         <div class="currency dropdown-item">
-                                            <p class="curr_text" id="btc_curr"><% if (currentUser.btcbalance) {%> <%=  currentUser.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
+                                            <p class="curr_text" id="btc_curr"><% if (user.btcbalance) {%> <%=  user.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
                                             <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                         <hr class="dropdown-divider">

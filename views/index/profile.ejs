@@ -172,8 +172,8 @@
                             <p class="productDescriptionText profileReview"><%= review.body %></p>
                             <sub style="position: absolute; bottom: 6%;">Review for: <a href="/products/<%= review.product._id %>/view" target="_top" class="link"><%= review.product.name %></a></sub>
                         </div>
-                        <% if(currentUser){ %>
-                            <% if(review.author.equals(currentUser._id)) { %>
+                        <% if(user){ %>
+                            <% if(review.author.equals(user._id)) { %>
                             <div class="reviewAuthor">
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
