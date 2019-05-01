@@ -80,9 +80,6 @@
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                         <div class="product-name">
                                             <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
-                                            <% if (product._source.feat_1.status === true) { %>
-                                                <p class="is-5"><span style="color: red;"><i class="fas fa-fire"></i> FEATURED DEAL <i class="fas fa-fire"></i></span></p>    
-                                            <% } %>
                                             <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
                                             <p>
                                                 <% for(let i = 0; i < 5; i++) { %>

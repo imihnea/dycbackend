@@ -18,6 +18,7 @@ const ProductSchema = new Schema({
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
   tags: [ String ],
+  searchableTags: { type: String, es_indexed: true, es_type: 'text'},
   createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
   views: { type: Number, default: 0, es_indexed: true, es_type: 'long'},
   viewDates: [ Date ],
@@ -50,7 +51,7 @@ const ProductSchema = new Schema({
       es_type: 'text'
     },
   ],
-  avgRating: { type: Number, default: 0, es_indexed: true },
+  avgRating: { type: Number, default: 0, es_indexed: true, es_type: 'double' },
 });
 
 ProductSchema.pre('remove', async () => {

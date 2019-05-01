@@ -797,6 +797,7 @@ module.exports = {
           description: req.body.product.description,
           btcPrice,
           tags,
+          searchableTags: req.body.product.tags,
           author
         };
         if (req.body.product.repeatable === "true") {
@@ -983,6 +984,7 @@ module.exports = {
       product.btcPrice = btcPrice;
       const tags = req.body.product.tags.trim().split(' ');
       product.tags = tags;
+      product.searchableTags = req.body.product.tags;
       // save the updated product into the db
       await product.save();
       // redirect to show page

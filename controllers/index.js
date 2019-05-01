@@ -51,7 +51,7 @@ function sendConfirmationEmail(req, userid, useremail) {
   }, function (err, data) {
     if (err) {
         console.log(err);
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     } else {
     const mailOptions = {
         from: `Deal Your Crypto <noreply@dyc.com>`,
@@ -62,7 +62,7 @@ function sendConfirmationEmail(req, userid, useremail) {
     transporter.sendMail(mailOptions, (error) => {
         if (error) {
           console.log(error);
-          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${useremail}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
     }
@@ -133,7 +133,7 @@ module.exports = {
           await User.register(newUser, req.body.password);
           sendConfirmationEmail(req, newUser._id, newUser.email, SECRET);
         } catch (error) {
-          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           req.flash('error', error.message);
           return res.redirect('back');
         }
@@ -289,7 +289,7 @@ module.exports = {
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
               console.log(error);
-              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
         });
         userLogger.info(`Message: User requested 2F disable\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -313,7 +313,7 @@ module.exports = {
         const user = jwt.decode(req.params.token);
         User.findByIdAndUpdate(user.user, { number: undefined, twofactor: false }, (err) => {
           if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
             res.redirect('/');
           } else {
@@ -392,7 +392,7 @@ module.exports = {
     } else {
       User.findOne({ username: req.body.username }, (err, user) => {
         if(err) {
-          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           let errors = { msg: String };
           errors.msg = err.message;
           return res.render('index/login', {
@@ -423,7 +423,7 @@ module.exports = {
           if (user.twofactor === true) {
             nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
               if(err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 let errors = { msg: String };
                 errors.msg = err.message;
                 return res.render('index/login', {
@@ -508,7 +508,11 @@ module.exports = {
     let onlyFeatured = false;
     await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
         if (err) {
-          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          if(req.user) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          } else {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          }
           return res.render('index', { 
             user: req.user, 
             'products.length': 0, 
@@ -527,7 +531,11 @@ module.exports = {
             });
             Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(20 - products.length).exec((err, result) => {
               if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                if(req.user) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                }
                 return res.render('index', { 
                   user: req.user, 
                   products,
@@ -732,17 +740,25 @@ module.exports = {
           { 
             "bool": { 
               "must": [
-                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": `${req.body.category}` }},
                 { "wildcard": { "author.continent": `*${continent}*`}},
                 { "wildcard": {"condition": `*${condition}*`}}
               ],
-            }
+              "should": [
+                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }}
+              ],
+              "minimum_should_match": 1
+            },
           }, 
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              if(req.user) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
               console.log(err);
             } else {
               Categories.forEach((item) => {
@@ -854,18 +870,26 @@ module.exports = {
           { 
             "bool": { 
               "must": [
-                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": `${req.body.searchCateg}`}},
                 { "match": { "category": `${req.body.category}`}},
                 { "wildcard": { "author.continent": `*${continent}*`}},
                 { "wildcard": {"condition": `*${condition}*`}}
               ],
+              "should": [
+                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }}
+              ],
+              "minimum_should_match": 1
             }
           }, 
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              if(req.user) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
               console.log(err);
             } else {
               secCategories.forEach((item) => {
@@ -980,19 +1004,27 @@ module.exports = {
           { 
             "bool": { 
               "must": [
-                { "wildcard": { "name": `*${req.body.searchName}*` }},
                 { "match": { "category": `${req.body.searchCateg}`}},
                 { "match": { "category": `${req.body.secondSearchCateg}`}},
                 { "match": { "category": `${req.body.category}`}},
                 { "wildcard": { "author.continent": `*${continent}*`}},
                 { "wildcard": {"condition": `*${condition}*`}}
               ],
+              "should": [
+                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                { "wildcard": { "name": `*${req.body.searchName}*` }}
+              ],
+              "minimum_should_match": 1
             }
           }, 
           { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
           (err, products) => {
             if (err) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              if(req.user) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
               console.log(err);
             } else {
               res.render('index/searchThirdCateg', { 
@@ -1179,7 +1211,11 @@ module.exports = {
           };
           transporter.sendMail(mailOptions, (error) => {
             if (error) {
-              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              if(req.user) {
+                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.body.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email: ${req.body.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
               req.flash('error', `${error.message}`);
               res.redirect('back', { error: error.message });
             }
