@@ -106,7 +106,7 @@ router.get('/premium/getProductViews/:_csrf/:csrfSecret/:product', verifyParam, 
 router.get('/notifications', isLoggedIn, asyncErrorHandler(getNotifications));
 
 // POST Email-notifications page
-router.post('/notifications', isLoggedIn, asyncErrorHandler(postNotifications));
+router.post('/notifications/:id', isLoggedIn, asyncErrorHandler(postNotifications));
 
 // GET Subscription Page
 

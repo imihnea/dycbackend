@@ -366,6 +366,7 @@ module.exports = {
   },
   //Withdraw BTC from Coinbase
   async withdraw(req, res) {
+    let CurrentUser = await User.findById(req.user._id);
     var address = req.body.address;
     var amount = Number(req.body.value) + 0.00005000;
     console.log(req.body.value);
@@ -397,35 +398,41 @@ module.exports = {
                   };
                   query_btc.withdrawal.push(withdrawal);
                   query_btc.save();
-                  ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-                    link: `http://${req.headers.host}/dashboard/address`,
-                    amount: amount,
-                    address: address,
-                    subject: 'Withdraw request success - Deal Your Crypto',
-                  }, function (err, data) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                      const mailOptions = {
-                          from: `Deal Your Crypto <noreply@dyc.com>`,
-                          to: `${user.email}`,
-                          subject: 'Currency withdrawn successfully',
-                          html: data,
-                      };
-                      transporter.sendMail(mailOptions, (error) => {
-                          if (error) {
-                            console.log(error);
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          }
-                          if (process.env.NODE_ENV === 'production') {
-                            userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          }
-                          req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-                          res.redirect('back');
-                          console.log(`Withdrawn ${amount} BTC successfully.`);
-                      });
-                    }
-                  });
+                  if(CurrentUser.email_notifications.user === true) {
+                    ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+                      link: `http://${req.headers.host}/dashboard/address`,
+                      footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                      amount: amount,
+                      address: address,
+                      subject: 'Withdraw request success - Deal Your Crypto',
+                    }, function (err, data) {
+                      if (err) {
+                          console.log(err);
+                      } else {
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dyc.com>`,
+                            to: `${user.email}`,
+                            subject: 'Currency withdrawn successfully',
+                            html: data,
+                        };
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                              console.log(error);
+                              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                            if (process.env.NODE_ENV === 'production') {
+                              userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                            req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                            res.redirect('back');
+                            console.log(`Withdrawn ${amount} BTC successfully.`);
+                        });
+                      }
+                    });
+                  } else {
+                    req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                    return res.redirect('back');
+                  }
                 });
               }
             }
@@ -1386,6 +1393,43 @@ module.exports = {
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
+  },
+  async postNotifications(req, res) {
+    const notif = req.body.name;
+    let CurrentUser = await User.findById(req.params.id);
+    switch(notif) {
+      case 'deal':
+        if(CurrentUser.email_notifications.deal === true) {
+          CurrentUser.email_notifications.deal = false;
+        } else {
+          CurrentUser.email_notifications.deal = true;
+        }
+        break;
+      case 'message':
+        if(CurrentUser.email_notifications.message === true) {
+          CurrentUser.email_notifications.message = false;
+        } else {
+          CurrentUser.email_notifications.message = true;
+        }
+        break;
+      case 'user':
+        if(CurrentUser.email_notifications.user === true) {
+          CurrentUser.email_notifications.user = false;
+        } else {
+          CurrentUser.email_notifications.user = true;
+        }
+        break;
+      default: break;
+    }
+    await CurrentUser.save((err, result) => {
+      if(err) {
+        req.flash('error', 'There was an error updating your settings, please try again.');
+        return res.redirect('back');
+      } else {
+        req.flash('success', 'Successfully updated your email notification settings.')
+        return res.redirect('back');
+      }
+    })
   },
   async getProductViews(req, res) {
     req.check('product').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();

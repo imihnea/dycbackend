@@ -237,29 +237,32 @@ module.exports = {
         // Send an email if it was the first message of the conversation    
         if (chat.messageCount == 1) {      
             const user2 = await User.findById(chat.user2.id);
-            ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
-                link: `http://${req.headers.host}/messages/${chat._id}`,
-                buyer: req.user.full_name,
-                name: chat.product.name,
-                subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
-              }, function (err, data) {
-                if (err) {
-                    console.log(err);
-                } else {
-                const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                    to: `${user2.email}`, // list of receivers
-                    subject: 'New Conversation Started', // Subject line
-                    html: data, // html body
-                };
-                // send mail with defined transport object
-                transporter.sendMail(mailOptions, (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
+            if(user2.email_notifications.message === true) {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
+                    link: `http://${req.headers.host}/messages/${chat._id}`,
+                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    buyer: req.user.full_name,
+                    name: chat.product.name,
+                    subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
+                }, function (err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        to: `${user2.email}`, // list of receivers
+                        subject: 'New Conversation Started', // Subject line
+                        html: data, // html body
+                    };
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            console.log(error);
+                        }
+                    });
+                } 
                 });
-            } 
-            });  
+            }
         }
         res.redirect(`/messages/${chat._id}`);
     },
