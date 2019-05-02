@@ -27,8 +27,6 @@ Backend:
       
    Low Priority:
 
-      Logs => Error logs for when there's no user (index is done)
-
       Service worker subscriptions => Notifications
 
       Login => Link accounts facebook, gmail etc to original

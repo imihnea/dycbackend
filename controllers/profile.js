@@ -37,10 +37,10 @@ module.exports = {
       reviews.page = Number(reviews.page);
       const floorRating = user.calculateAvgRating();
       const products = await Product.find({ available: "True", 'author.id': req.params.id });
-      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      let premium = await Subscription.findOne({userid: req.params.id}, (err, sub) => {
         if(err) {
           console.log('Failed to retrieve subscription.');
-          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.params.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
       if (premium) {
