@@ -507,7 +507,6 @@ module.exports = {
     res.redirect('/');
   },
   async getIndex(req, res) {
-    let onlyFeatured = false;
     await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
         if (err) {
           if(req.user) {
@@ -519,7 +518,7 @@ module.exports = {
             user: req.user, 
             'products.length': 0, 
             errors: false,
-            onlyFeatured,
+            onlyFeatured: false,
             pageTitle: 'Deal Your Crypto',
             pageDescription: 'Description',
             pageKeywords: 'Keywords'
@@ -542,7 +541,7 @@ module.exports = {
                   user: req.user, 
                   products,
                   errors: false,
-                  onlyFeatured,
+                  onlyFeatured: false,
                   pageTitle: 'Deal Your Crypto',
                   pageDescription: 'Description',
                   pageKeywords: 'Keywords'
@@ -556,18 +555,17 @@ module.exports = {
                     user: req.user, 
                     products,
                     errors: false,
-                    onlyFeatured,
+                    onlyFeatured: false,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Description',
                     pageKeywords: 'Keywords'
                   }); 
                 } else {
-                  onlyFeatured = true;
                   return res.render('index', { 
                     user: req.user, 
                     products,
                     errors: false,
-                    onlyFeatured,
+                    onlyFeatured: false,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Description',
                     pageKeywords: 'Keywords'
@@ -576,12 +574,11 @@ module.exports = {
               }
             });
           } else {
-            onlyFeatured = true;
             return res.render('index', { 
               user: req.user, 
               products,
               errors: false,
-              onlyFeatured,
+              onlyFeatured: true,
               pageTitle: 'Deal Your Crypto',
               pageDescription: 'Description',
               pageKeywords: 'Keywords'

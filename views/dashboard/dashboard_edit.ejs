@@ -89,6 +89,7 @@
                     <br>
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
+                        <input type="text" id="deleteImages" name="deleteImages" hidden>
                         <div class="file-upload">
                             <div class="mobileUpload">
                                 <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
@@ -234,5 +235,8 @@
     </div>
 </div>
 <% include ../partials/footer %>
-<script src="../../dist/js/editTransport.js"></script>
 <script src="../../dist/js/dashboard_new.js"></script>
+<script src="../../dist/js/deleteImages.js"></script>
+<span id="currentImages" hidden>
+    <%= JSON.stringify(product.images) %>
+</span>

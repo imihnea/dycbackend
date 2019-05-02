@@ -61,8 +61,7 @@
 	border-radius: 5px; 
 	display: flex; 
 	padding: 20px; 
-	justify-content: space-evenly;
-	width: 300px;
+	width: fit-content;
 	border-style: solid;
 }
 
@@ -83,6 +82,10 @@
 
 .thumbnails label img{
 	display: block;
+}
+
+.thumbnailLabelPast1{
+	margin-left: 5px;
 }
 
 .thumbnails input[name='slide_switch']:checked+label {

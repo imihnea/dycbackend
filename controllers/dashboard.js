@@ -915,40 +915,6 @@ module.exports = {
   async productUpdate(req, res) {
     // find the product by id
     const product = await Product.findById(req.params.id);
-    
-    // No way to use this yet
-
-    // check if there's any images for deletion
-    // if (req.body.deleteImages && req.body.deleteImages.length) {
-    //   // assign deleteImages from req.body to its own variable
-    //   const deleteImages = req.body.deleteImages;
-    //   // loop over deleteImages
-    //   for (const public_id of deleteImages) {
-    //     // delete images from cloudinary
-    //     await cloudinary.v2.uploader.destroy(public_id);
-    //     // delete image from product.images
-    //     for (const image of product.images) {
-    //       if (image.public_id === public_id) {
-    //         const index = product.images.indexOf(image);
-    //         product.images.splice(index, 1);
-    //       }
-    //     }
-    //   }
-    // }
-
-    // check if there are any new images for upload
-    if (req.files) {
-      // upload images
-      for (const file of req.files) {
-        const image = await cloudinary.v2.uploader.upload(file.path);
-        // add images to product.images array
-        product.images.push({
-          url: image.secure_url,
-          public_id: image.public_id,
-        });
-      }
-    }
-    // Look into which symbols are security threats - product name, product description
     req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/i).notEmpty();
     req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
     req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
@@ -959,7 +925,7 @@ module.exports = {
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
     req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
-    const btcPrice = req.body.product.btc_price;
+    req.check('deletedImages', 'Something went wrong. Please try again.').matches(/(^[a-z0-9 ]+$|)/i);
     const errors = req.validationErrors();
     if (errors) {
       res.render('dashboard/dashboard_edit', {
@@ -972,6 +938,46 @@ module.exports = {
         pageKeywords: 'Keywords'
       });
     } else {
+      // check if there are any new images for upload
+      if (req.files) {
+        // upload images
+        for (const file of req.files) {
+          const image = await cloudinary.v2.uploader.upload(file.path);
+          // add images to product.images array
+          product.images.push({
+            url: image.secure_url,
+            public_id: image.public_id,
+          });
+        }
+      }
+
+      let deleteImages;
+      // check if there are images to delete
+      if (req.body.deleteImages.length) {
+        deleteImages = req.body.deleteImages.trim().split(' ');
+        if (deleteImages.length >= product.images.length) {
+          req.flash('error', 'The product must have at least one image.');
+          return res.redirect('back');
+        }
+        for (const public_id of deleteImages) {
+          // delete images from cloudinary
+          await cloudinary.v2.uploader.destroy(public_id, (err) => {
+            if (err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              req.flash('error', 'A problem has occured. Please try again later.');
+              return res.redirect('back');
+            }
+          });
+          // delete images from DB
+          for (const image of product.images) {
+            if (image.public_id === public_id) {
+              product.images.splice(product.images.indexOf(image), 1);
+            }
+          }
+        }
+      }
+
+      const btcPrice = req.body.product.btc_price;
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
