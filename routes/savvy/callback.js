@@ -29,7 +29,6 @@ app.post('/savvy/callback/:order', (req, res) => {
     var amountPaid = data.inTransaction.amount / Math.pow(10, data.inTransaction.exp);
     console.log('amount paid ===', amountPaid);
 
-
     
     console.log(data.confirmations);
     if (data.maxConfirmations > data.confirmations) {

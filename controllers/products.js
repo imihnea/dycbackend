@@ -266,6 +266,7 @@ module.exports = {
     postReport(req, res) {
       ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
         link: `http://${req.headers.host}/dashboard`,
+        footerlink: `http://${req.headers.host}/dashboard/notifications`,
         id: req.user._id,
         name: req.user.full_name,
         email: req.user.email,
@@ -383,31 +384,34 @@ module.exports = {
                         await user.save();
                         // Send an email to the seller letting them know about the deal request
                         const user2 = await User.findById(product.author.id);
-                        ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                            link: `http://${req.headers.host}/deals/${deal._id}`,
-                            name: product.name,
-                            buyer: req.user.full_name,
-                            subject: `New buy request - Deal Your Crypto`,
-                          }, function (err, data) {
-                            if (err) {
-                                console.log(err);
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            } else {
-                                const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                                    to: `${user2.email}`, // list of receivers
-                                    subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                                    html: data, // html body
-                                };
-                                // send mail with defined transport object
-                                transporter.sendMail(mailOptions, (error) => {
-                                    if (error) {
-                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(error);
-                                    }
-                                });
-                            }
-                        });
+                        if(user2.email_notifications.deal === true) {
+                            ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                                link: `http://${req.headers.host}/deals/${deal._id}`,
+                                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                name: product.name,
+                                buyer: req.user.full_name,
+                                subject: `New buy request - Deal Your Crypto`,
+                            }, function (err, data) {
+                                if (err) {
+                                    console.log(err);
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    const mailOptions = {
+                                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                        to: `${user2.email}`, // list of receivers
+                                        subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                                        html: data, // html body
+                                    };
+                                    // send mail with defined transport object
+                                    transporter.sendMail(mailOptions, (error) => {
+                                        if (error) {
+                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            console.log(error);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                         dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         // Link chat to deal

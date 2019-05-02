@@ -143,31 +143,37 @@ module.exports = {
                 dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
                 const buyer = await User.findById(deal.buyer.id);
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
-                    link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
-                    name: deal.product.name,
-                    subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-                }, function (err, data) {
-                    if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
-                    } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                        to: `${buyer.email}`, // list of receivers
-                        subject: 'Deal Status Changed', // Subject line
-                        html: data, // html body
-                    };
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
+                if(buyer.email_notifications.deal === true) {
+                    ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
+                        link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
+                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                        name: deal.product.name,
+                        subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                    }, function (err, data) {
+                        if (err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            console.log(err);
+                        } else {
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                            to: `${buyer.email}`, // list of receivers
+                            subject: 'Deal Status Changed', // Subject line
+                            html: data, // html body
+                        };
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                console.log(error);
+                            }
+                                req.flash('success', 'Deal accepted successfully.');
+                                return res.redirect('back');
+                            });
                         }
-                            req.flash('success', 'Deal accepted successfully.');
-                            res.redirect('back');
-                        });
-                    }
-                });
+                    });
+                } else {
+                    req.flash('success', 'Deal accepted successfully.');
+                    return res.redirect('back');
+                }
             }
         });
         
@@ -205,31 +211,37 @@ module.exports = {
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         buyer.btcbalance += deal.price;
         await buyer.save();
-        ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
-            link: `http://${req.headers.host}/deals/${deal._id}`,
-            name: deal.product.name,
-            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-          }, function (err, data) {
-            if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                console.log(err);
-            } else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${buyer.email}`, // list of receivers
-                subject: 'Deal Status Changed', // Subject line
-                html: data, // html body
-            };
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(error);
+        if(buyer.email_notifications.deal === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
+                link: `http://${req.headers.host}/deals/${deal._id}`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                name: deal.product.name,
+                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+            }, function (err, data) {
+                if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    console.log(err);
+                } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${buyer.email}`, // list of receivers
+                    subject: 'Deal Status Changed', // Subject line
+                    html: data, // html body
+                };
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(error);
+                    }
+                        req.flash('success', 'Deal denied successfully.');
+                        return res.redirect('back');
+                    });
                 }
-                    req.flash('success', 'Deal denied successfully.');
-                    res.redirect('back');
-                });
-            }
-        })
+            });
+        } else {
+            req.flash('success', 'Deal denied successfully.');
+            return res.redirect('back');
+        }
     },
     async completeDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -256,50 +268,56 @@ module.exports = {
         }
         const buyer = await User.findById(deal.buyer.id);
         // Buyer email
-        ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-            link: `http://${req.headers.host}/deals/${deal._id}`,
-            name: deal.product.name,
-            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-          }, function (err, data) {
-            if (err) {
-                console.log(err);
-            } else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${buyer.email}`, // list of receivers
-                subject: 'Deal Status Changed', // Subject line
-                html: data, // html body
-            };
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(error);
-                }
-            });
-        }});
+        if(buyer.email_notifications.deal === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
+                link: `http://${req.headers.host}/deals/${deal._id}`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                name: deal.product.name,
+                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+            }, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${buyer.email}`, // list of receivers
+                    subject: 'Deal Status Changed', // Subject line
+                    html: data, // html body
+                };
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(error);
+                    }
+                });
+            }});
+        }
         // Seller email
-        ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-            link: `http://${req.headers.host}/dashboard`,
-            name: deal.product.name,
-            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-          }, function (err, data) {
-            if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                console.log(err);
-            } else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${seller.email}`, // list of receivers
-                subject: 'Deal Status Changed', // Subject line
-                html: data, // html body
-            };
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(error);
-                }
-            });
-        }});
+        if(seller.email_notifications.deal === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                link: `http://${req.headers.host}/dashboard`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                name: deal.product.name,
+                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+            }, function (err, data) {
+                if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    console.log(err);
+                } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${seller.email}`, // list of receivers
+                    subject: 'Deal Status Changed', // Subject line
+                    html: data, // html body
+                };
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(error);
+                    }
+                });
+            }});
+        }
         dealLogger.info(`Message: Deal ${deal._id} completed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         res.redirect(`/deals/${deal._id}/review`);
     },
@@ -314,32 +332,39 @@ module.exports = {
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         // Seller email
         const seller = await User.findById(deal.product.author.id);
-        ejs.renderFile(path.join(__dirname, "../views/email_templates/cancelDeal.ejs"), {
-            link: `http://${req.headers.host}/dashboard`,
-            name: deal.product.name,
-            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-          }, function (err, data) {
-            if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                console.log(err);
-            } else {
-            const mailOptions = {
-                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                to: `${seller.email}`, // list of receivers
-                subject: 'Deal Status Changed', // Subject line
-                html: data, // html body
-            };
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(error);
-                }
-                dealLogger.info(`Message: Deal ${deal._id} cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Deal cancelled successfully.');
-                res.redirect('back');
-            });
-        }});
+        if(seller.email_notifications.deal === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/cancelDeal.ejs"), {
+                link: `http://${req.headers.host}/dashboard`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                name: deal.product.name,
+                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+            }, function (err, data) {
+                if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    console.log(err);
+                } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    to: `${seller.email}`, // list of receivers
+                    subject: 'Deal Status Changed', // Subject line
+                    html: data, // html body
+                };
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(error);
+                    }
+                    dealLogger.info(`Message: Deal ${deal._id} cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    req.flash('success', 'Deal cancelled successfully.');
+                    return res.redirect('back');
+                });
+            }});
+        } else {
+            dealLogger.info(`Message: Deal ${deal._id} cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            req.flash('success', 'Deal cancelled successfully.');
+            return res.redirect('back');
+        }
     },
     async refundDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -413,28 +438,31 @@ module.exports = {
             deal.refund.status = 'Denied';
             deal.status = 'Refund denied';
             const buyer = await User.findById(deal.buyer.id);
-            ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
-                link: `http://${req.headers.host}/deals/${deal._id}`,
-                name: deal.product.name,
-                subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
-              }, function (err, data) {
-                if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
-                } else {
-                const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                    to: `${buyer.email}`, // list of receivers
-                    subject: 'Refund denied', // Subject line
-                    html: data, // html body
-                };
-                transporter.sendMail(mailOptions, (error) => {
-                    if (error) {
-                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
-                    }
-                });
-            }});
+            if(buyer.email_notifications.deal === true) {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
+                    link: `http://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    name: deal.product.name,
+                    subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
+                }, function (err, data) {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(err);
+                    } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        to: `${buyer.email}`, // list of receivers
+                        subject: 'Refund denied', // Subject line
+                        html: data, // html body
+                    };
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            console.log(error);
+                        }
+                    });
+                }});
+            }
             dealLogger.info(`Message: Deal ${deal._id} - refund denied\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
             res.redirect('back');
@@ -473,29 +501,32 @@ module.exports = {
             deal.status = 'Processing Refund';
             await deal.save();
             const seller = await User.findById(deal.product.author.id);
-            ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
-                link: `http://${req.headers.host}/deals/${deal._id}`,
-                name: deal.product.name,
-                subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
-              }, function (err, data) {
-                if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
-                } else {
-                const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                    to: `${seller.email}`, // list of receivers
-                    subject: 'Refund Requested', // Subject line
-                    html: data, // html body
-                };
-                // send mail with defined transport object
-                transporter.sendMail(mailOptions, (error) => {
-                    if (error) {
-                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
-                    }
-                });
-            }});
+            if(seller.email_notifications.deal === true) {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
+                    link: `http://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    name: deal.product.name,
+                    subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
+                }, function (err, data) {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(err);
+                    } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        to: `${seller.email}`, // list of receivers
+                        subject: 'Refund Requested', // Subject line
+                        html: data, // html body
+                    };
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            console.log(error);
+                        }
+                    });
+                }});
+            }
             dealLogger.info(`Message: Deal ${deal._id} - refund requested\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund request sent.');
             res.redirect(`/deals/${deal._id}`);

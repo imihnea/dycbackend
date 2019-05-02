@@ -47,6 +47,7 @@ function sendConfirmationEmail(req, userid, useremail) {
   { expiresIn: '1h' });
   ejs.renderFile(path.join(__dirname, "../views/email_templates/register.ejs"), {
     link: `http://${req.headers.host}/confirmation/${token}`,
+    footerlink: `http://${req.headers.host}/dashboard/notifications`,
     subject: 'Confirm Your Email - Deal Your Crypto',
   }, function (err, data) {
     if (err) {
@@ -274,6 +275,7 @@ module.exports = {
     { expiresIn: '1h' });
     ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
       link: `http://${req.headers.host}/disable2factor/${token}`,
+      footerlink: `http://${req.headers.host}/dashboard/notifications`,
       subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
     }, function (err, data) {
       if (err) {

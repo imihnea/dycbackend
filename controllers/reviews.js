@@ -61,30 +61,33 @@ module.exports = {
 		const author = await User.findById(product.author.id);
 		author.reviews.push(review);
 		author.save();
-		ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
-				link: `http://${req.headers.host}/products/${product._id}`,
-				name: product.name,
-				subject: `New review for ${product.name} - Deal Your Crypto`,
-		}, 
-		function (err, data) {
-			if (err) {
-				console.log(err);
-				errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-			} else {
-				const mailOptions = {
-						from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-						to: `${author.email}`, // list of receivers
-						subject: 'Your product has been reviewed', // Subject line
-						html: data, // html body
-				};
-				transporter.sendMail(mailOptions, (error) => {
-						if (error) {
-							console.log(error);
-							errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-						}
-				});
-			}
-		});
+		if(author.email_notifications.user === true) {
+			ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
+					link: `http://${req.headers.host}/products/${product._id}`,
+					footerlink: `http://${req.headers.host}/dashboard/notifications`,
+					name: product.name,
+					subject: `New review for ${product.name} - Deal Your Crypto`,
+			}, 
+			function (err, data) {
+				if (err) {
+					console.log(err);
+					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+				} else {
+					const mailOptions = {
+							from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+							to: `${author.email}`, // list of receivers
+							subject: 'Your product has been reviewed', // Subject line
+							html: data, // html body
+					};
+					transporter.sendMail(mailOptions, (error) => {
+							if (error) {
+								console.log(error);
+								errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+							}
+					});
+				}
+			});
+		}
 		// redirect to the product
 		req.session.success = 'Review created successfully!';
 		res.redirect(`/products/${product.id}/view`);

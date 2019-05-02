@@ -28,9 +28,9 @@
                         <div class="field">
                             <div class="control has-icons-left">
                                 <% if(user.email_notifications.message === true) { %>
-                                    <input class="input" name="name" placeholder="Message Emails are enabled ✔️" type="text">
+                                    <input class="input" name="name" value="Message Emails are enabled ✔️" type="text">
                                 <% } else { %>
-                                    <input class="input" name="name" placeholder="Message Emails are disabled ❌" type="text">
+                                    <input class="input" name="name" value="Message Emails are disabled ❌" type="text">
                                 <% } %>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope-open-text"></i>
@@ -41,9 +41,9 @@
                         <div class="field">
                             <div class="control has-icons-left">
                                 <% if(user.email_notifications.user === true) { %>
-                                    <input class="input" name="name" placeholder="User Emails are enabled ✔️" type="text">
+                                    <input class="input" name="name" value="User Emails are enabled ✔️" type="text">
                                 <% } else { %>
-                                    <input class="input" name="name" placeholder="User Emails are disabled ❌" type="text">
+                                    <input class="input" name="name" value="User Emails are disabled ❌" type="text">
                                 <% } %>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-users"></i>
@@ -52,16 +52,43 @@
                             <p class="help">User emails include reviews, withdrawal and account related issues.</p>
                         </div>
                         <br>
+                        <form action="/dashboard/notifications/<%= user._id %>" method="POST" id="dealEmails">
+                            <input class="input" name="name" value="deal" type="hidden" required />
+                        </form>
+                        <form action="/dashboard/notifications/<%= user._id %>" method="POST" id="messageEmails">
+                            <input class="input" name="name" value="message" type="hidden" required />
+                        </form>
+                        <form action="/dashboard/notifications/<%= user._id %>" method="POST" id="userEmails">
+                            <input class="input" name="name" value="user" type="hidden" required />
+                        </form>
                         <div class="buttons has-addons is-centered">
-                            <a href="#" class="button is-danger is-rounded">
-                                Disable Deal Emails
-                            </a>
-                            <a href="#" class="button is-danger is-rounded">
-                                Disable Message Emails
-                            </a>
-                            <a href="#" class="button is-danger is-rounded">
-                                Disable User Emails
-                            </a>
+                            <% if(user.email_notifications.deal === true) { %>
+                                <button type="submit" class="button is-danger is-rounded" form="dealEmails">
+                                    Disable Deal Emails
+                                </button>
+                            <% } else { %>
+                                <button type="submit" class="button is-success is-rounded" form="dealEmails">
+                                    Enable Deal Emails
+                                </button>
+                            <% } %>
+                            <% if(user.email_notifications.message === true) { %>
+                                <button type="submit" class="button is-danger is-rounded" form="messageEmails">
+                                    Disable Message Emails
+                                </button>
+                            <% } else { %>
+                                <button type="submit" class="button is-success is-rounded" form="messageEmails">
+                                    Enable Message Emails
+                                </button>
+                            <% } %>
+                            <% if(user.email_notifications.user === true) { %>
+                                <button type="submit" class="button is-danger is-rounded" form="userEmails">
+                                    Disable User Emails
+                                </button>
+                            <% } else { %>
+                                <button type="submit" class="button is-success is-rounded" form="userEmails">
+                                    Enable User Emails
+                                </button>
+                            <% } %>
                         </div>
                     </div>
                 </div>
