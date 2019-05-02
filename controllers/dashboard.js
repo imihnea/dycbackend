@@ -888,20 +888,18 @@ module.exports = {
       },
     });
     const floorRating = product.calculateAvgRating();
-    const keywords = product.tags.toString();
     res.render('products/product_view', { 
       product, 
       floorRating,
       csrfToken: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
       pageDescription: 'Description',
-      pageKeywords: keywords
+      pageKeywords: product.searchableTags
     });
   },
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
-    const keywords = product.tags.toString();
     res.render('dashboard/dashboard_edit', { 
       product: product, 
       user: req.user, 
@@ -910,7 +908,7 @@ module.exports = {
       csrfSecret: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
       pageDescription: 'Description',
-      pageKeywords: keywords
+      pageKeywords: product.searchableTags
     });
   },
   // Products Update

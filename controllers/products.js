@@ -68,7 +68,7 @@ module.exports = {
                     user: req.user,
                     pageTitle: `${product.name} - Deal Your Crypto`,
                     pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                    pageKeywords: product.searchableTags
                   });
                 } else {
                   let similar = result;
@@ -98,7 +98,7 @@ module.exports = {
                                     user: req.user,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
-                                    pageKeywords: 'Keywords'
+                                    pageKeywords: product.searchableTags
                                 });
                             } else {
                                 res.render('products/product_view', { 
@@ -111,7 +111,7 @@ module.exports = {
                                     user: req.user,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
-                                    pageKeywords: 'Keywords'
+                                    pageKeywords: product.searchableTags
                                 });
                             }
                         } else {
@@ -128,7 +128,7 @@ module.exports = {
                                 user: req.user,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: 'Description',
-                                pageKeywords: 'Keywords'
+                                pageKeywords: product.searchableTags
                             });
                         }
                     });
@@ -144,7 +144,7 @@ module.exports = {
                             user: req.user,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
-                            pageKeywords: 'Keywords'
+                            pageKeywords: product.searchableTags
                         });
                     } else {
                         res.render('products/product_view', { 
@@ -157,7 +157,7 @@ module.exports = {
                             user: req.user,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
-                            pageKeywords: 'Keywords'
+                            pageKeywords: product.searchableTags
                         });
                     }
                   }
@@ -182,7 +182,7 @@ module.exports = {
                         user: false,
                         pageTitle: `${product.name} - Deal Your Crypto`,
                         pageDescription: 'Description',
-                        pageKeywords: 'Keywords'
+                        pageKeywords: product.searchableTags
                     });
                 } else {
                   let similar = result;
@@ -212,7 +212,7 @@ module.exports = {
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
-                                    pageKeywords: 'Keywords'
+                                    pageKeywords: product.searchableTags
                                 });
                             } else {
                                 res.render('products/product_view', { 
@@ -225,7 +225,7 @@ module.exports = {
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
-                                    pageKeywords: 'Keywords'
+                                    pageKeywords: product.searchableTags
                                 });
                             }
                         } else {
@@ -242,7 +242,7 @@ module.exports = {
                                 user: false,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: 'Description',
-                                pageKeywords: 'Keywords'
+                                pageKeywords: product.searchableTags
                             });
                         }
                     });
@@ -258,7 +258,7 @@ module.exports = {
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
-                            pageKeywords: 'Keywords'
+                            pageKeywords: product.searchableTags
                         });
                     } else {
                         res.render('products/product_view', { 
@@ -271,7 +271,7 @@ module.exports = {
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
-                            pageKeywords: 'Keywords'
+                            pageKeywords: product.searchableTags
                         });
                     }
                   } 
