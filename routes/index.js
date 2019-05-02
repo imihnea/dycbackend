@@ -12,6 +12,7 @@ const {
   postLogin,
   getLogout,
   getIndex,
+  getError,
   getForgot,
   postForgot,
   getReset,
@@ -47,6 +48,9 @@ const { asyncErrorHandler, isLoggedIn } = middleware; // destructuring assignmen
 
 // index route
 router.get('/', asyncErrorHandler(getIndex));
+
+// error route
+router.get('/error', getError);
 
 // show reset form
 router.get('/forgot', getForgot);

@@ -277,7 +277,7 @@ app.use('/deals', dealsRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
-  res.send('Your friendly 404.');
+  res.redirect('/error');
 });
 
 // error handler

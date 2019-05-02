@@ -588,6 +588,13 @@ module.exports = {
         }
     });
   },
+  getError(req, res) {
+    res.render('errorPage', {
+      pageTitle: 'Error - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   getForgot(req, res) {
     res.render('index/forgot', {
       pageTitle: 'Forgot Password - Deal Your Crypto',

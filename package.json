@@ -42,6 +42,7 @@
     "helmet": "^3.14.0",
     "json2csv": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
+    "lesshat": "^4.1.0",
     "lodash": "^4.17.11",
     "logform": "^2.1.2",
     "method-override": "^3.0.0",
