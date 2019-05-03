@@ -1,6 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<link rel="stylesheet" href="../../dist/css/products.css">
+<link rel="stylesheet" href="/dist/css/products.css">
+<link rel="stylesheet" href="/dist/css/registerTooltips.css">
 <div class="columns" style="overflow: hidden; margin: auto;">
     <% include ../partials/sidebar %>
     
@@ -25,7 +26,15 @@
                     <br>
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
-                        <input class="input smmargin" style="width: 90%;" name="product[name]" value="<%= product.name %>" type="text" required />
+                        <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <input class="input" name="product[name]" value="<%= product.name %>" type="text" required />
+                            <div class="label" style="margin-left: 1vw;">
+                                <span class="registerTooltip" aria-label="Length: 3 - 100 characters
+Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                    <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
+                                </span>
+                            </div>
+                        </div>
                         <div class="select cont-select catSelectLeft">
                             <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
                                 <option disabled>Main Category</option>
@@ -62,7 +71,15 @@
                                 <option value="Broken" <% if (product.condition == 'Broken or Scrap') { %> selected <% } %>>Broken or Scrap</option>
                             </select>
                         </div>
-                        <textarea name="product[description]" class="textarea" value="<%= product.description %>"><%= product.description %></textarea>
+                        <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description" style="margin-left: 0;"><%= product.description %></textarea>
+                            <div class="label" style="margin-left: 1vw; margin-top: auto; margin-bottom: auto;">
+                                <span class="newTooltip" aria-label="Length: 3 - 100 characters
+Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                    <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
+                                </span>
+                            </div>
+                        </div>
                         <br>
                         <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
                         <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden required>
@@ -89,6 +106,12 @@
                     <br>
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
+                        <div class="label">
+                            <span class="newTooltip" aria-label="The recommended aspect ratio is 16:9
+All images are scaled to that ratio" tabindex="-1">
+                                <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
+                            </span>
+                        </div>
                         <input type="text" id="deleteImages" name="deleteImages" hidden>
                         <div class="file-upload">
                             <div class="mobileUpload">

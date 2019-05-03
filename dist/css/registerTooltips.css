@@ -1,66 +1,71 @@
-.registerTooltip{
-    cursor: pointer;
-    position: relative;
-  }
+.registerTooltip, .newTooltip{
+  cursor: pointer;
+  position: relative;
+}
+
+.registerTooltip::before, .newTooltip::before {
+  position: absolute;
+  top: -35px;
+  left: 38px;
+  background-color: white;
+  border-radius: 5px;
+  color: #fff;
+  content: attr(aria-label);
+  padding: 1rem;
+  text-transform: none;
+  transition: all 0.3s ease;
+  width: 200px;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important; 
+  white-space: pre-wrap;
+}
+
+.registerTooltip::after, .newTooltip::after {
+  position: absolute;
+  top: -0px;
+  left: 32px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid #2B222A;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+  margin-left: -5px;
+  width: 0; 
+}
+
+.newTooltip::before{
+  top: -75px !important;
+}
+
+.registerTooltip::before, .registerTooltip::after, .newTooltip::before, .newTooltip::after {
+  color: black;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center; 
+}
   
-  .registerTooltip::before {
-    position: absolute;
-    top: -35px;
-    left: 38px;
-    background-color: white;
-    border-radius: 5px;
-    color: #fff;
-    content: attr(aria-label);
-    padding: 1rem;
-    text-transform: none;
-    transition: all 0.3s ease;
-    width: 200px;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important; 
-    white-space: pre-wrap;
+.registerTooltip:focus::before, .registerTooltip:focus::after, .registerTooltip:hover::before, .registerTooltip:hover::after, .newTooltip:focus::after, .newTooltip:focus::before,
+.newTooltip:hover::after, .newTooltip:hover::before {
+  opacity: 1;
+  transition: all 0.5s ease;
+}
+
+@media only screen and (max-width: 768px){
+  .registerTooltip::before, .newTooltip::before{
+    top: -110px !important;
+    left: -151px;
+    z-index: 10;
   }
-  
-  .registerTooltip::after {
-    position: absolute;
-    top: -0px;
-    left: 32px;
+
+  .registerTooltip::after, .newTooltip::after{
+    top: -15px !important;
+    left: 16px;
     border-left: 5px solid transparent;
-    border-right: 5px solid #2B222A;
-    border-top: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
     border-bottom: 5px solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-    margin-left: -5px;
-    width: 0; 
   }
-  
-  .registerTooltip::before, .registerTooltip::after {
-    color: black;
-    font-family: 'Titillium Web', sans-serif;
-    font-size: 14px;
-    opacity: 0;
-    pointer-events: none;
-    text-align: center; 
-  }
-  
-  .registerTooltip:focus::before, .registerTooltip:focus::after, .registerTooltip:hover::before, .registerTooltip:hover::after {
-    opacity: 1;
-    transition: all 0.5s ease;
-  }
-
-  @media only screen and (max-width: 768px){
-    .registerTooltip::before{
-      top: -110px !important;
-      left: -151px;
-      z-index: 10;
-    }
-
-    .registerTooltip::after{
-      top: -15px !important;
-      left: 16px;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid black;
-      border-bottom: 5px solid transparent;
-    }
-  }
+}

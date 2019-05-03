@@ -754,13 +754,14 @@ module.exports = {
       res.redirect('/dashboard/new');
     } else {
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product must contain alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
-      req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
+      req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+      req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').isLength({ min: 3, max: 100 });
       req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
       req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
-      req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+      req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+      req.check('product[description]', 'The description must contain between 10 and 500 characters.').isLength({min: 10, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty();
       req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
@@ -769,7 +770,8 @@ module.exports = {
         res.render('dashboard/dashboard_new', {
           user: req.user,
           errors: errors,
-          csrfToken: req.body.csrfSecret,
+          csrfToken: req.params._csrf,
+          csrfSecret: req.params.csrfSecret,
           pageTitle: 'New Deal - Deal Your Crypto',
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
@@ -812,7 +814,8 @@ module.exports = {
         }
         await User.findById(req.user._id, (err, user) => {
           if (err) {
-            req.flash('error', 'An error has occured. (Could not find user)');
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            req.flash('error', 'An error has occured. Please try again later');
             res.redirect('back');
           } else {
             const feat_1 = {};
@@ -915,13 +918,14 @@ module.exports = {
   async productUpdate(req, res) {
     // find the product by id
     const product = await Product.findById(req.params.id);
-    req.check('product[name]', 'The name of the product must be alphanumeric.').matches(/^[a-zA-Z0-9 ]+$/i).notEmpty();
-    req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
+    req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+    req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').isLength({ min: 3, max: 100 });
     req.check('product[category][0]', 'Please choose a main category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[category][1]', 'Please choose a secondary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[category][2]', 'Please choose a tertiary category.').matches(/^[a-zA-Z& ]+$/g).notEmpty();
     req.check('product[condition]', 'Please select a product condition.').matches(/^[a-zA-Z ]+$/g).notEmpty();
-    req.check('product[description]', 'The product must have a valid description.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+    req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
+    req.check('product[description]', 'The description must contain between 10 and 500 characters.').isLength({min: 10, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/g).notEmpty();
     req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
@@ -932,7 +936,8 @@ module.exports = {
         user: req.user,
         errors: errors,
         product,
-        csrfToken: req.body.csrfSecret,
+        csrfToken: req.params._csrf,
+        csrfSecret: req.params.csrfSecret,
         pageTitle: `${product.name} - Deal Your Crypto`,
         pageDescription: 'Description',
         pageKeywords: 'Keywords'
@@ -1011,7 +1016,8 @@ module.exports = {
       case '1': 
         await User.findById(req.user._id, (err, user) => {
           if (err) {
-            req.flash('error', 'An error has occured. (Could not find user)');
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            req.flash('error', 'An error has occured. Please try again later');
             res.redirect('back');
           } else {
             if ( user.feature_tokens >= 5 ) {
@@ -1036,7 +1042,8 @@ module.exports = {
       case '2': 
         await User.findById(req.user._id, (err, user) => {
           if (err) {
-            req.flash('error', 'An error has occured. (Could not find user)');
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            req.flash('error', 'An error has occured. Please try again later');
             res.redirect('back');
           } else {
             if (user.feature_tokens >= 15) {
@@ -1068,17 +1075,22 @@ module.exports = {
     for (const image of product.images) {
       await cloudinary.v2.uploader.destroy(image.public_id);
     }
+    let unindexed = false;
     product.unIndex((err) => {
       if (err) {
-        console.log('Error while unindexing document.');
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       } else {
-        console.log('Document unindexed successfully.');
+        unindexed = true;
       }
     });
     const id = product._id;
     await product.remove();
     if (process.env.NODE_ENV === 'production') {
-      productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      if (unindexed) {
+        productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      } else {
+        productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      }
     }
     req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
