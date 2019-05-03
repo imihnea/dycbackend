@@ -753,24 +753,6 @@ module.exports = {
       req.flash('error', 'You need to upload at least one image.');
       res.redirect('/dashboard/new');
     } else {
-      req.body.product.images = [];
-      for (const file of req.files) {
-        const image = await cloudinary.v2.uploader.upload(file.path);
-        req.body.product.images.push({
-          url: image.secure_url,
-          public_id: image.public_id,
-        });
-      }
-      const author = {
-        id: req.user._id,
-        username: req.user.username,
-        name: req.user.full_name,
-        city: req.user.city,
-        state: req.user.state,
-        country: req.user.country,
-        continent: req.user.continent
-      };
-      req.body.product.author = author;
       // Look into which symbols are security threats - product name, product description
       req.check('product[name]', 'The name of the product must contain alphanumeric and ".", ",", "?", "!" characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g).notEmpty();
       req.check('product[name]', 'The name of the product must be between 3 and 100 characters.').isLength({ min: 3, max: 100 });
@@ -793,6 +775,24 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       } else {
+        req.body.product.images = [];
+        for (const file of req.files) {
+          const image = await cloudinary.v2.uploader.upload(file.path);
+          req.body.product.images.push({
+            url: image.secure_url,
+            public_id: image.public_id,
+          });
+        }
+        const author = {
+          id: req.user._id,
+          username: req.user.username,
+          name: req.user.full_name,
+          city: req.user.city,
+          state: req.user.state,
+          country: req.user.country,
+          continent: req.user.continent
+        };
+        req.body.product.author = author;
         const btcPrice=Number(req.body.product.btc_price);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const tags = req.body.product.tags.trim().split(' ');
