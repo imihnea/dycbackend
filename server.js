@@ -163,37 +163,71 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: 'http://localhost:8080/auth/facebook/callback',
-  profileFields: ['id', 'displayName', 'email']
+  profileFields: ['id', 'displayName', 'email'],
+  passReqToCallback: true
 },
-function(accessToken, refreshToken, profile, cb) {
-  User.findOrCreate(
-    { 
-      name: profile.displayName,
-      username: profile.displayName,
-      email: profile.emails[0].value,
-      facebookId: profile.id 
-    }, 
-    (err, User) => {
-    return cb(err, User);
-  });
+function(req, accessToken, refreshToken, profile, cb) {
+  if (req.user) {
+    let user = req.user;
+    if (user.facebookId) {
+      user.facebookId = '';
+    } else {
+      user.facebookId = profile.id;
+    }
+    user.save((err, user) => {return cb(err, user)});
+  } else {
+    User.findOne({facebookId: profile.id}, (err, res) => {
+      if (res._id) {
+        return cb(err, res);
+      } else {
+        User.create(
+          { 
+            name: profile.displayName,
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            facebookId: profile.id 
+          }, 
+          (err, User) => {
+          return cb(err, User);
+        });
+      }
+    });
+  }
 }
 ));
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: 'http://localhost:8080/auth/google/callback',
+  passReqToCallback: true
 },
-function(accessToken, refreshToken, profile, done) {
-  User.findOrCreate(
-    { 
-      name: profile.name.familyName + ' ' + profile.name.givenName,
-      username: profile.name.familyName + ' ' + profile.name.givenName,
-      email: profile.emails[0].value,
-      googleId: profile.id 
-    },
-    (err, user) => {
-    return done(err, user);
-  });
+function(req, accessToken, refreshToken, profile, done) {
+  if (req.user) {
+    let user = req.user;
+    if (user.googleId) {
+      user.googleId = '';
+    } else {
+      user.googleId = profile.id;
+    }
+    user.save((err, user) => {return done(err, user)});
+  } else {
+    User.findOne({googleId: profile.id}, (err, res) => {
+      if (res._id) {
+        return done(err, res);
+      } else {
+        User.create(
+          { 
+            name: profile.name.familyName + ' ' + profile.name.givenName,
+            username: profile.name.familyName + ' ' + profile.name.givenName,
+            email: profile.emails[0].value,
+            googleId: profile.id 
+          },
+          (err, user) => {
+          return done(err, user);
+        });
+      }
+    });
+  }
 }
 ));
 /* eslint-enable */

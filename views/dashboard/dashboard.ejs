@@ -205,6 +205,27 @@
                         <form action="/disable-account" method="POST" id="disableAccount">
                             <input class="input" name="email" value="<%= user.email %>" type="hidden" required />
                         </form>
+                        <div class="buttons has-addons is-centered">
+                            <% if (!user.googleId) { %>
+                                <button class="button is-primary is-rounded">
+                                    <a href="/auth/google" class="white-link">Connect your Google Account</a>
+                                </button> 
+                            <% } else { %>
+                                <button class="button is-danger is-rounded">
+                                    <a href="/auth/google" class="white-link">Disconnect your Google Account</a>    
+                                </button>
+                            <% } %>
+                            <br>
+                            <% if (!user.facebookId) { %>
+                                <button class="button is-primary is-rounded">
+                                    <a href="/auth/facebook" class="white-link">Connect your Facebook Account</a>
+                                </button>
+                            <% } else { %>
+                                <button class="button is-danger is-rounded">
+                                    <a href="/auth/facebook" class="white-link">Disconnect your Facebook Account</a>
+                                </button>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             <div class="column"></div>

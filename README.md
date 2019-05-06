@@ -28,8 +28,6 @@ Backend:
    Low Priority:
 
       Service worker subscriptions => Notifications
-
-      Login => Link accounts facebook, gmail etc to original
       
       Dashboard 
                => Settings
