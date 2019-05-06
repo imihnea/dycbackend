@@ -559,6 +559,7 @@ module.exports = {
 setInterval(async () => {
     // get deals that need to be paid
     const deal = await Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }});
+    let withdrawAmount;
     deal.forEach((item) => {
         // get user who has to be paid
         User.findById(item.product.author.id, (err, seller) => {
@@ -566,22 +567,106 @@ setInterval(async () => {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 console.log(err);
             } else {
-                // pay user
+                // pay user and withdraw
                 switch(seller.accountType) {
                     case 'Standard':
                         seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+
+                        // REQUIRES TESTING
+
                         // Withdraw to our wallet
                         // withdrawAmount = item.price * standardAccountFee * 0.01;
+                        // client.getAccount('primary', function(err, account) {
+                        //     if(err) {
+                        //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //     } else {
+                        //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                        //             if (err) {
+                        //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //             } else {
+                        //                 account.sell({
+                        //                     'amount': `${withdrawAmount}`,
+                        //                     'currency': 'BTC'
+                        //                 }, (err, sell) => {
+                        //                     if (err) {
+                        //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                     } else {
+                        //                         console.log(sell);
+                        //                         if (process.env.NODE_ENV === 'production') {
+                        //                             logger.info(`Sold ${withdrawAmount} BTC for ${withdrawAmount * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                         }
+                        //                     }
+                        //                 });     
+                        //             }
+                        //         });
+                        //     }
+                    // });
                         break;
                     case 'Premium':
                         seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
                         // Withdraw to our wallet
                         // withdrawAmount = item.price * premiumAccountFee * 0.01;
+
+                        // REQUIRES TESTING
+
+                        // client.getAccount('primary', function(err, account) {
+                        //     if(err) {
+                        //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //     } else {
+                        //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                        //             if (err) {
+                        //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //             } else {
+                        //                 account.sell({
+                        //                     'amount': `${withdrawAmount}`,
+                        //                     'currency': 'BTC'
+                        //                 }, (err, sell) => {
+                        //                     if (err) {
+                        //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                     } else {
+                        //                         console.log(sell);
+                        //                         if (process.env.NODE_ENV === 'production') {
+                        //                             logger.info(`Sold ${withdrawAmount} BTC for ${withdrawAmount * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                         }
+                        //                     }
+                        //                 });     
+                        //             }
+                        //         });
+                        //     }
+                    // });
                         break;
                     case 'Partner':
                         seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
                         // Withdraw to our wallet
                         // withdrawAmount = item.price * partnerAccountFee * 0.01;
+
+                        // REQUIRES TESTING
+
+                        // client.getAccount('primary', function(err, account) {
+                        //     if(err) {
+                        //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //     } else {
+                        //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                        //             if (err) {
+                        //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //             } else {
+                        //                 account.sell({
+                        //                     'amount': `${withdrawAmount}`,
+                        //                     'currency': 'BTC'
+                        //                 }, (err, sell) => {
+                        //                     if (err) {
+                        //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                     } else {
+                        //                         console.log(sell);
+                        //                         if (process.env.NODE_ENV === 'production') {
+                        //                             logger.info(`Sold ${withdrawAmount} BTC for ${withdrawAmount * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        //                         }
+                        //                     }
+                        //                 });     
+                        //             }
+                        //         });
+                        //     }
+                    // });
                         break;
                     default:
                         break;
@@ -595,5 +680,5 @@ setInterval(async () => {
     });
     if (process.env.NODE_ENV === 'production') {
         logger.info(`Deals were paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-      }
+    }
   }, 1000);

@@ -655,6 +655,34 @@ module.exports = {
               user.btcbalance -= totalPrice;
               user.feature_tokens += tokens;
               await user.save();
+
+              // REQUIRES TESTING
+
+              // client.getAccount('primary', function(err, account) {
+              //     if(err) {
+              //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              //     } else {
+              //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+              //             if (err) {
+              //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              //             } else {
+              //                 account.sell({
+              //                     'amount': `${totalPrice}`,
+              //                     'currency': 'BTC'
+              //                 }, (err, sell) => {
+              //                     if (err) {
+              //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              //                     } else {
+              //                         console.log(sell);
+              //                         if (process.env.NODE_ENV === 'production') {
+              //                             logger.info(`Sold ${totalPrice} BTC for ${totalPrice * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              //                         }
+              //                     }
+              //                 });     
+              //             }
+              //         });
+              //     }
+          // });
               if (process.env.NODE_ENV === 'production') {
                 userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               }
@@ -700,6 +728,7 @@ module.exports = {
             }
             await CurrentUser.save((err, result) => {
               if(err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', 'There was an error updating your balance, please try again.');
                 return res.redirect('back');
               } else {
@@ -721,6 +750,34 @@ module.exports = {
                     break;
                   default: break;
                 }
+
+                  // REQUIRES TESTING
+                
+                  // client.getAccount('primary', function(err, account) {
+                  //     if(err) {
+                  //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  //     } else {
+                  //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                  //             if (err) {
+                  //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  //             } else {
+                  //                 account.sell({
+                  //                     'amount': `${tokenCost}`,
+                  //                     'currency': 'BTC'
+                  //                 }, (err, sell) => {
+                  //                     if (err) {
+                  //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  //                     } else {
+                  //                         console.log(sell);
+                  //                         if (process.env.NODE_ENV === 'production') {
+                  //                             logger.info(`Sold ${tokenCost} for ${tokenCost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  //                         }
+                  //                     }
+                  //                 });     
+                  //             }
+                  //         });
+                  //     }
+              // });
                 return res.redirect(`back`);
               }
             });
@@ -1099,6 +1156,7 @@ module.exports = {
   async subscriptionPage(req, res) {
     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
       if(err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         console.log('Failed to retrieve subscription.');
       }
     });
@@ -1130,6 +1188,7 @@ module.exports = {
     async subscriptionCancelPage(req, res) {
       let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
         if(err) {
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           console.log('Failed to retrieve subscription.');
         }
       });
@@ -1150,120 +1209,277 @@ module.exports = {
 	// Subscription Create
 	async subscriptionCreate(req, res) {
     let CurrentUser = await User.findById(req.params.id);
-    let subscriptionCost = req.body.subscriptionCost;
-    let expireDate = moment().add(req.body.days,"days").toISOString();
-    let days = Number(req.body.days);
-    if(CurrentUser.btcbalance >= subscriptionCost) {
-      let today = Date.now();
-      if(days === 30) {
-          Subscription.create({
-          userid: CurrentUser._id,
-          username: CurrentUser.username,
-          expireDate: expireDate,
-          expires1: today,
-        }, (err, sub) => {
-          if(err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +5 } }, (err) => {
-              if(err) {
-                req.flash('error', 'There was an error updating your balance, please try again.');
-                return res.redirect('back');
-              } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
-                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Subscription created successfully!');
-                return res.redirect(`/dashboard`);
-              }
-            });
-          }
-        })
-      } else if (days === 90) {
-        let today = Date.now();
-        Subscription.create({
-          userid: CurrentUser._id,
-          username: CurrentUser.username,
-          expireDate: expireDate,
-          expires2: today,
-        }, (err, sub) => {
-          if(err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +15 } }, (err) => {
-              if(err) {
-                req.flash('error', 'There was an error updating your balance, please try again.');
-                return res.redirect('back');
-              } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
-                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Subscription created successfully!');
-                return res.redirect(`/dashboard`);
-              }
-            });
-          }
-        })
-      } else if (days === 180) {
-        let today = Date.now();
-        Subscription.create({
-          userid: CurrentUser._id,
-          username: CurrentUser.username,
-          expireDate: expireDate,
-          expires3: today,
-        }, (err, sub) => {
-          if(err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +30 } }, (err) => {
-              if(err) {
-                req.flash('error', 'There was an error updating your balance, please try again.');
-                return res.redirect('back');
-              } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
-                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Subscription created successfully!');
-                return res.redirect(`/dashboard`);
-              }
-            });
-          }
-        })
-      } else if (days === 360) {
-        let today = Date.now();
-        Subscription.create({
-          userid: CurrentUser._id,
-          username: CurrentUser.username,
-          expireDate: expireDate,
-          expires4: today,
-        }, (err, sub) => {
-          if(err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +60 } }, (err) => {
-              if(err) {
-                req.flash('error', 'There was an error updating your balance, please try again.');
-                return res.redirect('back');
-              } else {
-                console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
-                userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Subscription created successfully!');
-                return res.redirect(`/dashboard`);
-              }
-            });
-          }
-        })
-      } else {
-        req.flash('error', `Not enough balance, please add ${subscriptionCost} more.`)
-        return res.redirect('/dashboard/addresses');
+    // Get token price
+    const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+    request(url, async function(error, response, body){
+      if(!error && response.statusCode == 200) {
+        const json = JSON.parse(body);
+        const data = json.data;
+        const btcrate = data.btc.rate;
+        const tokenprice = 1/btcrate; // 1 USD
+        let expireDate = moment().add(req.body.days,"days").toISOString();
+        let days = Number(req.body.days);
+        const today = Date.now();
+        let subscriptionCost;
+        switch (days) {
+          case (30):
+            // Calculate cost
+            subscriptionCost = Number((tokenprice * 19.99).toFixed(5));
+            if (CurrentUser.btcbalance >= subscriptionCost) {
+              // Create subscription
+              Subscription.create({
+                userid: CurrentUser._id,
+                username: CurrentUser.username,
+                expireDate: expireDate,
+                expires1: today,
+              }, (err, sub) => {
+                if(err) {
+                  req.flash('error', err.message);
+                  return res.redirect('back');
+                } else {
+                  // Update user's balances
+                  User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +5 } }, (err) => {
+                    if(err) {
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      req.flash('error', 'There was an error updating your balance, please try again.');
+                      return res.redirect('back');
+                    } else {
+                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                      userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      // Sell BTC
+                      
+                      // REQUIRES TESTING
+                    
+                      // client.getAccount('primary', function(err, account) {
+                      //     if(err) {
+                      //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //     } else {
+                      //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                      //             if (err) {
+                      //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //             } else {
+                      //                 account.sell({
+                      //                     'amount': `${subscriptionCost}`,
+                      //                     'currency': 'BTC'
+                      //                 }, (err, sell) => {
+                      //                     if (err) {
+                      //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                     } else {
+                      //                         console.log(sell);
+                      //                         if (process.env.NODE_ENV === 'production') {
+                      //                             logger.info(`Sold ${subscriptionCost} for ${subscriptionCost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                         }
+                      //                     }
+                      //                 });     
+                      //             }
+                      //         });
+                      //     }
+                      // });
+                      req.flash('success', 'Subscription created successfully!');
+                      return res.redirect(`/dashboard`);
+                    }
+                  });
+                }
+              });
+            } else {
+              req.flash('error', `Not enough currency. You are ${subscriptionCost - CurrentUser.btcbalance} BTC short.`);
+              return res.redirect('/dashboard/addresses');
+            }
+          break;
+          case (90):
+            subscriptionCost = Number((tokenprice * 56.99).toFixed(5));
+            if (CurrentUser.btcbalance >= subscriptionCost) {
+              Subscription.create({
+                userid: CurrentUser._id,
+                username: CurrentUser.username,
+                expireDate: expireDate,
+                expires2: today,
+              }, (err, sub) => {
+                if(err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  req.flash('error', err.message);
+                  return res.redirect('back');
+                } else {
+                  User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +15 } }, (err) => {
+                    if(err) {
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      req.flash('error', 'There was an error updating your balance, please try again.');
+                      return res.redirect('back');
+                    } else {
+                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                      userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            
+                      // REQUIRES TESTING
+                    
+                      // client.getAccount('primary', function(err, account) {
+                      //     if(err) {
+                      //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //     } else {
+                      //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                      //             if (err) {
+                      //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //             } else {
+                      //                 account.sell({
+                      //                     'amount': `${subscriptionCost}`,
+                      //                     'currency': 'BTC'
+                      //                 }, (err, sell) => {
+                      //                     if (err) {
+                      //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                     } else {
+                      //                         console.log(sell);
+                      //                         if (process.env.NODE_ENV === 'production') {
+                      //                             logger.info(`Sold ${subscriptionCost} for ${subscriptionCost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                         }
+                      //                     }
+                      //                 });     
+                      //             }
+                      //         });
+                      //     }
+                      // });
+                      req.flash('success', 'Subscription created successfully!');
+                      return res.redirect(`/dashboard`);
+                    }
+                  });
+                }
+              });
+            } else {
+              req.flash('error', `Not enough currency. You are ${subscriptionCost - CurrentUser.btcbalance} BTC short.`);
+              return res.redirect('/dashboard/addresses');
+            }
+          break;
+          case (180):
+            subscriptionCost = Number((tokenprice * 107.99).toFixed(5));
+            if (CurrentUser.btcbalance >= subscriptionCost) {
+              Subscription.create({
+                userid: CurrentUser._id,
+                username: CurrentUser.username,
+                expireDate: expireDate,
+                expires3: today,
+              }, (err, sub) => {
+                if(err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  req.flash('error', err.message);
+                  return res.redirect('back');
+                } else {
+                  User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +30 } }, (err) => {
+                    if(err) {
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      req.flash('error', 'There was an error updating your balance, please try again.');
+                      return res.redirect('back');
+                    } else {
+                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                      userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            
+                      // REQUIRES TESTING
+                    
+                      // client.getAccount('primary', function(err, account) {
+                      //     if(err) {
+                      //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //     } else {
+                      //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                      //             if (err) {
+                      //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //             } else {
+                      //                 account.sell({
+                      //                     'amount': `${subscriptionCost}`,
+                      //                     'currency': 'BTC'
+                      //                 }, (err, sell) => {
+                      //                     if (err) {
+                      //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                     } else {
+                      //                         console.log(sell);
+                      //                         if (process.env.NODE_ENV === 'production') {
+                      //                             logger.info(`Sold ${subscriptionCost} for ${subscriptionCost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                         }
+                      //                     }
+                      //                 });     
+                      //             }
+                      //         });
+                      //     }
+                      // });
+                      req.flash('success', 'Subscription created successfully!');
+                      return res.redirect(`/dashboard`);
+                    }
+                  });
+                }
+              });
+            } else {
+              req.flash('error', `Not enough currency. You are ${subscriptionCost - CurrentUser.btcbalance} BTC short.`);
+              return res.redirect('/dashboard/addresses');
+            }
+          break;
+          case (360):
+            subscriptionCost = Number((tokenprice * 203.99).toFixed(5));
+            if (CurrentUser.btcbalance >= subscriptionCost) {
+              Subscription.create({
+                userid: CurrentUser._id,
+                username: CurrentUser.username,
+                expireDate: expireDate,
+                expires4: today,
+              }, (err, sub) => {
+                if(err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  req.flash('error', err.message);
+                  return res.redirect('back');
+                } else {
+                  User.findByIdAndUpdate({ _id: CurrentUser._id }, { $inc: { btcbalance: -subscriptionCost, feature_tokens: +60 } }, (err) => {
+                    if(err) {
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      req.flash('error', 'There was an error updating your balance, please try again.');
+                      return res.redirect('back');
+                    } else {
+                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
+                      userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            
+                      // REQUIRES TESTING
+                    
+                      // client.getAccount('primary', function(err, account) {
+                      //     if(err) {
+                      //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getAccount\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //     } else {
+                      //         client.getSellPrice({'currency': 'RON'}, function(err, sellPrice) {
+                      //             if (err) {
+                      //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - client.getSellPrice\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //             } else {
+                      //                 account.sell({
+                      //                     'amount': `${subscriptionCost}`,
+                      //                     'currency': 'BTC'
+                      //                 }, (err, sell) => {
+                      //                     if (err) {
+                      //                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                     } else {
+                      //                         console.log(sell);
+                      //                         if (process.env.NODE_ENV === 'production') {
+                      //                             logger.info(`Sold ${subscriptionCost} for ${subscriptionCost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                      //                         }
+                      //                     }
+                      //                 });     
+                      //             }
+                      //         });
+                      //     }
+                      // });
+                      req.flash('success', 'Subscription created successfully!');
+                      return res.redirect(`/dashboard`);
+                    }
+                  });
+                }
+              });
+            } else {
+              req.flash('error', `Not enough currency. You are ${subscriptionCost - CurrentUser.btcbalance} BTC short.`);
+              return res.redirect('/dashboard/addresses');
+            }
+          break;
+          default:
+          break;
+        }
       }
-    }
+    });
   },
 	async subscriptionCancel(req, res, next) {
     let CurrentUser = await User.findById(req.params.id);
     Subscription.findOneAndRemove({userid: CurrentUser}, (err) => {
       if(err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', 'There was an error cancelling your subscription.');
         return res.redirect('back');
       } else {
@@ -1277,6 +1493,7 @@ module.exports = {
   async getPremium(req, res) {
     const premium = await Subscription.find({userid: req.user._id}, (err) => {
       if (err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', 'There was an error. Please try again.');
         return res.redirect('back');
       }
