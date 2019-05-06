@@ -5,8 +5,6 @@ const multer = require('multer');
 
 const router = express.Router();
 
-const passport = require('passport');
-
 const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
