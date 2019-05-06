@@ -51,7 +51,6 @@
            <br>
         </div>
 <div class="hero-head">
-
     <nav class="level navi navbar is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
@@ -59,15 +58,14 @@
                     <img src="/dist/img/logo.png" width="112px" height="28px">
                 </a>
                 <% if (user) { %>
+                    <p class="hide" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
                         <div class="dropdown-trigger">
                             <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
                                 <span class="icon is-small">
                                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                                 </span>
-                                <span style="padding-right: 0.5vh;">
-                                    <%= user.username %>
-                                </span>
+                                <span style="padding-right: 0.5vh;" class="username"></span>
                                 <a href="/dashboard">
                                     <div class="image is-24x24">
                                         <img class="is-rounded" src="<%= user.avatar.url %>">
@@ -564,11 +562,9 @@
                                         <span class="icon is-small" style="padding-bottom: 1vh;">
                                             <i class="fas fa-angle-down" aria-hidden="true"></i>
                                         </span>
-                                        <span style="padding-right: 0.5vh; padding-bottom: 1vh;">
-                                            <%= user.username %>
-                                        </span>
+                                        <span style="padding-right: 0.5vh; padding-bottom: 1vh;" class="username"></span>
                                         <a href="/dashboard">
-                                            <div class="image is-32x32">
+                                            <div class="image is-32x32 userAvatar">
                                                 <img class="is-rounded" src="<%= user.avatar.url %>">
                                             </div>
                                         </a>

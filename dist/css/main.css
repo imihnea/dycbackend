@@ -258,6 +258,11 @@ a:hover {
 }
 
 
+@media screen and (min-width: 1088px) {
+    .userAvatar {
+        padding-bottom: 8px;
+    }
+}
 .currency{
     display: flex !important;
     align-items: center;
