@@ -99,6 +99,10 @@ const UserSchema = new Schema({
     },
   ],
   avgRating: { type: Number, default: 0 },
+  subscription1: Boolean,
+  subscription3: Boolean,
+  subscription6: Boolean,
+  subscription12: Boolean
 });
 
 UserSchema.pre('remove', async () => {

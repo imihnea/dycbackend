@@ -40,20 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Deactivate Modal
-  const deactivateOpenButton = document.querySelector('.deactivate');
-  const deactivateCloseButton = document.querySelector('.deleteDeactivate');
-  const deactivateModal = document.querySelector('.modalDeactivate');
-  deactivateOpenButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      deactivateModal.classList.toggle('is-active');
+  
+  // Cancel Subscription Modal
+  const cancelOpenButton = document.querySelector('.cancelSub');
+  const cancelCloseButton = document.querySelector('.deleteCancelSub');
+  const cancelModal = document.querySelector('.modalCancelSub');
+  cancelOpenButton.addEventListener('click', (event) => {
+    // event.stopPropagation();
+      cancelModal.classList.toggle('is-active');
     });
-  deactivateCloseButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      deactivateModal.classList.toggle('is-active');
+    cancelCloseButton.addEventListener('click', (event) => {
+      // event.stopPropagation();
+      cancelModal.classList.toggle('is-active');
     });
-  deactivateCancelButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      deactivateModal.classList.toggle('is-active');
+
+    // Deactivate Modal - leave this one last, it bugs out the others if
+    // the user doesn't have 2 factor enabled
+    const deactivateOpenButton = document.querySelector('.deactivate');
+    const deactivateCloseButton = document.querySelector('.deleteDeactivate');
+    const deactivateModal = document.querySelector('.modalDeactivate');
+    deactivateOpenButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        deactivateModal.classList.toggle('is-active');
+    });
+    deactivateCloseButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        deactivateModal.classList.toggle('is-active');
+    });
+    deactivateCancelButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        deactivateModal.classList.toggle('is-active');
     });
 });

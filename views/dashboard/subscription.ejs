@@ -7,53 +7,55 @@
       <h1 class="title">Premium Membership</h2>
     </div>
     <br>
-    <div class="field">
-      <div class="image is-128x128" style="margin: auto;">
-        <img src="<%= user.avatar.url %>" class="premiumImg" alt=""/>
+    <div class="column is-three-fifths" style="margin: auto;">
+      <div class="field">
+        <div class="image is-128x128" style="margin: auto;">
+          <img src="<%= user.avatar.url %>" class="premiumImg" alt=""/>
+        </div>
       </div>
-    </div>
-    <div class="field">
-        <h2 class="title">Benefits</h2>
-    </div>
-    <div class="field">
-        <p class="control has-icons-left">
-            <input class="input" value="Golden border profile picture" readonly/>
-            <span class="icon is-small is-left">
-                <i class="fas fa-check-square"></i>
-            </span>
-        </p>
-    </div>
-    <div class="field">
-        <p class="control has-icons-left">
-            <input class="input" value="Seller fee reduced to 10% per product (from 15%)" required readonly/>
-            <span class="icon is-small is-left">
-                <i class="fas fa-check-square"></i>
-            </span>
-        </p>
-    </div>
-    <div class="field">
-        <p class="control has-icons-left">
-            <input class="input" value="Five free tokens" required readonly/>
-            <span class="icon is-small is-left">
-                <i class="fas fa-check-square"></i>
-            </span>
-        </p>
-    </div>
-    <div class="field">
-        <p class="control has-icons-left">
-            <input class="input" value="Priority customer support" required readonly/>
-            <span class="icon is-small is-left">
-                <i class="fas fa-check-square"></i>
-            </span>
-        </p>
-    </div>
-    <div class="field">
-        <p class="control has-icons-left">
-            <input class="input" value="Special notifications page with charts and analytics" required readonly/>
-            <span class="icon is-small is-left">
-                <i class="fas fa-check-square"></i>
-            </span>
-        </p>
+      <div class="field">
+          <h2 class="title">Benefits</h2>
+      </div>
+      <div class="field">
+          <p class="control has-icons-left">
+              <input class="input" value="Golden border profile picture" readonly/>
+              <span class="icon is-small is-left">
+                  <i class="fas fa-check-square"></i>
+              </span>
+          </p>
+      </div>
+      <div class="field">
+          <p class="control has-icons-left">
+              <input class="input" value="Seller fee reduced to 10% per product (from 15%)" required readonly/>
+              <span class="icon is-small is-left">
+                  <i class="fas fa-check-square"></i>
+              </span>
+          </p>
+      </div>
+      <div class="field">
+          <p class="control has-icons-left">
+              <input class="input" value="Five free tokens" required readonly/>
+              <span class="icon is-small is-left">
+                  <i class="fas fa-check-square"></i>
+              </span>
+          </p>
+      </div>
+      <div class="field">
+          <p class="control has-icons-left">
+              <input class="input" value="Priority customer support" required readonly/>
+              <span class="icon is-small is-left">
+                  <i class="fas fa-check-square"></i>
+              </span>
+          </p>
+      </div>
+      <div class="field">
+          <p class="control has-icons-left">
+              <input class="input" value="Special notifications page with charts and analytics" required readonly/>
+              <span class="icon is-small is-left">
+                  <i class="fas fa-check-square"></i>
+              </span>
+          </p>
+      </div>
     </div>
     <div class="pricing-table is-comparative" style="padding-right:2vw;">
       <div class="pricing-plan is-features">
@@ -79,6 +81,7 @@
         <div class="plan-footer">
           <form action="/dashboard/<%= user._id %>/subscription" method="POST">
               <input type="hidden" name="days" value="30" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="subscriptionCost" value="<%= (tokenprice*19.99).toFixed(5) %>" />
               <button class="button is-fullwidth">Choose</button>
           </form>
@@ -96,6 +99,7 @@
         <div class="plan-footer">
           <form action="/dashboard/<%= user._id %>/subscription" method="POST">
               <input type="hidden" name="days" value="90" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="subscriptionCost" value="<%= (tokenprice*56.99).toFixed(5) %>" />
               <button class="button is-fullwidth">Choose</button>
           </form>
@@ -113,6 +117,7 @@
         <div class="plan-footer">
           <form action="/dashboard/<%= user._id %>/subscription" method="POST">
               <input type="hidden" name="days" value="180" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="subscriptionCost" value="<%= (tokenprice*107.99).toFixed(5) %>" />
               <button class="button is-fullwidth">Choose</button>
           </form>
@@ -130,6 +135,7 @@
         <div class="plan-footer">
           <form action="/dashboard/<%= user._id %>/subscription" method="POST">
               <input type="hidden" name="days" value="360" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="subscriptionCost" value="<%= (tokenprice*203.99).toFixed(5) %>" />
               <button class="button is-fullwidth">Choose</button>
           </form>

@@ -110,19 +110,19 @@ router.post('/notifications/:id', isLoggedIn, asyncErrorHandler(postNotification
 
 // GET Subscription Page
 
-router.get('/subscription', isLoggedIn, asyncErrorHandler(subscriptionPage));
+router.get('/subscription', isLoggedIn, assignCookie, asyncErrorHandler(subscriptionPage));
 
 // GET Cancel Subscription Page
 
-router.get('/subscription-cancel', isLoggedIn, asyncErrorHandler(subscriptionCancelPage))
+router.get('/subscription-cancel', isLoggedIn, asyncErrorHandler(subscriptionCancelPage));
 
 // POST Subscription create
 
-router.post('/:id/subscription', isLoggedIn, asyncErrorHandler(subscriptionCreate));
+router.post('/:id/subscription', isLoggedIn, verifyCookie, asyncErrorHandler(subscriptionCreate));
 
 // POST Subscription cancel
 
-router.post('/:id/subscription/cancel', isLoggedIn, asyncErrorHandler(subscriptionCancel));
+router.post('/subscription/cancel', isLoggedIn, asyncErrorHandler(subscriptionCancel));
 
 // NEW - show form to create new product
 router.get('/new', assignCookie, isLoggedIn, hasCompleteProfile, newProduct);
