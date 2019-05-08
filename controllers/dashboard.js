@@ -188,6 +188,40 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
+  async refundProductIndex(req, res) {
+    const deals = await Deal.paginate(
+      {
+        $and: [
+          {
+            $or: [
+              {
+                'buyer.id': req.user._id
+              }, {
+                'product.author.id': req.user._id
+              }
+            ]
+          }, {
+            status: {
+              $in: ['Processing Refund', 'Refunded', 'Refund denied']
+            }
+          }
+        ]
+      }, {
+        page: req.query.page || 1,
+        limit: 10,
+        sort: {createdAt: -1}
+      }
+    );
+    deals.page = Number(deals.page);
+    res.render('dashboard/dashboard_refunds', { 
+      deals,
+      user: req.user,
+      csrfToken: req.body.csrfSecret,
+      pageTitle: 'Refunded Deals - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;

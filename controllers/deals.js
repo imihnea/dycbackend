@@ -68,139 +68,176 @@ module.exports = {
         const deal = await Deal.findById(req.params.id);
         deal.status = 'Pending Delivery';
         await deal.save();
-        var addressFrom  = {
-            "name":req.body.name,
-            "street1":req.body.street1,
-            "city":req.body.city,
-            "state":req.body.state,
-            "zip":req.body.zip,
-            "country":req.body.country, // iso2 country code
-            "phone":req.body.phone,
-            "email":req.body.email,
-            'test':true,
-        };
-        
-        var addressTo = {
-            "name":deal.buyer.delivery.name,
-            "street1":deal.buyer.delivery.street1,
-            "city":deal.buyer.delivery.city,
-            "state":deal.buyer.delivery.state,
-            "zip":deal.buyer.delivery.zip,
-            "country":deal.buyer.delivery.country, // iso2 country code
-            "phone":deal.buyer.delivery.phone,
-            "email":deal.buyer.delivery.email,
-            'test':true,
-        };
-        
-        var parcel = {
-            "length": req.body.parcel_length,
-            "width": req.body.parcel_width,
-            "height": req.body.parcel_height,
-            "distance_unit": req.body.parcel_distance_unit,
-            "weight": req.body.parcel_weight,
-            "mass_unit": req.body.parcel_weight_unit,
-            'test':true,
-        };
-        
-        var shipment = {
-            "address_from": addressFrom,
-            "address_to": addressTo,
-            "parcels": [parcel],
-            'test': true,
-        };
-
-        // shippo.shipment.create({
-        //     "address_from": addressFrom,
-        //     "address_to": addressTo,
-        //     "parcels": [parcel],
-        //     "async": false,
-        //     'test':true,
-        // }, function(err, shipment){
-        //     if(err) {
-        //         console.log(err);
-        //     }
-        //     // asynchronously called
-        //     console.log(shipment);
-        // });
-
-        shippo.transaction.create({
-            "shipment": shipment,
-            "carrier_account": "32e1acf739a94a7f86cd168d63bc2df1",
-            "servicelevel_token": "usps_priority",
-            "label_file_type": "PDF"
-        }, async function(err, transaction) {
-            // asynchronously called
-            if(err) {
-                console.log(err);
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            }
-            const result = JSON.stringify(transaction);
-            console.log(`Full transaction details: ${result}`);
-            if(result.status === 'ERROR') {
-                req.flash('error', 'Eroare');
-                return res.redirect('back');
-            } else {
-                dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
-                const buyer = await User.findById(deal.buyer.id);
-                if(buyer.email_notifications.deal === true) {
-                    ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
-                        link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
-                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                        name: deal.product.name,
-                        subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-                    }, function (err, data) {
-                        if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(err);
-                        } else {
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                            to: `${buyer.email}`, // list of receivers
-                            subject: 'Deal Status Changed', // Subject line
-                            html: data, // html body
-                        };
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                console.log(error);
-                            }
-                                req.flash('success', 'Deal accepted successfully.');
-                                return res.redirect('back');
-                            });
+        if (deal.buyer.delivery.shipping == 'FaceToFace') {
+            dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+            const buyer = await User.findById(deal.buyer.id);
+            if(buyer.email_notifications.deal === true) {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
+                    link: `http://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    name: deal.product.name,
+                    subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                }, function (err, data) {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        console.log(err);
+                    } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        to: `${buyer.email}`, // list of receivers
+                        subject: 'Deal Status Changed', // Subject line
+                        html: data, // html body
+                    };
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            console.log(error);
                         }
-                    });
-                } else {
-                    req.flash('success', 'Deal accepted successfully.');
-                    return res.redirect('back');
-                }
+                            req.flash('success', 'Deal accepted successfully.');
+                            return res.redirect('back');
+                        });
+                    }
+                });
+            } else {
+                req.flash('success', 'Deal accepted successfully.');
+                return res.redirect('back');
             }
-        });
-        
-        
-        // )
-        // .then(function(transaction) {
-        //     shippo.transaction.list({
-        //       "rate": transaction.rate
-        //     })
-        //     .then(function(mpsTransactions) {
-        //         mpsTransactions.results.forEach(function(mpsTransaction){
-        //             if(mpsTransaction.object_status == "SUCCESS") {
-        //                 console.log("Label URL: %s", mpsTransaction.label_url);
-        //                 console.log("Tracking Number: %s", mpsTransaction.tracking_number);
-        //                 console.log("E-Mail: %s", mpsTransaction.object_owner);
-        //                 console.log(mpsTransaction.object_status);
-        //                 console.log("Label can be found under: " + mpsTransaction.label_url);
-        //             } else {
-        //                 // hanlde error transactions
-        //                 console.log("Error Message: %s", mpsTransactions.messages);
-        //             }
-        //         });
-        //     })
-        // }, function(err) {
-        //     // Deal with an error
-        //     console.log("There was an error creating transaction : %s", err.detail);
-        // });
+        } else if (deal.buyer.delivery.shipping == 'Shipping') {
+            var addressFrom  = {
+                "name":req.body.name,
+                "street1":req.body.street1,
+                "city":req.body.city,
+                "state":req.body.state,
+                "zip":req.body.zip,
+                "country":req.body.country, // iso2 country code
+                "phone":req.body.phone,
+                "email":req.body.email,
+                'test':true,
+            };
+            
+            var addressTo = {
+                "name":deal.buyer.delivery.name,
+                "street1":deal.buyer.delivery.street1,
+                "city":deal.buyer.delivery.city,
+                "state":deal.buyer.delivery.state,
+                "zip":deal.buyer.delivery.zip,
+                "country":deal.buyer.delivery.country, // iso2 country code
+                "phone":deal.buyer.delivery.phone,
+                "email":deal.buyer.delivery.email,
+                'test':true,
+            };
+            
+            var parcel = {
+                "length": req.body.parcel_length,
+                "width": req.body.parcel_width,
+                "height": req.body.parcel_height,
+                "distance_unit": req.body.parcel_distance_unit,
+                "weight": req.body.parcel_weight,
+                "mass_unit": req.body.parcel_weight_unit,
+                'test':true,
+            };
+            
+            var shipment = {
+                "address_from": addressFrom,
+                "address_to": addressTo,
+                "parcels": [parcel],
+                'test': true,
+            };
+    
+            // shippo.shipment.create({
+            //     "address_from": addressFrom,
+            //     "address_to": addressTo,
+            //     "parcels": [parcel],
+            //     "async": false,
+            //     'test':true,
+            // }, function(err, shipment){
+            //     if(err) {
+            //         console.log(err);
+            //     }
+            //     // asynchronously called
+            //     console.log(shipment);
+            // });
+    
+            shippo.transaction.create({
+                "shipment": shipment,
+                "carrier_account": "32e1acf739a94a7f86cd168d63bc2df1",
+                "servicelevel_token": "usps_priority",
+                "label_file_type": "PDF"
+            }, async function(err, transaction) {
+                // asynchronously called
+                if(err) {
+                    console.log(err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                }
+                const result = JSON.stringify(transaction);
+                console.log(`Full transaction details: ${result}`);
+                if(result.status === 'ERROR') {
+                    req.flash('error', 'Eroare');
+                    return res.redirect('back');
+                } else {
+                    dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+                    const buyer = await User.findById(deal.buyer.id);
+                    if(buyer.email_notifications.deal === true) {
+                        ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
+                            link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
+                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                            name: deal.product.name,
+                            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                        }, function (err, data) {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                console.log(err);
+                            } else {
+                            const mailOptions = {
+                                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                to: `${buyer.email}`, // list of receivers
+                                subject: 'Deal Status Changed', // Subject line
+                                html: data, // html body
+                            };
+                            transporter.sendMail(mailOptions, (error) => {
+                                if (error) {
+                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    console.log(error);
+                                }
+                                    req.flash('success', 'Deal accepted successfully.');
+                                    return res.redirect('back');
+                                });
+                            }
+                        });
+                    } else {
+                        req.flash('success', 'Deal accepted successfully.');
+                        return res.redirect('back');
+                    }
+                }
+            });
+            
+            
+            // )
+            // .then(function(transaction) {
+            //     shippo.transaction.list({
+            //       "rate": transaction.rate
+            //     })
+            //     .then(function(mpsTransactions) {
+            //         mpsTransactions.results.forEach(function(mpsTransaction){
+            //             if(mpsTransaction.object_status == "SUCCESS") {
+            //                 console.log("Label URL: %s", mpsTransaction.label_url);
+            //                 console.log("Tracking Number: %s", mpsTransaction.tracking_number);
+            //                 console.log("E-Mail: %s", mpsTransaction.object_owner);
+            //                 console.log(mpsTransaction.object_status);
+            //                 console.log("Label can be found under: " + mpsTransaction.label_url);
+            //             } else {
+            //                 // hanlde error transactions
+            //                 console.log("Error Message: %s", mpsTransactions.messages);
+            //             }
+            //         });
+            //     })
+            // }, function(err) {
+            //     // Deal with an error
+            //     console.log("There was an error creating transaction : %s", err.detail);
+            // });
+        }
     },
     async declineDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -397,6 +434,9 @@ module.exports = {
                 await deal.save();
                 buyer.btcbalance += deal.price;
                 await buyer.save();
+                const seller = await User.findById(deal.product.author.id);
+                seller.refundRequests -= 1;
+                await seller.save();
                 dealLogger.info(`Message: Deal ${deal._id} refunded - money back\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 res.redirect('back');
@@ -405,6 +445,9 @@ module.exports = {
                 deal.refund.status = 'Pending Delivery';
                 deal.refund.sellerOption = req.body.refundOption;
                 await deal.save();
+                const seller = await User.findById(deal.product.author.id);
+                seller.refundRequests -= 1;
+                await seller.save();
                 dealLogger.info(`Message: Deal ${deal._id} refunded - replacement\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Refund status updated: Deal refund pending.');
                 res.redirect('back');
@@ -437,6 +480,9 @@ module.exports = {
             deal.sellerMessage = req.body.message;
             deal.refund.status = 'Denied';
             deal.status = 'Refund denied';
+            const seller = await User.findById(deal.product.author.id);
+            seller.refundRequests -= 1;
+            await seller.save();
             const buyer = await User.findById(deal.buyer.id);
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
@@ -501,6 +547,8 @@ module.exports = {
             deal.status = 'Processing Refund';
             await deal.save();
             const seller = await User.findById(deal.product.author.id);
+            seller.refundRequests += 1;
+            await seller.save();
             if(seller.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
                     link: `http://${req.headers.host}/deals/${deal._id}`,

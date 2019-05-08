@@ -1,0 +1,115 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
+<div class="columns" style="overflow: hidden; margin: auto;">
+    <% include ../partials/sidebar %>
+    <div class="column dashboard-right">
+        <div class="dashTop column">
+            <h2 class="title">Refund Requests</h2>
+        </div>
+        <br>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <% if (deals.docs.length === 0) { %>
+                        <p class="title">You have no refund requests at this time.</p>
+                <% } else { %>
+                    <div>
+                        <div class="pagination paginationT">
+                            <% include ../partials/paginatePurchases %>
+                        </div>
+                        <main id="hits" style="width: 85%; margin: auto;">
+                        <% deals.docs.forEach((deal) => { %>
+                            <article class="hit columns frame">
+                                    <div class="product-picture-wrapper" >
+                                        <figure class="image is-128x128" style="margin:auto;">
+                                            <img src="<%= deal.product.imageUrl %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
+                                        </figure>
+                                    </div>
+                                    <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                        <div class="product-name">
+                                            <p class="title is-6"><%= deal.product.name %></p>
+                                            <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub>Refund Status: <%= deal.refund.status %></sub></p>
+                                            <div class="buttons">
+                                                <button class="button is-primary refundDetails">View all details</button>
+                                                <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
+                                                    <button class="button view-btn is-primary">View Deal</button>
+                                                </form>
+                                            </div>
+                                            <div class="modal modalrefundDetails">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-card">
+                                                    <header class="modal-card-head">
+                                                        <p class="modal-card-title">Refund Deal</p>
+                                                        <button class="delete deleterefundDetails" aria-label="close"></button>
+                                                    </header>
+                                                    <section class="modal-card-body" style="text-align: left;">
+                                                        <p class="title is-5">Reason: <%= deal.refund.reason %></p>
+                                                        <p class="title is-5">Message: <%= deal.refund.message %></p>
+                                                        <p class="title is-5">Preferred method of refund: <%= deal.refund.option %></p>
+                                                        <br>
+                                                        <% if (deal.refund.status === 'Not fulfilled') { %>
+                                                            <p class="title is-6" style="border-bottom:solid; border-width:1px;">Accept refund</p>
+                                                            <div style="display: flex; justify-content: space-evenly;">
+                                                                <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
+                                                                    <input type="text" name="refundOption" value="Money Back" hidden>
+                                                                    <button class="button is-primary">Refund Money</button>
+                                                                </form>
+                                                                <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
+                                                                    <input type="text" name="refundOption" value="New Product" hidden>                                                
+                                                                    <button class="button is-primary">Send another product</button>
+                                                                </form>
+                                                            </div>
+                                                            <br>
+                                                            <p class="title is-6" style="border-bottom:solid; border-width:1px;">Deny refund</p>
+                                                            <form class="modal-form" action="/deals/<%= deal._id %>/refundDeny?_method=PUT" method="POST" style="display: block;">
+                                                                <div class="column">
+                                                                    <div class="field select cont-select smmargin">
+                                                                        <select name="reason" style="width: 100%;">
+                                                                            <option value="" selected disabled>Reason</option>
+                                                                            <option value="Scam attempt">I suspect the buyer is trying to scam me</option>
+                                                                            <!-- Add more later -->
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="field" style="margin-top: 3px;">
+                                                                        <div class="control">
+                                                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button class="button is-primary">Send</button>
+                                                                </div>
+                                                            </form>
+                                                        <% }  else { %>
+                                                            <p class="title is-5" style="text-align:center !important;">Deal Refunded</p>
+                                                            <p class="title is-5">Refund option: <%= deal.refund.sellerOption %></p>
+                                                        <% } %>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                        <div class="prices openPrices frame" style="width: 100%;">
+                                            <p class="price_text" style="padding-left: 2vw;"><%= deal.price %></p>
+                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        </div>
+                                    </div>
+                                </article>                                          
+                        <% }); %>         
+                    </main>
+                    <div class="pagination paginationD">
+                        <% include ../partials/paginatePurchases %>
+                    </div>
+                </div>        
+                 
+                <% } %>
+            </div>
+            <div class="column"></div>
+        </div>
+
+    </div> 
+</div>
+
+<% include ../partials/footer %>
+<script src='../../dist/js/dashboard_products.js'></script>
+<script src='../../dist/js/dashboard_refunds.js'></script>
