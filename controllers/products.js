@@ -39,7 +39,7 @@ module.exports = {
             populate: 'product',
             page: req.query.page || 1,
             limit: 5,
-          });
+        });
         reviews.page = Number(reviews.page);
         const floorRating = product.calculateAvgRating();
         if (req.user) {
@@ -47,6 +47,17 @@ module.exports = {
             reviews.docs.forEach((review) => {
                 if (review.author.toString() === req.user._id.toString()) {
                     reviewed = true;
+                }
+            });
+            // Find if the user is already in the process of buying
+            let dealExists = false;
+            await Deal.findOne({$and: [{'buyer.id': req.user._id}, {'product.id': req.params.id}, {status: {$in: ['Processing', 'Pending Delivery', 'Refund Pending', 'Processing Refund']}}]}, (err, res) => {
+                if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                    if (res) {
+                        dealExists = [res._id, res.chat];
+                    }
                 }
             });
             // Find similar products
@@ -65,6 +76,7 @@ module.exports = {
                     reviews, 
                     reviewed,
                     fullUrl,
+                    dealExists,
                     user: req.user,
                     pageTitle: `${product.name} - Deal Your Crypto`,
                     pageDescription: 'Description',
@@ -95,6 +107,7 @@ module.exports = {
                                     reviews, 
                                     reviewed,
                                     fullUrl,
+                                    dealExists,
                                     user: req.user,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
@@ -108,6 +121,7 @@ module.exports = {
                                     reviews, 
                                     reviewed,
                                     fullUrl,
+                                    dealExists,
                                     user: req.user,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
@@ -125,6 +139,7 @@ module.exports = {
                                 reviews, 
                                 reviewed,
                                 fullUrl,
+                                dealExists,
                                 user: req.user,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: 'Description',
@@ -141,6 +156,7 @@ module.exports = {
                             reviews, 
                             reviewed,
                             fullUrl,
+                            dealExists,
                             user: req.user,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
@@ -154,6 +170,7 @@ module.exports = {
                             reviews, 
                             reviewed,
                             fullUrl,
+                            dealExists,
                             user: req.user,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
@@ -178,6 +195,7 @@ module.exports = {
                         floorRating, 
                         reviews,
                         fullUrl,
+                        dealExists,
                         reviewed: true, 
                         user: false,
                         pageTitle: `${product.name} - Deal Your Crypto`,
@@ -208,6 +226,7 @@ module.exports = {
                                     floorRating, 
                                     reviews,
                                     fullUrl,
+                                    dealExists,
                                     reviewed: true, 
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
@@ -221,6 +240,7 @@ module.exports = {
                                     floorRating, 
                                     reviews,
                                     fullUrl,
+                                    dealExists,
                                     reviewed: true, 
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
@@ -238,6 +258,7 @@ module.exports = {
                                 floorRating, 
                                 reviews,
                                 fullUrl,
+                                dealExists,
                                 reviewed: true, 
                                 user: false,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
@@ -254,6 +275,7 @@ module.exports = {
                             floorRating, 
                             reviews,
                             fullUrl,
+                            dealExists,
                             reviewed: true, 
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,
@@ -267,6 +289,7 @@ module.exports = {
                             floorRating, 
                             reviews,
                             fullUrl,
+                            dealExists,
                             reviewed: true, 
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,

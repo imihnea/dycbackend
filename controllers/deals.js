@@ -401,7 +401,7 @@ module.exports = {
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 res.redirect('back');
             } else {
-                deal.status = 'Refunded';
+                deal.status = 'Refund Pending';
                 deal.refund.status = 'Pending Delivery';
                 deal.refund.sellerOption = req.body.refundOption;
                 await deal.save();

@@ -152,6 +152,10 @@
                     <% } else if (user.username === product.author.username) { %>
                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary is-rounded">Update</a>
                         <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
+                    <% } else if (dealExists) { %>
+                        <form action="/messages/<%= dealExists[1] %>/<%= dealExists[0] %>?_method=PUT" method="POST">
+                            <button class="button view-btn is-primary">View Deal</button>
+                        </form>
                     <% } else if (user.btcbalance >= product.btcPrice) { %>
                         <div style="margin-top: 1vh; display: flex; justify-content: space-evenly;">
                             <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
