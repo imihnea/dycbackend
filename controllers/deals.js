@@ -285,7 +285,11 @@ module.exports = {
         const product = await Product.findById(deal.product.id);
         const seller = await User.findById(deal.product.author.id);
         deal.completedAt = Date.now();
-        deal.refundableUntil = Date.now() + refundTimer;
+        if (deal.buyer.delivery.shipping == 'FaceToFace') {
+            deal.refundableUntil = Date.now();
+        } else if (deal.buyer.delivery.shipping == 'Shipping') {
+            deal.refundableUntil = Date.now() + refundTimer;
+        }
         deal.status = 'Completed';
         await deal.save();
         seller.nrSold += 1;
