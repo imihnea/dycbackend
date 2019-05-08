@@ -188,6 +188,40 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
+  async refundProductIndex(req, res) {
+    const deals = await Deal.paginate(
+      {
+        $and: [
+          {
+            $or: [
+              {
+                'buyer.id': req.user._id
+              }, {
+                'product.author.id': req.user._id
+              }
+            ]
+          }, {
+            status: {
+              $in: ['Processing Refund', 'Refunded', 'Refund denied']
+            }
+          }
+        ]
+      }, {
+        page: req.query.page || 1,
+        limit: 10,
+        sort: {createdAt: -1}
+      }
+    );
+    deals.page = Number(deals.page);
+    res.render('dashboard/dashboard_refunds', { 
+      deals,
+      user: req.user,
+      csrfToken: req.body.csrfSecret,
+      pageTitle: 'Refunded Deals - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
@@ -872,6 +906,22 @@ module.exports = {
         if (req.body.product.shipping === 'true') {
           newproduct.delivery = {
             shipping: true,
+            name: req.body.name,
+            street1: req.body.street1,
+            city: req.body.city,
+            state: req.body.state,
+            zip: req.body.zip,
+            country: req.body.country,
+            phone: req.body.phone,
+            email: req.body.email,
+          };
+          newproduct.parcel = {
+            parcel_length: req.body.parcel_length,
+            parcel_width: req.body.parcel_width,
+            parcel_height: req.body.parcel_height,
+            parcel_distance_unit: req.body.parcel_distance_unit,
+            parcel_weight: req.body.parcel_weight,
+            parcel_weight_unit: req.body.parcel_weight_unit,
           }
           if(req.body.dhl_express === 'true') {
             newproduct.carrier = {

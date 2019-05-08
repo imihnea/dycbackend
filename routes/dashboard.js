@@ -8,7 +8,7 @@ const router = express.Router();
 const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
-        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, newProduct, getBTC, postBTC,
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
         getNotifications, postNotifications } = require('../controllers/dashboard');
@@ -87,6 +87,9 @@ router.get('/closed', isLoggedIn, asyncErrorHandler(closedProductIndex));
 
 // Show ongoing deals
 router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
+
+// Show refunded deals
+router.get('/refunds', isLoggedIn, assignCookie, asyncErrorHandler(refundProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));

@@ -71,6 +71,7 @@ const UserSchema = new Schema({
   zip: String,
   unreadMessages: { type: Number, default: 0},
   processingDeals: { type: Number, default: 0},
+  refundRequests: {type: Number, default: 0},
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   resetEmailToken: String,

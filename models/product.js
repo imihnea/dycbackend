@@ -71,6 +71,14 @@ const ProductSchema = new Schema({
     couriersplease: Boolean,
     fastway: Boolean,
   },
+  parcel: {
+    parcel_length: Number,
+    parcel_width: Number,
+    parcel_height: Number,
+    parcel_distance_unit: String,
+    parcel_weight: Number,
+    parcel_weight_unit: String,
+  }
 });
 
 ProductSchema.pre('remove', async () => {
