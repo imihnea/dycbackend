@@ -126,7 +126,7 @@ module.exports = {
         shippo.transaction.create({
             "shipment": shipment,
             "carrier_account": "32e1acf739a94a7f86cd168d63bc2df1",
-            "servicelevel_token": "usps_priority",
+            "servicelevel_token": "usps_priority_mail_international",
             "label_file_type": "PDF"
         }, async function(err, transaction) {
             // asynchronously called

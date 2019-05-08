@@ -869,6 +869,50 @@ module.exports = {
         if (req.body.product.repeatable === "true") {
           newproduct.repeatable = req.body.product.repeatable;
         }
+        if (req.body.product.shipping === 'true') {
+          newproduct.delivery = {
+            shipping: true,
+          }
+          if(req.body.dhl_express === 'true') {
+            newproduct.carrier = {
+              dhl_express: true,
+            }
+          }
+          if(req.body.usps === 'true') {
+            newproduct.carrier = { 
+              usps: true,
+            }
+          }
+          if(req.body.deutsche_post === 'true') {
+            newproduct.carrier = { 
+              deutsche_post: true,
+            }
+          }
+          if(req.body.sendle === 'true') {
+            newproduct.carrier = { 
+              sendle: true,
+            }
+          }
+          if(req.body.parcelforce === 'true') {
+            newproduct.carrier = { 
+              parcelforce: true,
+            }
+          }
+          if(req.body.fastway === 'true') {
+            newproduct.carrier = { 
+              fastway: true,
+            }
+          }
+          if(req.body.couriersplease === 'true') {
+            newproduct.carrier = {
+              couriersplease: true,
+            }
+          }
+        } else {
+          newproduct.delivery = {
+            shipping: false,
+          }
+        }
         await User.findById(req.user._id, (err, user) => {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

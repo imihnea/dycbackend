@@ -179,6 +179,130 @@ All images are scaled to that ratio" tabindex="-1">
                         </div>
                         <br>
                         <div class="frame">
+                            <h4 class="new-text" style="margin-bottom: 2vh;">Would you like to offer shipping?</h4>
+                            <div class="field">
+                                <div class="control">
+                                    <label class="radio">
+                                      <input type="radio" name="product[shipping]" id="shipping-yes" value="true">
+                                      Yes
+                                    </label>
+                                    <label class="radio">
+                                      <input type="radio" name="product[shipping]" id="shipping-no" value="false">
+                                      No
+                                    </label>
+                                  </div>
+                            </div>
+                            <div class="field" id="carriers" style="display: none;">
+                                <div class="control">
+                                    <h4 class="subtitle" style="margin-bottom: 2vh;">Please tick all carriers you want to offer</h4>
+                                    <table class="new-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Logo</th>
+                                                <th>Carrier</th>
+                                                <th>Website</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/dhl_express-ee633140040ec6341cf30481125678b3.png">
+                                                </td>
+                                                <td>DHL Express</td>
+                                                <td>
+                                                    <a href="https://www.dhl.com/en/express.html" class="link" target="_blank">dhl.com</a>
+                                                </td>
+                                                <td>
+                                                    <input name="dhl_express" type="checkbox" id="dhl_express" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="dhl_express" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/usps-3152d7513d82dcac47c2d86ecedda4f1.png">
+                                                </td>
+                                                <td>USPS</td>
+                                                <td>
+                                                    <a href="https://www.usps.com/" class="link" target="_blank">usps.com</a>
+                                                </td>
+                                                <td>
+                                                    <input name="usps" type="checkbox" id="usps" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="usps" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/deutsche_post-464439383fe9a1b27e48bf59d57706f7.png">
+                                                </td>
+                                                <td>Deutsche Post</td>
+                                                <td>
+                                                    <a href="https://www.deutschepost.de/en/home.html" class="link" target="_blank">deutschepost.de</a>
+                                                </td>
+                                                <td>
+                                                    <input name="deutsche_post" type="checkbox" id="deutsche_post" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="deutsche_post" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/sendle-c3df69cdbcbf48dd6d396058ba0773a1.png">
+                                                </td>
+                                                <td>Sendle</td>
+                                                <td>
+                                                    <a href="https://www.sendle.com/" class="link" target="_blank">sendle.com</a>
+                                                </td>
+                                                <td>
+                                                    <input name="sendle" type="checkbox" id="sendle" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="sendle" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/parcelforce-7163e9b39cf9a7ac7ed429bbe7bba5e9.png">
+                                                </td>
+                                                <td>Parcelforce</td>
+                                                <td>
+                                                    <a href="https://www.parcelforce.com/" class="link" target="_blank">parcelforce.com</a>
+                                                </td>
+                                                <td>
+                                                    <input name="parcelforce" type="checkbox" id="parcelforce" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="parcelforce" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/fastway_australia-bedecbbb9cd948ce5d920621270af20b.png">
+                                                </td>
+                                                <td>Fastway Australia</td>
+                                                <td>
+                                                    <a href="https://www.fastway.com.au/" class="link" target="_blank">fastway.com.au</a>
+                                                </td>
+                                                <td>
+                                                    <input name="fastway" type="checkbox" id="fastway" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="fastway" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="https://cdn.goshippo.com/assets/img/providers/140/couriersplease-88950638eaff6b93c00b2debc1627b3f.png">
+                                                </td>
+                                                <td>CouriersPlease</td>
+                                                <td>
+                                                    <a href="https://www.couriersplease.com.au/" class="link" target="_blank">couriersplease.com.au</a>
+                                                </td>
+                                                <td>
+                                                    <input name="couriersplease" type="checkbox" id="couriersplease" class="is-checkradio is-info is-large" value="true">
+                                                    <label for="couriersplease" style="padding-left: 2rem !important;"></label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
                             <div class="field">
                                 <p class="control has-icons-left smmargin" style="margin: auto;">

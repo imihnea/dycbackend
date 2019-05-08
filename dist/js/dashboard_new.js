@@ -15,6 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const radio1 = document.getElementById('shipping-yes');
+  const radio2 = document.getElementById('shipping-no');
+  radio1.addEventListener('change', () => {
+      if(radio1.checked == true) {
+        document.getElementById("carriers").style.display = "block";
+      }
+  });
+  radio2.addEventListener('change', () => {
+    if(radio2.checked == true) {
+      document.getElementById("carriers").style.display = "none";
+    }
+});
+
   const inputs = document.querySelectorAll('.file-upload__input');
   const inputItems = [].slice.call(inputs);
   const labels = document.querySelectorAll('.file-upload__label');
@@ -83,9 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Phones & Tablets', opt: ['Phones', 'Tablets', 'Accessories', 'Other'] },
     { name: 'Consoles & Videogames', opt: ['Consoles', 'Videogames', 'Console Accessories', 'Other'] },
     { name: 'Other Electronics', opt: ['GPS', 'Medical Electronics', 'Other'] },
-    { name: 'Female Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Skirts', 'Dresses', 'Wedding Dresses', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
+    { name: 'Female Clothes', opt: ['T Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Skirts', 'Dresses', 'Wedding Dresses', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
     { name: 'Female Shoes', opt: ['Sneakers', 'Boots', 'Shoes', 'Slippers', 'Sandals', 'Other'] },
-    { name: 'Male Clothes', opt: ['T-Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
+    { name: 'Male Clothes', opt: ['T Shirts', 'Shirts', 'Blouses & Pullovers', 'Jeans & Trousers', 'Suits', 'Jackets & Coats', 'Sport Clothes', 'Swimwear', 'Underwear', 'Other'] },
     { name: 'Male Shoes', opt: ['Sneakers', 'Boots', 'Shoes', 'Slippers', 'Sandals', 'Other'] },
     { name: 'Accessories', opt: ['Watches', 'Ties', 'Belts', 'Scarves', 'Bags', 'Glasses', 'Hats & Caps', 'Wallets', 'Other'] },
     { name: 'Jewellry', opt: ['Bracelets', 'Earrings', 'Necklaces', 'Rings', 'Sets', 'Other'] },
