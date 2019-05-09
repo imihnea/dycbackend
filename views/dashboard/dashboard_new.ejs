@@ -572,9 +572,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.address1) { %>
-                                                <input class="input" name="city" type="text" value="<%= user.city %>" required/>
+                                                <input class="input" name="city" type="text" value="<%= user.city %>"/>
                                             <% } else { %>
-                                                <input class="input" name="city" type="text" placeholder="City" required/>
+                                                <input class="input" name="city" type="text" placeholder="City"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-city"></i>
@@ -584,9 +584,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.address1) { %>
-                                                <input class="input" name="street1" type="text" value="<%= user.address1 %>" required/>
+                                                <input class="input" name="street1" type="text" value="<%= user.address1 %>"/>
                                             <% } else { %>
-                                                <input class="input" name="street1" type="text" placeholder="Street" required/>
+                                                <input class="input" name="street1" type="text" placeholder="Street"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-road"></i>
@@ -596,9 +596,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.zip) { %>
-                                                <input class="input" name="zip" type="text" value="<%= user.zip %>" required/>
+                                                <input class="input" name="zip" type="text" value="<%= user.zip %>"/>
                                             <% } else { %>
-                                                <input class="input" name="zip" type="text" placeholder="Zip Code" required/>
+                                                <input class="input" name="zip" type="text" placeholder="Zip Code"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-sort-numeric-down"></i>
@@ -608,9 +608,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.number) { %>
-                                                <input class="input" name="phone" type="tel" value="<%= user.number %>" required/>
+                                                <input class="input" name="phone" type="tel" value="<%= user.number %>"/>
                                             <% } else { %>
-                                                <input class="input" name="phone" type="tel" placeholder="Contact Phone Number" required/>
+                                                <input class="input" name="phone" type="tel" placeholder="Contact Phone Number"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-phone"></i>
@@ -620,9 +620,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.full_name) { %>
-                                                <input class="input" name="name" type="tel" value="<%= user.full_name %>" required/>
+                                                <input class="input" name="name" type="tel" value="<%= user.full_name %>"/>
                                             <% } else { %>
-                                                <input class="input" name="name" type="tel" placeholder="Contact Person Name" required/>
+                                                <input class="input" name="name" type="tel" placeholder="Contact Person Name"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-user-tie"></i>
@@ -632,9 +632,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.email) { %>
-                                                <input class="input" name="email" type="tel" value="<%= user.email %>" required/>
+                                                <input class="input" name="email" type="tel" value="<%= user.email %>"/>
                                             <% } else { %>
-                                                <input class="input" name="email" type="tel" placeholder="Contact Email" required/>
+                                                <input class="input" name="email" type="tel" placeholder="Contact Email"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-envelope"></i>
@@ -648,7 +648,7 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field-body">
                                         <div class="field">
                                             <p class="control has-icons-left is-expanded">
-                                                <input class="input is-fullwidth" name="parcel_length" type="number" placeholder="Length" required/>
+                                                <input class="input is-fullwidth" name="parcel_length" type="number" placeholder="Length"/>
                                                 <span class="icon is-small is-left">
                                                     <i class="fas fa-ruler"></i>
                                                 </span>
@@ -656,7 +656,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </div>
                                         <div class="field">
                                             <p class="control has-icons-left is-expanded">
-                                                <input class="input is-fullwidth" name="parcel_width" type="number" placeholder="Width" required/>
+                                                <input class="input is-fullwidth" name="parcel_width" type="number" placeholder="Width"/>
                                                 <span class="icon is-small is-left">
                                                     <i class="fas fa-ruler-horizontal"></i>
                                                 </span>
@@ -664,7 +664,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </div>
                                         <div class="field">
                                             <p class="control has-icons-left is-expanded">
-                                                <input class="input is-fullwidth" name="parcel_height" type="number" placeholder="Height" required/>
+                                                <input class="input is-fullwidth" name="parcel_height" type="number" placeholder="Height"/>
                                                 <span class="icon is-small is-left">
                                                     <i class="fas fa-ruler-vertical"></i>
                                                 </span>
@@ -688,7 +688,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 </div>
                                 <div class="field is-horizontal has-addons" style="margin: auto; width: 90%; margin-top: 1vh;">
                                     <p class="control has-icons-left is-expanded">
-                                        <input class="input is-fullwidth" name="parcel_weight" type="number" placeholder="Weight" required/>
+                                        <input class="input is-fullwidth" name="parcel_weight" type="number" placeholder="Weight"/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-weight-hanging"></i>
                                         </span>
