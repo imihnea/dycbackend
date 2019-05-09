@@ -7,6 +7,7 @@ const path = require('path');
 const Product = require('../models/product');
 const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
+const request = require("request");
 const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
 const { withdraw } = require('../config/withdraw');
 
@@ -50,9 +51,13 @@ module.exports = {
         });
     },
     async getBuyDeal(req, res) {
-        shippo.carrieraccount.list({results:10})
-        .then(function(carrieraccount){
-            console.log(carrieraccount);
+        // shippo.carrieraccount.list({results:10})
+        // .then(function(carrieraccount){
+        //     console.log(carrieraccount);
+        // });
+        shippo.address.list({results:2})   
+        .then(function(address){
+            console.log(address);
         });
         const product = await Product.findById(req.params.id);
         res.render('deals/deal_buy', { 
@@ -605,5 +610,91 @@ module.exports = {
                 pageKeywords: 'Keywords'
             });
         }
-    },   
+    },
+    async createAddress(req, res) {
+        console.log(req.body);
+        let addressFrom = {
+            "name":req.body.sellerName,
+            "street1":req.body.sellerStreet1,
+            "city":req.body.sellerCity,
+            "state":req.body.sellerState,
+            "zip":req.body.sellerZip,
+            "country":req.body.sellerCountry,
+            "phone":req.body.sellerPhone,
+            "email":req.body.sellerEmail,
+        };
+        let addressTo = {
+            "name":req.body.deliveryName,
+            "street1":req.body.deliveryStreet1,
+            "city":req.body.deliveryCity,
+            "state":req.body.deliveryState,
+            "zip":req.body.deliveryZip,
+            "country":req.body.deliveryCountry,
+            "phone":req.body.deliveryPhone,
+            "email":req.body.deliveryEmail,
+        };
+        let parcel = {
+            "length": req.body.parcel_length,
+            "width": req.body.parcel_width,
+            "height": req.body.parcel_height,
+            "distance_unit": req.body.parcel_distance_unit,
+            "weight": req.body.parcel_weight,
+            "mass_unit": req.body.parcel_weight_unit,
+        };
+        shippo.address.create({
+            "name":req.body.deliveryName,
+            "street1":req.body.deliveryStreet1,
+            "city":req.body.deliveryCity,
+            "state":req.body.deliveryState,
+            "zip":req.body.deliveryZip,
+            "country":req.body.deliveryCountry,
+            "phone":req.body.deliveryPhone,
+            "email":req.body.deliveryEmail,
+        }, (err, address) => {
+            if(err) {
+                console.log('eroare la creere adresa')
+                res.send(err);
+            } else {
+                shippo.address.validate(address.object_id, function(err, address1) {
+                    // asynchronously called
+                    if(err) {
+                        console.log('eroare la validare')
+                        res.send(err);
+                    } else {
+                        if(address.validation_results.is_valid === false) {
+                            console.log('e invalida')
+                            res.send(address1);
+                        } else {
+                            shippo.shipment.create({
+                                "address_from": addressFrom,
+                                "address_to": addressTo,
+                                "parcels": parcel,
+                                "carrier_accounts": [
+                                    // bagi cu if toti carrierii sellerului pt a genera rate
+                                ]
+                            }, (err, data) => {
+                                if(err) {
+                                    console.log('eroare la creere shipment')
+                                    res.send(err);
+                                } else {
+                                    console.log(data);
+                                    res.send(data);
+                                }
+                            })
+                        }
+                    }
+                });
+            }
+        });
+    },
+    async verifyAddress(req, res) {
+        shippo.address.validate(req.body.address, function(err, address) {
+            // asynchronously called
+            if(err) {
+                res.send(err);
+            } else {
+                res.send(address);
+            }
+        });
+    },
 };

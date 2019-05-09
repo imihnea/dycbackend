@@ -14,7 +14,6 @@ const ProductSchema = new Schema({
   description: { type: String, es_indexed: true, es_type: 'text' },
   status: { type: String, es_indexed: true, es_type: 'text' },
   btcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  accepted: { type: Array, default: [0, 0, 0, 0, 0] },
   available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
   repeatable: { type: Boolean, default: false },
   tags: [ String ],
@@ -52,6 +51,34 @@ const ProductSchema = new Schema({
     },
   ],
   avgRating: { type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  delivery: {
+    shipping: Boolean,
+    name: String,
+    street1: String,
+    city: String,
+    state: String,
+    zip: String,
+    country: String,
+    phone: String,
+    email: String,
+  },
+  carrier: {
+    dhl_express: Boolean,
+    usps: Boolean,
+    sendle: Boolean,
+    parcelforce: Boolean,
+    deutsche_post: Boolean,
+    couriersplease: Boolean,
+    fastway: Boolean,
+  },
+  parcel: {
+    parcel_length: Number,
+    parcel_width: Number,
+    parcel_height: Number,
+    parcel_distance_unit: String,
+    parcel_weight: Number,
+    parcel_weight_unit: String,
+  }
 });
 
 ProductSchema.pre('remove', async () => {

@@ -2,7 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal } = require('../controllers/deals');
+const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal,
+        createAddress, verifyAddress } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
@@ -38,5 +39,11 @@ router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal),
 
 // review product
 router.get('/:id/review', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
+
+// Create address with shippo
+router.post('/create-address', isLoggedIn, asyncErrorHandler(createAddress));
+
+// Verify address with shippo
+router.get('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
 
 module.exports = router;
