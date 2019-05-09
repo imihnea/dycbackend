@@ -1528,13 +1528,3 @@ module.exports = {
     });
   },
 };
-
-// Delete non-OAuth users who didn't confirm their email
-setInterval(() => {
-  User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
-    if (err) {
-      console.log(err);
-      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deleting users who didn't confirm their email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    }
-  });
-}, 60000);

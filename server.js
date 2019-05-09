@@ -332,6 +332,14 @@ app.use((err, req, res, next) => {
   res.redirect('back');
 });
 
+const { spawn } = require("child_process");
+
+const child = spawn("node", ["./config/recurringTasks.js"]);
+
+child.stdout.on('data', function(data) {
+  console.log(data.toString()); 
+});
+
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');
   if (process.env.NODE_ENV === 'production') {

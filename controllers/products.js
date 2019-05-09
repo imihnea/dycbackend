@@ -42,6 +42,7 @@ module.exports = {
         });
         reviews.page = Number(reviews.page);
         const floorRating = product.calculateAvgRating();
+        let dealExists = false;
         if (req.user) {
             let reviewed = false;
             reviews.docs.forEach((review) => {
@@ -50,7 +51,6 @@ module.exports = {
                 }
             });
             // Find if the user is already in the process of buying
-            let dealExists = false;
             await Deal.findOne({$and: [{'buyer.id': req.user._id}, {'product.id': req.params.id}, {status: {$in: ['Processing', 'Pending Delivery', 'Refund Pending', 'Processing Refund']}}]}, (err, res) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
