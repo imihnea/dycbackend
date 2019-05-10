@@ -1,0 +1,16 @@
+.parsley-errors-list{
+    list-style: none !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
+.parsley-errors-list.filled{
+    color: red;
+    font-weight: 600;
+    margin-bottom: 0 !important;
+    margin-top: 1vh !important;
+}
+
+.parsley-error{
+    background-color: #ff00005c !important;
+}

@@ -1,9 +1,25 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Chat = require('../models/chat');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger } = require('./winston');
 const { withdraw } = require('./withdraw');
+const nodemailer = require('nodemailer');
+
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
+
+const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
+    },
+});
 
 // Connect child to DB
 mongoose.Promise = global.Promise;
@@ -277,4 +293,77 @@ setInterval( () => {
     //         logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     //     }
     // });
+
+    // get chats with messages
+    Chat.find({"messageCount": { $gt: 0 }}, (err, chat) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding chats with messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            chat.forEach(item => {
+                // get last message and verify if it was read
+                const lastMsg = item.messages[item.messages.length - 1];
+                if (!lastMsg.read) {
+                    if (lastMsg.sender.toString() == item.user1.id.toString()) {
+                        // send email to user2
+                         User.findById(item.user2.id, (err, user2) => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            } else {
+                                const output = `
+                                <h1>You have an unread message</h1>
+                                <p>Sender: ${item.user1.fullname}</p>
+                                <p>Product: ${item.product.name}</p>
+                                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
+                                `;
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                    to: `${user2.full_name} <${user2.email}>`, // list of receivers
+                                    subject: 'You have an unread message', // Subject line
+                                    html: output, // html body
+                                };
+                                // send mail with defined transport object
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        console.log(error);
+                                    } else {
+                                        console.log('Mail sent');
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        // send email to user1
+                        const user1 = User.findById(item.user1.id, (err, res) => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            } else {
+                                const output = `
+                                <h1>You have an unread message</h1>
+                                <p>Sender: ${item.user2.fullname}</p>
+                                <p>Product: ${item.product.name}</p>
+                                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
+                                `;
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                    to: `${user1.full_name} <${user1.email}>`, // list of receivers
+                                    subject: 'You have an unread message', // Subject line
+                                    html: output, // html body
+                                };
+                                // send mail with defined transport object
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        console.log(error);
+                                    } else {
+                                        console.log('Mail sent');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
 }, 24 * 60 * 60 * 1000);

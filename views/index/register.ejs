@@ -1,6 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
 <link rel="stylesheet" href="../../dist/css/registerTooltips.css">
+<link rel="stylesheet" href="/dist/css/parsley.css">
 <div class="hero-body">
 
     <div class="container is-fluid" style="margin-bottom: 3vh;">
@@ -31,11 +32,11 @@
                         <i class="fab fa-google"></i>
                     </a>
                 </div>
-                <form action="/register" method="POST" class="logSigForm">
+                <form action="/register" method="POST" class="logSigForm" data-parsley-validate>
                     <div style="display: flex; justify-content: space-around;">
                         <div class="field" style="width: 85%;">
                             <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="Email" autofocus type="email" required />
+                                <input class="input" name="email" placeholder="Email" autofocus type="email" data-parsley-trigger="change" required />
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
@@ -50,7 +51,8 @@
                     <div style="display: flex; justify-content: space-around;">
                         <div class="field" style="width: 85%;">
                             <p class="control has-icons-left">
-                            <input class="input" name="username" placeholder="Username" type="text" required />
+                            <input class="input" name="username" placeholder="Username" type="text" data-parsley-type="alphanum" 
+                                data-parsley-minlength="6" data-parsley-maxlength="32" data-parsley-minlength-message="The username is too short. It should have 6 characters or more." data-parsley-trigger="change" required />
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user-tie"></i>
                             </span>
@@ -66,7 +68,8 @@ Characters: Alphanumeric" tabindex="-1">
                     <div style="display: flex; justify-content: space-around;">
                         <div class="field" style="width: 85%;">
                             <p class="control has-icons-left">
-                            <input class="input" name="password" placeholder="Password" type="password" required />
+                            <input class="input" name="password" placeholder="Password" type="password" required data-parsley-minlength="8" data-parsley-maxlength="64"
+                                data-parsley-pattern="[A-Za-z0-9]+" data-parsley-trigger="change"/>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-key"></i>
                             </span>
@@ -112,3 +115,5 @@ At least one number" tabindex="-1">
 </div>
 <% include ../partials/footer %>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../../dist/js/parsley.min.js"></script>

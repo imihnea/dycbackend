@@ -1,5 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
+<link rel="stylesheet" href="/dist/css/parsley.css">
 <div class="hero-body">
     <% if (errors) { %>
         <div class="notification is-danger container is-fluid" role="alert"> 
@@ -19,10 +20,12 @@
                         <i class="fab fa-google"></i>
                     </a>
                 </div>
-                <form action="/login<% if (errors) { %>?errors=1<% } %>" method="POST" class="logSigForm">
+                <form action="/login<% if (errors) { %>?errors=1<% } %>" method="POST" class="logSigForm" data-parsley-validate>
                     <div class="field">
                         <p class="control has-icons-left">
-                            <input class="input" name="username" placeholder="Username" type="text" required autofocus/>
+                            <input class="input" name="username" placeholder="Username" type="text" required data-parsley-type="alphanum" 
+                                data-parsley-minlength="6" data-parsley-maxlength="32" 
+                                data-parsley-minlength-message="The username is too short. It should have 6 characters or more." data-parsley-trigger="change" autofocus/>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user-tie"></i>
                             </span>
@@ -30,7 +33,9 @@
                     </div>
                     <div class="field">
                         <p class="control has-icons-left">
-                            <input class="input" name="password" placeholder="Password" type="password" required />
+                            <input class="input" name="password" placeholder="Password" type="password" required 
+                                data-parsley-minlength="8" data-parsley-maxlength="64"
+                                data-parsley-pattern="[A-Za-z0-9]+" data-parsley-trigger="change"/>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-key"></i>
                             </span>
@@ -51,3 +56,5 @@
 </div>
 <% include ../partials/footer %>
 <% if (errors) { %><script src="https://www.google.com/recaptcha/api.js" async defer></script><% } %>
+<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../../dist/js/parsley.min.js"></script>

@@ -2,6 +2,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" href="/dist/css/products.css">
 <link rel="stylesheet" href="/dist/css/registerTooltips.css">
+<link rel="stylesheet" href="/dist/css/parsley.css">
 <div class="columns" style="overflow: hidden; margin: auto;">
     <% include ../partials/sidebar %>
     
@@ -13,7 +14,7 @@
                     <h1 class="title">Edit Product</h1>
                 </div>
                 <br>
-                <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="editProductForm">
+                <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="editProductForm" data-parsley-validate>
                     <div class="container is-fluid">
                         <% if(errors){ %>
                             <div class="notification is-danger" role="alert"> 
@@ -27,7 +28,9 @@
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                         <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                            <input class="input" name="product[name]" value="<%= product.name %>" type="text" required />
+                            <input class="input" name="product[name]" value="<%= product.name %>" type="text" required 
+                            data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
+                            data-parsley-error-message=""	 data-parsley-trigger="change"/>
                             <div class="label" style="margin-left: 1vw;">
                                 <span class="registerTooltip" aria-label="Length: 3 - 100 characters
 Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
@@ -72,7 +75,9 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </select>
                         </div>
                         <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                            <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description" style="margin-left: 0;"><%= product.description %></textarea>
+                            <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description" style="margin-left: 0;" required
+                                data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
+                                data-parsley-error-message="" data-parsley-trigger="change"><%= product.description %></textarea>
                             <div class="label" style="margin-left: 1vw; margin-top: auto; margin-bottom: auto;">
                                 <span class="newTooltip" aria-label="Length: 3 - 100 characters
 Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
@@ -263,3 +268,5 @@ All images are scaled to that ratio" tabindex="-1">
 <span id="currentImages" hidden>
     <%= JSON.stringify(product.images) %>
 </span>
+<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../../dist/js/parsley.min.js"></script>
