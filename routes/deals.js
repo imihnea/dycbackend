@@ -41,7 +41,7 @@ router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal),
 router.get('/:id/review', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
 
 // Create address with shippo
-router.post('/create-address', isLoggedIn, asyncErrorHandler(createAddress));
+router.post('/create-address/:id', isLoggedIn, asyncErrorHandler(createAddress));
 
 // Verify address with shippo
 router.get('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
