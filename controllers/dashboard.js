@@ -878,41 +878,36 @@ module.exports = {
             parcel_distance_unit: req.body.parcel_distance_unit,
             parcel_weight: req.body.parcel_weight,
             parcel_weight_unit: req.body.parcel_weight_unit,
-          }
+          };
+          newproduct.carrier = {
+            dhl_express: false,
+            usps: false,
+            sendle: false,
+            parcelforce: false,
+            deutsche_post: false,
+            couriersplease: false,
+            fastway: false,
+          };
           if(req.body.dhl_express === 'true') {
-            newproduct.carrier = {
-              dhl_express: true,
-            }
+            newproduct.carrier.dhl_express = true;
           }
           if(req.body.usps === 'true') {
-            newproduct.carrier = { 
-              usps: true,
-            }
+            newproduct.carrier.usps = true;
           }
           if(req.body.deutsche_post === 'true') {
-            newproduct.carrier = { 
-              deutsche_post: true,
-            }
+            newproduct.carrier.deutsche_post = true;
           }
           if(req.body.sendle === 'true') {
-            newproduct.carrier = { 
-              sendle: true,
-            }
+            newproduct.carrier.sendle = true;
           }
           if(req.body.parcelforce === 'true') {
-            newproduct.carrier = { 
-              parcelforce: true,
-            }
+            newproduct.carrier.parcelforce = true;
           }
           if(req.body.fastway === 'true') {
-            newproduct.carrier = { 
-              fastway: true,
-            }
+            newproduct.carrier.fastway = true;
           }
           if(req.body.couriersplease === 'true') {
-            newproduct.carrier = {
-              couriersplease: true,
-            }
+            newproduct.carrier.couriersplease = true;
           }
         } else {
           newproduct.delivery = {

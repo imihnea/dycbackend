@@ -55,10 +55,10 @@ module.exports = {
         // .then(function(carrieraccount){
         //     console.log(carrieraccount);
         // });
-        shippo.address.list({results:2})   
-        .then(function(address){
-            console.log(address);
-        });
+        // shippo.address.list({results:2})   
+        // .then(function(address){
+        //     console.log(address);
+        // });
         const product = await Product.findById(req.params.id);
         res.render('deals/deal_buy', { 
             user: req.user,
@@ -612,16 +612,17 @@ module.exports = {
         }
     },
     async createAddress(req, res) {
+        const product = await Product.findById(req.params.id);
         console.log(req.body);
         let addressFrom = {
-            "name":req.body.sellerName,
-            "street1":req.body.sellerStreet1,
-            "city":req.body.sellerCity,
-            "state":req.body.sellerState,
-            "zip":req.body.sellerZip,
-            "country":req.body.sellerCountry,
-            "phone":req.body.sellerPhone,
-            "email":req.body.sellerEmail,
+            "name":product.delivery.name,
+            "street1":product.delivery.street1,
+            "city":product.delivery.city,
+            "state":product.delivery.state,
+            "zip":product.delivery.zip,
+            "country":product.delivery.country,
+            "phone":product.delivery.phone,
+            "email":product.delivery.email,
         };
         let addressTo = {
             "name":req.body.deliveryName,
@@ -634,13 +635,42 @@ module.exports = {
             "email":req.body.deliveryEmail,
         };
         let parcel = {
-            "length": req.body.parcel_length,
-            "width": req.body.parcel_width,
-            "height": req.body.parcel_height,
-            "distance_unit": req.body.parcel_distance_unit,
-            "weight": req.body.parcel_weight,
-            "mass_unit": req.body.parcel_weight_unit,
+            "length": product.parcel.parcel_length,
+            "width": product.parcel.parcel_width,
+            "height": product.parcel.parcel_height,
+            "distance_unit": product.parcel.parcel_distance_unit,
+            "weight": product.parcel.parcel_weight,
+            "mass_unit": product.parcel.parcel_weight_unit,
         };
+        let carriers = [];
+        if(product.carrier.dhl_express === true) {
+            let dhl = '3924c836947b4d4ca1d1a5c8bfe5b59b';
+            carriers.push(dhl);
+        }
+        if(product.carrier.usps === true) {
+            let usps = '32e1acf739a94a7f86cd168d63bc2df1';
+            carriers.push(usps);
+        }
+        if(product.carrier.sendle === true) {
+            let sendle = '89b81121d6d843228b9651748e2b96c7';
+            carriers.push(sendle);
+        }
+        if(product.carrier.parcelforce === true) {
+            let parcelforce = 'a97e0d2a493a468baf95b87f00b84de1';
+            carriers.push(parcelforce);
+        }
+        if(product.carrier.deutsche_post === true) {
+            let deutsche_post = '604de049b92846e899a03dfd48247087';
+            carriers.push(deutsche_post);
+        }
+        if(product.carrier.couriersplease === true) {
+            let couriersplease = 'a4c6ed9236a64b88b217d3b8b849db8f';
+            carriers.push(couriersplease);
+        }
+        if(product.carrier.fastway === true) {
+            let fastway = '435ad5f12e2c44a7b9163e73abe28bf6';
+            carriers.push(fastway);
+        }
         shippo.address.create({
             "name":req.body.deliveryName,
             "street1":req.body.deliveryStreet1,
@@ -669,9 +699,7 @@ module.exports = {
                                 "address_from": addressFrom,
                                 "address_to": addressTo,
                                 "parcels": parcel,
-                                "carrier_accounts": [
-                                    // bagi cu if toti carrierii sellerului pt a genera rate
-                                ]
+                                "carrier_accounts": carriers,
                             }, (err, data) => {
                                 if(err) {
                                     console.log('eroare la creere shipment')
