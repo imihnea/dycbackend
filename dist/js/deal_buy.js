@@ -13,7 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("facetoface").style.display = "none";
         }
     });
-    // const getValue = document.getElementById("deliverySelect").value;
+    // const btcrate = document.getElementById('btcrate');
+    // const shippingRate = document.querySelector('input[name="shippingRate"]:checked').value;
+    // const productPrice = document.getElementById('productPrice');
+    // if(shippingRate) {
+    //   shippingRate.addEventListener('change', () => {
+    //     totalPrice.innerHTML = `Total price: ${(productPrice + Number(1/btcrate + shippingRate))}`;
+    //   })
+    // }
 });
 
 
@@ -31,6 +38,9 @@ button.addEventListener('click', function(e) {
     // show spinner while fetching
     document.getElementById('rateSpinner').style.display = 'inline-block';
     document.getElementById('myButton').style.display = 'none';
+    // hide other divs
+    document.getElementById('not-valid').style.display = 'none';
+    document.getElementById('no-rates').style.display = 'none';
     // product id
     var productId = document.getElementById('productId').value;
   fetch(`/deals/create-address/${productId}`, {
@@ -64,9 +74,14 @@ button.addEventListener('click', function(e) {
       if(data.validation_results) {
         if(data.validation_results.is_valid === false) {
           document.getElementById('not-valid').style.display = 'block';
-        } else {
-          document.getElementById('is-valid').style.display = 'block';
+          document.getElementById('myButton').style.display = 'block';
+          document.getElementById('myButton').style = 'button is-primary is-rounded';
         }
+      }
+      if(data.type === 'ShippoAPIError') {
+        document.getElementById('not-valid').style.display = 'block';
+        document.getElementById('myButton').style.display = 'block';
+        document.getElementById('myButton').style = 'button is-primary is-rounded';
       }
       if(data.rates) {
         if(data.rates.length !== 0) {
@@ -81,17 +96,37 @@ button.addEventListener('click', function(e) {
                 <td>${data.rates[i].estimated_days} Day(s)</td>
                 <td>${data.rates[i].amount} ${data.rates[i].currency}</td>
                 <td>
-                  <input name="shippingRate" type="radio" id="${data.rates[i].amount}" class="is-checkradio is-info is-large" value="${data.rates[i].amount}">
-                  <label for="${data.rates[i].amount}" style="padding-left: 2rem !important;"></label>
+                  <input name="shippingRate" type="radio" id="${i}" class="is-checkradio is-info is-large" value="${data.rates[i].amount}">
+                  <label for="${i}"></label>
                 </td>
               </tr>
               `;
               tbody.insertAdjacentHTML('beforeend', text);
               console.log(`acesta este nr ${i} de rates`)
           }
+          let productPrice = document.getElementById('productPrice').value;
+          let btcrate = document.getElementById('btcrate').value;
+          let totalPrice = document.getElementById('totalPrice');
+          for(i = 0; i < document.shippingForm.shippingRate.length; i++ ) {
+            document.shippingForm.shippingRate[i].addEventListener('change', function() {
+              var id = this.getAttribute('id');
+              if(this.checked) {
+                console.log(`${id} e checked acum`)
+                document.getElementById('rate').value = data.rates[id].object_id;
+                console.log(data.rates[id].object_id);
+                let btcPrice = Number(productPrice) + Number((this.value*1/btcrate));
+                let usdEquiv = Number(this.value) + Number(productPrice*btcrate);
+                totalPrice.innerHTML = `Total Price: ${btcPrice.toFixed(7)} Bitcoin (${(usdEquiv).toFixed(2)} USD)`;
+              }
+            })
+          }
           document.getElementById('myButton').style.display = 'none';
           document.getElementById('rates').style.display = 'block';
           document.getElementById('buyButton').style.display = 'block';
+        } else {
+          document.getElementById('no-rates').style.display = 'block';
+          document.getElementById('myButton').style.display = 'block';
+          document.getElementById('myButton').style = 'button is-primary is-rounded';
         }
       }
   })
@@ -99,3 +134,5 @@ button.addEventListener('click', function(e) {
     console.log(error);
   });
 });
+
+

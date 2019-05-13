@@ -377,7 +377,12 @@ module.exports = {
                     req.flash('error', 'You cannot purchase your own product.');
                     res.redirect('back');
                 } else {
-                    let totalPrice = product.btcPrice;
+                    let totalPrice = product.btcPrice + Number(1/req.body.btcrate * req.body.shippingRate);
+                    let productPrice = product.btcPrice;
+                    let shippingPrice = Number(1/req.body.btcrate * req.body.shippingRate);
+                    console.log(`totalPrice: ${totalPrice}`);
+                    console.log(`productPrice: ${productPrice}`);
+                    console.log(`shippingPrice: ${shippingPrice}`);
                     if ( user.btcbalance >= totalPrice)  {
                         // Create deal
                         let deal = {
@@ -403,8 +408,13 @@ module.exports = {
                                 'delivery.phone': req.body.deliveryPhone,
                                 'delivery.email': req.body.deliveryEmail,
                             },
-                            price: totalPrice
+                            price: product.btcPrice,
+                            shippingPrice: shippingPrice,
+                            rate: req.body.rate,
                         };
+                        if (req.body.deliveryShipping === "Shipping") {
+                            deal.shipmentId = req.body.shipmentId;
+                        }
                         deal = await Deal.create(deal); 
                         // Update product and user
                         user.btcbalance -= totalPrice;

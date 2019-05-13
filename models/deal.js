@@ -37,6 +37,8 @@ const DealSchema = new Schema({
         } 
     },
     price: Number,
+    shippingPrice: Number,
+    rate: String,
     chat: Schema.Types.ObjectId,
     refund: { 
         reason: String, 

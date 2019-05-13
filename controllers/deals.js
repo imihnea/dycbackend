@@ -16,6 +16,8 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
+const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
+
 const refundTimer = 60000;
 
 // Deal payout fees (%)
@@ -60,14 +62,23 @@ module.exports = {
         //     console.log(address);
         // });
         const product = await Product.findById(req.params.id);
-        res.render('deals/deal_buy', { 
-            user: req.user,
-            errors: false,
-            product: product,
-            csrfToken: req.body.csrfSecret,
-            pageTitle: `Buy ${product.name} - Deal Your Crypto`,
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+        var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+        request(url, async function (error, response, body){
+            if (!error && response.statusCode == 200) {
+              var json = JSON.parse(body);
+              var data = json.data;
+              var btcrate = data.btc.rate;
+                res.render('deals/deal_buy', { 
+                    user: req.user,
+                    errors: false,
+                    product: product,
+                    btcrate,
+                    csrfToken: req.body.csrfSecret,
+                    pageTitle: `Buy ${product.name} - Deal Your Crypto`,
+                    pageDescription: 'Description',
+                    pageKeywords: 'Keywords'
+                });
+            }
         });
     },
     async acceptDeal(req, res) {
@@ -110,71 +121,17 @@ module.exports = {
                 return res.redirect('back');
             }
         } else if (deal.buyer.delivery.shipping == 'Shipping') {
-            var addressFrom  = {
-                "name":req.body.name,
-                "street1":req.body.street1,
-                "city":req.body.city,
-                "state":req.body.state,
-                "zip":req.body.zip,
-                "country":req.body.country, // iso2 country code
-                "phone":req.body.phone,
-                "email":req.body.email,
-                'test':true,
-            };
-            
-            var addressTo = {
-                "name":deal.buyer.delivery.name,
-                "street1":deal.buyer.delivery.street1,
-                "city":deal.buyer.delivery.city,
-                "state":deal.buyer.delivery.state,
-                "zip":deal.buyer.delivery.zip,
-                "country":deal.buyer.delivery.country, // iso2 country code
-                "phone":deal.buyer.delivery.phone,
-                "email":deal.buyer.delivery.email,
-                'test':true,
-            };
-            
-            var parcel = {
-                "length": req.body.parcel_length,
-                "width": req.body.parcel_width,
-                "height": req.body.parcel_height,
-                "distance_unit": req.body.parcel_distance_unit,
-                "weight": req.body.parcel_weight,
-                "mass_unit": req.body.parcel_weight_unit,
-                'test':true,
-            };
-            
-            var shipment = {
-                "address_from": addressFrom,
-                "address_to": addressTo,
-                "parcels": [parcel],
-                'test': true,
-            };
-    
-            // shippo.shipment.create({
-            //     "address_from": addressFrom,
-            //     "address_to": addressTo,
-            //     "parcels": [parcel],
-            //     "async": false,
-            //     'test':true,
-            // }, function(err, shipment){
-            //     if(err) {
-            //         console.log(err);
-            //     }
-            //     // asynchronously called
-            //     console.log(shipment);
-            // });
-    
+            console.log(`rate: ${deal.rate}`);
             shippo.transaction.create({
-                "shipment": shipment,
-                "carrier_account": "32e1acf739a94a7f86cd168d63bc2df1",
-                "servicelevel_token": "usps_priority",
-                "label_file_type": "PDF"
+                "rate": deal.rate,
+                "label_file_type": "PDF",
+                "async": true,
             }, async function(err, transaction) {
                 // asynchronously called
                 if(err) {
                     console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    return res.redirect('back');
                 }
                 const result = JSON.stringify(transaction);
                 console.log(`Full transaction details: ${result}`);

@@ -101,7 +101,7 @@
                     <label class="img-check ">
                         <div class="prices frame openPrices">
                             <p class="price_text">
-                                Price: <%= product.btcPrice %> Bitcoin
+                                Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
                             </p>
                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
@@ -111,16 +111,10 @@
                 </div>
             </form>
         </div>
-        <div id="is-valid" style="display: none;">
-            <h1>ADRESS IS VALID</h1>
-        </div>
-        <div id="not-valid" style="display: none;">
-            <h1>NOT VALID ADDRESS!!!!!!!</h1>
-        </div>
         <div id="shipping" class="field" style="display: none;">
             <br>
             <h2 class="subtitle">Delivery Details</h2>
-            <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+            <form action="/products/<%= product.id %>/buy?_method=PUT" name="shippingForm" id="shippingForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
                 <div class="field">
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">
@@ -457,7 +451,7 @@
                         <tr>
                             <th>Logo</th>
                             <th>Carrier</th>
-                            <th>Estimate</th>
+                            <th>Est.</th>
                             <th>Price</th>
                             <th></th>
                         </tr>
@@ -466,16 +460,25 @@
                     </tbody>
                 </table>
             </div>
+            <input type="hidden" name="productPrice" id="productPrice" value="<%= product.btcPrice %>">
+            <input type="hidden" name="btcrate" id="btcrate" value="<%= btcrate %>">
+            <input type="hidden" name="rate" id="rate" value="">
             <input type="hidden" name="productId" id="productId" value="<%= product.id %>">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="hidden" name="deliveryShipping" value="Shipping">
             <div class="lds-default" id="rateSpinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div id="no-rates" style="display: none;">
+                <h4 class="subtitle">There are no shipping rates available for your address with the carriers the seller has selected.</h4>
+            </div>
+            <div id="not-valid" style="display: none;">
+                <h4 class="subtitle">The address couldn't be validated. Please input a new one and try again.</h4>
+            </div>
             <br>
             <div class="column prod_info" id="buyButton" style="padding: 0; display: none;">
                 <label class="img-check ">
                     <div class="prices frame openPrices">
-                        <p class="price_text">
-                            Price: <%= product.btcPrice %> Bitcoin
+                        <p class="price_text" id="totalPrice">
+                            Product Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
                         </p>
                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
                     </div>
