@@ -11,7 +11,7 @@ const { profileUpdate, getProfile } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, verifyParam } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, verifyParam, checkId } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -39,7 +39,7 @@ const upload = multer({
 
 // GET Profile route
 
-router.get('/:id', asyncErrorHandler(getProfile));
+router.get('/:id', checkId, asyncErrorHandler(getProfile));
 
 // PUT Profile route
 

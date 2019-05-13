@@ -130,5 +130,29 @@ module.exports = {
         return next();
       });
     });
+  },
+  checkId: (req, res, next) => {
+    // Checks if the id is an actual ObjectID
+    // Mongoose thinks all 24 character strings are ObjectIDs
+    const idRegex = new RegExp(/^[a-f0-9]{24}$/);
+    if (req.params.id != undefined) {
+      if (req.params.id.match(idRegex) == null) {
+        req.flash('error', 'That page does not exist.');
+        return res.redirect('/error');
+      }
+    }
+    if (req.params.dealid != undefined) {
+      if (req.params.dealid.match(idRegex) == null) {
+        req.flash('error', 'That page does not exist.');
+        return res.redirect('/error');
+      }
+    }
+    if (req.params.review_id != undefined) {
+      if (req.params.review_id.match(idRegex) == null) {
+        req.flash('error', 'That page does not exist.');
+        return res.redirect('/error');
+      }
+    }
+    return next();
   }
 };

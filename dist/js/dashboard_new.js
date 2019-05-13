@@ -1,3 +1,19 @@
+const escapeHTML = (unsafe) => {
+  return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/@/g, "&commat;")
+        .replace(/\^/g, "&Hat;")
+        .replace(/:/g, "&colon;")
+        .replace(/;/g, "&semi;")
+        .replace(/#/g, "&num;")
+        .replace(/\$/g, "&dollar;")
+        .replace(/%/g, "&percent;")
+        .replace(/'/g, "&#039;");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const repeatable = document.querySelector('.fa-redo');
   repeatable.addEventListener('click', (event) => {
@@ -141,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Categories.forEach((item) => {
       if (firstCat.value == item.name) {
         item.opt.forEach((option) => {
-          secondCat.innerHTML += `<option value="${option}">${option}</option>`;
+          secondCat.innerHTML += `<option value="${escapeHTML(option)}">${escapeHTML(option)}</option>`;
         }); 
       }
     });
@@ -152,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     secCategories.forEach((item) => {
       if (secondCat.value == item.name) {
         item.opt.forEach((option) => {
-          thirdCat.innerHTML += `<option value="${option}">${option}</option>`;
+          thirdCat.innerHTML += `<option value="${escapeHTML(option)}">${escapeHTML(option)}</option>`;
         }); 
       }
     });
@@ -170,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add the tag to tag input that gets sent
         tags.value += ' ' + tagInput.value.substring(0, tagInput.value.length - 1);
         // Create the tag element
-        tagsControl.innerHTML += `<span class="tag is-link is-medium">${tagInput.value.substring(0, tagInput.value.length - 1)}<button type="button" class="delete deleteTag is-small"></button></span>`;
+        tagsControl.innerHTML += `<span class="tag is-link is-medium">${escapeHTML(tagInput.value.substring(0, tagInput.value.length - 1))}<button type="button" class="delete deleteTag is-small"></button></span>`;
         // Clean the input
         tagInput.value = '';
         // Remake the array of delete buttons with the new tag
@@ -193,6 +209,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
-
 
 });

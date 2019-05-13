@@ -44,7 +44,7 @@ const {
 
 const middleware = require('../middleware/index');
 
-const { asyncErrorHandler, isLoggedIn } = middleware; // destructuring assignment
+const { asyncErrorHandler, isLoggedIn, checkId } = middleware; // destructuring assignment
 
 // index route
 router.get('/', asyncErrorHandler(getIndex));
@@ -69,7 +69,7 @@ router.post('/register', asyncErrorHandler(postRegister));
 
 router.get('/confirmation/:token', asyncErrorHandler(confirmEmail));
 
-router.post('/resend/:id', asyncErrorHandler(resendEmail));
+router.post('/resend/:id', checkId, asyncErrorHandler(resendEmail));
 
 router.post('/verify', isLoggedIn, postVerify);
 

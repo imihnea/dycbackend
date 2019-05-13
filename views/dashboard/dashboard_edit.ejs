@@ -39,7 +39,8 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                         </div>
                         <div class="select cont-select catSelectLeft">
-                            <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
+                            <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required
+                            data-parsley-error-message="">
                                 <option disabled>Main Category</option>
                                 <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
                                 <option value="Electronics" <% if (product.category[1] == 'Electronics') { %> selected <% } %>>Electronics</option>
@@ -54,17 +55,20 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </select>
                         </div>
                         <div class="select cont-select catSelectCenter">
-                            <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
+                            <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required
+                            data-parsley-error-message="">
                                 <option value="<%= product.category[2] %>" selected><%= product.category[2] %></option>
                             </select>
                         </div>
                         <div class="select cont-select catSelectRight">
-                            <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
+                            <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required
+                            data-parsley-error-message="">
                                 <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
                             </select>
                         </div>
                         <div class="select cont-select" style="width: 90% !important;">
-                            <select type="text" name="product[condition]" style="width: 100%" required>
+                            <select type="text" name="product[condition]" style="width: 100%" required
+                            data-parsley-error-message="">
                                 <option disabled>Condition</option>
                                 <option value="Not Specified" <% if (product.condition == 'Not Specified') { %> selected <% } %> >Not Specified</option>
                                 <option value="Brand New" <% if (product.condition == 'Brand New') { %> selected <% } %> >Brand New</option>
@@ -87,7 +91,8 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                         </div>
                         <br>
                         <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
-                        <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden required>
+                        <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden 
+                        data-parsley-error-message="" required>
                         <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;">
                             <% product.tags.forEach(tag => { %>
                                 <span class="tag is-link is-medium">

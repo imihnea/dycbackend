@@ -15,7 +15,7 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyT
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam } = middleware; // destructuring assignment
+const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam, checkId } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -109,7 +109,7 @@ router.get('/premium/getProductViews/:_csrf/:csrfSecret/:product', verifyParam, 
 router.get('/notifications', isLoggedIn, asyncErrorHandler(getNotifications));
 
 // POST Email-notifications page
-router.post('/notifications/:id', isLoggedIn, asyncErrorHandler(postNotifications));
+router.post('/notifications/:id', isLoggedIn, checkId, asyncErrorHandler(postNotifications));
 
 // GET Subscription Page
 
@@ -121,7 +121,7 @@ router.get('/subscription-cancel', isLoggedIn, asyncErrorHandler(subscriptionCan
 
 // POST Subscription create
 
-router.post('/:id/subscription', isLoggedIn, verifyCookie, asyncErrorHandler(subscriptionCreate));
+router.post('/:id/subscription', isLoggedIn, checkId, verifyCookie, asyncErrorHandler(subscriptionCreate));
 
 // POST Subscription cancel
 
@@ -134,15 +134,15 @@ router.get('/new', assignCookie, isLoggedIn, hasCompleteProfile, newProduct);
 router.post('/new/:_csrf/:csrfSecret', verifyParam, isLoggedIn, upload.array('images', 5), asyncErrorHandler(productCreate));
 
 // EDIT - shows edit form for a product
-router.get('/:id/edit', assignCookie, isLoggedIn, checkUserproduct, asyncErrorHandler(productEdit));
+router.get('/:id/edit', assignCookie, isLoggedIn, checkId, checkUserproduct, asyncErrorHandler(productEdit));
 
 // PUT - updates product in the database
-router.put('/:id/:_csrf/:csrfSecret', verifyParam, upload.array('images', 5), checkUserproduct, asyncErrorHandler(productUpdate));
+router.put('/:id/:_csrf/:csrfSecret', verifyParam, checkId, checkUserproduct, upload.array('images', 5), asyncErrorHandler(productUpdate));
 
 // PUT - features the product
-router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, checkUserproduct, asyncErrorHandler(productFeature));
+router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, checkId, checkUserproduct, asyncErrorHandler(productFeature));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
-router.delete('/:id', verifyCookie, asyncErrorHandler(productDestroy));
+router.delete('/:id', verifyCookie, checkId, asyncErrorHandler(productDestroy));
 
 module.exports = router;

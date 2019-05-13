@@ -39,7 +39,8 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </div>
                             </div>
                             <div class="select cont-select catSelectLeft">
-                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required>
+                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required
+                                data-parsley-error-message="">
                                     <option disabled selected>Main Category</option>
                                     <option value="Collectibles & Art">Collectibles & Art</option>
                                     <option value="Electronics">Electronics</option>
@@ -54,17 +55,20 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </select>
                             </div>
                             <div class="select cont-select catSelectCenter">
-                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required>
+                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required
+                                data-parsley-error-message="">
                                     <option disabled selected>Secondary Category</option>
                                 </select>
                             </div>
                             <div class="select cont-select catSelectRight">
-                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required>
+                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required
+                                data-parsley-error-message="">
                                     <option disabled selected>Tertiary Category</option>
                                 </select>
                             </div>
                             <div class="select cont-select" style="width: 90% !important;">
-                                <select type="text" name="product[condition]" style="width: 100%" required>
+                                <select type="text" name="product[condition]" style="width: 100%" required
+                                data-parsley-error-message="">
                                     <option value="Not Specified" disabled selected>Condition</option>
                                     <option value="Brand New">Brand New</option>
                                     <option value="Like New">Like New</option>
@@ -86,7 +90,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                             <br>
                             <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
-                            <input type="text" name="product[tags]" id="tags" hidden required>
+                            <input type="text" name="product[tags]" id="tags" hidden>
                             <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;"></div>
                             <br>
                             <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
