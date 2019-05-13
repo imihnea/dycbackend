@@ -7,41 +7,41 @@ const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, 
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId } = middleware; // destructuring assignment
 
 // show deal
-router.get('/:id', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
+router.get('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
 
 // show interface after pressing buy on a product
 
-router.get('/:id/buy', assignCookie, isLoggedIn, asyncErrorHandler(getBuyDeal));
+router.get('/:id/buy', assignCookie, isLoggedIn, checkId, asyncErrorHandler(getBuyDeal));
 
 // cancel deal
-router.put('/:id/cancel', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(cancelDeal));
+router.put('/:id/cancel', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(cancelDeal));
 
 // accept deal
-router.put('/:id/accept', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(acceptDeal));
+router.put('/:id/accept', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(acceptDeal));
 
 // decline deal
-router.put('/:id/decline', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(declineDeal));
+router.put('/:id/decline', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(declineDeal));
 
 // complete deal
-router.put('/:id/complete', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeDeal));
+router.put('/:id/complete', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeDeal));
 
 // send refund request message
-router.put('/:id/refundRequest', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundRequest));
+router.put('/:id/refundRequest', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundRequest));
 
 // refund deal
-router.put('/:id/refund', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeal));
+router.put('/:id/refund', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeal));
 
 // deny refund request
-router.put('/:id/refundDeny', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeny));
+router.put('/:id/refundDeny', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeny));
 
 // review product
-router.get('/:id/review', isLoggedIn, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
+router.get('/:id/review', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(reviewProduct));
 
 // Create address with shippo
-router.post('/create-address/:id', isLoggedIn, asyncErrorHandler(createAddress));
+router.post('/create-address/:id', isLoggedIn, checkId, asyncErrorHandler(createAddress));
 
 // Verify address with shippo
 router.get('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));

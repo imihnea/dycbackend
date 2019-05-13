@@ -39,6 +39,36 @@ let transporter = nodemailer.createTransport({
   },
 });
 
+const escapeHTML = (unsafe) => {
+  return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/@/g, "&commat;")
+        .replace(/\^/g, "&Hat;")
+        .replace(/:/g, "&colon;")
+        .replace(/;/g, "&semi;")
+        .replace(/#/g, "&num;")
+        .replace(/\$/g, "&dollar;")
+        .replace(/%/g, "&percent;")
+        .replace(/\*/g, "&ast;")
+        .replace(/\(/g, "&lpar;")
+        .replace(/\)/g, "&rpar;")
+        .replace(/_/g, "&UnderBar;")
+        .replace(/=/g, "&equals;")
+        .replace(/\+/g, "&plus;")
+        .replace(/`/g, "&grave;")
+        .replace(/\//g, "&sol;")
+        .replace(/\\/g, "&bsol;")
+        .replace(/\|/g, "&vert;")
+        .replace(/\[/g, "&lsqb;")
+        .replace(/\]/g, "&rsqb;")
+        .replace(/\{/g, "&lcub;")
+        .replace(/\}/g, "&rcub;")
+        .replace(/'/g, "&#039;");
+}
+
 function sendConfirmationEmail(req, userid, useremail) {
   const token = jwt.sign({
     user: userid
@@ -114,8 +144,8 @@ module.exports = {
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
-      req.check('password', 'The password must contain at least one special character (" . ", " , ", " ? ", " ! ").').matches(/(\.|,|!|\?)/g);
-      req.check('password', 'The password can contain only alphanumeric and " . ", " , ", " ? ", " ! " characters.').matches(/^[a-zA-Z0-9 .,?!]+$/g);
+      req.check('password', 'The password must contain at least one special character').matches(/(`|!|@|#|\$|%|\^|&|\*|\(|\)|_|\\|-|=|\+|,|<|>|\.|\/|\?|;|:|'|\]|\[|\{|\}|\|)/g);
+      req.check('password', 'The password contains an unsupported character').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+$/g);
       // Uncomment when testing is done
       // const password = new RegExp(req.body.password, "g");
       // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
@@ -131,7 +161,8 @@ module.exports = {
       } else {
         const newUser = new User({ email: req.body.email, username: req.body.username });
         try {
-          await User.register(newUser, req.body.password);
+          const password = escapeHTML(req.body.password);
+          await User.register(newUser, password);
           sendConfirmationEmail(req, newUser._id, newUser.email, SECRET);
         } catch (error) {
           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -439,7 +470,7 @@ module.exports = {
                 if(result.status == '0') {
                   res.render('index/verifylogin', { 
                     username: req.body.username, 
-                    password: req.body.password, 
+                    password: escapeHTML(req.body.password), 
                     requestId: requestId,
                     pageTitle: 'Verify Login - Deal Your Crypto',
                     pageDescription: 'Description',
@@ -458,6 +489,7 @@ module.exports = {
               }
             });
           } else {
+            req.body.password = escapeHTML(req.body.password);
             passport.authenticate('local',
             {
               successFlash: 'Welcome to Deal Your Crypto!',

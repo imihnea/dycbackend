@@ -22,6 +22,36 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const escapeHTML = (unsafe) => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/@/g, "&commat;")
+        .replace(/\^/g, "&Hat;")
+        .replace(/:/g, "&colon;")
+        .replace(/;/g, "&semi;")
+        .replace(/#/g, "&num;")
+        .replace(/\$/g, "&dollar;")
+        .replace(/%/g, "&percent;")
+        .replace(/\*/g, "&ast;")
+        .replace(/\(/g, "&lpar;")
+        .replace(/\)/g, "&rpar;")
+        .replace(/_/g, "&UnderBar;")
+        .replace(/=/g, "&equals;")
+        .replace(/\+/g, "&plus;")
+        .replace(/`/g, "&grave;")
+        .replace(/\//g, "&sol;")
+        .replace(/\\/g, "&bsol;")
+        .replace(/\|/g, "&vert;")
+        .replace(/\[/g, "&lsqb;")
+        .replace(/\]/g, "&rsqb;")
+        .replace(/\{/g, "&lcub;")
+        .replace(/\}/g, "&rcub;")
+        .replace(/'/g, "&#039;");
+}
+
 module.exports = {
     // Chats Indexes
     async getChats(req, res) {
@@ -202,7 +232,7 @@ module.exports = {
     },
     // Create Message
     async newMessage(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?\r\n|\r|\n]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             req.flash('The message contains illegal characters.');
@@ -211,9 +241,10 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
+        const message = escapeHTML(req.body.message);
         const newMessage = {
             sender: req.user._id,
-            message: req.body.message,
+            message,
         }
         // Insert the message
         chat.messages.push(newMessage);
@@ -267,7 +298,7 @@ module.exports = {
         res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?\r\n|\r|\n]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
             const deal = await Deal.findById(req.params.dealid);
@@ -289,9 +320,10 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
+        const message = escapeHTML(req.body.message);
         const newMessage = {
             sender: req.user._id,
-            message: req.body.message,
+            message
         }
         // Insert the message
         chat.messages.push(newMessage);
