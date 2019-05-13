@@ -11,6 +11,20 @@ const escapeHTML = (unsafe) => {
         .replace(/#/g, "&num;")
         .replace(/\$/g, "&dollar;")
         .replace(/%/g, "&percent;")
+        .replace(/\*/g, "&ast;")
+        .replace(/\(/g, "&lpar;")
+        .replace(/\)/g, "&rpar;")
+        .replace(/_/g, "&UnderBar;")
+        .replace(/=/g, "&equals;")
+        .replace(/\+/g, "&plus;")
+        .replace(/`/g, "&grave;")
+        .replace(/\//g, "&sol;")
+        .replace(/\\/g, "&bsol;")
+        .replace(/\|/g, "&vert;")
+        .replace(/\[/g, "&lsqb;")
+        .replace(/\]/g, "&rsqb;")
+        .replace(/\{/g, "&lcub;")
+        .replace(/\}/g, "&rcub;")
         .replace(/'/g, "&#039;");
 }
 
