@@ -25,6 +25,7 @@ module.exports = {
 	// Reviews Create
 	async reviewCreate(req, res, next) {
 		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
+		req.check('review[body]', 'The review message contains more than 500 characters').isLength({ max: 500 });
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g).notEmpty();
 		const errors = req.validationErrors();
 		if (errors) {
@@ -95,7 +96,8 @@ module.exports = {
 	// Reviews Update
 	async reviewUpdate(req, res, next) {
 		if (req.query.from.match(/(user|product)/g) != null) {
-			req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g);
+			req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
+			req.check('review[body]', 'The review message contains more than 500 characters').isLength({ max: 500 });
 			req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
 			const errors = req.validationErrors();
 			if (errors) {

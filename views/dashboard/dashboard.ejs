@@ -1,5 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="/dist/css/parsley.css">
 <div class="columns" style="overflow: hidden; margin: auto;"> 
     <% include ../partials/sidebar %>
     <div class="column dashboard-right" style="margin-bottom: 4vh;">
@@ -11,7 +12,8 @@
             <div class="column"></div>
             <div class="column is-four-fifths">
                 <div class="frame smallerCenter">
-                    <form action="/profile/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="changeDetails">
+                    <form action="/profile/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="changeDetails"
+                        data-parsley-validate>
                         <% if(premium !== true) { %>
                             <h1 class="title">Standard Account</h1>
                         <% } else { %>
@@ -33,7 +35,9 @@
                             <div class="field">
                                 <div class="control has-icons-left">
                                     <input class="input" name="name" placeholder="Full Name*" type="text"
-                                    <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required />
+                                    <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required 
+                                        data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[a-zA-Z0-9 -]+"
+                                        data-parsley-minlength-message="The name is too short. It should have 3 characters or more." data-parsley-trigger="change"/>
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user-tie"></i>
                                     </span>
@@ -90,14 +94,16 @@
                             <div class="field is-horizontal has-addons">
                                 <p class="control has-icons-left is-expanded">
                                     <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
-                                    <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required />
+                                    <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required 
+                                        data-parsley-pattern="[a-zA-Z0-9., -]+" data-parsley-trigger="change" />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-road"></i>
                                     </span>
                                 </p>
                                 <p class="control has-icons-left is-expanded">
                                     <input class="input" name="zip" type="text" placeholder="ZIP Code*"
-                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required />
+                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required 
+                                        data-parsley-pattern="[a-zA-Z0-9]+" data-parsley-trigger="change" />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-sort-numeric-down"></i>
                                     </span>
@@ -106,7 +112,8 @@
                             <div class="field">
                                 <div class="control has-icons-left">
                                     <input class="input" name="address2" placeholder="Address Line 2" type="text"
-                                    <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>/>
+                                    <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>
+                                        data-parsley-pattern="[a-zA-Z0-9., -]+" data-parsley-trigger="change" />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-road"></i>
                                     </span>
@@ -263,3 +270,5 @@
 <!-- <script src="//geodata.solutions/includes/countrystatecity.js"></script> -->
 <script src="../../dist/js/dashboard.js"></script>
 <script src="../../dist/js/getScript.js"></script>
+<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../../dist/js/parsley.min.js"></script>

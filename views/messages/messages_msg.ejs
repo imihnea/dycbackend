@@ -79,8 +79,8 @@
                                         <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
                                     </time>
                                 </div>
-                                <div class="message-body">
-                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                <div class="message-body" style="text-align: left;">
+                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word; text-align: left;"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
@@ -92,8 +92,8 @@
                                         <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
                                     </time>
                                 </div>
-                                <div class="message-body">
-                                    <span style="white-space: pre-line"><p style="text-align: left;"><%= message.message %></p></span>
+                                <div class="message-body" style="text-align: left;">
+                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word; text-align: left;"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } %>

@@ -233,6 +233,7 @@ module.exports = {
     // Create Message
     async newMessage(req, res) {
         req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
+        req.check('message', 'The message must contain at most 500 characters').isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
             req.flash('The message contains illegal characters.');
@@ -299,6 +300,7 @@ module.exports = {
     },
     async newMessageDeal(req, res) {
         req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
+        req.check('message', 'The message must contain at most 500 characters').isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
             const deal = await Deal.findById(req.params.dealid);

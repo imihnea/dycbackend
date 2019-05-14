@@ -347,18 +347,25 @@ module.exports = {
             req.flash('error', errors[0].msg);
             res.redirect('back');
         } else {
-            req.check('deliveryName', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3 }).trim();
+            req.check('deliveryName', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
-            req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().trim();
-            req.check('deliveryPhone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).trim();
+            req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
+                .trim();
+            req.check('deliveryPhone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
+                .trim();
             if (req.body.deliveryShipping == 'Shipping') {
-                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).trim();
-                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
+                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
                 if(req.body.deliveryState) {
-                req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
+                    req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                        .trim();
                 }
-                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).trim();
-                req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).trim();
+                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
             }
             errors = req.validationErrors();
             if (errors) {

@@ -138,7 +138,7 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-      req.check('email', 'The email address is invalid').isEmail().notEmpty();
+      req.check('email', 'The email address is invalid').isEmail().notEmpty().isLength({ max: 500 });
       req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
       req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
@@ -220,7 +220,7 @@ module.exports = {
         return res.redirect('back');
       } else {
         if(result && result.status == '0') { // Success!
-          req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty();
+          req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
           const errors = req.validationErrors();
           if (errors) {
             res.render('dashboard/dashboard', {
@@ -257,7 +257,7 @@ module.exports = {
     })
   },
   async post2factor(req, res) {
-    req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty();
+    req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
     const errors = req.validationErrors();
     if (errors) {
       res.render('dashboard/dashboard', {
@@ -411,7 +411,7 @@ module.exports = {
     } else {
       req.session.cookie.expires = false; // Cookie expires at end of session
     }
-    req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
+    req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty().isLength({ max: 500 });
     const errors = req.validationErrors();
     if (errors) {
       let err = { msg: String };
@@ -642,7 +642,7 @@ module.exports = {
         });
       },
       (token, done) => {
-        req.check('email', 'Invalid email address.').isEmail().notEmpty();
+        req.check('email', 'Invalid email address.').isEmail().notEmpty().isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
           req.flash('error', 'Invalid email address.');
@@ -701,10 +701,10 @@ module.exports = {
       let currency = [];
       let secCat = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 .,!?]+$/g);
-      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 .,!?]+$/g).isLength({ max: 500 });
+      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
-        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty();
+        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
       let continent = '';
@@ -828,11 +828,11 @@ module.exports = {
       let currency = [];
       let thiCat = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
-      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
-      req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
+      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
+      req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
-        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty();
+        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
       let continent = '';
@@ -959,12 +959,12 @@ module.exports = {
     async thirdCategSearch(req, res){
       let currency = [];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g);
-      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
-      req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
-      req.check('secondSearchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty();
+      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
+      req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
+      req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
+      req.check('secondSearchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
-        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty();
+        req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
       let continent = '';
@@ -1214,11 +1214,14 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty();
+      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty()
+      .isLength({ max: 500 });
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
-      .trim();
+      .trim()
+      .isLength({ max: 500 });
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
-      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
+      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty()
+      .isLength({ max: 500 });
       const validationErrors = req.validationErrors();
       if (validationErrors) {
         res.render('index/contact', {
@@ -1291,11 +1294,14 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty();
+      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty()
+      .isLength({ max: 500 });
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
-      .trim();
+      .trim()
+      .isLength({ max: 500 });
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
-      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty();
+      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty()
+      .isLength({ max: 500 });
       const validationErrors = req.validationErrors();
       if (validationErrors) {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
@@ -1391,7 +1397,7 @@ module.exports = {
         });
       },
       (token, done) => {
-        req.check('email', 'Invalid email address.').isEmail().notEmpty();
+        req.check('email', 'Invalid email address.').isEmail().notEmpty().isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
           req.flash('error', 'Invalid email address.');

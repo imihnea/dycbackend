@@ -90,8 +90,9 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                             <br>
                             <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                                <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )"
-                                    data-parsley-pattern="[A-Za-z0-9 ,\-]+" data-parsley-error-message="" data-parsley-trigger="keyup">
+                                <input type="text" id="tagInput" class="input" placeholder="Tags"
+                                    data-parsley-pattern="^[A-Za-z0-9 .,\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
+                                <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                                 <div class="label" style="margin-left: 1vw;">
                                     <span class="registerTooltip" aria-label="Characters: Alphanumeric, including the hyphen (-)" tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
