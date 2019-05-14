@@ -211,6 +211,7 @@ module.exports = {
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         buyer.btcbalance += deal.price;
         await buyer.save();
+        await Product.findByIdAndUpdate(deal.product.id, {$set: {available: 'True'}});
         if(buyer.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
                 link: `http://${req.headers.host}/deals/${deal._id}`,
@@ -327,13 +328,16 @@ module.exports = {
     },
     async cancelDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        const buyer = await User.findById(deal.buyer.id);
+        if (deal.buyer.shipping === 'FaceToFace') {
+            await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: deal.price }});
+        } else if (deal.buyer.shipping === 'Shipping') {
+            await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: (deal.price + deal.shippingPrice) }});
+        }
         deal.status = 'Cancelled';
         deal.completedAt = Date.now();
         await deal.save();
-        buyer.btcbalance += deal.price;
-        await buyer.save();
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+        await Product.findByIdAndUpdate(deal.product.id, {$set: { available: 'True' }});
         // Seller email
         const seller = await User.findById(deal.product.author.id);
         if(seller.email_notifications.deal === true) {

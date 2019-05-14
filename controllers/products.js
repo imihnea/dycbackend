@@ -431,6 +431,7 @@ module.exports = {
                         } else {
                             product.nrBought = 1;
                         }
+                        product.lastBought = Date.now();
                         product.markModified('buyers');
                         await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
                         await product.save();

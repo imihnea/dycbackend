@@ -366,4 +366,68 @@ setInterval( () => {
             });
         }
     });
+
+    // Deleting flagged products
+    Products.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            console.log(err);
+        } else {
+            products.forEach(product => {
+                product.images.forEach(image => {
+                    cloudinary.v2.uploader.destroy(image.public_id);
+                });
+                let unindexed = false;
+                product.unIndex((err) => {
+                  if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  } else {
+                    unindexed = true;
+                  }
+                });
+                const id = product._id;
+                product.remove();
+                if (process.env.NODE_ENV === 'production') {
+                  if (unindexed) {
+                    productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  } else {
+                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  }
+                }
+            });
+        }
+    });
+
+    // Deleting products that weren't bought in a month
+    let monthAgo = new Date();
+    monthAgo.setDate(monthAgo.getDate() - 30);
+    Products.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            console.log(err);
+        } else {
+            products.forEach(product => {
+                product.images.forEach(image => {
+                    cloudinary.v2.uploader.destroy(image.public_id);
+                });
+                let unindexed = false;
+                product.unIndex((err) => {
+                  if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  } else {
+                    unindexed = true;
+                  }
+                });
+                const id = product._id;
+                product.remove();
+                if (process.env.NODE_ENV === 'production') {
+                  if (unindexed) {
+                    productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  } else {
+                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  }
+                }
+            });
+        }
+    });
 }, 24 * 60 * 60 * 1000);
