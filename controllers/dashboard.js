@@ -1173,27 +1173,9 @@ module.exports = {
   },
   // Products Destroy
   async productDestroy(req, res) {
-    const product = await Product.findById(req.params.id);
-    for (const image of product.images) {
-      await cloudinary.v2.uploader.destroy(image.public_id);
-    }
-    let unindexed = false;
-    product.unIndex((err) => {
-      if (err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-      } else {
-        unindexed = true;
-      }
-    });
-    const id = product._id;
-    await product.remove();
-    if (process.env.NODE_ENV === 'production') {
-      if (unindexed) {
-        productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-      } else {
-        productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-      }
-    }
+    let deleteDate = new Date();
+    deleteDate.setDate(deleteDate.getDate() + 30);
+    await Product.findByIdAndUpdate(req.params.id, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
     req.flash('success', 'Product deleted successfully!');
     res.redirect('/dashboard/open');
   },

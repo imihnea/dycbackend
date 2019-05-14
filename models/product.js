@@ -78,7 +78,12 @@ const ProductSchema = new Schema({
     parcel_distance_unit: String,
     parcel_weight: Number,
     parcel_weight_unit: String,
-  }
+  },
+  deleteIn30: {
+    status: { type: Boolean, default: false },
+    deleteDate: Date
+  },
+  lastBought: { type: Date, default: Date.now }
 });
 
 ProductSchema.pre('remove', async () => {
