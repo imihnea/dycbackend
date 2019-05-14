@@ -24,8 +24,10 @@
                         <br>
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText">Username: <%= buyer.username %></p>
-                            <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
-                            <button href="" class="button is-danger report">Report</button>
+                            <div class="buttons has-addons is-centered">
+                                <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
+                                <button href="" class="button is-danger report">Report</button>
+                            </div>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
                                     <div class="modal-card">
@@ -77,8 +79,10 @@
                         <br>
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText">Username: <%= seller.username %></p>
-                            <a href="/profile/<%= seller.id %>" class="button is-primary">View Profile</a>
-                            <button href="" class="button is-danger report">Report</button>
+                            <div class="buttons has-addons is-centered">
+                                <a href="/profile/<%= seller.id %>" class="button is-primary">View Profile</a>
+                                <button href="" class="button is-danger report">Report</button>
+                            </div>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
                                     <div class="modal-card">
@@ -652,6 +656,7 @@
                                         </div>
                                     </div> 
                                 </div>
+                                <br>
                             <% } %>
                             <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested')) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>                            
@@ -748,13 +753,13 @@
                             <% } %>
                             
                             <% if ((deal.status === 'Processing') && (user._id.toString() === buyer._id.toString())) { %>
-                                <div style="display: flex; justify-content: space-evenly">
+                                <div class="buttons has-addons is-centered">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                     <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
                                 </div>
                             <% } %>
                             <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
-                                <div style="display: flex; justify-content: space-evenly">
+                                <div class="buttons has-addons is-centered">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                     <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
                                 </div>
