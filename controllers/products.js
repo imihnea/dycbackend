@@ -7,12 +7,15 @@ const User = require('../models/user');
 const Deal = require('../models/deal');
 const Review = require('../models/review');
 const moment = require('moment');
+const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
+
+const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 const transporter = nodemailer.createTransport({
     host: EMAIL_HOST,
@@ -379,99 +382,192 @@ module.exports = {
                 } else {
                     let totalPrice = product.btcPrice;
                     let shippingPrice = 0;
-                    if (req.body.deliveryShipping === 'Shipping') {
-                        totalPrice += Number(1/req.body.btcrate * req.body.shippingRate);
-                        shippingPrice = Number(1/req.body.btcrate * req.body.shippingRate);
-                    }
                     let productPrice = product.btcPrice;
                     console.log(`totalPrice: ${totalPrice}`);
                     console.log(`productPrice: ${productPrice}`);
                     console.log(`shippingPrice: ${shippingPrice}`);
                     if ( user.btcbalance >= totalPrice)  {
-                        // Create deal
-                        let deal = {
-                            product: {
-                                id: product._id,
-                                name: product.name,
-                                imageUrl: product.images[0].url,
-                                author: product.author,
-                                price: product.btcPrice,
-                            },
-                            buyer: {
-                                id: user._id,
-                                username: user.username,
-                                name: user.full_name,
-                                avatarUrl: user.avatar.url,
-                                'delivery.shipping': req.body.deliveryShipping,
-                                'delivery.name': req.body.deliveryName,
-                                'delivery.street1': req.body.deliveryStreet1,
-                                'delivery.city': req.body.deliveryCity,
-                                'delivery.state': req.body.deliveryState,
-                                'delivery.zip': req.body.deliveryZip,
-                                'delivery.country': req.body.deliveryCountry,
-                                'delivery.phone': req.body.deliveryPhone,
-                                'delivery.email': req.body.deliveryEmail,
-                            },
-                            price: product.btcPrice,
-                            shippingPrice: shippingPrice,
-                            rate: req.body.rate,
-                        };
-                        if (req.body.deliveryShipping === "Shipping") {
-                            deal.shipmentId = req.body.shipmentId;
-                        }
-                        deal = await Deal.create(deal); 
-                        // Update product and user
-                        user.btcbalance -= totalPrice;
-                        // The product will remain available if it's repeatable
-                        if ( !product.repeatable ) {
-                            product.available = "Closed";
-                        }
-                        if (product.nrBought) {
-                            product.nrBought += 1;
-                        } else {
-                            product.nrBought = 1;
-                        }
-                        product.markModified('buyers');
-                        await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
-                        await product.save();
-                        await user.save();
-                        // Send an email to the seller letting them know about the deal request
-                        const user2 = await User.findById(product.author.id);
-                        if(user2.email_notifications.deal === true) {
-                            ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                                link: `http://${req.headers.host}/deals/${deal._id}`,
-                                footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                                name: product.name,
-                                buyer: req.user.full_name,
-                                subject: `New buy request - Deal Your Crypto`,
-                            }, function (err, data) {
-                                if (err) {
-                                    console.log(err);
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        if (req.body.deliveryShipping === 'Shipping') {
+                            var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+                            request(url, async function (error, response, body) {
+                                if (!error && response.statusCode == 200) {
+                                var json = JSON.parse(body);
+                                var data = json.data;
+                                console.log(`data: ${data}`)
+                                var btcrate = data.btc.rate;
+                                console.log(`btcrate: ${btcrate}`)
+                                totalPrice += Number(1/btcrate * req.body.shippingRate);
+                                console.log(`totalPrice din req: ${totalPrice}`);
+                                shippingPrice = Number(1/btcrate * req.body.shippingRate);
+                                console.log(`shippingPrice din req: ${shippingPrice}`);
+                                let deal = {
+                                    product: {
+                                        id: product._id,
+                                        name: product.name,
+                                        imageUrl: product.images[0].url,
+                                        author: product.author,
+                                        price: product.btcPrice,
+                                    },
+                                    buyer: {
+                                        id: user._id,
+                                        username: user.username,
+                                        name: user.full_name,
+                                        avatarUrl: user.avatar.url,
+                                        'delivery.shipping': req.body.deliveryShipping,
+                                        'delivery.name': req.body.deliveryName,
+                                        'delivery.street1': req.body.deliveryStreet1,
+                                        'delivery.city': req.body.deliveryCity,
+                                        'delivery.state': req.body.deliveryState,
+                                        'delivery.zip': req.body.deliveryZip,
+                                        'delivery.country': req.body.deliveryCountry,
+                                        'delivery.phone': req.body.deliveryPhone,
+                                        'delivery.email': req.body.deliveryEmail,
+                                    },
+                                    price: product.btcPrice,
+                                    shippingPrice: shippingPrice,
+                                    rate: req.body.rate,
+                                };
+                                deal = await Deal.create(deal); 
+                                // Update product and user
+                                user.btcbalance -= totalPrice;
+                                // The product will remain available if it's repeatable
+                                if ( !product.repeatable ) {
+                                    product.available = "Closed";
+                                }
+                                if (product.nrBought) {
+                                    product.nrBought += 1;
                                 } else {
-                                    const mailOptions = {
-                                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
-                                        to: `${user2.email}`, // list of receivers
-                                        subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                                        html: data, // html body
-                                    };
-                                    // send mail with defined transport object
-                                    transporter.sendMail(mailOptions, (error) => {
-                                        if (error) {
-                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            console.log(error);
+                                    product.nrBought = 1;
+                                }
+                                product.markModified('buyers');
+                                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
+                                await product.save();
+                                await user.save();
+                                // Send an email to the seller letting them know about the deal request
+                                const user2 = await User.findById(product.author.id);
+                                if(user2.email_notifications.deal === true) {
+                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                                        link: `http://${req.headers.host}/deals/${deal._id}`,
+                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        name: product.name,
+                                        buyer: req.user.full_name,
+                                        subject: `New buy request - Deal Your Crypto`,
+                                    }, function (err, data) {
+                                        if (err) {
+                                            console.log(err);
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        } else {
+                                            const mailOptions = {
+                                                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                                to: `${user2.email}`, // list of receivers
+                                                subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                                                html: data, // html body
+                                            };
+                                            // send mail with defined transport object
+                                            transporter.sendMail(mailOptions, (error) => {
+                                                if (error) {
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    console.log(error);
+                                                }
+                                            });
                                         }
                                     });
                                 }
+                                dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                // Link chat to deal
+                                res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                                } else {
+                                    req.flash('err', 'There\'s been an error with your request, please try again.');
+                                    return res.redirect('back');
+                                }
                             });
+                        } else if (req.body.deliveryShipping === 'FaceToFace') {
+                            // Create deal
+                            let deal = {
+                                product: {
+                                    id: product._id,
+                                    name: product.name,
+                                    imageUrl: product.images[0].url,
+                                    author: product.author,
+                                    price: product.btcPrice,
+                                },
+                                buyer: {
+                                    id: user._id,
+                                    username: user.username,
+                                    name: user.full_name,
+                                    avatarUrl: user.avatar.url,
+                                    'delivery.shipping': req.body.deliveryShipping,
+                                    'delivery.name': req.body.deliveryName,
+                                    'delivery.street1': req.body.deliveryStreet1,
+                                    'delivery.city': req.body.deliveryCity,
+                                    'delivery.state': req.body.deliveryState,
+                                    'delivery.zip': req.body.deliveryZip,
+                                    'delivery.country': req.body.deliveryCountry,
+                                    'delivery.phone': req.body.deliveryPhone,
+                                    'delivery.email': req.body.deliveryEmail,
+                                },
+                                price: product.btcPrice,
+                                shippingPrice: shippingPrice,
+                                rate: req.body.rate,
+                            };
+                            deal = await Deal.create(deal); 
+                            // Update product and user
+                            user.btcbalance -= totalPrice;
+                            // The product will remain available if it's repeatable
+                            if ( !product.repeatable ) {
+                                product.available = "Closed";
+                            }
+                            if (product.nrBought) {
+                                product.nrBought += 1;
+                            } else {
+                                product.nrBought = 1;
+                            }
+                            product.markModified('buyers');
+                            await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
+                            await product.save();
+                            await user.save();
+                            // Send an email to the seller letting them know about the deal request
+                            const user2 = await User.findById(product.author.id);
+                            if(user2.email_notifications.deal === true) {
+                                ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                                    link: `http://${req.headers.host}/deals/${deal._id}`,
+                                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                    name: product.name,
+                                    buyer: req.user.full_name,
+                                    subject: `New buy request - Deal Your Crypto`,
+                                }, function (err, data) {
+                                    if (err) {
+                                        console.log(err);
+                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    } else {
+                                        const mailOptions = {
+                                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                            to: `${user2.email}`, // list of receivers
+                                            subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                                            html: data, // html body
+                                        };
+                                        // send mail with defined transport object
+                                        transporter.sendMail(mailOptions, (error) => {
+                                            if (error) {
+                                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                console.log(error);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            // Link chat to deal
+                            res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                        } else {
+                            req.flash('error', 'Please select Face to Face or Shipping.');
+                            return res.redirect('back');
                         }
-                        dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        // Link chat to deal
-                        res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                     } else {
                         req.flash('error', 'You do not have enough currency to purchase this product.');
-                        res.redirect('back');
+                        return res.redirect('back');
                     }
                 }
             }

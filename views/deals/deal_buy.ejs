@@ -1,5 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="../../dist/css/product_view.css">
 <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
 <div class="hero-body">
     <% if(errors){ %>
@@ -16,7 +17,7 @@
         </div>
         <br>
         <div class="field" style="padding: 20px;">
-            <figure class="image is-square" style="overflow: hidden;">
+            <figure class="image is-16by9 is-square" style="overflow: hidden;">
                 <img class="mainImg" src="<%= product.images[0].url %>" alt="<%= product.name %>" style="border-style: solid; border-radius: 10px;"/>
             </figure>
         </div>
