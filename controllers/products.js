@@ -377,9 +377,13 @@ module.exports = {
                     req.flash('error', 'You cannot purchase your own product.');
                     res.redirect('back');
                 } else {
-                    let totalPrice = product.btcPrice + Number(1/req.body.btcrate * req.body.shippingRate);
+                    let totalPrice = product.btcPrice;
+                    let shippingPrice = 0;
+                    if (req.body.deliveryShipping === 'Shipping') {
+                        totalPrice += Number(1/req.body.btcrate * req.body.shippingRate);
+                        shippingPrice = Number(1/req.body.btcrate * req.body.shippingRate);
+                    }
                     let productPrice = product.btcPrice;
-                    let shippingPrice = Number(1/req.body.btcrate * req.body.shippingRate);
                     console.log(`totalPrice: ${totalPrice}`);
                     console.log(`productPrice: ${productPrice}`);
                     console.log(`shippingPrice: ${shippingPrice}`);
