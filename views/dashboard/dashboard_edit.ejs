@@ -28,8 +28,8 @@
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                         <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                            <input class="input" name="product[name]" value="<%= product.name %>" type="text" required 
-                            data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
+                            <input class="input" name="product[name]" value="<%= product.name %>" type="text" required maxlength="100"
+                            data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                             data-parsley-error-message=""	 data-parsley-trigger="change"/>
                             <div class="label" style="margin-left: 1vw;">
                                 <span class="registerTooltip" aria-label="Length: 3 - 100 characters
@@ -79,9 +79,9 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </select>
                         </div>
                         <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                            <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description" style="margin-left: 0;" required
-                                data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
-                                data-parsley-error-message="" data-parsley-trigger="change"><%= product.description %></textarea>
+                            <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description (500 characters)" style="margin-left: 0;" required
+                                maxlength="500" data-parsley-pattern="[A-Za-z0-9 ,.?!-]+"
+                                data-parsley-pattern-message="The description contains invalid characters" data-parsley-trigger="change"><%= product.description %></textarea>
                             <div class="label" style="margin-left: 1vw; margin-top: auto; margin-bottom: auto;">
                                 <span class="newTooltip" aria-label="Length: 3 - 100 characters
 Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
@@ -90,9 +90,17 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                         </div>
                         <br>
-                        <input type="text" id="tagInput" class="input" placeholder="Tags (separate by comma )" style="width: 90%;">
-                        <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden 
-                        data-parsley-error-message="" required>
+                        <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <input type="text" id="tagInput" class="input" placeholder="Tags" style="width: 90%;"
+                            data-parsley-pattern="^[A-Za-z0-9 .\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
+                            <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
+                            <div class="label" style="margin-left: 1vw;">
+                                <span class="registerTooltip" aria-label="Characters: Alphanumeric and the hyphen (-)" tabindex="-1">
+                                    <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
+                                </span>
+                        </div>
+                        </div>
+                        <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden  required>
                         <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;">
                             <% product.tags.forEach(tag => { %>
                                 <span class="tag is-link is-medium">

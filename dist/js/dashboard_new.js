@@ -6,14 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
     repeatable.classList.toggle('normal');
   });
 
-  const newCurrency = document.querySelectorAll('.new_cccy');
-  const newCurrencies = [].slice.call(newCurrency);
-  newCurrencies.forEach((item) => {
-    item.addEventListener('click', (event) => {
-      event.stopPropagation();
-      item.classList.toggle('gray');
-    });
-  });
+  // const newCurrency = document.querySelectorAll('.new_cccy');
+  // const newCurrencies = [].slice.call(newCurrency);
+  // newCurrencies.forEach((item) => {
+  //   item.addEventListener('click', (event) => {
+  //     event.stopPropagation();
+  //     item.classList.toggle('gray');
+  //   });
+  // });
+  
 
   const radio1 = document.getElementById('shipping-yes');
   const radio2 = document.getElementById('shipping-no');
