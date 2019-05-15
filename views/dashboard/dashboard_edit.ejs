@@ -203,6 +203,555 @@ All images are scaled to that ratio" tabindex="-1">
                     </div>
                     <br>
                     <div class="frame">
+                        <h4 class="new-text" style="margin-bottom: 2vh;">Would you like to offer shipping?</h4>
+                        <div class="field">
+                            <div class="control">
+                                <label class="radio">
+                                  <input type="radio" name="product[shipping]" id="shipping-yes" value="true" <% if (product.delivery.shipping == true) { %>checked<% } %> >
+                                  Yes
+                                </label>
+                                <label class="radio">
+                                  <input type="radio" name="product[shipping]" id="shipping-no" value="false" <% if (product.delivery.shipping == false) { %>checked<% } %> >
+                                  No
+                                </label>
+                              </div>
+                        </div>
+                        <div class="field" id="carriers" <% if (product.delivery.shipping == false) { %>style="display: none;"<% } %> >
+                            <div class="control">
+                                <h4 class="subtitle" style="margin-bottom: 2vh;">Please tick all carriers you want to offer</h4>
+                                <table class="new-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Logo</th>
+                                            <th>Carrier</th>
+                                            <th>Website</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/dhl_express-ee633140040ec6341cf30481125678b3.png" alt="dhl">
+                                            </td>
+                                            <td>DHL Express</td>
+                                            <td>
+                                                <a href="https://www.dhl.com/en/express.html" class="link" target="_blank">dhl.com</a>
+                                            </td>
+                                            <td>
+                                                <input name="dhl_express" type="checkbox" id="dhl_express" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.dhl_express == true) { %>checked<% } %> >
+                                                <label for="dhl_express" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/usps-3152d7513d82dcac47c2d86ecedda4f1.png" alt="usps">
+                                            </td>
+                                            <td>USPS</td>
+                                            <td>
+                                                <a href="https://www.usps.com/" class="link" target="_blank">usps.com</a>
+                                            </td>
+                                            <td>
+                                                <input name="usps" type="checkbox" id="usps" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.usps == true) { %>checked<% } %> >
+                                                <label for="usps" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/deutsche_post-464439383fe9a1b27e48bf59d57706f7.png" alt="deutsche post">
+                                            </td>
+                                            <td>Deutsche Post</td>
+                                            <td>
+                                                <a href="https://www.deutschepost.de/en/home.html" class="link" target="_blank">deutschepost.de</a>
+                                            </td>
+                                            <td>
+                                                <input name="deutsche_post" type="checkbox" id="deutsche_post" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.deutsche_post == true) { %>checked<% } %> >
+                                                <label for="deutsche_post" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/sendle-c3df69cdbcbf48dd6d396058ba0773a1.png" alt="sendle">
+                                            </td>
+                                            <td>Sendle</td>
+                                            <td>
+                                                <a href="https://www.sendle.com/" class="link" target="_blank">sendle.com</a>
+                                            </td>
+                                            <td>
+                                                <input name="sendle" type="checkbox" id="sendle" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.sendle == true) { %>checked<% } %> >
+                                                <label for="sendle" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/parcelforce-7163e9b39cf9a7ac7ed429bbe7bba5e9.png" alt="parcelforce">
+                                            </td>
+                                            <td>Parcelforce</td>
+                                            <td>
+                                                <a href="https://www.parcelforce.com/" class="link" target="_blank">parcelforce.com</a>
+                                            </td>
+                                            <td>
+                                                <input name="parcelforce" type="checkbox" id="parcelforce" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.parcelforce == true) { %>checked<% } %> >
+                                                <label for="parcelforce" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/fastway_australia-bedecbbb9cd948ce5d920621270af20b.png" alt="fastway">
+                                            </td>
+                                            <td>Fastway Australia</td>
+                                            <td>
+                                                <a href="https://www.fastway.com.au/" class="link" target="_blank">fastway.com.au</a>
+                                            </td>
+                                            <td>
+                                                <input name="fastway" type="checkbox" id="fastway" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.fastway == true) { %>checked<% } %> >
+                                                <label for="fastway" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="https://cdn.goshippo.com/assets/img/providers/140/couriersplease-88950638eaff6b93c00b2debc1627b3f.png" alt="couriers please">
+                                            </td>
+                                            <td>CouriersPlease</td>
+                                            <td>
+                                                <a href="https://www.couriersplease.com.au/" class="link" target="_blank">couriersplease.com.au</a>
+                                            </td>
+                                            <td>
+                                                <input name="couriersplease" type="checkbox" id="couriersplease" class="is-checkradio is-info is-large" value="true" <% if (product.carrier.couriersplease == true) { %>checked<% } %> >
+                                                <label for="couriersplease" style="padding-left: 2rem !important;"></label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <h2 class="subtitle">Your Delivery Details</h2>
+                                <div class="field">
+                                    <div class="control has-icons-left">
+                                        <div class="select is-fullwidth" style="margin: auto; width: 90%;">
+                                            <select name="country">
+                                                <option value="AF" <% if (product.delivery.country == 'AF') { %> selected <% } %> >Afghanistan</option>
+                                                <option value="AX" <% if (product.delivery.country == 'AX') { %> selected <% } %> >Åland Islands</option>
+                                                <option value="AL" <% if (product.delivery.country == 'AL') { %> selected <% } %> >Albania</option>
+                                                <option value="DZ" <% if (product.delivery.country == 'DZ') { %> selected <% } %> >Algeria</option>
+                                                <option value="AS" <% if (product.delivery.country == 'AS') { %> selected <% } %> >American Samoa</option>
+                                                <option value="AD" <% if (product.delivery.country == 'AD') { %> selected <% } %> >Andorra</option>
+                                                <option value="AO" <% if (product.delivery.country == 'AO') { %> selected <% } %> >Angola</option>
+                                                <option value="AI" <% if (product.delivery.country == 'AI') { %> selected <% } %> >Anguilla</option>
+                                                <option value="AQ" <% if (product.delivery.country == 'AQ') { %> selected <% } %> >Antarctica</option>
+                                                <option value="AG" <% if (product.delivery.country == 'AG') { %> selected <% } %> >Antigua and Barbuda</option>
+                                                <option value="AR" <% if (product.delivery.country == 'AR') { %> selected <% } %> >Argentina</option>
+                                                <option value="AM" <% if (product.delivery.country == 'AM') { %> selected <% } %> >Armenia</option>
+                                                <option value="AW" <% if (product.delivery.country == 'AW') { %> selected <% } %> >Aruba</option>
+                                                <option value="AU" <% if (product.delivery.country == 'AU') { %> selected <% } %> >Australia</option>
+                                                <option value="AT" <% if (product.delivery.country == 'AT') { %> selected <% } %> >Austria</option>
+                                                <option value="AZ" <% if (product.delivery.country == 'AZ') { %> selected <% } %> >Azerbaijan</option>
+                                                <option value="BS" <% if (product.delivery.country == 'BS') { %> selected <% } %> >Bahamas</option>
+                                                <option value="BH" <% if (product.delivery.country == 'BH') { %> selected <% } %> >Bahrain</option>
+                                                <option value="BD" <% if (product.delivery.country == 'BD') { %> selected <% } %> >Bangladesh</option>
+                                                <option value="BB" <% if (product.delivery.country == 'BB') { %> selected <% } %> >Barbados</option>
+                                                <option value="BY" <% if (product.delivery.country == 'BY') { %> selected <% } %> >Belarus</option>
+                                                <option value="BE" <% if (product.delivery.country == 'BE') { %> selected <% } %> >Belgium</option>
+                                                <option value="BZ" <% if (product.delivery.country == 'BZ') { %> selected <% } %> >Belize</option>
+                                                <option value="BJ" <% if (product.delivery.country == 'BJ') { %> selected <% } %> >Benin</option>
+                                                <option value="BM" <% if (product.delivery.country == 'BM') { %> selected <% } %> >Bermuda</option>
+                                                <option value="BT" <% if (product.delivery.country == 'BT') { %> selected <% } %> >Bhutan</option>
+                                                <option value="BO" <% if (product.delivery.country == 'BO') { %> selected <% } %> >Bolivia, Plurinational State of</option>
+                                                <option value="BQ" <% if (product.delivery.country == 'BQ') { %> selected <% } %> >Bonaire, Sint Eustatius and Saba</option>
+                                                <option value="BA" <% if (product.delivery.country == 'BA') { %> selected <% } %> >Bosnia and Herzegovina</option>
+                                                <option value="BW" <% if (product.delivery.country == 'BW') { %> selected <% } %> >Botswana</option>
+                                                <option value="BV" <% if (product.delivery.country == 'BV') { %> selected <% } %> >Bouvet Island</option>
+                                                <option value="BR" <% if (product.delivery.country == 'BR') { %> selected <% } %> >Brazil</option>
+                                                <option value="IO" <% if (product.delivery.country == 'IO') { %> selected <% } %> >British Indian Ocean Territory</option>
+                                                <option value="BN" <% if (product.delivery.country == 'BN') { %> selected <% } %> >Brunei Darussalam</option>
+                                                <option value="BG" <% if (product.delivery.country == 'BG') { %> selected <% } %> >Bulgaria</option>
+                                                <option value="BF" <% if (product.delivery.country == 'BF') { %> selected <% } %> >Burkina Faso</option>
+                                                <option value="BI" <% if (product.delivery.country == 'BI') { %> selected <% } %> >Burundi</option>
+                                                <option value="KH" <% if (product.delivery.country == 'KH') { %> selected <% } %> >Cambodia</option>
+                                                <option value="CM" <% if (product.delivery.country == 'CM') { %> selected <% } %> >Cameroon</option>
+                                                <option value="CA" <% if (product.delivery.country == 'CA') { %> selected <% } %> >Canada</option>
+                                                <option value="CV" <% if (product.delivery.country == 'CV') { %> selected <% } %> >Cape Verde</option>
+                                                <option value="KY" <% if (product.delivery.country == 'KY') { %> selected <% } %> >Cayman Islands</option>
+                                                <option value="CF" <% if (product.delivery.country == 'CF') { %> selected <% } %> >Central African Republic</option>
+                                                <option value="TD" <% if (product.delivery.country == 'TD') { %> selected <% } %> >Chad</option>
+                                                <option value="CL" <% if (product.delivery.country == 'CL') { %> selected <% } %> >Chile</option>
+                                                <option value="CN" <% if (product.delivery.country == 'CN') { %> selected <% } %> >China</option>
+                                                <option value="CX" <% if (product.delivery.country == 'CX') { %> selected <% } %> >Christmas Island</option>
+                                                <option value="CC" <% if (product.delivery.country == 'CC') { %> selected <% } %> >Cocos (Keeling) Islands</option>
+                                                <option value="CO" <% if (product.delivery.country == 'CO') { %> selected <% } %> >Colombia</option>
+                                                <option value="KM" <% if (product.delivery.country == 'KM') { %> selected <% } %> >Comoros</option>
+                                                <option value="CG" <% if (product.delivery.country == 'CG') { %> selected <% } %> >Congo</option>
+                                                <option value="CD" <% if (product.delivery.country == 'CD') { %> selected <% } %> >Congo, the Democratic Republic of the</option>
+                                                <option value="CK" <% if (product.delivery.country == 'CK') { %> selected <% } %> >Cook Islands</option>
+                                                <option value="CR" <% if (product.delivery.country == 'CR') { %> selected <% } %> >Costa Rica</option>
+                                                <option value="CI" <% if (product.delivery.country == 'CI') { %> selected <% } %> >Côte d'Ivoire</option>
+                                                <option value="HR" <% if (product.delivery.country == 'HR') { %> selected <% } %> >Croatia</option>
+                                                <option value="CU" <% if (product.delivery.country == 'CU') { %> selected <% } %> >Cuba</option>
+                                                <option value="CW" <% if (product.delivery.country == 'CW') { %> selected <% } %> >Curaçao</option>
+                                                <option value="CY" <% if (product.delivery.country == 'CY') { %> selected <% } %> >Cyprus</option>
+                                                <option value="CZ" <% if (product.delivery.country == 'CZ') { %> selected <% } %> >Czech Republic</option>
+                                                <option value="DK" <% if (product.delivery.country == 'DK') { %> selected <% } %> >Denmark</option>
+                                                <option value="DJ" <% if (product.delivery.country == 'DJ') { %> selected <% } %> >Djibouti</option>
+                                                <option value="DM" <% if (product.delivery.country == 'DM') { %> selected <% } %> >Dominica</option>
+                                                <option value="DO" <% if (product.delivery.country == 'DO') { %> selected <% } %> >Dominican Republic</option>
+                                                <option value="EC" <% if (product.delivery.country == 'EC') { %> selected <% } %> >Ecuador</option>
+                                                <option value="EG" <% if (product.delivery.country == 'EG') { %> selected <% } %> >Egypt</option>
+                                                <option value="SV" <% if (product.delivery.country == 'SV') { %> selected <% } %> >El Salvador</option>
+                                                <option value="GQ" <% if (product.delivery.country == 'GQ') { %> selected <% } %> >Equatorial Guinea</option>
+                                                <option value="ER" <% if (product.delivery.country == 'ER') { %> selected <% } %> >Eritrea</option>
+                                                <option value="EE" <% if (product.delivery.country == 'EE') { %> selected <% } %> >Estonia</option>
+                                                <option value="ET" <% if (product.delivery.country == 'ET') { %> selected <% } %> >Ethiopia</option>
+                                                <option value="FK" <% if (product.delivery.country == 'FK') { %> selected <% } %> >Falkland Islands (Malvinas)</option>
+                                                <option value="FO" <% if (product.delivery.country == 'FO') { %> selected <% } %> >Faroe Islands</option>
+                                                <option value="FJ" <% if (product.delivery.country == 'FJ') { %> selected <% } %> >Fiji</option>
+                                                <option value="FI" <% if (product.delivery.country == 'FI') { %> selected <% } %> >Finland</option>
+                                                <option value="FR" <% if (product.delivery.country == 'FR') { %> selected <% } %> >France</option>
+                                                <option value="GF" <% if (product.delivery.country == 'GF') { %> selected <% } %> >French Guiana</option>
+                                                <option value="PF" <% if (product.delivery.country == 'PF') { %> selected <% } %> >French Polynesia</option>
+                                                <option value="TF" <% if (product.delivery.country == 'TF') { %> selected <% } %> >French Southern Territories</option>
+                                                <option value="GA" <% if (product.delivery.country == 'GA') { %> selected <% } %> >Gabon</option>
+                                                <option value="GM" <% if (product.delivery.country == 'GM') { %> selected <% } %> >Gambia</option>
+                                                <option value="GE" <% if (product.delivery.country == 'GE') { %> selected <% } %> >Georgia</option>
+                                                <option value="DE" <% if (product.delivery.country == 'DE') { %> selected <% } %> >Germany</option>
+                                                <option value="GH" <% if (product.delivery.country == 'GH') { %> selected <% } %> >Ghana</option>
+                                                <option value="GI" <% if (product.delivery.country == 'GI') { %> selected <% } %> >Gibraltar</option>
+                                                <option value="GR" <% if (product.delivery.country == 'GR') { %> selected <% } %> >Greece</option>
+                                                <option value="GL" <% if (product.delivery.country == 'GL') { %> selected <% } %> >Greenland</option>
+                                                <option value="GD" <% if (product.delivery.country == 'GD') { %> selected <% } %> >Grenada</option>
+                                                <option value="GP" <% if (product.delivery.country == 'GP') { %> selected <% } %> >Guadeloupe</option>
+                                                <option value="GU" <% if (product.delivery.country == 'GU') { %> selected <% } %> >Guam</option>
+                                                <option value="GT" <% if (product.delivery.country == 'GT') { %> selected <% } %> >Guatemala</option>
+                                                <option value="GG" <% if (product.delivery.country == 'GG') { %> selected <% } %> >Guernsey</option>
+                                                <option value="GN" <% if (product.delivery.country == 'GN') { %> selected <% } %> >Guinea</option>
+                                                <option value="GW" <% if (product.delivery.country == 'GW') { %> selected <% } %> >Guinea-Bissau</option>
+                                                <option value="GY" <% if (product.delivery.country == 'GY') { %> selected <% } %> >Guyana</option>
+                                                <option value="HT" <% if (product.delivery.country == 'HT') { %> selected <% } %> >Haiti</option>
+                                                <option value="HM" <% if (product.delivery.country == 'HM') { %> selected <% } %> >Heard Island and McDonald Islands</option>
+                                                <option value="VA" <% if (product.delivery.country == 'VA') { %> selected <% } %> >Holy See (Vatican City State)</option>
+                                                <option value="HN" <% if (product.delivery.country == 'HN') { %> selected <% } %> >Honduras</option>
+                                                <option value="HK" <% if (product.delivery.country == 'HK') { %> selected <% } %> >Hong Kong</option>
+                                                <option value="HU" <% if (product.delivery.country == 'HU') { %> selected <% } %> >Hungary</option>
+                                                <option value="IS" <% if (product.delivery.country == 'IS') { %> selected <% } %> >Iceland</option>
+                                                <option value="IN" <% if (product.delivery.country == 'IN') { %> selected <% } %> >India</option>
+                                                <option value="ID" <% if (product.delivery.country == 'ID') { %> selected <% } %> >Indonesia</option>
+                                                <option value="IR" <% if (product.delivery.country == 'IR') { %> selected <% } %> >Iran, Islamic Republic of</option>
+                                                <option value="IQ" <% if (product.delivery.country == 'IQ') { %> selected <% } %> >Iraq</option>
+                                                <option value="IE" <% if (product.delivery.country == 'IE') { %> selected <% } %> >Ireland</option>
+                                                <option value="IM" <% if (product.delivery.country == 'IM') { %> selected <% } %> >Isle of Man</option>
+                                                <option value="IL" <% if (product.delivery.country == 'IL') { %> selected <% } %> >Israel</option>
+                                                <option value="IT" <% if (product.delivery.country == 'IT') { %> selected <% } %> >Italy</option>
+                                                <option value="JM" <% if (product.delivery.country == 'JM') { %> selected <% } %> >Jamaica</option>
+                                                <option value="JP" <% if (product.delivery.country == 'JP') { %> selected <% } %> >Japan</option>
+                                                <option value="JE" <% if (product.delivery.country == 'JE') { %> selected <% } %> >Jersey</option>
+                                                <option value="JO" <% if (product.delivery.country == 'JO') { %> selected <% } %> >Jordan</option>
+                                                <option value="KZ" <% if (product.delivery.country == 'KZ') { %> selected <% } %> >Kazakhstan</option>
+                                                <option value="KE" <% if (product.delivery.country == 'KE') { %> selected <% } %> >Kenya</option>
+                                                <option value="KI" <% if (product.delivery.country == 'KI') { %> selected <% } %> >Kiribati</option>
+                                                <option value="KP" <% if (product.delivery.country == 'KP') { %> selected <% } %> >Korea, Democratic People's Republic of</option>
+                                                <option value="KR" <% if (product.delivery.country == 'KR') { %> selected <% } %> >Korea, Republic of</option>
+                                                <option value="KW" <% if (product.delivery.country == 'KW') { %> selected <% } %> >Kuwait</option>
+                                                <option value="KG" <% if (product.delivery.country == 'KG') { %> selected <% } %> >Kyrgyzstan</option>
+                                                <option value="LA" <% if (product.delivery.country == 'LA') { %> selected <% } %> >Lao People's Democratic Republic</option>
+                                                <option value="LV" <% if (product.delivery.country == 'LV') { %> selected <% } %> >Latvia</option>
+                                                <option value="LB" <% if (product.delivery.country == 'LB') { %> selected <% } %> >Lebanon</option>
+                                                <option value="LS" <% if (product.delivery.country == 'LS') { %> selected <% } %> >Lesotho</option>
+                                                <option value="LR" <% if (product.delivery.country == 'LR') { %> selected <% } %> >Liberia</option>
+                                                <option value="LY" <% if (product.delivery.country == 'LY') { %> selected <% } %> >Libya</option>
+                                                <option value="LI" <% if (product.delivery.country == 'LI') { %> selected <% } %> >Liechtenstein</option>
+                                                <option value="LT" <% if (product.delivery.country == 'LT') { %> selected <% } %> >Lithuania</option>
+                                                <option value="LU" <% if (product.delivery.country == 'LU') { %> selected <% } %> >Luxembourg</option>
+                                                <option value="MO" <% if (product.delivery.country == 'MO') { %> selected <% } %> >Macao</option>
+                                                <option value="MK" <% if (product.delivery.country == 'MK') { %> selected <% } %> >Macedonia, the former Yugoslav Republic of</option>
+                                                <option value="MG" <% if (product.delivery.country == 'MG') { %> selected <% } %> >Madagascar</option>
+                                                <option value="MW" <% if (product.delivery.country == 'MW') { %> selected <% } %> >Malawi</option>
+                                                <option value="MY" <% if (product.delivery.country == 'MY') { %> selected <% } %> >Malaysia</option>
+                                                <option value="MV" <% if (product.delivery.country == 'MV') { %> selected <% } %> >Maldives</option>
+                                                <option value="ML" <% if (product.delivery.country == 'ML') { %> selected <% } %> >Mali</option>
+                                                <option value="MT" <% if (product.delivery.country == 'MT') { %> selected <% } %> >Malta</option>
+                                                <option value="MH" <% if (product.delivery.country == 'MH') { %> selected <% } %> >Marshall Islands</option>
+                                                <option value="MQ" <% if (product.delivery.country == 'MQ') { %> selected <% } %> >Martinique</option>
+                                                <option value="MR" <% if (product.delivery.country == 'MR') { %> selected <% } %> >Mauritania</option>
+                                                <option value="MU" <% if (product.delivery.country == 'MU') { %> selected <% } %> >Mauritius</option>
+                                                <option value="YT" <% if (product.delivery.country == 'YT') { %> selected <% } %> >Mayotte</option>
+                                                <option value="MX" <% if (product.delivery.country == 'MX') { %> selected <% } %> >Mexico</option>
+                                                <option value="FM" <% if (product.delivery.country == 'FM') { %> selected <% } %> >Micronesia, Federated States of</option>
+                                                <option value="MD" <% if (product.delivery.country == 'MD') { %> selected <% } %> >Moldova, Republic of</option>
+                                                <option value="MC" <% if (product.delivery.country == 'MC') { %> selected <% } %> >Monaco</option>
+                                                <option value="MN" <% if (product.delivery.country == 'MN') { %> selected <% } %> >Mongolia</option>
+                                                <option value="ME" <% if (product.delivery.country == 'ME') { %> selected <% } %> >Montenegro</option>
+                                                <option value="MS" <% if (product.delivery.country == 'MS') { %> selected <% } %> >Montserrat</option>
+                                                <option value="MA" <% if (product.delivery.country == 'MA') { %> selected <% } %> >Morocco</option>
+                                                <option value="MZ" <% if (product.delivery.country == 'MZ') { %> selected <% } %> >Mozambique</option>
+                                                <option value="MM" <% if (product.delivery.country == 'MM') { %> selected <% } %> >Myanmar</option>
+                                                <option value="NA" <% if (product.delivery.country == 'NA') { %> selected <% } %> >Namibia</option>
+                                                <option value="NR" <% if (product.delivery.country == 'NR') { %> selected <% } %> >Nauru</option>
+                                                <option value="NP" <% if (product.delivery.country == 'NP') { %> selected <% } %> >Nepal</option>
+                                                <option value="NL" <% if (product.delivery.country == 'NL') { %> selected <% } %> >Netherlands</option>
+                                                <option value="NC" <% if (product.delivery.country == 'NC') { %> selected <% } %> >New Caledonia</option>
+                                                <option value="NZ" <% if (product.delivery.country == 'NZ') { %> selected <% } %> >New Zealand</option>
+                                                <option value="NI" <% if (product.delivery.country == 'NI') { %> selected <% } %> >Nicaragua</option>
+                                                <option value="NE" <% if (product.delivery.country == 'NE') { %> selected <% } %> >Niger</option>
+                                                <option value="NG" <% if (product.delivery.country == 'NG') { %> selected <% } %> >Nigeria</option>
+                                                <option value="NU" <% if (product.delivery.country == 'NU') { %> selected <% } %> >Niue</option>
+                                                <option value="NF" <% if (product.delivery.country == 'NF') { %> selected <% } %> >Norfolk Island</option>
+                                                <option value="MP" <% if (product.delivery.country == 'MP') { %> selected <% } %> >Northern Mariana Islands</option>
+                                                <option value="NO" <% if (product.delivery.country == 'NO') { %> selected <% } %> >Norway</option>
+                                                <option value="OM" <% if (product.delivery.country == 'OM') { %> selected <% } %> >Oman</option>
+                                                <option value="PK" <% if (product.delivery.country == 'PK') { %> selected <% } %> >Pakistan</option>
+                                                <option value="PW" <% if (product.delivery.country == 'PW') { %> selected <% } %> >Palau</option>
+                                                <option value="PS" <% if (product.delivery.country == 'PS') { %> selected <% } %> >Palestinian Territory, Occupied</option>
+                                                <option value="PA" <% if (product.delivery.country == 'PA') { %> selected <% } %> >Panama</option>
+                                                <option value="PG" <% if (product.delivery.country == 'PG') { %> selected <% } %> >Papua New Guinea</option>
+                                                <option value="PY" <% if (product.delivery.country == 'PY') { %> selected <% } %> >Paraguay</option>
+                                                <option value="PE" <% if (product.delivery.country == 'PE') { %> selected <% } %> >Peru</option>
+                                                <option value="PH" <% if (product.delivery.country == 'PH') { %> selected <% } %> >Philippines</option>
+                                                <option value="PN" <% if (product.delivery.country == 'PN') { %> selected <% } %> >Pitcairn</option>
+                                                <option value="PL" <% if (product.delivery.country == 'PL') { %> selected <% } %> >Poland</option>
+                                                <option value="PT" <% if (product.delivery.country == 'PT') { %> selected <% } %> >Portugal</option>
+                                                <option value="PR" <% if (product.delivery.country == 'PR') { %> selected <% } %> >Puerto Rico</option>
+                                                <option value="QA" <% if (product.delivery.country == 'QA') { %> selected <% } %> >Qatar</option>
+                                                <option value="RE" <% if (product.delivery.country == 'RE') { %> selected <% } %> >Réunion</option>
+                                                <option value="RO" <% if (product.delivery.country == 'RO') { %> selected <% } %> >Romania</option>
+                                                <option value="RU" <% if (product.delivery.country == 'RU') { %> selected <% } %> >Russian Federation</option>
+                                                <option value="RW" <% if (product.delivery.country == 'RW') { %> selected <% } %> >Rwanda</option>
+                                                <option value="BL" <% if (product.delivery.country == 'BL') { %> selected <% } %> >Saint Barthélemy</option>
+                                                <option value="SH" <% if (product.delivery.country == 'SH') { %> selected <% } %> >Saint Helena, Ascension and Tristan da Cunha</option>
+                                                <option value="KN" <% if (product.delivery.country == 'KN') { %> selected <% } %> >Saint Kitts and Nevis</option>
+                                                <option value="LC" <% if (product.delivery.country == 'LC') { %> selected <% } %> >Saint Lucia</option>
+                                                <option value="MF" <% if (product.delivery.country == 'MF') { %> selected <% } %> >Saint Martin (French part)</option>
+                                                <option value="PM" <% if (product.delivery.country == 'PM') { %> selected <% } %> >Saint Pierre and Miquelon</option>
+                                                <option value="VC" <% if (product.delivery.country == 'VC') { %> selected <% } %> >Saint Vincent and the Grenadines</option>
+                                                <option value="WS" <% if (product.delivery.country == 'WS') { %> selected <% } %> >Samoa</option>
+                                                <option value="SM" <% if (product.delivery.country == 'SM') { %> selected <% } %> >San Marino</option>
+                                                <option value="ST" <% if (product.delivery.country == 'ST') { %> selected <% } %> >Sao Tome and Principe</option>
+                                                <option value="SA" <% if (product.delivery.country == 'SA') { %> selected <% } %> >Saudi Arabia</option>
+                                                <option value="SN" <% if (product.delivery.country == 'SN') { %> selected <% } %> >Senegal</option>
+                                                <option value="RS" <% if (product.delivery.country == 'RS') { %> selected <% } %> >Serbia</option>
+                                                <option value="SC" <% if (product.delivery.country == 'SC') { %> selected <% } %> >Seychelles</option>
+                                                <option value="SL" <% if (product.delivery.country == 'SL') { %> selected <% } %> >Sierra Leone</option>
+                                                <option value="SG" <% if (product.delivery.country == 'SG') { %> selected <% } %> >Singapore</option>
+                                                <option value="SX" <% if (product.delivery.country == 'SX') { %> selected <% } %> >Sint Maarten (Dutch part)</option>
+                                                <option value="SK" <% if (product.delivery.country == 'SK') { %> selected <% } %> >Slovakia</option>
+                                                <option value="SI" <% if (product.delivery.country == 'SI') { %> selected <% } %> >Slovenia</option>
+                                                <option value="SB" <% if (product.delivery.country == 'SB') { %> selected <% } %> >Solomon Islands</option>
+                                                <option value="SO" <% if (product.delivery.country == 'SO') { %> selected <% } %> >Somalia</option>
+                                                <option value="ZA" <% if (product.delivery.country == 'ZA') { %> selected <% } %> >South Africa</option>
+                                                <option value="GS" <% if (product.delivery.country == 'GS') { %> selected <% } %> >South Georgia and the South Sandwich Islands</option>
+                                                <option value="SS" <% if (product.delivery.country == 'SS') { %> selected <% } %> >South Sudan</option>
+                                                <option value="ES" <% if (product.delivery.country == 'ES') { %> selected <% } %> >Spain</option>
+                                                <option value="LK" <% if (product.delivery.country == 'LK') { %> selected <% } %> >Sri Lanka</option>
+                                                <option value="SD" <% if (product.delivery.country == 'SD') { %> selected <% } %> >Sudan</option>
+                                                <option value="SR" <% if (product.delivery.country == 'SR') { %> selected <% } %> >Suriname</option>
+                                                <option value="SJ" <% if (product.delivery.country == 'SJ') { %> selected <% } %> >Svalbard and Jan Mayen</option>
+                                                <option value="SZ" <% if (product.delivery.country == 'SZ') { %> selected <% } %> >Swaziland</option>
+                                                <option value="SE" <% if (product.delivery.country == 'SE') { %> selected <% } %> >Sweden</option>
+                                                <option value="CH" <% if (product.delivery.country == 'CH') { %> selected <% } %> >Switzerland</option>
+                                                <option value="SY" <% if (product.delivery.country == 'SY') { %> selected <% } %> >Syrian Arab Republic</option>
+                                                <option value="TW" <% if (product.delivery.country == 'TW') { %> selected <% } %> >Taiwan, Province of China</option>
+                                                <option value="TJ" <% if (product.delivery.country == 'TJ') { %> selected <% } %> >Tajikistan</option>
+                                                <option value="TZ" <% if (product.delivery.country == 'TZ') { %> selected <% } %> >Tanzania, United Republic of</option>
+                                                <option value="TH" <% if (product.delivery.country == 'TH') { %> selected <% } %> >Thailand</option>
+                                                <option value="TL" <% if (product.delivery.country == 'TL') { %> selected <% } %> >Timor-Leste</option>
+                                                <option value="TG" <% if (product.delivery.country == 'TG') { %> selected <% } %> >Togo</option>
+                                                <option value="TK" <% if (product.delivery.country == 'TK') { %> selected <% } %> >Tokelau</option>
+                                                <option value="TO" <% if (product.delivery.country == 'TO') { %> selected <% } %> >Tonga</option>
+                                                <option value="TT" <% if (product.delivery.country == 'TT') { %> selected <% } %> >Trinidad and Tobago</option>
+                                                <option value="TN" <% if (product.delivery.country == 'TN') { %> selected <% } %> >Tunisia</option>
+                                                <option value="TR" <% if (product.delivery.country == 'TR') { %> selected <% } %> >Turkey</option>
+                                                <option value="TM" <% if (product.delivery.country == 'TM') { %> selected <% } %> >Turkmenistan</option>
+                                                <option value="TC" <% if (product.delivery.country == 'TC') { %> selected <% } %> >Turks and Caicos Islands</option>
+                                                <option value="TV" <% if (product.delivery.country == 'TV') { %> selected <% } %> >Tuvalu</option>
+                                                <option value="UG" <% if (product.delivery.country == 'UG') { %> selected <% } %> >Uganda</option>
+                                                <option value="UA" <% if (product.delivery.country == 'UA') { %> selected <% } %> >Ukraine</option>
+                                                <option value="AE" <% if (product.delivery.country == 'AE') { %> selected <% } %> >United Arab Emirates</option>
+                                                <option value="GB" <% if (product.delivery.country == 'GB') { %> selected <% } %> >United Kingdom</option>
+                                                <option value="US" <% if (product.delivery.country == 'US') { %> selected <% } %> >United States</option>
+                                                <option value="UM" <% if (product.delivery.country == 'UM') { %> selected <% } %> >United States Minor Outlying Islands</option>
+                                                <option value="UY" <% if (product.delivery.country == 'UY') { %> selected <% } %> >Uruguay</option>
+                                                <option value="UZ" <% if (product.delivery.country == 'UZ') { %> selected <% } %> >Uzbekistan</option>
+                                                <option value="VU" <% if (product.delivery.country == 'VU') { %> selected <% } %> >Vanuatu</option>
+                                                <option value="VE" <% if (product.delivery.country == 'VE') { %> selected <% } %> >Venezuela, Bolivarian Republic of</option>
+                                                <option value="VN" <% if (product.delivery.country == 'VN') { %> selected <% } %> >Viet Nam</option>
+                                                <option value="VG" <% if (product.delivery.country == 'VG') { %> selected <% } %> >Virgin Islands, British</option>
+                                                <option value="VI" <% if (product.delivery.country == 'VI') { %> selected <% } %> >Virgin Islands, U.S.</option>
+                                                <option value="WF" <% if (product.delivery.country == 'WF') { %> selected <% } %> >Wallis and Futuna</option>
+                                                <option value="EH" <% if (product.delivery.country == 'EH') { %> selected <% } %> >Western Sahara</option>
+                                                <option value="YE" <% if (product.delivery.country == 'YE') { %> selected <% } %> >Yemen</option>
+                                                <option value="ZM" <% if (product.delivery.country == 'ZM') { %> selected <% } %> >Zambia</option>
+                                                <option value="ZW" <% if (product.delivery.country == 'ZW') { %> selected <% } %> >Zimbabwe</option>
+                                            </select>
+                                            <span class="icon is-large is-left">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.state) { %>
+                                            <input class="input" name="state" type="text" value="<%= product.delivery.state %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="state" type="text" placeholder="State or County"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-globe-americas"></i>
+                                        </span>
+                                        <p class="help">State is mandatory for US and CA only. Please use two character abbreviation.</p>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.city) { %>
+                                            <input class="input" name="city" type="text" value="<%= product.delivery.city %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="city" type="text" placeholder="City"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-city"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.street1) { %>
+                                            <input class="input" name="street1" type="text" value="<%= product.delivery.street1 %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="street1" type="text" placeholder="Street"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-road"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.zip) { %>
+                                            <input class="input" name="zip" type="text" value="<%= product.delivery.zip %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="zip" type="text" placeholder="Zip Code"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-sort-numeric-down"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.phone) { %>
+                                            <input class="input" name="phone" type="tel" value="<%= product.delivery.phone %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="phone" type="tel" placeholder="Contact Phone Number"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-phone"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.name) { %>
+                                            <input class="input" name="name" type="tel" value="<%= product.delivery.name %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="name" type="tel" placeholder="Contact Person Name"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user-tie"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <% if(product.delivery.email) { %>
+                                            <input class="input" name="email" type="tel" value="<%= product.delivery.email %>"/>
+                                        <% } else { %>
+                                            <input class="input" name="email" type="tel" placeholder="Contact Email"/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <br>
+                            <h2 class="subtitle">Parcel Size</h2>
+                            <div class="field is-horizontal has-addons" style="margin: auto; width: 90%;">
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control has-icons-left is-expanded">
+                                            <% if(product.parcel.parcel_length) { %>
+                                                <input class="input is-fullwidth" name="parcel_length" type="number" value="<%= product.parcel.parcel_length %>"/>
+                                            <% } else { %>
+                                                <input class="input is-fullwidth" name="parcel_length" type="number" placeholder="Length"/>
+                                            <% } %>
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-ruler"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control has-icons-left is-expanded">
+                                            <% if(product.parcel.parcel_width) { %>
+                                                <input class="input is-fullwidth" name="parcel_width" type="number" value="<%= product.parcel.parcel_width %>"/>
+                                            <% } else { %>
+                                                <input class="input is-fullwidth" name="parcel_width" type="number" placeholder="Width"/>
+                                            <% } %>
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-ruler-horizontal"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control has-icons-left is-expanded">
+                                            <% if(product.parcel.parcel_height) { %>
+                                                <input class="input is-fullwidth" name="parcel_height" type="number" value="<%= product.parcel.parcel_height %>"/>
+                                            <% } else { %>
+                                                <input class="input is-fullwidth" name="parcel_height" type="number" placeholder="Height"/>
+                                            <% } %>
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-ruler-vertical"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control">
+                                            <div class="select">
+                                                <select name="parcel_distance_unit">
+                                                    <option value="cm" <% if (product.parcel.parcel_distance_unit == 'cm') { %> selected <% } %> >cm</option>
+                                                    <option value="in" <% if (product.parcel.parcel_distance_unit == 'in') { %> selected <% } %> >in</option>
+                                                    <option value="ft" <% if (product.parcel.parcel_distance_unit == 'ft') { %> selected <% } %> >ft</option>
+                                                    <option value="mm" <% if (product.parcel.parcel_distance_unit == 'mm') { %> selected <% } %> >mm</option>
+                                                    <option value="m" <% if (product.parcel.parcel_distance_unit == 'm') { %> selected <% } %> >m</option>
+                                                    <option value="yd" <% if (product.parcel.parcel_distance_unit == 'yd') { %> selected <% } %> >yd</option>
+                                                </select>
+                                            </div>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal has-addons" style="margin: auto; width: 90%; margin-top: 1vh;">
+                                <p class="control has-icons-left is-expanded">
+                                    <% if(product.parcel.parcel_weight) { %>
+                                        <input class="input is-fullwidth" name="parcel_weight" type="number" value="<%= product.parcel.parcel_weight %>"/>
+                                    <% } else { %>
+                                        <input class="input is-fullwidth" name="parcel_weight" type="number" placeholder="Weight"/>
+                                    <% } %>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-weight-hanging"></i>
+                                    </span>
+                                </p>
+                                <p class="control">
+                                    <div class="select">
+                                        <select name="parcel_weight_unit">
+                                            <option value="g" <% if (product.parcel.parcel_weight_unit == 'g') { %> selected <% } %> >g</option>
+                                            <option value="oz" <% if (product.parcel.parcel_weight_unit == 'oz') { %> selected <% } %> >oz</option>
+                                            <option value="lb" <% if (product.parcel.parcel_weight_unit == 'lb') { %> selected <% } %> >lb</option>
+                                            <option value="kg" <% if (product.parcel.parcel_weight_unit == 'kg') { %> selected <% } %> >kg</option>
+                                        </select>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
                         <div class="field">
                             <p class="control has-icons-left smmargin" style="margin: auto;">

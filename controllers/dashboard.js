@@ -808,12 +808,58 @@ module.exports = {
       req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
       req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
-      req.check('product[description]', 'The description must contain between 10 and 500 characters.').notEmpty().isLength({min: 10, max: 500});
+      req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
       req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
       req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
+      req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
+      req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
+      req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+      req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
+      .trim();
+      req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
+      .trim();
+      req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+        .trim();
+      req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+        .trim();
+      if(req.body.state) {
+        req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+          .trim();
+      }
+      req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+        .trim();
+      req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+        .trim();
+      req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
+      req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
+      req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
+      req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
+      req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
+      req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
+      if(req.body.dhl_express) {
+        req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.usps) {
+        req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.sendle) {
+        req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.parcelforce) {
+        req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.deutsche_post) {
+        req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.couriersplease) {
+        req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
+      if(req.body.fastway) {
+        req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      }
       const errors = req.validationErrors();
       if (errors) {
         res.render('dashboard/dashboard_new', {
@@ -1029,13 +1075,59 @@ module.exports = {
     req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
     req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
-    req.check('product[description]', 'The description must contain between 10 and 500 characters.').notEmpty().isLength({min: 10, max: 500});
+    req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
     req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
     req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
+    req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
+    req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
+    req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+    req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
+    .trim();
+    req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
+    .trim();
+    req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+      .trim();
+    req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+      .trim();
+    if(req.body.state) {
+      req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+        .trim();
+    }
+    req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+      .trim();
+    req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+      .trim();
+    req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
+    req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
+    req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
+    req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
+    req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
+    req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
+    if(req.body.dhl_express) {
+      req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.usps) {
+      req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.sendle) {
+      req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.parcelforce) {
+      req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.deutsche_post) {
+      req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.couriersplease) {
+      req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
+    if(req.body.fastway) {
+      req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    }
     const errors = req.validationErrors();
     if (errors) {
       res.render('dashboard/dashboard_edit', {
@@ -1088,11 +1180,68 @@ module.exports = {
         }
       }
 
-      const btcPrice = req.body.product.btc_price;
+      const btcPrice = Number(req.body.product.btc_price);
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
         product.repeatable = "false";
+      }
+      if (req.body.product.shipping === 'true') {
+        product.delivery = {
+          shipping: true,
+          name: req.body.name,
+          street1: req.body.street1,
+          city: req.body.city,
+          state: req.body.state,
+          zip: req.body.zip,
+          country: req.body.country,
+          phone: req.body.phone,
+          email: req.body.email,
+        };
+        product.parcel = {
+          parcel_length: req.body.parcel_length,
+          parcel_width: req.body.parcel_width,
+          parcel_height: req.body.parcel_height,
+          parcel_distance_unit: req.body.parcel_distance_unit,
+          parcel_weight: req.body.parcel_weight,
+          parcel_weight_unit: req.body.parcel_weight_unit,
+        };
+        product.carrier = {
+          dhl_express: false,
+          usps: false,
+          sendle: false,
+          parcelforce: false,
+          deutsche_post: false,
+          couriersplease: false,
+          fastway: false,
+        };
+        if(req.body.dhl_express === 'true') {
+          product.carrier.dhl_express = true;
+        }
+        if(req.body.usps === 'true') {
+          product.carrier.usps = true;
+        }
+        if(req.body.deutsche_post === 'true') {
+          product.carrier.deutsche_post = true;
+        }
+        if(req.body.sendle === 'true') {
+          product.carrier.sendle = true;
+        }
+        if(req.body.parcelforce === 'true') {
+          product.carrier.parcelforce = true;
+        }
+        if(req.body.fastway === 'true') {
+          product.carrier.fastway = true;
+        }
+        if(req.body.couriersplease === 'true') {
+          product.carrier.couriersplease = true;
+        }
+      } else {
+        product.delivery = {
+          shipping: false,
+        }
+        product.parcel = {};
+        product.carrier = {};
       }
       // Everything is stored in constants so we can protect against
       // people making fields in the DevTools

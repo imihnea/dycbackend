@@ -136,7 +136,7 @@ module.exports = {
                 const result = JSON.stringify(transaction);
                 console.log(`Full transaction details: ${result}`);
                 if(result.status === 'ERROR') {
-                    req.flash('error', 'Eroare');
+                    req.flash('error', 'There\'s been an error creating the label, please try again.');
                     return res.redirect('back');
                 } else {
                     dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -144,7 +144,7 @@ module.exports = {
                     const buyer = await User.findById(deal.buyer.id);
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
-                            link: `http://${req.headers.host}/deals/${deal._id}`, // Change this to tracking link
+                            link: result.tracking_url_provider, // Tracking url
                             footerlink: `http://${req.headers.host}/dashboard/notifications`,
                             name: deal.product.name,
                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
