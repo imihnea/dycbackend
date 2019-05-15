@@ -1,6 +1,7 @@
 <% include ../partials/header %>
 
 <link rel="stylesheet" href="../../dist/css/lognreg.css">
+<link rel="stylesheet" href="/dist/css/parsley.css">
 
 <div class="hero-body">
     <% if (errors) { %>
@@ -23,10 +24,12 @@
             <div class="column is-three-fifths frame" >
                 <p class="title">Contact</p>
                 <% if (!user) { %>
-                    <form action="/contact/send" method="POST">
+                    <form action="/contact/send" method="POST" data-parsley-validate>
                         <div class="field">
                             <p class="control has-icons-left">
-                                <input class="input" name="name" placeholder="Your name" type="text" required  autofocus/>
+                                <input class="input" name="name" placeholder="Your name" type="text" required  autofocus
+                                maxlength="500" data-parsley-pattern="[a-zA-Z0-9 -]+"  data-parsley-pattern-message="The name contains invalid characters" 
+                                data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-user-tie"></i>
                                 </span>
@@ -34,7 +37,8 @@
                         </div>
                         <div class="field">
                             <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="your@email.com" type="email" required />
+                                <input class="input" name="email" placeholder="your@email.com" type="email" required 
+                                data-parsley-error-message="This email address is invalid" data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
@@ -51,7 +55,7 @@
                         </div>
                         <div class="field" >
                             <div class="control">
-                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                <textarea class="textarea" name="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
                             </div>
                         </div>
                         <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
@@ -63,7 +67,9 @@
                     <form action="/contact/sendUser" method="POST">
                         <div class="field">
                             <p class="control has-icons-left">
-                                <input class="input" name="name" placeholder="Your name" type="text" value="<%= user.name %>" required autofocus/>
+                                <input class="input" name="name" placeholder="Your name" type="text" value="<%= user.name %>" required autofocus
+                                maxlength="500" data-parsley-pattern="[a-zA-Z0-9 -]+"  data-parsley-pattern-message="The name contains invalid characters" 
+                                data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-user-tie"></i>
                                 </span>
@@ -71,7 +77,8 @@
                         </div>
                         <div class="field">
                             <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="your@email.com" type="email" value="<%= user.email %>" required />
+                                <input class="input" name="email" placeholder="your@email.com" type="email" value="<%= user.email %>" required 
+                                data-parsley-error-message="This email address is invalid" data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
@@ -96,7 +103,7 @@
                         </div>
                         <div class="field" >
                             <div class="control">
-                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                <textarea class="textarea" name="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
                             </div>
                         </div>
                         <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
@@ -113,3 +120,5 @@
 </div>
 <% include ../partials/footer %>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../../dist/js/parsley.min.js"></script>

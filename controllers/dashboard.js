@@ -816,7 +816,7 @@ module.exports = {
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
       req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
-      req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+      req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi).trim();
       req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
       .trim();
       req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })

@@ -1214,14 +1214,13 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty()
+      req.check('name', 'The name contains invalid characters.').matches(/^[a-zA-Z0-9 -]+$/g).trim().notEmpty()
       .isLength({ max: 500 });
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
       .trim()
       .isLength({ max: 500 });
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
-      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty()
-      .isLength({ max: 500 });
+      req.check('message', 'The message is too long.').notEmpty().trim().isLength({ max: 2000 });
       const validationErrors = req.validationErrors();
       if (validationErrors) {
         res.render('index/contact', {
@@ -1233,11 +1232,12 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       } else {
+        const message = escapeHTML(req.body.message);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
           name: req.body.name,
           email: req.body.email,
           topic: req.body.topic,
-          message: req.body.message,
+          message,
           subject: 'Deal Your Crypto - Contact Request',
         }, function (err, data) {
           if (err) {
@@ -1261,7 +1261,7 @@ module.exports = {
               res.redirect('back', { error: error.message });
             }
             req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-            res.redirect('/contact');
+            res.redirect('/');
           });
         }
        });
@@ -1294,14 +1294,13 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-      req.check('name', 'The name contains illegal characters.').matches(/^[a-zA-Z -]+$/g).trim().notEmpty()
+      req.check('name', 'The name contains invalid characters.').matches(/^[a-zA-Z0-9 -]+$/g).trim().notEmpty()
       .isLength({ max: 500 });
       req.check('email', 'The email address is invalid.').isEmail().normalizeEmail().notEmpty()
       .trim()
       .isLength({ max: 500 });
       req.check('topic', 'Something went wrong. Please try again.').matches(/^(General|Payments|Delivery|Bugs|Suggestions)$/g).notEmpty();
-      req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 .,!?]+$/).trim().notEmpty()
-      .isLength({ max: 500 });
+      req.check('message', 'The message is too long.').notEmpty().trim().isLength({ max: 2000 });
       const validationErrors = req.validationErrors();
       if (validationErrors) {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
@@ -1351,7 +1350,7 @@ module.exports = {
                 res.redirect('back', { error: error.message });
               }
               req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-              res.redirect('/contact');
+              res.redirect('/');
             });
           }
          });
@@ -1380,7 +1379,7 @@ module.exports = {
                 res.redirect('back', { error: error.message });
               }
               req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-              res.redirect('/contact');
+              res.redirect('/');
             });
           }
          });

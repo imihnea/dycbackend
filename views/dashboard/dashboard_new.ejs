@@ -28,8 +28,8 @@
                         <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                             <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                                <input class="input" name="product[name]" placeholder="Name" type="text" required 
-                                    data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
+                                <input class="input" name="product[name]" placeholder="Name" type="text" required maxlength="100" minlength="3"
+                                    data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                                     data-parsley-error-message=""	 data-parsley-trigger="change"/>
                                 <div class="label" style="margin-left: 1vw;">
                                     <span class="registerTooltip" aria-label="Length: 3 - 100 characters
@@ -78,8 +78,8 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </select>
                             </div>
                             <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                                <textarea name="product[description]" class="textarea" placeholder="Description" style="margin-left: 0;" required
-                                    data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
+                                <textarea name="product[description]" class="textarea" placeholder="Description (500 characters)" style="margin-left: 0;" required
+                                    maxlength="500" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                                     data-parsley-error-message="" data-parsley-trigger="keyup"></textarea>
                                 <div class="label" style="margin-left: 1vw; margin-top: auto; margin-bottom: auto;">
                                     <span class="newTooltip" aria-label="Length: 3 - 100 characters
@@ -90,7 +90,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                             <br>
                             <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
-                                <input type="text" id="tagInput" class="input" placeholder="Tags"
+                                <input type="text" id="tagInput" class="input" placeholder="Tags" 
                                     data-parsley-pattern="^[A-Za-z0-9 .,\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
                                 <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                                 <div class="label" style="margin-left: 1vw;">
@@ -99,7 +99,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                     </span>
                                 </div>
                             </div>
-                            <input type="text" name="product[tags]" id="tags" hidden>
+                            <input type="text" name="product[tags]" id="tags" maxlength="500" hidden>
                             <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;"></div>
                             <br>
                             <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
