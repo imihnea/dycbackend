@@ -369,6 +369,10 @@ module.exports = {
                     .trim();
                 req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
                     .trim();
+                req.check('shippingRate', 'Please choose a correct shipping rate.').notEmpty().isLength({ min: 3, max: 500 }).matches(/^[a-z0-9 .,-]+$/gi)
+                .trim();
+                req.check('rate', 'Something went wrong, please try again.').notEmpty().isLength({ min: 3, max: 500 }).isAlphanumeric()
+                .trim();
             }
             errors = req.validationErrors();
             if (errors) {
