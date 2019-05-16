@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal,
-        createAddress, verifyAddress } = require('../controllers/deals');
+        createAddress, verifyAddress, completeRefund } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
@@ -27,6 +27,9 @@ router.put('/:id/decline', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongs
 
 // complete deal
 router.put('/:id/complete', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeDeal));
+
+// complete deal refund
+router.put('/:id/completeRefund', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeRefund));
 
 // send refund request message
 router.put('/:id/refundRequest', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundRequest));

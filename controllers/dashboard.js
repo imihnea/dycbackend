@@ -203,7 +203,7 @@ module.exports = {
             ]
           }, {
             status: {
-              $in: ['Processing Refund', 'Refunded', 'Refund denied']
+              $in: ['Processing Refund', 'Refunded', 'Refund denied', 'Refund Pending']
             }
           }
         ]

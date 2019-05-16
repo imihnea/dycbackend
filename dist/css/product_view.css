@@ -11,10 +11,11 @@
     margin-right: auto;
 	top: 0;
 	max-width: 50vw;
-	max-height: 55vh;
-	border-style: solid;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
 	border-radius: 10px;
 	width: auto !important;
+	min-width: 100%;
+    object-fit: contain;
 }
 
 .mImg{
@@ -26,7 +27,8 @@
     margin-right: auto;
 	top: 0;
 	max-width: 50vw;
-	max-height: 55vh;
+	min-width: 100%;
+    object-fit: contain;
 }
 
 .noDisp{
@@ -58,12 +60,11 @@
 
 .thumbnailsDiv{
 	margin: auto; 
-	background-color: #d6dada;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
 	border-radius: 5px; 
 	display: flex; 
 	padding: 20px; 
 	width: fit-content;
-	border-style: solid;
 }
 
 .thumbnails label {

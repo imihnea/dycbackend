@@ -13,7 +13,7 @@
                                 <%= chat.user1.avatarUrl %>
                             <% } else { %>
                                 <%= chat.user2.avatarUrl %>
-                            <% } %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                            <% } %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
                         </figure>
                     </div>
                     <br>
@@ -113,13 +113,13 @@
                 <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 1vh;">
                     <div>
                         <figure class="image is-128x128" style="margin:auto;">
-                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
                         </figure>
                     </div>
                     <br>
                     <div class=" prod_info ">  
                         <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
-                        <div class="prices openPrices frame" style="width: 80% !important; background-color: #c1c7c7 !important;">
+                        <div class="prices openPrices frame" style="width: 80% !important;">
                             <p class="price_text" style="padding-left: 10px;"> <%= chat.product.price %></p>
                             <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>

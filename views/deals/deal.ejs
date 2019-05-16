@@ -18,7 +18,7 @@
                     <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
                         <div>
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= buyer.avatar.url %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                                <img src="<%= buyer.avatar.url %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
                             </figure>
                         </div>
                         <br>
@@ -73,7 +73,7 @@
                     <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
                         <div>
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= seller.avatar.url %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                                <img src="<%= seller.avatar.url %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
                             </figure>
                         </div>
                         <br>
@@ -173,13 +173,13 @@
                     <div class="messageProfile frame productFrame smallerCenter">
                         <div>                   
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px; height: inherit;">
+                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px; height: inherit;">
                             </figure>
                         </div>
                         <br>
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
-                            <div class="prices openPrices frame" style="width: 80% !important; background-color: #c1c7c7 !important;">
+                            <div class="prices openPrices frame" style="width: 80% !important;">
                                     <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
                                     <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                 </div>
@@ -270,7 +270,7 @@
                                                                 <select name="option" style="width: 100%;">
                                                                     <option selected disabled>Refund option</option>
                                                                     <option value="Money Back">Money Back</option>
-                                                                    <option value="New Object">New object (if possible)</option>
+                                                                    <option value="New Product">Replace Product (if possible)</option>
                                                                 </select>
                                                             </div>
                                                             <div class="field" style="margin-top: 3px;">
@@ -290,7 +290,7 @@
                             <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested')) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>                            
                                 <button class="button is-primary refundRequest">Ask for a refund</button>
-                                <div class="modal modalRefundRequest">
+                                <div class="modal modalrefundRequest">
                                     <div class="modal-background"></div>
                                         <div class="modal-card">
                                             <header class="modal-card-head">
@@ -311,7 +311,7 @@
                                                         <select name="option" style="width: 100%;">
                                                             <option value="" selected disabled>Refund option</option>
                                                             <option value="Money Back">Money Back</option>
-                                                            <option value="New Object">New object (if possible)</option>
+                                                            <option value="New Product">Replace Product (if possible)</option>
                                                         </select>
                                                     </div>
                                                     <div class="field" style="margin-top: 3px;">
@@ -350,7 +350,7 @@
                                                         </form>
                                                         <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
                                                             <input type="text" name="refundOption" value="New Product" hidden>                                                
-                                                            <button class="button is-primary">Send another product</button>
+                                                            <button class="button is-primary">Send replacement</button>
                                                         </form>
                                                     </div>
                                                     <br>
@@ -390,7 +390,12 @@
                             <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
                                 <div class="buttons has-addons is-centered">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
-                                    <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                                    <form action="/deals/<%= deal._id %>/completeRefund?_method=PUT" method="POST"><button class="button is-success">Complete Refund</button></form>
+                                </div>
+                            <% } %>
+                            <% if ((deal.status === 'Processing Refund') && (user._id.toString() === buyer._id.toString())) { %>
+                                <div class="buttons has-addons is-centered">
+                                    <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                 </div>
                             <% } %>
                             <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === seller._id.toString())) { %>
