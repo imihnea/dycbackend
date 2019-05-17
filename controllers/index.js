@@ -8,6 +8,8 @@ const async = require('async');
 const crypto = require('crypto');
 const User = require('../models/user');
 const Product = require('../models/product');
+const Withdraw = require('../models/withdrawRequests');
+const Profit = require('../models/profit');
 const Subscription = require('../models/subscription');
 const searchTerm = require('../models/searchTerm');
 const { errorLogger, userLogger } = require('../config/winston');
@@ -1564,4 +1566,15 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
+  async getAdmin (req, res) {
+    const profit = await Profit.find({status: 'Unpaid'});
+    const withdrawals = await Withdraw.find({status: 'Processing'});
+    res.render('admin', {
+      profit,
+      withdrawals,
+      pageTitle: 'Administration - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  }
 };

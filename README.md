@@ -10,7 +10,6 @@ Frontend:
 
     Low Priority:
 
-         Admin page
          Make everything responsive (see comments in css files)
          Better email wording
 
@@ -21,6 +20,10 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
+
+      Admin page => Withdraw logic
+                 => Profit reset logic
+                 => Call createProfit where necessary
       
    Low Priority:
 

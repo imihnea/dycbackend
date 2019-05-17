@@ -1,0 +1,188 @@
+<% include partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+
+<%
+    let withdrawTotal = 0;
+    withdrawals.forEach(item => {
+        withdrawTotal += item.amount;
+    });
+
+    let totalProfits = 0;
+    profit.forEach(item => {
+        totalProfits += item.amount;
+    });
+
+%>
+
+<div class="hero-body">
+    <div class="column dashboard" style="margin-bottom: 4vh;">
+        <div class="column dashTop">
+            <h2 class="title">Admin Page</h2>
+        </div>
+        <br>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+                <div class="frame smallerCenter">
+                    <p class="title">Withdrawals</p>
+                    <div style="display: flex; width: 80%; margin: auto;">
+                        <label for="withdrawTotal">
+                            Total to Withdraw
+                        </label>
+                        <input type="text" name="withdrawTotal" class="input" id="withdrawTotal" value="<%= withdrawTotal %>" readonly>
+                    </div>
+                    <br>
+                    <div class="column">
+                        <div class="buttons">
+                            <form action="/admin/acceptAll" style="margin: auto;">
+                                <input type="text" name="withdrawIDs" value="" hidden required>
+                                <button class="button is-primary">Withdraw all</button>
+                            </form>
+                            <form action="/admin/denyAll" style="margin: auto;">
+                                <input type="text" name="withdrawIDs" value="" hidden required>
+                                <button class="button is-danger">Deny all</button>
+                            </form>
+                        </div>
+                        <br>
+                        <p class="title is-4">Withdrawal requests</p>
+                        <table class="table is-hoverable is-bordered new-table" >
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>ID</th>
+                                    <th>User ID</th>
+                                    <th>Address</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% withdrawals.forEach((item, index) => { %>
+                                <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td style="word-break: break-all;"><%= item._id %></td>
+                                        <td style="word-break: break-all;"><%= item.userID %></td>
+                                        <td style="word-break: break-all;"><%= item.address %></td>
+                                        <td style="word-break: break-all;"><%= item.amount %></td>
+                                        <td style="word-break: break-all;"><%= item.withdrawDate.toUTCString() %></td>    
+                                        <td>
+                                            <form action="/admin/accept/<%= item._id %>">
+                                                <button class="button is-primary">Accept</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="/admin/deny/<%= item._id %>">
+                                                <button class="button is-danger">Deny</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="frame smallerCenter">
+                    <p class="title">Profits</p>
+                    <div style="display: flex; width: 80%; margin: auto;">
+                            <label for="withdrawTotalProfits">
+                                Total to Withdraw
+                            </label>
+                            <input type="text" name="withdrawTotalProfits" class="input" id="withdrawTotalProfits" value="<%= totalProfits %>" readonly>
+                        </div>
+                        <br>
+                        <div class="column">
+                            <div class="buttons">
+                                <form action="/admin/resetProfits" style="margin: auto;">
+                                    <button class="button is-primary">Reset</button>
+                                    <input type="text" name="profitIDs" value="" hidden required>
+                                    <sub>Click when the total amount was converted into fiat</sub>
+                                </form>
+                            </div>
+                            <br>
+                            <p class="title is-4">Unpaid profits</p>
+                            <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>ID</th>
+                                        <th>Acquired</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% profit.forEach((item, index) => { %>
+                                    <tr>
+                                        <td><%= index+1 %></td>
+                                        <td style="word-break: break-all;"><%= item._id %></td>
+                                        <td style="word-break: break-all;"><%= item.acquired %></td>
+                                        <td style="word-break: break-all;"><%= item.amount %></td>
+                                        <td style="word-break: break-all;"><%= item.profitDate.toUTCString() %></td>
+                                        <th>
+                                            <form action="/admin/delete/<%= item._id %>">
+                                                <button class="button is-danger">Delete</button>
+                                            </form>
+                                        </th>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+                <br>
+                <div class="frame smallerCenter">
+                    <p class="title">Users</p>
+                    <div class="column">
+                        
+                            <p class="title is-4">
+                                Ban user
+                            </p>
+                            <form action="/admin/banUser" style="margin: auto; max-width: 346px;">
+                                <div class="field">
+                                    <input type="text" class="input" name="userid" placeholder="User ID">
+                                </div>
+                                <div class="select field">
+                                    <select name="time" id="">
+                                        <option value="" selected disabled>Time</option>
+                                        <option value="1d">1 day</option>
+                                        <option value="3d">3 days</option>
+                                        <option value="7d">7 days</option>
+                                        <option value="1m">1 month</option>
+                                        <option value="perm">Permanent</option>
+                                    </select>
+                                </div>
+                                <div class="select field">
+                                    <select name="reason" id="">
+                                        <option value="" selected disabled>Reason</option>
+                                        <option value="Scam">Scamming</option>
+                                        <option value="Suspect">Suspect Activity</option>
+                                    </select>
+                                </div>
+                                <button class="button is-primary">Ban</button>
+                            </form>
+                            <br>
+                            <p class="title is-4">
+                                Promote to partner
+                            </p>
+                            <form action="/admin/partnerUser" style="margin: auto; max-width: 346px;">
+                                <div class="field">
+                                    <input type="text" name="userid" placeholder="User ID" class="input">
+                                </div>
+                                <button class="button is-primary">Promote</button>
+                            </form>
+                       
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div>
+</div>
+
+<% include partials/footer %>

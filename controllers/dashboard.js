@@ -9,6 +9,8 @@ const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Withdraw = require('../models/withdrawRequests');
+const Profit = require('../models/profit');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
 const request = require("request");
@@ -20,6 +22,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const { errorLogger, userLogger, productLogger } = require('../config/winston');
 const { withdraw } = require('../config/withdraw');
+const { createProfit } = require('../config/profit');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -402,82 +405,124 @@ module.exports = {
   //Withdraw BTC from Coinbase
   async withdraw(req, res) {
     let CurrentUser = await User.findById(req.user._id);
-    var address = req.body.address;
-    var amount = Number(req.body.value) + 0.00005000;
-    console.log(req.body.value);
-    console.log(amount);
-    client.getAccount('primary', function(err, account) {
-      if(err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        req.flash('error', 'There was a problem with your request, please try again.');
+    req.check('address', 'Invalid address format').notEmpty().isLength({ min: 26, max: 80 });
+    req.check('address', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]+$/g);
+    req.check('value', 'The value must be a number').notEmpty().isLength({max: 50}).isNumeric();
+    const errors = req.validationErrors();
+    if (errors) {
+      var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
+      request(url, function(error, response, body){
+        if(!error && response.statusCode == 200) {
+          var json = JSON.parse(body);
+          var data = json.data;
+          var btcrate = data.btc.rate;
+          var maxConfirmationsBTC = data.btc.maxConfirmations;
+          res.render('dashboard/dashboard_addr', 
+            { 
+              user: req.user,
+              btcrate,
+              maxConfirmationsBTC,
+              errors,
+              csrfToken: req.body.csrfSecret,
+              pageTitle: 'Addresses - Deal Your Crypto',
+              pageDescription: 'Description',
+              pageKeywords: 'Keywords'
+            });
+        }
+      });
+    } else {
+      const amount = Number(req.body.value) + 0.00005000;
+      if (amount <= CurrentUser.btcbalance) {
+        CurrentUser.btcbalance -= amount;
+        await Withdraw.create({
+          address: CurrentUser.btcadr,
+          amount,
+          withdrawDate: Date.now(),
+          userID: CurrentUser._id
+        });
+        await CurrentUser.save();
+        if (process.env.NODE_ENV == 'Production') {
+          userLogger.info(`Message: Withdraw request for ${amount} BTC created\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+        req.flash('success', 'Your withdrawal request has been registered.');
         res.redirect('back');
       } else {
-        if(req.user.btcbalance >= amount) {
-          account.sendMoney(
-            {
-              'to': address,
-              'amount': amount,
-              'currency': 'BTC'
-            }, function(err, tx) {
-              if(err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
-                res.redirect('back');
-              } else {
-                console.log(tx);
-                var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } });
-                query_btc.then(function(doc) {
-                  const withdrawal = {
-                    amount,
-                    sentTo: address
-                  };
-                  query_btc.withdrawal.push(withdrawal);
-                  query_btc.save();
-                  if(CurrentUser.email_notifications.user === true) {
-                    ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-                      link: `http://${req.headers.host}/dashboard/address`,
-                      footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                      amount: amount,
-                      address: address,
-                      subject: 'Withdraw request success - Deal Your Crypto',
-                    }, function (err, data) {
-                      if (err) {
-                          console.log(err);
-                      } else {
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`,
-                            to: `${user.email}`,
-                            subject: 'Currency withdrawn successfully',
-                            html: data,
-                        };
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                              console.log(error);
-                              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            }
-                            if (process.env.NODE_ENV === 'production') {
-                              userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            }
-                            req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-                            res.redirect('back');
-                            console.log(`Withdrawn ${amount} BTC successfully.`);
-                        });
-                      }
-                    });
-                  } else {
-                    req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-                    return res.redirect('back');
-                  }
-                });
-              }
-            }
-          );
-        } else {
-          req.flash('error', `Insufficient funds to withdraw.`);
-          res.redirect('back');
-        }
+        req.flash('error', 'Your balance is smaller than the amount requested.');
+        res.redirect('back');
       }
-    });
+    }
+    // client.getAccount('primary', function(err, account) {
+    //   if(err) {
+    //     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    //     req.flash('error', 'There was a problem with your request, please try again.');
+    //     res.redirect('back');
+    //   } else {
+    //     if(req.user.btcbalance >= amount) {
+    //       account.sendMoney(
+    //         {
+    //           'to': address,
+    //           'amount': amount,
+    //           'currency': 'BTC'
+    //         }, function(err, tx) {
+    //           if(err) {
+    //             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    //             req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
+    //             res.redirect('back');
+    //           } else {
+    //             console.log(tx);
+    //             var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } });
+    //             query_btc.then(function(doc) {
+    //               const withdrawal = {
+    //                 amount,
+    //                 sentTo: address
+    //               };
+    //               query_btc.withdrawal.push(withdrawal);
+    //               query_btc.save();
+    //               if(CurrentUser.email_notifications.user === true) {
+    //                 ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+    //                   link: `http://${req.headers.host}/dashboard/address`,
+    //                   footerlink: `http://${req.headers.host}/dashboard/notifications`,
+    //                   amount: amount,
+    //                   address: address,
+    //                   subject: 'Withdraw request success - Deal Your Crypto',
+    //                 }, function (err, data) {
+    //                   if (err) {
+    //                       console.log(err);
+    //                   } else {
+    //                     const mailOptions = {
+    //                         from: `Deal Your Crypto <noreply@dyc.com>`,
+    //                         to: `${user.email}`,
+    //                         subject: 'Currency withdrawn successfully',
+    //                         html: data,
+    //                     };
+    //                     transporter.sendMail(mailOptions, (error) => {
+    //                         if (error) {
+    //                           console.log(error);
+    //                           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    //                         }
+    //                         if (process.env.NODE_ENV === 'production') {
+    //                           userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    //                         }
+    //                         req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+    //                         res.redirect('back');
+    //                         console.log(`Withdrawn ${amount} BTC successfully.`);
+    //                     });
+    //                   }
+    //                 });
+    //               } else {
+    //                 req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+    //                 return res.redirect('back');
+    //               }
+    //             });
+    //           }
+    //         }
+    //       );
+    //     } else {
+    //       req.flash('error', `Insufficient funds to withdraw.`);
+    //       res.redirect('back');
+    //     }
+    //   }
+    // });
   },
   //Displays available pairs for BTC
   async CoinSwitchPair(req, res) {
@@ -685,7 +730,7 @@ module.exports = {
           const data = json.data;
           const btcrate = data.btc.rate;
           const tokenprice = 1/btcrate; // 1 USD
-          const totalPrice = tokens * tokenprice;
+          const totalPrice = Number((tokens * tokenprice).toFixed(8));
           if (user.btcbalance >= totalPrice) {
               user.btcbalance -= totalPrice;
               user.feature_tokens += tokens;
@@ -697,6 +742,7 @@ module.exports = {
                 } else {
                   // REQUIRES TESTING
                   // withdraw(req, totalPrice);
+                  createProfit(req, totalPrice, 'Tokens');
                   if (process.env.NODE_ENV === 'production') {
                     userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }

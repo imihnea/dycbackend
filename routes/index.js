@@ -8,6 +8,7 @@ const {
   postRegister,
   confirmEmail,
   resendEmail,
+  getAdmin,
   getLogin,
   postLogin,
   getLogout,
@@ -44,7 +45,7 @@ const {
 
 const middleware = require('../middleware/index');
 
-const { asyncErrorHandler, isLoggedIn, checkId } = middleware; // destructuring assignment
+const { asyncErrorHandler, isLoggedIn, checkId, isAdmin } = middleware; // destructuring assignment
 
 // index route
 router.get('/', asyncErrorHandler(getIndex));
@@ -82,6 +83,9 @@ router.post('/2factor', isLoggedIn, asyncErrorHandler(post2factor));
 router.get('/disable2factor/:token', postDisable2Factor);
 
 router.post('/disable2factor', isLoggedIn, postDisable2FactorRequest);
+
+// admin page
+router.get('/admin', asyncErrorHandler(isAdmin), asyncErrorHandler(getAdmin));
 
 //  show login form
 router.get('/login', getLogin);

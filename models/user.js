@@ -15,6 +15,11 @@ const UserSchema = new Schema({
     type: String,
     set: toLower,
   },
+  accountType: {type: String, default: 'Standard'},
+  admin: {
+    status: {type: Boolean, default: false},
+    profit: {type: Number, default: 0}
+  },
   confirmed: { 
     type: Boolean, 
     default: false,

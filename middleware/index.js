@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const Review = require('../models/review');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
+const User = require('../models/user');
 const Subscription = require('../models/subscription');
 
 const jwt = require('jsonwebtoken');
@@ -154,5 +155,26 @@ module.exports = {
       }
     }
     return next();
+  },
+  isAdmin: async (req, res, next) => {
+    const idRegex = new RegExp(/^[a-f0-9]{24}$/);
+    if (req.user != undefined) {
+      const id = req.user._id.toString();
+      if (id.match(idRegex) == null) {
+        req.flash('error', 'That page does not exist.');
+        return res.redirect('/error');
+      } else {
+        const user = await User.findById(req.user._id);
+        if (user.admin.status === true) {
+          return next();
+        } else {
+          req.flash('error', 'That page does not exist.');
+          return res.redirect('/error');
+        }
+      }
+    } else {
+      req.flash('error', 'That page does not exist.');
+      return res.redirect('/error');
+    }
   }
 };
