@@ -111,6 +111,8 @@ const reviewsRoutes = require('./routes/reviews');
 
 const dealsRoutes = require('./routes/deals');
 
+const adminRoutes = require('./routes/admin');
+
 const savvycallbackRoutes = require('./routes/savvy/callback');
 
 const savvycurrenciesRoutes = require('./routes/savvy/currencies');
@@ -308,6 +310,7 @@ app.use('/profile', profileRoutes);
 app.use('/messages', messagesRoutes);
 app.use('/reviews', reviewsRoutes);
 app.use('/deals', dealsRoutes);
+app.use('/admin', adminRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {

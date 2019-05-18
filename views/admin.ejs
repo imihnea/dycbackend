@@ -35,12 +35,12 @@
                     <br>
                     <div class="column">
                         <div class="buttons">
-                            <form action="/admin/acceptAll" style="margin: auto;">
-                                <input type="text" name="withdrawIDs" value="" hidden required>
+                            <form action="/admin/acceptAll?_method=PUT" method="POST" style="margin: auto;">
+                                <input type="text" name="withdrawIDs" value="<% withdrawals.forEach(item => { %><%= item._id %> <%});%>" hidden required>
                                 <button class="button is-primary">Withdraw all</button>
                             </form>
-                            <form action="/admin/denyAll" style="margin: auto;">
-                                <input type="text" name="withdrawIDs" value="" hidden required>
+                            <form action="/admin/denyAll?_method=PUT" method="POST" style="margin: auto;">
+                                <input type="text" name="withdrawIDs" value="<% withdrawals.forEach(item => { %><%= item._id %> <%});%>" hidden required>
                                 <button class="button is-danger">Deny all</button>
                             </form>
                         </div>
@@ -69,12 +69,17 @@
                                         <td style="word-break: break-all;"><%= item.amount %></td>
                                         <td style="word-break: break-all;"><%= item.withdrawDate.toUTCString() %></td>    
                                         <td>
-                                            <form action="/admin/accept/<%= item._id %>">
+                                            <form action="/admin/accept/<%= item._id %>?_method=PUT" method="POST">
                                                 <button class="button is-primary">Accept</button>
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="/admin/deny/<%= item._id %>">
+                                            <form action="/admin/deny/<%= item._id %>?_method=PUT" method="POST">
+                                                <select name="action" id="action">
+                                                    <option value="" disabled selected>Action</option>
+                                                    <option value="moneyBack">Money Back</option>
+                                                    <option value="noMoney">No money back</option>
+                                                </select>
                                                 <button class="button is-danger">Deny</button>
                                             </form>
                                         </td>
@@ -96,9 +101,9 @@
                         <br>
                         <div class="column">
                             <div class="buttons">
-                                <form action="/admin/resetProfits" style="margin: auto;">
-                                    <button class="button is-primary">Reset</button>
-                                    <input type="text" name="profitIDs" value="" hidden required>
+                                <form action="/admin/deleteAll?_method=PUT" method="POST" style="margin: auto;">
+                                    <button class="button is-primary">Delete</button>
+                                    <input type="text" name="profitIDs" value="<% profit.forEach(item => { %><%= item._id %> <%});%>" hidden required>
                                     <sub>Click when the total amount was converted into fiat</sub>
                                 </form>
                             </div>
@@ -124,7 +129,7 @@
                                         <td style="word-break: break-all;"><%= item.amount %></td>
                                         <td style="word-break: break-all;"><%= item.profitDate.toUTCString() %></td>
                                         <th>
-                                            <form action="/admin/delete/<%= item._id %>">
+                                            <form action="/admin/delete/<%= item._id %>?_method=PUT" method="POST">
                                                 <button class="button is-danger">Delete</button>
                                             </form>
                                         </th>
@@ -142,7 +147,7 @@
                             <p class="title is-4">
                                 Ban user
                             </p>
-                            <form action="/admin/banUser" style="margin: auto; max-width: 346px;">
+                            <form action="/admin/banUser?_method=PUT" method="POST" style="margin: auto; max-width: 346px;">
                                 <div class="field">
                                     <input type="text" class="input" name="userid" placeholder="User ID">
                                 </div>
@@ -169,7 +174,7 @@
                             <p class="title is-4">
                                 Promote to partner
                             </p>
-                            <form action="/admin/partnerUser" style="margin: auto; max-width: 346px;">
+                            <form action="/admin/partnerUser?_method=PUT" method="POST" style="margin: auto; max-width: 346px;">
                                 <div class="field">
                                     <input type="text" name="userid" placeholder="User ID" class="input">
                                 </div>

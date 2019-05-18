@@ -8,7 +8,6 @@ const {
   postRegister,
   confirmEmail,
   resendEmail,
-  getAdmin,
   getLogin,
   postLogin,
   getLogout,
@@ -83,9 +82,6 @@ router.post('/2factor', isLoggedIn, asyncErrorHandler(post2factor));
 router.get('/disable2factor/:token', postDisable2Factor);
 
 router.post('/disable2factor', isLoggedIn, postDisable2FactorRequest);
-
-// admin page
-router.get('/admin', asyncErrorHandler(isAdmin), asyncErrorHandler(getAdmin));
 
 //  show login form
 router.get('/login', getLogin);

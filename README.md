@@ -21,9 +21,7 @@ Backend:
       Security => Validate and sanitize every user input
                => Anti DDOS
 
-      Admin page => Withdraw logic
-                 => Profit reset logic
-                 => Call createProfit where necessary
+      Admin page => Call createProfit where necessary
       
    Low Priority:
 

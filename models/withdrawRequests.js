@@ -10,6 +10,8 @@ const withdrawSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    userEmail: String,
+    notify: Boolean,
     status: {type: String, default: 'Processing'}
 });
 

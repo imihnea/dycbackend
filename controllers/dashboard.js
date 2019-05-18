@@ -43,13 +43,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const Client = require('coinbase').Client;
-
-const client = new Client({
-  'apiKey': process.env.COINBASE_API_KEY,
-  'apiSecret': process.env.COINBASE_API_SECRET,
-});
-
 const transporter = nodemailer.createTransport({
   host: EMAIL_HOST,
   port: EMAIL_PORT,
@@ -438,91 +431,62 @@ module.exports = {
           address: CurrentUser.btcadr,
           amount,
           withdrawDate: Date.now(),
-          userID: CurrentUser._id
+          userID: CurrentUser._id,
+          userEmail: CurrentUser.email,
+          notify: CurrentUser.email_notifications.user
         });
+        const withdrawal = {
+          amount,
+          sentTo: address
+        };
+        CurrentUser.withdrawal.push(withdrawal);
         await CurrentUser.save();
+        if(CurrentUser.email_notifications.user === true) {
+          ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+          link: `http://${req.headers.host}/dashboard/address`,
+          footerlink: `http://${req.headers.host}/dashboard/notifications`,
+          amount,
+          address: CurrentUser.btcadr,
+          subject: 'Withdraw request success - Deal Your Crypto',
+        }, 
+        function (err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                const mailOptions = {
+                    from: `Deal Your Crypto <noreply@dyc.com>`,
+                    to: `${CurrentUser.email}`,
+                    subject: 'Currency withdrawn successfully',
+                    html: data,
+                };
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                      console.log(error);
+                      errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                    if (process.env.NODE_ENV === 'production') {
+                      userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                    req.flash('success', `${amount} BTC successfully requested for withdrawal!`);
+                    res.redirect('back');
+                    console.log(`Withdrawn ${amount} BTC successfully.`);
+                });
+            }
+          });
+        } else {
+            req.flash('success', `${amount} BTC successfully requested for withdrawal!`);
+            return res.redirect('back');
+        }
         if (process.env.NODE_ENV == 'Production') {
           userLogger.info(`Message: Withdraw request for ${amount} BTC created\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
         req.flash('success', 'Your withdrawal request has been registered.');
         res.redirect('back');
       } else {
-        req.flash('error', 'Your balance is smaller than the amount requested.');
+        req.flash('error', 'Insufficient funds.');
         res.redirect('back');
       }
     }
-    // client.getAccount('primary', function(err, account) {
-    //   if(err) {
-    //     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //     req.flash('error', 'There was a problem with your request, please try again.');
-    //     res.redirect('back');
-    //   } else {
-    //     if(req.user.btcbalance >= amount) {
-    //       account.sendMoney(
-    //         {
-    //           'to': address,
-    //           'amount': amount,
-    //           'currency': 'BTC'
-    //         }, function(err, tx) {
-    //           if(err) {
-    //             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //             req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
-    //             res.redirect('back');
-    //           } else {
-    //             console.log(tx);
-    //             var query_btc = User.findByIdAndUpdate({ _id: req.user._id }, { $inc: { btcbalance: -amount } });
-    //             query_btc.then(function(doc) {
-    //               const withdrawal = {
-    //                 amount,
-    //                 sentTo: address
-    //               };
-    //               query_btc.withdrawal.push(withdrawal);
-    //               query_btc.save();
-    //               if(CurrentUser.email_notifications.user === true) {
-    //                 ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-    //                   link: `http://${req.headers.host}/dashboard/address`,
-    //                   footerlink: `http://${req.headers.host}/dashboard/notifications`,
-    //                   amount: amount,
-    //                   address: address,
-    //                   subject: 'Withdraw request success - Deal Your Crypto',
-    //                 }, function (err, data) {
-    //                   if (err) {
-    //                       console.log(err);
-    //                   } else {
-    //                     const mailOptions = {
-    //                         from: `Deal Your Crypto <noreply@dyc.com>`,
-    //                         to: `${user.email}`,
-    //                         subject: 'Currency withdrawn successfully',
-    //                         html: data,
-    //                     };
-    //                     transporter.sendMail(mailOptions, (error) => {
-    //                         if (error) {
-    //                           console.log(error);
-    //                           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //                         }
-    //                         if (process.env.NODE_ENV === 'production') {
-    //                           userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //                         }
-    //                         req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-    //                         res.redirect('back');
-    //                         console.log(`Withdrawn ${amount} BTC successfully.`);
-    //                     });
-    //                   }
-    //                 });
-    //               } else {
-    //                 req.flash('success', `Successfully withdrawn ${amount} BTC!`);
-    //                 return res.redirect('back');
-    //               }
-    //             });
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       req.flash('error', `Insufficient funds to withdraw.`);
-    //       res.redirect('back');
-    //     }
-    //   }
-    // });
   },
   //Displays available pairs for BTC
   async CoinSwitchPair(req, res) {
