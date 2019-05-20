@@ -29,7 +29,11 @@
                 </span>
                 <span>
                     Messages
-                    <% if (user.unreadMessages > 0) { %><span style="color: red;">New message(s)</span><% } %>
+                    <% if (user.unreadMessages > 0) { %>
+                        <span>
+                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                        </span>
+                    <% } %>
                 </span>
             </a>
             <a id="tokens" class="panel-block" href="/dashboard/tokens">
@@ -62,7 +66,11 @@
                 </span>
                 <span>
                     Ongoing Deals
-                    <% if (user.processingDeals > 0) { %><span style="color: red;">Action required</span><% } %>
+                    <% if (user.processingDeals > 0) { %>
+                        <span>
+                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                        </span>
+                    <% } %>
                 </span>
             </a>
             <a id="refund" class="panel-block" href="/dashboard/refunds">
@@ -71,7 +79,11 @@
                 </span>
                 <span>
                     Refund Requests
-                    <% if (user.refundRequests > 0) { %><span style="color: red;">Action required</span><% } %>
+                    <% if (user.refundRequests > 0) { %>
+                        <span>
+                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                        </span>
+                    <% } %>
                 </span>
             </a>
             <a id="purchases" class="panel-block" href="/dashboard/purchases">

@@ -197,7 +197,8 @@ All images are scaled to that ratio" tabindex="-1">
                         </div>
                         <br>
                         <div class="frame">
-                            <h4 class="new-text" style="margin-bottom: 2vh;">Would you like to offer shipping handled by us?</h4>
+                            <h4 class="new-text">Would you like to offer shipping handled by us?</h4>
+                            <p class="help" style="margin-bottom: 2vh;">If you'd like to offer shipping handled by yourself, tick 'no' and discuss with the buyer if he wants the product shipped.</p>
                             <div class="field">
                                 <div class="control">
                                     <label class="radio">
@@ -321,7 +322,7 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <div class="control has-icons-left">
                                             <div class="select is-fullwidth" style="margin: auto; width: 90%;">
-                                                <select name="country">
+                                                <select name="country" id="country">
                                                     <option value="AF">Afghanistan</option>
                                                     <option value="AX">Åland Islands</option>
                                                     <option value="AL">Albania</option>
@@ -580,7 +581,7 @@ All images are scaled to that ratio" tabindex="-1">
                                     </div>
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
-                                            <input class="input" name="state" type="text" placeholder="State or County"/>
+                                            <input class="input" name="state" id="state" type="text" placeholder="State or County"/>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-globe-americas"></i>
                                             </span>
@@ -590,9 +591,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.address1) { %>
-                                                <input class="input" name="city" type="text" value="<%= user.city %>"/>
+                                                <input class="input" name="city" id="city" type="text" value="<%= user.city %>"/>
                                             <% } else { %>
-                                                <input class="input" name="city" type="text" placeholder="City"/>
+                                                <input class="input" name="city" id="city" type="text" placeholder="City"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-city"></i>
@@ -602,9 +603,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.address1) { %>
-                                                <input class="input" name="street1" type="text" value="<%= user.address1 %>"/>
+                                                <input class="input" name="street1" id="street1" type="text" value="<%= user.address1 %>"/>
                                             <% } else { %>
-                                                <input class="input" name="street1" type="text" placeholder="Street"/>
+                                                <input class="input" name="street1" id="street1" type="text" placeholder="Street"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-road"></i>
@@ -614,9 +615,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.zip) { %>
-                                                <input class="input" name="zip" type="text" value="<%= user.zip %>"/>
+                                                <input class="input" name="zip" id="zip" type="text" value="<%= user.zip %>"/>
                                             <% } else { %>
-                                                <input class="input" name="zip" type="text" placeholder="Zip Code"/>
+                                                <input class="input" name="zip" id="zip" type="text" placeholder="Zip Code"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-sort-numeric-down"></i>
@@ -626,9 +627,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.number) { %>
-                                                <input class="input" name="phone" type="tel" value="<%= user.number %>"/>
+                                                <input class="input" name="phone" id="phone" type="tel" value="<%= user.number %>"/>
                                             <% } else { %>
-                                                <input class="input" name="phone" type="tel" placeholder="Contact Phone Number"/>
+                                                <input class="input" name="phone" id="phone" type="tel" placeholder="Contact Phone Number"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-phone"></i>
@@ -638,9 +639,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.full_name) { %>
-                                                <input class="input" name="name" type="tel" value="<%= user.full_name %>"/>
+                                                <input class="input" name="name" id="name" value="<%= user.full_name %>"/>
                                             <% } else { %>
-                                                <input class="input" name="name" type="tel" placeholder="Contact Person Name"/>
+                                                <input class="input" name="name" id="name" placeholder="Contact Person Name"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-user-tie"></i>
@@ -650,9 +651,9 @@ All images are scaled to that ratio" tabindex="-1">
                                     <div class="field">
                                         <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                             <% if(user.email) { %>
-                                                <input class="input" name="email" type="tel" value="<%= user.email %>"/>
+                                                <input class="input" name="email" id="email" type="tel" value="<%= user.email %>"/>
                                             <% } else { %>
-                                                <input class="input" name="email" type="tel" placeholder="Contact Email"/>
+                                                <input class="input" name="email" id="email" type="tel" placeholder="Contact Email"/>
                                             <% } %>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-envelope"></i>
@@ -722,6 +723,15 @@ All images are scaled to that ratio" tabindex="-1">
                                         </div>
                                     </p>
                                 </div>
+                                <br>
+                                <div class="lds-default" id="validateSpinner" style="display: none;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                <div id="not-valid" style="display: none;">
+                                    <h4 class="subtitle" style="margin-bottom: 2vh;">The address is invalid. Please try again.</h4>
+                                </div>
+                                <div id="valid" style="display: none;">
+                                    <h4 class="subtitle">The address is valid.</h4>
+                                </div>
+                                <a class="button is-primary is-rounded" id="validate">Verify Address</a>
                             </div>
                         </div>
                         <br>

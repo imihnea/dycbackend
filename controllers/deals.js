@@ -805,12 +805,29 @@ module.exports = {
         });
     },
     async verifyAddress(req, res) {
-        shippo.address.validate(req.body.address, function(err, address) {
-            // asynchronously called
+        shippo.address.create({
+            "name":req.body.deliveryName,
+            "street1":req.body.deliveryStreet1,
+            "city":req.body.deliveryCity,
+            "state":req.body.deliveryState,
+            "zip":req.body.deliveryZip,
+            "country":req.body.deliveryCountry,
+            "phone":req.body.deliveryPhone,
+            "email":req.body.deliveryEmail,
+        }, (err, address) => {
             if(err) {
+                console.log('eroare la creere adresa')
                 res.send(err);
             } else {
-                res.send(address);
+                shippo.address.validate(address.object_id, function(err, address1) {
+                    // asynchronously called
+                    if(err) {
+                        console.log('eroare la validare')
+                        res.send(err);
+                    } else {
+                        res.send(address1);
+                    }
+                });
             }
         });
     },

@@ -79,10 +79,28 @@
                                     <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
                                 </div>
                                 <div class="dropdown-item">
-                                    <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
+                                    <a href="/dashboard/ongoing" class="dropdown-item link">
+                                        <strong>
+                                            Ongoing Deals
+                                            <% if (user.processingDeals > 0) { %>
+                                                <span>
+                                                    <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                </span>
+                                            <% } %>
+                                        </strong>
+                                    </a>
                                 </div>
                                 <div class="dropdown-item">
-                                    <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
+                                    <a href="/messages" class="dropdown-item link">
+                                        <strong>
+                                            Messages
+                                            <% if (user.unreadMessages > 0) { %>
+                                                <span>
+                                                    <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                </span>
+                                            <% } %>
+                                        </strong>
+                                    </a>
                                 </div>
                                 <div class="dropdown-item">
                                     <a href="/dashboard/addresses" class="dropdown-item link"><strong>Balance</strong></a>
@@ -576,10 +594,28 @@
                                             <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
                                         </div>
                                         <div class="dropdown-item">
-                                            <a href="/dashboard/open" class="dropdown-item link"><strong>Open Deals</strong></a>
+                                            <a href="/dashboard/ongoing" class="dropdown-item link">
+                                                <strong>
+                                                    Ongoing Deals
+                                                    <% if (user.processingDeals > 0) { %>
+                                                        <span>
+                                                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                        </span>
+                                                    <% } %>
+                                                </strong>
+                                            </a>
                                         </div>
                                         <div class="dropdown-item">
-                                            <a href="/messages" class="dropdown-item link"><strong>Messages</strong></a>
+                                            <a href="/messages" class="dropdown-item link">
+                                                <strong>
+                                                    Messages
+                                                    <% if (user.unreadMessages > 0) { %>
+                                                        <span>
+                                                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                        </span>
+                                                    <% } %>
+                                                </strong>
+                                            </a>
                                         </div>
                                         <div class="dropdown-item">
                                             <a href="/dashboard/tokens" class="dropdown-item link"><strong>Tokens</strong></a>

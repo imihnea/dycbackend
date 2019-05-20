@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addButton = document.getElementById('addTag');
   let times = tagsControl.children.length;
   addButton.addEventListener('click', () => {
-    if ((tagInput.value.match(/^[a-z,. -]+$/gi) != null) && (tagInput.value.length > 1) && (times < 10)) {
+    if ((tagInput.value.match(/^[a-z0-9,. -]+$/gi) != null) && (tagInput.value.length > 1) && (times < 10)) {
       times += 1;
       if (times == 10) {
           tagInput.placeholder = 'You have reached the tag limit';
@@ -205,4 +205,66 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   });
 
+});
+
+const button = document.getElementById('validate');
+button.addEventListener('click', function(e) {
+      // all delivery names
+      var deliveryName = document.getElementById('name').value;
+      var deliveryStreet1 = document.getElementById('street1').value;
+      var deliveryCity = document.getElementById('city').value;
+      var deliveryState = document.getElementById('state').value;
+      var deliveryZip = document.getElementById('zip').value;
+      var deliveryCountry = document.getElementById('country').value;
+      var deliveryPhone = document.getElementById('phone').value;
+      var deliveryEmail = document.getElementById('email').value;
+    // show spinner while fetching
+    document.getElementById('validateSpinner').style.display = 'inline-block';
+    document.getElementById('validate').style.display = 'none';
+  fetch(`/deals/verify-address/`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Accept: 'application/json',
+    },
+      body: JSON.stringify({
+          deliveryName: deliveryName, 
+          deliveryStreet1: deliveryStreet1,
+          deliveryCity: deliveryCity,
+          deliveryState: deliveryState,
+          deliveryZip: deliveryZip,
+          deliveryCountry: deliveryCountry,
+          deliveryPhone: deliveryPhone,
+          deliveryEmail: deliveryEmail,
+        }),
+    })
+  .then(function(response) {
+    if(response.ok) {
+      console.log('CREATE ADDRESS');
+      return response.json();
+    }
+    throw new Error('Request failed.');
+  })
+  .then(function(data) {
+      console.log('CREATED ADDRESS')
+      console.log(data);
+      document.getElementById('validateSpinner').style.display = 'none';
+      if(data.validation_results) {
+        if(data.validation_results.is_valid === true) {
+          document.getElementById('valid').style.display = 'block';
+        } else {
+          document.getElementById('not-valid').style.display = 'block';
+          document.getElementById('validate').style.display = 'block';
+          document.getElementById('validate').style = 'button is-primary is-rounded';
+        }
+      }
+      if(data.type === 'ShippoAPIError') {
+        document.getElementById('not-valid').style.display = 'block';
+        document.getElementById('validate').style.display = 'block';
+        document.getElementById('validate').style = 'button is-primary is-rounded';
+      }
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
 });

@@ -47,6 +47,6 @@ router.get('/:id/review', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsD
 router.post('/create-address/:id', isLoggedIn, checkId, asyncErrorHandler(createAddress));
 
 // Verify address with shippo
-router.get('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
+router.post('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
 
 module.exports = router;

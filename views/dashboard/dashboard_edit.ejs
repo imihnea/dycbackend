@@ -335,7 +335,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <div class="control has-icons-left">
                                         <div class="select is-fullwidth" style="margin: auto; width: 90%;">
-                                            <select name="country">
+                                            <select name="country" id="country">
                                                 <option value="AF" <% if (product.delivery.country == 'AF') { %> selected <% } %> >Afghanistan</option>
                                                 <option value="AX" <% if (product.delivery.country == 'AX') { %> selected <% } %> >Åland Islands</option>
                                                 <option value="AL" <% if (product.delivery.country == 'AL') { %> selected <% } %> >Albania</option>
@@ -595,9 +595,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.state) { %>
-                                            <input class="input" name="state" type="text" value="<%= product.delivery.state %>"/>
+                                            <input class="input" name="state" id="state" type="text" value="<%= product.delivery.state %>"/>
                                         <% } else { %>
-                                            <input class="input" name="state" type="text" placeholder="State or County"/>
+                                            <input class="input" name="state" id="state" type="text" placeholder="State or County"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-globe-americas"></i>
@@ -608,9 +608,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.city) { %>
-                                            <input class="input" name="city" type="text" value="<%= product.delivery.city %>"/>
+                                            <input class="input" name="city" id="city" type="text" value="<%= product.delivery.city %>"/>
                                         <% } else { %>
-                                            <input class="input" name="city" type="text" placeholder="City"/>
+                                            <input class="input" name="city" id="city" type="text" placeholder="City"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-city"></i>
@@ -620,9 +620,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.street1) { %>
-                                            <input class="input" name="street1" type="text" value="<%= product.delivery.street1 %>"/>
+                                            <input class="input" name="street1" id="street1" type="text" value="<%= product.delivery.street1 %>"/>
                                         <% } else { %>
-                                            <input class="input" name="street1" type="text" placeholder="Street"/>
+                                            <input class="input" name="street1" id="street1" type="text" placeholder="Street"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-road"></i>
@@ -632,9 +632,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.zip) { %>
-                                            <input class="input" name="zip" type="text" value="<%= product.delivery.zip %>"/>
+                                            <input class="input" name="zip" id="zip" type="text" value="<%= product.delivery.zip %>"/>
                                         <% } else { %>
-                                            <input class="input" name="zip" type="text" placeholder="Zip Code"/>
+                                            <input class="input" name="zip" id="zip" type="text" placeholder="Zip Code"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-sort-numeric-down"></i>
@@ -644,9 +644,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.phone) { %>
-                                            <input class="input" name="phone" type="tel" value="<%= product.delivery.phone %>"/>
+                                            <input class="input" name="phone" id="phone" type="tel" value="<%= product.delivery.phone %>"/>
                                         <% } else { %>
-                                            <input class="input" name="phone" type="tel" placeholder="Contact Phone Number"/>
+                                            <input class="input" name="phone" id="phone" type="tel" placeholder="Contact Phone Number"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-phone"></i>
@@ -656,9 +656,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.name) { %>
-                                            <input class="input" name="name" type="tel" value="<%= product.delivery.name %>"/>
+                                            <input class="input" name="name" id="name" type="tel" value="<%= product.delivery.name %>"/>
                                         <% } else { %>
-                                            <input class="input" name="name" type="tel" placeholder="Contact Person Name"/>
+                                            <input class="input" name="name" id="name" type="tel" placeholder="Contact Person Name"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user-tie"></i>
@@ -668,9 +668,9 @@ All images are scaled to that ratio" tabindex="-1">
                                 <div class="field">
                                     <p class="control has-icons-left" style="margin: auto; width: 90%;">
                                         <% if(product.delivery.email) { %>
-                                            <input class="input" name="email" type="tel" value="<%= product.delivery.email %>"/>
+                                            <input class="input" name="email" id="email" type="tel" value="<%= product.delivery.email %>"/>
                                         <% } else { %>
-                                            <input class="input" name="email" type="tel" placeholder="Contact Email"/>
+                                            <input class="input" name="email" id="email" type="tel" placeholder="Contact Email"/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-envelope"></i>
@@ -756,6 +756,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     </div>
                                 </p>
                             </div>
+                            <br>
+                            <div class="lds-default" id="validateSpinner" style="display: none;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                            <div id="not-valid" style="display: none;">
+                                <h4 class="subtitle" style="margin-bottom: 2vh;">The address is invalid. Please try again.</h4>
+                            </div>
+                            <div id="valid" style="display: none;">
+                                <h4 class="subtitle">The address is valid.</h4>
+                            </div>
+                            <a class="button is-primary is-rounded" id="validate">Verify Address</a>
                         </div>
                     </div>
                     <br>
@@ -771,8 +780,8 @@ All images are scaled to that ratio" tabindex="-1">
                         </div>
                     </div>
                     <br>
-                    <div class="control smmargin" style="margin: auto !important; margin-top: 2vh !important;">
-                        <button form="editProductForm" class="button is-primary">Update</button>
+                    <div class="control smmargin" style="margin: auto !important;">
+                        <button form="editProductForm" class="button is-primary is-rounded">Update Deal</button>
                     </div>
                 </form>
                 <br>
