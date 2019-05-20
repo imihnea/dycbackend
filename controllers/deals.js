@@ -9,7 +9,6 @@ const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
 const request = require("request");
 const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
-const { withdraw } = require('../config/withdraw');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';

@@ -20,8 +20,6 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
-
-      Admin page => Call createProfit where necessary
       
    Low Priority:
 

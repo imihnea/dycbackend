@@ -1,11 +1,11 @@
-const { errorLogger } = require('./winston');
+const { errorLogger, logger } = require('./winston');
 const Profit = require('../models/profit');
+const moment = require('moment');
 
 function createProfit(req, cost, method) {
     Profit.create({
         amount: cost,
         acquired: method,
-        profitDate: Date.now(),
         userID: req.user._id
     }, err => {
         if (err) {
