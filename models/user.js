@@ -108,7 +108,12 @@ const UserSchema = new Schema({
   subscription1: Boolean,
   subscription3: Boolean,
   subscription6: Boolean,
-  subscription12: Boolean
+  subscription12: Boolean,
+  ban: [{
+    banDay: {type: Date, default: Date.now},
+    until: Date,
+    reason: String
+  }]
 });
 
 UserSchema.pre('remove', async () => {

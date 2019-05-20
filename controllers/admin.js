@@ -2,13 +2,31 @@ const Profit = require('../models/profit');
 const Withdraw = require('../models/withdrawRequests');
 const User = require('../models/user');
 
+const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
+const ejs = require('ejs');
+const path = require('path');
+const { errorLogger, userLogger, logger } = require('../config/winston');
+const moment = require('moment');
 
 const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
 
+const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
+const EMAIL_PORT = process.env.EMAIL_PORT || '587';
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
+
+const transporter = nodemailer.createTransport({
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_API_KEY,
+    },
+});
 
 module.exports = {
     async getAdmin (req, res) {
@@ -74,14 +92,13 @@ module.exports = {
                                         if (process.env.NODE_ENV === 'production') {
                                             userLogger.info(`Message: Withdraw successful\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
-                                        req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                                        req.flash('success', `Successfully withdrawn ${withdraw.amount} BTC!`);
                                         res.redirect('back');
-                                        console.log(`Withdrawn ${amount} BTC successfully.`);
                                     });
                                 }
                             });
                         } else {
-                            req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                            req.flash('success', `Successfully withdrawn ${withdraw.amount} BTC!`);
                             return res.redirect('back');
                         }
                     }
@@ -97,12 +114,11 @@ module.exports = {
             await User.findByIdAndUpdate(withdraw.userID, {$inc: {btcbalance: withdraw.amount}});
         }
         if(withdraw.notify === true) {
-            ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/withdrawDenied.ejs"), {
                 link: `http://${req.headers.host}/dashboard/address`,
                 footerlink: `http://${req.headers.host}/dashboard/notifications`,
                 amount: withdraw.amount,
-                address: withdraw.address,
-                subject: 'Currency withdrawn successfully - Deal Your Crypto',
+                subject: 'Currency withdrawal denied - Deal Your Crypto',
             }, 
             function (err, data) {
                 if (err) {
@@ -111,7 +127,7 @@ module.exports = {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dyc.com>`,
                         to: `${withdraw.userEmail}`,
-                        subject: 'Currency withdrawn successfully',
+                        subject: 'Currency withdrawal denied',
                         html: data,
                     };
                     transporter.sendMail(mailOptions, (error) => {
@@ -120,16 +136,15 @@ module.exports = {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         if (process.env.NODE_ENV === 'production') {
-                            userLogger.info(`Message: Withdraw successful\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            userLogger.info(`Message: Withdraw denied\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
-                        req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+                        req.flash('success', `Successfully denied withdrawal!`);
                         res.redirect('back');
-                        console.log(`Withdrawn ${amount} BTC successfully.`);
                     });
                 }
             });
         } else {
-            req.flash('success', `Successfully withdrawn ${amount} BTC!`);
+            req.flash('success', `Successfully denied withdrawal!`);
             return res.redirect('back');
         }
     },
@@ -208,12 +223,44 @@ module.exports = {
             withdraw.status = 'Denied';
             await withdraw.save();
             await User.findByIdAndUpdate(withdraw.userID, {$inc: {btcbalance: withdraw.amount}});
+            if(withdraw.notify === true) {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/withdrawDenied.ejs"), {
+                    link: `http://${req.headers.host}/dashboard/address`,
+                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    amount: withdraw.amount,
+                    subject: 'Currency withdrawal denied - Deal Your Crypto',
+                }, 
+                function (err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dyc.com>`,
+                            to: `${withdraw.userEmail}`,
+                            subject: 'Currency withdrawal denied',
+                            html: data,
+                        };
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                                console.log(error);
+                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                            if (process.env.NODE_ENV === 'production') {
+                                userLogger.info(`Message: Withdraw denied\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                    }
+                });
+            }
         });
         req.flash('success', 'Successfully denied all withdraw requests');
         res.redirect('back');
     },
     async deleteProfit (req, res) {
         await Profit.findByIdAndUpdate(req.params.id, {$set: {status: 'Paid'}});
+        if (process.env.NODE_ENV == 'Production') {
+            logger.info(`Profit ${req.params.id} paid on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
         req.flash('success', 'Successfully resetted profit');
         res.redirect('back');
     },
@@ -225,7 +272,121 @@ module.exports = {
             profit.status = 'Paid';
             await profit.save();
         });
+        if (process.env.NODE_ENV == 'Production') {
+            logger.info(`Profits ${req.body.profitIDs} paid on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
         req.flash('success', 'Successfully resetted unpaid profits');
+        res.redirect('back');
+    },
+    async banUser (req, res) {
+        const user = await User.findById(req.body.userid);
+        let until = new Date();
+        switch (req.body.time) {
+            case '1d':
+                until.setDate(until.getDate() + 1);
+            break;
+            case '3d':
+                until.setDate(until.getDate() + 3);
+            break;
+            case '7d':
+                until.setDate(until.getDate() + 7);
+            break;
+            case '14d':
+                until.setDate(until.getDate() + 14);
+            break;
+            case '1m':
+                until.setDate(until.getDate() + 30);
+            break;
+            case 'perm':
+                until = new Date(8640000000000000);
+            break;
+            default:
+            break;
+        }
+        const ban = {
+            until,
+            reason: req.body.reason
+        }
+        user.ban.push(ban);
+        await user.save();
+        if (process.env.NODE_ENV === 'production') {
+            userLogger.info(`Message: User banned until ${until}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+        let reason;
+        switch (req.body.reason) {
+            case 'Scamming':
+                reason = 'Attempt to scam, fraud or mislead a potential customer';
+                break;
+            case 'SuspectActivity':
+                reason = 'Suspect activity';
+            break;
+            default:
+            break;
+        }
+        until = until.toUTCString();
+        if(user.email_notifications.user === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/ban.ejs"), {
+                link: `http://${req.headers.host}/`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                until,
+                reason,
+                subject: 'Account suspended - Deal Your Crypto',
+            }, 
+            function (err, data) {
+                if (err) {
+                    console.log(err);
+                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        to: `${user.email}`,
+                        subject: 'Account suspended',
+                        html: data,
+                    };
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            console.log(error);
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        }
+                    });
+                }
+            });
+        }
+        req.flash('success', 'User banned successfully');
+        res.redirect('back');
+    },
+    async partnerUser (req, res) {
+        const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner'}});
+        if (process.env.NODE_ENV === 'production') {
+            userLogger.info(`Message: User partnered\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+        if(user.email_notifications.user === true) {
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/partner.ejs"), {
+                link: `http://${req.headers.host}/`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                subject: 'Account partnered - Deal Your Crypto',
+            }, 
+            function (err, data) {
+                if (err) {
+                    console.log(err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        to: `${user.email}`,
+                        subject: 'Account partnered',
+                        html: data,
+                    };
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            console.log(error);
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        }
+                    });
+                }
+            });
+        }
+        req.flash('success', 'User partnered successfully');
         res.redirect('back');
     }
 };
