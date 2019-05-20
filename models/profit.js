@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const profitSchema = new Schema({
     amount: Number,
     acquired: String,
-    profitDate: Date,
+    profitDate: { type: Date, default: Date.now },
     userID: {
         type: Schema.Types.ObjectId,
         ref: 'User'

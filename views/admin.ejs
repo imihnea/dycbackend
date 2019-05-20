@@ -38,6 +38,7 @@
                             <form action="/admin/acceptAll?_method=PUT" method="POST" style="margin: auto;">
                                 <input type="text" name="withdrawIDs" value="<% withdrawals.forEach(item => { %><%= item._id %> <%});%>" hidden required>
                                 <button class="button is-primary">Withdraw all</button>
+                                <sub>Click when Coinbase has enough currency for all withdrawals</sub>
                             </form>
                             <form action="/admin/denyAll?_method=PUT" method="POST" style="margin: auto;">
                                 <input type="text" name="withdrawIDs" value="<% withdrawals.forEach(item => { %><%= item._id %> <%});%>" hidden required>

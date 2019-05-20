@@ -10,7 +10,6 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Withdraw = require('../models/withdrawRequests');
-const Profit = require('../models/profit');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
 const request = require("request");
@@ -21,7 +20,6 @@ const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const { errorLogger, userLogger, productLogger } = require('../config/winston');
-const { withdraw } = require('../config/withdraw');
 const { createProfit } = require('../config/profit');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
@@ -704,8 +702,6 @@ module.exports = {
                   req.flash('error', 'Something went wrong when purchasing tokens. Please try again later.');
                   return res.redirect('back');
                 } else {
-                  // REQUIRES TESTING
-                  // withdraw(req, totalPrice);
                   createProfit(req, totalPrice, 'Tokens');
                   if (process.env.NODE_ENV === 'production') {
                     userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -761,8 +757,7 @@ module.exports = {
                 if (process.env.NODE_ENV === 'production') {
                   userLogger.info(`Message: User spent ${tokenCost} to buy ${tokens} tokens pack\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
-                // REQUIRES TESTING
-                // withdraw(req, tokenCost);
+                createProfit(req, tokenCost, 'Tokens');
                 switch(tokens) {
                   case 20: 
                     req.flash('success', 'Successfully purchased the basic pack! Enjoy!');
@@ -1438,8 +1433,7 @@ module.exports = {
                       console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       // Sell BTC
-                      // REQUIRES TESTING
-                      // withdraw(req, subscriptionCost);
+                      createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -1473,8 +1467,7 @@ module.exports = {
                     } else {
                       console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                      
-                      // REQUIRES TESTING
-                      // withdraw(req, subscriptionCost);
+                      createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -1508,8 +1501,7 @@ module.exports = {
                     } else {
                       console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      // REQUIRES TESTING
-                      // withdraw(req, subscriptionCost);
+                      createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -1543,8 +1535,7 @@ module.exports = {
                     } else {
                       console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      // REQUIRES TESTING
-                      // withdraw(req, subscriptionCost);
+                      createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }

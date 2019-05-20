@@ -4,7 +4,7 @@ const Chat = require('../models/chat');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger } = require('./winston');
-const { withdraw } = require('./withdraw');
+const { createProfit } = require('./profit');
 const nodemailer = require('nodemailer');
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
@@ -47,28 +47,25 @@ setInterval( () => {
                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             console.log(err);
                         } else {
-                            // pay user and withdraw
+                            // pay user and create profit
                             switch(seller.accountType) {
                                 case 'Standard':
                                     seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
-                                    // Withdraw to our wallet
+                                    // add profit to db
                                     withdrawAmount = item.price * standardAccountFee * 0.01;
-                                    // REQUIRES TESTING
-                                    // withdraw(req, withdrawAmount);
+                                    createProfit(req, withdrawAmount, 'Income Fee');
                                     break;
                                 case 'Premium':
                                     seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
-                                    // Withdraw to our wallet
+                                    // add profit to db
                                     withdrawAmount = item.price * premiumAccountFee * 0.01;
-                                    // REQUIRES TESTING
-                                    // withdraw(req, withdrawAmount);
+                                    createProfit(req, withdrawAmount, 'Income Fee');
                                     break;
                                 case 'Partner':
                                     seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
-                                    // Withdraw to our wallet
+                                    // add profit to db
                                     withdrawAmount = item.price * partnerAccountFee * 0.01;
-                                    // REQUIRES TESTING
-                                    // withdraw(req, withdrawAmount);
+                                    createProfit(req, withdrawAmount, 'Income Fee');
                                     break;
                                 default:
                                     break;
@@ -130,8 +127,7 @@ setInterval( () => {
                                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 } else {
                                                     userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    // REQUIRES TESTING
-                                                    // withdraw(req, subscriptionCost);
+                                                    createProfit(req, subscriptionCost, 'Subscription');
                                                 }
                                             });
                                         }             
@@ -167,8 +163,7 @@ setInterval( () => {
                                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            // REQUIRES TESTING
-                                            // withdraw(req, subscriptionCost);
+                                                createProfit(req, subscriptionCost, 'Subscription');
                                             }
                                         });
                                     }             
@@ -204,8 +199,7 @@ setInterval( () => {
                                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            // REQUIRES TESTING
-                                            // withdraw(req, subscriptionCost);
+                                                createProfit(req, subscriptionCost, 'Subscription');
                                             }
                                         });
                                     }             
@@ -241,8 +235,7 @@ setInterval( () => {
                                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                // REQUIRES TESTING
-                                                // withdraw(req, subscriptionCost);
+                                                createProfit(req, subscriptionCost, 'Subscription');
                                             }
                                         });
                                     }             
