@@ -11,7 +11,7 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyT
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
-        getNotifications, postNotifications } = require('../controllers/dashboard');
+        getNotifications, postNotifications, deleteAccount, deleteAccountRequest } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -144,5 +144,11 @@ router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, 
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', verifyCookie, checkId, asyncErrorHandler(productDestroy));
+
+// POST - Delete account request
+router.post('/disable-account', isLoggedIn, asyncErrorHandler(deleteAccountRequest));
+
+// POST - Delete account
+router.post('/disable-account/:token', asyncErrorHandler(deleteAccount));
 
 module.exports = router;

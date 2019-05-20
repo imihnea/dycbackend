@@ -11,6 +11,7 @@ const User = require('../models/user');
 const Deal = require('../models/deal');
 const Withdraw = require('../models/withdrawRequests');
 const Profit = require('../models/profit');
+const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
 const request = require("request");
@@ -1459,8 +1460,8 @@ module.exports = {
                 product.delivery = {
                   shipping: false,
                 }
-                product.parcel = {};
-                product.carrier = {};
+                product.parcel = undefined;
+                product.carrier = undefined;
               }
               // Everything is stored in constants so we can protect against
               // people making fields in the DevTools
@@ -2113,5 +2114,77 @@ module.exports = {
       };
       return res.send(result);
     }
-  }
+  },
+  async deleteAccountRequest(req, res) {
+    const token = jwt.sign({
+      user: req.user._id
+    }, 
+    SECRET2, 
+    { expiresIn: '1h' });
+    ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
+      link: `http://${req.headers.host}/dashboard/disable-account/${token}`,
+      footerlink: `http://${req.headers.host}/dashboard/notifications`,
+      subject: 'Delete account request - Deal Your Crypto',
+    }, function (err, data) {
+      if (err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        console.log(err);
+      } else {
+        const mailOptions = {
+            from: `Deal Your Crypto <noreply@dyc.com>`,
+            to: `${req.user.email}`,
+            subject: 'Delete account request - Deal Your Crypto',
+            html: data,
+        };
+        transporter.sendMail(mailOptions, (error) => {
+            if (error) {
+              console.log(error);
+              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
+        });
+        userLogger.info(`Message: User requested deleting account\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
+        return res.redirect('back');
+      }
+    });
+  },
+  async deleteAccount(req, res) {
+    jwt.verify(req.params.token, SECRET2, async (err) => {
+      if (err) {
+        if (err.message.match(/Invalid/i)) {
+          req.flash('error', 'Invalid link.');
+          return res.redirect('/');
+        }
+        if (err.message.match(/Expired/i)) {
+          req.flash('error', 'The link has expired. Please try again.');
+          return res.redirect('/');
+        }
+      } else {
+        const user = jwt.decode(req.params.token);
+        const oldUser = await User.findById(user.user);
+        //Need to add deletion of other stuff like open deals, products etc
+        Deleted.create({
+          oldUser
+        }, (err) => {
+          if(err) {
+            req.flash('error', 'There\'s been an error updating our database, please try again.');
+            return res.redirect('back');
+          } else {
+            User.findByIdAndDelete(user.user, (err) => {
+              if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                req.flash('error', err.message);
+                return res.redirect('/');
+              } else {
+                userLogger.info(`Message: User deleted account\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                req.logout();
+                req.flash('success', 'Successfully deleted your account.');
+                return res.redirect('/');
+              }
+            });
+          }
+        })
+      }
+    });
+  },
 };
