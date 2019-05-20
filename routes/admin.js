@@ -9,7 +9,9 @@ const {
     withdrawAcceptAll,
     withdrawDenyAll,
     deleteProfit,
-    deleteAllProfits
+    deleteAllProfits,
+    banUser,
+    partnerUser
   } = require('../controllers/admin');
 
 const middleware = require('../middleware/index');
@@ -37,5 +39,11 @@ router.put('/delete/:id', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler
 
 // delete all profits
 router.put('/deleteAll', asyncErrorHandler(isAdmin), asyncErrorHandler(deleteAllProfits));
+
+// ban user
+router.put('/banUser', asyncErrorHandler(isAdmin), asyncErrorHandler(banUser));
+
+// partner user
+router.put('/partnerUser', asyncErrorHandler(isAdmin), asyncErrorHandler(partnerUser));
 
 module.exports = router;
