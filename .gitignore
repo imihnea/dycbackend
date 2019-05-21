@@ -63,6 +63,7 @@ typings/
 # Google credentials
 credentials.json
 token.json
+loggingProject-4a8d61a0c9d6.json
 
 # Certificates
 *.pem

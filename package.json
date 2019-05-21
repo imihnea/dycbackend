@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Ionitamihnea/dycbackend#readme",
   "dependencies": {
+    "@google-cloud/logging-winston": "^0.11.1",
     "archiver": "^3.0.0",
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
