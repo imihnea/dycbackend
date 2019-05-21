@@ -2,9 +2,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css">
 <link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
-<div class="columns" style="color: orange; justify-content: center;">
+<div class="columns" style="justify-content: center;">
     <div class="column is-three-fifths frame" style="margin-top: 5vh;">
-        <div class="messageProfile" style="height: auto; margin-left: auto; margin-right: auto; padding-bottom: 2.5vh;">
+        <div class="messageProfile dealReview">
             <div>
                 <p class="title is-2" style="margin-bottom: 4vh;"><%= deal.product.name %></p>                      
                 <img src="<%= deal.product.imageUrl %>"  class="open-img">
@@ -20,8 +20,8 @@
         <p class="title is-3" style="margin-top: 3vh;">Leave a Review</p>
         <form action="/reviews/<%= deal.product.id %>/reviews" method="POST">
             <textarea class="textarea" name="review[body]" placeholder="What a great product!" required></textarea>
-            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                <div style="width: 100%; margin-top: 1vh; margin-bottom: 1vh;">
+            <div class="flexCenter">
+                <div class="margins">
                     <fieldset class="starability-basic" style="margin: auto;">
                         <legend class="productDescriptionText">Rating:</legend>
                         <input type="radio" id="rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/dist/css/registerTooltips.css">
 <link rel="stylesheet" href="/dist/css/parsley.css">
 
-    <div class="columns" style="overflow: hidden; margin: auto;">
+    <div class="columns wrapper">
             <% include ../partials/sidebar %>
             <div class="column dashboard-right smallerCenter">
                 <div class="columns">
@@ -27,7 +27,7 @@
                         <br>
                         <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
-                            <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <div class="inputWrapper">
                                 <input class="input" name="product[name]" placeholder="Name" type="text" required maxlength="100" minlength="3"
                                     data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                                     data-parsley-error-message=""	 data-parsley-trigger="change"/>
@@ -77,11 +77,11 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                     <option value="Broken or Scrap">Broken or Scrap</option>
                                 </select>
                             </div>
-                            <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <div class="inputWrapper">
                                 <textarea name="product[description]" class="textarea" placeholder="Description (500 characters)" style="margin-left: 0;" required
                                     maxlength="500" data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                                     data-parsley-error-message="" data-parsley-trigger="keyup"></textarea>
-                                <div class="label" style="margin-left: 1vw; margin-top: auto; margin-bottom: auto;">
+                                <div class="label tooltipLabel">
                                     <span class="newTooltip" aria-label="Length: 3 - 100 characters
 Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
@@ -89,7 +89,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </div>
                             </div>
                             <br>
-                            <div style="display: flex; justify-content: space-evenly; width: 90%; margin: auto;">
+                            <div class="inputWrapper">
                                 <input type="text" id="tagInput" class="input" placeholder="Tags" 
                                     data-parsley-pattern="^[A-Za-z0-9 .,\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
                                 <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
@@ -100,9 +100,9 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </div>
                             </div>
                             <input type="text" name="product[tags]" id="tags" maxlength="500" hidden>
-                            <div class="tags" id="tagsControl" style="margin: auto; width: 90%; margin-top: 0.5vh;"></div>
+                            <div class="tags tagsWrapper" id="tagsControl"></div>
                             <br>
-                            <div style="display: flex; justify-content: space-evenly; margin-top: 1vh; align-items: center; padding-left: 5vw; padding-right: 5vw;">
+                            <div class="repeatable">
                                 <div>
                                     <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x"></i></label>
                                     <input id="repeatable" name="product[repeatable]" type="checkbox" value="true" hidden>
@@ -321,7 +321,7 @@ All images are scaled to that ratio" tabindex="-1">
                                     <h2 class="subtitle">Your Delivery Details</h2>
                                     <div class="field">
                                         <div class="control has-icons-left">
-                                            <div class="select is-fullwidth" style="margin: auto; width: 90%;">
+                                            <div class="select is-fullwidth deliveryDetails">
                                                 <select name="country" id="country">
                                                     <option value="AF">Afghanistan</option>
                                                     <option value="AX">Åland Islands</option>
@@ -580,7 +580,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </div>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <input class="input" name="state" id="state" type="text" placeholder="State or County"/>
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-globe-americas"></i>
@@ -589,7 +589,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.address1) { %>
                                                 <input class="input" name="city" id="city" type="text" value="<%= user.city %>"/>
                                             <% } else { %>
@@ -601,7 +601,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.address1) { %>
                                                 <input class="input" name="street1" id="street1" type="text" value="<%= user.address1 %>"/>
                                             <% } else { %>
@@ -613,7 +613,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.zip) { %>
                                                 <input class="input" name="zip" id="zip" type="text" value="<%= user.zip %>"/>
                                             <% } else { %>
@@ -625,7 +625,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.number) { %>
                                                 <input class="input" name="phone" id="phone" type="tel" value="<%= user.number %>"/>
                                             <% } else { %>
@@ -637,7 +637,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.full_name) { %>
                                                 <input class="input" name="name" id="name" value="<%= user.full_name %>"/>
                                             <% } else { %>
@@ -649,7 +649,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </p>
                                     </div>
                                     <div class="field">
-                                        <p class="control has-icons-left" style="margin: auto; width: 90%;">
+                                        <p class="control has-icons-left deliveryDetails">
                                             <% if(user.email) { %>
                                                 <input class="input" name="email" id="email" type="tel" value="<%= user.email %>"/>
                                             <% } else { %>
@@ -663,7 +663,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 </div>
                                 <br>
                                 <h2 class="subtitle">Parcel Size</h2>
-                                <div class="field is-horizontal has-addons" style="margin: auto; width: 90%;">
+                                <div class="field is-horizontal has-addons deliveryDetails">
                                     <div class="field-body">
                                         <div class="field">
                                             <p class="control has-icons-left is-expanded">
@@ -705,7 +705,7 @@ All images are scaled to that ratio" tabindex="-1">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field is-horizontal has-addons" style="margin: auto; width: 90%; margin-top: 1vh;">
+                                <div class="field is-horizontal has-addons deliveryDetails" style="margin-top: 1vh;">
                                     <p class="control has-icons-left is-expanded">
                                         <input class="input is-fullwidth" name="parcel_weight" type="number" placeholder="Weight"/>
                                         <span class="icon is-small is-left">

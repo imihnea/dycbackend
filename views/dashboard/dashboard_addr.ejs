@@ -2,14 +2,14 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
 <script type="text/javascript" src="/dist/js/bulma-steps.min.js"></script>
-<div class="columns" style="overflow: hidden; margin: auto;">
+<div class="columns wrapper">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right smallerCenter">
         <div class="dashTop column">
             <h2 class="title">Addresses</h2>
         </div>
         <br>
-        <div class="container is-fluid" style="margin-bottom: 3vh;">
+        <div class="container is-fluid errors">
             <% if(errors){ %>
                 <div class="notification is-danger" role="alert"> 
                 <% errors.forEach(function( err){ %>

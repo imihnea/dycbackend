@@ -18,7 +18,7 @@
         <br>
         <div class="field" style="padding: 20px;">
             <figure class="image is-16by9" style="overflow: hidden;">
-                <img class="mainImg" src="<%= product.images[0].url %>" alt="<%= product.name %>" style="border-style: solid; border-radius: 10px;"/>
+                <img class="mainImg dealImage" src="<%= product.images[0].url %>" alt="<%= product.name %>"/>
             </figure>
         </div>
         <div class="field">
@@ -58,7 +58,7 @@
         </div>
         <div id="facetoface" class="field" style="display: none;">
             <h2 class="subtitle">Face to Face Details</h2>
-            <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+            <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
                 <div class="field">
                     <p class="control has-icons-left">
                         <% if(user.number) { %>
@@ -116,7 +116,7 @@
         <div id="shipping" class="field" style="display: none;">
             <br>
             <h2 class="subtitle">Delivery Details</h2>
-            <form action="/products/<%= product.id %>/buy?_method=PUT" name="shippingForm" id="shippingForm" method="POST" style="width: 100%; flex-wrap: wrap; justify-content: space-evenly;">
+            <form action="/products/<%= product.id %>/buy?_method=PUT" name="shippingForm" id="shippingForm" method="POST" class="dealBuyRequest">
                 <div class="field">
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">

@@ -120,8 +120,8 @@ time{
     padding: 2rem;
     margin-top: -1.7rem;
     height: 58vh;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
     position: relative;
     z-index: 0;
     overflow-y: auto;
@@ -161,6 +161,8 @@ time{
     padding: 1rem;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
 }
 
 time{
@@ -260,4 +262,22 @@ time{
         -webkit-transform: translateX(-100%);
         transform: translateX(-100%);
     }
-}  
+}
+
+.profileMessage{
+    margin: auto;
+    margin-bottom: 4vh;
+}
+
+.messageImage{
+    margin: auto;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; 
+    border-radius: 10px;
+    height: inherit;
+}
+
+.messageSpan{
+    white-space: pre-line;
+    word-break: break-word;
+    text-align: left;
+}

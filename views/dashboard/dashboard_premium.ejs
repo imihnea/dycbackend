@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="../../dist/css/products.css">
 <link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
 <link rel="stylesheet" type="text/css" href="../../dist/css/Chart.min.css">
-<div class="columns" style="overflow: hidden; margin: auto;">
+<div class="columns wrapper">
     <% include ../partials/sidebar %>
 
     <div class="column dashboard-right smallerCenter" >
@@ -65,7 +65,7 @@
                             <br>
                             <button class="button is-primary" id="searchCateg" style="margin: auto;">Search</button>
                             <div id="canvasContainer">
-                                <canvas id="categChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
+                                <canvas id="categChart" class="hide" width="400" height="200"></canvas>
                             </div>
                         </div>
                         <div class="analytics hide">
@@ -100,11 +100,11 @@
                             <button class="button is-primary" id="searchProd" style="margin: auto;">Search</button>
                             <p class="title is-5 hide" id="prodText" style="margin-top: 2vh;">Product views</p>
                             <div id="prodCanvasContainer">
-                                <canvas id="prodChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
+                                <canvas id="prodChart" class="hide" width="400" height="200" class="charts"></canvas>
                             </div>
                             <p class="title is-5 hide" id="prodSoldText" style="margin-top: 2vh;">Products sold</p>
                             <div id="prodSoldCanvasContainer">
-                                <canvas id="prodSoldChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
+                                <canvas id="prodSoldChart" class="hide" width="400" height="200" class="charts"></canvas>
                             </div>
                         </div>
                         <div class="analytics hide">
@@ -122,7 +122,7 @@
                             <button class="button is-primary" id="searchProdViews" style="margin: auto;">Search</button>
                             <p class="title is-5 hide" id="prodText" style="margin-top: 2vh;">Product views (per week)</p>
                             <div id="prodViewsCanvasContainer">
-                                <canvas id="prodViewsChart" class="hide" width="400" height="200" style="width: 90%; margin-top: 2vh; padding-left: 2vw; padding-right: 2vw;"></canvas>
+                                <canvas id="prodViewsChart" class="hide" width="400" height="200" class="charts"></canvas>
                             </div>
                         </div>
                     </div>

@@ -762,3 +762,118 @@ body {
   }
 
   /* end spinner */
+
+.wrapper{
+  overflow: hidden;
+  margin: auto;
+}
+
+.errors{
+  margin-bottom: 3vh;
+}
+
+.modalBorder{
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.productWrapper{
+  width: 85%;
+  margin: auto;
+}
+
+.productImage{
+  margin: auto;
+  height: 100%;
+  border-style: solid;
+  border-radius: 10px;
+}
+
+.productRating{
+  margin-top: 0.5vh;
+  margin-bottom: 0.5vh;
+}
+
+.productPrice{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  position: relative;
+  top: -1vh;
+}
+
+.inputWrapper{
+  display: flex;
+  justify-content: space-evenly;
+  width: 90%;
+  margin: auto;
+}
+
+.tooltipLabel{
+  margin-left: 1vw;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.repeatable{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1vh;
+  align-items: center;
+  padding-left: 5vw;
+  padding-right: 5vw;
+}
+
+.tagsWrapper{
+  margin: auto;
+  width: 90%;
+  margin-top: 0.5vh;
+}
+
+.deliveryDetails{
+  margin: auto;
+  width: 90%;
+}
+
+.charts{
+  width: 90%;
+  margin-top: 2vh;
+  padding-left: 2vw;
+  padding-right: 2vw;
+}
+
+.flexEvenly{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.refundTitle{
+  border-bottom: solid;
+  border-width: 1px;
+}
+
+.dealReview{
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 2.5vh;
+}
+
+.flexCenter{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.margins{
+  width: 100%;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+/* Edge */
+@supports (-ms-ime-align: auto) {
+  .address, .productPrice, .inputWrapper, .repeatable, .flexEvenly {
+    justify-content: space-around;
+  }
+}

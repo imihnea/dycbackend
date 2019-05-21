@@ -15,10 +15,10 @@
             <div class="column is-one-fifth">
                 <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
-                    <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                    <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= buyer.avatar.url %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
+                                <img src="<%= buyer.avatar.url %>" class="open-img messageImage">
                             </figure>
                         </div>
                         <br>
@@ -70,10 +70,10 @@
             <div class="column is-one-fifth">
                 <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
-                    <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                    <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= seller.avatar.url %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
+                                <img src="<%= seller.avatar.url %>" class="open-img messageImage">
                             </figure>
                         </div>
                         <br>
@@ -123,7 +123,7 @@
         <% } %>
         <% if ((user._id.toString() === buyer._id.toString()) || (user._id.toString() === seller._id.toString())) { %>
             <div class="column smallerCenter">
-                <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
+                <div class="midlevel frame" id="mid">
                     <div class="level topWarn">
                         <div class="scrolling-limit">
                             <div class="scrolling">
@@ -142,7 +142,7 @@
                                     </time>
                                 </div>
                                 <div class="message-body" style="text-align: left;">
-                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word;"><%= message.message %></span>
+                                    <span class="messageSpan"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
@@ -155,13 +155,13 @@
                                     </time>
                                 </div>
                                 <div class="message-body" style="text-align: left;">
-                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word; text-align: left;"><%= message.message %></span>
+                                    <span class="messageSpan"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } %>
                     <% }); %>
                 </div>
-                <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
+                <div class="bottomlv frame">
                     <form action="/messages/<%= deal._id %>/<%= chat._id %>/sendMessageDeal?_method=PUT" method="POST" class="msgbox">
                         <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
                         <button class="button is-primary">Send</button>
@@ -173,7 +173,7 @@
                     <div class="messageProfile frame productFrame smallerCenter">
                         <div>                   
                             <figure class="image is-128x128" style="margin:auto;">
-                                <img src="<%= deal.product.imageUrl %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px; height: inherit;">
+                                <img src="<%= deal.product.imageUrl %>" class="open-img messageImage">
                             </figure>
                         </div>
                         <br>
@@ -240,48 +240,48 @@
                                         </footer>
                                     </div>
                                 </div>
-                                <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-danger">Decline Deal</button></form>
+                                <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
                             <% } %>
                             
                             <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
                                 <div class="buttons" style="display: block; margin: auto;">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                     <div>
-                                        <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST" style="margin-top: 1vh;"><button class="button is-success">Complete Deal</button></form>
-                                        <button class="button is-primary refundRequest" style="margin-top: 1vh;">Ask for a refund</button>
+                                        <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
+                                        <button class="button is-primary refundRequest">Ask for a refund</button>
                                         <div class="modal modalrefundRequest">
                                             <div class="modal-background"></div>
-                                                <div class="modal-card">
-                                                    <header class="modal-card-head">
-                                                        <p class="modal-card-title">Ask for a refund</p>
-                                                        <button class="delete deleteRefundRequest" aria-label="close"></button>
-                                                    </header>
-                                                    <section class="modal-card-body">
-                                                        <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
-                                                            <div class="field select cont-select smmargin">
-                                                                <select name="reason" style="width: 100%;">
-                                                                    <option selected disabled>Reason</option>
-                                                                    <option value="Product doesn't match">The product doesn't match the listing</option>
-                                                                    <option value="Faulty product">Faulty product</option>
-                                                                    <option value="Product hasn't arrived">The product hasn't arrived</option>
-                                                                </select>
+                                            <div class="modal-card">
+                                                <header class="modal-card-head">
+                                                    <p class="modal-card-title">Ask for a refund</p>
+                                                    <button class="delete deleteRefundRequest" aria-label="close"></button>
+                                                </header>
+                                                <section class="modal-card-body">
+                                                    <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
+                                                        <div class="field select cont-select smmargin">
+                                                            <select name="reason" style="width: 100%;">
+                                                                <option selected disabled>Reason</option>
+                                                                <option value="Product doesn't match">The product doesn't match the listing</option>
+                                                                <option value="Faulty product">Faulty product</option>
+                                                                <option value="Product hasn't arrived">The product hasn't arrived</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="field select cont-select smmargin">
+                                                            <select name="option" style="width: 100%;">
+                                                                <option selected disabled>Refund option</option>
+                                                                <option value="Money Back">Money Back</option>
+                                                                <option value="New Product">Replace Product (if possible)</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="field" style="margin-top: 3px;">
+                                                            <div class="control">
+                                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                                             </div>
-                                                            <div class="field select cont-select smmargin">
-                                                                <select name="option" style="width: 100%;">
-                                                                    <option selected disabled>Refund option</option>
-                                                                    <option value="Money Back">Money Back</option>
-                                                                    <option value="New Product">Replace Product (if possible)</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="field" style="margin-top: 3px;">
-                                                                <div class="control">
-                                                                    <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <button class="button is-primary">Send</button>
-                                                        </form>
-                                                    </section>
-                                                </div>
+                                                        </div>
+                                                        <button class="button is-primary">Send</button>
+                                                    </form>
+                                                </section>
+                                            </div>
                                         </div>
                                     </div> 
                                 </div>
@@ -342,7 +342,7 @@
                                                 <p class="title is-5">Preferred method of refund: <%= deal.refund.option %></p>
                                                 <br>
                                                 <% if (deal.refund.status === 'Not fulfilled') { %>
-                                                    <p class="title is-6" style="border-bottom:solid; border-width:1px;">Accept refund</p>
+                                                    <p class="title is-6 refundTitle">Accept refund</p>
                                                     <div style="display: flex; justify-content: space-evenly;">
                                                         <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
                                                             <input type="text" name="refundOption" value="Money Back" hidden>
@@ -354,7 +354,7 @@
                                                         </form>
                                                     </div>
                                                     <br>
-                                                    <p class="title is-6" style="border-bottom:solid; border-width:1px;">Deny refund</p>
+                                                    <p class="title is-6 refundTitle">Deny refund</p>
                                                     <form class="modal-form" action="/deals/<%= deal._id %>/refundDeny?_method=PUT" method="POST" style="display: block;">
                                                         <div class="column">
                                                             <div class="field select cont-select smmargin">

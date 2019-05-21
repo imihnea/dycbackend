@@ -8,6 +8,8 @@ Frontend:
 
          UI => New product => Feature deal
 
+         Edge & Safari CSS
+
     Low Priority:
 
          Make everything responsive (see comments in css files)

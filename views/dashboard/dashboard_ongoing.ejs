@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
-<div class="columns" style="overflow: hidden; margin: auto;">
+<div class="columns wrapper">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right">
         <div class="dashTop column">
@@ -18,12 +18,12 @@
                         <div class="pagination paginationT">
                             <% include ../partials/paginatePurchases %>
                         </div>
-                        <main id="hits" style="width: 85%; margin: auto;">
+                        <main class="productWrapper" id="hits">
                         <% deals.docs.forEach((deal) => { %>
                             <article class="hit columns frame">
                                     <div class="product-picture-wrapper" >
                                         <figure class="image is-128x128" style="margin:auto;">
-                                            <img src="<%= deal.product.imageUrl %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
+                                            <img src="<%= deal.product.imageUrl %>" class="productImage">
                                         </figure>
                                     </div>
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -35,7 +35,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                    <div class="column prod_info productPrice">
                                         <div class="prices openPrices frame" style="width: 100%;">
                                             <p class="price_text" style="padding-left: 2vw;"><%= deal.price %></p>
                                             <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>

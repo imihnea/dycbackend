@@ -272,6 +272,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     color: black !important;
+    padding-top: 3vh;
 }
 
 .currencies{
@@ -648,6 +649,31 @@ hr{
 .fas{
     color: black;
 }
+
+.dealImage{
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.dealBuyRequest{
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.dealForm{
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+@supports (-ms-ime-align: auto) {
+    .dealBuyRequest, .dealForm {
+      justify-content: space-around;
+    }
+  
+  }
+
 /* Content Ends */
 
 /* Cookie Policy start */

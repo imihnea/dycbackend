@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="../../dist/css/main.css" />
 <link rel="stylesheet" href="../../dist/css/tooltips.css">
-<div class="columns" style="overflow: hidden; margin: auto;">
+<div class="columns wrapper">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right">
         <div class="dashTop column">
@@ -19,19 +19,19 @@
                         <div class="pagination paginationT">
                             <% include ../partials/paginateIndex %>
                         </div>
-                        <main id="hits" style="width: 85%; margin: auto;">
+                        <main id="hits productWrapper">
                         <% products.docs.forEach((product) => { %>
                             <article class="hit columns frame">
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img src="<%= product.images[0].url %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
+                                        <img src="<%= product.images[0].url %>" class="productImage">
                                     </figure>                                  
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
                                         <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
-                                        <p style="margin-top: 0.5vh; margin-bottom: 0.5vh;">
+                                        <p class="productRating">
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product.avgRating)) { %>
                                                 <!-- display a full star -->
@@ -48,7 +48,7 @@
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                     </div>
                                 </div>
-                                <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                <div class="column prod_info productPrice">
                                     <div class="prices openPrices frame" style="width: 100%;">
                                         <p class="price_text"><%= product.btcPrice %></p>
                                         <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
