@@ -259,7 +259,7 @@ const registerLimiter = rateLimit({
   handler: (req, res) => {
     warnLogger.warn(`Message: Too many register requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many register attempts from this IP, please try again in an hour.');
-    res.redirect('/');
+    return res.redirect('/');
   },
 });
 // only apply to register requests
@@ -271,7 +271,7 @@ const loginLimiter = rateLimit({
   handler: (req, res) => {
     warnLogger.warn(`Message: Too many login requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many login attempts from this IP, please try again in an hour.');
-    res.redirect('/');
+    return res.redirect('/');
   },
 });
 // only apply to login requests
@@ -283,7 +283,7 @@ const forgotEmailLimiter = rateLimit({
   handler: (req, res) => {
     warnLogger.warn(`Message: Too many email reset requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many email reset attempts from ths IP, please try again in an hour.');
-    res.redirect('/');
+    return res.redirect('/');
   }
 });
 app.use("/forgotemail", forgotEmailLimiter);
@@ -294,7 +294,7 @@ const forgotPasswordLimiter = rateLimit({
   handler: (req, res) => {
     warnLogger.warn(`Message: Too many password reset requests\r\nIP:${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`)
     req.flash('error', 'Too many password reset attempts from this IP, please try again in an hour.');
-    res.redirect('/');
+    return res.redirect('/');
   }
 });
 app.use("/forgot", forgotPasswordLimiter);
@@ -314,7 +314,7 @@ app.use('/admin', adminRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
-  res.redirect('/error');
+  return res.redirect('/error');
 });
 
 // error handler
@@ -332,7 +332,7 @@ app.use((err, req, res, next) => {
   } else {
     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
   }
-  res.redirect('back');
+  return res.redirect('back');
 });
 
 const { spawn } = require("child_process");
