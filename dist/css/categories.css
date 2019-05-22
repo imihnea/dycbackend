@@ -87,3 +87,9 @@ ul{
 .menu-item:hover{
     background-color: transparent !important;
 }
+
+.filters{
+    font-size: 1.2rem;
+    text-align: center;
+}
+

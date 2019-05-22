@@ -6,7 +6,7 @@
     <div class="columns content-wrapper">
         <div class="searchSidebar column is-one-fifth frame products">    
             <div>
-                <p style="font-size: 1.2rem; text-align: center;">Filters</p>
+                <p class="filters">Filters</p>
                 <a role="button" class="navbar-burger filtersBurger burger" aria-label="menu" aria-expanded="false" data-target="filtersMenu" style="width: auto;">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -74,7 +74,7 @@
                                     <div class="product-picture-wrapper">
                                         <% if (product._source.feat_1.status === true) { %><span class="featured"></span><% } %>
                                         <figure class="image is-128x128" style="margin:auto;">
-                                            <img src="<%= product._source.images[0].url %>" style="margin: auto; height: 100%; border-style: solid; border-radius: 10px;">
+                                            <img src="<%= product._source.images[0].url %>" class="productImage">
                                         </figure>
                                     </div>
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -98,7 +98,7 @@
                                             <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                         </div>
                                     </div>
-                                    <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
+                                    <div class="column prod_info productPrice">
                                         <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.btcPrice %></p>
                                             <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>

@@ -8,7 +8,7 @@
             <div class="column is-three-fifths lrform">
                 <h1 style="color: orange;">Check your phone</h1>
                 <form action="/login/verify" method="POST" style="padding-top: 3vh;">
-                    <div style="display: flex; justify-content: space-between; padding-top: 1rem;">
+                    <div class="verifyDiv">
                         <input name="pin" type="number" placeholder="1234" required />
                         <input name="requestId" type="hidden" value="<%= requestId %>" required>
                         <input name="username" type="hidden" value="<%= username %>" required>

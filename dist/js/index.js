@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideThis = document.querySelectorAll('.lazyLoaded');
         let j = 0;
         while ((j < maxToShow) && (j < hideThis.length)) {
+            // TODO: Test if this works correctly (might need to use hideThis.length - j - 1)
             hideThis[j].classList.remove('lazyLoaded');
             hideThis[j].classList.add('lazyLoad');
             j += 1;

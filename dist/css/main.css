@@ -667,8 +667,86 @@ hr{
     justify-content: space-evenly;
 }
 
+.flexEvenly{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+.contentSubtitle{
+    text-align: center;
+    margin-bottom: 3vh;
+}
+
+.flexRows{
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.paginationPositioning{
+    margin-top: -1vh;
+    margin-bottom: 1vh;
+    justify-content: space-evenly;
+    align-items: baseline;
+}
+
+.reviewPadding{
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+}
+
+.avatarMargins{
+    margin-left: 1vw;
+    margin-right: 1vw;
+}
+
+.avatarFigureMargins{
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.avatarSize{
+    width: 75px;
+    height: 75px;
+    margin: auto;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.reviewRating{
+    padding-left: 2vw;
+    max-width: 80%;
+}
+
+.reviewItem{
+    position: absolute;
+    bottom: 6%;
+}
+
+.searchWrapper{
+    width: 85%;
+    margin-left: 5vw;
+}
+
+
+.productImage{
+    margin: auto;
+    height: 100%;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.productPrice{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    position: relative;
+    top: -1vh;
+}
+
 @supports (-ms-ime-align: auto) {
-    .dealBuyRequest, .dealForm {
+    .dealBuyRequest, .dealForm, .flexEvenly,
+    .paginationPositioning {
       justify-content: space-around;
     }
   

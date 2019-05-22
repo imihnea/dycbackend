@@ -8,7 +8,7 @@
                 <h1 style="margin-top: 1vh;">Verify Number</h1>
                 <br>
                 <p class="subtitle is-5">Input your verification number to activate two-factor authentication.</p>
-                <form action="/verify" method="POST" style="padding-top: 3vh; display: flex; justify-content: space-evenly;">
+                <form action="/verify" method="POST" class="verifyForm">
                     <input name="pin" type="number" placeholder="1234" class="input" style="width: 80%;" required />
                     <input name="requestId" type="hidden" value="<%= requestId %>" required>
                     <input name="number" type="hidden" value="<%= number %>" required>

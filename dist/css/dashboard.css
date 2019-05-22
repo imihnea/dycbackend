@@ -782,24 +782,9 @@ body {
   margin: auto;
 }
 
-.productImage{
-  margin: auto;
-  height: 100%;
-  border-style: solid;
-  border-radius: 10px;
-}
-
 .productRating{
   margin-top: 0.5vh;
   margin-bottom: 0.5vh;
-}
-
-.productPrice{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  position: relative;
-  top: -1vh;
 }
 
 .inputWrapper{
@@ -842,11 +827,6 @@ body {
   padding-right: 2vw;
 }
 
-.flexEvenly{
-  display: flex;
-  justify-content: space-evenly;
-}
-
 .refundTitle{
   border-bottom: solid;
   border-width: 1px;
@@ -873,7 +853,7 @@ body {
 
 /* Edge */
 @supports (-ms-ime-align: auto) {
-  .address, .productPrice, .inputWrapper, .repeatable, .flexEvenly {
+  .address, .productPrice, .inputWrapper, .repeatable{
     justify-content: space-around;
   }
 }

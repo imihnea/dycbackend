@@ -116,3 +116,25 @@ div.toptitle{
   margin-top: 1vh;
   margin-bottom: 1vh;
 }
+
+.sendBtn{
+  margin: auto;
+  margin-top: 1vh;
+}
+
+.flexAround{
+  display: flex;
+  justify-content: space-around;
+}
+
+.verifyForm{
+  padding-top: 3vh; 
+  display: flex; 
+  justify-content: space-evenly;
+}
+
+.verifyDiv{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
