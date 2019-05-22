@@ -31,23 +31,25 @@
                                 <div class="column">
                                     <div class="address">
                                         <label class="label adrlabel">Current<br/> Address</label>
-                                        <input class="input smmargin adradr" name="user[btcadr]" value="<%= user.btcadr %>" readonly />
+                                        <input class="input smmargin adradr" name="user[btcadr]" value="<% if (user.btcadr) { %><%= user.btcadr %><% } else { %>No current withdraw address found - please add a new one below<% } %>" readonly />
                                     </div>
                                     <form action="/dashboard/addresses" method="POST">
                                         <div class="address">
                                             <label class="label adrlabel">New <br/> Address</label>
-                                            <input class="input smmargin adradr" name="btcadr" placeholder="Bitcoin Address" type="text" required />
+                                            <input class="input smmargin adradr" name="btcadr" placeholder="Withdraw Bitcoin Address" type="text" required />
                                         </div>
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <button class="button is-primary">Change Address</button>
                                     </form>    
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
-                                        <input class="input smmargin adradr" name="btc_value" placeholder="<% if (user.btcbalance) { %><%= user.btcbalance.toFixed(8) %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.000000000 BTC <% } %>" type="number" step="any" readonly />
+                                        <input class="input smmargin adradr" name="btc_value" value="<% if (user.btcbalance) { %><%= user.btcbalance.toFixed(8) %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.00000000 BTC <% } %>" type="text" readonly />
                                     </div>
-                                    <button class="button is-primary topup" style="margin-top:1vh;">Top-up</button>
-                                    <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw</button>
-                                    <button class="button is-primary coinswitch" style="margin-top:1vh;" id="myButton">Deposit with Altcoins</button>
+                                    <div class="buttons has-addons is-centered">
+                                        <button class="button is-primary topup" style="margin-top:1vh;">Deposit BTC</button>
+                                        <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw BTC</button>
+                                        <button class="button is-primary coinswitch" style="margin-top:1vh;" id="myButton">Deposit with Altcoins</button>
+                                    </div>
                                     <div class="modal modalTopup">
                                         <div class="modal-background"></div>
                                         <div class="modal-card">
@@ -69,8 +71,7 @@
                                                 <form action="/dashboard/addresses/btc" method="POST">
                                                     <input type="hidden" name="btcrate" value="<%= btcrate %>" />
                                                     <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
-                                                    <label class="label adrlabel">Value</label>
-                                                    <input class="input adradr" name="coinsValue" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" />
+                                                    <input class="input adradr" name="coinsValue" placeholder="0.00000000 BTC" type="number" step="0.00000001" min="0.00005" style="width: 60%;" />
                                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                                     <button class="button is-primary">Continue</button>
                                                 </form>
@@ -99,8 +100,7 @@
                                                 <br>
                                                 <p class="title is-5 modal-section-title">Input Value</p>
                                                 <form class="modal-form" action="/dashboard/addresses/withdrawBTC" method="POST">
-                                                    <label class="label adrlabel">Value</label>
-                                                    <input class="input adradr" name="value" placeholder="0.000000000 BTC" type="number" step="any" style="width: 60%;" required/>
+                                                    <input class="input adradr" name="value" placeholder="0.00000000 BTC" type="number" step="0.00000001" min="0.00005" style="width: 60%;" required/>
                                                     <% if(user.btcadr) { %>
                                                     <input type="hidden" name="address" value="<%= user.btcadr %>" />
                                                     <% } else { %>
