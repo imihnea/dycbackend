@@ -323,7 +323,7 @@ module.exports = {
             }});
         }
         dealLogger.info(`Message: Deal ${deal._id} completed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        res.redirect(`/deals/${deal._id}/review`);
+        return res.redirect(`/deals/${deal._id}/review`);
     },
     async cancelDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -435,7 +435,7 @@ module.exports = {
                     }});
                 }
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
-                res.redirect('back');
+                return res.redirect('back');
             } else {
                 deal.status = 'Refund Pending';
                 deal.refund.status = 'Pending Delivery';
@@ -472,7 +472,7 @@ module.exports = {
                 }
                 dealLogger.info(`Message: Deal ${deal._id} refund - replacement pending delivery\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('success', 'Refund status updated: Deal refund pending.');
-                res.redirect('back');
+                return res.redirect('back');
             }
         }
     },
@@ -539,10 +539,10 @@ module.exports = {
                 }});
             }
             req.flash('success', 'Refund status updated: Deal refunded successfully');
-            res.redirect('back');
+            return res.redirect('back');
         } else {
             req.flash('error', 'The page you are looking for could not be found.');
-            res.redirect('/error');
+            return res.redirect('/error');
         }
     },
     // Deny Refund
@@ -603,13 +603,13 @@ module.exports = {
             }
             dealLogger.info(`Message: Deal ${deal._id} - refund denied\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
-            res.redirect('back');
+            return res.redirect('back');
         }
     },
     // Send refund request message
     async refundRequest(req, res) {
         // Create the refund request
-        req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn\'t match|Faulty product|Product hasn\'t arrived)$/).notEmpty();
+        req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Product hasn't arrived)$/).notEmpty();
         req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! \r\n|\r|\n]+$/gm).notEmpty();
         req.check('message', 'The message needs to contain at most 500 characters').isLength({ max: 500 });
         req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
@@ -675,7 +675,7 @@ module.exports = {
             }
             dealLogger.info(`Message: Deal ${deal._id} - refund requested\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund request sent.');
-            res.redirect(`/deals/${deal._id}`);
+            return res.redirect(`/deals/${deal._id}`);
         }
     },
     async reviewProduct(req, res) {

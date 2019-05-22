@@ -315,7 +315,7 @@ module.exports = {
       if(error) {
         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('error', error.message);
-        res.redirect('back');
+        return res.redirect('back');
       } else {
         console.log(body);
         var json = JSON.parse(body);
@@ -337,7 +337,7 @@ module.exports = {
           if(err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
-            res.redirect('back');
+            return res.redirect('back');
           } else {
             console.log(orderId);
             res.render('savvy/btc', { 
@@ -391,10 +391,10 @@ module.exports = {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'Something went wrong. Please try again.');
-            res.redirect('/dashboard/addresses');
+            return res.redirect('/dashboard/addresses');
           } else {
             req.flash('success', 'Successfully updated address!');
-            res.redirect('/dashboard/addresses');
+            return res.redirect('/dashboard/addresses');
           }
         });
       }
@@ -473,8 +473,8 @@ module.exports = {
                       userLogger.info(`Message: User withdrawed ${amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     }
                     req.flash('success', `${amount} BTC successfully requested for withdrawal!`);
-                    res.redirect('back');
                     console.log(`Withdrawn ${amount} BTC successfully.`);
+                    return res.redirect('back');
                 });
             }
           });
@@ -486,10 +486,10 @@ module.exports = {
           userLogger.info(`Message: Withdraw request for ${amount} BTC created\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
         req.flash('success', 'Your withdrawal request has been registered.');
-        res.redirect('back');
+        return res.redirect('back');
       } else {
         req.flash('error', 'Insufficient funds.');
-        res.redirect('back');
+        return res.redirect('back');
       }
     }
   },
@@ -714,12 +714,12 @@ module.exports = {
                     userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
                   req.flash('success', 'Tokens purchased successfully!');
-                  res.redirect('back');
+                  return res.redirect('back');
                 }
               });
           } else {
               req.flash('error', 'Insufficient balance.');
-              res.redirect('back');
+              return res.redirect('back');
           }
         }
       });
@@ -789,7 +789,7 @@ module.exports = {
           }
         } else {
           req.flash('error', 'Something went wrong, please try again.');
-          res.redirect('back');
+          return res.redirect('back');
         }
       }
     });
@@ -1000,7 +1000,7 @@ module.exports = {
                   if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     req.flash('error', 'An error has occured. Please try again later');
-                    res.redirect('back');
+                    return res.redirect('back');
                   } else {
                     const feat_1 = {};
                     const feat_2 = {};
@@ -1021,7 +1021,7 @@ module.exports = {
                         k = 1;
                       } else {
                         req.flash('error', 'Not enough tokens to promote product.');
-                        res.redirect('back');
+                        return res.redirect('back');
                       }
                     }
                     if (( req.body.product.feat_1 ) && ( k === 0 )) {
@@ -1036,7 +1036,7 @@ module.exports = {
                         newproduct.feat_1 = feat_1;
                       } else {
                         req.flash('error', 'Not enough tokens to promote product.');
-                        res.redirect('back');
+                        return res.redirect('back');
                       }
                     }
                     if (( req.body.product.feat_2 ) && ( k === 0 )) {
@@ -1051,7 +1051,7 @@ module.exports = {
                         newproduct.feat_2 = feat_2;
                       } else {
                         req.flash('error', 'Not enough tokens to promote product.');
-                        res.redirect('back');
+                        return res.redirect('back');
                       }
                     }
                   }
@@ -1060,7 +1060,7 @@ module.exports = {
                 if (process.env.NODE_ENV === 'production') {
                   productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
-                res.redirect(`/products/${product._id}/view`);
+                return res.redirect(`/products/${product._id}/view`);
               }
             }));
           }
@@ -1160,7 +1160,7 @@ module.exports = {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'An error has occured. Please try again later');
-            res.redirect('back');
+            return res.redirect('back');
           } else {
             const feat_1 = {};
             const feat_2 = {};
@@ -1181,7 +1181,7 @@ module.exports = {
                 k = 1;
               } else {
                 req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
+                return res.redirect('back');
               }
             }
             if (( req.body.product.feat_1 ) && ( k === 0 )) {
@@ -1196,7 +1196,7 @@ module.exports = {
                 newproduct.feat_1 = feat_1;
               } else {
                 req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
+                return res.redirect('back');
               }
             }
             if (( req.body.product.feat_2 ) && ( k === 0 )) {
@@ -1211,7 +1211,7 @@ module.exports = {
                 newproduct.feat_2 = feat_2;
               } else {
                 req.flash('error', 'Not enough tokens to promote product.');
-                res.redirect('back');
+                return res.redirect('back');
               }
             }
           }
@@ -1220,7 +1220,7 @@ module.exports = {
         if (process.env.NODE_ENV === 'production') {
           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
-        res.redirect(`/products/${product._id}/view`);
+        return res.redirect(`/products/${product._id}/view`);
       }
     }
   },
@@ -1476,7 +1476,7 @@ module.exports = {
               await product.save();
               // redirect to show page
               req.flash('success', 'Product updated successfully!');
-              res.redirect(`/products/${product.id}/view`);
+              return res.redirect(`/products/${product.id}/view`);
             }
           }));
         }
@@ -1601,7 +1601,7 @@ module.exports = {
       await product.save();
       // redirect to show page
       req.flash('success', 'Product updated successfully!');
-      res.redirect(`/products/${product.id}/view`);
+      return res.redirect(`/products/${product.id}/view`);
     }
   },
   // Feature product
@@ -1614,7 +1614,7 @@ module.exports = {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'An error has occured. Please try again later');
-            res.redirect('back');
+            return res.redirect('back');
           } else {
             if ( user.feature_tokens >= 5 ) {
               product.feat_1.status = true;
@@ -1626,10 +1626,10 @@ module.exports = {
               });
               product.save();
               req.flash('success', 'Your product has been promoted successfully.');
-              res.redirect(`/products/${product.id}/view`);
+              return res.redirect(`/products/${product.id}/view`);
             } else {
               req.flash('error', 'Not enough tokens to promote product.');
-              res.redirect('back');
+              return res.redirect('back');
             }
           }
         });
@@ -1640,7 +1640,7 @@ module.exports = {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'An error has occured. Please try again later');
-            res.redirect('back');
+            return res.redirect('back');
           } else {
             if (user.feature_tokens >= 15) {
               product.feat_2.status = true;
@@ -1652,10 +1652,10 @@ module.exports = {
               });
               product.save();
               req.flash('success', 'Your product has been promoted successfully.');
-              res.redirect(`/products/${product.id}/view`);
+              return res.redirect(`/products/${product.id}/view`);
             } else {
               req.flash('error', 'Not enough tokens to promote product.');
-              res.redirect('back');
+              return res.redirect('back');
             }
           }
         });
@@ -1671,7 +1671,7 @@ module.exports = {
     deleteDate.setDate(deleteDate.getDate() + 30);
     await Product.findByIdAndUpdate(req.params.id, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
     req.flash('success', 'Product deleted successfully!');
-    res.redirect('/dashboard/open');
+    return res.redirect('/dashboard/open');
   },
   // Subscription page with details
   async subscriptionPage(req, res) {

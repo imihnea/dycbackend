@@ -333,10 +333,10 @@ module.exports = {
                 if (error) {
                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     req.flash('error', `${error.message}`);
-                    res.redirect('back', { error: error.message });
+                    return res.redirect('back', { error: error.message });
                 }
                 req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
-                res.redirect('back');
+                return res.redirect('back');
             });
         }
     });
@@ -348,7 +348,7 @@ module.exports = {
         let errors = req.validationErrors();
         if (errors) {
             req.flash('error', errors[0].msg);
-            res.redirect('back');
+            return res.redirect('back');
         } else {
             req.check('deliveryName', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
@@ -389,7 +389,7 @@ module.exports = {
                 const user  = await User.findById(req.user._id);
                 if ( user._id.toString() === product.author.id.toString() ) {
                     req.flash('error', 'You cannot purchase your own product.');
-                    res.redirect('back');
+                    return res.redirect('back');
                 } else {
                     let totalPrice = product.btcPrice;
                     let shippingPrice = 0;
@@ -487,7 +487,7 @@ module.exports = {
                                 dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 // Link chat to deal
-                                res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                                return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                                 } else {
                                     req.flash('err', 'There\'s been an error with your request, please try again.');
                                     return res.redirect('back');
@@ -571,7 +571,7 @@ module.exports = {
                             dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             // Link chat to deal
-                            res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                            return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                         } else {
                             req.flash('error', 'Please select Face to Face or Shipping.');
                             return res.redirect('back');

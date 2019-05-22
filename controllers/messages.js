@@ -119,7 +119,7 @@ module.exports = {
             }
         });
         await chat.save();
-        res.redirect(`/messages/${ req.params.id }`);
+        return res.redirect(`/messages/${ req.params.id }`);
     },
     async updateMessagesDeal(req, res) {
         const chat = await Chat.findById( req.params.id );
@@ -139,21 +139,21 @@ module.exports = {
             }
         });
         await chat.save();
-        res.redirect(`/deals/${ req.params.dealid }`);
+        return res.redirect(`/deals/${ req.params.dealid }`);
     },
     // Create Chat
     async newChat(req, res) {
         // Verify if this chat already exists
         let chat = await Chat.findOne( { "user1.id": req.user._id, "product.id": req.params.id });
         if ( chat ) {
-            res.redirect(`/messages/${chat._id}`);
+            return res.redirect(`/messages/${chat._id}`);
         } else {
             // Find the product
             const product = await Product.findById( req.params.id );
             // Check if the user is the seller of the product
             if ( product.author.id.toString() === req.user._id.toString() ) {
                 req.flash('error', 'You cannot start a chat with yourself.');
-                res.redirect('back');
+                return res.redirect('back');
             } else {
                 // Find the seller
                 const user2 = await User.findById( product.author.id );
@@ -178,7 +178,7 @@ module.exports = {
                     }
                 };
                 chat = await Chat.create(newChat);
-                res.redirect(`/messages/${chat._id}`);
+                return res.redirect(`/messages/${chat._id}`);
             }
         }        
     },
@@ -194,7 +194,7 @@ module.exports = {
             await deal.save();
             await chat.save();
             req.flash('success', 'You have successfully sent a purchase request.');
-            res.redirect(`/deals/${deal._id}`);
+            return res.redirect(`/deals/${deal._id}`);
         } else {
             // Find the product
             const product = await Product.findById( req.params.id );
@@ -227,8 +227,8 @@ module.exports = {
             deal.chat = chat._id;
             await deal.save();
             req.flash('success', 'You have successfully sent a purchase request.');
-            res.redirect(`/deals/${deal._id}`);
-        };
+            return res.redirect(`/deals/${deal._id}`);
+        }
     },
     // Create Message
     async newMessage(req, res) {
@@ -296,7 +296,7 @@ module.exports = {
                 });
             }
         }
-        res.redirect(`/messages/${chat._id}`);
+        return res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
         req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
@@ -346,6 +346,6 @@ module.exports = {
                 }
             });
         }
-        res.redirect(`/deals/${req.params.dealid}`);
+        return res.redirect(`/deals/${req.params.dealid}`);
     },    
 };

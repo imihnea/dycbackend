@@ -186,14 +186,14 @@ module.exports = {
       if (err) {
         if (err.message.match(/Invalid/i)) {
           req.flash('error', 'Invalid link.');
-          res.redirect('/login');
+          return res.redirect('/login');
         }
         if (err.message.match(/Expired/i)) {
           req.flash('error', 'The link has expired. You should receive another email shortly.');
           const id = jwt.decode(req.params.token);
           uuser = await User.findById(id.user);
           sendConfirmationEmail(req, uuser._id, uuser.email, SECRET);
-          res.redirect('/login');
+          return res.redirect('/login');
         }
       } else {
         const user = jwt.decode(req.params.token);
@@ -203,7 +203,7 @@ module.exports = {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           } else {
             req.flash('success', 'You have successfully confirmed your email. You can now log in!');
-            res.redirect('/login');
+            return res.redirect('/login');
           }
         });
       }
@@ -236,11 +236,11 @@ module.exports = {
               if (err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', err.message);
-                res.redirect('back');
+                return res.redirect('back');
               }
             });
             req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
-            res.redirect('/dashboard');
+            return res.redirect('/dashboard');
           }
         } else {
           req.flash('error', 'Wrong PIN code, please try again.');
@@ -272,13 +272,13 @@ module.exports = {
       const user = await User.findOne({number: phoneNumber});
       if (user) {
         req.flash('error', 'Phone number already used. Please try again using another number.');
-        res.redirect('/2factor');
+        return res.redirect('/2factor');
       } else {
         nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
           if(err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
-            res.redirect('back');
+            return res.redirect('back');
           } else {
             let requestId = result.request_id;
             if(result.status == '0') {
@@ -291,7 +291,7 @@ module.exports = {
               }); // Success! Now, have your user enter the PIN
             } else {
               req.flash('error', 'Something went wrong, please try again.');
-              res.redirect('back');
+              return res.redirect('back');
             }
           }
         });
@@ -327,7 +327,7 @@ module.exports = {
         });
         userLogger.info(`Message: User requested 2F disable\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
-        res.redirect('back');
+        return res.redirect('back');
       }
     });
   },
@@ -336,11 +336,11 @@ module.exports = {
       if (err) {
         if (err.message.match(/Invalid/i)) {
           req.flash('error', 'Invalid link.');
-          res.redirect('/');
+          return res.redirect('/');
         }
         if (err.message.match(/Expired/i)) {
           req.flash('error', 'The link has expired. Please try again.');
-          res.redirect('/');
+          return res.redirect('/');
         }
       } else {
         const user = jwt.decode(req.params.token);
@@ -348,11 +348,11 @@ module.exports = {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', err.message);
-            res.redirect('/');
+            return res.redirect('/');
           } else {
             userLogger.info(`Message: User disabled 2F\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Successfully disabled 2-Factor authentication.');
-            res.redirect('/');
+            return res.redirect('/');
           }
         });
       }
@@ -506,7 +506,7 @@ module.exports = {
     const user = await User.findById(req.params.id);
     sendConfirmationEmail(req, user._id, user.email);
     req.flash('success', 'Confirmation email resent. Please check your inbox.');
-    res.redirect('/login');
+    return res.redirect('/login');
   },
   postVerifyLogin(req, res, next) {
     let pin = req.body.pin;
@@ -536,7 +536,7 @@ module.exports = {
   getLogout(req, res) {
     req.logout();
     req.flash('success', 'See you later!');
-    res.redirect('/');
+    return res.redirect('/');
   },
   async getIndex(req, res) {
     await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
@@ -686,7 +686,7 @@ module.exports = {
       },
     ], (err) => {
       if (err) return next(err);
-      res.redirect('back');
+      return res.redirect('back');
     });
   },
   getCategories(req, res) {
@@ -1156,7 +1156,7 @@ module.exports = {
         });
       },
     ], () => {
-      res.redirect('/');
+      return res.redirect('/');
     });
   },
   async getContact(req, res) {
@@ -1258,10 +1258,10 @@ module.exports = {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email: ${req.body.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               }
               req.flash('error', `${error.message}`);
-              res.redirect('back', { error: error.message });
+              return res.redirect('back', { error: error.message });
             }
             req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-            res.redirect('/');
+            return res.redirect('/');
           });
         }
        });
@@ -1347,10 +1347,10 @@ module.exports = {
               if (error) {
                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', `${error.message}`);
-                res.redirect('back', { error: error.message });
+                return res.redirect('back', { error: error.message });
               }
               req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-              res.redirect('/');
+              return res.redirect('/');
             });
           }
          });
@@ -1376,10 +1376,10 @@ module.exports = {
               if (error) {
                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', `${error.message}`);
-                res.redirect('back', { error: error.message });
+                return res.redirect('back', { error: error.message });
               }
               req.flash('success', 'Message sent successfully! We will get back to you as soon as possible!');
-              res.redirect('/');
+              return res.redirect('/');
             });
           }
          });
@@ -1439,7 +1439,7 @@ module.exports = {
       },
     ], (err) => {
       if (err) return next(err);
-      res.redirect('back');
+      return res.redirect('back');
     });
   },
   getResetEmail(req, res) {
@@ -1512,7 +1512,7 @@ module.exports = {
         });
       },
     ], () => {
-      res.redirect('/');
+      return res.redirect('/');
     });
   },
   getAbout(req, res) {

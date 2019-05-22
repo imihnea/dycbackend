@@ -96,7 +96,7 @@ router.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
     // Successful authentication, redirect home.
-    res.redirect('/dashboard');
+    return res.redirect('/dashboard');
   });
 
 router.get('/auth/google',
@@ -106,7 +106,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/dashboard');
+    return res.redirect('/dashboard');
   });
 
 // GET Categories page

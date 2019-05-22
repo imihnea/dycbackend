@@ -46,7 +46,7 @@ module.exports = {
             if(err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', 'There was a problem with your request, please try again.');
-                res.redirect('back');
+                return res.redirect('back');
             } else {
                 account.sendMoney({
                         'to': withdraw.address,
@@ -57,7 +57,7 @@ module.exports = {
                     if(err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
-                        res.redirect('back');
+                        return res.redirect('back');
                     } else {
                         console.log(tx);
                         withdraw.status = 'Completed';
@@ -93,7 +93,7 @@ module.exports = {
                                             userLogger.info(`Message: Withdraw successful\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                         req.flash('success', `Successfully withdrawn ${withdraw.amount} BTC!`);
-                                        res.redirect('back');
+                                        return res.redirect('back');
                                     });
                                 }
                             });
@@ -139,7 +139,7 @@ module.exports = {
                             userLogger.info(`Message: Withdraw denied\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         req.flash('success', `Successfully denied withdrawal!`);
-                        res.redirect('back');
+                        return res.redirect('back');
                     });
                 }
             });
@@ -168,7 +168,7 @@ module.exports = {
                         if(err) {
                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
-                            res.redirect('back');
+                            return res.redirect('back');
                         } else {
                             console.log(tx);
                             withdraw.status = 'Completed';
@@ -213,7 +213,7 @@ module.exports = {
             }
         });
         req.flash('success', 'Successfully accepted all requests');
-        res.redirect('back');
+        return res.redirect('back');
     },
     async withdrawDenyAll (req, res) {
         let ids = req.body.withdrawIDs.split(" ");
@@ -254,7 +254,7 @@ module.exports = {
             }
         });
         req.flash('success', 'Successfully denied all withdraw requests');
-        res.redirect('back');
+        return res.redirect('back');
     },
     async deleteProfit (req, res) {
         await Profit.findByIdAndUpdate(req.params.id, {$set: {status: 'Paid'}});
@@ -262,7 +262,7 @@ module.exports = {
             logger.info(`Profit ${req.params.id} paid on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
         req.flash('success', 'Successfully resetted profit');
-        res.redirect('back');
+        return res.redirect('back');
     },
     async deleteAllProfits (req, res) {
         let ids = req.body.profitIDs.split(" ");
@@ -276,7 +276,7 @@ module.exports = {
             logger.info(`Profits ${req.body.profitIDs} paid on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
         req.flash('success', 'Successfully resetted unpaid profits');
-        res.redirect('back');
+        return res.redirect('back');
     },
     async banUser (req, res) {
         const user = await User.findById(req.body.userid);
@@ -353,7 +353,7 @@ module.exports = {
             });
         }
         req.flash('success', 'User banned successfully');
-        res.redirect('back');
+        return res.redirect('back');
     },
     async partnerUser (req, res) {
         const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner'}});
@@ -387,6 +387,6 @@ module.exports = {
             });
         }
         req.flash('success', 'User partnered successfully');
-        res.redirect('back');
+        return res.redirect('back');
     }
 };

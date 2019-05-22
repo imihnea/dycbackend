@@ -91,7 +91,7 @@ module.exports = {
 		}
 		// redirect to the product
 		req.session.success = 'Review created successfully!';
-		res.redirect(`/products/${product.id}/view`);
+		return res.redirect(`/products/${product.id}/view`);
 	},
 	// Reviews Update
 	async reviewUpdate(req, res, next) {
@@ -108,20 +108,20 @@ module.exports = {
 				if (err) {
 					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 					req.flash('error', 'Something went wrong. Please try again.');
-					res.redirect('back');
+					return res.redirect('back');
 				} else {
 					reviewLogger.info(`Message: Review updated - ${review._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 					req.flash('success', 'Review updated successfully!');
 					if (req.query.from == 'user') {
-						res.redirect(`/profile/${review.user}`);
+						return res.redirect(`/profile/${review.user}`);
 					} else {
-						res.redirect(`/products/${req.params.id}/view`);
+						return res.redirect(`/products/${req.params.id}/view`);
 					}
 				}
 			});
 		} else {
 			req.flash('error', 'Something went wrong. Please try again.');
-			res.redirect('back');
+			return res.redirect('back');
 		}
 	},
 	// Reviews Destroy
@@ -139,14 +139,14 @@ module.exports = {
 				});
 				reviewLogger.info(`Review deleted ${req.params.review_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 				req.flash('success', 'Review deleted successfully!');
-				res.redirect(`/products/${req.params.id}/view`);
+				return res.redirect(`/products/${req.params.id}/view`);
 			} else {
 				req.flash('error', 'An error has occurred. Please try again.');
-				res.redirect(`/products/${req.params.id}/view`);
+				return res.redirect(`/products/${req.params.id}/view`);
 			}
 		} else {
 			req.flash('error', 'Something went wrong. Please try again.');
-			res.redirect('back');
+			return res.redirect('back');
 		}
 	},
 }

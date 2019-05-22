@@ -72,7 +72,7 @@ module.exports = {
         User.findById(req.user._id, async (err, user) => {
             if (err) {
               req.flash('error', err.message);
-              res.redirect('back');
+              return res.redirect('back');
             } else {
                 // check if there are any new images for upload
                 if (req.file) {
@@ -174,7 +174,7 @@ module.exports = {
                     } 
                   });
                   req.flash('success', 'Successfully updated your profile!');
-                  res.redirect(`/profile/${user._id}`);
+                  return res.redirect(`/profile/${user._id}`);
                 }
             }
         });
