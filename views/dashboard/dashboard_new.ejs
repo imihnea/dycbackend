@@ -90,7 +90,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                             <br>
                             <div class="inputWrapper">
-                                <input type="text" id="tagInput" class="input" placeholder="Tags" 
+                                <input type="text" id="tagInput" class="input" placeholder="Tags (Max 11)" 
                                     data-parsley-pattern="^[A-Za-z0-9 .,\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
                                 <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                                 <div class="label" style="margin-left: 1vw;">
@@ -320,8 +320,8 @@ All images are scaled to that ratio" tabindex="-1">
                                     <br>
                                     <h2 class="subtitle">Your Delivery Details</h2>
                                     <div class="field">
-                                        <div class="control has-icons-left">
-                                            <div class="select is-fullwidth deliveryDetails">
+                                        <div class="control has-icons-left deliveryDetails">
+                                            <div class="select is-fullwidth">
                                                 <select name="country" id="country">
                                                     <option value="AF">Afghanistan</option>
                                                     <option value="AX">Åland Islands</option>
@@ -798,5 +798,5 @@ All images are scaled to that ratio" tabindex="-1">
 <% include ../partials/footer %>
 
 <script src="/dist/js/dashboard_new.js"></script>
-<script src="../../dist/js/jquery-3.4.1.slim.min.js"></script>
-<script src="../../dist/js/parsley.min.js"></script>
+<script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="/dist/js/parsley.min.js"></script>

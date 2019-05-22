@@ -1,7 +1,7 @@
 <% include ../partials/header %>
-<link rel="stylesheet" type="text/css" media="screen" href="../../dist/css/dashboard.css" />
-<link rel="stylesheet" href="../../dist/css/products.css">
-<link rel="stylesheet" href="../../dist/css/bulma-pricingtable.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="/dist/css/products.css">
+<link rel="stylesheet" href="/dist/css/bulma-pricingtable.min.css">
 <div class="columns wrapper">
     <% include ../partials/sidebar %>
 
@@ -27,7 +27,7 @@
                         <div id="btc-fields" class="fields">
                             <div class="currency">
                                 <p>Price per token: <span id="btcTokenPrice"><%= tokenprice.toFixed(8) %></span></p>
-                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                             <div class="currency">
                                 <p>Aproximatively $0.99 USD</p>
@@ -37,7 +37,7 @@
                             <input type="hidden" name="tokenprice" value="<%= Number(tokenprice.toFixed(8)) %>">
                             <div class="currency">
                                 <p>Total price: <span id="btcPrice" class="tPrice">0</span></p>
-                                <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>                            
                             <button class="button is-primary is-rounded" style="margin-top: 3vh;">Purchase Tokens</button>
                         </div>
@@ -157,4 +157,4 @@
 
 <% include ../partials/footer %>
 
-<script src="../../dist/js/dashboard_tokens.js"></script>
+<script src="/dist/js/dashboard_tokens.js"></script>

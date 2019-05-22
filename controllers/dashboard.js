@@ -1273,7 +1273,7 @@ module.exports = {
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
     req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
-    req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi);
+    req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
     req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);

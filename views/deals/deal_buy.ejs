@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<link rel="stylesheet" href="../../dist/css/product_view.css">
+<link rel="stylesheet" href="/dist/css/product_view.css">
 <div class="column" style="padding-left: 5vw; padding-right: 5vw;">
 <div class="hero-body">
     <% if(errors){ %>
@@ -104,7 +104,7 @@
                             <p class="price_text">
                                 Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
                             </p>
-                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
                     </label>
                     <br>
@@ -482,7 +482,7 @@
                         <p class="price_text" id="totalPrice">
                             Product Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
                         </p>
-                        <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                        <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                     </div>
                 </label>
                 <br>
@@ -496,4 +496,4 @@
 </div>
 
 <% include ../partials/footer %>
-<script src="../../dist/js/deal_buy.js"></script>
+<script src="/dist/js/deal_buy.js"></script>

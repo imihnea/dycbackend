@@ -1,13 +1,13 @@
 <% include ../partials/header %>
-<script src="../../dist/js/maincateg.js"></script>
-<script src="../../dist/js/products.js"></script>       
-<link rel="stylesheet" href="../../dist/css/categories.css">
-<link rel="stylesheet" href="../../dist/css/products.css">
-<link rel="stylesheet" href="../../dist/css/product_view.css">
+<script src="/dist/js/maincateg.js"></script>
+<script src="/dist/js/products.js"></script>       
+<link rel="stylesheet" href="/dist/css/categories.css">
+<link rel="stylesheet" href="/dist/css/products.css">
+<link rel="stylesheet" href="/dist/css/product_view.css">
 <link rel="stylesheet" href="/../dist/css/index.css"> 
 <link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-<script src="../../dist/js/product_view.js"></script>
+<script src="/dist/js/product_view.js"></script>
 <div class="hero-body">
     <div class="container frame">
         <nav class="breadcrumb" style="margin-left: 1vw;" aria-label="breadcrumbs">
@@ -140,7 +140,7 @@
                                 <p class="price_text">
                                     <%= product.btcPrice %>
                                 </p>
-                                <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
                         </label>
                     </div>
@@ -216,7 +216,7 @@
             <br>
             <p class="productDescriptionText" ><%= product.description %></p>
             <br>
-            <table class="table is-striped is-narrow" style="margin: auto;">
+            <table class="table is-striped is-narrow">
                 <thead>
                     <td><p class="productDescriptionText" style="font-weight: 600;">Additional Information</p></td>
                     <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
@@ -229,6 +229,10 @@
                     <tr>
                         <td>Continent of origin</td>
                         <td><%= product.author.continent %></td>
+                    </tr>
+                    <tr>
+                        <td>Tags</td>
+                        <td><%= product.tags %></td>
                     </tr>
                 </tbody>
             </table>
@@ -392,7 +396,7 @@
                                     </div>
                                     <div class="accepted_currencies frame">
                                         <p class="curr_text" id="btc_curr"><%= sim.btcPrice %></p>
-                                        <span class="curr_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                     </div>
                                 </div> 
                             </a>      
@@ -403,6 +407,5 @@
         <% } %>
     </div>    
 </div>
-
 
 <% include ../partials/footer %>

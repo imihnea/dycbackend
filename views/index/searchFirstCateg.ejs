@@ -1,7 +1,7 @@
 <% include ../partials/header %>
-<link rel="stylesheet" href="../../dist/css/categories.css">
-<link rel="stylesheet" href="../../dist/css/products.css">
-<link rel="stylesheet" href="../../dist/css/tooltips.css">
+<link rel="stylesheet" href="/dist/css/categories.css">
+<link rel="stylesheet" href="/dist/css/products.css">
+<link rel="stylesheet" href="/dist/css/tooltips.css">
 
 <div id="results" class="container-fluid">  
     <div class="columns content-wrapper">
@@ -182,7 +182,7 @@
                                     <div class="column prod_info" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; position: relative; top: -1vh;">
                                         <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.btcPrice %></p>
-                                            <span class="price_img"><img src="../../dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     </div>
                                 </article>
@@ -198,4 +198,4 @@
 </div>
 
 <% include ../partials/footer %>
-<script src="../../dist/js/search.js"></script>
+<script src="/dist/js/search.js"></script>
