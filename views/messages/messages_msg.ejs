@@ -6,14 +6,14 @@
         <div class="column is-one-fifth">
             <a href="/messages" class="button is-primary showLater smallerCenter">To Dashboard</a>
             <div>
-                <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 4vh;">
+                <div class="messageProfile frame smallerCenter profileMessage">
                     <div>
                         <figure class="image is-128x128" style="margin:auto;">
                             <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                                 <%= chat.user1.avatarUrl %>
                             <% } else { %>
                                 <%= chat.user2.avatarUrl %>
-                            <% } %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
+                            <% } %>" class="open-img productImage">
                         </figure>
                     </div>
                     <br>
@@ -61,7 +61,7 @@
         </div>
         <div class="column smallerCenter">
             <div>
-                <div class="midlevel frame" id="mid" style="border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;">
+                <div class="midlevel frame" id="mid">
                     <div class="level topWarn">
                         <div class="scrolling-limit">
                             <div class="scrolling">
@@ -80,7 +80,7 @@
                                     </time>
                                 </div>
                                 <div class="message-body" style="text-align: left;">
-                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word; text-align: left;"><%= message.message %></span>
+                                    <span class="messageSpan"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
@@ -93,13 +93,13 @@
                                     </time>
                                 </div>
                                 <div class="message-body" style="text-align: left;">
-                                    <span class="messageSpan" style="white-space: pre-line; word-break: break-word; text-align: left;"><%= message.message %></span>
+                                    <span class="messageSpan"><%= message.message %></span>
                                 </div>
                             </article>
                         <% } %>
                     <% }); %>
                 </div>
-                <div class="bottomlv frame" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
+                <div class="bottomlv frame">
                     <form action="/messages/<%= chat._id %>/sendMessage?_method=PUT" method="POST" class="msgbox">
                         <textarea class="textarea has-fixed-size" rows="2" cols="10" name="message"></textarea>
                         <button class="button is-primary">Send</button>
@@ -110,10 +110,10 @@
     
         <div class="column is-one-fifth">
             <div class="productSide" style="margin-top: 0;">
-                <div class="messageProfile frame smallerCenter" style="margin: auto; margin-bottom: 1vh;">
+                <div class="messageProfile frame smallerCenter profileMessage" style="margin-bottom: 1vh !important;">
                     <div>
                         <figure class="image is-128x128" style="margin:auto;">
-                            <img src="<%= chat.product.imageUrl %>" class="open-img" style="margin: auto; box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important; border-radius: 10px;">
+                            <img src="<%= chat.product.imageUrl %>" class="open-img productImage">
                         </figure>
                     </div>
                     <br>

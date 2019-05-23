@@ -133,3 +133,22 @@ display: inline;
 #share-buttons img:hover {
 	animation: pulse 1s;
 }
+
+.productBuyPrice{
+	width: 100%;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.productBuyForm{
+	margin-top: 1vh;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+@supports (-ms-ime-align: auto) {
+    .productBuyPrice, .productBuyForm {
+      justify-content: space-around;
+    }
+  
+  }

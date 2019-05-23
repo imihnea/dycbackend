@@ -63,7 +63,7 @@
     <div class="column">
         <% if (onlyFeatured) { %><p class="title is-3">Featured Products</p><% } %>
     </div>
-    <div class="container columns products" style="flex-wrap: wrap; justify-content: space-evenly; width: 50vw;"> 
+    <div class="container columns products" class="indexProducts"> 
             <% if (products.length != 0) { %>
                 <% let i = 0;
                     while ((i < 20) && (i < products.length)) { %>

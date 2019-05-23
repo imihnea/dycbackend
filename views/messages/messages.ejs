@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/messages.css" />
-<div class="columns" style="overflow: hidden; margin: auto;">
+<div class="columns wrapper">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right">
         <div class="dashTop column">
@@ -40,12 +40,12 @@
                                     </form>
                                 <% } %>
                                 <div class="column">
-                                    <figure class="image is-128x128" style="margin:auto;">
+                                    <figure class="image is-128x128 profileFigure">
                                         <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
                                             <%= chats.docs[i].user1.avatarUrl %>
                                         <% } else { %>
                                             <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                                        <% } %>" class="open-img msgImg productImage">
                                     </figure>
                                 </div>
                                 <div class="column prod_info ">
@@ -91,7 +91,7 @@
                                             <%= chats.docs[i].user1.avatarUrl %>
                                         <% } else { %>
                                             <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg" style="margin: auto; border-style: solid; border-color: grey; border-radius: 10px;">
+                                        <% } %>" class="open-img msgImg messageImage">
                                     </figure>
                                 </div>
                                 <div class="column prod_info ">

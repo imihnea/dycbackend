@@ -281,3 +281,8 @@ time{
     word-break: break-word;
     text-align: left;
 }
+
+.profileFigure{
+    margin: auto;
+    width: 100% !important;
+}

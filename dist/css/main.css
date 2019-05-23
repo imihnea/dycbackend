@@ -710,6 +710,13 @@ hr{
     bottom: 6%;
 }
 
+.reviewWrapper{
+    display: flex;
+    margin-bottom: 1vh;
+    padding: 2%;
+    overflow: hidden;
+}
+
 .searchWrapper{
     width: 85%;
     margin-left: 5vw;
@@ -719,8 +726,9 @@ hr{
 .productImage{
     margin: auto;
     height: 100%;
-    border-style: solid;
     border-radius: 10px;
+    background-color: #f5f0f0 !important;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1) !important;
 }
 
 .productPrice{
@@ -731,9 +739,47 @@ hr{
     top: -1vh;
 }
 
+.searchButton{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.searchCategory{
+    width: 100% !important;
+    border-radius: 0px !important;
+}
+
+.flexWide{
+    display: flex;
+    width: 100%;
+}
+
+.categBtn{
+    position: absolute;
+    width: 100%;
+    left: 0%;
+}
+
+.smallContent{
+    display: flex;
+    width: 80%;
+    margin: auto;
+}
+
+.smallForm{
+    margin: auto;
+    max-width: 346px;
+}
+
+.indexProducts{
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 50vw;
+}
+
 @supports (-ms-ime-align: auto) {
     .dealBuyRequest, .dealForm, .flexEvenly,
-    .paginationPositioning {
+    .paginationPositioning, .indexProducts {
       justify-content: space-around;
     }
   
