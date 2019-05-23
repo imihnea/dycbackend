@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/dist/css/main.css" /> -->
 <div class="columns wrapper">
     <% include ../partials/sidebar %>
     <div class="column dashboard-right">
@@ -21,7 +21,7 @@
                         <main class="productWrapper" id="hits">
                         <% deals.docs.forEach((deal) => { %>
                             <article class="hit columns frame">
-                                    <div class="product-picture-wrapper" >
+                                    <div class="product-picture-wrapper" style="margin-bottom: auto;" >
                                         <figure class="image is-128x128" style="margin:auto;">
                                             <img src="<%= deal.product.imageUrl %>" class="productImage">
                                         </figure>

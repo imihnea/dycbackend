@@ -138,3 +138,10 @@ div.toptitle{
   justify-content: space-between;
   padding-top: 1rem;
 }
+
+/* Edge */
+@supports (-ms-ime-align: auto) {
+  .social-media, .verifyForm {
+    justify-content: space-around;
+  }
+}

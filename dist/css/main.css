@@ -779,10 +779,9 @@ hr{
 
 @supports (-ms-ime-align: auto) {
     .dealBuyRequest, .dealForm, .flexEvenly,
-    .paginationPositioning, .indexProducts {
+    .paginationPositioning, .indexProducts, .productPrice {
       justify-content: space-around;
     }
-  
   }
 
 /* Content Ends */

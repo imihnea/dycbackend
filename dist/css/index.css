@@ -228,3 +228,10 @@ div.latest-details{
     position: absolute;
     background: url('../img/premium.png') no-repeat;
 }
+
+/* Edge */
+@supports (-ms-ime-align: auto) {
+    .accepted_currencies {
+      justify-content: space-around;
+    }
+}

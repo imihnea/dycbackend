@@ -258,3 +258,9 @@ i.tooltip:hover .iTooltip{
     position: relative;
     bottom: -0.5vw;
 }
+
+@supports (-ms-ime-align: auto) {
+  .spacing {
+    justify-content: space-around;
+  }
+}

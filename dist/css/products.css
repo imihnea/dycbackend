@@ -108,3 +108,9 @@ input[type=checkbox].curr_checkbox{
 .noborder{
     border-color: transparent !important;
 }
+
+@supports (-ms-ime-align: auto) {
+    .modal-form {
+      justify-content: space-around;
+    }
+  }

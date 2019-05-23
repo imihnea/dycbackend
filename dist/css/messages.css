@@ -286,3 +286,9 @@ time{
     margin: auto;
     width: 100% !important;
 }
+
+@supports (-ms-ime-align: auto) {
+    .flexWrap, .msgbox, .flexEvenly {
+      justify-content: space-around;
+    }
+  }

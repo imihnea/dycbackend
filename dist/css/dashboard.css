@@ -779,7 +779,7 @@ body {
 
 .productWrapper{
   width: 85%;
-  margin: auto;
+  margin: auto !important;
 }
 
 .productRating{
@@ -853,7 +853,8 @@ body {
 
 /* Edge */
 @supports (-ms-ime-align: auto) {
-  .address, .productPrice, .inputWrapper, .repeatable{
+  .address, .productPrice, .inputWrapper, .repeatable, .address, .view_curr, 
+  .sel_curr, .modal-form, .file-upload, .mobileUpload, .transportFee {
     justify-content: space-around;
   }
 }
