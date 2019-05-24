@@ -1,0 +1,60 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="/dist/css/parsley.css">
+<div class="columns wrapper">
+    <% include ../partials/sidebar %>
+
+    <div class="column dashboard-right" style="margin-bottom: 4vh;">
+        <div class="column dashTop">
+            <h2 class="title">Become a partner</h2>
+        </div>
+        <br>
+        <div class="columns">
+            <div class="column">
+                <div class="frame smallerCenter">
+                    <p class="title is-4">Business</p>
+                    <p class="subtitle">For existing businesses looking to expand into the crypto market</p>
+                    <form action="/dashboard/businessPartner?_method=PUT" method="PUT" class="smallerCenter">
+                        <div class="field">
+                            <input type="text" class="input" name="name" placeholder="Company Name" required>
+                        </div>
+                        <div class="field">
+                            <input type="text" class="input" name="contactName" placeholder="Contact Person Full Name" required>
+                        </div>
+                        <div class="field">
+                            <input type="email" class="input" name="email" placeholder="Contact Person Email" required>
+                        </div>
+                        <div class="field">
+                            <input type="tel" class="input" name="phone" placeholder="Contact Person Phone Number" required>
+                        </div>
+                        <button class="button is-primary" <% if (lastApp > Date.now()) { %>disabled<% } %>>Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="column">
+                <div class="frame smallerCenter">
+                    <p class="title is-4">Proficient Dealer</p>
+                    <div class="subtitle">For users with a happy, large and consistent customer base</div>
+                    <form action="/dashboard/userPartner?_method=PUT" method="PUT" class="smallerCenter">
+                        <div class="smallerCenter">
+                            <div class="field">
+                                <input type="text" class="input" value="<%= user.nrSold %> Products sold">
+                            </div>
+                            <div class="field">
+                                <input type="text" class="input" value="<%= user.reviews.length %> Reviews">
+                            </div>
+                        </div>
+                        <br>
+                        <p>The partner application is enabled after 100 sold products and 25 reviews</p>
+                        <br>
+                        <button class="button is-primary" <% if ((user.nrSold < 100) || (user.reviews.length < 25) || (lastApp > Date.now())) { %>disabled<% } %>>Submit Application</button>
+                        <br><br>
+                        <p>You will not be able to submit another application for 90 days</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<% include ../partials/footer %>

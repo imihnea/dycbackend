@@ -2179,4 +2179,56 @@ module.exports = {
       }
     });
   },
+  async getPartner(req, res) {
+    const user = await User.findById(req.user._id);
+    let lastApp = new Date(-8640000000000000);
+    if (user.partnerApplication.sentOn != undefined) {
+      lastApp = new Date(user.partnerApplication.sentOn);
+      lastApp.setDate(lastApp.getDate() + 90);
+    }
+    return res.render('dashboard/dashboard_partner', {
+      user,
+      lastApp,
+      errors: req.session.errors,
+      pageTitle: 'Partner - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
+  },
+  async putUserPartner(req, res) {
+    const user = await User.findById(req.user._id);
+    if ((user.nrSold < 100) || (user.reviews.length < 25)) {
+      req.flash('error', 'You are not eligible to apply for partnership');
+      return res.redirect('back');
+    }
+    let lastApp = new Date(user.partnerApplication.sentOn);
+    lastApp.setDate(lastApp.getDate() + 90);
+    if (lastApp > Date.now()) {
+      req.flash('error', `You will be able to send another application on ${lastApp}`);
+      return res.redirect('back');
+    }
+    user.partnerApplication.sentOn = Date.now();
+    user.partnerApplication.status = 'Processing';
+    await user.save();
+    req.flash('success', 'Your application has been sent and will be reviewed as soon as possible');
+    return res.redirect('/dashboard');
+  },
+  async putBusinessPartner(req, res) {
+    const user = await User.findById(req.user._id);
+    let lastApp = new Date(user.partnerApplication.sentOn);
+    lastApp.setDate(lastApp.getDate() + 90);
+    if (lastApp > Date.now()) {
+      req.flash('error', `You will be able to send another application on ${lastApp}`);
+      return res.redirect('back');
+    }
+    user.partnerApplication.sentOn = Date.now();
+    user.partnerApplication.companyName = req.body.name;
+    user.partnerApplication.contactName = req.body.contactName;
+    user.partnerApplication.contactEmail = req.body.email;
+    user.partnerApplication.contactPhone = req.body.phone;
+    user.partnerApplication.status = 'Processing';
+    await user.save();
+    req.flash('success', 'Your application has been sent and will be reviewed as soon as possible');
+    return res.redirect('/dashboard');
+  }
 };

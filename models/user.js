@@ -104,6 +104,14 @@ const UserSchema = new Schema({
       ref: 'Review',
     },
   ],
+  partnerApplication: {
+    sentOn: Date,
+    status: Boolean,
+    companyName: String,
+    contactName: String,
+    contactEmail: String,
+    contactPhone: String
+  },
   avgRating: { type: Number, default: 0 },
   subscription1: Boolean,
   subscription3: Boolean,

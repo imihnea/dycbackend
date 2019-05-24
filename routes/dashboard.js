@@ -11,7 +11,7 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, getTokens, buyT
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
-        getNotifications, postNotifications, deleteAccount, deleteAccountRequest } = require('../controllers/dashboard');
+        getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -150,5 +150,14 @@ router.post('/disable-account', isLoggedIn, asyncErrorHandler(deleteAccountReque
 
 // POST - Delete account
 router.post('/disable-account/:token', asyncErrorHandler(deleteAccount));
+
+// GET Partner Page
+router.get('/partner', isLoggedIn, asyncErrorHandler(getPartner));
+
+// PUT Business Partner
+router.put('/businessPartner', isLoggedIn, asyncErrorHandler(putBusinessPartner));
+
+// PUT User Partner
+router.put('/userPartner', isLoggedIn, asyncErrorHandler(putUserPartner));
 
 module.exports = router;

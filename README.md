@@ -10,6 +10,8 @@ Frontend:
 
          Edge & Safari CSS
 
+         Partner => Badge / frame
+
     Low Priority:
 
          Make everything responsive (see comments in css files)
@@ -19,6 +21,10 @@ Frontend:
 Backend:
 
    High Priority:
+
+      Admin => Accept/Deny partner applications
+
+      Dashboard => Validate business applications
 
       Security => Validate and sanitize every user input
                => Anti DDOS
