@@ -22,8 +22,6 @@ Backend:
 
    High Priority:
 
-      Admin => Accept/Deny partner applications
-
       Dashboard => Validate business applications
 
       Security => Validate and sanitize every user input

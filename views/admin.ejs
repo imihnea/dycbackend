@@ -144,48 +144,96 @@
                 <div class="frame smallerCenter">
                     <p class="title">Users</p>
                     <div class="column">
-                        
-                            <p class="title is-4">
-                                Ban user
-                            </p>
-                            <form action="/admin/banUser?_method=PUT" method="POST" class="smallForm">
-                                <div class="field">
-                                    <input type="text" class="input" name="userid" placeholder="User ID">
-                                </div>
-                                <div class="select field">
-                                    <select name="time" id="">
-                                        <option value="" selected disabled>Time</option>
-                                        <option value="1d">1 day</option>
-                                        <option value="3d">3 days</option>
-                                        <option value="7d">7 days</option>
-                                        <option value="14d">14 days</option>
-                                        <option value="1m">1 month</option>
-                                        <option value="perm">Permanent</option>
-                                    </select>
-                                </div>
-                                <div class="select field">
-                                    <select name="reason" id="">
-                                        <option value="" selected disabled>Reason</option>
-                                        <option value="Scamming">Scamming</option>
-                                        <option value="SuspectActivity">Suspect Activity</option>
-                                    </select>
-                                </div>
-                                <button class="button is-primary">Ban</button>
-                            </form>
-                            <br>
-                            <p class="title is-4">
-                                Promote to partner
-                            </p>
-                            <form action="/admin/partnerUser?_method=PUT" method="POST" class="smallForm">
-                                <div class="field">
-                                    <input type="text" name="userid" placeholder="User ID" class="input">
-                                </div>
-                                <button class="button is-primary">Promote</button>
-                            </form>
-                       
+                        <p class="title is-4">
+                            Ban user
+                        </p>
+                        <form action="/admin/banUser?_method=PUT" method="POST" class="smallForm">
+                            <div class="field">
+                                <input type="text" class="input" name="userid" placeholder="User ID">
+                            </div>
+                            <div class="select field">
+                                <select name="time" id="">
+                                    <option value="" selected disabled>Time</option>
+                                    <option value="1d">1 day</option>
+                                    <option value="3d">3 days</option>
+                                    <option value="7d">7 days</option>
+                                    <option value="14d">14 days</option>
+                                    <option value="1m">1 month</option>
+                                    <option value="perm">Permanent</option>
+                                </select>
+                            </div>
+                            <div class="select field">
+                                <select name="reason" id="">
+                                    <option value="" selected disabled>Reason</option>
+                                    <option value="Scamming">Scamming</option>
+                                    <option value="SuspectActivity">Suspect Activity</option>
+                                </select>
+                            </div>
+                            <button class="button is-primary">Ban</button>
+                        </form>
                         <br>
+                        <p class="title is-4">
+                            Promote to partner
+                        </p>
+                        <form action="/admin/partnerUser?_method=PUT" method="POST" class="smallForm">
+                            <div class="field">
+                                <input type="text" name="userid" placeholder="User ID" class="input">
+                            </div>
+                            <button class="button is-primary">Promote</button>
+                        </form> 
+                        <br>
+                        <p class="title is-4">Partnership Applications</p>
+                        <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Account ID</th>
+                                    <th>Sent on</th>
+                                    <th>Company Name</th>
+                                    <th>Contact Name</th>
+                                    <th>Contact Phone</th>
+                                    <th>Contact Email</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% applications.forEach((item, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td style="word-break: break-all;"><%= item._id %></td>
+                                    <td style="word-break: break-all;"><%= item.partnerApplication.sentOn.toUTCString() %></td>
+                                    <td style="word-break: break-all;"><% if (item.partnerApplication.companyName) { %><%= item.partnerApplication.companyName %><% } %></td>
+                                    <td style="word-break: break-all;"><% if (item.partnerApplication.contactName) { %><%= item.partnerApplication.contactName %><% } %></td>
+                                    <td style="word-break: break-all;"><% if (item.partnerApplication.contactPhone) { %><%= item.partnerApplication.contactPhone %><% } %></td>
+                                    <td style="word-break: break-all;"><% if (item.partnerApplication.contactEmail) { %><%= item.partnerApplication.contactEmail %><% } %></td>
+                                    <th>
+                                        <form action="/admin/partnerUser?_method=PUT" method="POST">
+                                            <input type="text" name="userid" value="<%= item._id %>" hidden>
+                                            <button class="button is-primary">Accept</button>
+                                        </form>
+                                    </th>
+                                    <th>
+                                        <form action="/admin/partnerDecline?_method=PUT" method="POST">
+                                            <div class="select field">
+                                                <select name="reason" id="">
+                                                    <option value="" selected disabled>Reason</option>
+                                                    <option value="Small number of products">Small number of products</option>
+                                                    <option value="Rating too low">Rating too low</option>
+                                                    <option value="Inconsistent stock">Inconsistent stock</option>
+                                                </select>
+                                            </div>
+                                            <input type="text" name="userid" value="<%= item._id %>" hidden>
+                                            <button class="button is-danger">Decline</button>
+                                        </form>
+                                    </th>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <br>
             </div>
             <div class="column"></div>
         </div>

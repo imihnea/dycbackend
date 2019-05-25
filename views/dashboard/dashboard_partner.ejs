@@ -14,7 +14,7 @@
                 <div class="frame smallerCenter">
                     <p class="title is-4">Business</p>
                     <p class="subtitle">For existing businesses looking to expand into the crypto market</p>
-                    <form action="/dashboard/businessPartner?_method=PUT" method="PUT" class="smallerCenter">
+                    <form action="/dashboard/businessPartner?_method=PUT" method="POST" class="smallerCenter">
                         <div class="field">
                             <input type="text" class="input" name="name" placeholder="Company Name" required>
                         </div>
@@ -35,7 +35,7 @@
                 <div class="frame smallerCenter">
                     <p class="title is-4">Proficient Dealer</p>
                     <div class="subtitle">For users with a happy, large and consistent customer base</div>
-                    <form action="/dashboard/userPartner?_method=PUT" method="PUT" class="smallerCenter">
+                    <form action="/dashboard/userPartner?_method=PUT" method="POST" class="smallerCenter">
                         <div class="smallerCenter">
                             <div class="field">
                                 <input type="text" class="input" value="<%= user.nrSold %> Products sold">
@@ -47,7 +47,7 @@
                         <br>
                         <p>The partner application is enabled after 100 sold products and 25 reviews</p>
                         <br>
-                        <button class="button is-primary" <% if ((user.nrSold < 100) || (user.reviews.length < 25) || (lastApp > Date.now())) { %>disabled<% } %>>Submit Application</button>
+                        <button class="button is-primary" <% if ((user.nrSold < 100) || (user.reviews.length < 25) || (lastApp > Date.now())) { %>disabled<% } %>>Submit</button>
                         <br><br>
                         <p>You will not be able to submit another application for 90 days</p>
                     </form>

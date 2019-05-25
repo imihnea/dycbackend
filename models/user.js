@@ -106,7 +106,8 @@ const UserSchema = new Schema({
   ],
   partnerApplication: {
     sentOn: Date,
-    status: Boolean,
+    status: String,
+    declineReason: String,
     companyName: String,
     contactName: String,
     contactEmail: String,

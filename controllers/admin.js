@@ -32,9 +32,11 @@ module.exports = {
     async getAdmin (req, res) {
         const profit = await Profit.find({status: 'Unpaid'});
         const withdrawals = await Withdraw.find({status: 'Processing'});
+        const applications = await User.find({'partnerApplication.status': 'Processing'});
         res.render('admin', {
           profit,
           withdrawals,
+          applications,
           pageTitle: 'Administration - Deal Your Crypto',
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
@@ -356,7 +358,7 @@ module.exports = {
         return res.redirect('back');
     },
     async partnerUser (req, res) {
-        const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner'}});
+        const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner', 'partnerApplication.status': 'Accepted'}});
         if (process.env.NODE_ENV === 'production') {
             userLogger.info(`Message: User partnered\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
@@ -364,7 +366,7 @@ module.exports = {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/partner.ejs"), {
                 link: `http://${req.headers.host}/`,
                 footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                subject: 'Account partnered - Deal Your Crypto',
+                subject: 'Partnership accepted - Deal Your Crypto',
             }, 
             function (err, data) {
                 if (err) {
@@ -374,7 +376,7 @@ module.exports = {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dyc.com>`,
                         to: `${user.email}`,
-                        subject: 'Account partnered',
+                        subject: 'Partnership accepted',
                         html: data,
                     };
                     transporter.sendMail(mailOptions, (error) => {
@@ -388,5 +390,47 @@ module.exports = {
         }
         req.flash('success', 'User partnered successfully');
         return res.redirect('back');
+    },
+    async partnerDecline (req, res) {
+        const user = await User.findById(req.body.userid);
+        user.partnerApplication.status = 'Declined';
+        user.declineReason = req.body.reason;
+        await user.save();
+        if (process.env.NODE_ENV === 'production') {
+            userLogger.info(`Message: Partnership declined\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+        if(user.email_notifications.user === true) {
+            let lastApp = new Date(user.partnerApplication.sentOn);
+            lastApp.setDate(lastApp.getDate() + 90);
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/partnerDeclined.ejs"), {
+                link: `http://${req.headers.host}/`,
+                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                subject: 'Partnership declined - Deal Your Crypto',
+                reason: req.body.reason,
+                reapplyDate: lastApp
+            }, 
+            function (err, data) {
+                if (err) {
+                    console.log(err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                    const mailOptions = {
+                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        to: `${user.email}`,
+                        subject: 'Partnership declined',
+                        html: data,
+                    };
+                    transporter.sendMail(mailOptions, (error) => {
+                        if (error) {
+                            console.log(error);
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        }
+                    });
+                }
+            });
+        }
+        req.flash('success', 'Partnership successfully declined');
+        return res.redirect('back');
     }
+
 };

@@ -2209,6 +2209,10 @@ module.exports = {
     }
     user.partnerApplication.sentOn = Date.now();
     user.partnerApplication.status = 'Processing';
+    user.partnerApplication.companyName = '-';
+    user.partnerApplication.contactName = '-';
+    user.partnerApplication.contactEmail = '-';
+    user.partnerApplication.contactPhone = '-';
     await user.save();
     req.flash('success', 'Your application has been sent and will be reviewed as soon as possible');
     return res.redirect('/dashboard');
