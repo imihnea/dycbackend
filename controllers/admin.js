@@ -37,6 +37,7 @@ module.exports = {
           profit,
           withdrawals,
           applications,
+          errors: req.session.errors,
           pageTitle: 'Administration - Deal Your Crypto',
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
@@ -281,6 +282,22 @@ module.exports = {
         return res.redirect('back');
     },
     async banUser (req, res) {
+        req.check('userid', 'The userid is invalid').notEmpty().isLength({max: 24}).matches(/^[a-f0-9]+$/gi);
+        const errors = req.validationErrors();
+        if (errors) {
+            const profit = await Profit.find({status: 'Unpaid'});
+            const withdrawals = await Withdraw.find({status: 'Processing'});
+            const applications = await User.find({'partnerApplication.status': 'Processing'});
+            return res.render('admin', {
+                profit,
+                withdrawals,
+                applications,
+                errors,
+                pageTitle: 'Administration - Deal Your Crypto',
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
+        }
         const user = await User.findById(req.body.userid);
         let until = new Date();
         switch (req.body.time) {
@@ -358,6 +375,22 @@ module.exports = {
         return res.redirect('back');
     },
     async partnerUser (req, res) {
+        req.check('userid', 'The userid is invalid').notEmpty().isLength({max: 24}).matches(/^[a-f0-9]+$/gi);
+        const errors = req.validationErrors();
+        if (errors) {
+            const profit = await Profit.find({status: 'Unpaid'});
+            const withdrawals = await Withdraw.find({status: 'Processing'});
+            const applications = await User.find({'partnerApplication.status': 'Processing'});
+            return res.render('admin', {
+                profit,
+                withdrawals,
+                applications,
+                errors,
+                pageTitle: 'Administration - Deal Your Crypto',
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
+        }
         const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner', 'partnerApplication.status': 'Accepted'}});
         if (process.env.NODE_ENV === 'production') {
             userLogger.info(`Message: User partnered\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -392,6 +425,23 @@ module.exports = {
         return res.redirect('back');
     },
     async partnerDecline (req, res) {
+        req.check('reason', 'The reason is invalid').notEmpty().isLength({max: 500}).matches(/^[a-z ]+$/gi);
+        req.check('userid', 'The userid is invalid').notEmpty().isLength({max: 24}).matches(/^[a-f0-9]+$/gi);
+        const errors = req.validationErrors();
+        if (errors) {
+            const profit = await Profit.find({status: 'Unpaid'});
+            const withdrawals = await Withdraw.find({status: 'Processing'});
+            const applications = await User.find({'partnerApplication.status': 'Processing'});
+            return res.render('admin', {
+                profit,
+                withdrawals,
+                applications,
+                errors,
+                pageTitle: 'Administration - Deal Your Crypto',
+                pageDescription: 'Description',
+                pageKeywords: 'Keywords'
+            });
+        }
         const user = await User.findById(req.body.userid);
         user.partnerApplication.status = 'Declined';
         user.declineReason = req.body.reason;

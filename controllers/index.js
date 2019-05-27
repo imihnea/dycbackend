@@ -445,6 +445,12 @@ module.exports = {
             pageKeywords: 'Keywords'
           });
         }
+        if (user.ban.length > 0) {
+          if (user.ban[user.ban.length - 1].until > Date.now()) {
+            req.flash('error', 'Your account is suspended. Please check your email for more information');
+            return res.redirect('/');
+          }
+        }
         if ((!user.confirmed) && (!user.googleId) && (!user.facebookId)){
           res.render('index/confirmEmail', {
             user,

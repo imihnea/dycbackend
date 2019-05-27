@@ -36,6 +36,36 @@ const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
 const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
+const escapeHTML = (unsafe) => {
+  return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/@/g, "&commat;")
+      .replace(/\^/g, "&Hat;")
+      .replace(/:/g, "&colon;")
+      .replace(/;/g, "&semi;")
+      .replace(/#/g, "&num;")
+      .replace(/\$/g, "&dollar;")
+      .replace(/%/g, "&percent;")
+      .replace(/\*/g, "&ast;")
+      .replace(/\(/g, "&lpar;")
+      .replace(/\)/g, "&rpar;")
+      .replace(/_/g, "&UnderBar;")
+      .replace(/=/g, "&equals;")
+      .replace(/\+/g, "&plus;")
+      .replace(/`/g, "&grave;")
+      .replace(/\//g, "&sol;")
+      .replace(/\\/g, "&bsol;")
+      .replace(/\|/g, "&vert;")
+      .replace(/\[/g, "&lsqb;")
+      .replace(/\]/g, "&rsqb;")
+      .replace(/\{/g, "&lcub;")
+      .replace(/\}/g, "&rcub;")
+      .replace(/'/g, "&#039;");
+}
+
 // Constants for quick modification
 const feature1_time = 60000;
 const feature2_time = 120000;
@@ -2218,6 +2248,29 @@ module.exports = {
     return res.redirect('/dashboard');
   },
   async putBusinessPartner(req, res) {
+    req.check('name', 'The name must not be empty').notEmpty().isLength({max: 500});
+    req.check('name', 'The name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    req.check('contactName', 'The contact name must not be empty').notEmpty().isLength({max: 500});
+    req.check('contactName', 'The contact name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    req.check('email', 'Please input a valid email address').notEmpty().isEmail().isLength({max: 500});
+    req.check('phone', 'Please input a valid phone number').notEmpty().isLength({max: 20}).matches(/^[0-9+() -]+$/g);
+    const errors = req.validationErrors();
+    if (errors) {
+      const user = await User.findById(req.user._id);
+      let lastApp = new Date(-8640000000000000);
+      if (user.partnerApplication.sentOn != undefined) {
+        lastApp = new Date(user.partnerApplication.sentOn);
+        lastApp.setDate(lastApp.getDate() + 90);
+      }
+      return res.render('dashboard/dashboard_partner', {
+        user,
+        lastApp,
+        errors,
+        pageTitle: 'Partner - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    }
     const user = await User.findById(req.user._id);
     let lastApp = new Date(user.partnerApplication.sentOn);
     lastApp.setDate(lastApp.getDate() + 90);
@@ -2226,8 +2279,8 @@ module.exports = {
       return res.redirect('back');
     }
     user.partnerApplication.sentOn = Date.now();
-    user.partnerApplication.companyName = req.body.name;
-    user.partnerApplication.contactName = req.body.contactName;
+    user.partnerApplication.companyName = escapeHTML(req.body.name);
+    user.partnerApplication.contactName = escapeHTML(req.body.contactName);
     user.partnerApplication.contactEmail = req.body.email;
     user.partnerApplication.contactPhone = req.body.phone;
     user.partnerApplication.status = 'Processing';

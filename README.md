@@ -22,8 +22,6 @@ Backend:
 
    High Priority:
 
-      Dashboard => Validate business applications
-
       Security => Validate and sanitize every user input
                => Anti DDOS
       
