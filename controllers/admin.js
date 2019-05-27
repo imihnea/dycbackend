@@ -1,6 +1,7 @@
 const Profit = require('../models/profit');
 const Withdraw = require('../models/withdrawRequests');
 const User = require('../models/user');
+const Subscription = require('../models/subscription');
 
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
@@ -327,6 +328,19 @@ module.exports = {
             reason: req.body.reason
         }
         user.ban.push(ban);
+        await Subscription.findOne({userid: user._id},  (err, res) => {
+            if (err) {
+                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - @ Find Subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+                if (res.expireDate < until) {
+                    user.subscription1 = false;
+                    user.subscription3 = false;
+                    user.subscription6 = false;
+                    user.subscription12 = false;
+                    res.remove();
+                }
+            }
+        });
         await user.save();
         if (process.env.NODE_ENV === 'production') {
             userLogger.info(`Message: User banned until ${until}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
