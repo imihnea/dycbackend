@@ -52,18 +52,6 @@ const UserSchema = new Schema({
     }
   },
   btcbalance: { type: Number, default: 0 },
-  withdrawal: [{ 
-    createdAt: { 
-      type: Date, 
-      default: Date.now 
-    }, 
-    amount: Number, 
-    currency: { 
-      type: String, 
-      default: 'BTC' 
-    },
-    sentTo: String
-  }],
   full_name: String,
   number: String,
   twofactor: Boolean,

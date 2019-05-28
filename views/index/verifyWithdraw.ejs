@@ -1,0 +1,31 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="/dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">       
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <h1 style="margin-top: 1vh;">Authorize Withdrawal</h1>
+                <br>
+                <% if(err){ %>
+                    <div class="container is-fluid">
+                        <div class="notification is-danger" role="alert"> 
+                        <% err.forEach(function( err){ %>
+                            <%= err.msg %><br>
+                        <% }) %>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                <% } %>
+                <p class="subtitle is-5">Input your verification number to continue with the withdrawal request.</p>
+                <form action="/dashboard/addresses/withdrawBTC/<%= withdrawId %>" method="POST" class="verifyForm">
+                    <input name="pin" type="number" placeholder="Verification number (E.g. 1234)" class="input" style="width: 80%;" required />
+                    <input name="requestId" type="hidden" value="<%= requestId %>" required>
+                    <button class="button is-primary">Authorize</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>

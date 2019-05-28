@@ -225,9 +225,9 @@
                             </button>
                         <% } %>
                     </div>
-                    <div class="buttons has-addons is-centered">
+                    <div class="buttons <% if(user.twofactor !== true) { %> has-addons <% } %> is-centered">
                         <% if(user.twofactor === true) { %> 
-                            <button class="button is-primary deactivate is-rounded">Deactivate Two-Factor Authentication</button>
+                            <button class="button is-danger deactivate is-rounded">Deactivate Two-Factor Authentication</button>
                             <div class="modal modalDeactivate">
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
@@ -241,7 +241,7 @@
                                         <br>
                                         <form class="modal-form" action="/disable2factor" method="POST">
                                             <div class="control">
-                                                <button class="button is-primary is-rounded">Deactivate Two-Factor Authentication</button>
+                                                <button class="button is-danger is-rounded">Deactivate Two-Factor Authentication</button>
                                             </div>
                                         </form>
                                     </section>
@@ -250,12 +250,9 @@
                         <% } else { %>
                             <button class="button is-primary is-rounded" form="activate2Factor">Activate Two-Factor Authentication</button>
                         <% } %>
-                        </div>
-                        <% if(user.twofactor !== true) { %>
-                        <form action="/2factor" id="activate2Factor"></form>
-                        <% } %>
                     </div>
                 </div>
+            </div>
             <div class="column"></div>
         </div>
     </div>

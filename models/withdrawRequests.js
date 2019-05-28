@@ -11,6 +11,7 @@ const withdrawSchema = new Schema({
         ref: 'User'
     },
     userEmail: String,
+    verified: { type: Boolean, default: false },
     notify: Boolean,
     status: {type: String, default: 'Processing'}
 });

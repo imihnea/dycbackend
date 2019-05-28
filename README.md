@@ -27,10 +27,7 @@ Backend:
       
    Low Priority:
 
-      Service worker subscriptions => Notifications
-      
-      Dashboard 
-               => 2 Factor when withdrawing                      
+      Service worker subscriptions => Notifications          
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
 

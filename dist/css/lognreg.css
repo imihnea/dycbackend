@@ -139,6 +139,10 @@ div.toptitle{
   padding-top: 1rem;
 }
 
+.phonePage{
+  padding-bottom: 19vh;
+}
+
 /* Edge */
 @supports (-ms-ime-align: auto) {
   .social-media, .verifyForm {
