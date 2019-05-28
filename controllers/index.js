@@ -17,6 +17,9 @@ const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
 const jwt = require('jsonwebtoken');
 const ObjectID = require("bson-objectid");
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -125,7 +128,7 @@ module.exports = {
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-    request(verificationURL, async (error, response, body) => {
+    request(verificationURL, asyncErrorHandler(async (error, response, body) => {
       body = JSON.parse(body);
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
@@ -178,11 +181,11 @@ module.exports = {
           });
         }); 
       }
-    });
+    }));
   },
   async confirmEmail(req, res) {
     let uuser;
-    jwt.verify(req.params.token, SECRET, async (err) => {
+    jwt.verify(req.params.token, SECRET, asyncErrorHandler(async (err) => {
       if (err) {
         if (err.message.match(/Invalid/i)) {
           req.flash('error', 'Invalid link.');
@@ -207,7 +210,7 @@ module.exports = {
           }
         });
       }
-    });
+    }));
   },
   postVerify(req, res) {
     let pin = req.body.pin;
@@ -332,7 +335,7 @@ module.exports = {
     });
   },
   postDisable2Factor(req, res) {
-    jwt.verify(req.params.token, SECRET2, async (err) => {
+    jwt.verify(req.params.token, SECRET2, asyncErrorHandler(async (err) => {
       if (err) {
         if (err.message.match(/Invalid/i)) {
           req.flash('error', 'Invalid link.');
@@ -356,7 +359,7 @@ module.exports = {
           }
         });
       }
-    });
+    }));
   },
   getLogin(req, res) {
     if ( req.user ) {
@@ -1208,7 +1211,7 @@ module.exports = {
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-    request(verificationURL, async (error, response, body) => {
+    request(verificationURL, asyncErrorHandler(async (error, response, body) => {
       body = JSON.parse(body);
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
@@ -1272,7 +1275,7 @@ module.exports = {
         }
        });
       }
-    });
+    }));
   },
   async postContactUser(req, res) {
     if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
@@ -1288,7 +1291,7 @@ module.exports = {
     }
     const secretKey = RECAPTCHA_SECRET;
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-    request(verificationURL, async (error, response, body) => {
+    request(verificationURL, asyncErrorHandler(async (error, response, body) => {
       body = JSON.parse(body);
       if (body.success !== undefined && !body.success) {
         let errors = { msg: String };
@@ -1391,7 +1394,7 @@ module.exports = {
          });
         }
       }
-    });
+    }));
   },
   postForgotEmail(req, res, next) {
     async.waterfall([

@@ -9,6 +9,9 @@ const ejs = require('ejs');
 const path = require('path');
 const { errorLogger, userLogger, logger } = require('../config/winston');
 const moment = require('moment');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
@@ -223,7 +226,7 @@ module.exports = {
         let ids = req.body.withdrawIDs.split(" ");
         ids.pop();
         let withdraws = await Withdraw.find({_id: {$in: ids}});
-        withdraws.forEach(async withdraw => {
+        withdraws.forEach(asyncErrorHandler(async withdraw => {
             withdraw.status = 'Denied';
             await withdraw.save();
             await User.findByIdAndUpdate(withdraw.userID, {$inc: {btcbalance: withdraw.amount}});
@@ -256,7 +259,7 @@ module.exports = {
                     }
                 });
             }
-        });
+        }));
         req.flash('success', 'Successfully denied all withdraw requests');
         return res.redirect('back');
     },
@@ -272,10 +275,10 @@ module.exports = {
         let ids = req.body.profitIDs.split(" ");
         ids.pop();
         let profits = await Profit.find({_id: {$in: ids}});
-        profits.forEach(async profit => {
+        profits.forEach(asyncErrorHandler(async profit => {
             profit.status = 'Paid';
             await profit.save();
-        });
+        }));
         if (process.env.NODE_ENV == 'Production') {
             logger.info(`Profits ${req.body.profitIDs} paid on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }

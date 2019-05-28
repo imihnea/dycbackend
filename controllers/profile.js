@@ -10,6 +10,9 @@ const { errorLogger, userLogger } = require('../config/winston');
 const Subscription = require('../models/subscription');
 const { Regions } = require('../dist/js/regions');
 const moment = require('moment');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -69,7 +72,7 @@ module.exports = {
     },
     // Profile Update
     async profileUpdate(req, res) {
-        User.findById(req.user._id, async (err, user) => {
+        User.findById(req.user._id, asyncErrorHandler(async (err, user) => {
             if (err) {
               req.flash('error', err.message);
               return res.redirect('back');
@@ -151,12 +154,12 @@ module.exports = {
                     user.city = req.body.city;
                     await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
                   }
-                  Regions.forEach(async (region) => {
+                  Regions.forEach(asyncErrorHandler(async (region) => {
                     if ((user.country == region.country) && (user.continent != region.continent)) {
                       user.continent = region.continent;
                       await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.continent': user.continent}});
                     }
-                  });
+                  }));
                   user.address1 = req.body.address1;
                   user.zip = req.body.zip;
                   user.address2 = req.body.address2;
@@ -177,6 +180,6 @@ module.exports = {
                   return res.redirect(`/profile/${user._id}`);
                 }
             }
-        });
+        }));
   },
 };

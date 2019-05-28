@@ -7,6 +7,9 @@ const Deal = require('../models/deal');
 const { errorLogger } = require('../config/winston');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -103,7 +106,7 @@ module.exports = {
     // Update "read" field
     async updateMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
-        await chat.messages.forEach(async (message) => {
+        await chat.messages.forEach(asyncErrorHandler(async (message) => {
             let messagesRead = 0;
             if (( message.sender.toString() !== req.user._id.toString()) && (message.read == false) ) {
                 message.read = true;
@@ -117,13 +120,13 @@ module.exports = {
                     }
                 });
             }
-        });
+        }));
         await chat.save();
         return res.redirect(`/messages/${ req.params.id }`);
     },
     async updateMessagesDeal(req, res) {
         const chat = await Chat.findById( req.params.id );
-        await chat.messages.forEach(async (message) => {
+        await chat.messages.forEach(asyncErrorHandler(async (message) => {
             let messagesRead = 0;
             if (( message.sender.toString() !== req.user._id.toString()) && (message.read == false) ) {
                 message.read = true;
@@ -137,7 +140,7 @@ module.exports = {
                     }
                 });
             }
-        });
+        }));
         await chat.save();
         return res.redirect(`/deals/${ req.params.dealid }`);
     },

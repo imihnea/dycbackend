@@ -9,6 +9,9 @@ const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
 const request = require("request");
 const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -62,7 +65,7 @@ module.exports = {
         // });
         const product = await Product.findById(req.params.id);
         var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-        request(url, async function (error, response, body){
+        request(url, asyncErrorHandler(async (error, response, body) => {
             if (!error && response.statusCode == 200) {
               var json = JSON.parse(body);
               var data = json.data;
@@ -75,10 +78,10 @@ module.exports = {
                     csrfToken: req.body.csrfSecret,
                     pageTitle: `Buy ${product.name} - Deal Your Crypto`,
                     pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                    pageKeywords: 'Keywords',
                 });
             }
-        });
+        }));
     },
     async acceptDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
@@ -125,7 +128,7 @@ module.exports = {
                 "rate": deal.rate,
                 "label_file_type": "PDF",
                 "async": true,
-            }, async function(err, transaction) {
+            }, asyncErrorHandler(async (err, transaction) => {
                 // asynchronously called
                 if(err) {
                     console.log(err);
@@ -173,32 +176,7 @@ module.exports = {
                         return res.redirect('back');
                     }
                 }
-            });
-            
-            
-            // )
-            // .then(function(transaction) {
-            //     shippo.transaction.list({
-            //       "rate": transaction.rate
-            //     })
-            //     .then(function(mpsTransactions) {
-            //         mpsTransactions.results.forEach(function(mpsTransaction){
-            //             if(mpsTransaction.object_status == "SUCCESS") {
-            //                 console.log("Label URL: %s", mpsTransaction.label_url);
-            //                 console.log("Tracking Number: %s", mpsTransaction.tracking_number);
-            //                 console.log("E-Mail: %s", mpsTransaction.object_owner);
-            //                 console.log(mpsTransaction.object_status);
-            //                 console.log("Label can be found under: " + mpsTransaction.label_url);
-            //             } else {
-            //                 // hanlde error transactions
-            //                 console.log("Error Message: %s", mpsTransactions.messages);
-            //             }
-            //         });
-            //     })
-            // }, function(err) {
-            //     // Deal with an error
-            //     console.log("There was an error creating transaction : %s", err.detail);
-            // });
+            }));
         }
     },
     async declineDeal(req, res) {
@@ -773,7 +751,7 @@ module.exports = {
                 console.log('eroare la creere adresa')
                 res.send(err);
             } else {
-                shippo.address.validate(address.object_id, function(err, address1) {
+                shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
                     // asynchronously called
                     if(err) {
                         console.log('eroare la validare')
@@ -799,7 +777,7 @@ module.exports = {
                             })
                         }
                     }
-                });
+                }));
             }
         });
     },
@@ -818,7 +796,7 @@ module.exports = {
                 console.log('eroare la creere adresa')
                 res.send(err);
             } else {
-                shippo.address.validate(address.object_id, function(err, address1) {
+                shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
                     // asynchronously called
                     if(err) {
                         console.log('eroare la validare')
@@ -826,7 +804,7 @@ module.exports = {
                     } else {
                         res.send(address1);
                     }
-                });
+                }));
             }
         });
     },

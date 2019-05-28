@@ -6,6 +6,9 @@ const ejs = require('ejs');
 const path = require('path');
 const { errorLogger, userLogger, reviewLogger } = require('../config/winston');
 const moment = require('moment');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';

@@ -9,6 +9,9 @@ const Review = require('../models/review');
 const moment = require('moment');
 const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
+const middleware = require('../middleware/index');
+
+const { asyncErrorHandler } = middleware; // destructuring assignment
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -400,7 +403,7 @@ module.exports = {
                     if ( user.btcbalance >= totalPrice)  {
                         if (req.body.deliveryShipping === 'Shipping') {
                             var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-                            request(url, async function (error, response, body) {
+                            request(url, asyncErrorHandler(async (error, response, body) => {
                                 if (!error && response.statusCode == 200) {
                                 var json = JSON.parse(body);
                                 var data = json.data;
@@ -492,7 +495,7 @@ module.exports = {
                                     req.flash('err', 'There\'s been an error with your request, please try again.');
                                     return res.redirect('back');
                                 }
-                            });
+                            }));
                         } else if (req.body.deliveryShipping === 'FaceToFace') {
                             // Create deal
                             let deal = {

@@ -263,7 +263,7 @@ module.exports = {
   // Show address page
   async getAddresses(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function (error, response, body){
+    request(url, asyncErrorHandler(async (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var json = JSON.parse(body);
         var data = json.data;
@@ -286,7 +286,7 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-    });
+    }));
   },
   async savvyStatus(req, res) {
     var orderId = req.params.order;
@@ -447,7 +447,7 @@ module.exports = {
       req.flash('error', 'Wrong PIN code, please try again.');
       return res.redirect('back');
     }
-    nexmo.verify.check({request_id: req.body.requestId, code: req.body.pin}, async (err, result) => {
+    nexmo.verify.check({request_id: req.body.requestId, code: req.body.pin}, asyncErrorHandler(async (err, result) => {
       if(err) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         return res.render('index/verifyWithdraw', {
@@ -523,7 +523,7 @@ module.exports = {
           });
         }
       }
-    });
+    }));
   },
   async verifyWithdraw(req, res) {
     req.check('address', 'Invalid address format').notEmpty().isLength({ min: 26, max: 80 });
@@ -758,7 +758,7 @@ module.exports = {
   // Get tokens page
   async getTokens(req, res) {
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function(error, response, body){
+    request(url, asyncErrorHandler(async (error, response, body) => {
       if(!error && response.statusCode == 200) {
         var json = JSON.parse(body);
         var data = json.data;
@@ -775,7 +775,7 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-    });
+    }));
   },
   // Buy Tokens
   async buyTokens(req, res) {
@@ -796,7 +796,7 @@ module.exports = {
         const user = await User.findById(req.user._id);
         const tokens = Number(req.body.tokensNr);
         const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-        request(url, async function(error, response, body){
+        request(url, asyncErrorHandler(async (error, response, body) => {
         if(!error && response.statusCode == 200) {
           const json = JSON.parse(body);
           const data = json.data;
@@ -825,13 +825,13 @@ module.exports = {
               return res.redirect('back');
           }
         }
-      });
+      }));
     }
   },
   // Buy Token Packs
   async buyTokenPacks(req, res) {
     const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function(error, response, body){
+    request(url, asyncErrorHandler(async (error, response, body) => {
       if(!error && response.statusCode == 200) {
         const json = JSON.parse(body);
         const data = json.data;
@@ -895,7 +895,7 @@ module.exports = {
           return res.redirect('back');
         }
       }
-    });
+    }));
   },
   // Show new product form
   newProduct(req, res) {
@@ -1003,7 +1003,7 @@ module.exports = {
             req.flash('error', 'Error creating address, please try again.');
             return res.redirect('back');
           } else {
-            shippo.address.validate(address.object_id, asyncErrorHandler(async function(err, address1) {
+            shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
                 // asynchronously called
                 if(err || address1.validation_results.is_valid === false) {
                   req.flash('error', 'Invalid address, please try again.');
@@ -1454,7 +1454,7 @@ module.exports = {
           req.flash('error', 'Error creating address, please try again.');
           return res.redirect('back');
         } else {
-          shippo.address.validate(address.object_id, asyncErrorHandler(async function(err, address1) {
+          shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
             // asynchronously called
             if(err || address1.validation_results.is_valid === false) {
               req.flash('error', 'Invalid address, please try again.');
@@ -1790,7 +1790,7 @@ module.exports = {
       premium = false;
     }
     var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function(error, response, body){
+    request(url, asyncErrorHandler(async (error, response, body) => {
       if(!error && response.statusCode == 200) {
         var json = JSON.parse(body);
         var data = json.data;
@@ -1807,7 +1807,7 @@ module.exports = {
         pageKeywords: 'Keywords'
       });
       }
-    });
+    }));
   },
     // Subscription cancel page with details
     async subscriptionCancelPage(req, res) {
@@ -1836,7 +1836,7 @@ module.exports = {
     let CurrentUser = await User.findById(req.params.id);
     // Get token price
     const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, async function(error, response, body){
+    request(url, asyncErrorHandler(async (error, response, body) => {
       if(!error && response.statusCode == 200) {
         const json = JSON.parse(body);
         const data = json.data;
@@ -1990,7 +1990,7 @@ module.exports = {
           break;
         }
       }
-    });
+    }));
   },
 	async subscriptionCancel(req, res, next) {
     await User.findByIdAndUpdate(req.user._id, {$set: {subscription1: false, subscription3: false, subscription6: false, subscription12: false}},err => {
@@ -2029,7 +2029,7 @@ module.exports = {
       });
     } else {
       const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-      request(url, async function(error, response, body){
+      request(url, asyncErrorHandler(async (error, response, body) => {
       if(!error && response.statusCode == 200) {
         const json = JSON.parse(body);
         const data = json.data;
@@ -2047,7 +2047,7 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       }
-    });
+    }));
     }
   },
   async getSearchData(req, res) {
@@ -2244,7 +2244,7 @@ module.exports = {
     });
   },
   async deleteAccount(req, res) {
-    jwt.verify(req.params.token, SECRET2, async (err) => {
+    jwt.verify(req.params.token, SECRET2, asyncErrorHandler(async (err) => {
       if (err) {
         if (err.message.match(/Invalid/i)) {
           req.flash('error', 'Invalid link.');
@@ -2280,7 +2280,7 @@ module.exports = {
           }
         })
       }
-    });
+    }));
   },
   async getPartner(req, res) {
     const user = await User.findById(req.user._id);
