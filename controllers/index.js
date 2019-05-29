@@ -88,7 +88,7 @@ function sendConfirmationEmail(req, userid, useremail) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     } else {
     const mailOptions = {
-        from: `Deal Your Crypto <noreply@dyc.com>`,
+        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
         to: `${useremail}`,
         subject: 'Email Confirmation Required',
         html: data,
@@ -317,7 +317,7 @@ module.exports = {
         console.log(err);
       } else {
         const mailOptions = {
-            from: `Deal Your Crypto <noreply@dyc.com>`,
+            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
             to: `${req.user.email}`,
             subject: 'Disable two-factor authentication',
             html: data,
@@ -680,7 +680,7 @@ module.exports = {
         });
         const mailOptions = {
           to: user.email,
-          from: 'support@dyc.com',
+          from: 'support@dealyourcrypto.com',
           subject: 'Deal Your Crypto Password Reset',
           text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
@@ -1154,7 +1154,7 @@ module.exports = {
         });
         const mailOptions = {
           to: user.email,
-          from: 'support@dyc.com',
+          from: 'support@dealyourcrypto.com',
           subject: 'Your password has been changed',
           text: `${'Hello,\n\n'
             + 'This is a confirmation that the password for your account '}${user.email} has just been changed.\n`,
@@ -1434,7 +1434,7 @@ module.exports = {
         });
         const mailOptions = {
           to: user.email,
-          from: 'support@dyc.com',
+          from: 'support@dealyourcrypto.com',
           subject: 'Deal Your Crypto Change Email Request',
           text: `${'You are receiving this because you (or someone else) have requested to change the email for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
@@ -1510,7 +1510,7 @@ module.exports = {
         });
         const mailOptions = {
           to: user.email,
-          from: 'support@dyc.com',
+          from: 'support@dealyourcrypto.com',
           subject: 'Your email has been changed',
           text: `${'Hello,\n\n'
             + 'This is a confirmation that the email for your account '}${user.email} has just been changed.\n`,
@@ -1552,9 +1552,9 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
-  getGdpr(req, res) {
-    res.render('gdpr', {
-      pageTitle: 'General Data Protection - Deal Your Crypto',
+  getShipping(req, res) {
+    res.render('shipping', {
+      pageTitle: 'Shipping & Delivery - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });

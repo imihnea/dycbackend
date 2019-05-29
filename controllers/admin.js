@@ -86,7 +86,7 @@ module.exports = {
                                     console.log(err);
                                 } else {
                                     const mailOptions = {
-                                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                                         to: `${withdraw.userEmail}`,
                                         subject: 'Currency withdrawn successfully',
                                         html: data,
@@ -132,7 +132,7 @@ module.exports = {
                     console.log(err);
                 } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                         to: `${withdraw.userEmail}`,
                         subject: 'Currency withdrawal denied',
                         html: data,
@@ -197,7 +197,7 @@ module.exports = {
                                         console.log(err);
                                     } else {
                                         const mailOptions = {
-                                            from: `Deal Your Crypto <noreply@dyc.com>`,
+                                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                                             to: `${withdraw.userEmail}`,
                                             subject: 'Currency withdrawn successfully',
                                             html: data,
@@ -242,7 +242,7 @@ module.exports = {
                         console.log(err);
                     } else {
                         const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`,
+                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                             to: `${withdraw.userEmail}`,
                             subject: 'Currency withdrawal denied',
                             html: data,
@@ -374,7 +374,7 @@ module.exports = {
                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                         to: `${user.email}`,
                         subject: 'Account suspended',
                         html: data,
@@ -424,7 +424,7 @@ module.exports = {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                         to: `${user.email}`,
                         subject: 'Partnership accepted',
                         html: data,
@@ -482,7 +482,7 @@ module.exports = {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                         to: `${user.email}`,
                         subject: 'Partnership declined',
                         html: data,
