@@ -8,9 +8,7 @@ Frontend:
 
          UI => New product => Feature deal
 
-         Edge & Safari CSS
-
-         Partner => Badge / frame
+         Edge & Safari CSS       - Requires testing
 
     Low Priority:
 
@@ -27,7 +25,7 @@ Backend:
       
    Low Priority:
 
-      Service worker subscriptions => Notifications          
+      Service worker subscriptions => Notifications          - To do when it's hosted
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
 

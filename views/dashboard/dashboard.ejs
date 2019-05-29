@@ -15,9 +15,9 @@
                     <form action="/profile/update/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="changeDetails"
                         data-parsley-validate>
                         <% if(premium !== true) { %>
-                            <h1 class="title">Standard Account</h1>
+                            <h1 class="title">Standard <% if (user.accountType == 'Partner') { %>Partnered<% } %> Account</h1>
                         <% } else { %>
-                            <h1 class="title">Premium Account</h1>
+                            <h1 class="title">Premium <% if (user.accountType == 'Partner') { %>Partnered<% } %> Account</h1>
                             <p class="subtitle">Expires on: <%= expireDate %></p>
                         <% } %>
                         <div class="container is-fluid">

@@ -1024,7 +1024,8 @@ module.exports = {
                   city: req.user.city,
                   state: req.user.state,
                   country: req.user.country,
-                  continent: req.user.continent
+                  continent: req.user.continent,
+                  accountType: req.user.accountType
                 };
                 req.body.product.author = author;
                 const btcPrice=Number(req.body.product.btc_price);
@@ -1184,7 +1185,8 @@ module.exports = {
           city: req.user.city,
           state: req.user.state,
           country: req.user.country,
-          continent: req.user.continent
+          continent: req.user.continent,
+          accountType: req.user.accountType
         };
         req.body.product.author = author;
         const btcPrice=Number(req.body.product.btc_price);

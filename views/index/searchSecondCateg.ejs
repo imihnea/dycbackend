@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/dist/css/products.css">
 <link rel="stylesheet" href="/dist/css/tooltips.css">
 <div id="results" class="container-fluid">  
-    <div class="columns content-wrapper">
+    <div class="columns content-wrapper" style="margin-bottom: 0.5rem;">
         <div class="searchSidebar column is-one-fifth frame products">    
             <div>
                 <p class="filters">Filters</p>
@@ -99,6 +99,11 @@
                                         </div>
                                     </div>
                                     <div class="column prod_info productPrice">
+                                        <% if (product._source.author.accountType == 'Partner') { %>
+                                            <div class="searchBadge">
+                                                <img src="/dist/img/badge.png" alt="Partnered user" title="Partnered user" class="badge">
+                                            </div>
+                                        <% } %>
                                         <div class="prices openPrices frame">
                                             <p class="price_text"> <%= product._source.btcPrice %></p>
                                             <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>

@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
+const Subscription = require('../models/subscription');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger } = require('./winston');
@@ -48,28 +49,35 @@ setInterval( () => {
                             console.log(err);
                         } else {
                             // pay user and create profit
-                            switch(seller.accountType) {
-                                case 'Standard':
-                                    seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
-                                    // add profit to db
-                                    withdrawAmount = item.price * standardAccountFee * 0.01;
-                                    createProfit(req, withdrawAmount, 'Income Fee');
-                                    break;
-                                case 'Premium':
-                                    seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
-                                    // add profit to db
-                                    withdrawAmount = item.price * premiumAccountFee * 0.01;
-                                    createProfit(req, withdrawAmount, 'Income Fee');
-                                    break;
-                                case 'Partner':
-                                    seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
-                                    // add profit to db
-                                    withdrawAmount = item.price * partnerAccountFee * 0.01;
-                                    createProfit(req, withdrawAmount, 'Income Fee');
-                                    break;
-                                default:
-                                    break;
-                            }
+                            Subscription.find({userid: seller._id}, (err, res) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    if (res.length > 0) {
+                                        seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
+                                        // add profit to db
+                                        withdrawAmount = item.price * premiumAccountFee * 0.01;
+                                        createProfit(req, withdrawAmount, 'Income Fee');
+                                    } else {
+                                        switch(seller.accountType) {
+                                            case 'Standard':
+                                                seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+                                                // add profit to db
+                                                withdrawAmount = item.price * standardAccountFee * 0.01;
+                                                createProfit(req, withdrawAmount, 'Income Fee');
+                                                break;
+                                            case 'Partner':
+                                                seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
+                                                // add profit to db
+                                                withdrawAmount = item.price * partnerAccountFee * 0.01;
+                                                createProfit(req, withdrawAmount, 'Income Fee');
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
                             seller.save(err => {
                                 if (err) {
                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Couldn't save user ${seller._id}'s currency change\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

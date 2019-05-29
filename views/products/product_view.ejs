@@ -119,7 +119,11 @@
                 </div>
             </div>
             <div class="column is-one-quarter">
-                <p class="productUserText">Sold by: <a class="productUserLink link" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
+                <div class="frame" style="display: flex; margin: auto;">
+                    <p class="productUserText" style="margin: auto;">Sold by: <a class="productUserLink link" href="/profile/<%= product.author.id%>"><%= product.author.username %></a></p>
+                    <% if (product.author.accountType == 'Partner') { %> <img src="/dist/img/badge.png" alt="Partnered user" title="Partnered user" class="badge" style="margin: auto;"> <% } %>
+                </div>
+                <br>
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i < floorRating) { %>
                     <!-- display a full star -->

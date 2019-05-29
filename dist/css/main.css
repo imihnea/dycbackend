@@ -777,6 +777,17 @@ hr{
     width: 50vw;
 }
 
+.badge{
+    width: 36px;
+    height: 36px;
+}
+
+.searchBadge{
+    margin: auto; 
+    display: flex; 
+    justify-content: center;
+}
+
 @supports (-ms-ime-align: auto) {
     .dealBuyRequest, .dealForm, .flexEvenly,
     .paginationPositioning, .indexProducts, .productPrice {

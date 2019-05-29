@@ -2,6 +2,7 @@ const Profit = require('../models/profit');
 const Withdraw = require('../models/withdrawRequests');
 const User = require('../models/user');
 const Subscription = require('../models/subscription');
+const Product = require('../models/product');
 
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
@@ -409,6 +410,7 @@ module.exports = {
             });
         }
         const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner', 'partnerApplication.status': 'Accepted'}});
+        await Product.updateMany({'author.id': req.body.userid}, {$set: {'author.accountType': 'Partner'}}, {multi: true});
         if (process.env.NODE_ENV === 'production') {
             userLogger.info(`Message: User partnered\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }

@@ -34,14 +34,16 @@ const ProductSchema = new Schema({
     id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      es_type: 'text'
+      es_type: 'text', 
+      es_indexed: true
     },
-    username: { type: String, es_type: 'text'},
-    name: {type: String, es_type: 'text'},
-    city: { type: String, es_type: 'text'},
-    country: { type: String, es_type: 'text'},
-    state: { type: String, es_type: 'text'},
-    continent: { type: String, es_type: 'text'}
+    username: { type: String, es_type: 'text', es_indexed: true},
+    name: { type: String, es_type: 'text', es_indexed: true },
+    city: { type: String, es_type: 'text', es_indexed: true },
+    country: { type: String, es_type: 'text', es_indexed: true },
+    state: { type: String, es_type: 'text', es_indexed: true },
+    continent: { type: String, es_type: 'text', es_indexed: true },
+    accountType: { type: String, es_type: 'text', es_indexed: true },
   },
   reviews: [
     {
@@ -60,7 +62,8 @@ const ProductSchema = new Schema({
     zip: String,
     country: String,
     phone: String,
-    email: String,
+    email: String, 
+    es_indexed: false
   },
   carrier: {
     dhl_express: Boolean,
@@ -70,6 +73,7 @@ const ProductSchema = new Schema({
     deutsche_post: Boolean,
     couriersplease: Boolean,
     fastway: Boolean,
+    es_indexed: false
   },
   parcel: {
     parcel_length: Number,
@@ -78,10 +82,12 @@ const ProductSchema = new Schema({
     parcel_distance_unit: String,
     parcel_weight: Number,
     parcel_weight_unit: String,
+    es_indexed: false
   },
   deleteIn30: {
     status: { type: Boolean, default: false },
-    deleteDate: Date
+    deleteDate: Date,
+    es_indexed: false
   },
   lastBought: { type: Date, default: Date.now }
 });
