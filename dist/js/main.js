@@ -68,16 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   let user = document.getElementById('hiddenUsername');
-  if (user.textContent.length > 20) {
-      user.textContent = user.textContent.substr(0, 20);
-      user.textContent += '...';
-  }
+  if(user) {
+    if (user.textContent.length > 20) {
+        user.textContent = user.textContent.substr(0, 20);
+        user.textContent += '...';
+    }
   const userName = document.querySelectorAll('.username');
   const userNameItems = [].slice.call(userName);
   userNameItems.forEach((item) => {
       item.textContent = user.textContent;
   });
   user.remove();
+  }
 });
 
 // On ready

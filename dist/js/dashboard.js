@@ -45,30 +45,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelOpenButton = document.querySelector('.cancelSub');
   const cancelCloseButton = document.querySelector('.deleteCancelSub');
   const cancelModal = document.querySelector('.modalCancelSub');
-  cancelOpenButton.addEventListener('click', (event) => {
+  if(cancelOpenButton) {
+    cancelOpenButton.addEventListener('click', (event) => {
     // event.stopPropagation();
       cancelModal.classList.toggle('is-active');
     });
+  }
+  if(cancelCloseButton) {
     cancelCloseButton.addEventListener('click', (event) => {
       // event.stopPropagation();
       cancelModal.classList.toggle('is-active');
     });
-
+  }
     // Deactivate Modal - leave this one last, it bugs out the others if
     // the user doesn't have 2 factor enabled
     const deactivateOpenButton = document.querySelector('.deactivate');
     const deactivateCloseButton = document.querySelector('.deleteDeactivate');
+    const deactivateCancelButton = document.querySelector('.deactivateCancel');
     const deactivateModal = document.querySelector('.modalDeactivate');
-    deactivateOpenButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        deactivateModal.classList.toggle('is-active');
-    });
-    deactivateCloseButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        deactivateModal.classList.toggle('is-active');
-    });
-    deactivateCancelButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        deactivateModal.classList.toggle('is-active');
-    });
+    if(deactivateOpenButton) {
+      deactivateOpenButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          deactivateModal.classList.toggle('is-active');
+      });
+    }
+    if(deactivateCloseButton) {
+      deactivateCloseButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          deactivateModal.classList.toggle('is-active');
+      });
+    }
+    if(deactivateCancelButton) {
+      deactivateCancelButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          deactivateModal.classList.toggle('is-active');
+      });
+    }
 });
