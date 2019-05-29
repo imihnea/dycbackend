@@ -479,7 +479,7 @@ module.exports = {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`,
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
                         to: `${CurrentUser.email}`,
                         subject: 'Currency withdrawn successfully',
                         html: data,
@@ -2228,7 +2228,7 @@ module.exports = {
         console.log(err);
       } else {
         const mailOptions = {
-            from: `Deal Your Crypto <noreply@dyc.com>`,
+            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
             to: `${req.user.email}`,
             subject: 'Delete account request - Deal Your Crypto',
             html: data,

@@ -327,7 +327,7 @@ module.exports = {
         } else {
             const mailOptions = {
                 from: `${req.body.name} <${req.body.email}>`, // sender address
-                to: 'support@dyc.com', // list of receivers
+                to: 'support@dealyourcrypto.com', // list of receivers
                 subject: 'User Report - Deal Your Crypto', // Subject line
                 html: data, // html body
             };
@@ -472,7 +472,7 @@ module.exports = {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             const mailOptions = {
-                                                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                                                 to: `${user2.email}`, // list of receivers
                                                 subject: `New Deal Request - Deal Your Crypto`, // Subject line
                                                 html: data, // html body
@@ -556,7 +556,7 @@ module.exports = {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                     } else {
                                         const mailOptions = {
-                                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                                             to: `${user2.email}`, // list of receivers
                                             subject: `New Deal Request - Deal Your Crypto`, // Subject line
                                             html: data, // html body

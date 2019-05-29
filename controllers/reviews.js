@@ -78,7 +78,7 @@ module.exports = {
 					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 				} else {
 					const mailOptions = {
-							from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+							from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
 							to: `${author.email}`, // list of receivers
 							subject: 'Your product has been reviewed', // Subject line
 							html: data, // html body

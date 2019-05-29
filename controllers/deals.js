@@ -103,7 +103,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${buyer.email}`, // list of receivers
                         subject: 'Deal Status Changed', // Subject line
                         html: data, // html body
@@ -156,7 +156,7 @@ module.exports = {
                                 console.log(err);
                             } else {
                             const mailOptions = {
-                                from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                                 to: `${buyer.email}`, // list of receivers
                                 subject: 'Deal Status Changed', // Subject line
                                 html: data, // html body
@@ -201,7 +201,7 @@ module.exports = {
                     console.log(err);
                 } else {
                 const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                     to: `${buyer.email}`, // list of receivers
                     subject: 'Deal Status Changed', // Subject line
                     html: data, // html body
@@ -261,7 +261,7 @@ module.exports = {
                     console.log(err);
                 } else {
                 const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                     to: `${buyer.email}`, // list of receivers
                     subject: 'Deal Status Changed', // Subject line
                     html: data, // html body
@@ -287,7 +287,7 @@ module.exports = {
                     console.log(err);
                 } else {
                 const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                     to: `${seller.email}`, // list of receivers
                     subject: 'Deal Status Changed', // Subject line
                     html: data, // html body
@@ -329,7 +329,7 @@ module.exports = {
                     console.log(err);
                 } else {
                 const mailOptions = {
-                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                     to: `${seller.email}`, // list of receivers
                     subject: 'Deal Status Changed', // Subject line
                     html: data, // html body
@@ -398,7 +398,7 @@ module.exports = {
                             console.log(err);
                         } else {
                         const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                             to: `${seller.email}`, // list of receivers
                             subject: 'Deal Status Changed', // Subject line
                             html: data, // html body
@@ -434,7 +434,7 @@ module.exports = {
                             console.log(err);
                         } else {
                         const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                             to: `${seller.email}`, // list of receivers
                             subject: 'Deal Status Changed', // Subject line
                             html: data, // html body
@@ -476,7 +476,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${seller.email}`, // list of receivers
                         subject: 'Deal Status Changed', // Subject line
                         html: data, // html body
@@ -502,7 +502,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${buyer.email}`, // list of receivers
                         subject: 'Deal Status Changed', // Subject line
                         html: data, // html body
@@ -566,7 +566,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${buyer.email}`, // list of receivers
                         subject: 'Refund denied', // Subject line
                         html: data, // html body
@@ -637,7 +637,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${seller.email}`, // list of receivers
                         subject: 'Refund Requested', // Subject line
                         html: data, // html body

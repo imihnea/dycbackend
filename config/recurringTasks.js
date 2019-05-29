@@ -317,7 +317,7 @@ setInterval( () => {
                                 <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
                                 `;
                                 const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                                     to: `${user2.full_name} <${user2.email}>`, // list of receivers
                                     subject: 'You have an unread message', // Subject line
                                     html: output, // html body
@@ -346,7 +346,7 @@ setInterval( () => {
                                 <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
                                 `;
                                 const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                                     to: `${user1.full_name} <${user1.email}>`, // list of receivers
                                     subject: 'You have an unread message', // Subject line
                                     html: output, // html body

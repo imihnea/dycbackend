@@ -27,7 +27,7 @@ const {
   getTeam,
   getServices,
   getFaq,
-  getGdpr,
+  getShipping,
   getTos,
   getPrivPol,
   postVerify,
@@ -150,7 +150,7 @@ router.get('/services', getServices);
 
 router.get('/faq', getFaq);
 
-router.get('/gdpr', getGdpr);
+router.get('/shipping', getShipping);
 
 router.get('/terms-of-service', getTos);
 

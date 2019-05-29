@@ -284,7 +284,7 @@ module.exports = {
                         console.log(err);
                     } else {
                     const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dyc.com>`, // sender address
+                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
                         to: `${user2.email}`, // list of receivers
                         subject: 'New Conversation Started', // Subject line
                         html: data, // html body

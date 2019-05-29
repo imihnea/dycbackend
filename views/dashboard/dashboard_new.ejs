@@ -90,11 +90,11 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                             <br>
                             <div class="inputWrapper">
-                                <input type="text" id="tagInput" class="input" placeholder="Tags (Max 11)" 
+                                <input type="text" id="tagInput" class="input" placeholder="Tags" 
                                     data-parsley-pattern="^[A-Za-z0-9 .,\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
                                 <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                                 <div class="label" style="margin-left: 1vw;">
-                                    <span class="registerTooltip" aria-label="Characters: Alphanumeric, including the hyphen (-)" tabindex="-1">
+                                    <span class="registerTooltip" aria-label="Characters: Alphanumeric, including the hyphen (-). Maximum 11 tags." tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                     </span>
                                 </div>
@@ -783,15 +783,21 @@ All images are scaled to that ratio" tabindex="-1">
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="control smmargin" style="margin: auto; margin-top: 2vh;">
-                            <button type="submit" form="newProductForm" class="button is-primary">Create</button>
+                            <div class="control smmargin" style="margin: auto; margin-top: 2vh;">
+                                <button type="submit" form="newProductForm" class="button is-primary">Create new deal</button>
+                                <p class="help">
+                                    By creating a new deal you agree to our 
+                                    <a href="/terms-of-service" class="link" target="_blank">Terms of Service</a> 
+                                    and 
+                                    <a href="/shipping" class="link" target="_blank">Shipping & Delivery</a> 
+                                    policy.
+                                </p>
+                            </div>
                         </div>
                     </form>                
                 </div>
                 <div class="column"></div> 
                 </div>
-                
             </div>
         
 </div>
