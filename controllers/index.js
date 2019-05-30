@@ -17,9 +17,16 @@ const request = require("request");
 const { Categories, secCategories } = require('../dist/js/categories');
 const jwt = require('jsonwebtoken');
 const ObjectID = require("bson-objectid");
+const webpush = require('web-push');
 const middleware = require('../middleware/index');
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
+
+webpush.setVapidDetails(
+  "mailto:test@test.com",
+  process.env.PUBLIC_VAPID_KEY,
+  process.env.PRIVATE_VAPID_KEY
+);
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
