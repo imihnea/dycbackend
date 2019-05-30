@@ -141,8 +141,8 @@ app.use(require('express-session')({
   resave: true,
   saveUninitialized: true,
   // these need SSL
-  // secure: true,
-  // httpOnly: true,
+  secure: true,
+  httpOnly: true,
   maxAge: 2 * 60 * 60 * 1000,
 }));
 
