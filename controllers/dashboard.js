@@ -1012,7 +1012,7 @@ module.exports = {
                 req.body.product.images = [];
                 await cloudinary.v2.uploader.upload(file.path, 
                 {
-                  moderation: "aws_rek",
+                  moderation: "aws_rek:suggestive:ignore",
                 }, (err, result) => {
                   if(err) {
                     console.log(err);
@@ -1189,7 +1189,7 @@ module.exports = {
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              moderation: "aws_rek",
+              moderation: "aws_rek:suggestive:ignore",
             }, (err, result) => {
               if(err) {
                 console.log(err);
@@ -1500,7 +1500,7 @@ module.exports = {
                 for (const file of req.files) {
                   await cloudinary.v2.uploader.upload(file.path, 
                     {
-                      moderation: "aws_rek",
+                      moderation: "aws_rek:suggestive:ignore",
                     }, (err, result) => {
                       if(err) {
                         console.log(err);
@@ -1641,7 +1641,7 @@ module.exports = {
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              moderation: "aws_rek",
+              moderation: "aws_rek:suggestive:ignore",
             }, (err, result) => {
               if(err) {
                 console.log(err);

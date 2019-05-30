@@ -83,7 +83,7 @@ module.exports = {
                     try{
                       await cloudinary.v2.uploader.upload(req.file.path, 
                         {
-                          moderation: "aws_rek",
+                          moderation: "aws_rek:suggestive:ignore",
                         }, (err, result) => {
                           if(err) {
                             console.log(err);
