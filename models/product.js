@@ -118,7 +118,7 @@ ProductSchema.methods.calculateAvgRating = function() {
 ProductSchema.plugin(mongoosePaginate);
 
 // For local ElasticSearch
-ProductSchema.plugin(mongoosastic);
+// ProductSchema.plugin(mongoosastic);
 
 // For hosted ElasticSearch
 // ProductSchema.plugin(mongoosastic,{  
@@ -127,37 +127,37 @@ ProductSchema.plugin(mongoosastic);
 // });
 
 
-mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
-  if (err) {
-    console.log('error creating mapping');
-    console.log(err);
-  } else {
-    console.log('mapping created');
-    console.log(mapping);
-  }
-});
+// mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
+//   if (err) {
+//     console.log('error creating mapping');
+//     console.log(err);
+//   } else {
+//     console.log('mapping created');
+//     console.log(mapping);
+//   }
+// });
 
-// Delete the index on server restart
-mongoose.model('Product', ProductSchema).esTruncate((err) => {
-  if (err) {
-    console.log('cannot delete index.');
-    console.log(err);
-  } else {
-    console.log('index deleted successfully.');
-  }
-});
+// // Delete the index on server restart
+// mongoose.model('Product', ProductSchema).esTruncate((err) => {
+//   if (err) {
+//     console.log('cannot delete index.');
+//     console.log(err);
+//   } else {
+//     console.log('index deleted successfully.');
+//   }
+// });
 
-// Synchronize the index on server restart
-let stream = mongoose.model('Product', ProductSchema).synchronize();
-let count = 0;
-stream.on('data', function(err, doc){
-  count += 1;
-});
-stream.on('close', function(){
-  console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-  console.log(err);
-});
+// // Synchronize the index on server restart
+// let stream = mongoose.model('Product', ProductSchema).synchronize();
+// let count = 0;
+// stream.on('data', function(err, doc){
+//   count += 1;
+// });
+// stream.on('close', function(){
+//   console.log('indexed ' + count + ' documents!');
+// });
+// stream.on('error', function(err){
+//   console.log(err);
+// });
 
 module.exports = mongoose.model('Product', ProductSchema);
