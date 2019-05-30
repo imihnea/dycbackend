@@ -788,45 +788,39 @@ All images are scaled to that ratio" tabindex="-1">
                 <div class="frame">
                     <h4 class="new-text">Feature your deal</h4>
                     <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
-                    <table class="new-table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Description</th>
-                                <th>Duration</th>
-                                <th>Cost</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Subcategory feature</td>
-                                <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
-                                <td>14 days</td>
-                                <td>5 Tokens</td>
-                                <td style="padding-top: 0;">
-                                    <form action="/dashboard/<%= product._id %>/edit/1/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
-                                        <div class="control smmargin">
-                                            <button class="button is-primary">Feature</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Front-page feature</td>
-                                <td>The deal will be shown on the front-page of the website.</td>
-                                <td>7 days</td>
-                                <td>15 Tokens</td>
-                                <td style="padding-top: 0;">
-                                    <form action="/dashboard/<%= product._id %>/edit/2/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
-                                        <div class="control smmargin">
-                                            <button class="button is-primary">Feature</button>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="columns">
+                        <div class="column is-one-fifth"></div>
+                        <div class="column frame">
+                            <label for="feat_1">
+                                <i class="fas fa-angle-double-up fa-7x blueI" id="feat1I" style="margin-bottom: 1vh;"></i>
+                                <br>
+                                <p style="font-weight: 800">Subcategory feature</p>
+                                <br>
+                                <p>The product will be shown towards the beginning of the list</p>
+                                <p>Lasts 14 days</p>
+                                <p>Costs 5 tokens</p>
+                                <br>
+                                <form action="/dashboard/<%= product._id %>/edit/1/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
+                                    <button class="button is-primary">Feature</button>
+                                </form>
+                            </label>
+                        </div>
+                        <div class="column frame">
+                            <label for="feat_2">
+                                <i class="fas fa-file fa-7x blueI" id="feat2I" style="margin-bottom: 1vh;"></i>
+                                <p style="font-weight: 800">Frontpage feature</p>
+                                <br>
+                                <p>The product will be shown on the website's front page</p>
+                                <p>Lasts 7 days</p>
+                                <p>Costs 15 tokens</p>
+                                <br>
+                                <form action="/dashboard/<%= product._id %>/edit/2/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
+                                    <button class="button is-primary">Feature</button>
+                                </form>
+                            </label>
+                        </div>
+                        <div class="column is-one-fifth"></div>
+                    </div>
                 </div>
             </div>
             <div class="column"></div>

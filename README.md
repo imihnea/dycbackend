@@ -6,8 +6,6 @@ Frontend:
 
     High Priority:
 
-         UI => New product => Feature deal
-
          Edge & Safari CSS       - Requires testing
 
     Low Priority:
