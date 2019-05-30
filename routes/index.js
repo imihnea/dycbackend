@@ -42,6 +42,15 @@ const {
   thirdCategSearch
 } = require('../controllers/index');
 
+
+const webpush = require('web-push');
+
+webpush.setVapidDetails(
+  "mailto:test@test.com",
+  process.env.PUBLIC_VAPID_KEY,
+  process.env.PRIVATE_VAPID_KEY
+);
+
 const middleware = require('../middleware/index');
 
 const { asyncErrorHandler, isLoggedIn, checkId, isAdmin } = middleware; // destructuring assignment
