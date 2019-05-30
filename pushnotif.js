@@ -1,10 +1,10 @@
 const publicVapidKey = 'BHmUkXG3_l9NeLEw_ZvaJ443OplBi_5sZsE8c5QbpoKe1noLS6Ecf4RM8gFoALzbtUanEIrlIL0ev5CecMBh2vY';
-
+console.log('1');
 // Check for service worker
 if ("serviceWorker" in navigator) {
   send().catch(err => console.error(err));
 }
-
+console.log('2');
 // Register SW, Register Push, Send Push
 async function send() {
   // Register Service Worker
