@@ -92,19 +92,21 @@ app.post('/savvy/callback/:order', (req, res) => {
             if(err) {
               res.send('error');
             }
-            
-            const output = `
-            <h1>Deposit successfully confirmed!</h1>
-            <h3>Thank you for your trust, here are the details:</h3>
-            <h3>Amount deposited: ${amountPaid} ${coin.toUpperCase()} </h3>
-            <h3>We look forward to doing more business with you!</h3>
-            <h3>Deal Your Crypto</h3>
-            `;
+            ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
+              link: `http://${req.headers.host}/dashboard/addresses`,
+              footerlink: `http://${req.headers.host}/dashboard/notifications`,
+              amount: amountPaid,
+              coin: coin.toUpperCase(),
+              subject: `Deposit successfully confirmed!`,
+            }, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
                   const mailOptions = {
-                      from: `support@dyc.com`, // sender address
+                      from: `support@dealyourcrypto.com`, // sender address
                       to: `${user1.email}`, // list of receivers
                       subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
-                      html: output, // html body
+                      html: data, // html body
                   };
                   // send mail with defined transport object
                   transporter.sendMail(mailOptions, (error) => {
@@ -112,7 +114,8 @@ app.post('/savvy/callback/:order', (req, res) => {
                       console.log(`error for sending mail confirmation === ${error}`);
                       }
                   });
-
+                }
+              });
           });
         }
       });

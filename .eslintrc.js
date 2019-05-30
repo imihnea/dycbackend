@@ -74,6 +74,7 @@ module.exports = {
         "no-new": "off"
     },
     "plugins": [
-        "security"
+        "security",
+        "ejs-html"
     ]
 };
