@@ -851,6 +851,25 @@ body {
   margin-bottom: 1vh;
 }
 
+.blueI{
+  color: #3269ca;
+}
+
+.greenI{
+  color: green;
+}
+
+.redI{
+  color: red;
+}
+
+#feat1Label:hover{
+  cursor: pointer;
+}
+
+#feat2Label:hover{
+  cursor: pointer;
+}
 /* Edge */
 @supports (-ms-ime-align: auto) {
   .address, .productPrice, .inputWrapper, .repeatable, .address, .view_curr, 

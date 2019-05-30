@@ -750,39 +750,37 @@ All images are scaled to that ratio" tabindex="-1">
                         <div class="frame">
                             <h4 class="new-text">Promote your deal</h4>
                             <h5 class="token-text">You have <%= user.feature_tokens %> tokens</h5>
-                            <table class="new-table">
-                                <thead>
-                                    <tr>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                        <th>Duration</th>
-                                        <th>Cost</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Subcategory feature</td>
-                                        <td>The deal will be shown in the first 5 deals on a subcategory page.</td>
-                                        <td>14 days</td>
-                                        <td>5 tokens</td>
-                                        <td>
-                                            <input name="product[feat_1]" type="checkbox" id="feat_1" class="is-checkradio is-info is-large" value="1">
-                                            <label for="feat_1" style="padding-left: 2rem !important;"></label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Front-page feature</td>
-                                        <td>The deal will be shown on the front-page of the website.</td>
-                                        <td>7 days</td>
-                                        <td>15 tokens</td>
-                                        <td>
-                                            <input name="product[feat_2]" type="checkbox" id="feat_2" class="is-checkradio is-info is-large"value="2">
-                                            <label for="feat_2" style="padding-left: 2rem !important;" ></label>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="columns">
+                                <div class="column is-one-fifth"></div>
+                                <div class="column frame">
+                                    <label for="feat_1" id="feat1Label">
+                                        <i class="fas fa-angle-double-up fa-7x blueI" id="feat1I" style="margin-bottom: 1vh;"></i>
+                                        <br>
+                                        <p style="font-weight: 800">Subcategory feature</p>
+                                        <br>
+                                        <p>The product will be shown towards the beginning of the list</p>
+                                        <p>Lasts 14 days</p>
+                                        <p>Costs 5 tokens</p>
+                                        <br>
+                                        <input name="product[feat_1]" type="checkbox" id="feat_1" class="is-checkradio is-info is-large" value="1">
+                                        <label for="feat_1" style="padding-left: 2rem !important;"></label>
+                                    </label>
+                                </div>
+                                <div class="column frame">
+                                    <label for="feat_2" id="feat2Label">
+                                        <i class="fas fa-file fa-7x blueI" id="feat2I" style="margin-bottom: 1vh;"></i>
+                                        <p style="font-weight: 800">Frontpage feature</p>
+                                        <br>
+                                        <p>The product will be shown on the website's front page</p>
+                                        <p>Lasts 7 days</p>
+                                        <p>Costs 15 tokens</p>
+                                        <br>
+                                        <input name="product[feat_2]" type="checkbox" id="feat_2" class="is-checkradio is-info is-large" value="1">
+                                        <label for="feat_2" style="padding-left: 2rem !important;"></label>
+                                    </label>
+                                </div>
+                                <div class="column is-one-fifth"></div>
+                            </div>
                             <div class="control smmargin" style="margin: auto; margin-top: 2vh;">
                                 <button type="submit" form="newProductForm" class="button is-primary">Create new deal</button>
                                 <p class="help">
