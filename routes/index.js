@@ -171,7 +171,8 @@ router.post('/subscribe', (req, res) => {
   let subscription = req.body;
   console.log(subscription);
   if (req.user) {
-    User.findByIdAndUpdate(req.user._id, {$set: {pushSub: subscription}}, (err, res) => {
+    User.findByIdAndUpdate(req.user._id, {$set: {'pushSub.endpoint': subscription.endpoint, 'pushSub.expirationTime': subscription.expirationTime,
+              'pushSub.keys.p256dh': subscription.keys.p256dh, 'pushSub.keys.auth': subscription.keys.auth}}, (err, res) => {
       if (err) {
         console.log(err);
       } else {
