@@ -81,9 +81,22 @@ module.exports = {
                 if (req.file) {
                 // upload images
                     try{
-                        const image = await cloudinary.v2.uploader.upload(req.file.path);
-                        user.avatar.url = image.secure_url;
-                        user.avatar.public_id = image.public_id;
+                      await cloudinary.v2.uploader.upload(req.file.path, 
+                        {
+                          moderation: "aws_rek:suggestive:ignore",
+                        }, (err, result) => {
+                          if(err) {
+                            console.log(err);
+                          } else if (result.moderation[0].status === 'rejected') {
+                              user.avatar.url = 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg';
+                              user.avatar.public_id = result.public_id;
+                              console.log(result);
+                          } else {
+                            user.avatar.url = result.secure_url;
+                            user.avatar.public_id = result.public_id;
+                            console.log(result);
+                          }
+                        });
                     } catch (error) {
                         req.flash('error', error.message);
                         return res.redirect('back');

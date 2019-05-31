@@ -310,27 +310,37 @@ setInterval( () => {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                const output = `
-                                <h1>You have an unread message</h1>
-                                <p>Sender: ${item.user1.fullname}</p>
-                                <p>Product: ${item.product.name}</p>
-                                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
-                                `;
-                                const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                    to: `${user2.full_name} <${user2.email}>`, // list of receivers
-                                    subject: 'You have an unread message', // Subject line
-                                    html: output, // html body
-                                };
-                                // send mail with defined transport object
-                                transporter.sendMail(mailOptions, (error) => {
-                                    if (error) {
-                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(error);
-                                    } else {
-                                        console.log('Mail sent');
-                                    }
-                                });
+                                // test this and the one below
+                                if(user2.email_notifications.message === true) {
+                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
+                                        link: `http://${req.headers.host}/messages/${item._id}`,
+                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        sender: item.user1.fullname,
+                                        product: item.product.name,
+                                        subject: `You have an unread message`,
+                                    }, function (err, data) {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            console.log(err);
+                                        } else {
+                                            const mailOptions = {
+                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                to: `${user2.full_name} <${user2.email}>`, // list of receivers
+                                                subject: 'You have an unread message', // Subject line
+                                                html: data, // html body
+                                            };
+                                            // send mail with defined transport object
+                                            transporter.sendMail(mailOptions, (error) => {
+                                                if (error) {
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    console.log(error);
+                                                } else {
+                                                    console.log('Mail sent');
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
                         });
                     } else {
@@ -339,27 +349,36 @@ setInterval( () => {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                const output = `
-                                <h1>You have an unread message</h1>
-                                <p>Sender: ${item.user2.fullname}</p>
-                                <p>Product: ${item.product.name}</p>
-                                <p>Click <a href="localhost:8080/messages/${item._id}">here</a> to see the conversation.</p>
-                                `;
-                                const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                    to: `${user1.full_name} <${user1.email}>`, // list of receivers
-                                    subject: 'You have an unread message', // Subject line
-                                    html: output, // html body
-                                };
-                                // send mail with defined transport object
-                                transporter.sendMail(mailOptions, (error) => {
-                                    if (error) {
-                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(error);
-                                    } else {
-                                        console.log('Mail sent');
-                                    }
-                                });
+                                if(buyer.email_notifications.message === true) {
+                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
+                                        link: `http://${req.headers.host}/messages/${item._id}`,
+                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        sender: item.user2.fullname,
+                                        product: item.product.name,
+                                        subject: `You have an unread message`,
+                                    }, function (err, data) {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            console.log(err);
+                                        } else {
+                                            const mailOptions = {
+                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                to: `${user1.full_name} <${user1.email}>`, // list of receivers
+                                                subject: 'You have an unread message', // Subject line
+                                                html: data, // html body
+                                            };
+                                            // send mail with defined transport object
+                                            transporter.sendMail(mailOptions, (error) => {
+                                                if (error) {
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    console.log(error);
+                                                } else {
+                                                    console.log('Mail sent');
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
                         });
                     }

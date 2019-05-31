@@ -1010,13 +1010,28 @@ module.exports = {
                   return res.redirect('back');
                 } else {
                 req.body.product.images = [];
-                for (const file of req.files) {
-                  const image = await cloudinary.v2.uploader.upload(file.path);
-                  req.body.product.images.push({
-                    url: image.secure_url,
-                    public_id: image.public_id,
-                  });
-                }
+                await cloudinary.v2.uploader.upload(file.path, 
+                {
+                  moderation: "aws_rek:suggestive:ignore",
+                }, (err, result) => {
+                  if(err) {
+                    console.log(err);
+                  } else if (result.moderation[0].status === 'rejected') {
+                      req.body.product.images.push({
+                        // replace with a 'picture contains nudity' or something
+                        url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                        public_id: result.public_id,
+                      });
+                      console.log('product contains nudity')
+                      console.log(result);
+                  } else {
+                    req.body.product.images.push({
+                      url: result.secure_url,
+                      public_id: result.public_id,
+                    });
+                    console.log(result);
+                  }
+                });
                 const author = {
                   id: req.user._id,
                   username: req.user.username,
@@ -1172,11 +1187,28 @@ module.exports = {
       } else {
         req.body.product.images = [];
         for (const file of req.files) {
-          const image = await cloudinary.v2.uploader.upload(file.path);
-          req.body.product.images.push({
-            url: image.secure_url,
-            public_id: image.public_id,
-          });
+          await cloudinary.v2.uploader.upload(file.path, 
+            {
+              moderation: "aws_rek:suggestive:ignore",
+            }, (err, result) => {
+              if(err) {
+                console.log(err);
+              } else if (result.moderation[0].status === 'rejected') {
+                  req.body.product.images.push({
+                    // replace with a 'picture contains nudity' or something
+                    url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                    public_id: result.public_id,
+                  });
+                  console.log('product contains nudity')
+                  console.log(result);
+              } else {
+                req.body.product.images.push({
+                  url: result.secure_url,
+                  public_id: result.public_id,
+                });
+                console.log(result);
+              }
+            });
         }
         const author = {
           id: req.user._id,
@@ -1466,12 +1498,28 @@ module.exports = {
               if (req.files) {
                 // upload images
                 for (const file of req.files) {
-                  const image = await cloudinary.v2.uploader.upload(file.path);
-                  // add images to product.images array
-                  product.images.push({
-                    url: image.secure_url,
-                    public_id: image.public_id,
-                  });
+                  await cloudinary.v2.uploader.upload(file.path, 
+                    {
+                      moderation: "aws_rek:suggestive:ignore",
+                    }, (err, result) => {
+                      if(err) {
+                        console.log(err);
+                      } else if (result.moderation[0].status === 'rejected') {
+                          product.images.push({
+                            // replace with a 'picture contains nudity' or something
+                            url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                            public_id: result.public_id,
+                          });
+                          console.log('product contains nudity')
+                          console.log(result);
+                      } else {
+                        product.images.push({
+                          url: result.secure_url,
+                          public_id: result.public_id,
+                        });
+                        console.log(result);
+                      }
+                    });
                 }
               }
 
@@ -1591,12 +1639,28 @@ module.exports = {
       if (req.files) {
         // upload images
         for (const file of req.files) {
-          const image = await cloudinary.v2.uploader.upload(file.path);
-          // add images to product.images array
-          product.images.push({
-            url: image.secure_url,
-            public_id: image.public_id,
-          });
+          await cloudinary.v2.uploader.upload(file.path, 
+            {
+              moderation: "aws_rek:suggestive:ignore",
+            }, (err, result) => {
+              if(err) {
+                console.log(err);
+              } else if (result.moderation[0].status === 'rejected') {
+                  product.images.push({
+                    // replace with a 'picture contains nudity' or something
+                    url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                    public_id: result.public_id,
+                  });
+                  console.log('product contains nudity')
+                  console.log(result);
+              } else {
+                product.images.push({
+                  url: result.secure_url,
+                  public_id: result.public_id,
+                });
+                console.log(result);
+              }
+            });
         }
       }
 
