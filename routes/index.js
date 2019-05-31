@@ -181,7 +181,7 @@ router.post('/subscribe', isLoggedIn, (req, res) => {
   
   // Pass object into sendNotification
   webpush
-  .sendNotification(subscription, payload)
+  .sendNotification(subscription, payload, 'https://www.google.com')
   .catch(err => console.error(err));
   
   // Send 201 - resource created

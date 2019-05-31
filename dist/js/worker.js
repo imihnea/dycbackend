@@ -6,7 +6,7 @@ self.addEventListener("push", async e => {
   console.log("Push Recieved...");
 
   await self.registration.showNotification(data[0].title, {
-    body: "Notified by Deal Your Crypto! https://www.google.com",
+    body: "Notified by Deal Your Crypto!",
     icon: "/dist/img/rollo.png",
     tag:  "push-notification-tag",
     link: 'https://www.google.com',
@@ -14,8 +14,5 @@ self.addEventListener("push", async e => {
     actions: {
       'yes': 'https://www.google.com'
     },
-    data: {
-      url: 'https://www.google.com'
-    }
   });
 });
