@@ -167,11 +167,14 @@ router.get('/privacy-policy', getPrivPol);
 
 router.post('/subscribe', (req, res) => {
   // Get pushSubscription object
-  const subscription = req.body;
+  let subscription = req.body;
+  if (req.user) {
+    subscription = [req.body, req.user._id]; 
+  }
   console.log(subscription);
   
   // Create payload
-  const payload = JSON.stringify({ title: "Push Test" });
+  const payload = JSON.stringify({ title: "Welcome to Deal Your Crypto" });
   
   // Pass object into sendNotification
   webpush
