@@ -166,24 +166,18 @@ router.get('/terms-of-service', getTos);
 
 router.get('/privacy-policy', getPrivPol);
 
-router.post('/subscribe', (req, res) => {
-  // Get pushSubscription object
+router.post('/subscribe', isLoggedIn, (req, res) => {
   let subscription = req.body;
-  console.log(subscription);
-  if (req.user) {
-    User.findByIdAndUpdate(req.user._id, {$set: {'pushSub.endpoint': subscription.endpoint, 'pushSub.expirationTime': subscription.expirationTime,
-              'pushSub.keys.p256dh': subscription.keys.p256dh, 'pushSub.keys.auth': subscription.keys.auth}}, (err, res) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(res);
-      }
-    });
-    console.log('2');
-  }
-  
+  User.findByIdAndUpdate(req.user._id, {$set: {'pushSub.endpoint': subscription.endpoint, 'pushSub.expirationTime': subscription.expirationTime,
+  'pushSub.keys.p256dh': subscription.keys.p256dh, 'pushSub.keys.auth': subscription.keys.auth}}, err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  // Use this part to create notifications
   // Create payload
-  const payload = JSON.stringify({ title: "Welcome to Deal Your Crypto" });
+  const payload = JSON.stringify({ title: "Push notifications enabled!" });
   
   // Pass object into sendNotification
   webpush

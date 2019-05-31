@@ -7,6 +7,9 @@ self.addEventListener("push", async e => {
 
   await self.registration.showNotification(data[0].title, {
     body: "Notified by Deal Your Crypto!",
-    icon: "/dist/img/rollo.png"
+    icon: "/dist/img/rollo.png",
+    data: {
+      url: 'https://www.google.com'
+    }
   });
 });
