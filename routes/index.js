@@ -179,6 +179,8 @@ router.post('/subscribe', (req, res) => {
   webpush
     .sendNotification(subscription, payload)
     .catch(err => console.error(err));
+
+  console.log('1');
 });
 
 module.exports = router;
