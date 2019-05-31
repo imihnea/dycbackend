@@ -170,8 +170,8 @@ router.post('/subscribe', (req, res) => {
   // Get pushSubscription object
   let subscription = req.body.subscription;
   console.log(subscription);
-  if (req.body.userid.length > 0) {
-    User.findByIdAndUpdate(req.body.userid, {$set: {pushSub: subscription}}, (err, res) => {
+  if (req.user) {
+    User.findByIdAndUpdate(req.user._id, {$set: {pushSub: subscription}}, (err, res) => {
       if (err) {
         console.log(err);
       } else {
@@ -180,7 +180,6 @@ router.post('/subscribe', (req, res) => {
     });
     console.log('2');
   }
-  console.log(subscription);
   
   // Create payload
   const payload = JSON.stringify({ title: "Welcome to Deal Your Crypto" });
