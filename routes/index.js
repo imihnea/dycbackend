@@ -169,6 +169,7 @@ router.get('/privacy-policy', getPrivPol);
 router.post('/subscribe', (req, res) => {
   // Get pushSubscription object
   let subscription = req.body[0];
+  console.log(subscription);
   if (req.body[1].length > 0) {
     User.findByIdAndUpdate(req.body[1], {$set: {pushSub: subscription}}, (err, res) => {
       if (err) {
