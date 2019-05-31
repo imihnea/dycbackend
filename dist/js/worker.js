@@ -1,11 +1,13 @@
 console.log("Service Worker Loaded...");
 
-self.addEventListener("push", e => {
+self.addEventListener("push", async e => {
   console.log(e);
+  console.log('kappa');
   const data = e.data.json();
   console.log("Push Recieved...");
-  self.registration.showNotification(data.title, {
+  await self.registration.showNotification(data.title, {
     body: "Notified by Deal Your Crypto!",
     icon: "/dist/img/rollo.png"
   });
+  console.log('krappa');
 });
