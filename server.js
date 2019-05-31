@@ -248,6 +248,7 @@ app.use((req, res, next) => {
   // if (req.cookies._csrf){
   //   res.locals.csrfToken = req.cookies._csrf;
   // }
+  res.setHeader('Service-Worker-Allowed', '/');
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
   next();

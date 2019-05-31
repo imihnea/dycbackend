@@ -29,7 +29,6 @@ async function send() {
     body: JSON.stringify(subscription),
     headers: {
       "content-type": "application/json",
-      "Service-Worker-Allowed": "/"
     }
   });
   console.log("Push Sent...");
