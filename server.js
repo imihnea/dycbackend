@@ -146,7 +146,11 @@ app.use(require('express-session')({
   maxAge: 2 * 60 * 60 * 1000,
 }));
 
-app.use('/dist', express.static(path.join(__dirname, '/dist')));
+app.use('/dist', express.static(path.join(__dirname, '/dist'), {
+  setHeaders: function (res, path, stat) {
+      res.set('Service-Worker-Allowed', '/');
+  },
+}));
 app.use(methodOverride('_method'));
 
 app.locals.moment = require('moment');
@@ -248,7 +252,6 @@ app.use((req, res, next) => {
   // if (req.cookies._csrf){
   //   res.locals.csrfToken = req.cookies._csrf;
   // }
-  res.setHeader('Service-Worker-Allowed', '/');
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
   next();
