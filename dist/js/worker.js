@@ -9,6 +9,11 @@ self.addEventListener("push", async e => {
     body: "Notified by Deal Your Crypto! https://www.google.com",
     icon: "/dist/img/rollo.png",
     tag:  "push-notification-tag",
+    link: 'https://www.google.com',
+    deeplink: 'https://www.google.com',
+    actions: {
+      'yes': 'https://www.google.com'
+    },
     data: {
       url: 'https://www.google.com'
     }
