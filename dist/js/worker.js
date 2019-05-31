@@ -1,5 +1,9 @@
 console.log("Service Worker Loaded...");
 
+self.addEventListener('install', event => {
+  console.log('SW installed');
+})
+
 self.addEventListener("push", async e => {
   console.log(e);
   console.log('kappa');
