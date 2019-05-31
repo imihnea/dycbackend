@@ -168,7 +168,7 @@ router.get('/privacy-policy', getPrivPol);
 router.post('/subscribe', (req, res) => {
   // Get pushSubscription object
   const subscription = req.body;
-
+  console.log(subscription);
   
   // Create payload
   const payload = JSON.stringify({ title: "Push Test" });
@@ -178,7 +178,6 @@ router.post('/subscribe', (req, res) => {
   .sendNotification(subscription, payload)
   .catch(err => console.error(err));
   
-  console.log('1');
   // Send 201 - resource created
   res.status(201).json({});
 });
