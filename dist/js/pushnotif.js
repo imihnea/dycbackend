@@ -22,7 +22,6 @@ async function send() {
   });
   console.log(subscription);
   console.log("Push Registered...");
-  const user = document.getElementById('userid');
   // Send Push Notification
   console.log("Sending Push...");
   await fetch("https://dyc.herokuapp.com/subscribe", {
