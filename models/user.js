@@ -110,7 +110,15 @@ const UserSchema = new Schema({
     banDay: {type: Date, default: Date.now},
     until: Date,
     reason: String
-  }]
+  }],
+  pushSub: {
+    endpoint: String,
+    expirationTime: Date,
+    keys: {
+      p256dh: String,
+      auth: String
+    }
+  }
 });
 
 UserSchema.pre('remove', async () => {

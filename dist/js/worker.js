@@ -5,7 +5,7 @@ self.addEventListener("push", async e => {
   console.log(data);
   console.log("Push Recieved...");
 
-  await self.registration.showNotification(data.title, {
+  await self.registration.showNotification(data[0].title, {
     body: "Notified by Deal Your Crypto!",
     icon: "/dist/img/rollo.png"
   });

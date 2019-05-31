@@ -3,6 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 const passport = require('passport');
+const User = require('../models/user');
 const {
   getRegister,
   postRegister,
@@ -167,9 +168,16 @@ router.get('/privacy-policy', getPrivPol);
 
 router.post('/subscribe', (req, res) => {
   // Get pushSubscription object
-  let subscription = req.body;
-  if (req.user) {
-    subscription = [req.body, req.user._id]; 
+  let subscription = req.body[0];
+  if (req.body[1].length > 0) {
+    User.findByIdAndUpdate(req.body[1], {$set: {pushSub: subscription}}, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(res);
+      }
+    });
+    console.log('2');
   }
   console.log(subscription);
   

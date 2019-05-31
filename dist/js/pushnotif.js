@@ -20,13 +20,14 @@ async function send() {
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
   });
+  console.log(subscription);
   console.log("Push Registered...");
-
+  const user = document.getElementById('userid');
   // Send Push Notification
   console.log("Sending Push...");
   await fetch("https://dyc.herokuapp.com/subscribe", {
     method: "POST",
-    body: JSON.stringify(subscription),
+    body: [JSON.stringify(subscription), user.innerText],
     headers: {
       "content-type": "application/json",
     }
