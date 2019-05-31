@@ -27,7 +27,10 @@ async function send() {
   console.log("Sending Push...");
   await fetch("https://dyc.herokuapp.com/subscribe", {
     method: "POST",
-    body: [JSON.stringify(subscription), user.innerText],
+    body: {
+      subscription: JSON.stringify(subscription), 
+      userid: user.innerText
+    },
     headers: {
       "content-type": "application/json",
     }
