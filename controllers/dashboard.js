@@ -2429,7 +2429,7 @@ module.exports = {
     return res.redirect('/dashboard');
   },
   async getNotif(req, res) {
-    const notifications = await Notification.find({'_id': userid, read: false});
+    const notifications = await Notification.find({'userid': req.user._id, read: false});
     return res.render('dashboard/dashboard_notif', {
       user: req.user,
       notifications,
