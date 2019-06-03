@@ -26,6 +26,12 @@ const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2
 const { errorLogger, userLogger, productLogger } = require('../config/winston');
 const { createProfit } = require('../config/profit');
 const Nexmo = require('nexmo');
+const Client = require('coinbase').Client;
+const client = new Client({
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
+});
+
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -40,8 +46,6 @@ const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
-
-const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 const escapeHTML = (unsafe) => {
   return unsafe
@@ -263,13 +267,10 @@ module.exports = {
   },
   // Show address page
   async getAddresses(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, asyncErrorHandler(async (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        var json = JSON.parse(body);
-        var data = json.data;
-        var btcrate = data.btc.rate;
-        var maxConfirmationsBTC = data.btc.maxConfirmations;
+    client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
+        var maxConfirmationsBTC = 3;
         const withdrawals = await Withdraw.find({userID: req.user._id});
         const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
         const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
@@ -286,6 +287,9 @@ module.exports = {
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
         });
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
     }));
   },
@@ -319,81 +323,38 @@ module.exports = {
       resp.confirmations = confirmations;
     res.json(resp); //return this data to savvy form
   },
-  getBTC(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, function(error, response, body){
-      if(!error && response.statusCode == 200) {
-        var json = JSON.parse(body);
-        var data = json.data;
-        var btcrate = data.btc.rate;
-        var maxConfirmationsBTC = data.btc.maxConfirmations;
-        res.render('savvy/btc', { 
-          btcrate, 
-          user: req.user,
-          maxConfirmationsBTC,
-          csrfToken: req.body.csrfSecret,
-          pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      }
-    });
-  },
-  postBTC(req, res) {
-    var orderId = uuidv1();
-    var callback = 'https://dyc.herokuapp.com/savvy/callback/' + orderId;
-    var encoded_callback = encodeURIComponent(callback);
-    console.log(encoded_callback);
-    var url = "https://api.savvy.io/v3/btc/payment/" + encoded_callback + "?token=" + SAVVY_SECRET + "&lock_address_timeout=3600";
-    var btcrate = req.body.btcrate;
-    var maxConfirmationsBTC = req.body.maxConfirmationsBTC;
-    var coinsValue = req.body.coinsValue;
-    request.get({
-      url: url 
-    }, function(error, response, body) {
-      if(error) {
-        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        req.flash('error', error.message);
-        return res.redirect('back');
-      } else {
-        console.log(body);
-        var json = JSON.parse(body);
-        var invoice = json.data.invoice;
-        var address = json.data.address;
-        console.log(invoice);
-        console.log(address);
-        Checkout.create({
-          user: req.user,
-          invoice: invoice,
-          coin: 'BTC',
-          address: address,
-          orderId: orderId,
-          confirmations: 0,
-          maxConfirmations: maxConfirmationsBTC,
-          orderTotal: coinsValue,
-          paid: false
-        }, (err) => {
-          if(err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            console.log(orderId);
-            res.render('savvy/btc', { 
-              btcrate, 
-              orderId, 
-              address, 
-              coinsValue, 
-              maxConfirmationsBTC,
-              user: req.user,
-              csrfToken: req.body.csrfSecret,
-              pageTitle: 'Deposit Bitcoin - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
-            })
-          }
-        });
-      }
+  async postBTC(req, res) {
+    console.log(`red.body: ${req.body}`);
+    const invoice = uuidv1();
+    console.log(`invoice: ${invoice}`)
+    client.getAccount('primary', function(err, account) {
+      account.createAddress(null, function(error, address) {
+        console.log(`asta e address: ${address}`);
+        if(error) {
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          req.flash('error', error.message);
+          return res.redirect('back');
+        } else {
+          Checkout.create({
+            user: req.body.username,
+            coin: 'BTC',
+            invoice: invoice,
+            address: address.address,
+            orderId: address.id,
+            confirmations: 0,
+            maxConfirmations: 3,
+            paid: false
+          }, (err) => {
+            if(err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              req.flash('error', err.message);
+              return res.redirect('back');
+            } else {
+              res.send(address);
+            }
+          });
+        }
+      });
     });
   },
   // Get address modifications
@@ -403,13 +364,10 @@ module.exports = {
     req.check('btcadr', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]+$/g);
     const errors = req.validationErrors();
     if (errors) {
-      var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-      request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-          var json = JSON.parse(body);
-          var data = json.data;
-          var btcrate = data.btc.rate;
-          var maxConfirmationsBTC = data.btc.maxConfirmations;
+      client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+        if (!error) {
+          let btcrate = data.data.rates.USD;
+          let maxConfirmationsBTC = 3;
           res.render('dashboard/dashboard_addr', 
             { 
               user: req.user,
@@ -421,6 +379,9 @@ module.exports = {
               pageDescription: 'Description',
               pageKeywords: 'Keywords'
             });
+        } else {
+          req.flash('err', 'There\'s been an error, please try again.');
+          return res.redirect('back');
         }
       });
     } else {
@@ -532,13 +493,10 @@ module.exports = {
     req.check('value', 'The value must be a number').notEmpty().isLength({max: 50}).isNumeric();
     const errors = req.validationErrors();
     if (errors) {
-      var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-      request(url, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-          var json = JSON.parse(body);
-          var data = json.data;
-          var btcrate = data.btc.rate;
-          var maxConfirmationsBTC = data.btc.maxConfirmations;
+      client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+        if (!error) {
+          let btcrate = data.data.rates.USD;
+          let maxConfirmationsBTC = 3;
           return res.render('dashboard/dashboard_addr', { 
             user: req.user,
             btcrate,
@@ -549,6 +507,9 @@ module.exports = {
             pageDescription: 'Description',
             pageKeywords: 'Keywords'
           });
+        } else {
+          req.flash('err', 'There\'s been an error, please try again.');
+          return res.redirect('back');
         }
       });
     }
@@ -673,7 +634,7 @@ module.exports = {
         var json = JSON.parse(body);
         var data = json.data;
         Checkout.create({
-          user: user.username,
+          user: user,
           coin: coin,
           address: data.exchangeAddress.address,
           orderId: data.orderId,
@@ -758,12 +719,9 @@ module.exports = {
   },
   // Get tokens page
   async getTokens(req, res) {
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, asyncErrorHandler(async (error, response, body) => {
-      if(!error && response.statusCode == 200) {
-        var json = JSON.parse(body);
-        var data = json.data;
-        var btcrate = data.btc.rate;
+    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
         var tokenprice = 1/btcrate; // 1 USD
         res.render('dashboard/dashboard_tokens', { 
           user: req.user,
@@ -775,8 +733,11 @@ module.exports = {
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
         });
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
-    }));
+    });
   },
   // Buy Tokens
   async buyTokens(req, res) {
@@ -796,12 +757,9 @@ module.exports = {
       } else {
         const user = await User.findById(req.user._id);
         const tokens = Number(req.body.tokensNr);
-        const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-        request(url, asyncErrorHandler(async (error, response, body) => {
-        if(!error && response.statusCode == 200) {
-          const json = JSON.parse(body);
-          const data = json.data;
-          const btcrate = data.btc.rate;
+        client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+          if (!error) {
+          let btcrate = data.data.rates.USD;
           const tokenprice = 1/btcrate; // 1 USD
           const totalPrice = Number((tokens * tokenprice).toFixed(8));
           if (user.btcbalance >= totalPrice) {
@@ -825,18 +783,18 @@ module.exports = {
               req.flash('error', 'Insufficient balance.');
               return res.redirect('back');
           }
+        } else {
+          req.flash('err', 'There\'s been an error, please try again.');
+          return res.redirect('back');
         }
       }));
     }
   },
   // Buy Token Packs
   async buyTokenPacks(req, res) {
-    const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, asyncErrorHandler(async (error, response, body) => {
-      if(!error && response.statusCode == 200) {
-        const json = JSON.parse(body);
-        const data = json.data;
-        const btcrate = data.btc.rate;
+    client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
         const tokenprice = 1/btcrate; // 1 USD
         const tokens = Number(req.body.pack);
         if ([20, 40, 60, 100].includes(tokens)) {
@@ -895,6 +853,9 @@ module.exports = {
           req.flash('error', 'Something went wrong, please try again.');
           return res.redirect('back');
         }
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
     }));
   },
@@ -1856,25 +1817,25 @@ module.exports = {
     } else {
       premium = false;
     }
-    var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, asyncErrorHandler(async (error, response, body) => {
-      if(!error && response.statusCode == 200) {
-        var json = JSON.parse(body);
-        var data = json.data;
-        var btcrate = data.btc.rate;
+    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
         var tokenprice = 1/btcrate; // 1 USD
-      res.render('dashboard/subscription', { 
-        user: req.user,
-        premium: premium,
-        tokenprice,
-        errors: req.session.errors,
-        csrfToken: req.body.csrfSecret,
-        pageTitle: 'Subscription - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
-      });
+        res.render('dashboard/subscription', { 
+          user: req.user,
+          premium: premium,
+          tokenprice,
+          errors: req.session.errors,
+          csrfToken: req.body.csrfSecret,
+          pageTitle: 'Subscription - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
-    }));
+    });
   },
     // Subscription cancel page with details
     async subscriptionCancelPage(req, res) {
@@ -1902,12 +1863,9 @@ module.exports = {
 	async subscriptionCreate(req, res) {
     let CurrentUser = await User.findById(req.params.id);
     // Get token price
-    const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-    request(url, asyncErrorHandler(async (error, response, body) => {
-      if(!error && response.statusCode == 200) {
-        const json = JSON.parse(body);
-        const data = json.data;
-        const btcrate = data.btc.rate;
+    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
         const tokenprice = 1/btcrate; // 1 USD
         let expireDate = moment().add(req.body.days,"days").toISOString();
         let days = Number(req.body.days);
@@ -2056,8 +2014,11 @@ module.exports = {
           default:
           break;
         }
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
-    }));
+    });
   },
 	async subscriptionCancel(req, res, next) {
     await User.findByIdAndUpdate(req.user._id, {$set: {subscription1: false, subscription3: false, subscription6: false, subscription12: false}},err => {
@@ -2095,12 +2056,9 @@ module.exports = {
         pageKeywords: 'Keywords'
       });
     } else {
-      const url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-      request(url, asyncErrorHandler(async (error, response, body) => {
-      if(!error && response.statusCode == 200) {
-        const json = JSON.parse(body);
-        const data = json.data;
-        const btcrate = data.btc.rate;
+      client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+        if (!error) {
+        let btcrate = data.data.rates.USD;
         const tokenprice = 1/btcrate; // 1 USD
         res.render('dashboard/dashboard_premium', {
           user: req.user,
@@ -2113,8 +2071,11 @@ module.exports = {
           pageDescription: 'Description',
           pageKeywords: 'Keywords'
         });
+      } else {
+        req.flash('err', 'There\'s been an error, please try again.');
+        return res.redirect('back');
       }
-    }));
+    });
     }
   },
   async getSearchData(req, res) {

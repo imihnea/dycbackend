@@ -8,7 +8,7 @@ const router = express.Router();
 const { getDashboardIndex, getAddresses, addAddresses, withdraw, verifyWithdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
-        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, getBTC, postBTC,
+        openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
         getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner,
@@ -47,11 +47,8 @@ router.get('/addresses', assignCookie, isLoggedIn, asyncErrorHandler(getAddresse
 // Modify addresses
 router.post('/addresses', verifyCookie, isLoggedIn, asyncErrorHandler(addAddresses));
 
-//GET Btc deposit
-router.get('/addresses/btc', isLoggedIn, getBTC);
-
 //POST Btc deposit
-router.post('/addresses/btc', isLoggedIn, postBTC);
+router.post('/addresses/btc', isLoggedIn, asyncErrorHandler(postBTC));
 
 //GET Pairs available for BTC
 router.get('/addresses/altcoins/pair', asyncErrorHandler(CoinSwitchPair));

@@ -11,6 +11,12 @@ const nodemailer = require('nodemailer');
 const request = require("request");
 const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
 const middleware = require('../middleware/index');
+const Client = require('coinbase').Client;
+const client = new Client({
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
+});
+
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -18,8 +24,6 @@ const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
-
-const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 const refundTimer = 60000;
 
@@ -65,13 +69,13 @@ module.exports = {
         //     console.log(address);
         // });
         const product = await Product.findById(req.params.id);
-        var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-        request(url, asyncErrorHandler(async (error, response, body) => {
-            if (!error && response.statusCode == 200) {
-              var json = JSON.parse(body);
-              var data = json.data;
-              var btcrate = data.btc.rate;
-                res.render('deals/deal_buy', { 
+        client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+            if(error) {
+                req.flash('err', 'There\'s been an error, please try again.');
+                return res.redirect('back');
+            } else {
+                let btcrate = data.data.rates.USD;
+                res.render('deals/deal_buy', {
                     user: req.user,
                     errors: false,
                     product: product,
@@ -82,7 +86,7 @@ module.exports = {
                     pageKeywords: 'Keywords',
                 });
             }
-        }));
+        });
     },
     async acceptDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
