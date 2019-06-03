@@ -450,4 +450,21 @@ setInterval( () => {
             });
         }
     });
+
+        // Deleting week old notifications
+        let weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        Notification.find({'createdAt': { $lt: weegAgo }}, (err, notifications) => {
+            if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                console.log(err);
+            } else {
+                notifications.forEach(notification => {
+                    notification.remove();
+                });
+            }
+        });
+        if (process.env.NODE_ENV === 'production') {
+            logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
 }, 24 * 60 * 60 * 1000);

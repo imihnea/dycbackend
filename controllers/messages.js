@@ -4,6 +4,7 @@ const path = require('path');
 const User = require('../models/user');
 const Product = require('../models/product');
 const Deal = require('../models/deal');
+const Notification = require('../models/notification');
 const { errorLogger } = require('../config/winston');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
@@ -255,18 +256,28 @@ module.exports = {
         chat.messageCount += 1;
         await chat.save();
         if (chat.user1.id.toString() != req.user._id) {
-            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
+            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
+            await Notification.create({
+                userid: chat.user1.id,
+                linkTo: `/messages/${chat._id}`,
+                message: `You have received a message from ${chat.user2.username}`
+            });
         } else if (chat.user2.id.toString() != req.user._id) {
-            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
+            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
+            });
+            await Notification.create({
+                userid: chat.user2.id,
+                linkTo: `/messages/${chat._id}`,
+                message: `You have received a message from ${chat.user1.username}`
             });
         }
         // Send an email if it was the first message of the conversation    
@@ -335,18 +346,28 @@ module.exports = {
         chat.messageCount += 1;
         await chat.save();
         if (chat.user1.id.toString() != req.user._id) {
-            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1 } }, (err) => {
+            await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 }
             });
+            await Notification.create({
+                userid: chat.user1.id,
+                linkTo: `/messages/${chat._id}`,
+                message: `You have received a message`
+            });
         } else if (chat.user2.id.toString() != req.user._id) {
-            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1 } }, (err) => {
+            await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     console.log(err);
                 }
+            });
+            await Notification.create({
+                userid: chat.user2.id,
+                linkTo: `/messages/${chat._id}`,
+                message: `You have received a message`
             });
         }
         return res.redirect(`/deals/${req.params.dealid}`);

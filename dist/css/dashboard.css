@@ -870,6 +870,26 @@ body {
 #feat2Label:hover{
   cursor: pointer;
 }
+
+.notifBtn{
+  width: 100%;
+  height: 100%;
+  border-color: transparent;
+  background-color: transparent;
+  cursor: pointer;
+  outline-color: transparent;
+  /* position: absolute; */
+}
+
+.notifSpan{
+  position: absolute; 
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
 /* Edge */
 @supports (-ms-ime-align: auto) {
   .address, .productPrice, .inputWrapper, .repeatable, .address, .view_curr, 

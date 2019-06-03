@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Notification = require('../models/notification');
 const { logger, dealLogger, errorLogger } = require('../config/winston');
 const moment = require('moment');
 const ejs = require('ejs');
@@ -90,7 +91,14 @@ module.exports = {
         if (deal.buyer.delivery.shipping == 'FaceToFace') {
             dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+            await Notification.create({
+                userid: deal.buyer._id,
+                linkTo: deal._id,
+                message: `Your deal request has been accepted`
+            });
             const buyer = await User.findById(deal.buyer.id);
+            buyer.unreadNotifications += 1;
+            await buyer.save();
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
                     link: `http://${req.headers.host}/deals/${deal._id}`,
@@ -143,7 +151,14 @@ module.exports = {
                 } else {
                     dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
+                    await Notification.create({
+                        userid: deal.buyer.id,
+                        linkTo: deal._id,
+                        message: `Your deal request has been accepted`
+                    });
                     const buyer = await User.findById(deal.buyer.id);
+                    buyer.unreadNotifications += 1;
+                    await buyer.save();
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
                             link: result.tracking_url_provider, // Tracking url
@@ -187,7 +202,13 @@ module.exports = {
         dealLogger.info(`Message: Deal ${deal._id} declined\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
         buyer.btcbalance += deal.price;
+        buyer.unreadNotifications += 1;
         await buyer.save();
+        await Notification.create({
+            userid: deal.buyer.id,
+            linkTo: deal._id,
+            message: `Your deal request has been declined`
+        });
         await Product.findByIdAndUpdate(deal.product.id, {$set: {available: 'True'}});
         if(buyer.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
@@ -234,7 +255,13 @@ module.exports = {
         deal.status = 'Completed';
         await deal.save();
         seller.nrSold += 1;
+        seller.unreadNotifications += 1;
         await seller.save();
+        await Notification.create({
+            userid: seller._id,
+            linkTo: deal._id,
+            message: `Your deal request has been completed`
+        });
         if (!product.repeatable) {
             product.available = 'Closed';
             await product.save();
@@ -317,6 +344,13 @@ module.exports = {
         await Product.findByIdAndUpdate(deal.product.id, {$set: { available: 'True' }});
         // Seller email
         const seller = await User.findById(deal.product.author.id);
+        seller.unreadNotifications += 1;
+        await seller.save();
+        await Notification.create({
+            userid: seller._id,
+            linkTo: deal._id,
+            message: `Your deal request has been cancelled`
+        });
         if(seller.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/cancelDeal.ejs"), {
                 link: `http://${req.headers.host}/dashboard`,
@@ -381,7 +415,13 @@ module.exports = {
                 deal.status = 'Refunded';
                 await deal.save();
                 buyer.btcbalance += deal.price;
+                buyer.unreadNotifications += 1;
                 await buyer.save();
+                await Notification.create({
+                    userid: buyer._id,
+                    linkTo: deal._id,
+                    message: `Your refund request has been accepted`
+                });
                 const seller = await User.findById(deal.product.author.id);
                 seller.refundRequests -= 1;
                 await seller.save();
@@ -422,6 +462,14 @@ module.exports = {
                 const seller = await User.findById(deal.product.author.id);
                 seller.refundRequests -= 1;
                 await seller.save();
+                const buyer = await User.findById(deal.buyer.id);
+                buyer.unreadNotifications += 1;
+                await buyer.save();
+                await Notification.create({
+                    userid: deal.buyer.id,
+                    linkTo: deal._id,
+                    message: `Your refund request has been accepted`
+                });
                 if(seller.email_notifications.deal === true) {
                     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
                         link: `http://${req.headers.host}/dashboard`,
@@ -463,7 +511,13 @@ module.exports = {
             dealLogger.info(`Message: Deal ${deal._id} refund - refund completed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             const seller = await User.findById(deal.product.author.id);
             seller.nrSold += 1;
+            seller.unreadNotifications += 1;
             await seller.save();
+            await Notification.create({
+                userid: seller._id,
+                linkTo: deal._id,
+                message: `Refund complete`
+            });
             if(seller.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
                     link: `http://${req.headers.host}/dashboard`,
@@ -554,6 +608,13 @@ module.exports = {
             seller.refundRequests -= 1;
             await seller.save();
             const buyer = await User.findById(deal.buyer.id);
+            buyer.unreadNotifications += 1;
+            await buyer.save();
+            await Notification.create({
+                userid: deal.buyer.id,
+                linkTo: deal._id,
+                message: `Your refund request has been declined`
+            });
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
                     link: `http://${req.headers.host}/deals/${deal._id}`,
@@ -624,7 +685,13 @@ module.exports = {
             deal.status = 'Processing Refund';
             await deal.save();
             seller.refundRequests += 1;
+            seller.unreadNotifications += 1;
             await seller.save();
+            await Notification.create({
+                userid: seller._id,
+                linkTo: deal._id,
+                message: `You have received a refund request`
+            });
             if(seller.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
                     link: `http://${req.headers.host}/deals/${deal._id}`,

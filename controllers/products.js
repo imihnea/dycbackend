@@ -6,6 +6,7 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Review = require('../models/review');
+const Notification = require('../models/notification');
 const moment = require('moment');
 const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
@@ -454,9 +455,14 @@ module.exports = {
                                     product.nrBought = 1;
                                 }
                                 product.markModified('buyers');
-                                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
+                                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
                                 await product.save();
                                 await user.save();
+                                await Notification.create({
+                                    userid: product.author.id,
+                                    linkTo: deal._id,
+                                    message: `You have received a deal request`
+                                });
                                 // Send an email to the seller letting them know about the deal request
                                 const user2 = await User.findById(product.author.id);
                                 if(user2.email_notifications.deal === true) {
@@ -538,9 +544,14 @@ module.exports = {
                                 product.nrBought = 1;
                             }
                             product.markModified('buyers');
-                            await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1 }});
+                            await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
                             await product.save();
                             await user.save();
+                            await Notification.create({
+                                userid: product.author.id,
+                                linkTo: deal._id,
+                                message: `You have received a deal request`
+                            });
                             // Send an email to the seller letting them know about the deal request
                             const user2 = await User.findById(product.author.id);
                             if(user2.email_notifications.deal === true) {

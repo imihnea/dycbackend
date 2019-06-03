@@ -9,6 +9,7 @@ const notificationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    imgLink: { type: String, default: '/dist/img/avatar.png'}, // Change for company logo
     linkTo: String,
     read: {type: Boolean, default: false}
 });

@@ -20,10 +20,12 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
-      
+
+      Notifications => Child process
+                    => Pagination
+                    => Images for deals/chats/products
    Low Priority:
 
-      Service worker subscriptions => Notifications          - To do when it's hosted
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
 
@@ -35,3 +37,10 @@ Optimization:
    Caching => Redis
 
    HTTP/2 => SPDY
+
+
+After launch:
+
+   Bitcore implementation
+
+   Push notifications

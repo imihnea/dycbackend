@@ -2429,13 +2429,21 @@ module.exports = {
     return res.redirect('/dashboard');
   },
   async getNotif(req, res) {
-    const notifications = await Notification.find({'userid': req.user._id, read: false});
-    return res.render('dashboard/dashboard_notif', {
+    // TODO: Pagination
+    const notif = await Notification.find({'userid': req.user._id}).sort({createdAt: -1});
+    const notifications = notif;
+    await User.findByIdAndUpdate(req.user._id, {$set: {unreadNotifications: 0}});
+    res.render('dashboard/dashboard_notif', {
       user: req.user,
       notifications,
-      pageTitle: 'Partner - Deal Your Crypto',
+      pageTitle: 'Notifications - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
+    });
+    // TODO: Make a child process for this
+    notif.forEach(notification => {
+      notification.read = true;
+      notification.save();
     });
   }
 };

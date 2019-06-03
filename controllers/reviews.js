@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 const User = require('../models/user');
 const Review = require('../models/review');
+const Notification = require('../models/notification');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
@@ -65,6 +66,11 @@ module.exports = {
 		const author = await User.findById(product.author.id);
 		author.reviews.push(review);
 		author.save();
+		await Notification.create({
+            userid: author._id,
+            linkTo: `/products/${product._id}/view`,
+            message: `One of your products has been reviewed`
+        });
 		if(author.email_notifications.user === true) {
 			ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
 					link: `http://${req.headers.host}/products/${product._id}`,
