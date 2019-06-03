@@ -9,7 +9,6 @@ const CheckoutSchema = new Schema({
     address: { type: String },
     confirmations: { type: Number },
     maxConfirmations: { type: Number },
-    orderTotal: { type: Number },
     createdAt: { type: Date, default: Date.now },
     paid: { type: Boolean, default: false, index: true },
 });

@@ -38,3 +38,33 @@ button.addEventListener('click', function(e) {
     console.log(error);
   });
 });
+
+const username = document.getElementById('username').value;
+const depositBtn = document.getElementById('depositBtn');
+depositBtn.addEventListener('click', function(e) {
+  document.getElementById('depositSpinner').style.display = 'inline-block';
+  document.getElementById('depositBody').style.display = 'none';
+  fetch(`/dashboard/addresses/btc`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({ username: username }),
+  })
+  .then(function(response) {
+    if(response.ok) {
+      console.log('Click was recorded');
+      return response.json();
+    }
+    throw new Error('Request failed.');
+  })
+  .then(function(data) {
+    document.getElementById('depositAddressBTC').value = data.address;
+    document.getElementById('depositSpinner').style.display = 'none';
+    document.getElementById('depositBody').style.display = 'block';
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+});

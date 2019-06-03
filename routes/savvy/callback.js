@@ -58,30 +58,6 @@ app.post('/savvy/callback/:order', (req, res) => {
               console.log("Deposit arrived!");
             });
           }
-          if(coin === 'ltc') {
-            var query_ltc = User.findByIdAndUpdate({ _id: user }, { $inc: { ltcbalance: amountPaid } } );
-            query_ltc.then(function(doc) {
-              console.log("Deposit arrived!");
-            });
-          }
-          if(coin === 'eth') {
-            var query_eth = User.findByIdAndUpdate({ _id: user }, { $inc: { ethbalance: amountPaid } } );
-            query_eth.then(function(doc) {
-              console.log("Deposit arrived!");
-            });
-          }
-          if(coin === 'bch') {
-            var query_bch = User.findByIdAndUpdate({ _id: user }, { $inc: { bchbalance: amountPaid } } );
-            query_bch.then(function(doc) {
-              console.log("Deposit arrived!");
-            });
-          }
-          if(coin === 'dash') {
-            var query_dash = User.findByIdAndUpdate({ _id: user }, { $inc: { dashbalance: amountPaid } } );
-            query_dash.then(function(doc) {
-              console.log("Deposit arrived!");
-            });
-          }
           var query_4 = Checkout.findOneAndUpdate({ orderId: orderId }, { paid: true });
           query_4.then(function(doc) {
             console.log("Marked as paid");

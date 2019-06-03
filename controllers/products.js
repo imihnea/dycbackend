@@ -10,6 +10,12 @@ const moment = require('moment');
 const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
 const middleware = require('../middleware/index');
+const Client = require('coinbase').Client;
+const client = new Client({
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
+});
+
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -17,8 +23,6 @@ const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
-
-const SAVVY_SECRET = 'secf30f5f307df6c75bbd17b3043c1d81c5';
 
 const transporter = nodemailer.createTransport({
     host: EMAIL_HOST,
@@ -402,13 +406,9 @@ module.exports = {
                     console.log(`shippingPrice: ${shippingPrice}`);
                     if ( user.btcbalance >= totalPrice)  {
                         if (req.body.deliveryShipping === 'Shipping') {
-                            var url = "https://api.savvy.io/v3/currencies?token=" + SAVVY_SECRET;
-                            request(url, asyncErrorHandler(async (error, response, body) => {
-                                if (!error && response.statusCode == 200) {
-                                var json = JSON.parse(body);
-                                var data = json.data;
-                                console.log(`data: ${data}`)
-                                var btcrate = data.btc.rate;
+                            client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+                                if (!error) {
+                                let btcrate = data.data.rates.USD;
                                 console.log(`btcrate: ${btcrate}`)
                                 totalPrice += Number(1/btcrate * req.body.shippingRate);
                                 console.log(`totalPrice din req: ${totalPrice}`);

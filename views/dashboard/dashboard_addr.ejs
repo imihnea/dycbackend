@@ -46,7 +46,7 @@
                                         <input class="input smmargin adradr" name="btc_value" value="<% if (user.btcbalance) { %><%= user.btcbalance.toFixed(8) %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.00000000 BTC <% } %>" type="text" readonly />
                                     </div>
                                     <div class="buttons has-addons is-centered">
-                                        <button class="button is-primary topup" style="margin-top:1vh;">Deposit BTC</button>
+                                        <button class="button is-primary topup" style="margin-top:1vh;" id="depositBtn">Deposit BTC</button>
                                         <button class="button is-primary withdraw" style="margin-top:1vh;">Withdraw BTC</button>
                                         <button class="button is-primary coinswitch" style="margin-top:1vh;" id="myButton">Deposit with Altcoins</button>
                                     </div>
@@ -58,26 +58,44 @@
                                                 <button class="delete deleteTopup is-large" aria-label="close"></button>
                                             </header>
                                             <section class="modal-card-body">
-                                                <p class="title is-5 modal-section-title">Instructions</p>
-                                                <div style="text-align: left;">
-                                                    <p class="subtitle">1. Input value to deposit</p>
-                                                    <p class="subtitle">2. Click continue to start transaction</p>
-                                                    <p class="subtitle">3. Check your order details</p>
-                                                    <p class="subtitle">4. Press button to show deposit form</p>
-                                                    <p class="subtitle">5. Check your email and form for confirmation</p>
+                                                <div class="lds-roller" id="depositSpinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                <div id="depositBody">
+                                                    <p class="title is-5 modal-section-title">Transaction details</p>
+                                                    <div style="text-align: left;">
+                                                        <div class="field">
+                                                            <p class="control has-icons-left">
+                                                                <input class="input" name="rate" value="1 BTC = $<%= btcrate %> USD" required readonly/>
+                                                                <span class="icon is-small is-left">
+                                                                    <i class="fab fa-bitcoin"></i>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="field">
+                                                            <p class="control has-icons-left">
+                                                                <input class="input" name="orderId" value="Transaction ID: " required readonly />
+                                                                <span class="icon is-small is-left">
+                                                                    <i class="fas fa-id-card"></i>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="field">
+                                                            <p class="control has-icons-left">
+                                                                <input class="input" name="maxConfirmationsBTC" value="Required Confirmations: <%= maxConfirmationsBTC %>" required readonly/>
+                                                                <span class="icon is-small is-left">
+                                                                    <i class="fas fa-calendar-check"></i>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <p class="title is-5 modal-section-title">Send Bitcoin to this address</p>
+                                                    <input class="input" id="depositAddressBTC" name="depositAddressBTC" value="Bitcoin Deposit Address" readonly/>
+                                                    <input type="hidden" id="username" name="username" value="<%= user.username %>" />
                                                 </div>
-                                                <br>
-                                                <p class="title is-5 modal-section-title">Input Value</p>
-                                                <form action="/dashboard/addresses/btc" method="POST">
-                                                    <input type="hidden" name="btcrate" value="<%= btcrate %>" />
-                                                    <input type="hidden" name="maxConfirmationsBTC" value="<%= maxConfirmationsBTC %>" />
-                                                    <input class="input adradr" name="coinsValue" placeholder="0.00000000 BTC" type="number" step="0.00000001" min="0.00005" style="width: 60%;" />
-                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                    <button class="button is-primary">Continue</button>
-                                                </form>
                                             </section>
                                             <footer class="modal-card-foot">
                                                 <button class="button is-danger cancelTopup">Cancel</button>
+                                                <p class="subtitle">You will receive a success email after 3 confirmations.</p>
                                             </footer>
                                         </div>
                                     </div>
@@ -236,7 +254,6 @@
                                                                         <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
                                                                         <input type="hidden" id="depositCoinAmount" value="1" required />
                                                                         <input type="hidden" id="refundAddress" value="none" required />
-                                                                        <input type="hidden" id="user" value="<%= user %>" required />
                                                                     </div>
                                                                 </div>
                                                                 </div>
@@ -329,6 +346,7 @@
                                                                 <a href="#" data-nav="next" class="button is-light" id="next">Next</a>
                                                             </div>
                                                         </div>
+                                                    </div>
                                             </section>
                                             <footer class="modal-card-foot">
                                                 <button class="button is-danger cancelCoinswitch">Cancel</button>
