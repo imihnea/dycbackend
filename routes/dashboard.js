@@ -11,7 +11,8 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, verifyWithdraw,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, getBTC, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
-        getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner } = require('../controllers/dashboard');
+        getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner,
+        getNotif } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
@@ -161,5 +162,8 @@ router.put('/businessPartner', isLoggedIn, asyncErrorHandler(putBusinessPartner)
 
 // PUT User Partner
 router.put('/userPartner', isLoggedIn, asyncErrorHandler(putUserPartner));
+
+// GET Notifications Page
+router.get('/notif', isLoggedIn, asyncErrorHandler(getNotif));
 
 module.exports = router;

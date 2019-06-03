@@ -111,14 +111,6 @@ const UserSchema = new Schema({
     until: Date,
     reason: String
   }],
-  pushSub: {
-    endpoint: String,
-    expirationTime: Date,
-    keys: {
-      p256dh: String,
-      auth: String
-    }
-  }
 });
 
 UserSchema.pre('remove', async () => {

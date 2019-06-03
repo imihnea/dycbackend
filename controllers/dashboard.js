@@ -14,6 +14,7 @@ const Profit = require('../models/profit');
 const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
+const Notification = require('../models/notification');
 const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
@@ -2426,5 +2427,15 @@ module.exports = {
     await user.save();
     req.flash('success', 'Your application has been sent and will be reviewed as soon as possible');
     return res.redirect('/dashboard');
+  },
+  async getNotif(req, res) {
+    const notifications = await Notification.find({'_id': userid, read: false});
+    return res.render('dashboard/dashboard_notif', {
+      user: req.user,
+      notifications,
+      pageTitle: 'Partner - Deal Your Crypto',
+      pageDescription: 'Description',
+      pageKeywords: 'Keywords'
+    });
   }
 };

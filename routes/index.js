@@ -43,15 +43,6 @@ const {
   thirdCategSearch
 } = require('../controllers/index');
 
-
-const webpush = require('web-push');
-
-webpush.setVapidDetails(
-  "mailto:test@test.com",
-  process.env.PUBLIC_VAPID_KEY,
-  process.env.PRIVATE_VAPID_KEY
-);
-
 const middleware = require('../middleware/index');
 
 const { asyncErrorHandler, isLoggedIn, checkId, isAdmin } = middleware; // destructuring assignment
@@ -165,27 +156,5 @@ router.get('/shipping', getShipping);
 router.get('/terms-of-service', getTos);
 
 router.get('/privacy-policy', getPrivPol);
-
-router.post('/subscribe', isLoggedIn, (req, res) => {
-  let subscription = req.body;
-  User.findByIdAndUpdate(req.user._id, {$set: {'pushSub.endpoint': subscription.endpoint, 'pushSub.expirationTime': subscription.expirationTime,
-  'pushSub.keys.p256dh': subscription.keys.p256dh, 'pushSub.keys.auth': subscription.keys.auth}}, err => {
-    if (err) {
-      console.log(err);
-    }
-  });
-
-  // Use this part to create notifications
-  // Create payload
-  const payload = JSON.stringify({ title: "Push notifications enabled!" });
-  
-  // Pass object into sendNotification
-  webpush
-  .sendNotification(subscription, payload, 'https://www.google.com')
-  .catch(err => console.error(err));
-  
-  // Send 201 - resource created
-  res.status(201).json({});
-});
 
 module.exports = router;

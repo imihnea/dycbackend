@@ -26,7 +26,7 @@ const passport = require('passport');
 
 const flash = require('connect-flash');
 
-const {errorLogger, logger, warnLogger, authorizeUpload} = require('./config/winston');
+const {errorLogger, logger, warnLogger} = require('./config/winston');
 
 const helmet = require('helmet');
 
@@ -87,13 +87,6 @@ const methodOverride = require('method-override');
 require('dotenv').config();
 
 const User = require('./models/user');
-
-// Uploads logs to Google Drive and clears them - Runs on server boot and once a week
-setInterval(() => {
-  if (process.env.NODE_ENV === 'production') {
-    authorizeUpload();
-  }
-}, 7 * 24 * 60 * 60 * 1000);
 
 // requiring routes
 
@@ -350,7 +343,6 @@ child.stdout.on('data', function(data) {
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   console.log('Server started');
   if (process.env.NODE_ENV === 'production') {
-    authorizeUpload();
     logger.info(`Server started on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
   }
 });

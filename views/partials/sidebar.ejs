@@ -36,6 +36,19 @@
                     <% } %>
                 </span>
             </a>
+            <a id="notifications" class="panel-block" href="/notif/">
+                <span class="panel-icon">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                </span>
+                <span>
+                    Notifications
+                    <% if (user.unreadMessages > 0) { %>
+                        <span>
+                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                        </span>
+                    <% } %>
+                </span>
+            </a>
             <a id="tokens" class="panel-block" href="/dashboard/tokens">
                 <span class="panel-icon">
                     <i class="fas fa-coins" aria-hidden="true"></i>
