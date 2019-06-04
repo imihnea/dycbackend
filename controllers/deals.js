@@ -97,7 +97,8 @@ module.exports = {
             await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
             await Notification.create({
                 userid: deal.buyer._id,
-                linkTo: deal._id,
+                linkTo: `/deals/${deal._id}`,
+                imgLink: deal.product.imageUrl,
                 message: `Your deal request has been accepted`
             });
             const buyer = await User.findById(deal.buyer.id);
@@ -157,7 +158,8 @@ module.exports = {
                     await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
                     await Notification.create({
                         userid: deal.buyer.id,
-                        linkTo: deal._id,
+                        linkTo: `/deals/${deal._id}`,
+                        imgLink: deal.product.imageUrl,
                         message: `Your deal request has been accepted`
                     });
                     const buyer = await User.findById(deal.buyer.id);
@@ -210,7 +212,8 @@ module.exports = {
         await buyer.save();
         await Notification.create({
             userid: deal.buyer.id,
-            linkTo: deal._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
             message: `Your deal request has been declined`
         });
         await Product.findByIdAndUpdate(deal.product.id, {$set: {available: 'True'}});
@@ -263,7 +266,8 @@ module.exports = {
         await seller.save();
         await Notification.create({
             userid: seller._id,
-            linkTo: deal._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
             message: `Your deal request has been completed`
         });
         if (!product.repeatable) {
@@ -352,7 +356,8 @@ module.exports = {
         await seller.save();
         await Notification.create({
             userid: seller._id,
-            linkTo: deal._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
             message: `Your deal request has been cancelled`
         });
         if(seller.email_notifications.deal === true) {
@@ -423,7 +428,8 @@ module.exports = {
                 await buyer.save();
                 await Notification.create({
                     userid: buyer._id,
-                    linkTo: deal._id,
+                    linkTo: `/deals/${deal._id}`,
+                    imgLink: deal.product.imageUrl,
                     message: `Your refund request has been accepted`
                 });
                 const seller = await User.findById(deal.product.author.id);
@@ -471,7 +477,8 @@ module.exports = {
                 await buyer.save();
                 await Notification.create({
                     userid: deal.buyer.id,
-                    linkTo: deal._id,
+                    linkTo: `/deals/${deal._id}`,
+                    imgLink: deal.product.imageUrl,
                     message: `Your refund request has been accepted`
                 });
                 if(seller.email_notifications.deal === true) {
@@ -519,7 +526,8 @@ module.exports = {
             await seller.save();
             await Notification.create({
                 userid: seller._id,
-                linkTo: deal._id,
+                linkTo: `/deals/${deal._id}`,
+                imgLink: deal.product.imageUrl,
                 message: `Refund complete`
             });
             if(seller.email_notifications.deal === true) {
@@ -616,7 +624,8 @@ module.exports = {
             await buyer.save();
             await Notification.create({
                 userid: deal.buyer.id,
-                linkTo: deal._id,
+                linkTo: `/deals/${deal._id}`,
+                imgLink: deal.product.imageUrl,
                 message: `Your refund request has been declined`
             });
             if(buyer.email_notifications.deal === true) {
@@ -693,7 +702,8 @@ module.exports = {
             await seller.save();
             await Notification.create({
                 userid: seller._id,
-                linkTo: deal._id,
+                linkTo: `/deals/${deal._id}`,
+                imgLink: deal.product.imageUrl,
                 message: `You have received a refund request`
             });
             if(seller.email_notifications.deal === true) {
