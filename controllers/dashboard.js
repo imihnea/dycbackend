@@ -356,7 +356,7 @@ module.exports = {
                                   link: `http://${req.headers.host}/dashboard/addresses`,
                                   footerlink: `http://${req.headers.host}/dashboard/notifications`,
                                   invoice: checkout.invoice,
-                                  amount: txs.amount.amount,
+                                  amount: json.amount.amount,
                                   coin: 'BTC',
                                   subject: `Deposit successfully confirmed!`,
                                 }, function (err, data) {
