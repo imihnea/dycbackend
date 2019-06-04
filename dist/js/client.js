@@ -60,6 +60,7 @@ depositBtn.addEventListener('click', function(e) {
     throw new Error('Request failed.');
   })
   .then(function(data) {
+    document.getElementById('transactionId').value = `Transaction ID: ${data.id}`;
     document.getElementById('depositAddressBTC').value = data.address;
     document.getElementById('depositSpinner').style.display = 'none';
     document.getElementById('depositBody').style.display = 'block';

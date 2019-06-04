@@ -293,36 +293,6 @@ module.exports = {
       }
     }));
   },
-  async savvyStatus(req, res) {
-    var orderId = req.params.order;
-    var confirmations = null;
-      
-    var confirmations1 = await Checkout.findOne({orderId: orderId}, '-_id confirmations', function(err, confirmations) { 
-      if(err) {
-        res.send(err)
-      }
-    }); //get from DB, see callback.js
-    var maxConfirmations1 = await Checkout.findOne({orderId: orderId}, '-_id maxConfirmations', function(err, maxConfirmations) { 
-      if(err) {
-        res.send(err)
-      }
-    }); //get from DB, see callback.js
-    
-    confirmations = confirmations1.confirmations;
-    maxConfirmations = maxConfirmations1.maxConfirmations;
-    
-    console.log('----------------------');
-    console.log(confirmations);
-    console.log(maxConfirmations);
-    console.log('----------------------');
-    
-    var resp = {
-      success: confirmations >= maxConfirmations
-    };
-    if(confirmations !== null)
-      resp.confirmations = confirmations;
-    res.json(resp); //return this data to savvy form
-  },
   async postBTC(req, res) {
     console.log(`red.body: ${req.body}`);
     const invoice = uuidv1();
@@ -344,13 +314,78 @@ module.exports = {
             confirmations: 0,
             maxConfirmations: 3,
             paid: false
-          }, (err) => {
+          }, (err, checkout) => {
             if(err) {
               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               req.flash('error', err.message);
               return res.redirect('back');
             } else {
               res.send(address);
+              let timer = 0;
+              var i = setInterval(function() {
+                address.getTransactions({}, function(err, txs) {
+                  let json = JSON.parse(txs);
+                  const status = json.status;
+                  console.log(`asta e status: ${status}`);
+                  if (err) {
+                    console.log(err);
+                  } else {
+                      if(timer == 48) { // 12 hours
+                        return clearInterval(i);
+                    } else {
+                        if(status == 'completed') {
+                        console.log(`txs din completed: ${txs}`);
+                        console.log(`transaction completed`)
+                        Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
+                          if(err) {
+                            console.log(err);
+                          } else {
+                            console.log(`checkout updated`)
+                            User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
+                              if(err) {
+                                console.log(err)
+                              } else {
+                                console.log(`user updated`)
+                                clearInterval(i);
+                                ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
+                                  link: `http://${req.headers.host}/dashboard/addresses`,
+                                  footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                  invoice: checkout.invoice,
+                                  amount: txs.amount.amount,
+                                  coin: 'BTC',
+                                  subject: `Deposit successfully confirmed!`,
+                                }, function (err, data) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                      const mailOptions = {
+                                          from: `noreply@dealyourcrypto.com`, // sender address
+                                          to: `${user1.email}`, // list of receivers
+                                          subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
+                                          html: data, // html body
+                                      };
+                                      // send mail with defined transport object
+                                      transporter.sendMail(mailOptions, (error) => {
+                                          if (error) {
+                                          console.log(`error for sending mail confirmation === ${error}`);
+                                          }
+                                          console.log(`mail sent`);
+                                      });
+                                    }
+                                  });
+                              }
+                            });
+                          }
+                        })
+                      } else {
+                        console.log(`txs: ${txs}`);
+                        timer = timer + 1;
+                        console.log(`timer: ${timer}`);
+                      }
+                    }
+                  }
+                });
+              }, 1000 * 60 * 15)
             }
           });
         }
@@ -707,7 +742,7 @@ module.exports = {
                   var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
                   query_1.then(function(doc2) {
                     console.log("Checkout updated to paid!");
-                    clearInterval(i);
+                    return clearInterval(i);
                   });
                 });
               }
