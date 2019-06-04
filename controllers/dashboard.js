@@ -31,7 +31,12 @@ const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
+const { fork } = require("child_process");
+const forked = fork("config/notifications.js");
 
+forked.on('message', msg => {
+  console.log(msg);
+})
 
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
@@ -2390,9 +2395,12 @@ module.exports = {
     return res.redirect('/dashboard');
   },
   async getNotif(req, res) {
-    // TODO: Pagination
-    const notif = await Notification.find({'userid': req.user._id}).sort({createdAt: -1});
-    const notifications = notif;
+    const notifications = await Notification.paginate({'userid': req.user._id}, {
+      page: req.query.page || 1,
+      limit: 10,
+      sort: {createdAt: -1}
+    });
+    notifications.page = Number(notifications.page);
     await User.findByIdAndUpdate(req.user._id, {$set: {unreadNotifications: 0}});
     res.render('dashboard/dashboard_notif', {
       user: req.user,
@@ -2401,10 +2409,6 @@ module.exports = {
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
-    // TODO: Make a child process for this
-    notif.forEach(notification => {
-      notification.read = true;
-      notification.save();
-    });
+    forked.send(req.user._id);
   }
 };
