@@ -460,7 +460,8 @@ module.exports = {
                                 await user.save();
                                 await Notification.create({
                                     userid: product.author.id,
-                                    linkTo: deal._id,
+                                    linkTo: `/deals/${deal._id}`,
+                                    imgLink: product.images[0].url,
                                     message: `You have received a deal request`
                                 });
                                 // Send an email to the seller letting them know about the deal request
@@ -549,7 +550,8 @@ module.exports = {
                             await user.save();
                             await Notification.create({
                                 userid: product.author.id,
-                                linkTo: deal._id,
+                                linkTo: `/deals/${deal._id}`,
+                                imgLink: product.images[0].url,
                                 message: `You have received a deal request`
                             });
                             // Send an email to the seller letting them know about the deal request

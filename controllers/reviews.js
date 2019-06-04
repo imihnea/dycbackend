@@ -68,7 +68,8 @@ module.exports = {
 		author.save();
 		await Notification.create({
             userid: author._id,
-            linkTo: `/products/${product._id}/view`,
+			linkTo: `/products/${product._id}/view`,
+			imgLink: product.images[0].url,
             message: `One of your products has been reviewed`
         });
 		if(author.email_notifications.user === true) {

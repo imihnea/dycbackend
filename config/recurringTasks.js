@@ -29,7 +29,7 @@ mongoose.set('useFindAndModify', false); // disables warnings
 mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
-console.log('Child process started');
+console.log('Tasks process started');
 const req = false;
 
 // Runs every 24 hours

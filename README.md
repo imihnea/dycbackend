@@ -20,10 +20,7 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
-
-      Notifications => Child process
-                    => Pagination
-                    => Images for deals/chats/products
+               
    Low Priority:
 
       Email verification => Error path @confirmEmail doesn't render error

@@ -265,6 +265,7 @@ module.exports = {
             await Notification.create({
                 userid: chat.user1.id,
                 linkTo: `/messages/${chat._id}`,
+                imgLink: chat.product.imageUrl,
                 message: `You have received a message from ${chat.user2.username}`
             });
         } else if (chat.user2.id.toString() != req.user._id) {
@@ -277,6 +278,7 @@ module.exports = {
             await Notification.create({
                 userid: chat.user2.id,
                 linkTo: `/messages/${chat._id}`,
+                imgLink: chat.product.imageUrl,
                 message: `You have received a message from ${chat.user1.username}`
             });
         }
@@ -355,6 +357,7 @@ module.exports = {
             await Notification.create({
                 userid: chat.user1.id,
                 linkTo: `/messages/${chat._id}`,
+                imgLink: chat.product.imageUrl,
                 message: `You have received a message`
             });
         } else if (chat.user2.id.toString() != req.user._id) {
@@ -367,6 +370,7 @@ module.exports = {
             await Notification.create({
                 userid: chat.user2.id,
                 linkTo: `/messages/${chat._id}`,
+                imgLink: chat.product.imageUrl,
                 message: `You have received a message`
             });
         }

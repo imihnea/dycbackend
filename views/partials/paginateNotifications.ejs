@@ -1,0 +1,13 @@
+<div style="margin-left: 1vw;">
+    <% if(notifications.page - 1) { %>
+        <a class="button page" href="?page=<%= notifications.page - 1 %>">Prev</a>
+    <% } %>
+    <% for(let i = 1; i <= notifications.pages; i++) { %>
+        <a class="button page %>" href="?page=<%= i %>"
+                <%= i === notifications.page ? 'style=color:#000;' : '' %>
+            ><%= i %></a>
+    <% } %>
+    <% if((notifications.page + 1) <= notifications.pages) { %>
+        <a class="button page" href="?page=<%= notifications.page + 1 %>">Next</a>
+    <% } %>
+</div>

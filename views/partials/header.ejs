@@ -61,7 +61,7 @@
                     <p class="hide" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
                         <div class="dropdown-trigger">
-                            <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
+                            <button class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
                                 <span class="icon is-small">
                                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                                 </span>
@@ -71,6 +71,11 @@
                                         <img class="is-rounded" src="<%= user.avatar.url %>">
                                     </div>
                                 </a>
+                                <% if ((user.unreadNotifications > 0) || (user.processingDeals > 0)) { %>
+                                    <span style="margin-left: 3px;">
+                                        <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                    </span>
+                                <% } %>
                             </button>
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
@@ -83,6 +88,18 @@
                                         <strong>
                                             Ongoing Deals
                                             <% if (user.processingDeals > 0) { %>
+                                                <span>
+                                                    <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                </span>
+                                            <% } %>
+                                        </strong>
+                                    </a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/dashboard/notif" class="dropdown-item link">
+                                        <strong>
+                                            Notifications
+                                            <% if (user.unreadNotifications > 0) { %>
                                                 <span>
                                                     <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
                                                 </span>
@@ -576,16 +593,22 @@
                         <div class="navbar-item">
                             <div class="dropdown is-right is-hoverable hideOnBurger">
                                 <div class="dropdown-trigger">
-                                    <button class="button balance-btn" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                    <button class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
                                         <span class="icon is-small" style="margin-bottom: auto;">
                                             <i class="fas fa-angle-down" aria-hidden="true"></i>
                                         </span>
                                         <span style="padding-right: 0.5vh; margin-bottom: auto;" class="username"></span>
+                                        
                                         <a href="/dashboard">
                                             <div class="image is-32x32">
                                                 <img class="is-rounded" src="<%= user.avatar.url %>">
                                             </div>
                                         </a>
+                                        <% if ((user.unreadNotifications > 0) || (user.processingDeals > 0)) { %>
+                                            <span style="margin-left: 3px;">
+                                                <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                            </span>
+                                        <% } %>
                                     </button>
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu4" role="menu">
@@ -598,6 +621,18 @@
                                                 <strong>
                                                     Ongoing Deals
                                                     <% if (user.processingDeals > 0) { %>
+                                                        <span>
+                                                            <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
+                                                        </span>
+                                                    <% } %>
+                                                </strong>
+                                            </a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/dashboard/notif" class="dropdown-item link">
+                                                <strong>
+                                                    Notifications
+                                                    <% if (user.unreadNotifications > 0) { %>
                                                         <span>
                                                             <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
                                                         </span>

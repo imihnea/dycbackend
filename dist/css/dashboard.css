@@ -878,7 +878,6 @@ body {
   background-color: transparent;
   cursor: pointer;
   outline-color: transparent;
-  /* position: absolute; */
 }
 
 .notifSpan{
@@ -888,6 +887,17 @@ body {
   top: 0;
   left: 0;
   z-index: 1;
+}
+
+.notif{
+  position: relative;
+  border-bottom-style: solid; 
+  border-color: black; 
+  border-width: 1px;
+}
+
+.notif:hover{
+  background-color: #2b47c5 !important;
 }
 
 /* Edge */

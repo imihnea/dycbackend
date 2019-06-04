@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 const Schema = mongoose.Schema;
 
@@ -13,5 +14,7 @@ const notificationSchema = new Schema({
     linkTo: String,
     read: {type: Boolean, default: false}
 });
+
+notificationSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Notification', notificationSchema);
