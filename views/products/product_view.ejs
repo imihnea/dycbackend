@@ -251,7 +251,7 @@
                         <div>
                             <a href="/profile/<%= review.author %>">
                                 <figure class="image">
-                                    <img src="<%= review.avatarUrl %>" class="avatarSize">
+                                    <img src="<%= review.avatarUrl %>" class="avatarSize" alt="">
                                 </figure>
                             </a>
                             <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
@@ -384,7 +384,7 @@
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
                                     <figure class="image featimg">
-                                        <img src="<%= sim.images[0].url %>" class="featimgs">
+                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="">
                                         <% if (sim.feat_1.status == true) { %>
                                             <span class="featured"></span>    
                                         <% } %>

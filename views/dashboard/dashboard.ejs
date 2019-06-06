@@ -125,9 +125,9 @@
                                     <!-- Every user will have a default profile pic  -->
                                     <figure class="image is-128x128" style="margin: auto;">
                                         <% if(premium !== true) { %>
-                                            <img src="<%= user.avatar.url %>" class="profilepic">
+                                            <img src="<%= user.avatar.url %>" class="profilepic" alt="">
                                         <% } else { %>
-                                            <img src="<%= user.avatar.url %>" class="premiumImg">
+                                            <img src="<%= user.avatar.url %>" class="premiumImg" alt="">
                                             <span class="premium"></span>
                                         <% } %>
                                     </figure>

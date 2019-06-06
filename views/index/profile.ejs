@@ -5,7 +5,7 @@
         <div class="columns" style="margin-top: 1vh;">
             <div class="column is-two-fifths">
                 <figure class="image" style="width: 200px; margin: auto;">
-                    <img src="<%= user.avatar.url %>" class="avatar <% if (premium) { %>premiumImg<% } %>" style="width: 200px; margin: auto; border-radius: 10px; border-style: solid;">
+                    <img src="<%= user.avatar.url %>" class="avatar <% if (premium) { %>premiumImg<% } %>" style="width: 200px; margin: auto; border-radius: 10px; border-style: solid;" alt="">
                     <% if (premium) { %>
                         <span class="premium"></span>    
                     <% } %>
@@ -51,7 +51,7 @@
                                 <a href="/products/<%= products[i].id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-16by9" style="width: auto !important;">
-                                            <img src="<%= products[i].images[0].url %>">
+                                            <img src="<%= products[i].images[0].url %>" alt="">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -75,7 +75,7 @@
                                 <a href="/products/<%= products[i].id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-16by9" style="width: auto;">
-                                            <img src="" data-src="<%= products[i].images[0].url %>" class="noImg">
+                                            <img src="" data-src="<%= products[i].images[0].url %>" class="noImg" alt="">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -117,7 +117,7 @@
                         <div class="buttonsSpace">
                             <a href="/profile/<%= review.author %>" class="avatarMargins">
                                 <figure class="image" class="avatarFigureMargins">
-                                    <img src="<%= review.avatarUrl %>" class="avatarSize" style="border-color: black;"></a>
+                                    <img src="<%= review.avatarUrl %>" class="avatarSize" style="border-color: black;" alt=""></a>
                                 </figure>
                             <a href="/profile/<%= review.author %>" class="link"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
                             <% if (review.createdAt) { %>
