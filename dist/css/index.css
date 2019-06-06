@@ -125,6 +125,10 @@ div.latest-details{
     display: none;
 }
 
+.hiddenRow{
+    display: none !important;
+}
+
 .reviewAuthorButtons{
     position: absolute;  
     bottom: 0%;

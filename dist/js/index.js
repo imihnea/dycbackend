@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let showMore = document.querySelector('.showMore');
     let showLess = document.querySelector('.showLess');
     let lastLoaded = 0;
-
+    
     if(showMore) {
         showMore.addEventListener('click', () => {
             const loadThis = document.querySelectorAll('.lazyLoad');
@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 j += 1;
             }
             lastLoaded = j;
+            let hiddenRows = document.querySelectorAll('.hiddenRow');
+            hiddenRows[0].classList.remove('hiddenRow');
+            hiddenRows[0].classList.add('hideRow');
             let img = document.querySelectorAll('.lazyLoadImg');
             if (img.length > 0) {
                 for (let i = 0; i < j; i += 1) {
@@ -64,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     j += 1;
                 }
             }
+            let hideRows = document.querySelectorAll('.hideRow');
+            hideRows[hideRows.length - 1].classList.remove('hideRow');
+            hideRows[hideRows.length - 1].classList.add('hiddenRow');
             const remaining = document.querySelectorAll('.lazyLoaded');
             if (remaining.length == 0) {
                 showLess.classList.add('hidden');
