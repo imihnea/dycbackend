@@ -170,7 +170,7 @@ function(req, accessToken, refreshToken, profile, cb) {
     user.save((err, user) => {return cb(err, user)});
   } else {
     User.findOne({facebookId: profile.id}, (err, res) => {
-      if (res._id) {
+      if (res !== null) {
         return cb(err, res);
       } else {
         User.create(
@@ -205,7 +205,7 @@ function(req, accessToken, refreshToken, profile, done) {
     user.save((err, user) => {return done(err, user)});
   } else {
     User.findOne({googleId: profile.id}, (err, res) => {
-      if (res._id) {
+      if (res !== null) {
         return done(err, res);
       } else {
         User.create(
