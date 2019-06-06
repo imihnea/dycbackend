@@ -365,7 +365,7 @@ module.exports = {
                                     } else {
                                       const mailOptions = {
                                           from: `noreply@dealyourcrypto.com`, // sender address
-                                          to: `${user1.email}`, // list of receivers
+                                          to: `${updatedUser.email}`, // list of receivers
                                           subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
                                           html: data, // html body
                                       };
@@ -711,7 +711,7 @@ module.exports = {
       }
     });
   },
-  // Polls server every minute to check for status of order
+  // Polls server every 15 minutes to check for status of order
   async CoinSwitchPoll(req, res) {
     console.log(req.body);
     const orderId = req.body.orderId;
@@ -755,7 +755,7 @@ module.exports = {
           }
         }
       });
-    }, 1000 * 60);
+    }, 1000 * 60 * 15);
   },
   // Get tokens page
   async getTokens(req, res) {

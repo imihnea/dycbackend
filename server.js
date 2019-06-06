@@ -106,12 +106,6 @@ const dealsRoutes = require('./routes/deals');
 
 const adminRoutes = require('./routes/admin');
 
-const savvycallbackRoutes = require('./routes/savvy/callback');
-
-const savvycurrenciesRoutes = require('./routes/savvy/currencies');
-
-const savvystatusRoutes = require('./routes/savvy/status');
-
 // Gzip compression
 
 app.use(compression());
@@ -176,7 +170,7 @@ function(req, accessToken, refreshToken, profile, cb) {
     user.save((err, user) => {return cb(err, user)});
   } else {
     User.findOne({facebookId: profile.id}, (err, res) => {
-      if (res._id) {
+      if (res !== null) {
         return cb(err, res);
       } else {
         User.create(
@@ -211,7 +205,7 @@ function(req, accessToken, refreshToken, profile, done) {
     user.save((err, user) => {return done(err, user)});
   } else {
     User.findOne({googleId: profile.id}, (err, res) => {
-      if (res._id) {
+      if (res !== null) {
         return done(err, res);
       } else {
         User.create(
@@ -298,9 +292,6 @@ app.use("/forgot", forgotPasswordLimiter);
 
 // refactored routes
 app.use('/', indexRoutes);
-app.use('/', savvycallbackRoutes);
-app.use('/', savvycurrenciesRoutes);
-app.use('/', savvystatusRoutes);
 app.use('/dashboard', dashboardRoutes); // by saying this we write shorter code in routes
 app.use('/products', productRoutes);
 app.use('/profile', profileRoutes);
