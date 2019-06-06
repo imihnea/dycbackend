@@ -148,8 +148,8 @@ router.delete('/:id', verifyCookie, checkId, asyncErrorHandler(productDestroy));
 // POST - Delete account request
 router.post('/disable-account', isLoggedIn, asyncErrorHandler(deleteAccountRequest));
 
-// POST - Delete account
-router.post('/disable-account/:token', asyncErrorHandler(deleteAccount));
+// GET - Delete account
+router.get('/disable-account/:token', asyncErrorHandler(deleteAccount));
 
 // GET Partner Page
 router.get('/partner', isLoggedIn, asyncErrorHandler(getPartner));

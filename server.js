@@ -106,12 +106,6 @@ const dealsRoutes = require('./routes/deals');
 
 const adminRoutes = require('./routes/admin');
 
-const savvycallbackRoutes = require('./routes/savvy/callback');
-
-const savvycurrenciesRoutes = require('./routes/savvy/currencies');
-
-const savvystatusRoutes = require('./routes/savvy/status');
-
 // Gzip compression
 
 app.use(compression());
@@ -298,9 +292,6 @@ app.use("/forgot", forgotPasswordLimiter);
 
 // refactored routes
 app.use('/', indexRoutes);
-app.use('/', savvycallbackRoutes);
-app.use('/', savvycurrenciesRoutes);
-app.use('/', savvystatusRoutes);
 app.use('/dashboard', dashboardRoutes); // by saying this we write shorter code in routes
 app.use('/products', productRoutes);
 app.use('/profile', profileRoutes);

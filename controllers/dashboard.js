@@ -32,12 +32,18 @@ const client = new Client({
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
 const { fork } = require("child_process");
-const forked = fork("config/notifications.js");
+const notifProcess = fork("config/notifications.js");
+const deleteProcess = fork("config/deleteAcc.js");
 
-forked.on('message', msg => {
+notifProcess.on('message', msg => {
   console.log(msg);
-})
+});
 
+deleteProcess.on('message', msg => {
+  console.log(msg);
+});
+
+const SECRET2 = 'monkaGiga';
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
   apiSecret: process.env.NEXMO_API_SECRET
@@ -2279,12 +2285,19 @@ module.exports = {
     }
   },
   async deleteAccountRequest(req, res) {
+    // Verify if there are any ongoing deals
+    const deals = await Deal.find({ $and: [{ $or: [{ refundableUntil: { $exists: true, $gt: Date.now() }}, { refundableUntil: { $exists: false } }]}, {
+          $or: [ { 'buyer.id': req.user._id }, { 'product.author.id': req.user._id }] }, { status: { $nin: ['Cancelled', 'Refunded', 'Declined']}}]});
+    if (deals.length > 0) {
+      req.flash('error', 'You cannot delete your account while there are ongoing deals');
+      return res.redirect('/dashboard');
+    }
     const token = jwt.sign({
       user: req.user._id
     }, 
     SECRET2, 
     { expiresIn: '1h' });
-    ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
+    ejs.renderFile(path.join(__dirname, "../views/email_templates/deleteAccount.ejs"), {
       link: `http://${req.headers.host}/dashboard/disable-account/${token}`,
       footerlink: `http://${req.headers.host}/dashboard/notifications`,
       subject: 'Delete account request - Deal Your Crypto',
@@ -2325,7 +2338,6 @@ module.exports = {
       } else {
         const user = jwt.decode(req.params.token);
         const oldUser = await User.findById(user.user);
-        //Need to add deletion of other stuff like open deals, products etc
         Deleted.create({
           oldUser
         }, (err) => {
@@ -2333,18 +2345,10 @@ module.exports = {
             req.flash('error', 'There\'s been an error updating our database, please try again.');
             return res.redirect('back');
           } else {
-            User.findByIdAndDelete(user.user, (err) => {
-              if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('error', err.message);
-                return res.redirect('/');
-              } else {
-                userLogger.info(`Message: User deleted account\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.logout();
-                req.flash('success', 'Successfully deleted your account.');
-                return res.redirect('/');
-              }
-            });
+            deleteProcess.send(user.user);
+            req.logout();
+            req.flash('success', 'Successfully deleted your account.');
+            return res.redirect('/');
           }
         })
       }
@@ -2444,6 +2448,6 @@ module.exports = {
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
-    forked.send(req.user._id);
+    notifProcess.send(req.user._id);
   }
 };
