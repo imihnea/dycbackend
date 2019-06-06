@@ -15,7 +15,7 @@ mongoose.set('useFindAndModify', false); // disables warnings
 mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
-console.log('Account deletion process started');
+logger.info(`Message: Account deletion process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 
 process.on('message', user => {
     Product.deleteMany({'author.id': user}, (err) => {

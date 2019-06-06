@@ -44,56 +44,83 @@
         <% } else { %>
             <div class="deals smallerCenter frame" >
                 <p class="subtitle contentSubtitle">Active Deals</p>
-                <div class="columns flexRows">
-                    <%  let i = 0;
-                        while ((i < products.length) && (i < 4)) { %>
-                            <div class="column card feat_card frame activeDealProduct" style="flex-basis: 25%;">
-                                <a href="/products/<%= products[i].id %>/view">
+                <% 
+                    let k = products.length
+                    let a = products;
+                    let b = [];
+                    b = a.splice(0, 5);
+                %>
+                    <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                        <% b.forEach(product => { %>
+                            <div class="column card feat_card frame activeDealProduct" >
+                                <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-16by9" style="width: auto !important;">
-                                            <img src="<%= products[i].images[0].url %>" alt="">
+                                            <img src="<%= product.images[0].url %>" alt="">
                                         </figure>
                                     </div>
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title is-5"><%= products[i].name %></p>
+                                                <p class="title is-5"><%= product.name %></p>
                                             </div>
                                         </div>
                                         <div class="accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= products[i].btcPrice %></p>
+                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
                                             <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     </div> 
                                 </a>
                             </div>
-                        <%
-                         ++i; 
-                        }
-                        while (i < products.length) { %>
-                            <div class="column card feat_card frame activeDealProduct noLoad hidden" style="flex-basis: 25%;">
-                                <a href="/products/<%= products[i].id %>/view">
+                        <% }); %>
+                    </div>
+                <% 
+                    while (a.length) {
+                        b = a.splice(0, 5);
+                %>
+                    <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                        <% b.forEach(product => { %>
+                            <div class="column card feat_card frame activeDealProduct noLoad hidden">
+                                <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
-                                        <figure class="image featimg is-16by9" style="width: auto;">
-                                            <img src="" data-src="<%= products[i].images[0].url %>" class="noImg" alt="">
+                                        <figure class="image featimg is-16by9" style="width: auto !important;">
+                                                <img src="" data-src="<%= product.images[0].url %>" class="noImg" alt="">
                                         </figure>
                                     </div>
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title is-5"><%= products[i].name %></p>
+                                                <p class="title is-5"><%= product.name %></p>
                                             </div>
                                         </div>
                                         <div class="accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= products[i].btcPrice %></p>
+                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
                                             <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                     </div> 
                                 </a>
                             </div>
-                        <% ++i; } %> 
-                </div>
-                <% if (i > 4) { %>   
+                        <% }); %>
+                        <% switch(b.length) {
+                            case 1: %>
+                            <div class="column is-four-fifths"></div>
+                            <% break; 
+                            case 2: %>
+                            <div class="column is-three-fifths"></div>
+                            <% break;
+                            case 3: %>
+                            <div class="column is-two-fifths"></div>
+                            <% break;
+                            case 4: %>
+                            <div class="column"></div>
+                            <% break;
+                            default: break;
+                        } %>
+                    </div>
+                <% 
+                    }
+                %>
+                <% if (k > 4) { %>   
                     <div class="column buttons">
                         <button class="button is-primary showMore">Show more</button>
                         <button class="button is-primary showLess hidden">Show less</button>
@@ -238,6 +265,7 @@
             </div>   
         <% } %>
     </div>
+</div>
 </div>
 
 <% include ../partials/footer %>

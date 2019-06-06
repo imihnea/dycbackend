@@ -29,7 +29,7 @@ mongoose.set('useFindAndModify', false); // disables warnings
 mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
-console.log('Tasks process started');
+logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 const req = false;
 
 // Runs every 24 hours

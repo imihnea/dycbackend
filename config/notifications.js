@@ -1,5 +1,7 @@
 const Notification = require('../models/notification');
 const mongoose = require('mongoose');
+const moment = require('moment');
+const { logger } = require('./winston');
 
 // Connect child to DB
 mongoose.Promise = global.Promise;
@@ -8,7 +10,7 @@ mongoose.set('useFindAndModify', false); // disables warnings
 mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
-console.log('Notifications process started');
+logger.info(`Message: Notifications process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 
 process.on('message', userid => {
     Notification.find({'userid': userid}, (err, notif) => {
