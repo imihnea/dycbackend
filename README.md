@@ -10,7 +10,6 @@ Frontend:
 
     Low Priority:
 
-         Test index lazyloading
          Make everything responsive (see comments in css files)
          Better email wording
 

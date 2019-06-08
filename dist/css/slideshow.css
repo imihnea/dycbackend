@@ -9,7 +9,7 @@
     to{left:0;}
   }
   .slides{
-    width:400%;
+    width: 300%;
     position:relative;
     -webkit-animation:slide 15s infinite;
     -moz-animation:slide 15s infinite;
@@ -31,15 +31,13 @@
   }
   
   .slider{
-    width:25%;
     height:100%;
     float:left;
     position:relative;
     z-index:1;
-    overflow:hidden;
-    background-color: black;
-    border-color: black;
-    border-style: solid;
+    overflow: hidden;
+    width: 33.33%;
+    border-style: none;
   }
   .slide img{
     width:100%;
@@ -224,6 +222,8 @@
     border-color: transparent; 
     background-color: transparent; 
     cursor: pointer;
+    padding: 0; 
+    border-width: 0;
 }
 
 .sliderBtn:focus{
