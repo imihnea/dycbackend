@@ -61,7 +61,11 @@
 
 <div class="hero-body hero-content">
 
-        <% if (onlyFeatured) { %><p class="title is-3">Featured Products</p><% } %>
+        <% if (onlyFeatured) { %>
+            <p class="title is-2">Featured Products</p>
+        <% } else { %>
+            <p class="title is-2">Products currently for sale</p>
+        <% } %>
 
         <% 
             const k = products.length;
@@ -168,8 +172,8 @@
             </div>
             <% if (k > 20) { %>
                 <div class="buttons column">
-                    <button class="button is-primary showMore">Show More</button>
-                    <button class="button is-primary showLess hidden">Show Less</button>
+                    <button class="button is-primary showMore is-large">Show More</button>
+                    <button class="button is-primary showLess is-large hidden">Show Less</button>
                 </div>
             <% } %>
 

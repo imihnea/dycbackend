@@ -327,65 +327,69 @@ module.exports = {
               let timer = 0;
               var i = setInterval(function() {
                 address.getTransactions({}, function(err, txs) {
-                  let json = JSON.parse(txs);
-                  const status = json.status;
-                  console.log(`asta e status: ${status}`);
-                  if (err) {
-                    console.log(err);
-                  } else {
-                      if(timer == 48) { // 12 hours
-                        return clearInterval(i);
+                  if(txs !== null || txs !== undefined) {
+                    let json = JSON.parse(txs);
+                    const status = json.status;
+                    console.log(`asta e status: ${status}`);
+                    if (err) {
+                      console.log(err);
                     } else {
-                        if(status == 'completed') {
-                        console.log(`txs din completed: ${txs}`);
-                        console.log(`transaction completed`)
-                        Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
-                          if(err) {
-                            console.log(err);
-                          } else {
-                            console.log(`checkout updated`)
-                            User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
-                              if(err) {
-                                console.log(err)
-                              } else {
-                                console.log(`user updated`)
-                                clearInterval(i);
-                                ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
-                                  link: `http://${req.headers.host}/dashboard/addresses`,
-                                  footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                                  invoice: checkout.invoice,
-                                  amount: json.amount.amount,
-                                  coin: 'BTC',
-                                  subject: `Deposit successfully confirmed!`,
-                                }, function (err, data) {
-                                    if (err) {
-                                        console.log(err);
-                                    } else {
-                                      const mailOptions = {
-                                          from: `noreply@dealyourcrypto.com`, // sender address
-                                          to: `${updatedUser.email}`, // list of receivers
-                                          subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
-                                          html: data, // html body
-                                      };
-                                      // send mail with defined transport object
-                                      transporter.sendMail(mailOptions, (error) => {
-                                          if (error) {
-                                          console.log(`error for sending mail confirmation === ${error}`);
-                                          }
-                                          console.log(`mail sent`);
-                                      });
-                                    }
-                                  });
-                              }
-                            });
-                          }
-                        })
+                        if(timer == 48) { // 12 hours
+                          return clearInterval(i);
                       } else {
-                        console.log(`txs: ${txs}`);
-                        timer = timer + 1;
-                        console.log(`timer: ${timer}`);
+                          if(status == 'completed') {
+                          console.log(`txs din completed: ${txs}`);
+                          console.log(`transaction completed`)
+                          Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
+                            if(err) {
+                              console.log(err);
+                            } else {
+                              console.log(`checkout updated`)
+                              User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
+                                if(err) {
+                                  console.log(err)
+                                } else {
+                                  console.log(`user updated`)
+                                  clearInterval(i);
+                                  ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
+                                    link: `http://${req.headers.host}/dashboard/addresses`,
+                                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                    invoice: checkout.invoice,
+                                    amount: json.amount.amount,
+                                    coin: 'BTC',
+                                    subject: `Deposit successfully confirmed!`,
+                                  }, function (err, data) {
+                                      if (err) {
+                                          console.log(err);
+                                      } else {
+                                        const mailOptions = {
+                                            from: `noreply@dealyourcrypto.com`, // sender address
+                                            to: `${updatedUser.email}`, // list of receivers
+                                            subject: 'Deal Your Crypto - Balance Confirmation', // Subject line
+                                            html: data, // html body
+                                        };
+                                        // send mail with defined transport object
+                                        transporter.sendMail(mailOptions, (error) => {
+                                            if (error) {
+                                            console.log(`error for sending mail confirmation === ${error}`);
+                                            }
+                                            console.log(`mail sent`);
+                                        });
+                                      }
+                                    });
+                                }
+                              });
+                            }
+                          })
+                        } else {
+                          console.log(`txs: ${txs}`);
+                          timer = timer + 1;
+                          console.log(`timer: ${timer}`);
+                        }
                       }
                     }
+                  } else {
+                    return clearInterval(i);
                   }
                 });
               }, 1000 * 60 * 15)

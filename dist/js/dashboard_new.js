@@ -22,47 +22,51 @@ document.addEventListener('DOMContentLoaded', () => {
   const feat1 = document.getElementById('feat_1');
   const feat2 = document.getElementById('feat_2');
   
-  label1.addEventListener('mouseenter', () => {
-    if (feat1.checked) {
-      i1.classList.add('redI');
-      i1.classList.remove('greenI');
-    } else {
-      i1.classList.add('greenI');
-      i1.classList.remove('blueI');        
-    }
-  });
-  
-  label1.addEventListener('mouseleave', () => {
-    if (feat1.checked) {
-      i1.classList.remove('redI');
-      i1.classList.add('greenI');
-    } else {
-      i1.classList.remove('greenI');
-      i1.classList.remove('redI');
-      i1.classList.add('blueI');  
-    }
-  });
+  if(label1) {
+    label1.addEventListener('mouseenter', () => {
+      if (feat1.checked) {
+        i1.classList.add('redI');
+        i1.classList.remove('greenI');
+      } else {
+        i1.classList.add('greenI');
+        i1.classList.remove('blueI');        
+      }
+    });
+    
+    label1.addEventListener('mouseleave', () => {
+      if (feat1.checked) {
+        i1.classList.remove('redI');
+        i1.classList.add('greenI');
+      } else {
+        i1.classList.remove('greenI');
+        i1.classList.remove('redI');
+        i1.classList.add('blueI');  
+      }
+    });
+  }
 
-  label2.addEventListener('mouseenter', () => {
-    if (feat2.checked) {
-      i2.classList.add('redI');
-      i2.classList.remove('greenI');
-    } else {
-      i2.classList.add('greenI');
-      i2.classList.remove('blueI');        
-    }
-  });
-  
-  label2.addEventListener('mouseleave', () => {
-    if (feat2.checked) {
-      i2.classList.remove('redI');
-      i2.classList.add('greenI');
-    } else {
-      i2.classList.remove('greenI');
-      i2.classList.remove('redI');
-      i2.classList.add('blueI');  
-    }
-  });
+  if(label2) {
+    label2.addEventListener('mouseenter', () => {
+      if (feat2.checked) {
+        i2.classList.add('redI');
+        i2.classList.remove('greenI');
+      } else {
+        i2.classList.add('greenI');
+        i2.classList.remove('blueI');        
+      }
+    });
+    
+    label2.addEventListener('mouseleave', () => {
+      if (feat2.checked) {
+        i2.classList.remove('redI');
+        i2.classList.add('greenI');
+      } else {
+        i2.classList.remove('greenI');
+        i2.classList.remove('redI');
+        i2.classList.add('blueI');  
+      }
+    });
+  }
 
   const radio1 = document.getElementById('shipping-yes');
   const radio2 = document.getElementById('shipping-no');
