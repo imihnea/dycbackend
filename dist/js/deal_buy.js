@@ -1,18 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('rateSpinner').style.display = 'none';
-    const select = document.getElementById('deliverySelect');
-    select.addEventListener('change', () => {
-        if(select.value == 'Shipping') {
-            document.getElementById("shipping").style.display = "block";
-            document.getElementById("facetoface").style.display = "none";
-        } else if(select.value == 'Face to Face') {
-            document.getElementById("shipping").style.display = "none";
-            document.getElementById("facetoface").style.display = "block";
+    const radio = document.querySelectorAll('input[type=radio][name="deliverySelect"]');
+    const f2fLabel = document.getElementById('f2fLabel');
+    const shipLabel = document.getElementById('shipLabel');
+    radio.forEach(item => {
+      item.addEventListener('change', () => {
+        if(item.value == 'Shipping') {
+          document.getElementById("shipping").style.display = "block";
+          if (shipLabel) {
+            if (!shipLabel.classList.contains('greenI')) {
+              shipLabel.classList.add('greenI');
+            }
+            if (shipLabel.classList.contains('blueI')) {
+              shipLabel.classList.remove('blueI');
+            }
+          }
+          if (f2fLabel.classList.contains('greenI')) {
+            f2fLabel.classList.remove('greenI');
+          }
+          if (!f2fLabel.classList.contains('blueI')) {
+            f2fLabel.classList.add('blueI');
+          }
+          document.getElementById("facetoface").style.display = "none";
+        } else if(item.value == 'Face to Face') {
+          if (shipLabel) {
+            if (shipLabel.classList.contains('greenI')) {
+              shipLabel.classList.remove('greenI');
+            }
+            if (!shipLabel.classList.contains('blueI')) {
+              shipLabel.classList.add('blueI');
+            }
+          }
+          if (!f2fLabel.classList.contains('greenI')) {
+            f2fLabel.classList.add('greenI');
+          }
+          if (f2fLabel.classList.contains('blueI')) {
+            f2fLabel.classList.remove('blueI');
+          }
+          document.getElementById("shipping").style.display = "none";
+          document.getElementById("facetoface").style.display = "block";
         } else {
-            document.getElementById("shipping").style.display = "none";
-            document.getElementById("facetoface").style.display = "none";
+          if (shipLabel) {
+            if (!shipLabel.classList.contains('blueI')) {
+              shipLabel.classList.add('blueI');
+            }
+          }
+          if (!f2fLabel.classList.contains('blueI')) {
+            f2fLabel.classList.add('blueI');
+          }
+          document.getElementById("shipping").style.display = "none";
+          document.getElementById("facetoface").style.display = "none";
         }
+      });
     });
+
     // const btcrate = document.getElementById('btcrate');
     // const shippingRate = document.querySelector('input[name="shippingRate"]:checked').value;
     // const productPrice = document.getElementById('productPrice');
