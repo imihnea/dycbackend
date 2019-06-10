@@ -11,7 +11,7 @@
                 <input type="text" name="searchName" value="" hidden>
                 <input type="text" name="searchCateg" value="Collectibles & Art" hidden>
                 <input type="text" name="category" value="Collectibles" hidden>
-                <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559918198/architecture.png" alt="" ></div></button>
+                <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559918198/architecture.png" alt="" style="width: 100vw;"></div></button>
             </form>
         </div>
         </div>
@@ -22,7 +22,7 @@
                     <input type="text" name="searchName" value="" hidden>
                     <input type="text" name="searchCateg" value="Leisure Time" hidden>
                     <input type="text" name="category" value="Music" hidden>
-                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559997823/home.png" alt="" ></div></button>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559997823/home.png" alt=""  style="width: 100vw;"></div></button>
                 </form>
             </div>
         </div>
@@ -33,7 +33,7 @@
                     <input type="text" name="searchName" value="" hidden>
                     <input type="text" name="searchCateg" value="Sports & Outdoors" hidden>
                     <input type="text" name="category" value="Sports & Fitness" hidden>
-                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559997826/pets1.png" alt="" ></div></button>
+                    <button class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/dxbujmytn/image/upload/v1559997826/pets1.png" alt=""  style="width: 100vw;"></div></button>
                 </form>
             </div>
         </div>
@@ -67,27 +67,27 @@
             const k = products.length;
             let j = 0;
         %>
-        <div class="container columns products indexProducts"> 
+        <div class="columns products indexProducts"> 
                 <% if (products.length != 0) { %>
                     <% 
                         let a = products;
                         let b = [];
-                        b = a.splice(0, 5);
+                        b = a.splice(0, 7);
                     %>
-                    <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                    <div class="columns indexRow">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct" >
+                            <div class="column card feat_card frame activeDealProduct">
                                 <a href="/products/<%= product._id %>/view">
                                     <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %><span class="featured"></span><% } %>
                                     <div class="card-image">
-                                        <figure class="image featimg">
+                                        <figure class="image featimg is-4by3" style="width: auto;">
                                             <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title is-5" style="overflow: hidden;"><%= product.name %> </p>
+                                                <p class="title productName" style="overflow: hidden;"><%= product.name %> </p>
                                             </div>
                                         </div>
                                         <div class="accepted_currencies frame">
@@ -99,14 +99,14 @@
                             </div>
                         <% j += 1; }); %> 
                     </div>
-                    <%  while ((j < 20) && (a.length > 0)) { b = a.splice(0, 5); %>
-                        <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                    <%  while ((j < 20) && (a.length > 0)) { b = a.splice(0, 7); %>
+                        <div class="columns indexRow">
                             <% b.forEach(product => { %>
                                 <div class="column card feat_card frame activeDealProduct" >
                                     <a href="/products/<%= product._id %>/view">
                                         <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %><span class="featured"></span><% } %>
                                         <div class="card-image">
-                                            <figure class="image featimg">
+                                            <figure class="image featimg is-4by3" style="width: auto;">
                                                 <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
                                             </figure>
                                         </div>
@@ -125,16 +125,21 @@
                                 </div>
                                 <% j += 1; %>
                             <% }); %>
+                            <% if (b.length < 7) { %>
+                                <% for (let v = b.length; v < 7; v+= 1) { %>
+                                    <div class="column"></div>
+                                <% } %>
+                            <% } %>
                         </div>
                     <% } %>
-                    <% while (a.length > 0) { b = a.splice(0, 5); %>
-                        <div class="columns hiddenRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                    <% while (a.length > 0) { b = a.splice(0, 7); %>
+                        <div class="columns indexRow hiddenRow">
                             <% b.forEach(product => { %>
                                 <div class="column card feat_card frame activeDealProduct lazyLoad" >
                                     <a href="/products/<%= product._id %>/view">
                                         <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %><span class="featured"></span><% } %>
                                         <div class="card-image">
-                                            <figure class="image featimg">
+                                            <figure class="image featimg is-4by3" style="width: auto;">
                                                 <img  src="" data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>
@@ -152,6 +157,11 @@
                                     </a>      
                                 </div>
                             <% }); %>
+                            <% if (b.length < 7) { %>
+                                <% for (let v = b.length; v < 7; v+= 1) { %>
+                                    <div class="column"></div>
+                                <% } %>
+                            <% } %>
                         </div>
                     <% } %>
                 <% } %>

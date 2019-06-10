@@ -111,8 +111,11 @@ div.latest-details{
 
 .avatar{
     width: auto;
-    max-width: 300px;
     height: 200px;
+    width: 200px; 
+    margin: auto; 
+    border-radius: 10px; 
+    border-style: solid;
 }
 
 .profileProducts{
@@ -138,8 +141,6 @@ div.latest-details{
 .reviewRating{
     margin-top: 1vh; 
     margin-bottom: 1vh; 
-    margin-left: auto; 
-    margin-right: auto;
 }
 
 .lazyLoad{

@@ -48,7 +48,7 @@ module.exports = {
       });
       if (premium) {
         res.render('index/profile', { 
-          user, 
+          viewedUser: user, 
           products, 
           floorRating, 
           reviews,
@@ -59,7 +59,7 @@ module.exports = {
         });
       } else {
         res.render('index/profile', { 
-          user, 
+          viewedUser: user, 
           products, 
           floorRating, 
           reviews,

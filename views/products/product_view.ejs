@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="/dist/css/categories.css">
 <link rel="stylesheet" href="/dist/css/products.css">
 <link rel="stylesheet" href="/dist/css/product_view.css">
-<link rel="stylesheet" href="/../dist/css/index.css"> 
-<link rel="stylesheet" href="/../dist/css/starability-basic.min.css">
+<link rel="stylesheet" href="/dist/css/index.css"> 
+<link rel="stylesheet" href="/dist/css/starability-basic.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <script src="/dist/js/product_view.js"></script>
 <div class="hero-body">
@@ -249,7 +249,7 @@
                 <% reviews.docs.forEach(function(review, index) { %>
                     <div class="columns container is-fluid frame reviewWrapper">
                         <div>
-                            <a href="/profile/<%= review.author %>">
+                            <a href="/profile/<%= review.author %>" class="link">
                                 <figure class="image">
                                     <img src="<%= review.avatarUrl %>" class="avatarSize" alt="">
                                 </figure>
