@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         i += 1;
     });
     
-    const maxToShow = 5;
+    const maxToShow = 7;
     let showMore = document.querySelector('.showMore');
     let showLess = document.querySelector('.showLess');
     let lastLoaded = 0;

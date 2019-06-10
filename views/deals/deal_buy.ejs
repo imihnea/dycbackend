@@ -45,18 +45,32 @@
                 </span>
             </p>
         </div>
-        <div class="field select cont-select">
-            <select id="deliverySelect" style="width: 100vw;">
-                <option value="" selected>Delivery method</option>
-                <option value="Face to Face">Seller Handled Delivery</option>
-                <% if(product.delivery.shipping === false) { %>
-                    <option value="Shipping" disabled>Shipping by Deal Your Crypto is Not Offered</option>
-                <% } else { %>
-                    <option value="Shipping">Shipping by Deal Your Crypto</option>
-                <% } %>
-            </select>
+        <% let x = 1; 
+            if (product.delivery.shipping === false) { %>
+                x = 0;
+            <% } %>
+        <div class="frame" style="display: flex; justify-content: space-around;">
+            <label for="f2fRadio">
+                <i class="fas fa-handshake fa-7x <% if (x === 0) { %>blueI<% } else { %>greenI<% } %>" id="f2fLabel" style="margin-bottom: 1vh;"></i>
+                <br>
+                <p style="font-weight: 800">Seller Handled Delivery</p>
+                <br>
+                <input name="deliverySelect" type="radio" id="f2fRadio" class="is-checkradio is-info is-large" value="Face to Face" <% if (x === 1) { %>checked<% } %>>
+                <label for="f2fRadio" style="padding-left: 2rem !important;"></label>
+            </label>
+            <% if (x === 0) { %>
+                <label for="shipRadio">
+                    <i class="fas fa-truck fa-7x blueI" id="shipLabel" style="margin-bottom: 1vh;"></i>
+                    <br>
+                    <p style="font-weight: 800">Shipping by Deal Your Crypto</p>
+                    <br>
+                    <input name="deliverySelect" type="radio" id="shipRadio" class="is-checkradio is-info is-large" value="Shipping">
+                    <label for="shipRadio" style="padding-left: 2rem !important;"></label>
+                </label>
+            <% } %>
         </div>
-        <div id="facetoface" class="field" style="display: none;">
+        <br>
+        <div id="facetoface" class="field" <% if (x === 0) { %>style="display: none;"<% } %>>
             <h2 class="subtitle">Your Details</h2>
             <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
                 <div class="field">
@@ -497,3 +511,8 @@
 
 <% include ../partials/footer %>
 <script src="/dist/js/deal_buy.js"></script>
+<script> 
+    if (!document.getElementById('shipLabel')){
+        document.getElementById('f2fRadio').checked = true;
+    }
+</script>

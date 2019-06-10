@@ -817,10 +817,10 @@ hr{
 .indexProducts{
     flex-wrap: wrap;
     justify-content: space-evenly;
-    margin: auto; 
+    margin: auto !important; 
     width: auto;
-    margin-left: 5vw; 
-    margin-right: 5vw;
+    margin-left: 5vw !important; 
+    margin-right: 5vw !important;
 }
 
 .indexRow{
