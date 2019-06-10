@@ -327,7 +327,10 @@ module.exports = {
               let timer = 0;
               var i = setInterval(function() {
                 address.getTransactions({}, function(err, txs) {
-                  if(txs !== null || txs !== undefined) {
+                  console.log(txs)
+                  if(!Array.isArray(txs) || !txs.length) {
+                    return clearInterval(i);
+                  } else {
                     let json = JSON.parse(txs);
                     const status = json.status;
                     console.log(`asta e status: ${status}`);
@@ -388,8 +391,6 @@ module.exports = {
                         }
                       }
                     }
-                  } else {
-                    return clearInterval(i);
                   }
                 });
               }, 1000 * 60 * 15)
