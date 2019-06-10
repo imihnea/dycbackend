@@ -579,12 +579,13 @@ hr{
 }
 
 .card:hover{
-    background-color: #3269ca7d !important;
+    transform: scale(1.1);
 }
 
 .card{
     max-height: 281px !important;
     max-width: 250px !important;
+    transition: all .2s ease-in-out;
 }
 
 .card-content{

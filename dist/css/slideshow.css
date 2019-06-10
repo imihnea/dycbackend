@@ -11,9 +11,9 @@
   .slides{
     width: 300%;
     position:relative;
-    -webkit-animation:slide 15s infinite;
-    -moz-animation:slide 15s infinite;
-    animation:slide 15s infinite;
+    -webkit-animation:slide 25s infinite;
+    -moz-animation:slide 25s infinite;
+    animation:slide 25s infinite;
     background-color: black;
     margin-top: -4px;
     height: 97%;
@@ -25,9 +25,9 @@
     border-radius:50%;
     background:#f39c12;
     position:relative;
-    -webkit-animation:on 15s infinite;
-    -moz-animation:on 15s infinite;
-    animation:on 15s infinite;
+    -webkit-animation:on 25s infinite;
+    -moz-animation:on 25s infinite;
+    animation:on 25s infinite;
   }
   
   .slider{

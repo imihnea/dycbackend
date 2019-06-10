@@ -60,14 +60,14 @@
 </div>
 
 <div class="hero-body hero-content">
-    <div class="column">
+
         <% if (onlyFeatured) { %><p class="title is-3">Featured Products</p><% } %>
 
         <% 
             const k = products.length;
             let j = 0;
         %>
-        <div class="container columns products indexProducts" style="padding-left: 10vw; padding-right: 10vw;"> 
+        <div class="container columns products indexProducts"> 
                 <% if (products.length != 0) { %>
                     <% 
                         let a = products;
@@ -163,7 +163,6 @@
                 </div>
             <% } %>
 
-    </div>
 </div>
 
 <% include partials/footer %>
