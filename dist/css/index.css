@@ -37,12 +37,13 @@ figure.latestimg{
 .feat_card{
     margin: 10px;
     padding: 0 !important;
+
 }
 
 
 .card-image{
     /* padding: 25px;   */
-    background: #a8a8a7;
+    background: #f3f3f0;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     /* padding-top: 5%;
