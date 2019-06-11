@@ -184,6 +184,7 @@ input{
     width: 37vw;    
 }
 
+
 .dropdown.categ{
     margin-left: 1vw;
     width: auto;
@@ -404,6 +405,18 @@ div.content{
     background: linear-gradient(to right, #3269ca, #4f38a4);
     width: 70%;
     margin: auto;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.dashTitle{
+    text-shadow: 2px 3px black;
+}
+
+.buttonShadow{
+    text-shadow: 1px 2px black;
+    color: white;
 }
 
 .frame{

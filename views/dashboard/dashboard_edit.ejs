@@ -11,7 +11,7 @@
             <div class="column"></div>
             <div class="column is-three-fifths">
                 <div class="dashTop column">
-                    <h1 class="title">Edit Product</h1>
+                    <h1 class="title dashTitle" style="color: white !important;">Edit Product</h1>
                 </div>
                 <br>
                 <form action="/dashboard/<%= product._id %>/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" enctype="multipart/form-data" id="editProductForm" data-parsley-validate>
