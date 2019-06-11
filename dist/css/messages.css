@@ -287,6 +287,20 @@ time{
     width: 100% !important;
 }
 
+.prodImage{
+    position: absolute; 
+    z-index: 1; 
+    bottom: 0; 
+    right: 0; 
+    background-color: transparent;
+}
+
+.messageDealProduct{ 
+    margin-top: 1vh !important;
+    max-height: 400px !important; 
+    max-width: 300px !important;
+}
+
 @supports (-ms-ime-align: auto) {
     .flexWrap, .msgbox, .flexEvenly {
       justify-content: space-around;

@@ -30,7 +30,7 @@
                 %>
                 <div class="columns indexRow">
                     <% b.forEach(chat => { %>
-                        <div class="column card feat_card frame activeDealProduct" style="max-width: 300px !important; max-height: 400px !important;" >
+                        <div class="column card feat_card frame activeDealProduct messageDealProduct">
                             <% if (!chat.deal) { %>
                                 <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
                                     <button class="chatBtn">
@@ -52,7 +52,7 @@
                                         <%= chat.user2.avatarUrl %>
                                     <% } %>" alt="">
                                 </figure>
-                                <figure class="image featimg is-64x64" style="position: absolute; z-index: 1; bottom: 0; right: 0; background-color: grey;">
+                                <figure class="image featimg is-64x64 prodImage">
                                     <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
                                 </figure>
                             </div>
@@ -84,7 +84,7 @@
                 <% if (a.length > 0 ) { b = a.splice(0, 5); %>
                     <div class="columns indexRow">
                         <% b.forEach(chat => { %>
-                            <div class="column card feat_card frame activeDealProduct" style="max-width: 300px !important; max-height: 400px !important;" >
+                            <div class="column card feat_card frame messageDealProduct">
                                 <% if (!chat.deal) { %>
                                     <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
                                         <button class="chatBtn">
@@ -106,7 +106,7 @@
                                             <%= chat.user2.avatarUrl %>
                                         <% } %>" alt="">
                                     </figure>
-                                    <figure class="image featimg is-64x64" style="position: absolute; z-index: 1; bottom: 0; right: 0; background-color: grey;">
+                                    <figure class="image featimg is-64x64 prodImage">
                                         <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
                                     </figure>
                                 </div>
