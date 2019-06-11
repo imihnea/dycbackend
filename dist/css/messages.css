@@ -296,9 +296,16 @@ time{
 }
 
 .messageDealProduct{ 
-    margin-top: 1vh !important;
     max-height: 400px !important; 
     max-width: 300px !important;
+    margin-top: 1vh !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .messageDealProduct{
+        margin: auto !important;
+        margin-top: 3vh !important;
+    }
 }
 
 @supports (-ms-ime-align: auto) {
