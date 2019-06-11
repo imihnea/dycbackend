@@ -64,9 +64,6 @@ figure.latestimg{
 }
 
 .accepted_currencies{
-    display: flex;
-    justify-content: space-evenly;
-    margin: auto;
     padding-top: 1vh !important;
     padding-bottom: 1vh !important;
     background-color: #f1f1f1 !important;

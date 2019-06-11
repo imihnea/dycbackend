@@ -16,7 +16,7 @@
                 <div style="display: flex; margin: auto;">
                     <p class="subtitle" style="margin: auto;"><%= viewedUser.username %></p>
                     <% if (viewedUser.accountType == 'Partner') { %>
-                        <img src="/dist/img/badge.png" alt="Partner" title="Partnered viewedUser" class="badge" style="margin: auto;">    
+                        <img src="/dist/img/badge.png" alt="Partner" title="Partnered user" class="badge" style="margin: auto;">    
                     <% } %>
                 </div>
                 <% for(let i = 0; i < 5; i++) { %>
@@ -50,24 +50,24 @@
                     let b = [];
                     b = a.splice(0, 5);
                 %>
-                    <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                    <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct" >
+                            <div class="column card feat_card frame activeDealProduct <% if (product.feat_1.status == true) { %> premiumCard <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
-                                        <figure class="image featimg is-16by9" style="width: auto !important;">
-                                            <img src="<%= product.images[0].url %>" alt="">
+                                        <figure class="image featimg is-4by3" style="width: auto;">
+                                            <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title is-5"><%= product.name %></p>
+                                                <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <div class="accepted_currencies frame">
+                                        <div class="column accepted_currencies frame">
                                             <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
-                                            <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
                                         </div>
                                     </div> 
                                 </a>
@@ -78,24 +78,24 @@
                     while (a.length) {
                         b = a.splice(0, 5);
                 %>
-                    <div class="columns" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
+                    <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct noLoad hidden">
+                            <div class="column card feat_card frame activeDealProduct noLoad hidden <% if (product.feat_1.status == true) { %> premiumCard <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
-                                        <figure class="image featimg is-16by9" style="width: auto !important;">
-                                                <img src="" data-src="<%= product.images[0].url %>" class="noImg" alt="">
+                                        <figure class="image featimg is-4by3" style="width: auto;">
+                                                <img src="" data-src="<%= product.images[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title is-5"><%= product.name %></p>
+                                                <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <div class="accepted_currencies frame">
+                                        <div class="column accepted_currencies frame">
                                             <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
-                                            <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
                                         </div>
                                     </div> 
                                 </a>
@@ -257,8 +257,9 @@
                             </div>
                         <% } %>
                     <% } %>
-                </div>                
-            <% }); %>     
+                </div> 
+                <% }); %>     
+            <br>               
         <% } else { %>
             <div class="smallerCenter" style="text-align: center;">
                 <p class="subtitle">This user does not have any reviews.</p>    

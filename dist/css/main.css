@@ -307,6 +307,10 @@ a:hover {
         display: block !important;
     }
 
+    .curr_text{
+        font-size: 1.1rem;
+    }
+
     .search{
         width: 100%;
     }
@@ -421,6 +425,11 @@ div.content{
     max-width: 600px !important;
 }
 
+.premiumCard{
+    background-color: #ffd700ba !important; 
+    box-shadow: 0 2px 3px #bfa930, 0 0 0 1px #bfa930 !important;
+}
+
 .reviewAuthor{
     position: absolute; 
     bottom: 3%; 
@@ -435,7 +444,7 @@ div.content{
     
     .activeDealProduct{
         margin: auto !important;
-        margin-top: 1vh !important;
+        margin-top: 3vh !important;
     }
     
     .profileReview{
@@ -817,7 +826,7 @@ hr{
 }
 
 .indexRow{
-    margin: auto; 
+    margin: auto !important; 
     padding-left: 1vw; 
     padding-right: 1vw; 
     width: 100%;
