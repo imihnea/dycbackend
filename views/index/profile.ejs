@@ -52,7 +52,7 @@
                 %>
                     <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct <% if (product.feat_1.status == true) { %> premiumCard <% } %>">
+                            <div class="column card feat_card frame activeDealProduct <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-4by3" style="width: auto;">
@@ -65,10 +65,7 @@
                                                 <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <div class="column accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
-                                            <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
-                                        </div>
+                                        <p class="curr_text" id="btc_curr"><b><%= product.btcPrice %></b> BTC</p>
                                     </div> 
                                 </a>
                             </div>
@@ -80,7 +77,7 @@
                 %>
                     <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct noLoad hidden <% if (product.feat_1.status == true) { %> premiumCard <% } %>">
+                            <div class="column card feat_card frame activeDealProduct noLoad hidden <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-4by3" style="width: auto;">
@@ -93,10 +90,7 @@
                                                 <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <div class="column accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr" style="margin-bottom: 0;"><%= product.btcPrice %></p>
-                                            <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
-                                        </div>
+                                        <p class="curr_text" id="btc_curr"><b><%= product.btcPrice %></b> BTC</p>
                                     </div> 
                                 </a>
                             </div>
