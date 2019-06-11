@@ -50,6 +50,12 @@ const { asyncErrorHandler, isLoggedIn, checkId, isAdmin } = middleware; // destr
 // index route
 router.get('/', asyncErrorHandler(getIndex));
 
+// For web crawlers
+router.get('/robots.txt', function (req, res) {
+  res.type('text/plain');
+  res.send("User-agent: *\nDisallow: /");
+});
+
 // error route
 router.get('/error', getError);
 
