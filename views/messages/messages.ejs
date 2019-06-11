@@ -11,8 +11,9 @@
             <br>
         </div>
         <div>
+            <% const k = chats.docs.length; %>
             <div class="container">
-                <% if (chats.docs.length === 0) { %>
+                <% if (k === 0) { %>
                     <div class="column">
                         <p class="title">You do not have any open chats at this time.</p>
                         <p class="subtitle">Chats get deleted after a month of no activity.</p>
@@ -22,108 +23,132 @@
                         <% include ../partials/paginateChats %>
                     </div>
                 <% } %>
-                <div class="columns">
-                    <div class="column">
-                        <% for (let i = 0; i < chats.docs.length; i += 2) { %>
-                            <div class="columns messageObj frame">
-                                <% if (!chats.docs[i].deal) { %>
-                                    <form action="/messages/<%= chats.docs[i]._id %>?_method=PUT" method="POST" class="updMsg">
+                <% 
+                    let a = chats.docs;
+                    let b = [];
+                    b = a.splice(0, 5);
+                %>
+                <div class="columns indexRow">
+                    <% b.forEach(chat => { %>
+                        <div class="column card feat_card frame activeDealProduct" style="max-width: 300px !important; max-height: 400px !important;" >
+                            <% if (!chat.deal) { %>
+                                <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
+                                    <button class="chatBtn">
+                                        <span class="chatSpan"></span>
+                                    </button>
+                                </form>
+                            <% } else { %>
+                                <form action="/messages/<%= chat._id %>/<%= chat.deal %>?_method=PUT" method="POST" class="updMsg">
+                                    <button class="chatBtn">
+                                        <span class="chatSpan"></span>
+                                    </button>
+                                </form>
+                            <% } %>
+                            <div class="card-image">
+                                <figure class="image featimg is-4by3" style="width: auto; margin: auto;">
+                                    <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                        <%= chat.user1.avatarUrl %>
+                                    <% } else { %>
+                                        <%= chat.user2.avatarUrl %>
+                                    <% } %>" alt="">
+                                </figure>
+                                <figure class="image featimg is-64x64" style="position: absolute; z-index: 1; bottom: 0; right: 0; background-color: grey;">
+                                    <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title productName messageProfileText"><% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                            <%= chat.user1.username %>
+                                        <% } else { %>
+                                            <%= chat.user2.username %>
+                                        <% } %></p>
+                                        <p class="title productName" style="overflow: hidden;"><%= chat.product.name %></p>
+                                    </div>
+                                </div>
+                                <p class="subtitle messageProfileText">Last message: <br>
+                                    <%=((  chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) : ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) %>
+                                    /<%= (( chat.messages[chat.messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getDate()) : ( chat.messages[chat.messageCount - 1].createdAt.getDate()) %> -
+                                    <%= (( chat.messages[chat.messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getHours()) : ( chat.messages[chat.messageCount - 1].createdAt.getHours()) %>:
+                                    <%= (( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) : ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) %></p>
+                                <% if ((chat.messages[chat.messages.length - 1].read == false) && (chat.messages[chat.messages.length - 1].sender.toString() != user._id.toString())) { %>
+                                    <p style="color: red;">New Message(s)</p>    
+                                <% } else { %>
+                                    <p>No new messages</p>
+                                <% } %>
+                            </div>    
+                        </div>
+                    <% }); %>
+                </div>
+                <% if (a.length > 0 ) { b = a.splice(0, 5); %>
+                    <div class="columns indexRow">
+                        <% b.forEach(chat => { %>
+                            <div class="column card feat_card frame activeDealProduct" style="max-width: 300px !important; max-height: 400px !important;" >
+                                <% if (!chat.deal) { %>
+                                    <form action="/messages/<%= chat._id %>?_method=PUT" method="POST" class="updMsg">
                                         <button class="chatBtn">
                                             <span class="chatSpan"></span>
                                         </button>
                                     </form>
                                 <% } else { %>
-                                    <form action="/messages/<%= chats.docs[i]._id %>/<%= chats.docs[i].deal %>?_method=PUT" method="POST" class="updMsg">
+                                    <form action="/messages/<%= chat._id %>/<%= chat.deal %>?_method=PUT" method="POST" class="updMsg">
                                         <button class="chatBtn">
                                             <span class="chatSpan"></span>
                                         </button>
                                     </form>
                                 <% } %>
-                                <div class="column">
-                                    <figure class="image is-128x128">
-                                        <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                            <%= chats.docs[i].user1.avatarUrl %>
+                                <div class="card-image">
+                                    <figure class="image featimg is-4by3" style="width: auto; margin: auto;">
+                                        <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                            <%= chat.user1.avatarUrl %>
                                         <% } else { %>
-                                            <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg productImage" alt="">
+                                            <%= chat.user2.avatarUrl %>
+                                        <% } %>" alt="">
+                                    </figure>
+                                    <figure class="image featimg is-64x64" style="position: absolute; z-index: 1; bottom: 0; right: 0; background-color: grey;">
+                                        <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
                                     </figure>
                                 </div>
-                                <div class="column prod_info ">
-                                    <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.username %>
-                                    <% } else { %>
-                                        <%= chats.docs[i].user2.username %>
-                                    <% } %></p>
-                                    <p class="title is-5 messageProfileText">Deal: <%= chats.docs[i].product.name %></p>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p class="title productName messageProfileText"><% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                                <%= chat.user1.username %>
+                                            <% } else { %>
+                                                <%= chat.user2.username %>
+                                            <% } %></p>
+                                            <p class="title productName" style="overflow: hidden;">Deal: <%= chat.product.name %></p>
+                                        </div>
+                                    </div>
                                     <p class="subtitle messageProfileText">Last message: <br>
-                                        <%=((  chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) %>
-                                        /<%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) %> -
-                                        <%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) %>:
-                                        <%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) %></p>
-                                    <% if ((chats.docs[i].messages[chats.docs[i].messages.length - 1].read == false) && (chats.docs[i].messages[chats.docs[i].messages.length - 1].sender.toString() != user._id.toString())) { %>
+                                        <%=((  chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) : ( chat.messages[chat.messageCount - 1].createdAt.getMonth() + 1) %>
+                                        /<%= (( chat.messages[chat.messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getDate()) : ( chat.messages[chat.messageCount - 1].createdAt.getDate()) %> -
+                                        <%= (( chat.messages[chat.messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getHours()) : ( chat.messages[chat.messageCount - 1].createdAt.getHours()) %>:
+                                        <%= (( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) : ( chat.messages[chat.messageCount - 1].createdAt.getMinutes()) %></p>
+                                    <% if ((chat.messages[chat.messages.length - 1].read == false) && (chat.messages[chat.messages.length - 1].sender.toString() != user._id.toString())) { %>
                                         <p style="color: red;">New Message(s)</p>    
                                     <% } else { %>
                                         <p>No new messages</p>
                                     <% } %>
-                                </div>
+                                </div>    
                             </div>
+                        <% }); %>
+                        <% if (b.length < 5) { %>
+                            <% for (let v = b.length; v < 5; v+= 1) { %>
+                                <div class="column"></div>
+                            <% } %>
                         <% } %>
                     </div>
-                    <div class="column">
-                        <% for (let i = 1; i < chats.docs.length; i += 2) { %>
-                            <div class="columns messageObj frame">
-                                <% if (!chats.docs[i].deal) { %>
-                                    <form action="/messages/<%= chats.docs[i]._id %>?_method=PUT" method="POST" class="updMsg">
-                                        <button class="chatBtn">
-                                            <span class="chatSpan"></span>
-                                        </button>
-                                    </form>
-                                <% } else { %>
-                                    <form action="/messages/<%= chats.docs[i]._id %>/<%= chats.docs[i].deal %>?_method=PUT" method="POST" class="updMsg">
-                                        <button class="chatBtn">
-                                            <span class="chatSpan"></span>
-                                        </button>
-                                    </form>
-                                <% } %>
-                                <div class="column">
-                                    <figure class="image is-128x128" style="margin:auto;">
-                                        <img src="<% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                            <%= chats.docs[i].user1.avatarUrl %>
-                                        <% } else { %>
-                                            <%= chats.docs[i].user2.avatarUrl %>
-                                        <% } %>" class="open-img msgImg messageImage" alt="">
-                                    </figure>
-                                </div>
-                                <div class="column prod_info ">
-                                    <p class="title is-5 messageProfileText"><% if (chats.docs[i].user1.id.toString() !== user._id.toString()) { %> 
-                                        <%= chats.docs[i].user1.username %>
-                                    <% } else { %>
-                                        <%= chats.docs[i].user2.username %>
-                                    <% } %></p>
-                                    <p class="title is-5 messageProfileText">Deal: <%= chats.docs[i].product.name %></p>
-                                    <p class="subtitle messageProfileText">Last message: <br>
-                                        <%=((  chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMonth() + 1) %>
-                                        /<%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getDate()) %> -
-                                        <%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getHours()) %>:
-                                        <%= (( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) < 10) ? '0' + ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) : ( chats.docs[i].messages[chats.docs[i].messageCount - 1].createdAt.getMinutes()) %></p>
-                                        <% if ((chats.docs[i].messages[chats.docs[i].messages.length - 1].read == false) && (chats.docs[i].messages[chats.docs[i].messages.length - 1].sender.toString() != user._id.toString())) { %>
-                                            <p style="color: red;">New Message(s)</p>    
-                                        <% } else { %>
-                                            <p>No new messages</p>
-                                        <% } %>
-                                </div>
-                            </div>
-                        <% } %>
-                    </div>
-                </div>
-                <% if (chats.docs.length !== 0 ) { %>
+                <% } %>
+                <% if (k !== 0 ) { %>
                     <div class="pagination paginationD messagePagination">
                         <% include ../partials/paginateChats %>
                     </div>
                 <% } %>
                 </div>
             </div>
-        </div>
+    </div>
 </div>
 
 <% include ../partials/footer %>
