@@ -86,7 +86,7 @@
                     %>
                     <div class="columns indexRow">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct <% if (product.feat_2.status == true) { %> premiumCard <% } %>">
+                            <div class="column card feat_card frame activeDealProduct <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>">
                                 <a href="/products/<%= product._id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-4by3" style="width: auto;">
@@ -99,10 +99,7 @@
                                                 <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <div class="column accepted_currencies frame">
-                                            <p class="curr_text" id="btc_curr"><%= product.btcPrice %></p>
-                                            <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
-                                        </div>
+                                        <p class="curr_text" id="btc_curr"><b><%= product.btcPrice %></b> BTC</p>
                                     </div> 
                                 </a>      
                             </div>
@@ -111,7 +108,7 @@
                     <%  while ((j < 20) && (a.length > 0)) { b = a.splice(0, 7); %>
                         <div class="columns indexRow">
                             <% b.forEach(product => { %>
-                                <div class="column card feat_card frame activeDealProduct" >
+                                <div class="column card feat_card frame activeDealProduct <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>">
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-4by3" style="width: auto;">
@@ -124,11 +121,8 @@
                                                     <p class="title productName" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
-                                            <div class="column accepted_currencies frame">
-                                                <p class="curr_text" id="btc_curr"><%= product.btcPrice %></p>
-                                                <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
-                                            </div>
-                                        </div> 
+                                            <p class="curr_text" id="btc_curr"><b><%= product.btcPrice %></b> BTC</p>
+                                        </div>
                                     </a>      
                                 </div>
                                 <% j += 1; %>
@@ -143,11 +137,11 @@
                     <% while (a.length > 0) { b = a.splice(0, 7); %>
                         <div class="columns indexRow hiddenRow">
                             <% b.forEach(product => { %>
-                                <div class="column card feat_card frame activeDealProduct lazyLoad" >
+                                <div class="column card feat_card frame activeDealProduct lazyLoad <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>" >
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-4by3" style="width: auto;">
-                                                <img  src="" data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
+                                                <img src="" data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -156,10 +150,14 @@
                                                     <p class="title productName" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
+<<<<<<< HEAD
+                                            <p class="curr_text" id="btc_curr"><b><%= product.btcPrice %></b> BTC</p>
+=======
                                             <div class="column accepted_currencies frame">
                                                 <p class="curr_text" id="btc_curr"><%= product.btcPrice %></p>
                                                 <img src="/dist/img/bitcoin.png" alt="Bitcoin" class="curr_img">
                                             </div>
+>>>>>>> 34961c91ab48819aa101631d6f980a9d3915768c
                                         </div> 
                                     </a>      
                                 </div>

@@ -462,14 +462,7 @@ div.content{
 }
 
 .featured{
-    width: 83px;
-    height: 84px; 
-    left: 0; 
-    bottom: 0; 
-    top: 0; 
-    z-index: 2; 
-    position: absolute;
-    background: url('../img/featured.png') no-repeat;
+    box-shadow: 0.5vh 0.5vh 0.5vh rgba(241, 221, 189, 0.918) !important;
 }
 
 .smallerCenter{
