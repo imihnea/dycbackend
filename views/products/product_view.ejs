@@ -234,10 +234,6 @@
                         <td>Continent of origin</td>
                         <td><%= product.author.continent %></td>
                     </tr>
-                    <tr>
-                        <td>Tags</td>
-                        <td><%= product.tags %></td>
-                    </tr>
                 </tbody>
             </table>
         </div> 
@@ -380,17 +376,17 @@
             <div class="column detailsContainer">    
                 <div class="columns indexRow" style="justify-content: center;">
                     <% similar.forEach((sim) => { %>
-                        <div class="column card feat_card frame smallerCenter similarProducts <% if (sim.feat_1.status == true) { %>featured<% } %>">
+                        <div class="column card feat_card frame smallerCenter similarProducts">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
-                                    <figure class="image featimg is-4by3">
-                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="">
+                                    <figure class="image featimg is-128x128">
+                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="<%= sim.name %>">
                                     </figure>
                                 </div>
                                 <div class="card-content">
                                     <div class="media">
                                         <div class="media-content">
-                                            <p class="title productName" style="overflow: hidden;"><%= sim.name %> </p>
+                                            <p class="title productName" style="overflow: hidden;"><%= sim.name %></p>
                                         </div>
                                     </div>
                                     <p class="curr_text" id="btc_curr"><b><%= sim.btcPrice %></b> BTC</p>
