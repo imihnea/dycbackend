@@ -378,27 +378,24 @@
             <hr class="smallerCenter">
             <p class="productSubTitleText">Similar products</p>
             <div class="column detailsContainer">    
-                <div class="columns" style="justify-content: center;">
+                <div class="columns indexRow" style="justify-content: center;">
                     <% similar.forEach((sim) => { %>
-                        <div class="column card feat_card frame smallerCenter similarProducts">
+                        <div class="column card feat_card frame activeDealProduct <% if (sim.feat_1.status == true) { %> premiumCard <% } %>">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
-                                    <figure class="image featimg">
-                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="">
-                                        <% if (sim.feat_1.status == true) { %>
-                                            <span class="featured"></span>    
-                                        <% } %>
+                                    <figure class="image featimg is-4by3" style="width: auto;">
+                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="<%= sim.name %>">
                                     </figure>
                                 </div>
                                 <div class="card-content">
                                     <div class="media">
                                         <div class="media-content">
-                                            <p class="title is-5" style="overflow: hidden;"><%= sim.name %> </p>
+                                            <p class="title productName" style="overflow: hidden;"><%= sim.name %> </p>
                                         </div>
                                     </div>
-                                    <div class="accepted_currencies frame">
+                                    <div class="column accepted_currencies frame">
                                         <p class="curr_text" id="btc_curr"><%= sim.btcPrice %></p>
-                                        <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        <img src="/dist/img/bitcoin.png" class="curr_img" alt="Bitcoin">
                                     </div>
                                 </div> 
                             </a>      
