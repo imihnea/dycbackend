@@ -53,8 +53,8 @@
     <nav class="level navi navbar is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                    <img src="/dist/img/logo.png" width="112px" height="28px" alt="">
+                <a id="Logo" class="navbar-item" href="/">
+                    <img src="/dist/img/logo.png" width="112px" height="28px" alt="Website Logo">
                 </a>
                 <% if (user) { %>
                     <p class="hide" id="hiddenUsername"><%= user.username %></p>
@@ -65,9 +65,9 @@
                                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                                 </span>
                                 <span style="padding-right: 0.5vh;" class="username"></span>
-                                <a href="/dashboard">
+                                <a id="Avatar" href="/dashboard">
                                     <div class="image is-24x24">
-                                        <img class="is-rounded" src="<%= user.avatar.url %>">
+                                        <img class="is-rounded" src="<%= user.avatar.url %>" alt="User avatar">
                                     </div>
                                 </a>
                                 <% if ((user.unreadNotifications > 0) || (user.processingDeals > 0)) { %>
@@ -569,7 +569,7 @@
                                     <div class="dropdown-content frame">
                                     <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                         <div class="currency dropdown-item">
-                                            <p class="curr_text" id="btc_curr"><% if (user.btcbalance) {%> <%=  user.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
+                                            <p class="curr_text"><% if (user.btcbalance) {%> <%=  user.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
                                             <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                                         </div>
                                         <hr class="dropdown-divider">

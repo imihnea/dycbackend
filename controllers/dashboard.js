@@ -1018,6 +1018,10 @@ module.exports = {
                 await cloudinary.v2.uploader.upload(file.path, 
                 {
                   moderation: "aws_rek:suggestive:ignore",
+                  transformation: [
+                    {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
+                    {width: "auto", dpr: "auto", crop: "scale"}
+                    ]
                 }, (err, result) => {
                   if(err) {
                     console.log(err);
@@ -1195,6 +1199,10 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore",
+              transformation: [
+                {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
+                {width: "auto", dpr: "auto", crop: "scale"}
+                ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
@@ -1506,6 +1514,10 @@ module.exports = {
                   await cloudinary.v2.uploader.upload(file.path, 
                     {
                       moderation: "aws_rek:suggestive:ignore",
+                      transformation: [
+                        {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
+                        {width: "auto", dpr: "auto", crop: "scale"}
+                        ]
                     }, (err, result) => {
                       if(err) {
                         console.log(err);
@@ -1647,6 +1659,10 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore",
+              transformation: [
+                {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
+                {width: "auto", dpr: "auto", crop: "scale"}
+                ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
