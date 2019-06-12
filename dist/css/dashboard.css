@@ -61,7 +61,7 @@ a.panel-block:hover{
     /* margin-left: 1vw; */
 }
 
-#repeatableLabel:hover{
+#repeatableLabel:hover > .fa-redo{
     cursor: pointer;
     color: green;
 }

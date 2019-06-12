@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const tagsControl = document.getElementById('tagsControl');
   let deleteTagBtns = document.querySelectorAll('.deleteTag');
   let deleteTagItems = [].slice.call(deleteTagBtns);
-  // Check if the last character was the comma
   const addButton = document.getElementById('addTag');
   let times = tagsControl.children.length;
   addButton.addEventListener('click', () => {
@@ -253,7 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tagInput.placeholder = 'Tags';
           }
         });
-      }); 
+      });
+      tagInput.focus(); 
       }
   });
 
