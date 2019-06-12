@@ -236,7 +236,7 @@ module.exports = {
     },
     // Create Message
     async newMessage(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./"?;:'\][{}\\|\r\n]+$/g).notEmpty();
         req.check('message', 'The message must contain at most 500 characters').isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
@@ -315,7 +315,7 @@ module.exports = {
         return res.redirect(`/messages/${chat._id}`);
     },
     async newMessageDeal(req, res) {
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/g).notEmpty();
+        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:"'\][{}\\|\r\n]+$/g).notEmpty();
         req.check('message', 'The message must contain at most 500 characters').isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
