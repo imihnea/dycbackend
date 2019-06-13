@@ -78,7 +78,13 @@ const escapeHTML = (unsafe) => {
       .replace(/\{/g, "&lcub;")
       .replace(/\}/g, "&rcub;")
       .replace(/'/g, "&#039;");
-}
+};
+
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
+};
 
 // Constants for quick modification
 const feature1_time = 60000;
@@ -921,18 +927,18 @@ module.exports = {
       return res.redirect('/dashboard/new');
     } else {
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
-      req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').notEmpty().isLength({ min: 3, max: 100 });
+      // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
+      req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
       req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
-      req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
+      // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
       req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
-      req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
+      // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
       if(req.body.product.shipping === 'true') {
@@ -994,6 +1000,9 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       } else if(req.body.product.shipping === 'true') {
+        req.body.product.name = cleanHTML(String(req.body.product.name));
+        req.body.product.description = cleanHTML(String(req.body.product.description));
+        req.body.product.tags = cleanHTML(String(req.body.product.tags));
         shippo.address.create({
           "name":req.body.name,
           "street1":req.body.street1,
@@ -1194,6 +1203,9 @@ module.exports = {
           }
         });  
       } else {
+        req.body.product.name = cleanHTML(String(req.body.product.name));
+        req.body.product.description = cleanHTML(String(req.body.product.description));
+        req.body.product.tags = cleanHTML(String(req.body.product.tags));
         req.body.product.images = [];
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
@@ -1412,18 +1424,21 @@ module.exports = {
   async productUpdate(req, res) {
     // find the product by id
     const product = await Product.findById(req.params.id);
-    req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
-    req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').notEmpty().isLength({ min: 3, max: 100 });
+    req.body.product.name = cleanHTML(String(req.body.product.name));
+    req.body.product.description = cleanHTML(String(req.body.product.description));
+    req.body.product.tags = cleanHTML(String(req.body.product.tags));
+    // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
+    req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
     req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
-    req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
+    // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
     req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
     req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
-    req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
+    // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
     req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
@@ -2407,13 +2422,14 @@ module.exports = {
   },
   async putBusinessPartner(req, res) {
     req.check('name', 'The name must not be empty').notEmpty().isLength({max: 500});
-    req.check('name', 'The name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    // req.check('name', 'The name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
     req.check('contactName', 'The contact name must not be empty').notEmpty().isLength({max: 500});
-    req.check('contactName', 'The contact name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    // req.check('contactName', 'The contact name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
     req.check('email', 'Please input a valid email address').notEmpty().isEmail().isLength({max: 500});
     req.check('phone', 'Please input a valid phone number').notEmpty().isLength({max: 20}).matches(/^[0-9+() -]+$/g);
     const errors = req.validationErrors();
     if (errors) {
+
       const user = await User.findById(req.user._id);
       let lastApp = new Date(-8640000000000000);
       if (user.partnerApplication.sentOn != undefined) {
@@ -2428,7 +2444,9 @@ module.exports = {
         pageDescription: 'Description',
         pageKeywords: 'Keywords'
       });
-    }
+    }      
+    req.body.name = cleanHTML(String(req.body.name));
+    req.body.contactName = cleanHTML(String(req.body.contactName));
     const user = await User.findById(req.user._id);
     let lastApp = new Date(user.partnerApplication.sentOn);
     lastApp.setDate(lastApp.getDate() + 90);
@@ -2437,8 +2455,8 @@ module.exports = {
       return res.redirect('back');
     }
     user.partnerApplication.sentOn = Date.now();
-    user.partnerApplication.companyName = escapeHTML(req.body.name);
-    user.partnerApplication.contactName = escapeHTML(req.body.contactName);
+    user.partnerApplication.companyName = req.body.name;
+    user.partnerApplication.contactName = req.body.contactName;
     user.partnerApplication.contactEmail = req.body.email;
     user.partnerApplication.contactPhone = req.body.phone;
     user.partnerApplication.status = 'Processing';

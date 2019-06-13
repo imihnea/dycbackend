@@ -25,10 +25,16 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
+const cleanHTML = (unclean) => {
+	return unclean
+	  .replace(/</g, "")
+	  .replace(/>/g, "");
+};
+
 module.exports = {
 	// Reviews Create
 	async reviewCreate(req, res, next) {
-		req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
+		// req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
 		req.check('review[body]', 'The review message contains more than 500 characters').isLength({ max: 500 });
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g).notEmpty();
 		const errors = req.validationErrors();
@@ -37,6 +43,7 @@ module.exports = {
 			req.flash('error', 'Something went wrong or the message contains illegal characters.');
 			return res.redirect('back');
 		}
+		req.body.review.body = cleanHTML(String(req.body.review.body));
 		// find the product by its id and populate reviews
 		let product = await Product.findById(req.params.id).populate('reviews').exec();
 		// filter product.reviews to see if any of the reviews were created by logged in user
@@ -51,12 +58,16 @@ module.exports = {
 			return res.redirect(`/products/${product.id}/view`);
 		}
 		// create the review
-		req.body.review.product = req.params.id;
-		req.body.review.name = req.user.username;
-		req.body.review.author = req.user._id;
-		req.body.review.avatarUrl = req.user.avatar.url;
-		req.body.review.user = product.author.id;
-		let review = await Review.create(req.body.review);
+		const newReview = {
+			product: req.params.id,
+			name: req.user.username,
+			author: req.user._id,
+			avatarUrl: req.user.avatar.url,
+			user: product.author.id,
+			body: req.body.review.body,
+			rating: req.body.review.rating
+		}
+		let review = await Review.create(newReview);
 		// assign review to product
 		product.reviews.push(review);
 		// save the product
@@ -106,7 +117,7 @@ module.exports = {
 	// Reviews Update
 	async reviewUpdate(req, res, next) {
 		if (req.query.from.match(/(user|product)/g) != null) {
-			req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
+			// req.check('review[body]', 'The review message contains illegal characters.').matches(/^[a-zA-Z0-9 .,\-!?]+$/g).notEmpty();
 			req.check('review[body]', 'The review message contains more than 500 characters').isLength({ max: 500 });
 			req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g);
 			const errors = req.validationErrors();
@@ -114,6 +125,7 @@ module.exports = {
 				req.session.error = 'Something went wrong or the message contains illegal characters.';
 				return res.redirect(`/products/${req.params.id}/view`);
 			}
+			req.body.review.body = cleanHTML(String(req.body.review.body));
 			await Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, review) => {
 				if (err) {
 					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

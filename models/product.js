@@ -7,23 +7,23 @@ const Review = require('./review');
 
 
 const ProductSchema = new Schema({
-  name: { type: String, es_indexed: true, es_type: 'text' },
-  images: [{ url: {type: String, es_indexed: true, es_type: 'text' }, public_id: String }],
-  category: { type: Array, es_indexed: true, es_type: 'text' },
-  condition: { type: String, es_indexed: true, es_type: 'text' },
-  description: { type: String, es_indexed: true, es_type: 'text' },
-  status: { type: String, es_indexed: true, es_type: 'text' },
-  btcPrice: {type: Number, default: 0, es_indexed: true, es_type: 'double' },
-  available: { type: String, default: "True", es_indexed: true, es_type: 'text' },
+  name: { type: String, es_indexed: true },
+  images: [{ url: {type: String, es_indexed: true}, public_id: String }],
+  category: { type: Array, es_indexed: true },
+  condition: { type: String, es_indexed: true },
+  description: { type: String, es_indexed: true },
+  status: { type: String, es_indexed: true },
+  btcPrice: {type: Number, default: 0, es_indexed: true },
+  available: { type: String, default: "True", es_indexed: true },
   repeatable: { type: Boolean, default: false },
   tags: [ String ],
-  searchableTags: { type: String, es_indexed: true, es_type: 'text'},
-  createdAt: { type: Date, default: Date.now, es_indexed: true, es_type: 'date' },
-  views: { type: Number, default: 0, es_indexed: true, es_type: 'long'},
+  searchableTags: { type: String, es_indexed: true},
+  createdAt: { type: Date, default: Date.now, es_indexed: true },
+  views: { type: Number, default: 0, es_indexed: true},
   viewDates: [ Date ],
   nrBought: {type: Number, default: 0 },
   feat_1: {
-    status: { type: Boolean, default: false, es_indexed: true, es_type: 'boolean' },
+    status: { type: Boolean, default: false, es_indexed: true },
     expiry_date: Date
   },
   feat_2: {
@@ -34,25 +34,25 @@ const ProductSchema = new Schema({
     id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      es_type: 'text', 
+      
       es_indexed: true
     },
-    username: { type: String, es_type: 'text', es_indexed: true},
-    name: { type: String, es_type: 'text', es_indexed: true },
-    city: { type: String, es_type: 'text', es_indexed: true },
-    country: { type: String, es_type: 'text', es_indexed: true },
-    state: { type: String, es_type: 'text', es_indexed: true },
-    continent: { type: String, es_type: 'text', es_indexed: true },
-    accountType: { type: String, es_type: 'text', es_indexed: true },
+    username: { type: String,  es_indexed: true},
+    name: { type: String, es_indexed: true },
+    city: { type: String,  es_indexed: true },
+    country: { type: String,  es_indexed: true },
+    state: { type: String,  es_indexed: true },
+    continent: { type: String,  es_indexed: true },
+    accountType: { type: String, es_indexed: true },
   },
   reviews: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Review',
-      es_type: 'text'
+ 
     },
   ],
-  avgRating: { type: Number, default: 0, es_indexed: true, es_type: 'double' },
+  avgRating: { type: Number, default: 0, es_indexed: true },
   delivery: {
     shipping: Boolean,
     name: String,
@@ -121,11 +121,12 @@ ProductSchema.plugin(mongoosePaginate);
 ProductSchema.plugin(mongoosastic);
 
 // For hosted ElasticSearch
-// ProductSchema.plugin(mongoosastic,{  
-  // host: 'elasticsearch',
-  // port: 9200
-// });
-
+ProductSchema.plugin(mongoosastic,{  
+  host: '994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io',
+  port: 9243,
+  protocol: "https",
+  auth: "elastic:E37nCmTkobiqfwIAHeGOfrsz"
+});
 
 mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
   if (err) {

@@ -20,9 +20,11 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
-               
+      Reporting on reviews and products
+
    Low Priority:
 
+      Redo elasticsearch mapping using their module
       Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
 
