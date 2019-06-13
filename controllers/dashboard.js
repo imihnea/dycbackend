@@ -78,6 +78,12 @@ const escapeHTML = (unsafe) => {
       .replace(/\{/g, "&lcub;")
       .replace(/\}/g, "&rcub;")
       .replace(/'/g, "&#039;");
+};
+
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
 }
 
 // Constants for quick modification
@@ -921,18 +927,21 @@ module.exports = {
       return res.redirect('/dashboard/new');
     } else {
       // Look into which symbols are security threats - product name, product description
-      req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
-      req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').notEmpty().isLength({ min: 3, max: 100 });
+      req.body.product.name = cleanHTML(String(req.body.product.name));
+      req.body.product.description = cleanHTML(String(req.body.product.description));
+      req.body.product.tags = cleanHTML(String(req.body.product.tags));
+      // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
+      req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
       req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
       req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
-      req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
+      // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
       req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
-      req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
+      // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
       if(req.body.product.shipping === 'true') {
@@ -1412,18 +1421,21 @@ module.exports = {
   async productUpdate(req, res) {
     // find the product by id
     const product = await Product.findById(req.params.id);
-    req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
-    req.check('product[name]', 'The name of the product must contain between 3 and 100 characters.').notEmpty().isLength({ min: 3, max: 100 });
+    req.body.product.name = cleanHTML(String(req.body.product.name));
+    req.body.product.description = cleanHTML(String(req.body.product.description));
+    req.body.product.tags = cleanHTML(String(req.body.product.tags));
+    // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
+    req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
     req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
     req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
-    req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
+    // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
     req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
     req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
-    req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
+    // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
     req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);

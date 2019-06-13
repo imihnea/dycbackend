@@ -1,3 +1,9 @@
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const repeatable = document.querySelector('.fa-redo');
   repeatable.addEventListener('click', (event) => {
@@ -219,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addButton = document.getElementById('addTag');
   let times = tagsControl.children.length;
   addButton.addEventListener('click', () => {
-    if ((tagInput.value.match(/^[a-z0-9,. -]+$/gi) != null) && (tagInput.value.length > 1) && (times < 10)) {
+    if ((tagInput.value.length > 1) && (times < 10)) {
       times += 1;
       if (times == 10) {
           tagInput.placeholder = 'You have reached the tag limit';
@@ -227,9 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
           tagInput.classList.add('parsley-error');
       }
       // Add the tag to tag input that gets sent
-      tags.value += ' ' + tagInput.value;
+      tags.value += ' ' + cleanHTML(String(tagInput.value));
       // Create the tag element
-      tagsControl.innerHTML += `<span class="tag is-link is-medium">${tagInput.value}<button type="button" class="delete deleteTag is-small"></button></span>`;
+      tagsControl.innerHTML += `<span class="tag is-link is-medium">${cleanHTML(String(tagInput.value))}<button type="button" class="delete deleteTag is-small"></button></span>`;
       // Clean the input
       tagInput.value = '';
       // Remake the array of delete buttons with the new tag

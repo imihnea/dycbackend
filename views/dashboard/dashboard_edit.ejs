@@ -29,7 +29,6 @@
                         <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                         <div class="inputWrapper">
                             <input class="input" name="product[name]" value="<%= product.name %>" type="text" required maxlength="100"
-                            data-parsley-pattern="[A-Za-z0-9 ,.?!]+"
                             data-parsley-error-message=""	 data-parsley-trigger="change"/>
                             <div class="label" style="margin-left: 1vw;">
                                 <span class="registerTooltip" aria-label="Length: 3 - 100 characters
@@ -80,7 +79,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                         </div>
                         <div class="inputWrapper">
                             <textarea name="product[description]" class="textarea" value="<%= product.description %>" placeholder="Description (500 characters)" style="margin-left: 0;" required
-                                maxlength="500" data-parsley-pattern="[A-Za-z0-9 ,.?!-]+"
+                                maxlength="500"
                                 data-parsley-pattern-message="The description contains invalid characters" data-parsley-trigger="change"><%= product.description %></textarea>
                             <div class="label tooltipLabel">
                                 <span class="newTooltip" aria-label="Length: 3 - 100 characters
@@ -92,7 +91,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                         <br>
                         <div class="inputWrapper">
                             <input type="text" id="tagInput" class="input" placeholder="Tags (Max 11)" style="width: 90%;"
-                            data-parsley-pattern="^[A-Za-z0-9 .\-]+$" data-parsley-error-message="" data-parsley-trigger="keyup">
+                            data-parsley-error-message="" data-parsley-trigger="keyup">
                             <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                             <div class="label" style="margin-left: 1vw;">
                                 <span class="registerTooltip" aria-label="Characters: Alphanumeric and the hyphen (-)" tabindex="-1">
