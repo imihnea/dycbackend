@@ -84,7 +84,7 @@ const cleanHTML = (unclean) => {
   return unclean
     .replace(/</g, "")
     .replace(/>/g, "");
-}
+};
 
 // Constants for quick modification
 const feature1_time = 60000;
@@ -927,9 +927,6 @@ module.exports = {
       return res.redirect('/dashboard/new');
     } else {
       // Look into which symbols are security threats - product name, product description
-      req.body.product.name = cleanHTML(String(req.body.product.name));
-      req.body.product.description = cleanHTML(String(req.body.product.description));
-      req.body.product.tags = cleanHTML(String(req.body.product.tags));
       // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
       req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
@@ -1003,6 +1000,9 @@ module.exports = {
           pageKeywords: 'Keywords'
         });
       } else if(req.body.product.shipping === 'true') {
+        req.body.product.name = cleanHTML(String(req.body.product.name));
+        req.body.product.description = cleanHTML(String(req.body.product.description));
+        req.body.product.tags = cleanHTML(String(req.body.product.tags));
         shippo.address.create({
           "name":req.body.name,
           "street1":req.body.street1,
@@ -1203,6 +1203,9 @@ module.exports = {
           }
         });  
       } else {
+        req.body.product.name = cleanHTML(String(req.body.product.name));
+        req.body.product.description = cleanHTML(String(req.body.product.description));
+        req.body.product.tags = cleanHTML(String(req.body.product.tags));
         req.body.product.images = [];
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
@@ -2419,13 +2422,14 @@ module.exports = {
   },
   async putBusinessPartner(req, res) {
     req.check('name', 'The name must not be empty').notEmpty().isLength({max: 500});
-    req.check('name', 'The name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    // req.check('name', 'The name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
     req.check('contactName', 'The contact name must not be empty').notEmpty().isLength({max: 500});
-    req.check('contactName', 'The contact name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
+    // req.check('contactName', 'The contact name contains invalid characters').matches(/^[a-z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|\r\n]+$/gi);
     req.check('email', 'Please input a valid email address').notEmpty().isEmail().isLength({max: 500});
     req.check('phone', 'Please input a valid phone number').notEmpty().isLength({max: 20}).matches(/^[0-9+() -]+$/g);
     const errors = req.validationErrors();
     if (errors) {
+
       const user = await User.findById(req.user._id);
       let lastApp = new Date(-8640000000000000);
       if (user.partnerApplication.sentOn != undefined) {
@@ -2440,7 +2444,9 @@ module.exports = {
         pageDescription: 'Description',
         pageKeywords: 'Keywords'
       });
-    }
+    }      
+    req.body.name = cleanHTML(String(req.body.name));
+    req.body.contactName = cleanHTML(String(req.body.contactName));
     const user = await User.findById(req.user._id);
     let lastApp = new Date(user.partnerApplication.sentOn);
     lastApp.setDate(lastApp.getDate() + 90);
@@ -2449,8 +2455,8 @@ module.exports = {
       return res.redirect('back');
     }
     user.partnerApplication.sentOn = Date.now();
-    user.partnerApplication.companyName = escapeHTML(req.body.name);
-    user.partnerApplication.contactName = escapeHTML(req.body.contactName);
+    user.partnerApplication.companyName = req.body.name;
+    user.partnerApplication.contactName = req.body.contactName;
     user.partnerApplication.contactEmail = req.body.email;
     user.partnerApplication.contactPhone = req.body.phone;
     user.partnerApplication.status = 'Processing';
