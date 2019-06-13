@@ -1028,8 +1028,8 @@ module.exports = {
                 {
                   moderation: "aws_rek:suggestive:ignore",
                   transformation: [
-                    {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
-                    {width: "auto", dpr: "auto", crop: "scale"}
+                    {quality: "jpegmini:1", sign_url: true},
+                    {width: "auto", dpr: "auto"}
                     ]
                 }, (err, result) => {
                   if(err) {
@@ -1209,8 +1209,8 @@ module.exports = {
             {
               moderation: "aws_rek:suggestive:ignore",
               transformation: [
-                {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
-                {width: "auto", dpr: "auto", crop: "scale"}
+                {quality: "jpegmini:1", sign_url: true},
+                {width: "auto", dpr: "auto"}
                 ]
             }, (err, result) => {
               if(err) {
@@ -1527,8 +1527,8 @@ module.exports = {
                     {
                       moderation: "aws_rek:suggestive:ignore",
                       transformation: [
-                        {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
-                        {width: "auto", dpr: "auto", crop: "scale"}
+                        {quality: "jpegmini:1", sign_url: true},
+                        {width: "auto", dpr: "auto"}
                         ]
                     }, (err, result) => {
                       if(err) {
@@ -1672,8 +1672,8 @@ module.exports = {
             {
               moderation: "aws_rek:suggestive:ignore",
               transformation: [
-                {aspect_ratio: "4:3", crop: "fill", quality: "jpegmini:1", sign_url: true},
-                {width: "auto", dpr: "auto", crop: "scale"}
+                {quality: "jpegmini:1", sign_url: true},
+                {width: "auto", dpr: "auto"}
                 ]
             }, (err, result) => {
               if(err) {
