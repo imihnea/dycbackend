@@ -205,24 +205,22 @@
                         <a href="/dashboard/notifications" class="button is-primary is-rounded">Email Notifications</a>
                     </div>
                     <div class="buttons has-addons is-centered">
-                        <% if (!user.googleId) { %>
-                            <button class="button is-primary is-rounded">
-                                <a href="/auth/google" class="white-link">Connect your Google Account</a>
-                            </button> 
+                        <% if ((user.googleId && user.facebookId) || (user.googleId && user.salt && user.hash)) { %>
+                            <a href="/auth/google" class="button is-danger is-rounded">Disconnect your Google Account</a>
                         <% } else { %>
-                            <button class="button is-danger is-rounded">
-                                <a href="/auth/google" class="white-link">Disconnect your Google Account</a>    
-                            </button>
+                            <a class="button is-danger is-rounded" disabled>Disconnect your Google Account</a>
+                        <% } %>
+                        <% if (!user.googleId) { %>
+                            <a href="/auth/google" class="button is-primary is-rounded">Connect your Google Account</a>
                         <% } %>
                         <br>
-                        <% if (!user.facebookId) { %>
-                            <button class="button is-primary is-rounded">
-                                <a href="/auth/facebook" class="white-link">Connect your Facebook Account</a>
-                            </button>
+                        <% if ((user.googleId && user.facebookId) || (user.facebookId && user.salt && user.hash)) { %>
+                            <a href="/auth/facebook" class="button is-danger is-rounded">Disconnect your Facebook Account</a>
                         <% } else { %>
-                            <button class="button is-danger is-rounded">
-                                <a href="/auth/facebook" class="white-link">Disconnect your Facebook Account</a>
-                            </button>
+                            <a class="button is-danger is-rounded" disabled>Disconnect your Facebook Account</a>
+                        <% } %>
+                        <% if (!user.facebookId) { %>
+                            <a href="/auth/facebook" class="button is-primary is-rounded">Connect your Facebook Account</a>
                         <% } %>
                     </div>
                     <div class="buttons <% if(user.twofactor !== true) { %> has-addons <% } %> is-centered">

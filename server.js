@@ -162,7 +162,7 @@ passport.use(new FacebookStrategy({
 function(req, accessToken, refreshToken, profile, cb) {
   if (req.user) {
     let user = req.user;
-    if (user.facebookId) {
+    if ((user.googleId && user.facebookId) || (user.facebookId && user.salt && user.hash)) {
       user.facebookId = '';
     } else {
       user.facebookId = profile.id;
@@ -175,8 +175,7 @@ function(req, accessToken, refreshToken, profile, cb) {
       } else {
         User.create(
           { 
-            name: profile.displayName,
-            username: profile.displayName,
+            full_name: profile.displayName,
             email: profile.emails[0].value,
             facebookId: profile.id 
           }, 
@@ -191,13 +190,13 @@ function(req, accessToken, refreshToken, profile, cb) {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://dyc.herokuapp.com/auth/google/callback',
+  callbackURL: 'http://localhost:8080/auth/google/callback',
   passReqToCallback: true
 },
 function(req, accessToken, refreshToken, profile, done) {
   if (req.user) {
     let user = req.user;
-    if (user.googleId) {
+    if ((user.googleId && user.facebookId) || (user.googleId && user.salt && user.hash)) {
       user.googleId = '';
     } else {
       user.googleId = profile.id;
@@ -210,8 +209,7 @@ function(req, accessToken, refreshToken, profile, done) {
       } else {
         User.create(
           { 
-            name: profile.name.familyName + ' ' + profile.name.givenName,
-            username: profile.name.familyName + ' ' + profile.name.givenName,
+            full_name: profile.name.familyName + ' ' + profile.name.givenName,
             email: profile.emails[0].value,
             googleId: profile.id 
           },

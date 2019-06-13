@@ -1,0 +1,38 @@
+<% include ../partials/header %>
+<link rel="stylesheet" href="/dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">    
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <h1>You have signed up successfully!</h1>
+                <h3>Please choose your unique username</h3>
+                <br>
+                <div class="container is-fluid" style="margin-bottom: 3vh;">
+                    <% if(regErrors){ %>
+                        <div class="notification is-danger" role="alert"> 
+                        <% regErrors.forEach(function( err){ %>
+                            <%= err.msg %><br>
+                        <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+                <form action="/set-username" method="POST">
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="username" placeholder="Username" type="text" required data-parsley-type="alphanum" 
+                                data-parsley-minlength="6" data-parsley-maxlength="32" 
+                                data-parsley-minlength-message="The username is too short. It should have 6 characters or more." data-parsley-trigger="change" autofocus/>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user-tie"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="column smallerCenter">
+                        <button class="button is-rounded is-primary">Choose Username</button>
+                    </div>     
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>

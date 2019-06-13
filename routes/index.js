@@ -40,7 +40,9 @@ const {
   getCategories,
   firstCategSearch,
   secondCategSearch,
-  thirdCategSearch
+  thirdCategSearch,
+  getSetUsername,
+  postSetUsername
 } = require('../controllers/index');
 
 const middleware = require('../middleware/index');
@@ -102,8 +104,11 @@ router.get('/auth/facebook',
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
-    // Successful authentication, redirect home.
-    return res.redirect('/dashboard');
+    if(req.user.username) {
+      return res.redirect('/dashboard');
+    } else {
+      return res.redirect('/set-username');
+    }
   });
 
 router.get('/auth/google',
@@ -113,8 +118,20 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    return res.redirect('/dashboard');
+    if(req.user.username) {
+      return res.redirect('/dashboard');
+    } else {
+      return res.redirect('/set-username');
+    }
   });
+
+// GET Set username page
+
+router.get('/set-username', getSetUsername);
+
+// POST Set username page
+
+router.post('/set-username', postSetUsername);
 
 // GET Categories page
 

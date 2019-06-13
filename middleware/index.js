@@ -10,16 +10,20 @@ const jwt = require('jsonwebtoken');
 module.exports = {
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
-      return next();
+      if (req.user.username) {
+        return next();
+      } else {
+        return res.redirect('/set-username');
+      }
     }
     req.flash('error', 'You must be signed in to do that!');
-    res.redirect('/login');
+    return res.redirect('/login');
   },
   // isSubscribed(req, res, next) {
   //   Subscription.findById(req.params.id, (err, user) => {
   //     if(err || !user) {
   //       req.flash('error', 'You must be a Premium User to do that.')
-  //       res.redirect('back');
+  //       return res.redirect('back');
   //     } else if (user.userid.equals(req.user._id)) {
   //       req.subscription = user;
   //       next();
@@ -30,13 +34,13 @@ module.exports = {
     Product.findById(req.params.id, (err, foundproduct) => {
       if (err || !foundproduct) {
         req.flash('error', 'Sorry, that product does not exist!');
-        res.redirect('/categories/products');
+        return res.redirect('/categories/products');
       } else if (foundproduct.author.id.equals(req.user._id)) {
         req.product = foundproduct;
         next();
       } else {
         req.flash('error', 'You don\'t have permission to do that!');
-        res.redirect(`/categories/products/${req.params.id}`);
+        return res.redirect(`/categories/products/${req.params.id}`);
       }
     });
   },

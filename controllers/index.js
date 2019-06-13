@@ -544,7 +544,7 @@ module.exports = {
   // GET /logout
   getLogout(req, res) {
     req.logout();
-    req.flash('success', 'See you later!');
+    req.flash('success', 'Successfully logged out!');
     return res.redirect('/');
   },
   async getIndex(req, res) {
@@ -1572,5 +1572,60 @@ module.exports = {
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });
+  },
+  getSetUsername(req, res) {
+    if(req.user) {
+      if(req.user.username) {
+        req.flash('error', 'You\'ve already set your username.')
+        return res.redirect('/dashboard');
+      } else {
+        res.render('index/set-username', {
+          regErrors: false,
+          pageTitle: 'Set Username - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
+    } else {
+      req.flash('error', 'You must be signed in to do that!')
+      return res.redirect('back');
+    }
+  },
+  postSetUsername(req, res) {
+    req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
+    req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
+    const regErrors = req.validationErrors();
+    if (regErrors) {
+      res.render('index/set-username', {
+        regErrors,
+        pageTitle: 'Set Username - Deal Your Crypto',
+        pageDescription: 'Description',
+        pageKeywords: 'Keywords'
+      });
+    } else {
+      const CurrentUser = req.user._id;
+      const NewUsername = req.body.username;
+      User.findOne({username: NewUsername}, (err, ExistingUser) => {
+        if(err) {
+          console.log(err);
+          return res.redirect('back');
+        } else {
+          if(ExistingUser) {
+            req.flash('error', 'The username is unavailable.');
+            return res.redirect('back');
+          } else {
+            User.findByIdAndUpdate({_id: CurrentUser}, {username: NewUsername}, (err) => {
+              if(err) {
+                console.log(err)
+                return res.redirect('back');
+              } else {
+                req.flash('success', `Successfully set your username! Welcome ${NewUsername}!`);
+                return res.redirect('/dashboard');
+              }
+            });
+          }
+        }
+      });
+    }
   },
 };
