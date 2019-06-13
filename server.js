@@ -155,7 +155,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: 'http://localhost:8080/auth/facebook/callback',
+  callbackURL: 'https://dyc.herokuapp.com/auth/facebook/callback',
   profileFields: ['id', 'displayName', 'email'],
   passReqToCallback: true
 },
@@ -191,7 +191,7 @@ function(req, accessToken, refreshToken, profile, cb) {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:8080/auth/google/callback',
+  callbackURL: 'https://dyc.herokuapp.com/auth/google/callback',
   passReqToCallback: true
 },
 function(req, accessToken, refreshToken, profile, done) {
@@ -302,7 +302,7 @@ app.use('/admin', adminRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
-  return res.redirect('/error');
+  return res.status(404).redirect('/error');
 });
 
 // error handler
