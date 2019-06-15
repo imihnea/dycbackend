@@ -131,4 +131,23 @@ Product.find({available: 'True'}, (err ,res) => {
     }
 });
 
-module.exports = { client };
+const updateRating = function(product) {
+    client.update({
+        index: 'products',
+        type: 'products',
+        id: `${product._id}`,
+        body: {
+            doc: {
+                avgRating: product.avgRating
+            }
+        }
+    }, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(res);
+        }
+    }
+)};
+
+module.exports = { client, updateRating };

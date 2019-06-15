@@ -8,6 +8,7 @@ const path = require('path');
 const { errorLogger, userLogger, reviewLogger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
+const { updateRating } = require('../config/elasticsearch');
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -72,6 +73,7 @@ module.exports = {
 		product.reviews.push(review);
 		// save the product
 		product.save();
+		updateRating(product);
 		userLogger.info(`Message: Review created - ${review._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 		// let the author know of the new review
 		const author = await User.findById(product.author.id);
@@ -155,6 +157,8 @@ module.exports = {
 				await review.remove();		
 				await Product.findByIdAndUpdate(req.params.id, {
 					$pull: { reviews: req.params.review_id }
+				}, (res) => {
+					updateRating(res);
 				});
 				await User.findByIdAndUpdate(review.user, {
 					$pull: { reviews: req.params.review_id }

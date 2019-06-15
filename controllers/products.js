@@ -16,7 +16,7 @@ const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
-
+const { client:elasticClient } = require('../config/elasticsearch');
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -448,6 +448,15 @@ module.exports = {
                                 // The product will remain available if it's repeatable
                                 if ( !product.repeatable ) {
                                     product.available = "Closed";
+                                    elasticClient.delete({
+                                        index: 'products',
+                                        type: 'products',
+                                        id: `${product._id}`
+                                      }, (err) => {
+                                        if (err) {
+                                          console.log(err);
+                                        }
+                                    });   
                                 }
                                 if (product.nrBought) {
                                     product.nrBought += 1;
@@ -538,6 +547,15 @@ module.exports = {
                             // The product will remain available if it's repeatable
                             if ( !product.repeatable ) {
                                 product.available = "Closed";
+                                elasticClient.delete({
+                                    index: 'products',
+                                    type: 'products',
+                                    id: `${product._id}`
+                                  }, (err) => {
+                                    if (err) {
+                                      console.log(err);
+                                    }
+                                });
                             }
                             if (product.nrBought) {
                                 product.nrBought += 1;

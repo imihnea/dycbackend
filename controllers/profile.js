@@ -11,6 +11,7 @@ const Subscription = require('../models/subscription');
 const { Regions } = require('../dist/js/regions');
 const moment = require('moment');
 const middleware = require('../middleware/index');
+const { client } = require('../config/elasticsearch');
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -177,6 +178,19 @@ module.exports = {
                       await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.continent': user.continent}});
                     }
                   }));
+                  const products = await Product.find({'author.id': user._id, 'available': 'True'});
+                  products.forEach(product => {
+                    client.update({
+                      index: 'products',
+                      type: 'products',
+                      id: `${product._id}`,
+                      body: {
+                        doc: {
+                          author: product.author
+                        }
+                      }
+                    })
+                  });
                   user.address1 = req.body.address1;
                   user.zip = req.body.zip;
                   user.address2 = req.body.address2;

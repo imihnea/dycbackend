@@ -21,9 +21,7 @@ Backend:
       Security => Validate and sanitize every user input
                => Anti DDOS
       Reporting on reviews and products
-      Elasticsearch => Update indexed documents @avgRating
-                    => Update indexed documents @author change
-                    => Boost name match
+      Elasticsearch => Boost name match
                     => Test more in depth
    Low Priority:
 

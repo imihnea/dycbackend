@@ -74,6 +74,12 @@ const escapeHTML = (unsafe) => {
         .replace(/'/g, "&#039;");
 }
 
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
+};
+
 function sendConfirmationEmail(req, userid, useremail) {
   const token = jwt.sign({
     user: userid
@@ -712,7 +718,6 @@ module.exports = {
       let currency = ['btc', 'asc'];
       let secCat = [];
       let from = 0;
-      // clean html
       req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 .,!?]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
@@ -745,7 +750,8 @@ module.exports = {
       const errors = req.validationErrors();
       if (errors) {
         return res.status(404).redirect('/error');
-      } else {        
+      } else {
+        req.body.searchName = cleanHTML(req.body.searchName);     
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -834,8 +840,7 @@ module.exports = {
       let currency = ['btc', 'asc'];
       let thiCat = [];
       let from = 0;
-      // clean html
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
+      // req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
@@ -869,6 +874,7 @@ module.exports = {
       if (errors) {
         return res.status(404).redirect('/error');
       } else {
+        req.body.searchName = cleanHTML(req.body.searchName);
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -960,7 +966,7 @@ module.exports = {
     async thirdCategSearch(req, res){
       let currency = ['btc', 'asc'];
       let from = 0;
-      req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
+      // req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       req.check('secondSearchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
@@ -995,6 +1001,7 @@ module.exports = {
       if (errors) {
         return res.redirect('/error');
       } else {
+        req.body.searchName = cleanHTML(req.body.searchName);   
         if (from === 0) {
           let search = {};
           if (req.user) {

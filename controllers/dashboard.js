@@ -1967,6 +1967,15 @@ module.exports = {
     let deleteDate = new Date();
     deleteDate.setDate(deleteDate.getDate() + 30);
     await Product.findByIdAndUpdate(req.params.id, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
+    elasticClient.delete({
+      index: 'products',
+      type: 'products',
+      id: `${req.params.id}`
+    }, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
     req.flash('success', 'Product deleted successfully!');
     return res.redirect('/dashboard/open');
   },
