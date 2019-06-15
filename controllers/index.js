@@ -42,6 +42,8 @@ let transporter = nodemailer.createTransport({
   },
 });
 
+const { client } = require('../config/elasticsearch');
+
 const escapeHTML = (unsafe) => {
   return unsafe
         .replace(/&/g, "&amp;")
@@ -707,51 +709,43 @@ module.exports = {
     });
   },
     async firstCategSearch(req, res) {
-      let currency = [];
+      let currency = ['btc', 'asc'];
       let secCat = [];
       let from = 0;
+      // clean html
       req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 .,!?]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z ]+$/g).notEmpty().isLength({ max: 500 });
       if (req.body.from) {
         req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
+      let sort = [{"feat_1.status": {'unmapped_type': "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       if (req.body.continent) {
         req.check('continent', 'Error: Continent does not match. Please contact us regarding this issue.').matches(/^(fric|si|urop|orth|ceani|outh)$/g).notEmpty();
         continent = req.body.continent;
+      }     
+      let avgRating = '';
+      if (req.body.avgRating) {
+        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
+        avgRating = req.body.avgRating;
+        sort.unshift({'avgRating': {'order': `${avgRating}`}});
       }
       if (req.body.currency) {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
+        sort.unshift({'btcPrice': {'order': `${currency[1]}`}});
       }
       let condition = '';
       if (req.body.condition) {
         req.check('condition', 'Error: Condition does not match. Please contact us regarding this issue.').matches(/^(and|ik|efur|se|oke)$/g);
         condition = req.body.condition;
       }
-      let avgRating = '';
-      if (req.body.avgRating) {
-        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
-        avgRating = req.body.avgRating;
-      }
       const errors = req.validationErrors();
       if (errors) {
-        const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
-          page: req.query.page || 1,
-          limit: 20,
-        });
-        products.page = Number(products.page);
-        res.render('index', {
-          user: req.user,
-          errors,
-          products,
-          pageTitle: 'Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
-      } else {
+        return res.status(404).redirect('/error');
+      } else {        
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -783,60 +777,64 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        await Product.search(
-          { 
-            "bool": { 
-              "must": [
-                { "match": { "category": `${req.body.category}` }},
-                { "wildcard": { "author.continent": `*${continent}*`}},
-                { "wildcard": {"condition": `*${condition}*`}}
-              ],
-              "should": [
-                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
-                { "wildcard": { "name": `*${req.body.searchName}*` }}
-              ],
-              "minimum_should_match": 1
-            },
-          }, 
-          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-          (err, products) => {
-            if (err) {
-              if(req.user) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              } else {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              }
-              console.log(err);
-            } else {
-              Categories.forEach((item) => {
-                if (req.body.category == item.name) {
-                  secCat = item.opt;
+        client.search({
+          index: 'products',
+          type: 'products',
+          body: {
+              from: from,
+              size: 10,
+              sort,
+              query: {
+                bool: {
+                  must: [
+                    { "match": { "category": `${req.body.category}` }},
+                    { "wildcard": { "author.continent": `*${continent}*`}},
+                    { "wildcard": {"condition": `*${condition}*`}}
+                  ],
+                  "should": [
+                    { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                    { "wildcard": { "name": `*${req.body.searchName}*` }}
+                  ],
+                  "minimum_should_match": 1
                 }
-              });
-              res.render('index/searchFirstCateg', { 
-                products: products.hits.hits, 
-                total: products.hits.total, 
-                from, 
-                searchName: req.body.searchName, 
-                searchCateg: req.body.category, 
-                secCat, 
-                currency: req.body.currency, 
-                continent, 
-                avgRating, 
-                condition,
-                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
-              });
-            }
+              }
           }
-        ); 
+        }).then(function(products) {
+          Categories.forEach((item) => {
+            if (req.body.category == item.name) {
+              secCat = item.opt;
+            }
+          });
+          res.render('index/searchFirstCateg', { 
+            products: products.hits.hits, 
+            total: products.hits.total, 
+            from, 
+            searchName: req.body.searchName, 
+            searchCateg: req.body.category, 
+            secCat, 
+            currency: req.body.currency, 
+            continent, 
+            avgRating, 
+            condition,
+            pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
+        }, function(err) {
+            console.trace(err.message);
+            if(req.user) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
+        });
       }
     },
     async secondCategSearch(req, res) {
-      let currency = [];
+      let currency = ['btc', 'asc'];
       let thiCat = [];
       let from = 0;
+      // clean html
       req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
@@ -844,41 +842,32 @@ module.exports = {
         req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
+      let sort = [{"feat_1.status": {'unmapped_type': "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       if (req.body.continent) {
         req.check('continent', 'Error: Continent does not match. Please contact us regarding this issue.').matches(/^(fric|si|urop|orth|ceani|outh)$/g).notEmpty();
         continent = req.body.continent;
+      }      
+      let avgRating = '';
+      if (req.body.avgRating) {
+        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
+        avgRating = req.body.avgRating;
+        sort.unshift({'avgRating': {'order': `${avgRating}`}});
       }
       if (req.body.currency) {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
+        sort.unshift({'btcPrice': {'order': `${currency[1]}`}});
       }
       let condition = '';
       if (req.body.condition) {
         req.check('condition', 'Error: Condition does not match. Please contact us regarding this issue.').matches(/^(and|ik|efur|se|oke)$/g);
         condition = req.body.condition;
       }
-      let avgRating = '';
-      if (req.body.avgRating) {
-        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
-        avgRating = req.body.avgRating;
-      }
       const errors = req.validationErrors();
       if (errors) {
-        const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
-          page: req.query.page || 1,
-          limit: 20,
-        });
-        products.page = Number(products.page);
-        res.render('index', {
-          user: req.user,
-          errors,
-          products,
-          pageTitle: 'Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
+        return res.status(404).redirect('/error');
       } else {
         if (from === 0) {
           let search = {};
@@ -913,60 +902,63 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        await Product.search(
-          { 
-            "bool": { 
-              "must": [
-                { "match": { "category": `${req.body.searchCateg}`}},
-                { "match": { "category": `${req.body.category}`}},
-                { "wildcard": { "author.continent": `*${continent}*`}},
-                { "wildcard": {"condition": `*${condition}*`}}
-              ],
-              "should": [
-                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
-                { "wildcard": { "name": `*${req.body.searchName}*` }}
-              ],
-              "minimum_should_match": 1
-            }
-          }, 
-          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-          (err, products) => {
-            if (err) {
-              if(req.user) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              } else {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              }
-              console.log(err);
-            } else {
-              secCategories.forEach((item) => {
-                if (req.body.category == item.name) {
-                  thiCat = item.opt;
+        client.search({
+          index: 'products',
+          type: 'products',
+          body: {
+              from: from,
+              size: 10,
+              sort,
+              query: {
+                bool: {
+                  must: [
+                    { "match": { "category": `${req.body.searchCateg}`}},
+                    { "match": { "category": `${req.body.category}`}},
+                    { "wildcard": { "author.continent": `*${continent}*`}},
+                    { "wildcard": {"condition": `*${condition}*`}}
+                  ],
+                  "should": [
+                    { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                    { "wildcard": { "name": `*${req.body.searchName}*` }}
+                  ],
+                  "minimum_should_match": 1
                 }
-              });
-              res.render('index/searchSecondCateg', { 
-                products: products.hits.hits, 
-                searchName: req.body.searchName, 
-                total: products.hits.total, 
-                from, 
-                searchCateg: req.body.searchCateg, 
-                secondSearchCateg: req.body.category, 
-                thiCat, 
-                currency: req.body.currency, 
-                continent, 
-                avgRating, 
-                condition,
-                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
-              });
-            }
+              }
           }
-        );
+        }).then(function(products) {
+          secCategories.forEach((item) => {
+            if (req.body.category == item.name) {
+              thiCat = item.opt;
+            }
+          });
+          res.render('index/searchSecondCateg', { 
+            products: products.hits.hits, 
+            searchName: req.body.searchName, 
+            total: products.hits.total, 
+            from, 
+            searchCateg: req.body.searchCateg, 
+            secondSearchCateg: req.body.category, 
+            thiCat, 
+            currency: req.body.currency, 
+            continent, 
+            avgRating, 
+            condition,
+            pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
+        }, function(err) {
+            console.trace(err.message);
+            if(req.user) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
+        });
       }
     },
     async thirdCategSearch(req, res){
-      let currency = [];
+      let currency = ['btc', 'asc'];
       let from = 0;
       req.check('searchName', 'Error: The query contains illegal characters.').matches(/^$|[a-zA-Z0-9 ]+$/g).isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 ]+$/g).notEmpty().isLength({ max: 500 });
@@ -976,41 +968,32 @@ module.exports = {
         req.check('from', 'Error: Page does not match. Please contact us regarding this issue.').isNumeric().notEmpty().isLength({ max: 500 });
         from = req.body.from;
       }
+      let sort = [{"feat_1.status": {'unmapped_type': "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       if (req.body.continent) {
         req.check('continent', 'Error: Continent does not match. Please contact us regarding this issue.').matches(/^(fric|si|urop|orth|ceani|outh)$/g).notEmpty();
         continent = req.body.continent;
+      }     
+      let avgRating = '';
+      if (req.body.avgRating) {
+        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
+        avgRating = req.body.avgRating;
+        sort.unshift({'avgRating': {'order': `${avgRating}`}});
       }
       if (req.body.currency) {
         // The currency is given is this format -> currency-asc/desc
         req.check('currency', 'Error: Currency does not match. Please contact us regarding this issue.').matches(/^(btc-asc|btc-desc)$/g);
         currency = req.body.currency.split('-');
+        sort.unshift({'btcPrice': {'order': `${currency[1]}`}});
       }
       let condition = '';
       if (req.body.condition) {
         req.check('condition', 'Error: Condition does not match. Please contact us regarding this issue.').matches(/^(and|ik|efur|se|oke)$/g);
         condition = req.body.condition;
       }
-      let avgRating = '';
-      if (req.body.avgRating) {
-        req.check('avgRating', 'Error: Rating does not match. Please contact us regarding this issue.').matches(/^(asc|desc)$/g);
-        avgRating = req.body.avgRating;
-      }
       const errors = req.validationErrors();
       if (errors) {
-        const products = await Product.paginate({ "feat_2.status": true, available: "True" }, {
-          page: req.query.page || 1,
-          limit: 20,
-        });
-        products.page = Number(products.page);
-        res.render('index', {
-          user: req.user,
-          errors,
-          products,
-          pageTitle: 'Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
-        });
+        return res.redirect('/error');
       } else {
         if (from === 0) {
           let search = {};
@@ -1047,52 +1030,55 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        await Product.search(
-          { 
-            "bool": { 
-              "must": [
-                { "match": { "category": `${req.body.searchCateg}`}},
-                { "match": { "category": `${req.body.secondSearchCateg}`}},
-                { "match": { "category": `${req.body.category}`}},
-                { "wildcard": { "author.continent": `*${continent}*`}},
-                { "wildcard": {"condition": `*${condition}*`}}
-              ],
-              "should": [
-                { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
-                { "wildcard": { "name": `*${req.body.searchName}*` }}
-              ],
-              "minimum_should_match": 1
-            }
-          }, 
-          { from: from, size: 10, sort: [`${currency[0]}Price:${currency[1]}`, `avgRating:${avgRating}`, "feat_1.status:desc", "createdAt:desc"] },
-          (err, products) => {
-            if (err) {
-              if(req.user) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              } else {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        client.search({
+          index: 'products',
+          type: 'products',
+          body: {
+              from: from,
+              size: 10,
+              sort,
+              query: {
+                bool: {
+                  must: [
+                    { "match": { "category": `${req.body.searchCateg}`}},
+                    { "match": { "category": `${req.body.secondSearchCateg}`}},
+                    { "match": { "category": `${req.body.category}`}},
+                    { "wildcard": { "author.continent": `*${continent}*`}},
+                    { "wildcard": {"condition": `*${condition}*`}}
+                  ],
+                  "should": [
+                    { "wildcard": { "searchableTags": `*${req.body.searchName}*` }},
+                    { "wildcard": { "name": `*${req.body.searchName}*` }}
+                  ],
+                  "minimum_should_match": 1
+                }
               }
-              console.log(err);
-            } else {
-              res.render('index/searchThirdCateg', { 
-                products: products.hits.hits, 
-                searchName: req.body.searchName, 
-                total: products.hits.total, 
-                from, 
-                searchCateg: req.body.searchCateg, 
-                secondSearchCateg: req.body.secondSearchCateg, 
-                thirdSearchCateg: req.body.category, 
-                currency: req.body.currency, 
-                continent, 
-                avgRating, 
-                condition,
-                pageTitle: `${req.body.searchName} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
-              });
-            }
           }
-        );
+        }).then(function(products) {
+          res.render('index/searchThirdCateg', { 
+            products: products.hits.hits, 
+            searchName: req.body.searchName, 
+            total: products.hits.total, 
+            from, 
+            searchCateg: req.body.searchCateg, 
+            secondSearchCateg: req.body.secondSearchCateg, 
+            thirdSearchCateg: req.body.category, 
+            currency: req.body.currency, 
+            continent, 
+            avgRating, 
+            condition,
+            pageTitle: `${req.body.searchName} - Deal Your Crypto`,
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+          });
+        }, function(err) {
+            console.trace(err.message);
+            if(req.user) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
+        });
       }
     },
   getReset(req, res) {

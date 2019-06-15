@@ -50,6 +50,8 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
+const { client:elasticClient } = require('../config/elasticsearch');
+
 const escapeHTML = (unsafe) => {
   return unsafe
       .replace(/&/g, "&amp;")
@@ -1194,6 +1196,30 @@ module.exports = {
                   }
                 });
                 const product = await Product.create(newproduct);
+                elasticClient.index({
+                  index: 'products',
+                  type: 'products',
+                  id: `${product._id}`,
+                  body: {
+                      id: product._id,
+                      feat_1: product.feat_1,
+                      image: product.images[0].url,
+                      name: product.name,
+                      author: product.author,
+                      avgRating: product.avgRating,
+                      btcPrice: product.btcPrice,
+                      condition: product.condition,
+                      category: product.category,
+                      createdAt: product.createdAt,
+                      searchableTags: product.searchableTags
+                  }
+                }, function(err, resp, status) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                      console.log(resp);
+                    }
+                });
                 if (process.env.NODE_ENV === 'production') {
                   productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
@@ -1379,6 +1405,30 @@ module.exports = {
           }
         });
         const product = await Product.create(newproduct);
+        elasticClient.index({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+              id: product._id,
+              feat_1: product.feat_1,
+              image: product.images[0].url,
+              name: product.name,
+              author: product.author,
+              avgRating: product.avgRating,
+              btcPrice: product.btcPrice,
+              condition: product.condition,
+              category: product.category,
+              createdAt: product.createdAt,
+              searchableTags: product.searchableTags
+          }
+        }, function(err, resp, status) {
+            if (err) {
+                console.log(err);
+            } else {
+              console.log(resp);
+            }
+        });
         if (process.env.NODE_ENV === 'production') {
           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
@@ -1659,6 +1709,27 @@ module.exports = {
               product.searchableTags = req.body.product.tags;
               // save the updated product into the db
               await product.save();
+              elasticClient.update({
+                index: 'products',
+                type: 'products',
+                id: `${product._id}`,
+                body: {
+                  doc: {
+                    name: product.name,
+                    image: product.images[0].url,
+                    btcPrice: product.btcPrice,
+                    condition: product.condition,
+                    category: product.category,
+                    searchableTags: product.searchableTags
+                  }
+                }
+              }, (err, res) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(res);
+                }
+              });
               // redirect to show page
               req.flash('success', 'Product updated successfully!');
               return res.redirect(`/products/${product.id}/view`);
@@ -1804,6 +1875,27 @@ module.exports = {
       product.searchableTags = req.body.product.tags;
       // save the updated product into the db
       await product.save();
+      elasticClient.update({
+        index: 'products',
+        type: 'products',
+        id: `${product._id}`,
+        body: {
+          doc: {
+            name: product.name,
+            image: product.images[0].url,
+            btcPrice: product.btcPrice,
+            condition: product.condition,
+            category: product.category,
+            searchableTags: product.searchableTags
+          }
+        }
+      }, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(res);
+        }
+      });
       // redirect to show page
       req.flash('success', 'Product updated successfully!');
       return res.redirect(`/products/${product.id}/view`);

@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-const mongoosastic = require('mongoosastic');
 
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 const Review = require('./review');
-
 
 const ProductSchema = new Schema({
   name: { type: String, es_indexed: true },
@@ -116,49 +114,5 @@ ProductSchema.methods.calculateAvgRating = function() {
 };
 
 ProductSchema.plugin(mongoosePaginate);
-
-// For local ElasticSearch
-ProductSchema.plugin(mongoosastic);
-
-// For hosted ElasticSearch
-ProductSchema.plugin(mongoosastic,{  
-  host: '994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io',
-  port: 9243,
-  protocol: "https",
-  auth: "elastic:E37nCmTkobiqfwIAHeGOfrsz"
-});
-
-mongoose.model('Product', ProductSchema).createMapping( (err, mapping) => {  
-  if (err) {
-    console.log('error creating mapping');
-    console.log(err);
-  } else {
-    console.log('mapping created');
-    console.log(mapping);
-  }
-});
-
-// Delete the index on server restart
-mongoose.model('Product', ProductSchema).esTruncate((err) => {
-  if (err) {
-    console.log('cannot delete index.');
-    console.log(err);
-  } else {
-    console.log('index deleted successfully.');
-  }
-});
-
-// Synchronize the index on server restart
-let stream = mongoose.model('Product', ProductSchema).synchronize();
-let count = 0;
-stream.on('data', function(err, doc){
-  count += 1;
-});
-stream.on('close', function(){
-  console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-  console.log(err);
-});
 
 module.exports = mongoose.model('Product', ProductSchema);

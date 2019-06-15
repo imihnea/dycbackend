@@ -155,12 +155,12 @@
                                     <div class="product-picture-wrapper">
                                         <% if (product._source.feat_1.status === true) { %><span class="featured"></span><% } %>
                                         <figure class="image is-128x128" style="margin:auto;">
-                                            <img src="<%= product._source.images[0].url %>" class="productImage" alt="">
+                                            <img src="<%= product._source.image %>" class="productImage" alt="">
                                         </figure>
                                     </div>
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                         <div class="product-name">
-                                            <p class="is-5"><a class="link" href="/products/<%= product._id %>/view"><%= product._source.name %></a></p>
+                                            <p class="is-5"><a class="link" href="/products/<%= product._source.id %>/view"><%= product._source.name %></a></p>
                                             <p class="is-5">From: <%= product._source.author.city %>, <%= product._source.author.country %></p>
                                             <p>
                                                 <% for(let i = 0; i < 5; i++) { %>
@@ -176,7 +176,7 @@
                                                     <% } %>
                                                 <% } %>
                                             </p>
-                                            <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                            <a href="/products/<%= product._source.id %>/view" class="button is-primary">View Details</a>
                                         </div>
                                     </div>
                                     <div class="column prod_info productPrice">
