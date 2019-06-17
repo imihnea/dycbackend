@@ -26,10 +26,8 @@
                 <% notifications.docs.forEach(notification => { %>
                     <div class="columns notif" <% if (!notification.read) { %> style="background-color: rgba(50, 105, 202, 0.44);" <% } else { %> style="background-color: rgba(50, 105, 202, 0.44);" <% } %> >
                         <div style="position: absolute; width: 100%; height: 100%;">
-                            <a href="<%= notification.linkTo %>">
-                                <button class="notifBtn">
-                                    <span class="notifSpan"></span>
-                                </button>
+                            <a href="<%= notification.linkTo %>" class="notifBtn">
+                                <span class="notifSpan"></span>
                             </a>
                         </div>
                         <div class="column is-one-fifth">
@@ -39,7 +37,7 @@
                             <p style="text-align: left;"><%= notification.message %></p>
                             <span style="display: flex; align-items: center;">
                                 <i class="far fa-clock" style="margin-right: 0.5vw;"></i>
-                                <p style="text-align: left;">
+                                <div style="text-align: left;">
                                     <% time = Math.floor((Date.now() - notification.createdAt)/1000/60/60) %>
                                     <%
                                         const days = Math.floor(time/24);
@@ -47,7 +45,7 @@
                                         const months = Math.floor(weeks/4);
                                     %>
                                     <% if (months >= 1) { %><%= months %> Month <% if (months > 1) { %>s <% } %> ago<% } else if (weeks >= 1) { %><%= weeks %> Week <% if (weeks > 1) { %>s <% } %>ago<% } else if (days >= 1) { %><%= days %> Day<% if (Math.floor(time/24) > 1) { %>s <% } %> ago <% } else if (time >= 1) { %> <%= time %> Hr <% } else { %> Just now <% } %>
-                                </p>
+                                </div>
                             </span>
                         </div>
                     </div>
@@ -66,5 +64,6 @@
     </div>
 
 </div>
-<% include ../partials/footer %>
+
 <script src="../../dist/js/dashboard_products.js"></script>
+<% include ../partials/footer %>

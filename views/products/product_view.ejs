@@ -40,38 +40,38 @@
             </ul>
         </nav>
         <div class="column">
-            <h1 class="title"><strong><%= product.name %></strong></h2>
+            <h1 class="title"><strong><%= product.name %></strong></h1>
         </div>
         <hr  class="smallerCenter">
         <div class="columns detailsContainer">
             <div class="column">
                 <div class="slider">
                     <figure class="image is-4by3 sliderFig">
-                        <img class="mainImg " src="<%= product.images[0].url %>"/>
-                        <img class="mImg"  src="<%= product.images[0].url %>"/>
+                        <img class="mainImg " src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mImg"  src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
                     </figure>
                     <% if (product.images[1]) { %>
                         <figure class="image is-4by3 sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[1].url %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[1].url %>"/>
+                            <img class="mainImg hiddenImg" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[2]) { %>
                         <figure class="image is-4by3 sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[2].url %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[2].url %>"/>
+                            <img class="mainImg hiddenImg" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[3]) { %>
                         <figure class="image is-4by3 sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[3].url %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[3].url %>"/>
+                            <img class="mainImg hiddenImg" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[4]) { %>
                         <figure class="image is-4by3 sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[4].url %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[4].url %>"/>
+                            <img class="mainImg hiddenImg" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mImg noDisp" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                 </div>
@@ -80,14 +80,14 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                             <label for="id1">
-                                <img class="thumbnail" src="<%= product.images[0].url %>"/>
+                                <img class="thumbnail" src="<%= product.images[0].url %>" alt="Thumbnail 1 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% if (product.images[1]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id2"/>
                             <label for="id2" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[1].url %>"/>
+                                <img class="thumbnail" src="<%= product.images[1].url %>" alt="Thumbnail 2 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -95,7 +95,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id3"/>
                             <label for="id3" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[2].url %>"/>
+                                <img class="thumbnail" src="<%= product.images[2].url %>" alt="Thumbnail 3 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -103,7 +103,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id4"/>
                             <label for="id4" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[3].url %>"/>
+                                <img class="thumbnail" src="<%= product.images[3].url %>" alt="Thumbnail 4 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -111,7 +111,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id5"/>
                             <label for="id5" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[4].url %>"/>
+                                <img class="thumbnail" src="<%= product.images[4].url %>" alt="Thumbnail 5 for <%= product.name %>"/>
                             </label>
                         </div> 
                         <% } %>                
@@ -250,7 +250,7 @@
                                     <img src="<%= review.avatarUrl %>" class="avatarSize" alt="">
                                 </figure>
                             </a>
-                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></a>
+                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></p></a>
                             <% if (review.createdAt) { %>
                             <p class="productDescriptionText" style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {

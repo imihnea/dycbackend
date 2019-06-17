@@ -38,7 +38,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             </div>
                         </div>
                         <div class="select cont-select catSelectLeft">
-                            <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required
+                            <select name="product[category][0]" id="firstCat" style="width: 100%;" required
                             data-parsley-error-message="">
                                 <option disabled>Main Category</option>
                                 <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
@@ -826,7 +826,7 @@ All images are scaled to that ratio" tabindex="-1">
         </div>
     </div>
 </div>
-<% include ../partials/footer %>
+
 <script src="/dist/js/dashboard_new.js"></script>
 <script src="/dist/js/deleteImages.js"></script>
 <span id="currentImages" hidden>
@@ -834,3 +834,4 @@ All images are scaled to that ratio" tabindex="-1">
 </span>
 <script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
 <script src="/dist/js/parsley.min.js"></script>
+<% include ../partials/footer %>

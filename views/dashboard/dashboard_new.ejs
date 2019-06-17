@@ -39,7 +39,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </div>
                             </div>
                             <div class="select cont-select catSelectLeft">
-                                <select type="text" name="product[category][0]" id="firstCat" style="width: 100%;" required
+                                <select name="product[category][0]" id="firstCat" style="width: 100%;" required
                                 data-parsley-error-message="">
                                     <option disabled selected>Main Category</option>
                                     <option value="Collectibles & Art">Collectibles & Art</option>
@@ -55,19 +55,19 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 </select>
                             </div>
                             <div class="select cont-select catSelectCenter">
-                                <select type="text" name="product[category][1]" id="secondCat" style="width: 100%" required
+                                <select name="product[category][1]" id="secondCat" style="width: 100%" required
                                 data-parsley-error-message="">
                                     <option disabled selected>Secondary Category</option>
                                 </select>
                             </div>
                             <div class="select cont-select catSelectRight">
-                                <select type="text" name="product[category][2]" id="thirdCat" style="width: 100%" required
+                                <select name="product[category][2]" id="thirdCat" style="width: 100%" required
                                 data-parsley-error-message="">
                                     <option disabled selected>Tertiary Category</option>
                                 </select>
                             </div>
                             <div class="select cont-select" style="width: 90% !important;">
-                                <select type="text" name="product[condition]" style="width: 100%" required
+                                <select name="product[condition]" style="width: 100%" required
                                 data-parsley-error-message="">
                                     <option value="Not Specified" disabled selected>Condition</option>
                                     <option value="Brand New">Brand New</option>
@@ -584,7 +584,7 @@ All images are scaled to that ratio" tabindex="-1">
                                             <span class="icon is-small is-left">
                                                 <i class="fas fa-globe-americas"></i>
                                             </span>
-                                            <p class="help">State is mandatory for US and CA only. Please use two character abbreviation.</p>
+                                            <div class="help">State is mandatory for US and CA only. Please use two character abbreviation.</div>
                                         </p>
                                     </div>
                                     <div class="field">
@@ -689,7 +689,7 @@ All images are scaled to that ratio" tabindex="-1">
                                             </p>
                                         </div>
                                         <div class="field">
-                                            <p class="control">
+                                            <div class="control">
                                                 <div class="select">
                                                     <select name="parcel_distance_unit">
                                                         <option value="cm">cm</option>
@@ -700,7 +700,7 @@ All images are scaled to that ratio" tabindex="-1">
                                                         <option value="yd">yd</option>
                                                     </select>
                                                 </div>
-                                            </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -711,7 +711,7 @@ All images are scaled to that ratio" tabindex="-1">
                                             <i class="fas fa-weight-hanging"></i>
                                         </span>
                                     </p>
-                                    <p class="control">
+                                    <div class="control">
                                         <div class="select">
                                             <select name="parcel_weight_unit">
                                                 <option value="g">g</option>
@@ -720,7 +720,7 @@ All images are scaled to that ratio" tabindex="-1">
                                                 <option value="kg">kg</option>
                                             </select>
                                         </div>
-                                    </p>
+                                    </div>
                                 </div>
                                 <br>
                                 <div class="lds-default" id="validateSpinner" style="display: none;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
@@ -798,8 +798,9 @@ All images are scaled to that ratio" tabindex="-1">
             </div>
         
 </div>
-<% include ../partials/footer %>
+
 
 <script src="/dist/js/dashboard_new.js"></script>
 <script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
 <script src="/dist/js/parsley.min.js"></script>
+<% include ../partials/footer %>

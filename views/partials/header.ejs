@@ -19,8 +19,8 @@
     <link rel="stylesheet" type="text/css" href="/dist/css/bulma-checkradio.min.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/animate.css" />
     <!-- JavaScript links -->
-    <script type="text/javascript" src="/dist/js/savvy.js"></script>
-    <script type="text/javascript" src="/dist/js/bulma-toast.min.js"></script>
+    <script src="/dist/js/savvy.js"></script>
+    <script src="/dist/js/bulma-toast.min.js"></script>
 </head>
 <body class="has-navbar-fixed-top">
         <div id="overlay"></div>
@@ -50,17 +50,17 @@
            <br>
         </div>
 <div class="hero-head">
-    <nav class="level navi navbar is-fixed-top" role="navigation" aria-label="main navigation">
+    <nav class="level navi navbar is-fixed-top" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a id="Logo" class="navbar-item" href="/">
-                    <img src="/dist/img/logo.png" width="112px" height="28px" alt="Website Logo">
+                    <img src="/dist/img/logo.png" alt="Website Logo">
                 </a>
                 <% if (user) { %>
                     <p class="hidden" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
                         <div class="dropdown-trigger">
-                            <button class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
+                            <div class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
                                 <span class="icon is-small">
                                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                                 </span>
@@ -75,7 +75,7 @@
                                         <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
                                     </span>
                                 <% } %>
-                            </button>
+                                </div>
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                             <div class="dropdown-content">
@@ -527,7 +527,7 @@
                         <input type="text" class="input searchbarInput" name="searchName" placeholder="Search">
                         <div class="select categorySelect" style="border-radius: 0px;">
                             <select name="category" class="searchCategory">
-                                <option value="all" checked>All categories</option>
+                                <option value="all" selected>All categories</option>
                                 <option value="Collectibles and Art">Collectibles and Art</option>
                                 <option value="Electronics">Electronics</option>
                                 <option value="Fashion and Beauty">Fashion and Beauty</option>
@@ -574,7 +574,7 @@
                                         </div>
                                         <hr class="dropdown-divider">
                                         <div class="dropdown-item">
-                                            <a class="link" style="font-weight: 600;" href="/dashboard/addresses" class="white-text">Deposit</a>
+                                            <a class="link" style="font-weight: 600;" href="/dashboard/addresses">Deposit</a>
                                         </div>
                                     </div>
                                 </div>
@@ -592,7 +592,7 @@
                         <div class="navbar-item">
                             <div class="dropdown is-right is-hoverable hideOnBurger">
                                 <div class="dropdown-trigger">
-                                    <button class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                    <div class="button balance-btn" style="align-items: baseline;" aria-haspopup="true" aria-controls="dropdown-menu4">
                                         <span class="icon is-small" style="margin-bottom: auto;">
                                             <i class="fas fa-angle-down" aria-hidden="true"></i>
                                         </span>
@@ -600,7 +600,7 @@
                                         
                                         <a href="/dashboard">
                                             <div class="image is-32x32">
-                                                <img class="is-rounded" src="<%= user.avatar.url %>">
+                                                <img class="is-rounded" src="<%= user.avatar.url %>" alt="User Avatar">
                                             </div>
                                         </a>
                                         <% if ((user.unreadNotifications > 0) || (user.processingDeals > 0)) { %>
@@ -608,7 +608,7 @@
                                                 <i class="fas fa-exclamation-circle" style="color: red !important;"></i>
                                             </span>
                                         <% } %>
-                                    </button>
+                                        </div>
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                                     <div class="dropdown-content">

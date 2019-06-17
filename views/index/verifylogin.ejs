@@ -10,9 +10,9 @@
                 <form action="/login/verify" method="POST" style="padding-top: 3vh;">
                     <div class="verifyDiv">
                         <input name="pin" type="number" placeholder="1234" required />
-                        <input name="requestId" type="hidden" value="<%= requestId %>" required>
-                        <input name="username" type="hidden" value="<%= username %>" required>
-                        <input name="password" type="hidden" value="<%= password %>" required>
+                        <input name="requestId" type="hidden" value="<%= requestId %>" >
+                        <input name="username" type="hidden" value="<%= username %>" >
+                        <input name="password" type="hidden" value="<%= password %>" >
                         <button class="button is-primary">Verify PIN</button>
                     </div>
                 </form>
