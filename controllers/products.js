@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport({
         user: EMAIL_USER,
         pass: EMAIL_API_KEY,
     },
-    });
+});
 
 module.exports = {
     async getProduct(req, res) {
@@ -53,6 +53,20 @@ module.exports = {
         });
         reviews.page = Number(reviews.page);
         const floorRating = product.calculateAvgRating();
+        elasticClient.update({
+            index: 'products',
+            type: 'products',
+            id: `${product._id}`,
+            body: {
+                doc: {
+                    avgRating: floorRating
+                }
+            }
+        }, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
         let dealExists = false;
         if (req.user) {
             let reviewed = false;

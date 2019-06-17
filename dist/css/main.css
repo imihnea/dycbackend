@@ -449,6 +449,39 @@ div.content{
     right: 3%;
 }
 
+.updMsg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+}
+
+.chatBtn{
+    width: 100%;
+    height: 100%;
+    border-color: transparent;
+    background-color: transparent;
+    cursor: pointer;
+    outline-color: transparent;
+}
+
+.chatSpan{
+    position: absolute; 
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.hitFrame:hover{
+    transform: scale(1.1);
+}
+
+.hitFrame{
+    transition: all .2s ease-in-out;
+}
+
 @media only screen and (max-width: 768px) {
     .similarProducts{
         margin: auto !important;

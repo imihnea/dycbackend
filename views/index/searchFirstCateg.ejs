@@ -151,7 +151,12 @@
                 <main id="hits">
                     <%  if (products.length > 0) {
                             products.forEach((product) => { %>
-                                <article class="hit columns frame">
+                                <article class="hit hitFrame columns frame">
+                                    <form action="/products/<%= product._source.id %>/view" method="GET" class="updMsg">
+                                        <button class="chatBtn">
+                                            <span class="chatSpan"></span>
+                                        </button>
+                                    </form>
                                     <div class="product-picture-wrapper">
                                         <% if (product._source.feat_1.status === true) { %><span class="featured"></span><% } %>
                                         <figure class="image is-128x128" style="margin:auto;">
@@ -176,7 +181,6 @@
                                                     <% } %>
                                                 <% } %>
                                             </p>
-                                            <a href="/products/<%= product._source.id %>/view" class="button is-primary">View Details</a>
                                         </div>
                                     </div>
                                     <div class="column prod_info productPrice">
