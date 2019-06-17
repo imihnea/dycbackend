@@ -1,14 +1,14 @@
 const Product = require('../models/product');
 const elasticsearch = require('elasticsearch');
-if (process.env.HEROKU == true) {
-    client = new elasticsearch.Client({
-        host: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
-    });
-} else {
-    client = new elasticsearch.Client({
-        host: 'localhost:9200',
-    });
-}
+client = new elasticsearch.Client({
+    host: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
+});
+// if (process.env.HEROKU == true) {
+// } else {
+//     client = new elasticsearch.Client({
+//         host: 'localhost:9200',
+//     });
+// }
 
 client.ping({
   requestTimeout: 3000
