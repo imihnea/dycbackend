@@ -194,10 +194,10 @@
                 <div class="frame smallerCenter">
                     <h2 class="subtitle">Credentials</h2>
                     <form action="/forgot" method="POST" id="changePassword">
-                        <input class="input" name="email" value="<%= user.email %>" type="hidden" required />
+                        <input class="input" name="email" value="<%= user.email %>" type="hidden" />
                     </form>
                     <form action="/forgotemail" method="POST" id="changeEmail">
-                        <input class="input" name="email" value="<%= user.email %>" type="hidden" required />
+                        <input class="input" name="email" value="<%= user.email %>" type="hidden" />
                     </form>
                     <div class="buttons has-addons is-centered">
                         <button class="button is-primary is-rounded" form="changePassword">Change your Password</button>
@@ -250,7 +250,9 @@
                                 </div>
                             </div>
                         <% } else { %>
-                            <button class="button is-primary is-rounded" form="activate2Factor">Activate Two-Factor Authentication</button>
+                            <form id="activate2Factor" action="/2factor" method="GET">
+                                <button class="button is-primary is-rounded" form="activate2Factor">Activate Two-Factor Authentication</button>
+                            </form>
                         <% } %>
                     </div>
                     <form action="/dashboard/disable-account" method="POST">
@@ -263,12 +265,10 @@
     </div>
 </div>
 
-<div style="display: none;" id="userid"><%= user._id %></div>
-
-<% include ../partials/footer %>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
 <!-- <script src="//geodata.solutions/includes/countrystatecity.js"></script> -->
 <script src="/dist/js/dashboard.js"></script>
 <!-- <script src="/dist/js/jquery-3.4.1.slim.min.js"></script> -->
 <script src="/dist/js/getScript.js"></script>
 <script src="/dist/js/parsley.min.js"></script>
+<% include ../partials/footer %>

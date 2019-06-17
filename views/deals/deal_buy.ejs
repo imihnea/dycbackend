@@ -13,7 +13,7 @@
     <br>
     <div class="column is-two-fifths frame smallerCenter">
         <div class="column">
-                <h1 class="title">Transaction Details</h2>
+                <h1 class="title">Transaction Details</h1>
         </div>
         <br>
         <div class="field" style="padding: 20px;">
@@ -397,7 +397,7 @@
                     <span class="icon is-small is-left">
                         <i class="fas fa-globe-americas"></i>
                     </span>
-                    <p class="help">State is mandatory for US and CA only. Please use two character abbreviation.</p>
+                    <div class="help">State is mandatory for US and CA only. Please use two character abbreviation.</div>
                 </p>
             </div>
             <div class="field">
@@ -509,10 +509,10 @@
 </div>
 </div>
 
-<% include ../partials/footer %>
 <script src="/dist/js/deal_buy.js"></script>
 <script> 
     if (!document.getElementById('shipLabel')){
         document.getElementById('f2fRadio').checked = true;
     }
 </script>
+<% include ../partials/footer %>

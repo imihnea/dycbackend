@@ -35,7 +35,7 @@
                         <div class="analytics">
                             <p class="title is-5">Category popularity is determined by the number of searches where the user selected to look into that category</p>
                             <div class="select cont-select catSelectLeft premiumSelect">
-                                <select type="text" name="firstCategory" id="firstCategory" style="width: 100%;" required>
+                                <select name="firstCategory" id="firstCategory" style="width: 100%;" required>
                                     <option disabled selected>Main Category</option>
                                     <option value="all">All Categories</option>
                                     <option value="Collectibles & Art">Collectibles & Art</option>
@@ -51,7 +51,7 @@
                                 </select>
                             </div>
                             <div class="select cont-select catSelectLeft premiumSelect">
-                                <select type="text" name="timeFrame" id="timeframe" style="width: 100%;" required>
+                                <select name="timeFrame" id="timeframe" style="width: 100%;" required>
                                     <option disabled selected>Time Frame</option>
                                     <option value="7">7 days</option>
                                     <option value="14">14 days</option>
@@ -71,7 +71,7 @@
                         <div class="analytics hide">
                             <p class="title is-5 smallerCenter">Look for the times your products were viewed and how many you've sold so far</p>
                             <div class="select cont-select catSelectLeft premiumSelect">
-                                <select type="text" name="firstCategory" id="firstCategoryProd" style="width: 100%;" required>
+                                <select name="firstCategory" id="firstCategoryProd" style="width: 100%;" required>
                                     <option disabled selected>Main Category</option>
                                     <option value="all">All Categories</option>
                                     <option value="Collectibles & Art">Collectibles & Art</option>
@@ -87,7 +87,7 @@
                                 </select>
                             </div>
                             <div class="select cont-select catSelectLeft premiumSelect">
-                                <select type="text" name="timeFrame" id="timeframeProd" style="width: 100%;" required>
+                                <select name="timeFrame" id="timeframeProd" style="width: 100%;" required>
                                     <option disabled selected>Time Frame</option>
                                     <option value="7">7 days</option>
                                     <option value="14">14 days</option>
@@ -98,20 +98,20 @@
                             </div>
                             <br>
                             <button class="button is-primary" id="searchProd" style="margin: auto;">Search</button>
-                            <p class="title is-5 hide" id="prodText" style="margin-top: 2vh;">Product views</p>
+                            <p class="title is-5 hide" style="margin-top: 2vh;">Product views</p>
                             <div id="prodCanvasContainer">
-                                <canvas id="prodChart" class="hide" width="400" height="200" class="charts"></canvas>
+                                <canvas id="prodChart" class="hide charts" width="400" height="200"></canvas>
                             </div>
                             <p class="title is-5 hide" id="prodSoldText" style="margin-top: 2vh;">Products sold</p>
                             <div id="prodSoldCanvasContainer">
-                                <canvas id="prodSoldChart" class="hide" width="400" height="200" class="charts"></canvas>
+                                <canvas id="prodSoldChart" class="hide charts" width="400" height="200"></canvas>
                             </div>
                         </div>
                         <div class="analytics hide">
                             <p class="title is-5 smallerCenter">See how your product's view count evolves</p>
                             <p class="title is-5 smallerCenter">Choose a product and click search</p>
                             <div class="select cont-select catSelectLeft premiumSelect">
-                                <select type="text" name="product" id="product" style="width: 100%;" required>
+                                <select name="product" id="product" style="width: 100%;" required>
                                     <option disabled selected>Products</option>
                                     <% products.forEach(product => { %>
                                         <option value="<%= product._id %>"><%= product.name %></option>
@@ -120,7 +120,7 @@
                             </div>
                             <br>
                             <button class="button is-primary" id="searchProdViews" style="margin: auto;">Search</button>
-                            <p class="title is-5 hide" id="prodText" style="margin-top: 2vh;">Product views (per week)</p>
+                            <p class="title is-5 hide" style="margin-top: 2vh;">Product views (per week)</p>
                             <div id="prodViewsCanvasContainer">
                                 <canvas id="prodViewsChart" class="hide" width="400" height="200" class="charts"></canvas>
                             </div>
@@ -139,6 +139,6 @@
     </div>
 </div>
 
-<% include ../partials/footer %>
 <script src="/dist/js/dashboard_premium.js"></script>
 <script src="/dist/js/Chart.min.js"></script>
+<% include ../partials/footer %>

@@ -141,7 +141,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-4by3" style="width: auto;">
-                                                <img src="" data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
+                                                <img data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -173,5 +173,5 @@
 
 </div>
 
-<% include partials/footer %>
 <script src="/dist/js/index.js"></script>
+<% include partials/footer %>
