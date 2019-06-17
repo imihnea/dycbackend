@@ -45,9 +45,9 @@
                 </span>
             </p>
         </div>
-        <% let x = 1; 
+        <% let x = 0; 
             if (product.delivery.shipping === false) { %>
-                x = 0;
+                <% x = 1; %>
             <% } %>
         <div class="frame" style="display: flex; justify-content: space-around;">
             <label for="f2fRadio">

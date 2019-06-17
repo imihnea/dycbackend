@@ -157,8 +157,6 @@ module.exports = {
 				await review.remove();		
 				await Product.findByIdAndUpdate(req.params.id, {
 					$pull: { reviews: req.params.review_id }
-				}, (res) => {
-					updateRating(res);
 				});
 				await User.findByIdAndUpdate(review.user, {
 					$pull: { reviews: req.params.review_id }

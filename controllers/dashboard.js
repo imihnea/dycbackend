@@ -1723,11 +1723,9 @@ module.exports = {
                     searchableTags: product.searchableTags
                   }
                 }
-              }, (err, res) => {
+              }, (err) => {
                 if (err) {
                   console.log(err);
-                } else {
-                  console.log(res);
                 }
               });
               // redirect to show page
