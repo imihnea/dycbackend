@@ -21,6 +21,10 @@ const ReviewSchema = new Schema({
   name: String,
   avatarUrl: String,
   createdAt: { type: Date, default: Date.now },
+  reports: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+  }]
 });
 
 ReviewSchema.plugin(mongoosePaginate);

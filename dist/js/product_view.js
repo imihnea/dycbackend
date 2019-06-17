@@ -23,6 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  if (document.querySelector('.reportBtn')) {
+    const reportOpenButton = document.querySelector('.reportBtn');
+    const reportCloseButton = document.querySelector('.deleteReport');
+    const reportModal = document.querySelector('.modalReport');
+    reportOpenButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      reportModal.classList.toggle('is-active');
+    });
+    reportCloseButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      reportModal.classList.toggle('is-active');
+    });
+  }
+
   const editOpenButtons = document.querySelectorAll('.edit');
   const editCloseButtons = document.querySelectorAll('.deleteEdit');
   const editModals = document.querySelectorAll('.modalEdit');

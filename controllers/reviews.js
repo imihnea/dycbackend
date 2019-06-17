@@ -173,4 +173,11 @@ module.exports = {
 			return res.redirect('back');
 		}
 	},
+	async reviewReport(req, res) {
+		await Review.findByIdAndUpdate(req.params.review_id, {
+			$push: { reports: req.user._id }
+		});
+		req.flash('success', 'Review reported successfully!');
+		return res.redirect(`back`);
+	}
 }

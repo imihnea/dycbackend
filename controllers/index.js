@@ -470,6 +470,7 @@ module.exports = {
             pageKeywords: 'Keywords'
           });
         } else {
+          // verif password
           if (user.twofactor === true) {
             nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
               if(err) {
