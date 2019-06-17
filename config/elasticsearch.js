@@ -1,11 +1,7 @@
 const elasticsearch = require('elasticsearch');
 let client;
 client = new elasticsearch.Client({
-    cloud: {
-        id: 'Dyc-test:ZXUtY2VudHJhbC0xLmF3cy5jbG91ZC5lcy5pbyQ5OTQxMjVkNGRhZjA0ZDRlOTk5ZmMyYzNjY2RiNWExMyQ1NDk1MzEwMjc5ZTU0NmMwODViY2YzNjQ0ZjY2YmY3NQ==',
-        username: 'elastic',
-        password: 'E37nCmTkobiqfwIAHeGOfrsz'
-    }
+    node: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
 });
 // if (process.env.HEROKU == true) {
 // } else {
