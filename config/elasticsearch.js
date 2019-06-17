@@ -1,18 +1,18 @@
 const elasticsearch = require('elasticsearch');
 let client;
-if (process.env.HEROKU == true) {
-    client = new elasticsearch.Client({
-        cloud: {
-            id: 'Dyc-test:ZXUtY2VudHJhbC0xLmF3cy5jbG91ZC5lcy5pbyQ5OTQxMjVkNGRhZjA0ZDRlOTk5ZmMyYzNjY2RiNWExMyQ1NDk1MzEwMjc5ZTU0NmMwODViY2YzNjQ0ZjY2YmY3NQ==',
-            username: 'elastic',
-            password: 'E37nCmTkobiqfwIAHeGOfrsz'
-        }
-    });
-} else {
-    client = new elasticsearch.Client({
-      host: 'localhost:9200',
-    });
-}
+client = new elasticsearch.Client({
+    cloud: {
+        id: 'Dyc-test:ZXUtY2VudHJhbC0xLmF3cy5jbG91ZC5lcy5pbyQ5OTQxMjVkNGRhZjA0ZDRlOTk5ZmMyYzNjY2RiNWExMyQ1NDk1MzEwMjc5ZTU0NmMwODViY2YzNjQ0ZjY2YmY3NQ==',
+        username: 'elastic',
+        password: 'E37nCmTkobiqfwIAHeGOfrsz'
+    }
+});
+// if (process.env.HEROKU == true) {
+// } else {
+//     client = new elasticsearch.Client({
+//       host: 'localhost:9200',
+//     });
+// }
 const Product = require('../models/product');
 
 client.ping({
