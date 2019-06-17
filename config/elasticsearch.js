@@ -1,7 +1,11 @@
 const elasticsearch = require('elasticsearch');
 let client;
+const { URL } = require('url')
 client = new elasticsearch.Client({
-    node: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
+    node: {
+        url: new URL('https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243'),
+        id: 'node-1'
+    }
 });
 // client = new elasticsearch.Client({
 //     host: '994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
