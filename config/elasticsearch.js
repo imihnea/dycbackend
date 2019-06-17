@@ -3,6 +3,11 @@ let client;
 client = new elasticsearch.Client({
     node: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
 });
+// client = new elasticsearch.Client({
+//     host: '994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
+//     protocol: "https",
+//     auth: "elastic:E37nCmTkobiqfwIAHeGOfrsz"
+// });
 // if (process.env.HEROKU == true) {
 // } else {
 //     client = new elasticsearch.Client({
