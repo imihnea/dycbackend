@@ -1,40 +1,14 @@
-// const elasticsearch = require('elasticsearch');
-// let client;
-// const { URL } = require('url')
-// client = new elasticsearch.Client({
-//     node: {
-//         url: new URL('https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243'),
-//         id: 'node-1'
-//     }
-// });
-// client = new elasticsearch.Client({
-//     host: '994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
-//     protocol: "https",
-//     auth: "elastic:E37nCmTkobiqfwIAHeGOfrsz"
-// });
-const elasticsearch = require('elasticsearch');
-// const client = new elasticsearch.Client({
-//   cloud: {
-//     id: 'Dyc-test:ZXUtY2VudHJhbC0xLmF3cy5jbG91ZC5lcy5pbyQ5OTQxMjVkNGRhZjA0ZDRlOTk5ZmMyYzNjY2RiNWExMyQ1NDk1MzEwMjc5ZTU0NmMwODViY2YzNjQ0ZjY2YmY3NQ==',
-//     username: 'elastic',
-//     password: 'E37nCmTkobiqfwIAHeGOfrsz'
-//   }
-// });
-
-// if (process.env.HEROKU == true) {
-// } else {
-    client = new elasticsearch.Client({
-      host: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
-    });
-// }
-
-// if (process.env.HEROKU == true) {
-// } else {
-//     client = new elasticsearch.Client({
-//       host: 'localhost:9200',
-//     });
-// }
 const Product = require('../models/product');
+const elasticsearch = require('elasticsearch');
+if (process.env.HEROKU == true) {
+    client = new elasticsearch.Client({
+        host: 'https://elastic:E37nCmTkobiqfwIAHeGOfrsz@994125d4daf04d4e999fc2c3ccdb5a13.eu-central-1.aws.cloud.es.io:9243',
+    });
+} else {
+    client = new elasticsearch.Client({
+        host: 'localhost:9200',
+    });
+}
 
 client.ping({
   requestTimeout: 3000
