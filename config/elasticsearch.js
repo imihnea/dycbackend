@@ -1,6 +1,6 @@
 const elasticsearch = require('elasticsearch');
 let client;
-if (process.env.HEROKU === true) {
+if (process.env.HEROKU == true) {
     client = new elasticsearch.Client({
         cloud: {
             id: 'Dyc-test:ZXUtY2VudHJhbC0xLmF3cy5jbG91ZC5lcy5pbyQ5OTQxMjVkNGRhZjA0ZDRlOTk5ZmMyYzNjY2RiNWExMyQ1NDk1MzEwMjc5ZTU0NmMwODViY2YzNjQ0ZjY2YmY3NQ==',
