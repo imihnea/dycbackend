@@ -87,7 +87,15 @@ const ProductSchema = new Schema({
     deleteDate: Date,
     es_indexed: false
   },
-  lastBought: { type: Date, default: Date.now }
+  lastBought: { type: Date, default: Date.now },
+  reports: [{
+    from: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    message: String,
+    reason: String
+  }],
 });
 
 ProductSchema.pre('remove', async () => {

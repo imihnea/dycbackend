@@ -7,6 +7,7 @@ Frontend:
     High Priority:
 
          Edge & Safari CSS       - Requires testing
+         Admin page => Show reported products/reviews => Show reports on products
 
     Low Priority:
 
@@ -18,9 +19,13 @@ Backend:
 
    High Priority:
 
-      Security => Validate and sanitize every user input
+      Admin page => Show reports
+                 => Delete products/reviews
+      Security => Remove password from verifLogin, verify the password before 2factor 
+               => Validate and sanitize every user input
                => Anti DDOS
-      Reporting on reviews and products
+      Reporting => Middleware to check if the user already reported the product
+                => CSRF
       Elasticsearch => Boost name match
                     => Test more in depth
    Low Priority:

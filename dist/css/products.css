@@ -88,18 +88,6 @@ input[type=checkbox].curr_checkbox{
     position: relative;
 }
 
-.modal-card-body{
-    border-left: 1px solid orange;
-    border-right: 1px solid orange;
-    border-bottom: 1px solid orange;
-    background-color: black !important;
-}
-
-.modal-section-title{
-    text-align: left; 
-    border-bottom: 1px solid orange;
-}
-
 .modal-form{
     display: flex; 
     justify-content: space-evenly;

@@ -212,7 +212,36 @@
                         </a>
                         
                     </div>
-            </div>                
+                    <br>
+                    <% if (user) { %>
+                        <button class="button is-danger reportBtn">Report</button>
+                        <div class="modal modalReport">
+                            <div class="modal-background"></div>
+                            <div class="modal-card">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">Are you sure?</p>
+                                <button class="delete deleteReport" aria-label="close"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <form class="deleteForm" action="/products/<%= product._id %>/report?_method=PUT" method="POST">
+                                    <textarea class="textarea" name="message" cols="30" rows="5" placeholder="Please tell us more about why this product should be removed"></textarea>
+                                    <br>
+                                    <div class="field select cont-select">
+                                        <select name="reason" style="width: 100vw;">
+                                            <option disabled selected>Reason</option>
+                                            <option value="Scam">Scam attempt</option>
+                                            <option value="No Product">The product doesn't exist</option>
+                                            <option value="Illegal">Illegal product</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <button class="button is-danger">Delete</button>
+                                </form>
+                            </section>
+                            </div>
+                        </div>
+                    <% } %>
+            </div>     
         </div>  
         <hr  class="smallerCenter">
         <div class="column detailsContainer">
@@ -311,8 +340,8 @@
                             <p class="productDescriptionText"><%= review.body %></p>
                         </div>
                         <% if(user){ %>
-                            <% if(review.author.equals(user._id)) { %>
                             <div class="column is-one-fifth reviewAuthorButtons">
+                            <% if(review.author.equals(user._id)) { %>
                                 <button class="button is-primary edit">Edit</button>
                                 <div class="modal modalEdit">
                                     <div class="modal-background"></div>
@@ -361,8 +390,12 @@
                                     </div>
                                 </div>
 
+                                <% } else { %>
+                                    <form action="/products/<%= product._id %>/reviews/<%= review._id %>/report?_method=PUT" method="POST">
+                                        <button class="button is-danger">Report</button>
+                                    </form>
+                                <% } %>
                             </div>
-                            <% } %>
                         <% } %>
                     </div>
                     <% if (index < reviews.total - 1) { %><hr  class="smallerCenter"><% } %>

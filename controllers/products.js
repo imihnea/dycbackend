@@ -34,6 +34,36 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const escapeHTML = (unsafe) => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/@/g, "&commat;")
+        .replace(/\^/g, "&Hat;")
+        .replace(/:/g, "&colon;")
+        .replace(/;/g, "&semi;")
+        .replace(/#/g, "&num;")
+        .replace(/\$/g, "&dollar;")
+        .replace(/%/g, "&percent;")
+        .replace(/\*/g, "&ast;")
+        .replace(/\(/g, "&lpar;")
+        .replace(/\)/g, "&rpar;")
+        .replace(/_/g, "&UnderBar;")
+        .replace(/=/g, "&equals;")
+        .replace(/\+/g, "&plus;")
+        .replace(/`/g, "&grave;")
+        .replace(/\//g, "&sol;")
+        .replace(/\\/g, "&bsol;")
+        .replace(/\|/g, "&vert;")
+        .replace(/\[/g, "&lsqb;")
+        .replace(/\]/g, "&rsqb;")
+        .replace(/\{/g, "&lcub;")
+        .replace(/\}/g, "&rcub;")
+        .replace(/'/g, "&#039;");
+};
+
 module.exports = {
     async getProduct(req, res) {
         var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -631,5 +661,25 @@ module.exports = {
                 }
             }
         }
+    },
+    async reportProduct(req, res) {
+        req.check('message', 'The message must be between 3 and 250 characters long').notEmpty().isLength({min: 3, max: 250});
+        req.check('reason', 'The reason does not match').matches(/^(Scam|No Product|Illegal|Other)$/);
+        const errors = req.validationErrors();
+        if (errors) {
+            req.flash('error', 'The message must be between 3 and 250 characters long');
+            return res.redirect('back');
+        }
+        await Product.findByIdAndUpdate(req.params.id, {
+            $push: {
+                reports: {
+                    from: req.user._id,
+                    message: escapeHTML(req.body.message),
+                    reason: req.body.reason
+                }
+            }
+        });
+        req.flash('success', 'Product reported successfully');
+        return res.redirect('back');
     }
 };
