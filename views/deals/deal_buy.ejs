@@ -74,6 +74,7 @@
             <h2 class="subtitle">Your Details</h2>
             <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
                 <div class="field">
+                    <label class="label" for="deliveryPhone" style="text-align: left !important;">Phone Number</label>
                     <p class="control has-icons-left">
                         <% if(user.number) { %>
                             <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
@@ -86,6 +87,7 @@
                     </p>
                 </div>
                 <div class="field">
+                    <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                     <p class="control has-icons-left">
                         <% if(user.full_name) { %>
                             <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
@@ -98,6 +100,7 @@
                     </p>
                 </div>
                 <div class="field">
+                    <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
                     <p class="control has-icons-left">
                         <% if(user.email) { %>
                             <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
@@ -129,9 +132,10 @@
         </div>
         <div id="shipping" class="field" style="display: none;">
             <br>
-            <h2 class="subtitle">Delivery Details</h2>
+            <h2 class="subtitle">Your Delivery Details</h2>
             <form action="/products/<%= product.id %>/buy?_method=PUT" name="shippingForm" id="shippingForm" method="POST" class="dealBuyRequest">
                 <div class="field">
+                    <label class="label" for="deliveryCountry" style="text-align: left !important;">Country</label>
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">
                                 <select name="deliveryCountry" id="deliveryCountry">
@@ -392,6 +396,7 @@
                         </div>
                     </div>
             <div class="field">
+                <label class="label" for="deliveryState" style="text-align: left !important;">State</label>
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryState" id="deliveryState" type="text" placeholder="State or County"/>
                     <span class="icon is-small is-left">
@@ -401,6 +406,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryCity" style="text-align: left !important;">City</label>
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryCity" id="deliveryCity" type="text" placeholder="City" required/>
                     <span class="icon is-small is-left">
@@ -409,6 +415,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryStreet1" style="text-align: left !important;">Street</label>
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryStreet1" id="deliveryStreet1" type="text" placeholder="Street" required/>
                     <span class="icon is-small is-left">
@@ -417,6 +424,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryZip" style="text-align: left !important;">Zip Code</label>
                 <p class="control has-icons-left">
                     <input class="input" name="deliveryZip" id="deliveryZip" type="text" placeholder="Zip Code" required/>
                     <span class="icon is-small is-left">
@@ -425,6 +433,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryPhone" style="text-align: left !important;">Phone Number</label>
                 <p class="control has-icons-left">
                     <% if(user.number) { %>
                         <input class="input" name="deliveryPhone" id="deliveryPhone" type="tel" value="<%= user.number %>" required/>
@@ -437,6 +446,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                 <p class="control has-icons-left">
                     <% if(user.full_name) { %>
                         <input class="input" name="deliveryName" id="deliveryName" type="tel" value="<%= user.full_name %>" required/>
@@ -449,6 +459,7 @@
                 </p>
             </div>
             <div class="field">
+                <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
                 <p class="control has-icons-left">
                     <% if(user.email) { %>
                         <input class="input" name="deliveryEmail" id="deliveryEmail" type="tel" value="<%= user.email %>" required/>
