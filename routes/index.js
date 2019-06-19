@@ -38,6 +38,9 @@ const {
   postDisable2Factor,
   postVerifyLogin,
   getCategories,
+  postFirstCategSearch,
+  postSecondCategSearch,
+  postThirdCategSearch,
   firstCategSearch,
   secondCategSearch,
   thirdCategSearch,
@@ -139,11 +142,17 @@ router.get('/categories', getCategories);
 
 // POST Search
 
-router.post('/firstCategSearch', asyncErrorHandler(firstCategSearch));
+router.get('/firstCategSearch', asyncErrorHandler(firstCategSearch));
 
-router.post('/secondCategSearch', asyncErrorHandler(secondCategSearch));
+router.get('/secondCategSearch', asyncErrorHandler(secondCategSearch));
 
-router.post('/thirdCategSearch', asyncErrorHandler(thirdCategSearch));
+router.get('/thirdCategSearch', asyncErrorHandler(thirdCategSearch));
+
+router.post('/firstCategSearch', postFirstCategSearch);
+
+router.post('/secondCategSearch', postSecondCategSearch);
+
+router.post('/thirdCategSearch', postThirdCategSearch);
 
 // GET Logout route
 router.get('/logout', getLogout);

@@ -523,10 +523,10 @@
                     </div>
                 </div>
                 <div class="navbar-item navbar-center input-group">
-                    <form action="/firstCategSearch" method="POST" class="flexWide">
-                        <input type="text" class="input searchbarInput" name="searchName" placeholder="Search">
+                    <form action="/firstCategSearch" method="GET" class="flexWide">
+                        <input type="text" id="searchName" class="input searchbarInput" name="searchName" placeholder="Search">
                         <div class="select categorySelect" style="border-radius: 0px;">
-                            <select name="category" class="searchCategory">
+                            <select name="category" id="category" class="searchCategory">
                                 <option value="all" selected>All categories</option>
                                 <option value="Collectibles and Art">Collectibles and Art</option>
                                 <option value="Electronics">Electronics</option>

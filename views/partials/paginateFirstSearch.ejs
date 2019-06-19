@@ -1,10 +1,11 @@
 <div style="margin-left: 1vw; display: flex;">
     <% if (from - 10 >= 0) { %>
-        <form action="/firstCategSearch" method="POST">
+        <form action="/firstCategSearch" method="GET">
             <input type="number" name="from" value="<%= Number(from) - 10 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="category" value="<%= searchCateg %>" hidden >
             <input type="text" name="continent" value="<%= continent %>" hidden>
+            <input type="text" name="condition" value="<%= condition %>" hidden>
             <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
             <input type="text" name="currency" value="<%= currency %>" hidden>
             <button class="button page">Prev</button>
@@ -24,11 +25,12 @@
             page2 = currentPage - 1;
         } %>
 
-        <form action="/firstCategSearch" method="POST">
+        <form action="/firstCategSearch" method="GET">
             <input type="number" name="from" value="0" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="category" value="<%= searchCateg %>" hidden >
             <input type="text" name="continent" value="<%= continent %>" hidden>
+            <input type="text" name="condition" value="<%= condition %>" hidden>
             <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
             <input type="text" name="currency" value="<%= currency %>" hidden>
             <button class="button page paginationBtn <% if (currentPage == 1) { %>active<% } %>">1</button>
@@ -42,31 +44,34 @@
             case 1:
                 break;
             case 2: %>
-                <form action="/firstCategSearch" method="POST">
+                <form action="/firstCategSearch" method="GET">
                     <input type="number" name="from" value="10" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="category" value="<%= searchCateg %>" hidden >
                     <input type="text" name="continent" value="<%= continent %>" hidden>
+                    <input type="text" name="condition" value="<%= condition %>" hidden>
                     <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                     <input type="text" name="currency" value="<%= currency %>" hidden>
                     <button class="button paginationBtn page">2</button>
                 </form> 
                 <% break;
             case 3: %>
-                <form action="/firstCategSearch" method="POST">
+                <form action="/firstCategSearch" method="GET">
                     <input type="number" name="from" value="20" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="category" value="<%= searchCateg %>" hidden >
                     <input type="text" name="continent" value="<%= continent %>" hidden>
+                    <input type="text" name="condition" value="<%= condition %>" hidden>
                     <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                     <input type="text" name="currency" value="<%= currency %>" hidden>
                     <button class="button paginationBtn page">2</button>
                 </form> 
-                <form action="/firstCategSearch" method="POST">
+                <form action="/firstCategSearch" method="GET">
                     <input type="number" name="from" value="30" hidden>
                     <input type="text" name="searchName" value="<%= searchName %>" hidden>
                     <input type="text" name="category" value="<%= searchCateg %>" hidden >
                     <input type="text" name="continent" value="<%= continent %>" hidden>
+                    <input type="text" name="condition" value="<%= condition %>" hidden>
                     <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                     <input type="text" name="currency" value="<%= currency %>" hidden>
                     <button class="button paginationBtn page">3</button>
@@ -77,11 +82,12 @@
                     <p class="subtitle dots">...</p>
                 <% }
                 for (let i = currentPage - 3; i < currentPage; i += 1) { %>
-                    <form action="/firstCategSearch" method="POST">
+                    <form action="/firstCategSearch" method="GET">
                         <input type="number" name="from" value="<%= i*10 - 10 %>" hidden>
                         <input type="text" name="searchName" value="<%= searchName %>" hidden>
                         <input type="text" name="category" value="<%= searchCateg %>" hidden >
                         <input type="text" name="continent" value="<%= continent %>" hidden>
+                        <input type="text" name="condition" value="<%= condition %>" hidden>
                         <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                         <input type="text" name="currency" value="<%= currency %>" hidden>
                         <button class="button paginationBtn page"><%= i %></button>
@@ -106,11 +112,12 @@
     <% } 
     
         while ((page + 1 < totalPages) && (nr < 3)) { %>
-            <form action="/firstCategSearch" method="POST">
+            <form action="/firstCategSearch" method="GET">
                 <input type="number" name="from" value="<%= copyFrom %>" hidden>
                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
                 <input type="text" name="category" value="<%= searchCateg %>" hidden>
                 <input type="text" name="continent" value="<%= continent %>" hidden>
+                <input type="text" name="condition" value="<%= condition %>" hidden>
                 <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                 <input type="text" name="currency" value="<%= currency %>" hidden>
                 <button class="button paginationBtn page"><%= page + 1 %></button>
@@ -125,22 +132,24 @@
         <% }
     %>
     <% if (total > 10) { %>
-        <form action="/firstCategSearch" method="POST">
+        <form action="/firstCategSearch" method="GET">
             <input type="number" name="from" value="<%= totalPages * 10 - 10 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="category" value="<%= searchCateg %>" hidden >
             <input type="text" name="continent" value="<%= continent %>" hidden>
+            <input type="text" name="condition" value="<%= condition %>" hidden>
             <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
             <input type="text" name="currency" value="<%= currency %>" hidden>
             <button class="button paginationBtn page <% if (currentPage == totalPages) { %>active<% } %> "><%= totalPages %></button>
         </form> 
     <% } %>
     <% if (currentPage < totalPages) { %>
-        <form action="/firstCategSearch" method="POST">
+        <form action="/firstCategSearch" method="GET">
             <input type="number" name="from" value="<%= Number(from) + 10 %>" hidden>
             <input type="text" name="searchName" value="<%= searchName %>" hidden>
             <input type="text" name="category" value="<%= searchCateg %>" hidden >
             <input type="text" name="continent" value="<%= continent %>" hidden>
+            <input type="text" name="condition" value="<%= condition %>" hidden>
             <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
             <input type="text" name="currency" value="<%= currency %>" hidden>
             <button class="button paginationBtn page">Next</button>
