@@ -92,7 +92,6 @@ function sendConfirmationEmail(req, userid, useremail) {
     subject: 'Confirm Your Email - Deal Your Crypto',
   }, function (err, data) {
     if (err) {
-        console.log(err);
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     } else {
     const mailOptions = {
@@ -103,7 +102,6 @@ function sendConfirmationEmail(req, userid, useremail) {
     };
     transporter.sendMail(mailOptions, (error) => {
         if (error) {
-          console.log(error);
           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${useremail}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
@@ -210,7 +208,6 @@ module.exports = {
         const user = jwt.decode(req.params.token);
         uuser = await User.findByIdAndUpdate(user.user, { confirmed: true }, async (err) => {
           if (err) {
-            console.log(err);
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           } else {
             req.flash('success', 'You have successfully confirmed your email. You can now log in!');
@@ -322,7 +319,6 @@ module.exports = {
     }, function (err, data) {
       if (err) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        console.log(err);
       } else {
         const mailOptions = {
             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
@@ -332,7 +328,6 @@ module.exports = {
         };
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
-              console.log(error);
               errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
         });
@@ -1166,7 +1161,6 @@ module.exports = {
     if (req.user) {
       let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
         if(err) {
-          console.log('Failed to retrieve subscription.');
           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
@@ -1245,7 +1239,6 @@ module.exports = {
         }, function (err, data) {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            console.log(err);
           } else {
           const mailOptions = {
             from: `${req.body.name} <${req.body.email}>`, // sender address
@@ -1308,7 +1301,6 @@ module.exports = {
       if (validationErrors) {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
           if(err) {
-            console.log('Failed to retrieve subscription.');
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           }
         });
@@ -1324,7 +1316,6 @@ module.exports = {
       } else {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
           if(err) {
-            console.log('Failed to retrieve subscription.');
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           }
         });
@@ -1338,7 +1329,6 @@ module.exports = {
           }, function (err, data) {
             if (err) {
               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              console.log(err);
             } else {
             const mailOptions = {
               from: `${req.body.name} <${req.body.email}>`, // sender address
@@ -1367,7 +1357,6 @@ module.exports = {
           }, function (err, data) {
             if (err) {
               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);              
-              console.log(err);
             } else {
             const mailOptions = {
               from: `${req.body.name} <${req.body.email}>`, // sender address
@@ -1601,7 +1590,7 @@ module.exports = {
       const NewUsername = req.body.username;
       User.findOne({username: NewUsername}, (err, ExistingUser) => {
         if(err) {
-          console.log(err);
+          console.log(err); // Replace with logger
           return res.redirect('back');
         } else {
           if(ExistingUser) {
@@ -1610,7 +1599,7 @@ module.exports = {
           } else {
             User.findByIdAndUpdate({_id: CurrentUser}, {username: NewUsername}, (err) => {
               if(err) {
-                console.log(err)
+                console.log(err) // Replace with logger
                 return res.redirect('back');
               } else {
                 req.flash('success', `Successfully set your username! Welcome ${NewUsername}!`);

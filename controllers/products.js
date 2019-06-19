@@ -94,7 +94,7 @@ module.exports = {
             }
         }, (err) => {
             if (err) {
-                console.log(err);
+                console.log(err); // Replace with logger
             }
         });
         let dealExists = false;
@@ -123,7 +123,6 @@ module.exports = {
                   } else {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
-                  console.log(err);
                   res.render('products/product_view', { 
                     product, 
                     similar: false, 
@@ -372,7 +371,6 @@ module.exports = {
       }, function (err, data) {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            console.log(err);
         } else {
             const mailOptions = {
                 from: `${req.body.name} <${req.body.email}>`, // sender address
@@ -446,19 +444,13 @@ module.exports = {
                     let totalPrice = product.btcPrice;
                     let shippingPrice = 0;
                     let productPrice = product.btcPrice;
-                    console.log(`totalPrice: ${totalPrice}`);
-                    console.log(`productPrice: ${productPrice}`);
-                    console.log(`shippingPrice: ${shippingPrice}`);
                     if ( user.btcbalance >= totalPrice)  {
                         if (req.body.deliveryShipping === 'Shipping') {
                             client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
                                 if (!error) {
                                 let btcrate = data.data.rates.USD;
-                                console.log(`btcrate: ${btcrate}`)
                                 totalPrice += Number(1/btcrate * req.body.shippingRate);
-                                console.log(`totalPrice din req: ${totalPrice}`);
                                 shippingPrice = Number(1/btcrate * req.body.shippingRate);
-                                console.log(`shippingPrice din req: ${shippingPrice}`);
                                 let deal = {
                                     product: {
                                         id: product._id,
@@ -498,7 +490,7 @@ module.exports = {
                                         id: `${product._id}`
                                       }, (err) => {
                                         if (err) {
-                                          console.log(err);
+                                          console.log(err); // Replace with logger
                                         }
                                     });   
                                 }
@@ -528,7 +520,6 @@ module.exports = {
                                         subject: `New buy request - Deal Your Crypto`,
                                     }, function (err, data) {
                                         if (err) {
-                                            console.log(err);
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             const mailOptions = {
@@ -541,7 +532,6 @@ module.exports = {
                                             transporter.sendMail(mailOptions, (error) => {
                                                 if (error) {
                                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    console.log(error);
                                                 }
                                             });
                                         }
@@ -597,7 +587,7 @@ module.exports = {
                                     id: `${product._id}`
                                   }, (err) => {
                                     if (err) {
-                                      console.log(err);
+                                      console.log(err); // Replace with logger
                                     }
                                 });
                             }
@@ -627,7 +617,6 @@ module.exports = {
                                     subject: `New buy request - Deal Your Crypto`,
                                 }, function (err, data) {
                                     if (err) {
-                                        console.log(err);
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                     } else {
                                         const mailOptions = {
@@ -640,7 +629,6 @@ module.exports = {
                                         transporter.sendMail(mailOptions, (error) => {
                                             if (error) {
                                                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                console.log(error);
                                             }
                                         });
                                     }

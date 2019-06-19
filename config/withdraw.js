@@ -24,7 +24,6 @@ function withdraw(req, cost) {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                console.log(sell);
                                 if (process.env.NODE_ENV === 'production') {
                                     logger.info(`Sold ${cost} for ${cost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
@@ -50,7 +49,6 @@ function withdraw(req, cost) {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - account.sell\r\n${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                console.log(sell);
                                 if (process.env.NODE_ENV === 'production') {
                                     logger.info(`Sold ${cost} for ${cost * sellPrice} RON; Paid on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }

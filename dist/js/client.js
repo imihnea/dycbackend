@@ -24,7 +24,6 @@ button.addEventListener('click', function(e) {
   fetch('/dashboard/addresses/altcoins/pair', {method: 'GET'})
   .then(function(response) {
     if(response.ok) {
-      console.log('Click was recorded');
       return response.json();
     }
     throw new Error('Request failed.');
@@ -54,7 +53,6 @@ depositBtn.addEventListener('click', function(e) {
   })
   .then(function(response) {
     if(response.ok) {
-      console.log('Click was recorded');
       return response.json();
     }
     throw new Error('Request failed.');

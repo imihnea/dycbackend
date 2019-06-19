@@ -103,14 +103,11 @@ button.addEventListener('click', function(e) {
     })
   .then(function(response) {
     if(response.ok) {
-      console.log('CREATE ADDRESS');
       return response.json();
     }
     throw new Error('Request failed.');
   })
   .then(function(data) {
-      console.log('CREATED ADDRESS')
-      console.log(data);
       document.getElementById('rateSpinner').style.display = 'none';
       if(data.validation_results) {
         if(data.validation_results.is_valid === false) {
@@ -143,7 +140,6 @@ button.addEventListener('click', function(e) {
               </tr>
               `;
               tbody.insertAdjacentHTML('beforeend', text);
-              console.log(`acesta este nr ${i} de rates`)
           }
           let productPrice = document.getElementById('productPrice').value;
           let btcrate = document.getElementById('btcrate').value;
@@ -152,9 +148,7 @@ button.addEventListener('click', function(e) {
             document.shippingForm.shippingRate[i].addEventListener('change', function() {
               var id = this.getAttribute('id');
               if(this.checked) {
-                console.log(`${id} e checked acum`)
                 document.getElementById('rate').value = data.rates[id].object_id;
-                console.log(data.rates[id].object_id);
                 let btcPrice = Number(productPrice) + Number((this.value*1/btcrate));
                 let usdEquiv = Number(this.value) + Number(productPrice*btcrate);
                 totalPrice.innerHTML = `Total Price: ${btcPrice.toFixed(7)} Bitcoin (${(usdEquiv).toFixed(2)} USD)`;

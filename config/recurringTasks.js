@@ -46,7 +46,6 @@ setInterval( () => {
                     User.findById(item.product.author.id, (err, seller) => {
                         if (err) {
                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(err);
                         } else {
                             // pay user and create profit
                             Subscription.find({userid: seller._id}, (err, res) => {
@@ -106,13 +105,11 @@ setInterval( () => {
     User.find({$or: [{subscription1: true}, {subscription3: true}, {subscription6: true}, {subscription12: true}]}, (err, res) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            console.log(err);
         } else {
             res.forEach((user) => {
                 Subscription.find({userid: user._id}, (err, sub) => {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else if (sub.length == 0) {
                         if (user.subscription1 == true) {
                             subscriptionCost = Number((tokenprice * 19.99).toFixed(5));
@@ -125,7 +122,6 @@ setInterval( () => {
                                 }, err => {
                                         if(err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            console.log(err);
                                         } else {
                                             // Update user's balances
                                             user.btcbalance -= subscriptionCost;
@@ -161,7 +157,6 @@ setInterval( () => {
                                 }, err => {
                                     if(err) {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(err);
                                     } else {
                                         // Update user's balances
                                         user.btcbalance -= subscriptionCost;
@@ -197,7 +192,6 @@ setInterval( () => {
                                 }, err => {
                                     if(err) {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(err);
                                     } else {
                                         // Update user's balances
                                         user.btcbalance -= subscriptionCost;
@@ -233,7 +227,6 @@ setInterval( () => {
                                 }, err => {
                                     if(err) {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        console.log(err);
                                     } else {
                                         // Update user's balances
                                         user.btcbalance -= subscriptionCost;
@@ -268,7 +261,6 @@ setInterval( () => {
     // Delete non-OAuth users who didn't confirm their email
     User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
         if (err) {
-            console.log(err);
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deleting users who didn't confirm their email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
     });
@@ -277,7 +269,6 @@ setInterval( () => {
     // Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
     //     if (err) {
     //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //         console.log(err);
     //     } else {
     //         productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     //         logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -288,7 +279,6 @@ setInterval( () => {
     // Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
     //     if (err) {
     //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_2\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //         console.log(err);
     //     } else {
     //         productLogger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     //         logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -321,7 +311,6 @@ setInterval( () => {
                                     }, function (err, data) {
                                         if (err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            console.log(err);
                                         } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -333,9 +322,7 @@ setInterval( () => {
                                             transporter.sendMail(mailOptions, (error) => {
                                                 if (error) {
                                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    console.log(error);
-                                                } else {
-                                                    console.log('Mail sent');
+                                                    console.log(error); // Replace with logger
                                                 }
                                             });
                                         }
@@ -359,7 +346,6 @@ setInterval( () => {
                                     }, function (err, data) {
                                         if (err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            console.log(err);
                                         } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -372,8 +358,6 @@ setInterval( () => {
                                                 if (error) {
                                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                     console.log(error);
-                                                } else {
-                                                    console.log('Mail sent');
                                                 }
                                             });
                                         }
@@ -391,7 +375,6 @@ setInterval( () => {
     Products.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            console.log(err);
         } else {
             products.forEach(product => {
                 product.images.forEach(image => {
@@ -424,7 +407,6 @@ setInterval( () => {
     Products.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            console.log(err);
         } else {
             products.forEach(product => {
                 product.images.forEach(image => {
@@ -457,7 +439,6 @@ setInterval( () => {
         Notification.find({'createdAt': { $lt: weegAgo }}, (err, notifications) => {
             if (err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                console.log(err);
             } else {
                 notifications.forEach(notification => {
                     notification.remove();
