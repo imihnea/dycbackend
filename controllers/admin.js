@@ -68,7 +68,6 @@ module.exports = {
                         req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                         return res.redirect('back');
                     } else {
-                        console.log(tx);
                         withdraw.status = 'Completed';
                         withdraw.save(err => {
                             if (err) {
@@ -95,7 +94,6 @@ module.exports = {
                                     };
                                     transporter.sendMail(mailOptions, (error) => {
                                         if (error) {
-                                            console.log(error);
                                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                         if (process.env.NODE_ENV === 'production') {
@@ -141,7 +139,6 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         if (process.env.NODE_ENV === 'production') {
@@ -179,7 +176,6 @@ module.exports = {
                             req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                             return res.redirect('back');
                         } else {
-                            console.log(tx);
                             withdraw.status = 'Completed';
                             withdraw.save(err => {
                                 if (err) {
@@ -206,7 +202,6 @@ module.exports = {
                                         };
                                         transporter.sendMail(mailOptions, (error) => {
                                             if (error) {
-                                                console.log(error);
                                                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                             if (process.env.NODE_ENV === 'production') {
@@ -251,7 +246,6 @@ module.exports = {
                         };
                         transporter.sendMail(mailOptions, (error) => {
                             if (error) {
-                                console.log(error);
                                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                             if (process.env.NODE_ENV === 'production') {
@@ -372,7 +366,6 @@ module.exports = {
             }, 
             function (err, data) {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
@@ -383,7 +376,6 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                     });
@@ -428,7 +420,6 @@ module.exports = {
             }, 
             function (err, data) {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
@@ -439,7 +430,6 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                     });
@@ -492,7 +482,6 @@ module.exports = {
             }, 
             function (err, data) {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
@@ -503,7 +492,6 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                     });

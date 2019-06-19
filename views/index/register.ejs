@@ -33,56 +33,34 @@
                     </a>
                 </div>
                 <form action="/register" method="POST" class="logSigForm" data-parsley-validate>
-                    <div class="flexAround">
-                        <div class="field" style="width: 85%;">
-                            <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="Email" autofocus type="email" data-parsley-trigger="change" required />
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-envelope"></i>
-                                </span>
-                            </p>
-                        </div>
-                        <div class="label" >
-                            <span class="registerTooltip" aria-label="We will send you information regarding your deals" tabindex="-1">
-                                <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="flexAround">
-                        <div class="field" style="width: 85%;">
-                            <p class="control has-icons-left">
-                            <input class="input" name="username" placeholder="Username" type="text" data-parsley-type="alphanum" 
-                                data-parsley-minlength="6" data-parsley-maxlength="32" data-parsley-minlength-message="The username is too short. It should have 6 characters or more." data-parsley-trigger="change" required />
+                    <div class="field">
+                        <label class="label" for="email" style="text-align: left !important;">Email</label>
+                        <p class="control has-icons-left">
+                            <input class="input" name="email" id="email" placeholder="Email" autofocus type="email" data-parsley-trigger="change" required />
                             <span class="icon is-small is-left">
-                                <i class="fas fa-user-tie"></i>
+                                <i class="fas fa-envelope"></i>
                             </span>
-                            </p>
-                        </div>
-                        <div class="label" >
-                            <span class="registerTooltip" aria-label="Length: 6 - 32 characters
-Characters: Alphanumeric" tabindex="-1">
-                                <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
-                            </span>
-                        </div>
+                        </p>
                     </div>
-                    <div class="flexAround">
-                        <div class="field" style="width: 85%;">
-                            <p class="control has-icons-left">
-                            <input class="input" name="password" placeholder="Password" type="password" required data-parsley-minlength="8" data-parsley-maxlength="64"
-                                data-parsley-pattern="[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+" data-parsley-trigger="change"/>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
-                            </p>
-                        </div>
-                        <div class="label" >
-                            <span class="registerTooltip" aria-label="Length: 8 - 64 characters
-Characters: Alphanumeric
-At least one uppercase
-At least one number" tabindex="-1">
-                                <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
-                            </span>
-                        </div>
+                    <div class="field">
+                        <label class="label" for="username" style="text-align: left !important;">Username</label>
+                        <p class="control has-icons-left">
+                        <input class="input" name="username" id="username" placeholder="Username" type="text" data-parsley-type="alphanum" 
+                            data-parsley-minlength="6" data-parsley-maxlength="32" data-parsley-minlength-message="The username is too short. It should have 6 characters or more." data-parsley-trigger="change" required />
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user-tie"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="password" style="text-align: left !important;">Password</label>
+                        <p class="control has-icons-left">
+                        <input class="input" name="password" id="password" placeholder="Password" type="password" required data-parsley-minlength="8" data-parsley-maxlength="64"
+                            data-parsley-pattern="[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+" data-parsley-trigger="change"/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        </p>
                     </div>
                     <!-- Uncomment when testing is done -->
                     <!-- <div style="display: flex; justify-content: space-around;">
@@ -93,14 +71,6 @@ At least one number" tabindex="-1">
                                 <i class="fas fa-key"></i>
                             </span>
                             </p>
-                        </div>
-                        <div class="label" >
-                            <span class="registerTooltip"aria-label="Length: 8 - 64 characters
-Characters: Alphanumeric
-At least one uppercase
-At least one number" tabindex="-1">
-                                <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
-                            </span>
                         </div>
                     </div> -->
                     <div class="control" style="margin-top: 1.5vh;">

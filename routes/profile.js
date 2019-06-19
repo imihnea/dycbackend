@@ -32,7 +32,6 @@ const upload = multer({
   storage: storage,
   fileFilter: imageFilter,
   onError: (err, next) => {
-    console.log('error', err);
     next(err);
   },
 });

@@ -378,7 +378,7 @@ hr{
     top: 0;
     right: 0;
     bottom: 0;
-    font-size: 1;
+    font-size: 1px;
     width:0;
     height: 100%;
     opacity: 0;
@@ -390,7 +390,7 @@ hr{
     top: 0;
     right: 0;
     bottom: 0;
-    font-size: 1;
+    font-size: 1px;
     width:0;
     height: 100%;
     opacity: 0;

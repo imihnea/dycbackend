@@ -26,8 +26,9 @@
                 <% if (!user) { %>
                     <form action="/contact/send" method="POST" data-parsley-validate>
                         <div class="field">
+                            <label class="label" for="name" style="text-align: left !important;">Name</label>
                             <p class="control has-icons-left">
-                                <input class="input" name="name" placeholder="Your name" type="text" required  autofocus
+                                <input class="input" name="name" id="name" placeholder="Your name" type="text" required  autofocus
                                 maxlength="500" data-parsley-pattern="[a-zA-Z0-9 -]+"  data-parsley-pattern-message="The name contains invalid characters" 
                                 data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
@@ -36,16 +37,18 @@
                             </p>
                         </div>
                         <div class="field">
+                            <label class="label" for="email" style="text-align: left !important;">Email</label>
                             <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="your@email.com" type="email" required 
+                                <input class="input" name="email" id="email" placeholder="your@email.com" type="email" required 
                                 data-parsley-error-message="This email address is invalid" data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
                             </p>
                         </div>
+                        <label class="label" for="topic" style="text-align: left !important;">Topic</label>
                         <div class="field select cont-select">
-                            <select name="topic" style="width: 100vw;">
+                            <select name="topic" id="topic" style="width: 100vw;">
                                 <option value="General">General</option>
                                 <option value="Payments">Payments</option>
                                 <option value="Delivery">Delivery</option>
@@ -54,8 +57,9 @@
                             </select>
                         </div>
                         <div class="field" >
+                            <label class="label" for="message" style="text-align: left !important;">Message</label>
                             <div class="control">
-                                <textarea class="textarea" name="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
+                                <textarea class="textarea" name="message" id="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
                             </div>
                         </div>
                         <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
@@ -66,8 +70,9 @@
                 <% } else { %>
                     <form action="/contact/sendUser" method="POST">
                         <div class="field">
+                            <label class="label" for="name" style="text-align: left !important;">Name</label>
                             <p class="control has-icons-left">
-                                <input class="input" name="name" placeholder="Your name" type="text" value="<%= user.name %>" required autofocus
+                                <input class="input" name="name" id="name" placeholder="Your name" type="text" value="<%= user.name %>" required autofocus
                                 maxlength="500" data-parsley-pattern="[a-zA-Z0-9 -]+"  data-parsley-pattern-message="The name contains invalid characters" 
                                 data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
@@ -76,8 +81,9 @@
                             </p>
                         </div>
                         <div class="field">
+                            <label class="label" for="email" style="text-align: left !important;">Email</label>
                             <p class="control has-icons-left">
-                                <input class="input" name="email" placeholder="your@email.com" type="email" value="<%= user.email %>" required 
+                                <input class="input" name="email" id="email" placeholder="your@email.com" type="email" value="<%= user.email %>" required 
                                 data-parsley-error-message="This email address is invalid" data-parsley-trigger="change"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
@@ -85,15 +91,17 @@
                             </p>
                         </div>
                         <div class="field">
+                            <label class="label" for="premium" style="text-align: left !important;">Priority</label>
                             <p class="control has-icons-left">
-                                <input name="premium" type="text" value="<% if (premium) { %>Premium user - Support priority enabled<% } else { %>Standard user - No support priority<% } %>" class="input" required readonly>
+                                <input name="premium" type="text" id="premium" value="<% if (premium) { %>Premium user - Support priority enabled<% } else { %>Standard user - No support priority<% } %>" class="input" required readonly>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-award"></i>
                                 </span>
                             </p>
                         </div>
+                        <label class="label" for="topic" style="text-align: left !important;">Topic</label>
                         <div class="field select cont-select">
-                            <select name="topic" style="width: 100vw;">
+                            <select name="topic" id="topic" style="width: 100vw;">
                                 <option value="General">General</option>
                                 <option value="Payments">Payments</option>
                                 <option value="Delivery">Delivery</option>
@@ -102,8 +110,9 @@
                             </select>
                         </div>
                         <div class="field" >
+                            <label class="label" for="message" style="text-align: left !important;">Message</label>
                             <div class="control">
-                                <textarea class="textarea" name="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
+                                <textarea class="textarea" id="message" name="message" placeholder="Message (2000 characters)" minlength="10" maxlength="2000" required></textarea>
                             </div>
                         </div>
                         <div class="column g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>

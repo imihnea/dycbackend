@@ -15,13 +15,13 @@ logger.info(`Message: Notifications process started\r\nTime: ${moment(Date.now()
 process.on('message', userid => {
     Notification.find({'userid': userid}, (err, notif) => {
         if (err) {
-            console.log(err);
+            console.log(err); // Replace with logger
         } else {
             notif.forEach( notification => {
                 notification.read = true;
                 notification.save(err => {
                     if (err) {
-                        console.log(err);
+                        console.log(err); // Replace with logger
                     }
                 });
             });

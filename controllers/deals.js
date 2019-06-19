@@ -113,7 +113,6 @@ module.exports = {
                 }, function (err, data) {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -124,7 +123,6 @@ module.exports = {
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
                         }
                             req.flash('success', 'Deal accepted successfully.');
                             return res.redirect('back');
@@ -136,7 +134,6 @@ module.exports = {
                 return res.redirect('back');
             }
         } else if (deal.buyer.delivery.shipping == 'Shipping') {
-            console.log(`rate: ${deal.rate}`);
             shippo.transaction.create({
                 "rate": deal.rate,
                 "label_file_type": "PDF",
@@ -144,12 +141,10 @@ module.exports = {
             }, asyncErrorHandler(async (err, transaction) => {
                 // asynchronously called
                 if(err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     return res.redirect('back');
                 }
                 const result = JSON.stringify(transaction);
-                console.log(`Full transaction details: ${result}`);
                 if(result.status === 'ERROR') {
                     req.flash('error', 'There\'s been an error creating the label, please try again.');
                     return res.redirect('back');
@@ -174,7 +169,6 @@ module.exports = {
                         }, function (err, data) {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                console.log(err);
                             } else {
                             const mailOptions = {
                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -185,7 +179,6 @@ module.exports = {
                             transporter.sendMail(mailOptions, (error) => {
                                 if (error) {
                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    console.log(error);
                                 }
                                     req.flash('success', 'Deal accepted successfully.');
                                     return res.redirect('back');
@@ -226,7 +219,6 @@ module.exports = {
             }, function (err, data) {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
                 } else {
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -237,7 +229,6 @@ module.exports = {
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
                     }
                         req.flash('success', 'Deal denied successfully.');
                         return res.redirect('back');
@@ -304,7 +295,6 @@ module.exports = {
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
                     }
                 });
             }});
@@ -319,7 +309,6 @@ module.exports = {
             }, function (err, data) {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
                 } else {
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -330,7 +319,6 @@ module.exports = {
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
                     }
                 });
             }});
@@ -369,7 +357,6 @@ module.exports = {
             }, function (err, data) {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
                 } else {
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -381,7 +368,6 @@ module.exports = {
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(error);
                     }
                     dealLogger.info(`Message: Deal ${deal._id} cancelled\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     req.flash('success', 'Deal cancelled successfully.');
@@ -445,7 +431,6 @@ module.exports = {
                     }, function (err, data) {
                         if (err) {
                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(err);
                         } else {
                         const mailOptions = {
                             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -457,7 +442,6 @@ module.exports = {
                         transporter.sendMail(mailOptions, (error) => {
                             if (error) {
                                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                console.log(error);
                             }
                         });
                     }});
@@ -490,7 +474,6 @@ module.exports = {
                     }, function (err, data) {
                         if (err) {
                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(err);
                         } else {
                         const mailOptions = {
                             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -502,7 +485,6 @@ module.exports = {
                         transporter.sendMail(mailOptions, (error) => {
                             if (error) {
                                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                console.log(error);
                             }
                         });
                     }});
@@ -539,7 +521,6 @@ module.exports = {
                 }, function (err, data) {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -551,7 +532,6 @@ module.exports = {
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
                         }
                     });
                 }});
@@ -565,7 +545,6 @@ module.exports = {
                 }, function (err, data) {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -577,7 +556,6 @@ module.exports = {
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
                         }
                     });
                 }});
@@ -637,7 +615,6 @@ module.exports = {
                 }, function (err, data) {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -648,7 +625,6 @@ module.exports = {
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
                         }
                     });
                 }});
@@ -715,7 +691,6 @@ module.exports = {
                 }, function (err, data) {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -727,7 +702,6 @@ module.exports = {
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
                             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            console.log(error);
                         }
                     });
                 }});
@@ -760,7 +734,6 @@ module.exports = {
     },
     async createAddress(req, res) {
         const product = await Product.findById(req.params.id);
-        console.log(req.body);
         let addressFrom = {
             "name":product.delivery.name,
             "street1":product.delivery.street1,
@@ -829,17 +802,14 @@ module.exports = {
             "email":req.body.deliveryEmail,
         }, (err, address) => {
             if(err) {
-                console.log('eroare la creere adresa')
                 res.send(err);
             } else {
                 shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
                     // asynchronously called
                     if(err) {
-                        console.log('eroare la validare')
                         res.send(err);
                     } else {
                         if(address.validation_results.is_valid === false) {
-                            console.log('e invalida')
                             res.send(address1);
                         } else {
                             shippo.shipment.create({
@@ -849,10 +819,8 @@ module.exports = {
                                 "carrier_accounts": carriers,
                             }, (err, data) => {
                                 if(err) {
-                                    console.log('eroare la creere shipment')
                                     res.send(err);
                                 } else {
-                                    console.log(data);
                                     res.send(data);
                                 }
                             })
@@ -874,13 +842,11 @@ module.exports = {
             "email":req.body.deliveryEmail,
         }, (err, address) => {
             if(err) {
-                console.log('eroare la creere adresa')
                 res.send(err);
             } else {
                 shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
                     // asynchronously called
                     if(err) {
-                        console.log('eroare la validare')
                         res.send(err);
                     } else {
                         res.send(address1);

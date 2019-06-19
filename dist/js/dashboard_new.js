@@ -298,14 +298,11 @@ button.addEventListener('click', function(e) {
     })
   .then(function(response) {
     if(response.ok) {
-      console.log('CREATE ADDRESS');
       return response.json();
     }
     throw new Error('Request failed.');
   })
   .then(function(data) {
-      console.log('CREATED ADDRESS')
-      console.log(data);
       document.getElementById('validateSpinner').style.display = 'none';
       if(data.validation_results) {
         if(data.validation_results.is_valid === true) {

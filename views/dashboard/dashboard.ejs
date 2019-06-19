@@ -33,8 +33,9 @@
                         <p class="subtitle">Personal Details</p>
                         <div class="column is-three-fifths" style="margin: auto;">
                             <div class="field">
+                                <label class="label" for="name" style="text-align: left !important;">Full Name</label>
                                 <div class="control has-icons-left">
-                                    <input class="input" name="name" placeholder="Full Name*" type="text"
+                                    <input class="input" name="name" id="name" placeholder="Full Name*" type="text"
                                     <% if (user.full_name) { %> value="<%= user.full_name %>" <% } %> required 
                                         data-parsley-minlength="3" data-parsley-maxlength="100" data-parsley-pattern="[a-zA-Z0-9 -]+"
                                         data-parsley-minlength-message="The name is too short. It should have 3 characters or more." data-parsley-trigger="change"/>
@@ -44,6 +45,7 @@
                                 </div>
                             </div>
                             <div class="field">
+                                <label class="label" for="countryId" style="text-align: left !important;">Country</label>
                                 <div class="control has-icons-left">
                                     <div class="select is-fullwidth">
                                         <select name="country" class="countries" id="countryId" required>
@@ -60,6 +62,7 @@
                                 </div>
                             </div>
                             <div class="field">
+                                <label class="label" for="stateId" style="text-align: left !important;">State</label>
                                 <div class="control has-icons-left">
                                     <div class="select is-fullwidth">
                                         <select name="state" class="states" id="stateId" style="width:100%;" required>
@@ -76,6 +79,7 @@
                                 </div>
                             </div>
                             <div class="field">
+                                <label class="label" for="cityId" style="text-align: left !important;">City</label>
                                 <div class="control has-icons-left">
                                     <div class="select is-fullwidth">
                                         <select name="city" class="cities" id="cityId" style="width: 100%;" required>
@@ -91,31 +95,36 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="field is-horizontal has-addons">
-                                <p class="control has-icons-left is-expanded">
-                                    <input class="input" name="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
+                            <div class="field">
+                                <label class="label" for="address1" style="text-align: left !important;">Address line 1</label>
+                                <div class="control has-icons-left is-expanded">
+                                    <input class="input" name="address1" id="address1" placeholder="Address Line 1* (Street name, number, etc.)" type="text"
                                     <% if (user.address1) { %> value="<%= user.address1%>" <% } %> required 
                                         data-parsley-pattern="[a-zA-Z0-9., -]+" data-parsley-trigger="change" />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-road"></i>
                                     </span>
-                                </p>
-                                <p class="control has-icons-left is-expanded">
-                                    <input class="input" name="zip" type="text" placeholder="ZIP Code*"
-                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required 
-                                        data-parsley-pattern="[a-zA-Z0-9]+" data-parsley-trigger="change" />
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-sort-numeric-down"></i>
-                                    </span>
-                                </p>
+                                </div>
                             </div>
                             <div class="field">
+                                <label class="label" for="address2" style="text-align: left !important;">Address line 2</label>
                                 <div class="control has-icons-left">
-                                    <input class="input" name="address2" placeholder="Address Line 2" type="text"
+                                    <input class="input" name="address2" id="address2" placeholder="Address Line 2" type="text"
                                     <% if (user.address2) { %> value="<%= user.address2 %>" <% } %>
                                         data-parsley-pattern="[a-zA-Z0-9., -]+" data-parsley-trigger="change" />
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-road"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="zip" style="text-align: left !important;">Zip</label>
+                                <div class="control has-icons-left is-expanded">
+                                    <input class="input" name="zip" id="zip" type="text" placeholder="ZIP Code*"
+                                    <% if (user.zip) { %> value="<%= user.zip %>" <% } %> required 
+                                        data-parsley-pattern="[a-zA-Z0-9]+" data-parsley-trigger="change" />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-sort-numeric-down"></i>
                                     </span>
                                 </div>
                             </div>

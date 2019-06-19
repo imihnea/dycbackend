@@ -113,7 +113,6 @@ module.exports = {
   async getDashboardIndex(req, res) {
     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
       if(err) {
-        console.log('Failed to retrieve subscription.');
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
     });
@@ -305,12 +304,9 @@ module.exports = {
     }));
   },
   async postBTC(req, res) {
-    console.log(`red.body: ${req.body}`);
     const invoice = uuidv1();
-    console.log(`invoice: ${invoice}`)
     client.getAccount('primary', function(err, account) {
       account.createAddress(null, function(error, address) {
-        console.log(`asta e address: ${address}`);
         if(error) {
           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           req.flash('error', error.message);
@@ -335,13 +331,11 @@ module.exports = {
               let timer = 0;
               var i = setInterval(function() {
                 address.getTransactions({}, function(err, txs) {
-                  console.log(txs)
                   if(!Array.isArray(txs) || !txs.length) {
                     return clearInterval(i);
                   } else {
                     let json = JSON.parse(txs);
                     const status = json.status;
-                    console.log(`asta e status: ${status}`);
                     if (err) {
                       console.log(err);
                     } else {
@@ -349,18 +343,14 @@ module.exports = {
                           return clearInterval(i);
                       } else {
                           if(status == 'completed') {
-                          console.log(`txs din completed: ${txs}`);
-                          console.log(`transaction completed`)
                           Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
                             if(err) {
                               console.log(err);
                             } else {
-                              console.log(`checkout updated`)
                               User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
                                 if(err) {
                                   console.log(err)
                                 } else {
-                                  console.log(`user updated`)
                                   clearInterval(i);
                                   ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
                                     link: `http://${req.headers.host}/dashboard/addresses`,
@@ -384,7 +374,6 @@ module.exports = {
                                             if (error) {
                                             console.log(`error for sending mail confirmation === ${error}`);
                                             }
-                                            console.log(`mail sent`);
                                         });
                                       }
                                     });
@@ -393,9 +382,7 @@ module.exports = {
                             }
                           })
                         } else {
-                          console.log(`txs: ${txs}`);
                           timer = timer + 1;
-                          console.log(`timer: ${timer}`);
                         }
                       }
                     }
@@ -488,7 +475,6 @@ module.exports = {
             }, 
             function (err, data) {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     const mailOptions = {
@@ -499,14 +485,12 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                          console.log(error);
                           errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         if (process.env.NODE_ENV === 'production') {
                           userLogger.info(`Message: User withdrawed ${withdraw.amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         req.flash('success', `${withdraw.amount} BTC successfully requested for withdrawal!`);
-                        console.log(`Withdrawn ${withdraw.amount} BTC successfully.`);
                         return res.redirect('/dashboard/addresses');
                     });
                 }
@@ -580,7 +564,6 @@ module.exports = {
       if (user.twofactor === true) {
         nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
           if(err) {
-            console.log(err);
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('error', 'Something went wrong. Please try again later.');
             return res.redirect('back');
@@ -627,7 +610,6 @@ module.exports = {
       if(!error && response.statusCode == 200) {
         var json = JSON.parse(body);
         var data = json.data;
-        console.log(data);
         //Add Check for isActive: true
         res.send(data);
       }
@@ -635,7 +617,6 @@ module.exports = {
   },
   //Checks rate for a pair
   async CoinSwitchRate(req, res) {
-    console.log(req.body.counter);
     const deposit = req.body.counter;
     var options = { 
       method: 'POST',
@@ -653,7 +634,6 @@ module.exports = {
       if(!error && response.statusCode == 200) {
         var json = JSON.parse(body);
         var data = json.data;
-        console.log(data);
         //Add Check for isActive: true
         res.send(data);
       }
@@ -661,7 +641,6 @@ module.exports = {
   },
   //Route to start an order on CoinSwitch
   async CoinSwitchDeposit(req, res) {
-    console.log(req.body);
     const deposit = req.body.deposit;
     const amount = req.body.amount;
     const refund = req.body.refund;
@@ -681,7 +660,6 @@ module.exports = {
   
     request(options, function (error, response, body) {
       if(!error && response.statusCode == 200) {
-        console.log(body);
         var json = JSON.parse(body);
         var data = json.data;
         Checkout.create({
@@ -693,7 +671,6 @@ module.exports = {
           if(err) {
             res.send(err);
           } else {
-            console.log('created deposit')
             res.send(data);
           }
         });
@@ -702,7 +679,6 @@ module.exports = {
   },
   //Get request to check order status, hit on final step
   async CoinSwitchStatus(req, res) {
-    console.log(req.body);
     const orderId = req.body.orderId;
     var options = { 
       method: 'GET',
@@ -715,7 +691,6 @@ module.exports = {
     };
     request(options, function (error, response, body) {
       if(!error && response.statusCode == 200) {
-        console.log(body);
         var json = JSON.parse(body);
         var data = json.data;
         res.send(data);
@@ -724,7 +699,6 @@ module.exports = {
   },
   // Polls server every 15 minutes to check for status of order
   async CoinSwitchPoll(req, res) {
-    console.log(req.body);
     const orderId = req.body.orderId;
     var options = { 
       method: 'GET',
@@ -741,7 +715,6 @@ module.exports = {
     var i = setInterval(function() {
       request(options, function (error, response, body) {
         if(!error && response.statusCode == 200) {
-          console.log(body);
           var json = JSON.parse(body);
           var data = json.data;
           if(data.status === 'complete') {
@@ -754,10 +727,8 @@ module.exports = {
                 var user = checkout.user;
                 var query_btc = User.findByIdAndUpdate({ _id: user }, { $inc: { btcbalance: data.destinationCoinAmount } });
                 query_btc.then(function(doc) {
-                  console.log("Deposit arrived!");
                   var query_1 = Checkout.findOneAndUpdate({ orderId: orderId }, {paid: true});
                   query_1.then(function(doc2) {
-                    console.log("Checkout updated to paid!");
                     return clearInterval(i);
                   });
                 });
@@ -1042,14 +1013,11 @@ module.exports = {
                         url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
                         public_id: result.public_id,
                       });
-                      console.log('product contains nudity')
-                      console.log(result);
                   } else {
                     req.body.product.images.push({
                       url: result.secure_url,
                       public_id: result.public_id,
                     });
-                    console.log(result);
                   }
                 });
                 const author = {
@@ -1250,14 +1218,11 @@ module.exports = {
                     url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
                     public_id: result.public_id,
                   });
-                  console.log('product contains nudity')
-                  console.log(result);
               } else {
                 req.body.product.images.push({
                   url: result.secure_url,
                   public_id: result.public_id,
                 });
-                console.log(result);
               }
             });
         }
@@ -1592,14 +1557,11 @@ module.exports = {
                             url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
                             public_id: result.public_id,
                           });
-                          console.log('product contains nudity')
-                          console.log(result);
                       } else {
                         product.images.push({
                           url: result.secure_url,
                           public_id: result.public_id,
                         });
-                        console.log(result);
                       }
                     });
                 }
@@ -1756,14 +1718,11 @@ module.exports = {
                     url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
                     public_id: result.public_id,
                   });
-                  console.log('product contains nudity')
-                  console.log(result);
               } else {
                 product.images.push({
                   url: result.secure_url,
                   public_id: result.public_id,
                 });
-                console.log(result);
               }
             });
         }
@@ -1982,7 +1941,6 @@ module.exports = {
     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
       if(err) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        console.log('Failed to retrieve subscription.');
       }
     });
     if(premium) {
@@ -2015,7 +1973,6 @@ module.exports = {
       let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
         if(err) {
           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-          console.log('Failed to retrieve subscription.');
         }
       });
       if(premium) {
@@ -2067,7 +2024,6 @@ module.exports = {
                       req.flash('error', 'There was an error updating your balance, please try again.');
                       return res.redirect('back');
                     } else {
-                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       // Sell BTC
                       createProfit(req, subscriptionCost, 'Subscription');
@@ -2102,7 +2058,6 @@ module.exports = {
                       req.flash('error', 'There was an error updating your balance, please try again.');
                       return res.redirect('back');
                     } else {
-                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                      
                       createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
@@ -2136,7 +2091,6 @@ module.exports = {
                       req.flash('error', 'There was an error updating your balance, please try again.');
                       return res.redirect('back');
                     } else {
-                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
@@ -2170,7 +2124,6 @@ module.exports = {
                       req.flash('error', 'There was an error updating your balance, please try again.');
                       return res.redirect('back');
                     } else {
-                      console.log(`Successfully created sub for ${subscriptionCost} BTC cost.`);
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       createProfit(req, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
@@ -2431,7 +2384,6 @@ module.exports = {
     }, function (err, data) {
       if (err) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        console.log(err);
       } else {
         const mailOptions = {
             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
@@ -2441,7 +2393,6 @@ module.exports = {
         };
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
-              console.log(error);
               errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
         });

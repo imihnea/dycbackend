@@ -117,7 +117,6 @@ module.exports = {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     }
                 });
             }
@@ -137,7 +136,6 @@ module.exports = {
                 await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        console.log(err);
                     }
                 });
             }
@@ -258,7 +256,6 @@ module.exports = {
         if (chat.user1.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
@@ -271,7 +268,6 @@ module.exports = {
         } else if (chat.user2.id.toString() != req.user._id) {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
-                    console.log(err);
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
@@ -294,7 +290,7 @@ module.exports = {
                     subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
                     if (err) {
-                        console.log(err);
+                        console.log(err); // Replace with logger
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -305,7 +301,7 @@ module.exports = {
                     // send mail with defined transport object
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);
+                            console.log(error);  // Replace with logger
                         }
                     });
                 } 
@@ -351,7 +347,6 @@ module.exports = {
             await User.findByIdAndUpdate(chat.user1.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
                 }
             });
             await Notification.create({
@@ -364,7 +359,6 @@ module.exports = {
             await User.findByIdAndUpdate(chat.user2.id, { $inc: { unreadMessages: 1, unreadNotifications: 1 } }, (err) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    console.log(err);
                 }
             });
             await Notification.create({

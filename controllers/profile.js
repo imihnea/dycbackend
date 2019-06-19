@@ -43,7 +43,6 @@ module.exports = {
       const products = await Product.find({ available: "True", 'author.id': req.params.id });
       let premium = await Subscription.findOne({userid: req.params.id}, (err, sub) => {
         if(err) {
-          console.log('Failed to retrieve subscription.');
           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.params.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
@@ -91,15 +90,13 @@ module.exports = {
                             ]
                         }, (err, result) => {
                           if(err) {
-                            console.log(err);
+                            console.log(err); // Replace with logger
                           } else if (result.moderation[0].status === 'rejected') {
                               user.avatar.url = 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg';
                               user.avatar.public_id = result.public_id;
-                              console.log(result);
                           } else {
                             user.avatar.url = result.secure_url;
                             user.avatar.public_id = result.public_id;
-                            console.log(result);
                           }
                         });
                     } catch (error) {
@@ -119,7 +116,6 @@ module.exports = {
                 if (errors) {
                     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
                       if(err) {
-                        console.log('Failed to retrieve subscription.');
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       }
                     });

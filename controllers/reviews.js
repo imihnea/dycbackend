@@ -40,7 +40,6 @@ module.exports = {
 		req.check('review[rating]', 'Something went wrong, please try again.').matches(/^[0-5]$/g).notEmpty();
 		const errors = req.validationErrors();
 		if (errors) {
-			console.log(errors);
 			req.flash('error', 'Something went wrong or the message contains illegal characters.');
 			return res.redirect('back');
 		}
@@ -94,7 +93,6 @@ module.exports = {
 			}, 
 			function (err, data) {
 				if (err) {
-					console.log(err);
 					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 				} else {
 					const mailOptions = {
@@ -105,7 +103,6 @@ module.exports = {
 					};
 					transporter.sendMail(mailOptions, (error) => {
 							if (error) {
-								console.log(error);
 								errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 							}
 					});

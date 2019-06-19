@@ -90,7 +90,7 @@
 }
 
 .thumbnails input[name='slide_switch']:checked+label {
-	border-color: rgb(58, 61, 238)a;
+	border-color: rgb(58, 61, 238);
 	opacity: 1;
 }
 
@@ -125,7 +125,6 @@
 #share-buttons img {
 padding: 5px;
 border: 0;
-box-shadow: 0;
 display: inline;
 }
 
