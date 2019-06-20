@@ -90,7 +90,7 @@ module.exports = {
                             ]
                         }, (err, result) => {
                           if(err) {
-                            console.log(err); // Replace with logger
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           } else if (result.moderation[0].status === 'rejected') {
                               user.avatar.url = 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg';
                               user.avatar.public_id = result.public_id;

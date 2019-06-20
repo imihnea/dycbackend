@@ -1715,7 +1715,7 @@ module.exports = {
       const NewUsername = req.body.username;
       User.findOne({username: NewUsername}, (err, ExistingUser) => {
         if(err) {
-          console.log(err); // Replace with logger
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           return res.redirect('back');
         } else {
           if(ExistingUser) {
@@ -1724,7 +1724,7 @@ module.exports = {
           } else {
             User.findByIdAndUpdate({_id: CurrentUser}, {username: NewUsername}, (err) => {
               if(err) {
-                console.log(err) // Replace with logger
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 return res.redirect('back');
               } else {
                 req.flash('success', `Successfully set your username! Welcome ${NewUsername}!`);

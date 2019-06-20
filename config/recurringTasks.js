@@ -322,7 +322,6 @@ setInterval( () => {
                                             transporter.sendMail(mailOptions, (error) => {
                                                 if (error) {
                                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    console.log(error); // Replace with logger
                                                 }
                                             });
                                         }
@@ -357,7 +356,6 @@ setInterval( () => {
                                             transporter.sendMail(mailOptions, (error) => {
                                                 if (error) {
                                                     errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    console.log(error);
                                                 }
                                             });
                                         }
@@ -433,19 +431,19 @@ setInterval( () => {
         }
     });
 
-        // Deleting week old notifications
-        let weekAgo = new Date();
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        Notification.find({'createdAt': { $lt: weegAgo }}, (err, notifications) => {
-            if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            } else {
-                notifications.forEach(notification => {
-                    notification.remove();
-                });
-            }
-        });
-        if (process.env.NODE_ENV === 'production') {
-            logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    // Deleting week old notifications
+    let weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    Notification.find({'createdAt': { $lt: weegAgo }}, (err, notifications) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            notifications.forEach(notification => {
+                notification.remove();
+            });
         }
+    });
+    if (process.env.NODE_ENV === 'production') {
+        logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    }
 }, 24 * 60 * 60 * 1000);

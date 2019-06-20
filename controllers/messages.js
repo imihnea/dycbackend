@@ -290,7 +290,7 @@ module.exports = {
                     subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
                     if (err) {
-                        console.log(err); // Replace with logger
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                     const mailOptions = {
                         from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -301,7 +301,7 @@ module.exports = {
                     // send mail with defined transport object
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            console.log(error);  // Replace with logger
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                     });
                 } 
