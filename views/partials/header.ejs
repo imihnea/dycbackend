@@ -52,9 +52,10 @@
     <nav class="level navi navbar is-fixed-top" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <a id="Logo" class="navbar-item" href="/">
+                <a id="Logo" class="navbar-item" href="/" style="background: url(/dist/img/logo.png); background-size: cover; width: 240px;"></a>
+                <!-- <a id="Logo" class="navbar-item" href="/">
                     <img src="/dist/img/logo.png" alt="Website Logo">
-                </a>
+                </a> -->
                 <% if (user) { %>
                     <p class="hidden" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
