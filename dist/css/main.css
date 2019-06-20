@@ -51,6 +51,17 @@ input{
 }
 
 /* Header */
+
+#Logo{
+    background: url(/dist/img/logo.png); background-size: cover; width: 240px;
+}
+
+@media only screen and (max-width: 768px) {
+    #Logo{
+        background: url(/dist/img/logo_transparent.png); background-size: contain; width: 150px;
+    }
+}
+
 .navi{
     padding-top: 1vh;
     padding-bottom: 1vh;
