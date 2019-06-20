@@ -42,6 +42,16 @@ const ChatSchema = new Schema({
     createdAt: { 
         type: Date, 
         default: Date.now 
+    },
+    report: { 
+        status: { 
+            type: Boolean, 
+            default: false 
+        },
+        report: {
+            type: Schema.Types.ObjectId,
+            ref: 'Report'
+        }
     }
 });
 

@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Review = require('../models/review');
 const Notification = require('../models/notification');
+const Report = require('../models/report');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
@@ -178,7 +179,12 @@ module.exports = {
 				return res.redirect('back');
 			}
 		});
-		review.reports.push({from: req.user._id});
+		const report = await Report.create({
+			review: req.params.review_id,
+			reviewMessage: review.body,
+			from: req.user._id
+		});
+		review.reports.push({from: req.user._id, report: report._id});
 		await review.save();
 		req.flash('success', 'Review reported successfully!');
 		return res.redirect(`back`);

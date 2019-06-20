@@ -85,7 +85,7 @@ router.post('/resend/:id', checkId, asyncErrorHandler(resendEmail));
 
 router.post('/verify', isLoggedIn, postVerify);
 
-router.post('/login/verify', postVerifyLogin);
+// router.post('/login/verify', postVerifyLogin);
 
 router.get('/2factor', isLoggedIn, get2factor);
 

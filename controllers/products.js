@@ -7,6 +7,7 @@ const User = require('../models/user');
 const Deal = require('../models/deal');
 const Review = require('../models/review');
 const Notification = require('../models/notification');
+const Report = require('../models/report');
 const moment = require('moment');
 const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
@@ -362,40 +363,30 @@ module.exports = {
             });
         }
     },
-    postReport(req, res) {
-      ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
-        link: `http://${req.headers.host}/dashboard`,
-        footerlink: `http://${req.headers.host}/dashboard/notifications`,
-        id: req.user._id,
-        name: req.user.full_name,
-        email: req.user.email,
-        userid: req.body.userid,
-        from: req.params.id,
-        topic: req.body.topic,
-        message: req.body.message,
-        subject: `New report - Deal Your Crypto`,
-      }, function (err, data) {
-        if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        } else {
-            const mailOptions = {
-                from: `${req.body.name} <${req.body.email}>`, // sender address
-                to: 'support@dealyourcrypto.com', // list of receivers
-                subject: 'User Report - Deal Your Crypto', // Subject line
-                html: data, // html body
-            };
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error) => {
-                if (error) {
-                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    req.flash('error', `${error.message}`);
-                    return res.redirect('back', { error: error.message });
-                }
-                req.flash('success', 'Report sent successfully! We will get back to you as soon as possible.');
-                return res.redirect('back');
-            });
+    async postReport(req, res) {
+        req.check('message', 'The message must be between 3 and 250 characters long').notEmpty().isLength({min: 3, max: 250});
+        req.check('topic', 'The reason does not match').matches(/^(Scam|Fake|Harassment|Other)$/);
+        const errors = req.validationErrors();
+        if (errors) {
+            req.flash('error', 'The message must be between 3 and 250 characters long');
+            return res.redirect('back');
         }
-    });
+        const deal = await Deal.findById(req.params.id);        
+        if (deal.report.status == true) {
+            req.flash('error', 'You have already reported this deal. We will take a look at it as soon as possible');
+            return res.redirect('back');
+        }
+        const report = await Report.create({
+            message: escapeHTML(req.body.message),
+            reason: req.body.topic,
+            deal: deal._id,
+            from: req.user._id
+        });
+        deal.report.status = true;
+        deal.report.report = report._id;
+        await deal.save();
+        req.flash('success', 'User reported successfully');
+        return res.redirect('back');
     },
     async buyProduct(req, res) {
         // Get the user and the product
@@ -671,7 +662,12 @@ module.exports = {
             req.flash('error', 'The message must be between 3 and 250 characters long');
             return res.redirect('back');
         }
-        product.reports.push({from: req.user._id, message: escapeHTML(req.body.message), reason: req.body.reason});
+        const report = await Report.create({
+            message: escapeHTML(req.body.message),
+            reason: req.body.reason,
+            product: req.params.id
+        });
+        product.reports.push({from: req.user._id, report: report._id});
         await product.save();
         req.flash('success', 'Product reported successfully');
         return res.redirect('back');

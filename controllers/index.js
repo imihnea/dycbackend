@@ -466,42 +466,42 @@ module.exports = {
           });
         } else {
           // verif password
-          if (user.twofactor === true) {
-            nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
-              if(err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                let errors = { msg: String };
-                errors.msg = err.message;
-                return res.render('index/login', {
-                  errors,
-                  pageTitle: 'Login - Deal Your Crypto',
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
-                });
-              } else {
-                let requestId = result.request_id;
-                if(result.status == '0') {
-                  res.render('index/verifylogin', { 
-                    username: req.body.username, 
-                    password: escapeHTML(req.body.password), 
-                    requestId: requestId,
-                    pageTitle: 'Verify Login - Deal Your Crypto',
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                   }); // Success! Now, have your user enter the PIN
-                } else {
-                  let errors = { msg: String };
-                  errors.msg = 'Something went wrong. Please try again.';
-                  return res.render('index/login', {
-                    errors,
-                    pageTitle: 'Login - Deal Your Crypto',
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
-                  });
-                }
-              }
-            });
-          } else {
+          // if (user.twofactor === true) {
+          //   nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+          //     if(err) {
+          //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          //       let errors = { msg: String };
+          //       errors.msg = err.message;
+          //       return res.render('index/login', {
+          //         errors,
+          //         pageTitle: 'Login - Deal Your Crypto',
+          //         pageDescription: 'Description',
+          //         pageKeywords: 'Keywords'
+          //       });
+          //     } else {
+          //       let requestId = result.request_id;
+          //       if(result.status == '0') {
+          //         res.render('index/verifylogin', { 
+          //           username: req.body.username, 
+          //           password: escapeHTML(req.body.password), 
+          //           requestId: requestId,
+          //           pageTitle: 'Verify Login - Deal Your Crypto',
+          //           pageDescription: 'Description',
+          //           pageKeywords: 'Keywords'
+          //          }); // Success! Now, have your user enter the PIN
+          //       } else {
+          //         let errors = { msg: String };
+          //         errors.msg = 'Something went wrong. Please try again.';
+          //         return res.render('index/login', {
+          //           errors,
+          //           pageTitle: 'Login - Deal Your Crypto',
+          //           pageDescription: 'Description',
+          //           pageKeywords: 'Keywords'
+          //         });
+          //       }
+          //     }
+          //   });
+          // } else {
             req.body.password = escapeHTML(req.body.password);
             passport.authenticate('local',
             {
@@ -510,7 +510,7 @@ module.exports = {
               failureRedirect: '/login',
               failureFlash: true,
             })(req, res, next);
-          }
+          // }
         }
       });
     }
@@ -521,30 +521,30 @@ module.exports = {
     req.flash('success', 'Confirmation email resent. Please check your inbox.');
     return res.redirect('/login');
   },
-  postVerifyLogin(req, res, next) {
-    let pin = req.body.pin;
-    let requestId = req.body.requestId;
-    nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
-      if(err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        req.flash('error', err.message);
-        return res.redirect('back');
-      } else {
-        if(result && result.status == '0') { // Success!
-            passport.authenticate('local',
-          {
-            successFlash: 'Welcome to Deal Your Crypto!',
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true,
-          })(req, res, next);
-        } else {
-          req.flash('error', 'Wrong PIN code, please try again.');
-          return res.redirect('back');
-        }
-      }
-    });
-  },
+  // postVerifyLogin(req, res, next) {
+  //   let pin = req.body.pin;
+  //   let requestId = req.body.requestId;
+  //   nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
+  //     if(err) {
+  //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //       req.flash('error', err.message);
+  //       return res.redirect('back');
+  //     } else {
+  //       if(result && result.status == '0') { // Success!
+  //           passport.authenticate('local',
+  //         {
+  //           successFlash: 'Welcome to Deal Your Crypto!',
+  //           successRedirect: '/',
+  //           failureRedirect: '/login',
+  //           failureFlash: true,
+  //         })(req, res, next);
+  //       } else {
+  //         req.flash('error', 'Wrong PIN code, please try again.');
+  //         return res.redirect('back');
+  //       }
+  //     }
+  //   });
+  // },
   // GET /logout
   getLogout(req, res) {
     req.logout();

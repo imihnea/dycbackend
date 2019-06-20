@@ -91,15 +91,13 @@ const ProductSchema = new Schema({
   reports: [{
     from: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
-    message: String,
-    reason: String,
-    createdAt: {
-      type: Date,
-      default: Date.now
+    report: {
+      type: Schema.Types.ObjectId,
+      ref: 'Report'
     }
-  }],
+  }]
 });
 
 ProductSchema.pre('remove', async () => {

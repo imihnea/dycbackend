@@ -91,7 +91,7 @@
                                         <button class="delete deleteReport" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
-                                        <form class="modal-form" action="/products/<%= deal.chat %>/report" method="POST" style="display: block;">
+                                        <form class="modal-form" action="/products/<%= deal._id %>/report" method="POST" style="display: block;">
                                             <input type="text" name="userid" value="<%= seller.id %>" hidden>
                                             <div class="field select cont-select smmargin">
                                                 <select name="topic" style="width: 100%;">
@@ -99,6 +99,7 @@
                                                     <option value="Fake">Fake product</option>
                                                     <option value="Scam">Scamming attempt</option>
                                                     <option value="Harassment">Harassment</option>
+                                                    <option value="Other">Other</option>
                                                 </select>
                                             </div>
                                             <div class="field" style="margin-top: 3px;">

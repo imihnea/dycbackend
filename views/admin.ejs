@@ -234,6 +234,134 @@
                     </div>
                 </div>
                 <br>
+                <div class="frame smallerCenter">
+                    <p class="title">Reports</p>
+                    <br>
+                    <p class="title is-4">Product Reports</p>
+                    <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>ID</th>
+                                <th>From</th>
+                                <th>Created At</th>
+                                <th>Message</th>
+                                <th>Reason</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% productReports.forEach((item, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td style="word-break: break-all;"><%= item._id %></td>
+                                <td style="word-break: break-all;"><%= item.from %></td>
+                                <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                                <td style="word-break: break-all;"><%= item.message %></td>
+                                <td style="word-break: break-all;"><%= item.reason %></td>
+                                <td>
+                                    <form action="/admin/deleteProduct?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>" hidden>
+                                        <input type="text" name="productid" value="<%= item.product %>" hidden>
+                                        <button class="button is-primary">Accept</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>">
+                                        <button class="button is-primary">Decline</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="/products/<%= item.product %>/view" class="button is-primary">View</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p class="title is-4">Review Reports</p>
+                    <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>ID</th>
+                                <th>From</th>
+                                <th>Created At</th>
+                                <th>Message</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% reviewReports.forEach((item, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td style="word-break: break-all;"><%= item._id %></td>
+                                <td style="word-break: break-all;"><%= item.from %></td>
+                                <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                                <td style="word-break: break-all;"><%= item.message %></td>
+                                <td>
+                                    <form action="/admin/deleteReview?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>" hidden>
+                                        <input type="text" name="reviewid" value="<%= item.review %>" hidden>
+                                        <button class="button is-primary">Accept</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>">
+                                        <button class="button is-primary">Decline</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p class="title is-4">Deal Reports</p>
+                    <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>ID</th>
+                                <th>From</th>
+                                <th>Created At</th>
+                                <th>Message</th>
+                                <th>Reason</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% dealReports.forEach((item, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td style="word-break: break-all;"><%= item._id %></td>
+                                <td style="word-break: break-all;"><%= item.from %></td>
+                                <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                                <td style="word-break: break-all;"><%= item.message %></td>
+                                <td style="word-break: break-all;"><%= item.reason %></td>
+                                <td>
+                                    <form action="/admin/deleteDeal?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>" hidden>
+                                        <input type="text" name="dealid" value="<%= item.deal %>" hidden>
+                                        <button class="button is-primary">Accept</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
+                                        <input type="text" name="id" value="<%= item._id %>" hidden>
+                                        <button class="button is-primary">Decline</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="column"></div>
         </div>

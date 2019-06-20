@@ -56,7 +56,17 @@ const DealSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
     completedAt: Date,
     refundableUntil: Date,
-    paid: { type: Boolean, default: false }
+    paid: { type: Boolean, default: false },
+    report: { 
+        status: { 
+            type: Boolean, 
+            default: false 
+        },
+        report: {
+            type: Schema.Types.ObjectId,
+            ref: 'Report'
+        }
+    }
 });
 
 DealSchema.plugin(mongoosePaginate);

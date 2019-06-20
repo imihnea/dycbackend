@@ -12,7 +12,7 @@ const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, verifyCookie, checkId
 router.get('/:id/view', assignCookie, checkId, asyncErrorHandler(getProduct));
 
 // Report product/user
-router.post('/:id/report', isLoggedIn, checkId, postReport);
+router.post('/:id/report', isLoggedIn, checkId, asyncErrorHandler(postReport));
 
 // Buy products
 router.put('/:id/buy', verifyCookie, isLoggedIn, checkId, hasCompleteProfile, asyncErrorHandler(buyProduct));

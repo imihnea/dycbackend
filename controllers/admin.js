@@ -4,6 +4,7 @@ const User = require('../models/user');
 const Subscription = require('../models/subscription');
 const Product = require('../models/product');
 const Notification = require('../models/notification');
+const Report = require('../models/report');
 
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
@@ -39,10 +40,26 @@ module.exports = {
         const profit = await Profit.find({status: 'Unpaid'});
         const withdrawals = await Withdraw.find({status: 'Processing'});
         const applications = await User.find({'partnerApplication.status': 'Processing'});
+        const reports = await Report.find({createdAt: {$gte: new Date((new Date().getTime() - (14 * 24 * 60 * 60 * 1000)))}});
+        let productReports = [];
+        let dealReports = [];
+        let reviewReports = [];
+        reports.forEach(report => {
+            if (report.product) {
+                productReports.push(report);
+            } else if (report.deal) {
+                dealReports.push(report);
+            } else {
+                reviewReports.push(report);
+            }
+        });
         res.render('admin', {
           profit,
           withdrawals,
           applications,
+          productReports,
+          dealReports,
+          reviewReports,
           errors: req.session.errors,
           pageTitle: 'Administration - Deal Your Crypto',
           pageDescription: 'Description',
