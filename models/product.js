@@ -94,7 +94,11 @@ const ProductSchema = new Schema({
       ref: 'User',
     },
     message: String,
-    reason: String
+    reason: String,
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   }],
 });
 

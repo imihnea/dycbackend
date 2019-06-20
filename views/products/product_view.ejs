@@ -223,6 +223,7 @@
                             </header>
                             <section class="modal-card-body">
                                 <form class="deleteForm" action="/products/<%= product._id %>/report?_method=PUT" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <textarea class="textarea" name="message" cols="30" rows="5" placeholder="Please tell us more about why this product should be removed"></textarea>
                                     <br>
                                     <div class="field select cont-select">
@@ -390,8 +391,9 @@
                                 </div>
 
                                 <% } else { %>
-                                    <form action="/products/<%= product._id %>/reviews/<%= review._id %>/report?_method=PUT" method="POST">
+                                    <form action="/reviews/<%= product._id %>/reviews/<%= review._id %>/report?_method=PUT" method="POST">
                                         <button class="button is-danger">Report</button>
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     </form>
                                 <% } %>
                             </div>

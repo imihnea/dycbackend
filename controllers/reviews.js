@@ -171,9 +171,15 @@ module.exports = {
 		}
 	},
 	async reviewReport(req, res) {
-		await Review.findByIdAndUpdate(req.params.review_id, {
-			$push: { reports: req.user._id }
+		const review = await Review.findById(req.params.review_id);
+		review.reports.forEach(report => {
+			if (report.from.toString() == req.user._id.toString()) {
+				req.flash('error', 'You have already reported this review');
+				return res.redirect('back');
+			}
 		});
+		review.reports.push({from: req.user._id});
+		await review.save();
 		req.flash('success', 'Review reported successfully!');
 		return res.redirect(`back`);
 	}

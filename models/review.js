@@ -22,8 +22,14 @@ const ReviewSchema = new Schema({
   avatarUrl: String,
   createdAt: { type: Date, default: Date.now },
   reports: [{
+    from: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+    },
+    createdAt:{
+      type: Date,
+      default: Date.now
+    }
   }]
 });
 
