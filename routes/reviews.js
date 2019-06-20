@@ -19,6 +19,6 @@ router.put('/:id/reviews/:review_id', isLoggedIn, checkId, isReviewAuthor, async
 router.delete('/:id/reviews/:review_id', isLoggedIn, checkId, isReviewAuthor, asyncErrorHandler(reviewDestroy));
 
 /* PUT report review */
-router.put('/:id/reviews/:review_id/report', isLoggedIn,  checkId, asyncErrorHandler(reviewReport));
+router.put('/:id/reviews/:review_id/report', verifyCookie, isLoggedIn,  checkId, asyncErrorHandler(reviewReport));
 
 module.exports = router;

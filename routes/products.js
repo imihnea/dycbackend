@@ -18,6 +18,6 @@ router.post('/:id/report', isLoggedIn, checkId, postReport);
 router.put('/:id/buy', verifyCookie, isLoggedIn, checkId, hasCompleteProfile, asyncErrorHandler(buyProduct));
 
 // Report product
-router.put('/:id/report', isLoggedIn, asyncErrorHandler(reportProduct));
+router.put('/:id/report', verifyCookie, isLoggedIn, asyncErrorHandler(reportProduct));
 
 module.exports = router;

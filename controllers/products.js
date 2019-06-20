@@ -132,6 +132,7 @@ module.exports = {
                     fullUrl,
                     dealExists,
                     user: req.user,
+                    csrfToken: req.body.csrfSecret,
                     pageTitle: `${product.name} - Deal Your Crypto`,
                     pageDescription: 'Description',
                     pageKeywords: product.searchableTags
@@ -163,6 +164,7 @@ module.exports = {
                                     fullUrl,
                                     dealExists,
                                     user: req.user,
+                                    csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
                                     pageKeywords: product.searchableTags
@@ -177,6 +179,7 @@ module.exports = {
                                     fullUrl,
                                     dealExists,
                                     user: req.user,
+                                    csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: 'Description',
                                     pageKeywords: product.searchableTags
@@ -195,6 +198,7 @@ module.exports = {
                                 fullUrl,
                                 dealExists,
                                 user: req.user,
+                                csrfToken: req.body.csrfSecret,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: 'Description',
                                 pageKeywords: product.searchableTags
@@ -212,6 +216,7 @@ module.exports = {
                             fullUrl,
                             dealExists,
                             user: req.user,
+                            csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
                             pageKeywords: product.searchableTags
@@ -226,6 +231,7 @@ module.exports = {
                             fullUrl,
                             dealExists,
                             user: req.user,
+                            csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: 'Description',
                             pageKeywords: product.searchableTags
@@ -651,6 +657,13 @@ module.exports = {
         }
     },
     async reportProduct(req, res) {
+        const product = await Product.findById(req.params.id);
+        product.reports.forEach(report => {
+            if (report.from.toString() == req.user._id.toString()) {
+                req.flash('error', 'You have already reported this product');
+                return res.redirect('back');
+            }
+        });
         req.check('message', 'The message must be between 3 and 250 characters long').notEmpty().isLength({min: 3, max: 250});
         req.check('reason', 'The reason does not match').matches(/^(Scam|No Product|Illegal|Other)$/);
         const errors = req.validationErrors();
@@ -658,15 +671,8 @@ module.exports = {
             req.flash('error', 'The message must be between 3 and 250 characters long');
             return res.redirect('back');
         }
-        await Product.findByIdAndUpdate(req.params.id, {
-            $push: {
-                reports: {
-                    from: req.user._id,
-                    message: escapeHTML(req.body.message),
-                    reason: req.body.reason
-                }
-            }
-        });
+        product.reports.push({from: req.user._id, message: escapeHTML(req.body.message), reason: req.body.reason});
+        await product.save();
         req.flash('success', 'Product reported successfully');
         return res.redirect('back');
     }
