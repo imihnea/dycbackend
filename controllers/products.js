@@ -649,12 +649,16 @@ module.exports = {
     },
     async reportProduct(req, res) {
         const product = await Product.findById(req.params.id);
+        let reported = 0;
         product.reports.forEach(report => {
             if (report.from.toString() == req.user._id.toString()) {
-                req.flash('error', 'You have already reported this product');
-                return res.redirect('back');
+                reported = 1;
             }
         });
+        if (reported == 1) {
+            req.flash('error', 'You have already reported this product');
+            return res.redirect('back');
+        }
         req.check('message', 'The message must be between 3 and 250 characters long').notEmpty().isLength({min: 3, max: 250});
         req.check('reason', 'The reason does not match').matches(/^(Scam|No Product|Illegal|Other)$/);
         const errors = req.validationErrors();

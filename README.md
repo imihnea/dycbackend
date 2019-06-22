@@ -20,7 +20,6 @@ Backend:
    High Priority:
 
       Shipping => Add 1$ shipping tax
-      Admin page => Delete products/reviews
       Security => Validate and sanitize every user input
                => Anti DDOS
       Elasticsearch => Boost name match

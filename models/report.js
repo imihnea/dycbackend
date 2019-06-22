@@ -23,7 +23,14 @@ const reportSchema = new Schema({
     deal: {
         type: Schema.Types.ObjectId,
         ref: 'Deal'
-    }    
+    },
+    expires: { 
+        type: Date, 
+        index: { 
+            expires: '90d' 
+        },
+        default: Date.now
+    },
 });
 
 reportSchema.plugin(mongoosePaginate);

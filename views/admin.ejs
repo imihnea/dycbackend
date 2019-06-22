@@ -262,15 +262,12 @@
                                 <td style="word-break: break-all;"><%= item.message %></td>
                                 <td style="word-break: break-all;"><%= item.reason %></td>
                                 <td>
-                                    <form action="/admin/deleteProduct?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>" hidden>
-                                        <input type="text" name="productid" value="<%= item.product %>" hidden>
+                                    <form action="/admin/deleteProduct/<%= item._id %>/<%= item.product %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Accept</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>">
+                                    <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Decline</button>
                                     </form>
                                 </td>
@@ -304,15 +301,12 @@
                                 <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
                                 <td style="word-break: break-all;"><%= item.message %></td>
                                 <td>
-                                    <form action="/admin/deleteReview?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>" hidden>
-                                        <input type="text" name="reviewid" value="<%= item.review %>" hidden>
+                                    <form action="/admin/deleteReview/<%= item._id %>/<%= item.review %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Accept</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>">
+                                    <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Decline</button>
                                     </form>
                                 </td>
@@ -345,15 +339,12 @@
                                 <td style="word-break: break-all;"><%= item.message %></td>
                                 <td style="word-break: break-all;"><%= item.reason %></td>
                                 <td>
-                                    <form action="/admin/deleteDeal?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>" hidden>
-                                        <input type="text" name="dealid" value="<%= item.deal %>" hidden>
+                                    <form action="/admin/deleteDeal/<%= item._id %>/<%= item.deal %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Accept</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/admin/deleteReport?_method=PUT" method="POST">
-                                        <input type="text" name="id" value="<%= item._id %>" hidden>
+                                    <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
                                         <button class="button is-primary">Decline</button>
                                     </form>
                                 </td>

@@ -5,6 +5,7 @@ const Subscription = require('../models/subscription');
 const Product = require('../models/product');
 const Notification = require('../models/notification');
 const Report = require('../models/report');
+const Deal = require('../models/deal');
 
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
@@ -13,6 +14,7 @@ const path = require('path');
 const { errorLogger, userLogger, logger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
+const { client:elasticClient } = require('../config/elasticsearch');
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -516,6 +518,74 @@ module.exports = {
             });
         }
         req.flash('success', 'Partnership successfully declined');
+        return res.redirect('back');
+    },
+    async reportDelete(req, res){
+        await Report.findByIdAndDelete(req.params.id);
+        req.flash('success', 'Report successfully deleted');
+        return res.redirect('back');
+    },
+    async reviewDelete(req, res){
+        const review = await Review.findById(req.params.reviewid);
+        await Notification.create({
+            userid: review.author,
+            linkTo: `/products/${review.product}/view`,
+            message: `Your review has been found to breach the guidelines and it has been removed`
+        });
+        await review.deleteOne();
+        await Report.deleteMany({review: req.params.reviewid});
+        req.flash('success', 'Review deleted successfully');
+        return res.redirect('back');
+    },
+    async productDelete(req, res){
+        const deals = await Deal.find({'product._id': req.params.productid});
+        if (deals.length > 0) {
+            req.flash('error', 'There are existing deals for this product.');
+            return res.redirect('back');
+        }
+        const product = await Product.findById(req.params.productid);
+        await Notification.create({
+            userid: product.author._id,
+            linkTo: `/`,
+            imgLink: product.images[0].url,
+            message: `${product.name} has been found to breach the guidelines and it has been removed`
+        });
+        let deleteDate = new Date();
+        deleteDate.setDate(deleteDate.getDate() + 30);
+        await Product.findByIdAndUpdate(req.params.productid, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
+        elasticClient.delete({
+            index: 'products',
+            type: 'products',
+            id: `${req.params.productid}`
+          }, (err) => {
+            if (err) {
+              console.log(err);
+            }
+        });
+        await Report.deleteMany({product: req.params.productid});
+        req.flash('success', 'Product deleted successfully');
+        return res.redirect('back');
+    },
+    async dealDelete(req, res){
+        const deal = await Deal.findById(req.params.dealid);
+        const buyer = await User.findById(deal.buyer.id);
+        buyer.btcbalance += deal.price;
+        buyer.unreadNotifications += 1;
+        await buyer.save();
+        await Notification.create({
+            userid: deal.buyer.id,
+            linkTo: `/`,
+            imgLink: deal.product.imageUrl,
+            message: `Your deal for ${deal.product.name} has been cancelled and you were refunded ${deal.price} BTC`
+        });
+        await Notification.create({
+            userid: deal.product.author._id,
+            linkTo: `/`,
+            imgLink: deal.product.imageUrl,
+            message: `Your deal for ${deal.product.name} has been found to breach the guidelines and it has been cancelled`
+        });
+        await Report.deleteMany({deal: req.params.dealid});
+        req.flash('success', 'Deal deleted successfully');
         return res.redirect('back');
     }
 

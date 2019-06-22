@@ -12,7 +12,11 @@ const {
     deleteAllProfits,
     banUser,
     partnerUser,
-    partnerDecline
+    partnerDecline,
+    reportDelete,
+    productDelete,
+    reviewDelete,
+    dealDelete
   } = require('../controllers/admin');
 
 const middleware = require('../middleware/index');
@@ -49,5 +53,17 @@ router.put('/partnerUser', asyncErrorHandler(isAdmin), asyncErrorHandler(partner
 
 // partner decline
 router.put('/partnerDecline', asyncErrorHandler(isAdmin), asyncErrorHandler(partnerDecline));
+
+// delete report
+router.put('/deleteReport/:id', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(reportDelete));
+
+// delete product
+router.put('/deleteProduct/:id/:productid', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(productDelete));
+
+// delete review
+router.put('/deleteReview/:id/:reviewid', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(reviewDelete));
+
+// delete deal
+router.put('/deleteDeal/:id/:dealid', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(dealDelete));
 
 module.exports = router;
