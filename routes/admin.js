@@ -4,6 +4,8 @@ const router = express.Router();
 
 const {
     getAdmin,
+    getReports,
+    getUsers,
     withdrawAccept,
     withdrawDeny,
     withdrawAcceptAll,
@@ -26,6 +28,12 @@ const { asyncErrorHandler, checkId, isAdmin } = middleware;
 
 // admin page
 router.get('/', asyncErrorHandler(isAdmin), asyncErrorHandler(getAdmin));
+
+// reports page
+router.get('/reports', asyncErrorHandler(isAdmin), asyncErrorHandler(getReports));
+
+// users page
+router.get('/users', asyncErrorHandler(isAdmin), asyncErrorHandler(getUsers));
 
 // accept single withdraw
 router.put('/accept/:id', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(withdrawAccept));

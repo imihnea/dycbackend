@@ -1,0 +1,136 @@
+<% include partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+
+<div class="hero-body">
+    <div class="column dashTop">
+        <h2 class="title dashTitle" style="color: white !important;">Reports</h2>
+    </div>
+    <br>
+    <% include partials/adminMenu %>
+    <div class="frame smallerCenter">
+        <div class="column">
+            <p class="title is-4">Product Reports</p>
+        </div>
+        <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>Created At</th>
+                    <th>Message</th>
+                    <th>Reason</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% productReports.forEach((item, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td style="word-break: break-all;"><%= item._id %></td>
+                    <td style="word-break: break-all;"><%= item.from %></td>
+                    <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                    <td style="word-break: break-all;"><%= item.message %></td>
+                    <td style="word-break: break-all;"><%= item.reason %></td>
+                    <td>
+                        <form action="/admin/deleteProduct/<%= item._id %>/<%= item.product %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Accept</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Decline</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="/products/<%= item.product %>/view" class="button is-primary">View</a>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <br>
+        <div class="column">
+            <p class="title is-4">Review Reports</p>
+        </div>
+        <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>Created At</th>
+                    <th>Message</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reviewReports.forEach((item, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td style="word-break: break-all;"><%= item._id %></td>
+                    <td style="word-break: break-all;"><%= item.from %></td>
+                    <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                    <td style="word-break: break-all;"><%= item.message %></td>
+                    <td>
+                        <form action="/admin/deleteReview/<%= item._id %>/<%= item.review %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Accept</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <br>
+        <div class="column">
+            <p class="title is-4">Deal Reports</p>
+        </div>
+        <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>Created At</th>
+                    <th>Message</th>
+                    <th>Reason</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% dealReports.forEach((item, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td style="word-break: break-all;"><%= item._id %></td>
+                    <td style="word-break: break-all;"><%= item.from %></td>
+                    <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                    <td style="word-break: break-all;"><%= item.message %></td>
+                    <td style="word-break: break-all;"><%= item.reason %></td>
+                    <td>
+                        <form action="/admin/deleteDeal/<%= item._id %>/<%= item.deal %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Accept</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/admin/deleteReport/<%= item._id %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<% include partials/footer %>

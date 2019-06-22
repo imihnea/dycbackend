@@ -1,0 +1,21 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const currentLocation = window.location.pathname;
+    switch (currentLocation) {
+      case ('/admin'): {
+        document.querySelector('#currency').classList.add('is-active');
+        break;
+      }
+      case ('/admin/users'): {
+        document.querySelector('#users').classList.add('is-active');
+        break;
+      }
+      case ('/admin/reports'): {
+        document.querySelector('#reports').classList.add('is-active');
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+});
+  

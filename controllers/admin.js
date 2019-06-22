@@ -41,7 +41,26 @@ module.exports = {
     async getAdmin (req, res) {
         const profit = await Profit.find({status: 'Unpaid'});
         const withdrawals = await Withdraw.find({status: 'Processing'});
+        res.render('admin', {
+          profit,
+          withdrawals,
+          errors: req.session.errors,
+          pageTitle: 'Administration - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+    },
+    async getUsers(req, res) {
         const applications = await User.find({'partnerApplication.status': 'Processing'});
+        res.render('adminUsers', {
+            applications,
+            errors: req.session.errors,
+            pageTitle: 'Administration - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
+        });
+    },
+    async getReports(req, res) {
         const reports = await Report.find({createdAt: {$gte: new Date((new Date().getTime() - (14 * 24 * 60 * 60 * 1000)))}});
         let productReports = [];
         let dealReports = [];
@@ -55,17 +74,14 @@ module.exports = {
                 reviewReports.push(report);
             }
         });
-        res.render('admin', {
-          profit,
-          withdrawals,
-          applications,
-          productReports,
-          dealReports,
-          reviewReports,
-          errors: req.session.errors,
-          pageTitle: 'Administration - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+        res.render('adminReports', {
+            productReports,
+            dealReports,
+            reviewReports,
+            errors: req.session.errors,
+            pageTitle: 'Administration - Deal Your Crypto',
+            pageDescription: 'Description',
+            pageKeywords: 'Keywords'
         });
     },
     async withdrawAccept (req, res) {
@@ -350,12 +366,14 @@ module.exports = {
             if (err) {
                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - @ Find Subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             } else {
-                if (res.expireDate < until) {
-                    user.subscription1 = false;
-                    user.subscription3 = false;
-                    user.subscription6 = false;
-                    user.subscription12 = false;
-                    res.remove();
+                if (res) {
+                    if (res.expireDate < until) {
+                        user.subscription1 = false;
+                        user.subscription3 = false;
+                        user.subscription6 = false;
+                        user.subscription12 = false;
+                        res.remove();
+                    }
                 }
             }
         });
