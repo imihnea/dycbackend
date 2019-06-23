@@ -89,8 +89,8 @@ const cleanHTML = (unclean) => {
 };
 
 // Constants for quick modification
-const feature1_time = 60000;
-const feature2_time = 120000;
+const feature1_time = 14 * 24 * 60 * 60 * 1000;
+const feature2_time = 7 * 24 * 60 * 60 * 1000;
 const feature1_cost = -5;
 const feature2_cost = -15;
 

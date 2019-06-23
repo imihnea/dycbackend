@@ -7,6 +7,13 @@ const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger } = require('./winston');
 const { createProfit } = require('./profit');
 const nodemailer = require('nodemailer');
+const { deleteProduct } = require('./elasticsearch');
+
+const Client = require('coinbase').Client;
+const client = new Client({
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
+});
 
 const EMAIL_USER = process.env.EMAIL_USER || 'k4nsyiavbcbmtcxx@ethereal.email';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
@@ -32,7 +39,7 @@ mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 const req = false;
 
-// Runs every 24 hours
+// Runs every 11 hours
 setInterval( () => {
     // Pay deals which cannot be refunded anymore
     Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }}, (err, deal) => {
@@ -53,23 +60,62 @@ setInterval( () => {
                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (res.length > 0) {
-                                        seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
-                                        // add profit to db
-                                        withdrawAmount = item.price * premiumAccountFee * 0.01;
-                                        createProfit(req, withdrawAmount, 'Income Fee');
+                                        if (deal.buyer.delivery.shipping == 'Shipping') {
+                                            client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+                                                if (!error) {
+                                                    let btcrate = data.data.rates.USD;
+                                                    var tokenprice = 1/btcrate; // 1 USD
+                                                    seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01) - tokenprice;
+                                                    // add profit to db
+                                                    withdrawAmount = item.price * premiumAccountFee * 0.01 + tokenprice;
+                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                }
+                                            });
+                                        } else {
+                                            seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
+                                            // add profit to db
+                                            withdrawAmount = item.price * premiumAccountFee * 0.01;
+                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                        }
                                     } else {
                                         switch(seller.accountType) {
                                             case 'Standard':
-                                                seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
-                                                // add profit to db
-                                                withdrawAmount = item.price * standardAccountFee * 0.01;
-                                                createProfit(req, withdrawAmount, 'Income Fee');
+                                                if (deal.buyer.delivery.shipping == 'Shipping') {
+                                                    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+                                                        if (!error) {
+                                                            let btcrate = data.data.rates.USD;
+                                                            var tokenprice = 1/btcrate; // 1 USD
+                                                            seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01) - tokenprice;
+                                                            // add profit to db
+                                                            withdrawAmount = item.price * standardAccountFee * 0.01 + tokenprice;
+                                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                                        }
+                                                    });
+                                                } else {
+                                                    seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+                                                    // add profit to db
+                                                    withdrawAmount = item.price * premiumAccountFee * 0.01;
+                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                }
                                                 break;
                                             case 'Partner':
-                                                seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
-                                                // add profit to db
-                                                withdrawAmount = item.price * partnerAccountFee * 0.01;
-                                                createProfit(req, withdrawAmount, 'Income Fee');
+                                                if (deal.buyer.delivery.shipping == 'Shipping') {
+                                                    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+                                                        if (!error) {
+                                                            let btcrate = data.data.rates.USD;
+                                                            var tokenprice = 1/btcrate; // 1 USD
+                                                            seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01) - tokenprice;
+                                                            // add profit to db
+                                                            withdrawAmount = item.price * partnerAccountFee * 0.01 + tokenprice;
+                                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                                        }
+                                                    });
+                                                } else {
+                                                    seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
+                                                    // add profit to db
+                                                    withdrawAmount = item.price * partnerAccountFee * 0.01;
+                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                }
                                                 break;
                                             default:
                                                 break;
@@ -265,25 +311,25 @@ setInterval( () => {
         }
     });
 
-    // // Remove expired feat_1
-    // Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
-    //     if (err) {
-    //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //     } else {
-    //         productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //         logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //     }
-    // });
+    // Remove expired feat_1
+    Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+    });
 
-    // // Remove expired feat_2
-    // Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
-    //     if (err) {
-    //         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_2\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //     } else {
-    //         productLogger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //         logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-    //     }
-    // });
+    // Remove expired feat_2
+    Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_2\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            productLogger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+    });
 
     // get chats with messages
     Chat.find({"messageCount": { $gt: 0 }}, (err, chat) => {
@@ -378,22 +424,11 @@ setInterval( () => {
                 product.images.forEach(image => {
                     cloudinary.v2.uploader.destroy(image.public_id);
                 });
-                let unindexed = false;
-                product.unIndex((err) => {
-                  if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  } else {
-                    unindexed = true;
-                  }
-                });
                 const id = product._id;
+                deleteProduct(id);
                 product.remove();
                 if (process.env.NODE_ENV === 'production') {
-                  if (unindexed) {
-                    productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  } else {
-                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  }
+                    productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         }
@@ -410,15 +445,8 @@ setInterval( () => {
                 product.images.forEach(image => {
                     cloudinary.v2.uploader.destroy(image.public_id);
                 });
-                let unindexed = false;
-                product.unIndex((err) => {
-                  if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't unindex document\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  } else {
-                    unindexed = true;
-                  }
-                });
                 const id = product._id;
+                deleteProduct(id);
                 product.remove();
                 if (process.env.NODE_ENV === 'production') {
                   if (unindexed) {
@@ -446,4 +474,4 @@ setInterval( () => {
     if (process.env.NODE_ENV === 'production') {
         logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
-}, 24 * 60 * 60 * 1000);
+}, 11 * 60 * 60 * 1000);

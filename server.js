@@ -28,6 +28,10 @@ const flash = require('connect-flash');
 
 const {errorLogger, logger, warnLogger} = require('./config/winston');
 
+const {startElastic} = require('./config/elasticsearch');
+
+startElastic();
+
 const helmet = require('helmet');
 
 app.use(helmet());
