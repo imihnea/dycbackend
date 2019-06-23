@@ -1860,10 +1860,20 @@ module.exports = {
   },
   // Feature product
   async productFeature(req, res) {
+    req.check('feature_id', 'Something went wrong. Please try again').matches(/(1|2)/);
+    const errors = req.validationErrors();
+    if (errors) {
+      req.flash('error', 'Something went wrong. Please try again');
+      return res.redirect('back');
+    }
     const product = await Product.findById(req.params.id);
     const feature_id = req.params.feature_id;
     switch ( feature_id ) {
       case '1': 
+        if (product.feat_1.status == true) {
+          req.flash('error', 'You cannot feature the product until the current feature expires.');
+          return res.redirect('back');
+        }
         await User.findById(req.user._id, (err, user) => {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -1879,6 +1889,19 @@ module.exports = {
                 }
               });
               product.save();
+              elasticClient.update({
+                index: 'products',
+                type: 'products',
+                id: `${req.params.id}`,
+                body: {
+                  doc: {
+                    feat_1: {
+                      status: product.feat_1.status,
+                      expiry_date: product.feat_1.expiry_date
+                    }
+                  }
+                }
+              });
               req.flash('success', 'Your product has been promoted successfully.');
               return res.redirect(`/products/${product.id}/view`);
             } else {
@@ -1890,6 +1913,10 @@ module.exports = {
         break;
 
       case '2': 
+        if (product.feat_2.status == true) {
+          req.flash('error', 'You cannot feature the product until the current feature expires.');
+          return res.redirect('back');
+        }
         await User.findById(req.user._id, (err, user) => {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -1905,6 +1932,19 @@ module.exports = {
                 }
               });
               product.save();
+              elasticClient.update({
+                index: 'products',
+                type: 'products',
+                id: `${req.params.id}`,
+                body: {
+                  doc: {
+                    feat_2: {
+                      status: product.feat_2.status,
+                      expiry_date: product.feat_2.expiry_date
+                    }
+                  }
+                }
+              });
               req.flash('success', 'Your product has been promoted successfully.');
               return res.redirect(`/products/${product.id}/view`);
             } else {

@@ -799,9 +799,15 @@ All images are scaled to that ratio" tabindex="-1">
                                 <p>Lasts 14 days</p>
                                 <p>Costs 5 tokens</p>
                                 <br>
-                                <form action="/dashboard/<%= product._id %>/edit/1/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
-                                    <button class="button is-primary">Feature</button>
-                                </form>
+                                <% if (product.feat_1.status) { %>
+                                    <p style="color: red;">Unable to buy until the current subcategory feature expires</p>
+                                    <br>
+                                    <p>Expiry date: <%= product.feat_1.expiry_date.getDate() %>/<%= product.feat_1.expiry_date.getMonth() %>/<%= product.feat_1.expiry_date.getFullYear() %></p>
+                                <% } else { %>
+                                    <form action="/dashboard/<%= product._id %>/edit/1/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
+                                        <button class="button is-primary">Feature</button>
+                                    </form>
+                                <% } %>
                             </label>
                         </div>
                         <div class="column frame">
@@ -813,9 +819,15 @@ All images are scaled to that ratio" tabindex="-1">
                                 <p>Lasts 7 days</p>
                                 <p>Costs 15 tokens</p>
                                 <br>
-                                <form action="/dashboard/<%= product._id %>/edit/2/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
-                                    <button class="button is-primary">Feature</button>
-                                </form>
+                                <% if (product.feat_2.status) { %>
+                                    <p style="color: red;">Unable to buy until the current frontpage feature expires</p>
+                                    <br>
+                                    <p>Expiry date: <%= product.feat_2.expiry_date.getDate() %>/<%= product.feat_2.expiry_date.getMonth() %>/<%= product.feat_2.expiry_date.getFullYear() %></p>
+                                <% } else { %>
+                                    <form action="/dashboard/<%= product._id %>/edit/2/<%= csrfToken %>/<%= csrfSecret %>?_method=PUT" method="POST" style="padding: inherit;">
+                                        <button class="button is-primary">Feature</button>
+                                    </form>
+                                <% } %>
                             </label>
                         </div>
                         <div class="column is-one-fifth"></div>
