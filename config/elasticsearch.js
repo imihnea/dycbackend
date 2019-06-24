@@ -1,12 +1,10 @@
 const Product = require('../models/product');
 const elasticsearch = require('elasticsearch');
-let client;
+client = new elasticsearch.Client({
+    host: process.env.ELASTICHOST,
+});
 
-const startElastic = () => {
-    client = new elasticsearch.Client({
-        host: process.env.ELASTICHOST,
-    });
-    
+const startElastic = () => { 
     client.ping({
       requestTimeout: 3000
     }, function (error) {
