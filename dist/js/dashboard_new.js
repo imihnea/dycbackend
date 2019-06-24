@@ -21,6 +21,55 @@ document.addEventListener('DOMContentLoaded', () => {
   //   });
   // });
   
+  const userType = document.getElementById('userType').value;
+  document.getElementById('userType').remove();
+  const price = document.getElementById('btc-price');
+  const payout = document.getElementById('btc-payout');
+  const labelFee = document.getElementById('btc-label');
+  const label = document.getElementById('labelField');
+  const standardFee = 10;
+  const partnerFee = 8;
+  const premiumFee = 8;
+
+  if (price.value > 0) {
+    switch(userType) {
+      case 'Standard':
+        payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
+        break;
+      case 'Premium':
+        payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
+        break;
+      case 'Partner':
+        payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
+        break;
+      default:
+        break;
+    }
+    if (!label.classList.contains('hidden')) {
+      payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
+    }
+  }
+
+  price.addEventListener('keyup', () => {
+    switch(userType) {
+      case 'Standard':
+        payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
+        break;
+      case 'Premium':
+        payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
+        break;
+      case 'Partner':
+        payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
+        break;
+      default:
+        break;
+    }
+    if (!label.classList.contains('hidden')) {
+      payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
+    }
+  });
+
+  
   const label1 = document.getElementById('feat1Label');
   const i1 = document.getElementById('feat1I');
   const label2 = document.getElementById('feat2Label');
@@ -79,11 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
   radio1.addEventListener('change', () => {
       if(radio1.checked == true) {
         document.getElementById("carriers").style.display = "block";
+        if (label.classList.contains('hidden')) {
+          label.classList.remove('hidden');
+          if (payout.value > 0) {
+            payout.value = (payout.value - labelFee.value).toFixed(8);
+          }
+        }
       }
   });
   radio2.addEventListener('change', () => {
     if(radio2.checked == true) {
       document.getElementById("carriers").style.display = "none";
+      if (!label.classList.contains('hidden')) {
+        label.classList.add('hidden');
+        if (payout.value > 0) {
+          payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
+        }
+      }
     }
 });
 

@@ -882,15 +882,43 @@ module.exports = {
     }));
   },
   // Show new product form
-  newProduct(req, res) {
-    res.render('dashboard/dashboard_new', {
-      user: req.user, 
-      errors: req.session.errors,
-      csrfToken: req.cookies._csrf,
-      csrfSecret: req.body.csrfSecret,
-      pageTitle: 'New Deal - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+  async newProduct(req, res) {
+    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      if(err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      }
+    });
+    if (premium) {
+      premium = true;
+    }
+    client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
+        const tokenprice = 1/btcrate; // 1 USD
+        res.render('dashboard/dashboard_new', {
+          user: req.user,
+          premium, 
+          oneDollar: tokenprice,
+          errors: req.session.errors,
+          csrfToken: req.cookies._csrf,
+          csrfSecret: req.body.csrfSecret,
+          pageTitle: 'New Deal - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      } else {
+        res.render('dashboard/dashboard_new', {
+          user: req.user,
+          premium, 
+          oneDollar: 'BTC equivalent of $1 at payment date',
+          errors: req.session.errors,
+          csrfToken: req.cookies._csrf,
+          csrfSecret: req.body.csrfSecret,
+          pageTitle: 'New Deal - Deal Your Crypto',
+          pageDescription: 'Description',
+          pageKeywords: 'Keywords'
+        });
+      }
     });
   },
   // Products New
@@ -1424,15 +1452,44 @@ module.exports = {
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
-    res.render('dashboard/dashboard_edit', { 
-      product: product, 
-      user: req.user, 
-      errors: req.session.errors,
-      csrfToken: req.cookies._csrf,
-      csrfSecret: req.body.csrfSecret,
-      pageTitle: `${product.name} - Deal Your Crypto`,
-      pageDescription: 'Description',
-      pageKeywords: product.searchableTags
+    let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+      if(err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      }
+    });
+    if (premium) {
+      premium = true;
+    }
+    client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
+        const tokenprice = 1/btcrate; // 1 USD
+        res.render('dashboard/dashboard_edit', {
+          product: product, 
+          user: req.user,
+          premium, 
+          oneDollar: tokenprice,
+          errors: req.session.errors,
+          csrfToken: req.cookies._csrf,
+          csrfSecret: req.body.csrfSecret,
+          pageTitle: `${product.name} - Deal Your Crypto`,
+          pageDescription: 'Description',
+          pageKeywords: product.searchableTags
+        });
+      } else {
+        res.render('dashboard/dashboard_edit', {
+          product: product, 
+          user: req.user,
+          premium, 
+          oneDollar: 'BTC equivalent of $1 at payment date',
+          errors: req.session.errors,
+          csrfToken: req.cookies._csrf,
+          csrfSecret: req.body.csrfSecret,
+          pageTitle: `${product.name} - Deal Your Crypto`,
+          pageDescription: 'Description',
+          pageKeywords: product.searchableTags
+        });
+      }
     });
   },
   // Products Update

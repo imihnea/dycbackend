@@ -128,7 +128,7 @@ router.post('/:id/subscription', isLoggedIn, checkId, verifyCookie, asyncErrorHa
 router.post('/subscription/cancel', isLoggedIn, asyncErrorHandler(subscriptionCancel));
 
 // NEW - show form to create new product
-router.get('/new', assignCookie, isLoggedIn, hasCompleteProfile, newProduct);
+router.get('/new', assignCookie, isLoggedIn, hasCompleteProfile, asyncErrorHandler(newProduct));
 
 // CREATE - add new product to DB
 router.post('/new/:_csrf/:csrfSecret', verifyParam, isLoggedIn, upload.array('images', 5), asyncErrorHandler(productCreate));

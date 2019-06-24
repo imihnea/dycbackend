@@ -7,7 +7,6 @@ Frontend:
     High Priority:
 
          Edge & Safari CSS       - Requires testing
-         New Product => 1$ shipping tax
 
     Low Priority:
 
@@ -19,7 +18,6 @@ Backend:
 
    High Priority:
 
-      Shipping => Add 1$ shipping tax
       Security => Validate and sanitize every user input
                => Anti DDOS
       Elasticsearch => Boost name match
