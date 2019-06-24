@@ -857,7 +857,7 @@ module.exports = {
       let from = 0;
       req.check('searchName', 'Error: The query contains too many characters.').isLength({ max: 500 });
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z &]+$/g).notEmpty().isLength({ max: 500 });
-      let sort = [{"feat_1.status": {'order': "desc"}}, {"createdAt": {'order': "desc"}}];
+      let sort = [{"feat_1.status": {'order': "desc"}}, {"_score": {"order": "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       let avgRating = '';
       let condition = '';
@@ -920,6 +920,7 @@ module.exports = {
           body: {
               from: from,
               size: 10,
+              "track_scores": true,
               sort,
               query: {
                 bool: {
@@ -975,7 +976,7 @@ module.exports = {
       req.check('searchName', 'Error: The query contains too many characters.').isLength({ max: 500 });      
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 &]+$/g).notEmpty().isLength({ max: 500 });
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 &]+$/g).notEmpty().isLength({ max: 500 });
-      let sort = [{"feat_1.status": {'order': "desc"}}, {"createdAt": {'order': "desc"}}];
+      let sort = [{"feat_1.status": {'order': "desc"}}, {"_score": {"order": "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       let avgRating = '';
       let condition = '';
@@ -1040,6 +1041,7 @@ module.exports = {
           body: {
               from: from,
               size: 10,
+              "track_scores": true,
               sort,
               query: {
                 bool: {
@@ -1097,7 +1099,7 @@ module.exports = {
       req.check('category', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 &]+$/g).notEmpty().isLength({ max: 500 });
       req.check('searchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 &]+$/g).notEmpty().isLength({ max: 500 });
       req.check('secondSearchCateg', 'Error: The category contains illegal characters.').matches(/^[a-zA-Z0-9 &]+$/g).notEmpty().isLength({ max: 500 });
-      let sort = [{"feat_1.status": {'order': "desc"}}, {"createdAt": {'order': "desc"}}];
+      let sort = [{"feat_1.status": {'order': "desc"}}, {"_score": {"order": "desc"}}, {"createdAt": {'order': "desc"}}];
       let continent = '';
       let avgRating = '';
       let condition = '';
@@ -1164,6 +1166,7 @@ module.exports = {
           body: {
               from: from,
               size: 10,
+              "track_scores": true,
               sort,
               query: {
                 bool: {

@@ -20,8 +20,7 @@ Backend:
 
       Security => Validate and sanitize every user input
                => Anti DDOS
-      Elasticsearch => Boost name match
-                    => Test more in depth
+      Elasticsearch => Test more in depth
    Low Priority:
 
       Email verification => Error path @confirmEmail doesn't render error

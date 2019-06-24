@@ -62,7 +62,7 @@
                 <main id="hits" style="width: 85%; margin-left: 5vw;">
                     <%  if (products.length > 0) {
                             products.forEach((product) => { %>
-                                <article class="hit hitFrame columns frame">
+                                <article class="hit hitFrame columns frame <% if (product._source.feat_1.status == true) { %>featured<% } %>">
                                     <form action="/products/<%= product._source.id %>/view" method="GET" class="updMsg">
                                         <button class="chatBtn">
                                             <span class="chatSpan"></span>
