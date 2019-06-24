@@ -1639,16 +1639,9 @@ module.exports = {
       pageKeywords: 'Keywords'
     });
   },
-  getTeam(req, res) {
-    res.render('team', {
-      pageTitle: 'Our Team - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
-    });
-  },
-  getServices(req, res) {
-    res.render('services', {
-      pageTitle: 'Services - Deal Your Crypto',
+  getBuyBitcoin(req, res) {
+    res.render('buy-bitcoin', {
+      pageTitle: 'Buy Bitcoin - Deal Your Crypto',
       pageDescription: 'Description',
       pageKeywords: 'Keywords'
     });

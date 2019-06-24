@@ -89,7 +89,7 @@
                             <div class="column card feat_card frame activeDealProduct <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>">
                                 <a href="/products/<%= product._id %>/view">
                                     <div class="card-image">
-                                        <figure class="image featimg is-4by3" style="width: auto;">
+                                        <figure class="image featimg is-square" style="width: auto;">
                                             <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
@@ -111,7 +111,7 @@
                                 <div class="column card feat_card frame activeDealProduct <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>">
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
-                                            <figure class="image featimg is-4by3" style="width: auto;">
+                                            <figure class="image featimg is-square" style="width: auto;">
                                                 <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
                                             </figure>
                                         </div>
@@ -140,7 +140,7 @@
                                 <div class="column card feat_card frame activeDealProduct lazyLoad <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>" >
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
-                                            <figure class="image featimg is-4by3" style="width: auto;">
+                                            <figure class="image featimg is-square" style="width: auto;">
                                                 <img data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>

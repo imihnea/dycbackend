@@ -25,8 +25,7 @@ const {
   getResetEmail,
   postResetEmail,
   getAbout,
-  getTeam,
-  getServices,
+  getBuyBitcoin,
   getFaq,
   getShipping,
   getTos,
@@ -177,9 +176,7 @@ router.post('/resetemail/:token', postResetEmail);
 
 router.get('/about', getAbout);
 
-router.get('/team', getTeam);
-
-router.get('/services', getServices);
+router.get('/buy-bitcoin', getBuyBitcoin);
 
 router.get('/faq', getFaq);
 
