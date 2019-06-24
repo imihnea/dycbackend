@@ -692,7 +692,7 @@ module.exports = {
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
-          userLogger.info(`Message: User requested a password reset\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          userLogger.info(`Message: User requested a password reset\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserEmail: ${user.email}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
           req.flash('success', `An e-mail with further instructions has been sent to ${user.email}.`);
           done(err, 'done');
         });
@@ -1366,7 +1366,11 @@ module.exports = {
           subject: 'Deal Your Crypto - Contact Request',
         }, function (err, data) {
           if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            if (req.user) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
           } else {
           const mailOptions = {
             from: `${req.body.name} <${req.body.email}>`, // sender address

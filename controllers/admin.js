@@ -88,7 +88,7 @@ module.exports = {
         const withdraw = await Withdraw.findById(req.params.id);
         client.getAccount('primary', function(err, account) {
             if(err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 req.flash('error', 'There was a problem with your request, please try again.');
                 return res.redirect('back');
             } else {
@@ -99,14 +99,14 @@ module.exports = {
                 }, 
                 function(err, tx) {
                     if(err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                         return res.redirect('back');
                     } else {
                         withdraw.status = 'Completed';
                         withdraw.save(err => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't save withdraw 'Completed' status\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't save withdraw 'Completed' status\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawId: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                         });
                         if(withdraw.notify === true) {
@@ -129,7 +129,7 @@ module.exports = {
                                     };
                                     transporter.sendMail(mailOptions, (error) => {
                                         if (error) {
-                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                         if (process.env.NODE_ENV === 'production') {
                                             userLogger.info(`Message: Withdraw successful\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -174,7 +174,7 @@ module.exports = {
                     };
                     transporter.sendMail(mailOptions, (error) => {
                         if (error) {
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         }
                         if (process.env.NODE_ENV === 'production') {
                             userLogger.info(`Message: Withdraw denied\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -207,14 +207,14 @@ module.exports = {
                     }, 
                     function(err, tx) {
                         if(err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot withdraw\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             req.flash('error', 'There was an error withdrawing, please contact us immediately about this.');
                             return res.redirect('back');
                         } else {
                             withdraw.status = 'Completed';
                             withdraw.save(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't save withdraw 'Completed' status\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't save withdraw 'Completed' status\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });
                             if(withdraw.notify === true) {
@@ -237,7 +237,7 @@ module.exports = {
                                         };
                                         transporter.sendMail(mailOptions, (error) => {
                                             if (error) {
-                                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                             if (process.env.NODE_ENV === 'production') {
                                                 userLogger.info(`Message: Withdraw successful\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -281,7 +281,7 @@ module.exports = {
                         };
                         transporter.sendMail(mailOptions, (error) => {
                             if (error) {
-                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nWithdrawID: ${withdraw._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                             if (process.env.NODE_ENV === 'production') {
                                 userLogger.info(`Message: Withdraw denied\r\nWithdrawID: ${withdraw._id}\r\nAmount: ${withdraw.amount}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${withdraw.userID}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

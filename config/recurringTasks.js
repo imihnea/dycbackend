@@ -356,7 +356,7 @@ setInterval( () => {
                                         subject: `You have an unread message`,
                                     }, function (err, data) {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Sending user2 notif email\r\nUserId: ${user2._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -367,7 +367,7 @@ setInterval( () => {
                                             // send mail with defined transport object
                                             transporter.sendMail(mailOptions, (error) => {
                                                 if (error) {
-                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user2 @chats\r\nUserId: ${user2._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 }
                                             });
                                         }
@@ -390,7 +390,7 @@ setInterval( () => {
                                         subject: `You have an unread message`,
                                     }, function (err, data) {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -428,7 +428,7 @@ setInterval( () => {
                 deleteProduct(id);
                 product.remove();
                 if (process.env.NODE_ENV === 'production') {
-                    productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         }
@@ -449,11 +449,7 @@ setInterval( () => {
                 deleteProduct(id);
                 product.remove();
                 if (process.env.NODE_ENV === 'production') {
-                  if (unindexed) {
-                    productLogger.info(`Message: Product ${id} was deleted and unindexed\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  } else {
-                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                  }
+                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nMethod: Deleting old products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         }
@@ -472,6 +468,6 @@ setInterval( () => {
         }
     });
     if (process.env.NODE_ENV === 'production') {
-        logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
 }, 11 * 60 * 60 * 1000);

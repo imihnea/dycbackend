@@ -1,4 +1,6 @@
 const Product = require('../models/product');
+const moment = require('moment');
+const { errorLogger, logger } = require('./winston');
 const elasticsearch = require('elasticsearch');
 client = new elasticsearch.Client({
     host: process.env.ELASTICHOST,
@@ -9,33 +11,32 @@ const startElastic = () => {
       requestTimeout: 3000
     }, function (error) {
       if (error) {
-        console.trace('Elasticsearch cluster is down!');
+            errorLogger.error(`Elasticsearch Error\r\nStatus: ${error.status || 500}\r\nMessage: ES Cluster is down\r\n${error.message} - Elasticsearch\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       } else {
-        console.log('All is well');
+            logger.info(`Message: All is well - Elasticsearch\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
     });
     
     // Check if there is an old index
     client.indices.exists({index: 'products'}, (err, result) => {
         if (err) {
-            console.log(err);
+            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             if (result) {
                 // Delete the old index
                 client.indices.delete({index: 'products'}, (err, result) => {
                   if (err) {
-                    console.log(err);
+                    errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   } else {
-                    console.log(result);
                     // Create new index after the old one was deleted
                     client.indices.create({index: 'products'}, (err, result) => {
                       if (err) {
-                        console.log(err);
+                        errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       } else {
-                        console.log(result);// Create mapping
+                        // Create mapping
                         client.indices.getMapping({index: 'products'}, (err, res) => {
                             if (err) {
-                            console.log(err);
+                                errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 if (!res.products.mappings) {
                                     client.indices.putMapping(
@@ -72,9 +73,7 @@ const startElastic = () => {
                                         }, {
                                     }, (err, res) => {
                                         if (err) {
-                                            console.log(err);
-                                        } else {
-                                            console.log(res);
+                                            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
                                 }
@@ -84,7 +83,7 @@ const startElastic = () => {
                         // Index available products
                         Product.find({available: 'True'}, (err ,res) => {
                             if (err) {
-                                console.log(err);
+                                errorLogger.error(`Elasticsearch Mongoose Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 res.forEach(product => {
                                     client.index({
@@ -106,7 +105,7 @@ const startElastic = () => {
                                         }
                                     }, function(err, resp, status) {
                                         if (err) {
-                                            console.log(err);
+                                            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
                                 });
@@ -134,21 +133,19 @@ const updateRating = function(product) {
         }
     }, (err, res) => {
         if (err) {
-          console.log(err);
-        } else {
-          console.log(res);
+          errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
     }
 )};
 
 const deleteProduct = (id) => {
-    elasticClient.delete({
+    client.delete({
         index: 'products',
         type: 'products',
         id: `${req.params.id}`
       }, (err) => {
         if (err) {
-          console.log(err);
+            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
     });
 };
