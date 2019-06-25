@@ -23,7 +23,6 @@ Backend:
       Elasticsearch => Test more in depth
    Low Priority:
 
-      Email verification => Error path @confirmEmail doesn't render error
       Categories => Add more in future
 
 Optimization:
@@ -33,10 +32,9 @@ Optimization:
 
    Caching => Redis
 
-   HTTP/2 => SPDY
-
-
 After launch:
+
+   HTTP/2 => SPDY (when supported by heroku)
 
    Bitcore implementation
 
