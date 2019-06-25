@@ -9,7 +9,7 @@ const Product = require('../models/product');
 const Chat = require('../models/chat');
 const nodemailer = require('nodemailer');
 const request = require("request");
-const shippo = require('shippo')('shippo_test_df6c272d5ff5a03ed46f7fa6371c73edd2964986');
+const shippo = require('shippo')(`${process.env.SHIPPO_SECRET}`);
 const middleware = require('../middleware/index');
 const Client = require('coinbase').Client;
 const client = new Client({
@@ -63,7 +63,7 @@ module.exports = {
         // shippo.carrieraccount.list({results:10})
         // .then(function(carrieraccount){
         //     console.log(carrieraccount);
-        // });
+        // }); if you need to see new courier ids uncomment this
         // shippo.address.list({results:2})   
         // .then(function(address){
         //     console.log(address);
@@ -764,31 +764,31 @@ module.exports = {
         };
         let carriers = [];
         if(product.carrier.dhl_express === true) {
-            let dhl = '3924c836947b4d4ca1d1a5c8bfe5b59b';
+            let dhl = '3eed752394b1430c86da206392a6b409';
             carriers.push(dhl);
         }
         if(product.carrier.usps === true) {
-            let usps = '32e1acf739a94a7f86cd168d63bc2df1';
+            let usps = 'e9ce10a08a1440f1a6e0c7d9450ecd0c';
             carriers.push(usps);
         }
         if(product.carrier.sendle === true) {
-            let sendle = '89b81121d6d843228b9651748e2b96c7';
+            let sendle = '6405c45a77f24c7197fa8db84ab58d75';
             carriers.push(sendle);
         }
         if(product.carrier.parcelforce === true) {
-            let parcelforce = 'a97e0d2a493a468baf95b87f00b84de1';
+            let parcelforce = '6d584261be87429fb125204a0a469458';
             carriers.push(parcelforce);
         }
         if(product.carrier.deutsche_post === true) {
-            let deutsche_post = '604de049b92846e899a03dfd48247087';
+            let deutsche_post = 'e4ad18f46aff495f999998a8b30a8619';
             carriers.push(deutsche_post);
         }
         if(product.carrier.couriersplease === true) {
-            let couriersplease = 'a4c6ed9236a64b88b217d3b8b849db8f';
+            let couriersplease = '3ed3f7828a444079aa917388bdac78dd';
             carriers.push(couriersplease);
         }
         if(product.carrier.fastway === true) {
-            let fastway = '435ad5f12e2c44a7b9163e73abe28bf6';
+            let fastway = 'edcbb2595aa24b23bd87a88c6509ad31';
             carriers.push(fastway);
         }
         shippo.address.create({

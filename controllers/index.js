@@ -1374,7 +1374,7 @@ module.exports = {
           } else {
           const mailOptions = {
             from: `${req.body.name} <${req.body.email}>`, // sender address
-            to: 'ionitamihneadjgogu@gmail.com', // list of receivers
+            to: 'support@dealyourcrypto.com', // list of receivers
             subject: 'Deal Your Crypto - Contact Request', // Subject line
             html: data, // html body
           };
@@ -1464,7 +1464,7 @@ module.exports = {
             } else {
             const mailOptions = {
               from: `${req.body.name} <${req.body.email}>`, // sender address
-              to: 'adrianpopa97@gmail.com', // list of receivers
+              to: 'support@dealyourcrypto.com', // list of receivers
               subject: 'Deal Your Crypto - Contact Request', // Subject line
               html: data, // html body
             };
@@ -1492,7 +1492,7 @@ module.exports = {
             } else {
             const mailOptions = {
               from: `${req.body.name} <${req.body.email}>`, // sender address
-              to: 'adrianpopa97@gmail.com', // list of receivers
+              to: 'support@dealyourcrypto.com', // list of receivers
               subject: 'Deal Your Crypto - Priority Contact Request', // Subject line
               html: data, // html body
             };
