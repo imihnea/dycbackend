@@ -18,6 +18,7 @@ Backend:
 
    High Priority:
 
+      Notifications => Add more if needed
       Security => Validate and sanitize every user input
                => Anti DDOS
       Elasticsearch => Test more in depth

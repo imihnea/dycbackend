@@ -890,6 +890,8 @@ module.exports = {
     });
     if (premium) {
       premium = true;
+    } else {
+      premium = false;
     }
     client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
       if (!error) {
@@ -1459,6 +1461,8 @@ module.exports = {
     });
     if (premium) {
       premium = true;
+    } else {
+      premium = false;
     }
     client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
       if (!error) {
