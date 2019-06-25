@@ -39,6 +39,11 @@ mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 const req = false;
 
+let monthAgo = new Date();
+monthAgo.setDate(monthAgo.getDate() - 30);
+let weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 7);
+
 // Runs every 11 hours
 setInterval( () => {
     // Pay deals which cannot be refunded anymore
@@ -178,6 +183,15 @@ setInterval( () => {
                                                 } else {
                                                     userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                     createProfit(req, subscriptionCost, 'Subscription');
+                                                    Notification.create({
+                                                        userid: user._id,
+                                                        linkTo: `/dashboard`,
+                                                        message: `Your subscription has been automatically renewed`
+                                                    }, (err) => {
+                                                        if (err) {
+                                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                        }
+                                                    });
                                                 }
                                             });
                                         }             
@@ -189,6 +203,15 @@ setInterval( () => {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             userLogger.info(`Message: Recurring payments ended for 30 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            Notification.create({
+                                                userid: user._id,
+                                                linkTo: `/dashboard`,
+                                                message: `Your subscription has been cancelled due to lack of funds`
+                                            }, (err) => {
+                                                if (err) {
+                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
                                         }
                                     }); 
                                 }
@@ -213,6 +236,15 @@ setInterval( () => {
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 createProfit(req, subscriptionCost, 'Subscription');
+                                                Notification.create({
+                                                    userid: user._id,
+                                                    linkTo: `/dashboard`,
+                                                    message: `Your subscription has been automatically renewed`
+                                                }, (err) => {
+                                                    if (err) {
+                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
                                             }
                                         });
                                     }             
@@ -224,6 +256,15 @@ setInterval( () => {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                     } else {
                                         userLogger.info(`Message: Recurring payments ended for 90 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        Notification.create({
+                                            userid: user._id,
+                                            linkTo: `/dashboard`,
+                                            message: `Your subscription has been cancelled due to lack of funds`
+                                        }, (err) => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
                                     }
                                 }); 
                             }
@@ -248,6 +289,15 @@ setInterval( () => {
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 createProfit(req, subscriptionCost, 'Subscription');
+                                                Notification.create({
+                                                    userid: user._id,
+                                                    linkTo: `/dashboard`,
+                                                    message: `Your subscription has been automatically renewed`
+                                                }, (err) => {
+                                                    if (err) {
+                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
                                             }
                                         });
                                     }             
@@ -259,6 +309,15 @@ setInterval( () => {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             userLogger.info(`Message: Recurring payments ended for 180 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            Notification.create({
+                                                userid: user._id,
+                                                linkTo: `/dashboard`,
+                                                message: `Your subscription has been cancelled due to lack of funds`
+                                            }, (err) => {
+                                                if (err) {
+                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
                                         }
                                     }); 
                                 }
@@ -283,6 +342,15 @@ setInterval( () => {
                                             } else {
                                                 userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 createProfit(req, subscriptionCost, 'Subscription');
+                                                Notification.create({
+                                                    userid: user._id,
+                                                    linkTo: `/dashboard`,
+                                                    message: `Your subscription has been automatically renewed`
+                                                }, (err) => {
+                                                    if (err) {
+                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
                                             }
                                         });
                                     }             
@@ -294,6 +362,15 @@ setInterval( () => {
                                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                     } else {
                                         userLogger.info(`Message: Recurring payments ended for 360 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        Notification.create({
+                                            userid: user._id,
+                                            linkTo: `/dashboard`,
+                                            message: `Your subscription has been cancelled due to lack of funds`
+                                        }, (err) => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
                                     }
                                 }); 
                             }
@@ -415,6 +492,73 @@ setInterval( () => {
         }
     });
 
+    // Deleting old chats and deals
+    Chat.find({'createdAt': {$lt: monthAgo}}, (err, chats) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the old chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            chats.forEach(chat => {
+                if (chat.messageCount == 0) {
+                    if (!chat.deal) {
+                        chat.remove(err => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with no messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                    } else {
+                        Deal.findById(chat.deal, (err, deal) => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            } else {
+                                if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
+                                    deal.remove(err => {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                    chat.remove(err => {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    if (chat.messages[messageCount - 1].createdAt < weekAgo) {
+                        if (!chat.deal) {
+                            chat.remove(err => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });     
+                        } else {
+                            Deal.findById(chat.deal, (err, deal) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
+                                        deal.remove(err => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
+                                        chat.remove(err => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    });
+
     // Deleting flagged products
     Products.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
         if (err) {
@@ -435,8 +579,6 @@ setInterval( () => {
     });
 
     // Deleting products that weren't bought in a month
-    let monthAgo = new Date();
-    monthAgo.setDate(monthAgo.getDate() - 30);
     Products.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -456,9 +598,7 @@ setInterval( () => {
     });
 
     // Deleting week old notifications
-    let weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    Notification.find({'createdAt': { $lt: weegAgo }}, (err, notifications) => {
+    Notification.find({'createdAt': { $lt: weekAgo }}, (err, notifications) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {

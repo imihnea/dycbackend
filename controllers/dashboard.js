@@ -10,7 +10,6 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Withdraw = require('../models/withdrawRequests');
-const Profit = require('../models/profit');
 const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
