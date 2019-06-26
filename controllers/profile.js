@@ -54,8 +54,8 @@ module.exports = {
           reviews,
           premium,
           pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         res.render('index/profile', { 
@@ -65,8 +65,8 @@ module.exports = {
           reviews,
           premium: false,
           pageTitle: 'Profile - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       }
     },
@@ -133,8 +133,8 @@ module.exports = {
                         csrfToken: req.cookies._csrf,
                         csrfSecret: req.body.csrfSecret,
                         pageTitle: 'Dashboard - Deal Your Crypto',
-                        pageDescription: 'Description',
-                        pageKeywords: 'Keywords'
+                        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                       });
                     } else {
                       premium = false;
@@ -145,8 +145,8 @@ module.exports = {
                         csrfToken: req.cookies._csrf,
                         csrfSecret: req.body.csrfSecret,
                         pageTitle: 'Dashboard - Deal Your Crypto',
-                        pageDescription: 'Description',
-                        pageKeywords: 'Keywords'
+                        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                       });
                     }
                 } else {

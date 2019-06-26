@@ -139,8 +139,8 @@ module.exports = {
                     user: req.user,
                     csrfToken: req.body.csrfSecret,
                     pageTitle: `${product.name} - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: product.searchableTags
+                    pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                    pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                   });
                 } else {
                   let similar = result;
@@ -171,8 +171,8 @@ module.exports = {
                                     user: req.user,
                                     csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
-                                    pageDescription: 'Description',
-                                    pageKeywords: product.searchableTags
+                                    pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                    pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                                 });
                             } else {
                                 res.render('products/product_view', { 
@@ -186,8 +186,8 @@ module.exports = {
                                     user: req.user,
                                     csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
-                                    pageDescription: 'Description',
-                                    pageKeywords: product.searchableTags
+                                    pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                    pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                                 });
                             }
                         } else {
@@ -205,8 +205,8 @@ module.exports = {
                                 user: req.user,
                                 csrfToken: req.body.csrfSecret,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
-                                pageDescription: 'Description',
-                                pageKeywords: product.searchableTags
+                                pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                             });
                         }
                     });
@@ -223,8 +223,8 @@ module.exports = {
                             user: req.user,
                             csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
-                            pageDescription: 'Description',
-                            pageKeywords: product.searchableTags
+                            pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                         });
                     } else {
                         res.render('products/product_view', { 
@@ -238,8 +238,8 @@ module.exports = {
                             user: req.user,
                             csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
-                            pageDescription: 'Description',
-                            pageKeywords: product.searchableTags
+                            pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                         });
                     }
                   }
@@ -264,8 +264,8 @@ module.exports = {
                         reviewed: true, 
                         user: false,
                         pageTitle: `${product.name} - Deal Your Crypto`,
-                        pageDescription: 'Description',
-                        pageKeywords: product.searchableTags
+                        pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                        pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                     });
                 } else {
                   let similar = result;
@@ -295,8 +295,8 @@ module.exports = {
                                     reviewed: true, 
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
-                                    pageDescription: 'Description',
-                                    pageKeywords: product.searchableTags
+                                    pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                    pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                                 });
                             } else {
                                 res.render('products/product_view', { 
@@ -309,8 +309,8 @@ module.exports = {
                                     reviewed: true, 
                                     user: false,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
-                                    pageDescription: 'Description',
-                                    pageKeywords: product.searchableTags
+                                    pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                    pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                                 });
                             }
                         } else {
@@ -327,8 +327,8 @@ module.exports = {
                                 reviewed: true, 
                                 user: false,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
-                                pageDescription: 'Description',
-                                pageKeywords: product.searchableTags
+                                pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                                pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                             });
                         }
                     });
@@ -344,8 +344,8 @@ module.exports = {
                             reviewed: true, 
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,
-                            pageDescription: 'Description',
-                            pageKeywords: product.searchableTags
+                            pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                         });
                     } else {
                         res.render('products/product_view', { 
@@ -358,8 +358,8 @@ module.exports = {
                             reviewed: true, 
                             user: false,
                             pageTitle: `${product.name} - Deal Your Crypto`,
-                            pageDescription: 'Description',
-                            pageKeywords: product.searchableTags
+                            pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
                         });
                     }
                   } 
@@ -433,8 +433,8 @@ module.exports = {
                     product: product,
                     csrfToken: req.body.csrfSecret,
                     pageTitle: `Buy ${product.name} - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                    pageDescription: `Buy ${product.name} for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                    pageKeywords: `buy with bitcoin, ${product.name}, bitcoin, bitcoin market, crypto, cryptocurrency`,
                 });
             } else {
                 const user  = await User.findById(req.user._id);

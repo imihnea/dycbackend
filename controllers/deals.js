@@ -55,8 +55,8 @@ module.exports = {
             chat, 
             errors: false,
             pageTitle: `${deal.product.name} - Deal Your Crypto`,
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: `Check out deal ${deal} on the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: 'deal, personal deal, chat, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
     },
     async getBuyDeal(req, res) {
@@ -82,8 +82,8 @@ module.exports = {
                     btcrate,
                     csrfToken: req.body.csrfSecret,
                     pageTitle: `Buy ${product.name} - Deal Your Crypto`,
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords',
+                    pageDescription: `Buy ${product.name} for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                    pageKeywords: `buy with bitcoin, ${product.name}, bitcoin, bitcoin market, crypto, cryptocurrency`,
                 });
             }
         });
@@ -396,8 +396,8 @@ module.exports = {
                 chat, 
                 errors,
                 pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: `Get the best deal for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         } else {
             if (req.body.refundOption === 'Money Back') {
@@ -586,8 +586,8 @@ module.exports = {
                 chat, 
                 errors,
                 pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: `Get the best deal for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         } else {
             deal.sellerReason = req.body.reason;
@@ -656,8 +656,8 @@ module.exports = {
                 chat, 
                 errors,
                 pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: `Get the best deal for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         } else {
             // Find the deal
@@ -727,8 +727,8 @@ module.exports = {
                 user: req.user, 
                 deal: deal,
                 pageTitle: `${deal.product.name} Review - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: `Leave a review for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                pageKeywords: `buy with bitcoin, ${product.name}, review, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         }
     },

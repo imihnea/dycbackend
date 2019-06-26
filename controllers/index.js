@@ -115,8 +115,8 @@ module.exports = {
       errors: false, 
       regErrors: false,
       pageTitle: 'Register - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Register an account on Deal Your Crypto and start buying and selling products!',
+      pageKeywords: 'register account, register, sign up, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   // POST /register
@@ -128,8 +128,8 @@ module.exports = {
         errors, 
         regErrors: false,
         pageTitle: 'Register - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Register an account on Deal Your Crypto and start buying and selling products!',
+        pageKeywords: 'register account, register, sign up, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       } );
     }
     const secretKey = RECAPTCHA_SECRET;
@@ -143,8 +143,8 @@ module.exports = {
           errors, 
           regErrors: false,
           pageTitle: 'Register - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Register an account on Deal Your Crypto and start buying and selling products!',
+          pageKeywords: 'register account, register, sign up, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       }
       req.check('email', 'The email address is invalid').isEmail().notEmpty().isLength({ max: 500 });
@@ -164,8 +164,8 @@ module.exports = {
           errors: false, 
           regErrors,
           pageTitle: 'Register - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Register an account on Deal Your Crypto and start buying and selling products!',
+          pageKeywords: 'register account, register, sign up, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         const newUser = new User({ email: req.body.email, username: req.body.username });
@@ -182,8 +182,8 @@ module.exports = {
           res.render('index/confirmEmail', {
             user: newUser,
             pageTitle: 'Confirm Email - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Confirm your email on Deal Your Crypto and start buying and selling products!',
+            pageKeywords: 'confirm email, email, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         }); 
       }
@@ -235,8 +235,8 @@ module.exports = {
               user: req.user,
               errors: errors,
               pageTitle: 'Dashboard - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
+              pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
           } else {
             let phoneNumber = req.body.number;
@@ -260,8 +260,8 @@ module.exports = {
   get2factor(req, res) {
     res.render('index/2factor',{
       pageTitle: 'Two-Factor - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Enable two-factor authentication to enhance your account security!',
+      pageKeywords: 'two-factor, 2factor, security, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     })
   },
   async post2factor(req, res) {
@@ -272,8 +272,8 @@ module.exports = {
         user: req.user,
         errors: errors,
         pageTitle: 'Dashboard - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       let phoneNumber = req.body.number;
@@ -294,8 +294,8 @@ module.exports = {
                 number: phoneNumber, 
                 requestId: requestId,
                 pageTitle: 'Verify - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: 'Verify your phone number to activate two-factor authentication.',
+                pageKeywords: 'phone number, verify, check, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
               }); // Success! Now, have your user enter the PIN
             } else {
               req.flash('error', 'Something went wrong, please try again.');
@@ -370,15 +370,15 @@ module.exports = {
         user: req.user, 
         errors: false,
         pageTitle: 'Login - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+        pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       res.render('index/login', { 
         errors: false,
         pageTitle: 'Login - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+        pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
        });
     }
   },
@@ -392,8 +392,8 @@ module.exports = {
         return res.render('index/login', {
           errors,
           pageTitle: 'Login - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+          pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       }
       const secretKey = "6LdvYJcUAAAAABRACFNVD7CyVxgDa3M04i1_aGs5";
@@ -406,8 +406,8 @@ module.exports = {
           return res.render('index/login', {
             errors,
             pageTitle: 'Login - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+            pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         } 
       });
@@ -425,8 +425,8 @@ module.exports = {
       return res.render('index/login', {
         errors: err,
         pageTitle: 'Login - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+        pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       User.findOne({ username: req.body.username }, (err, user) => {
@@ -437,8 +437,8 @@ module.exports = {
           return res.render('index/login', {
             errors,
             pageTitle: 'Login - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+            pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         }
         if(!user) {
@@ -447,8 +447,8 @@ module.exports = {
           return res.render('index/login', {
             errors,
             pageTitle: 'Login - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+            pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         }
         if (user.ban.length > 0) {
@@ -461,8 +461,8 @@ module.exports = {
           res.render('index/confirmEmail', {
             user,
             pageTitle: 'Confirm Email - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Confirm your email to activate your account on Deal Your Crypto.',
+            pageKeywords: 'confirm email, confirm, email, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         } else {
           // verif password
@@ -475,8 +475,8 @@ module.exports = {
           //       return res.render('index/login', {
           //         errors,
           //         pageTitle: 'Login - Deal Your Crypto',
-          //         pageDescription: 'Description',
-          //         pageKeywords: 'Keywords'
+          //         pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+          //         pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           //       });
           //     } else {
           //       let requestId = result.request_id;
@@ -486,8 +486,8 @@ module.exports = {
           //           password: escapeHTML(req.body.password), 
           //           requestId: requestId,
           //           pageTitle: 'Verify Login - Deal Your Crypto',
-          //           pageDescription: 'Description',
-          //           pageKeywords: 'Keywords'
+          //           pageDescription: 'Verify your login on Deal Your Crypto.',
+          //           pageKeywords: 'verify login, verify, login, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           //          }); // Success! Now, have your user enter the PIN
           //       } else {
           //         let errors = { msg: String };
@@ -495,8 +495,8 @@ module.exports = {
           //         return res.render('index/login', {
           //           errors,
           //           pageTitle: 'Login - Deal Your Crypto',
-          //           pageDescription: 'Description',
-          //           pageKeywords: 'Keywords'
+          //           pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
+          //           pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           //         });
           //       }
           //     }
@@ -565,8 +565,8 @@ module.exports = {
             errors: false,
             onlyFeatured: false,
             pageTitle: 'Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+            pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         } else {
           let products = result;
@@ -588,8 +588,8 @@ module.exports = {
                   errors: false,
                   onlyFeatured: false,
                   pageTitle: 'Deal Your Crypto',
-                  pageDescription: 'Description',
-                  pageKeywords: 'Keywords'
+                  pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                  pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                 }); 
               } else {
                 Array.from(result).forEach((res) => {
@@ -602,8 +602,8 @@ module.exports = {
                     errors: false,
                     onlyFeatured: false,
                     pageTitle: 'Deal Your Crypto',
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                    pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                    pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                   }); 
                 } else {
                   return res.render('index', { 
@@ -612,8 +612,8 @@ module.exports = {
                     errors: false,
                     onlyFeatured: false,
                     pageTitle: 'Deal Your Crypto',
-                    pageDescription: 'Description',
-                    pageKeywords: 'Keywords'
+                    pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                    pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                   }); 
                 }
               }
@@ -625,8 +625,8 @@ module.exports = {
               errors: false,
               onlyFeatured: true,
               pageTitle: 'Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
+              pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
           }
         }
@@ -635,15 +635,15 @@ module.exports = {
   getError(req, res) {
     res.render('errorPage', {
       pageTitle: 'Error - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Error 404, the page you were looking for does not exist.',
+      pageKeywords: 'error, bug, error page, 404, error 404'
     });
   },
   getForgot(req, res) {
     res.render('index/forgot', {
       pageTitle: 'Forgot Password - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Forgot your password? Fill out the form and we will send you an email!',
+      pageKeywords: 'forgot password, forgot, password, email'
     });
   },
   postForgot(req, res, next) {
@@ -706,8 +706,8 @@ module.exports = {
     res.render('index/categories',{
       errors: false, 
       pageTitle: 'Categories - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Browse all categories for products to buy and sell for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'all categories, categories, bitcoin, bitcoin market, crypto, cryptocurrency'
     });
   },
   postFirstCategSearch(req, res) {
@@ -955,8 +955,8 @@ module.exports = {
             avgRating, 
             condition,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
           });
         }, function(err) {
             console.trace(err.message);
@@ -1078,8 +1078,8 @@ module.exports = {
             avgRating, 
             condition,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
           });
         }, function(err) {
             console.trace(err.message);
@@ -1199,8 +1199,8 @@ module.exports = {
             avgRating, 
             condition,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
           });
         }, function(err) {
             console.trace(err.message);
@@ -1225,8 +1225,8 @@ module.exports = {
         res.render('index/reset', { 
           token: req.params.token,
           pageTitle: 'Reset Password - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Reset your password, make sure you choose a strong one!',
+          pageKeywords: 'password reset, reset, password'
         });
       },
     );
@@ -1298,8 +1298,8 @@ module.exports = {
         errors: false, 
         validationErrors: false,
         pageTitle: 'Contact - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+        pageKeywords: 'contact page, contact, support'
       });
     } else {
       res.render('index/contact', {
@@ -1308,8 +1308,8 @@ module.exports = {
         errors: false, 
         validationErrors: false,
         pageTitle: 'Contact - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+        pageKeywords: 'contact page, contact, support'
       });
     }
   },
@@ -1321,8 +1321,8 @@ module.exports = {
         errors, 
         validationErrors: false,
         pageTitle: 'Contact - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+        pageKeywords: 'contact page, contact, support'
       });
     }
     const secretKey = RECAPTCHA_SECRET;
@@ -1335,8 +1335,8 @@ module.exports = {
         return res.render('index/contact', {
           errors,
           pageTitle: 'Contact - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+          pageKeywords: 'contact page, contact, support'
         });
       }
       req.check('name', 'The name contains invalid characters.').matches(/^[a-zA-Z0-9 -]+$/g).trim().notEmpty()
@@ -1353,8 +1353,8 @@ module.exports = {
           validationErrors,
           errors: false,
           pageTitle: 'Contact - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+          pageKeywords: 'contact page, contact, support'
         });
       } else {
         const message = escapeHTML(req.body.message);
@@ -1404,8 +1404,8 @@ module.exports = {
         errors, 
         validationErrors: false,
         pageTitle: 'Contact - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+        pageKeywords: 'contact page, contact, support'
       });
     }
     const secretKey = RECAPTCHA_SECRET;
@@ -1418,8 +1418,8 @@ module.exports = {
         return res.render('index/contact', {
           errors,
           pageTitle: 'Contact - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+          pageKeywords: 'contact page, contact, support'
         });
       }
       req.check('name', 'The name contains invalid characters.').matches(/^[a-zA-Z0-9 -]+$/g).trim().notEmpty()
@@ -1442,8 +1442,8 @@ module.exports = {
           validationErrors,
           errors: false,
           pageTitle: 'Contact - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Contact Deal Your Crypto about anything you need support with! We will respond as soon as possible!',
+          pageKeywords: 'contact page, contact, support'
         });
       } else {
         let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
@@ -1579,8 +1579,8 @@ module.exports = {
         res.render('index/resetemail', { 
           token: req.params.token,
           pageTitle: 'Reset Email - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Change your email on Deal Your Crypto.',
+          pageKeywords: 'change email, email'
          });
       },
     );
@@ -1642,43 +1642,43 @@ module.exports = {
   getAbout(req, res) {
     res.render('about', {
       pageTitle: 'About - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'We are an online marketplace that connects buyers and sellers of any products, with the primary currency used being Bitcoin. The aim of what we built is to provide the best experience for everyone interested in buying and selling products for Bitcoin.',
+      pageKeywords: 'about, about page, bitcoin marketplace, bitcoin'
     });
   },
   getBuyBitcoin(req, res) {
     res.render('buy-bitcoin', {
       pageTitle: 'Buy Bitcoin - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Check out all websites you can buy bitcoin from! Buying Bitcoin was never so easy!',
+      pageKeywords: 'buy bitcoin, bitcoin, bitcoin platform, buy bitcoin credit card'
     });
   },
   getFaq(req, res) {
     res.render('faq', {
       pageTitle: 'Frequently Asked Questions - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Frequently asked questions about Deal Your Crypto. If you contact us about something, your question might end up here.',
+      pageKeywords: 'frequently asked questions, faq, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   getShipping(req, res) {
     res.render('shipping', {
       pageTitle: 'Shipping & Delivery - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Shipping and delivery policies for Deal Your Crypto.',
+      pageKeywords: 'shipping, delivery, policy, policies, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   getTos(req, res) {
     res.render('terms-of-service', {
       pageTitle: 'Terms of Service - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Terms of service for Deal Your Crypto.',
+      pageKeywords: 'terms of service, terms, tos, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   getPrivPol(req, res) {
     res.render('privacy-policy', {
       pageTitle: 'Privacy Policy - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Privacy policy for Deal Your Crypto.',
+      pageKeywords: 'privacy policy, policy, privacy, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   getSetUsername(req, res) {
@@ -1690,8 +1690,8 @@ module.exports = {
         res.render('index/set-username', {
           regErrors: false,
           pageTitle: 'Set Username - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Set your username for Deal Your Crypto.',
+          pageKeywords: 'set username, username, new username, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       }
     } else {
@@ -1707,8 +1707,8 @@ module.exports = {
       res.render('index/set-username', {
         regErrors,
         pageTitle: 'Set Username - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Set your username for Deal Your Crypto.',
+        pageKeywords: 'set username, username, new username, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       const CurrentUser = req.user._id;
