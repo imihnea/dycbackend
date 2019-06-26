@@ -2,12 +2,20 @@ const User = require('../models/user');
 const Deal = require('../models/deal');
 const Chat = require('../models/chat');
 const Subscription = require('../models/subscription');
+const Product = require('../models/product');
+const Notification = require('../models/notification');
 const moment = require('moment');
 const mongoose = require('mongoose');
-const { logger, dealLogger, errorLogger } = require('./winston');
+const { logger, dealLogger, errorLogger, productLogger, userLogger } = require('./winston');
 const { createProfit } = require('./profit');
 const nodemailer = require('nodemailer');
 const { deleteProduct } = require('./elasticsearch');
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const Client = require('coinbase').Client;
 const client = new Client({
@@ -39,13 +47,14 @@ mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 const req = false;
 
-let monthAgo = new Date();
-monthAgo.setDate(monthAgo.getDate() - 30);
-let weekAgo = new Date();
-weekAgo.setDate(weekAgo.getDate() - 7);
-
 // Runs every 11 hours
 setInterval( () => {
+    let today = Date.now();
+    let monthAgo = new Date();
+    monthAgo.setDate(monthAgo.getDate() - 30);
+    let weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
     // Pay deals which cannot be refunded anymore
     Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }}, (err, deal) => {
         if (err) {
@@ -153,233 +162,246 @@ setInterval( () => {
     // Create subs for users with recurring payments
     // and expired subs
     let subscriptionCost;
-    User.find({$or: [{subscription1: true}, {subscription3: true}, {subscription6: true}, {subscription12: true}]}, (err, res) => {
-        if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    let tokenprice;
+    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+        if (!error) {
+          let btcrate = data.data.rates.USD;
+          tokenprice = 1/btcrate; // 1 USD
+          User.find({$or: [{subscription1: true}, {subscription3: true}, {subscription6: true}, {subscription12: true}]}, (err, res) => {
+              if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                  res.forEach((user) => {
+                      Subscription.find({userid: user._id}, (err, sub) => {
+                          if (err) {
+                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                          } else if (sub.length == 0) {
+                              if (user.subscription1 == true) {
+                                  let expireDate = moment().add(30,"days").toISOString();
+                                  subscriptionCost = Number((tokenprice * 19.99).toFixed(5));
+                                  if (user.btcbalance >= subscriptionCost) {
+                                      Subscription.create({
+                                          userid: user._id,
+                                          username: user.username,
+                                          expireDate: expireDate,
+                                          expires1: today
+                                      }, err => {
+                                              if(err) {
+                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              } else {
+                                                  // Update user's balances
+                                                  user.btcbalance -= subscriptionCost;
+                                                  user.feature_tokens += 5;
+                                                  user.save(err => {
+                                                      if (err) {
+                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      } else {
+                                                          userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          createProfit(req, subscriptionCost, 'Subscription');
+                                                          Notification.create({
+                                                              userid: user._id,
+                                                              linkTo: `/dashboard`,
+                                                              message: `Your subscription has been automatically renewed`
+                                                          }, (err) => {
+                                                              if (err) {
+                                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                              }
+                                                          });
+                                                      }
+                                                  });
+                                              }             
+                                          });
+                                      } else {
+                                          user.subscription1 = false;
+                                          user.save(err => {
+                                              if (err) {
+                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              } else {
+                                                  userLogger.info(`Message: Recurring payments ended for 30 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  Notification.create({
+                                                      userid: user._id,
+                                                      linkTo: `/dashboard`,
+                                                      message: `Your subscription has been cancelled due to lack of funds`
+                                                  }, (err) => {
+                                                      if (err) {
+                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      }
+                                                  });
+                                              }
+                                          }); 
+                                      }
+                              } else if (user.subscription3 == true) {
+                                  let expireDate = moment().add(90,"days").toISOString();
+                                  subscriptionCost = Number((tokenprice * 56.99).toFixed(5));
+                                  if (user.btcbalance >= subscriptionCost) {
+                                      Subscription.create({
+                                          userid: user._id,
+                                          username: user.username,
+                                          expireDate: expireDate,
+                                          expires3: today
+                                      }, err => {
+                                          if(err) {
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                          } else {
+                                              // Update user's balances
+                                              user.btcbalance -= subscriptionCost;
+                                              user.feature_tokens += 15;
+                                              user.save(err => {
+                                                  if (err) {
+                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  } else {
+                                                      userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      Notification.create({
+                                                          userid: user._id,
+                                                          linkTo: `/dashboard`,
+                                                          message: `Your subscription has been automatically renewed`
+                                                      }, (err) => {
+                                                          if (err) {
+                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          }
+                                                      });
+                                                  }
+                                              });
+                                          }             
+                                      });
+                                  } else {
+                                      user.subscription3 = false;
+                                      user.save(err => {
+                                          if (err) {
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                          } else {
+                                              userLogger.info(`Message: Recurring payments ended for 90 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              Notification.create({
+                                                  userid: user._id,
+                                                  linkTo: `/dashboard`,
+                                                  message: `Your subscription has been cancelled due to lack of funds`
+                                              }, (err) => {
+                                                  if (err) {
+                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  }
+                                              });
+                                          }
+                                      }); 
+                                  }
+                              } else if (user.subscription6 == true) {
+                                  let expireDate = moment().add(180,"days").toISOString();
+                                  subscriptionCost = Number((tokenprice * 107.99).toFixed(5));
+                                  if (user.btcbalance >= subscriptionCost) {
+                                      Subscription.create({
+                                          userid: user._id,
+                                          username: user.username,
+                                          expireDate: expireDate,
+                                          expires6: today
+                                      }, err => {
+                                          if(err) {
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                          } else {
+                                              // Update user's balances
+                                              user.btcbalance -= subscriptionCost;
+                                              user.feature_tokens += 30;
+                                              user.save(err => {
+                                                  if (err) {
+                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  } else {
+                                                      userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      Notification.create({
+                                                          userid: user._id,
+                                                          linkTo: `/dashboard`,
+                                                          message: `Your subscription has been automatically renewed`
+                                                      }, (err) => {
+                                                          if (err) {
+                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          }
+                                                      });
+                                                  }
+                                              });
+                                          }             
+                                          });
+                                      } else {
+                                          user.subscription6 = false;
+                                          user.save(err => {
+                                              if (err) {
+                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              } else {
+                                                  userLogger.info(`Message: Recurring payments ended for 180 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  Notification.create({
+                                                      userid: user._id,
+                                                      linkTo: `/dashboard`,
+                                                      message: `Your subscription has been cancelled due to lack of funds`
+                                                  }, (err) => {
+                                                      if (err) {
+                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      }
+                                                  });
+                                              }
+                                          }); 
+                                      }
+                              } else if (user.subscription12 == true) {
+                                  let expireDate = moment().add(365,"days").toISOString();
+                                  subscriptionCost = Number((tokenprice * 203.99).toFixed(5));
+                                  if (user.btcbalance >= subscriptionCost) {
+                                      Subscription.create({
+                                          userid: user._id,
+                                          username: user.username,
+                                          expireDate: expireDate,
+                                          expires12: today
+                                      }, err => {
+                                          if(err) {
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                          } else {
+                                              // Update user's balances
+                                              user.btcbalance -= subscriptionCost;
+                                              user.feature_tokens += 60;
+                                              user.save(err => {
+                                                  if (err) {
+                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  } else {
+                                                      userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      Notification.create({
+                                                          userid: user._id,
+                                                          linkTo: `/dashboard`,
+                                                          message: `Your subscription has been automatically renewed`
+                                                      }, (err) => {
+                                                          if (err) {
+                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          }
+                                                      });
+                                                  }
+                                              });
+                                          }             
+                                          });
+                                  } else {
+                                      user.subscription12 = false;
+                                      user.save(err => {
+                                          if (err) {
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                          } else {
+                                              userLogger.info(`Message: Recurring payments ended for 360 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              Notification.create({
+                                                  userid: user._id,
+                                                  linkTo: `/dashboard`,
+                                                  message: `Your subscription has been cancelled due to lack of funds`
+                                              }, (err) => {
+                                                  if (err) {
+                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  }
+                                              });
+                                          }
+                                      }); 
+                                  }
+                              }
+                          }
+                      });
+                  });
+              }
+          });
         } else {
-            res.forEach((user) => {
-                Subscription.find({userid: user._id}, (err, sub) => {
-                    if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    } else if (sub.length == 0) {
-                        if (user.subscription1 == true) {
-                            subscriptionCost = Number((tokenprice * 19.99).toFixed(5));
-                            if (user.btcbalance >= subscriptionCost) {
-                                Subscription.create({
-                                    userid: user._id,
-                                    username: user.username,
-                                    expireDate: expireDate,
-                                    expires1: today
-                                }, err => {
-                                        if(err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        } else {
-                                            // Update user's balances
-                                            user.btcbalance -= subscriptionCost;
-                                            user.feature_tokens += 5;
-                                            user.save(err => {
-                                                if (err) {
-                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                } else {
-                                                    userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    createProfit(req, subscriptionCost, 'Subscription');
-                                                    Notification.create({
-                                                        userid: user._id,
-                                                        linkTo: `/dashboard`,
-                                                        message: `Your subscription has been automatically renewed`
-                                                    }, (err) => {
-                                                        if (err) {
-                                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }             
-                                    });
-                                } else {
-                                    user.subscription1 = false;
-                                    user.save(err => {
-                                        if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        } else {
-                                            userLogger.info(`Message: Recurring payments ended for 30 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            Notification.create({
-                                                userid: user._id,
-                                                linkTo: `/dashboard`,
-                                                message: `Your subscription has been cancelled due to lack of funds`
-                                            }, (err) => {
-                                                if (err) {
-                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                }
-                                            });
-                                        }
-                                    }); 
-                                }
-                        } else if (user.subscription3 == true) {
-                            subscriptionCost = Number((tokenprice * 56.99).toFixed(5));
-                            if (user.btcbalance >= subscriptionCost) {
-                                Subscription.create({
-                                    userid: user._id,
-                                    username: user.username,
-                                    expireDate: expireDate,
-                                    expires3: today
-                                }, err => {
-                                    if(err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        // Update user's balances
-                                        user.btcbalance -= subscriptionCost;
-                                        user.feature_tokens += 15;
-                                        user.save(err => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            } else {
-                                                userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                createProfit(req, subscriptionCost, 'Subscription');
-                                                Notification.create({
-                                                    userid: user._id,
-                                                    linkTo: `/dashboard`,
-                                                    message: `Your subscription has been automatically renewed`
-                                                }, (err) => {
-                                                    if (err) {
-                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }             
-                                });
-                            } else {
-                                user.subscription3 = false;
-                                user.save(err => {
-                                    if (err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        userLogger.info(`Message: Recurring payments ended for 90 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        Notification.create({
-                                            userid: user._id,
-                                            linkTo: `/dashboard`,
-                                            message: `Your subscription has been cancelled due to lack of funds`
-                                        }, (err) => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            }
-                                        });
-                                    }
-                                }); 
-                            }
-                        } else if (user.subscription6 == true) {
-                            subscriptionCost = Number((tokenprice * 107.99).toFixed(5));
-                            if (user.btcbalance >= subscriptionCost) {
-                                Subscription.create({
-                                    userid: user._id,
-                                    username: user.username,
-                                    expireDate: expireDate,
-                                    expires6: today
-                                }, err => {
-                                    if(err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        // Update user's balances
-                                        user.btcbalance -= subscriptionCost;
-                                        user.feature_tokens += 30;
-                                        user.save(err => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            } else {
-                                                userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                createProfit(req, subscriptionCost, 'Subscription');
-                                                Notification.create({
-                                                    userid: user._id,
-                                                    linkTo: `/dashboard`,
-                                                    message: `Your subscription has been automatically renewed`
-                                                }, (err) => {
-                                                    if (err) {
-                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }             
-                                    });
-                                } else {
-                                    user.subscription6 = false;
-                                    user.save(err => {
-                                        if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        } else {
-                                            userLogger.info(`Message: Recurring payments ended for 180 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            Notification.create({
-                                                userid: user._id,
-                                                linkTo: `/dashboard`,
-                                                message: `Your subscription has been cancelled due to lack of funds`
-                                            }, (err) => {
-                                                if (err) {
-                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                }
-                                            });
-                                        }
-                                    }); 
-                                }
-                        } else if (user.subscription12 == true) {
-                            subscriptionCost = Number((tokenprice * 203.99).toFixed(5));
-                            if (user.btcbalance >= subscriptionCost) {
-                                Subscription.create({
-                                    userid: user._id,
-                                    username: user.username,
-                                    expireDate: expireDate,
-                                    expires12: today
-                                }, err => {
-                                    if(err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        // Update user's balances
-                                        user.btcbalance -= subscriptionCost;
-                                        user.feature_tokens += 60;
-                                        user.save(err => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            } else {
-                                                userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                createProfit(req, subscriptionCost, 'Subscription');
-                                                Notification.create({
-                                                    userid: user._id,
-                                                    linkTo: `/dashboard`,
-                                                    message: `Your subscription has been automatically renewed`
-                                                }, (err) => {
-                                                    if (err) {
-                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }             
-                                    });
-                            } else {
-                                user.subscription12 = false;
-                                user.save(err => {
-                                    if (err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        userLogger.info(`Message: Recurring payments ended for 360 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        Notification.create({
-                                            userid: user._id,
-                                            linkTo: `/dashboard`,
-                                            message: `Your subscription has been cancelled due to lack of funds`
-                                        }, (err) => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            }
-                                        });
-                                    }
-                                }); 
-                            }
-                        }
-                    }
-                });
-            });
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on getting token price and updating subscriptions\r\n${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
-    });
+      });
 
     // Delete non-OAuth users who didn't confirm their email
     User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
@@ -458,31 +480,33 @@ setInterval( () => {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                if(buyer.email_notifications.message === true) {
-                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                        link: `http://${req.headers.host}/messages/${item._id}`,
-                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
-                                        sender: item.user2.fullname,
-                                        product: item.product.name,
-                                        subject: `You have an unread message`,
-                                    }, function (err, data) {
-                                        if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        } else {
-                                            const mailOptions = {
-                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                                to: `${user1.full_name} <${user1.email}>`, // list of receivers
-                                                subject: 'You have an unread message', // Subject line
-                                                html: data, // html body
-                                            };
-                                            // send mail with defined transport object
-                                            transporter.sendMail(mailOptions, (error) => {
-                                                if (error) {
-                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                }
-                                            });
-                                        }
-                                    });
+                                if (user1) {
+                                    if(user1.email_notifications.message === true) {
+                                        ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
+                                            link: `http://${req.headers.host}/messages/${item._id}`,
+                                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                            sender: item.user2.fullname,
+                                            product: item.product.name,
+                                            subject: `You have an unread message`,
+                                        }, function (err, data) {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            } else {
+                                                const mailOptions = {
+                                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                    to: `${user1.full_name} <${user1.email}>`, // list of receivers
+                                                    subject: 'You have an unread message', // Subject line
+                                                    html: data, // html body
+                                                };
+                                                // send mail with defined transport object
+                                                transporter.sendMail(mailOptions, (error) => {
+                                                    if (error) {
+                                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Sending mail user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -526,7 +550,7 @@ setInterval( () => {
                         });
                     }
                 } else {
-                    if (chat.messages[messageCount - 1].createdAt < weekAgo) {
+                    if (chat.messages[chat.messageCount - 1].createdAt < weekAgo) {
                         if (!chat.deal) {
                             chat.remove(err => {
                                 if (err) {
@@ -538,17 +562,25 @@ setInterval( () => {
                                 if (err) {
                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
-                                    if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
-                                        deal.remove(err => {
-                                            if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                            }
-                                        });
+                                    if (deal) {
+                                        if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
+                                            deal.remove(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                            chat.remove(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                        }
+                                    } else {
                                         chat.remove(err => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
-                                        });
+                                        });  
                                     }
                                 }
                             });
@@ -560,7 +592,7 @@ setInterval( () => {
     });
 
     // Deleting flagged products
-    Products.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
+    Product.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
@@ -579,7 +611,7 @@ setInterval( () => {
     });
 
     // Deleting products that weren't bought in a month
-    Products.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
+    Product.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
         if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
@@ -610,4 +642,5 @@ setInterval( () => {
     if (process.env.NODE_ENV === 'production') {
         logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
+    logger.info(`Message: Recurring Tasks finished\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 }, 11 * 60 * 60 * 1000);
