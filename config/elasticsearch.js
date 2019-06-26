@@ -142,7 +142,7 @@ const deleteProduct = (id) => {
     client.delete({
         index: 'products',
         type: 'products',
-        id: `${req.params.id}`
+        id: `${id}`
       }, (err) => {
         if (err) {
             errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
