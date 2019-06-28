@@ -1221,9 +1221,7 @@ module.exports = {
                   }
                 }, function(err, resp, status) {
                     if (err) {
-                        console.log(err);
-                    } else {
-                      console.log(resp);
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't index product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
                     }
                 });
                 if (process.env.NODE_ENV === 'production') {
@@ -1426,11 +1424,9 @@ module.exports = {
               searchableTags: product.searchableTags
           }
         }, function(err, resp, status) {
-            if (err) {
-                console.log(err);
-            } else {
-              console.log(resp);
-            }
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't index product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
         });
         if (process.env.NODE_ENV === 'production') {
           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -1756,7 +1752,9 @@ module.exports = {
                 }
               }, (err) => {
                 if (err) {
-                  console.log(err);
+                  if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+                  }
                 }
               });
               // redirect to show page
@@ -1917,9 +1915,7 @@ module.exports = {
         }
       }, (err, res) => {
         if (err) {
-          console.log(err);
-        } else {
-          console.log(res);
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
         }
       });
       // redirect to show page
@@ -1957,7 +1953,11 @@ module.exports = {
                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
               });
-              product.save();
+              product.save(err => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't save product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+                }
+              });
               elasticClient.update({
                 index: 'products',
                 type: 'products',
@@ -1969,6 +1969,10 @@ module.exports = {
                       expiry_date: product.feat_1.expiry_date
                     }
                   }
+                }
+              }, (err) => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${req.params.id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
                 }
               });
               req.flash('success', 'Your product has been promoted successfully.');
@@ -2000,7 +2004,11 @@ module.exports = {
                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
               });
-              product.save();
+              product.save(err => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+                }
+              });
               elasticClient.update({
                 index: 'products',
                 type: 'products',
@@ -2012,6 +2020,10 @@ module.exports = {
                       expiry_date: product.feat_2.expiry_date
                     }
                   }
+                }
+              }, err => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
                 }
               });
               req.flash('success', 'Your product has been promoted successfully.');
@@ -2049,7 +2061,7 @@ module.exports = {
       id: `${req.params.id}`
     }, (err) => {
       if (err) {
-        console.log(err);
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nProductId: ${req.params.id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
     });
     req.flash('success', 'Product deleted successfully!');

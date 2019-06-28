@@ -577,8 +577,8 @@ module.exports = {
             id: `${req.params.productid}`
           }, (err) => {
             if (err) {
-              console.log(err);
-            }
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete product ${req.params.productid}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+              }
         });
         await Report.deleteMany({product: req.params.productid});
         req.flash('success', 'Product deleted successfully');
