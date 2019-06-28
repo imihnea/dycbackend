@@ -46,8 +46,8 @@ module.exports = {
           withdrawals,
           errors: req.session.errors,
           pageTitle: 'Administration - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Admin page for Deal Your Crypto.',
+          pageKeywords: 'admin, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
     },
     async getUsers(req, res) {
@@ -56,8 +56,8 @@ module.exports = {
             applications,
             errors: req.session.errors,
             pageTitle: 'Administration - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Admin user page for Deal Your Crypto.',
+            pageKeywords: 'admin, admin user, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
     },
     async getReports(req, res) {
@@ -80,8 +80,8 @@ module.exports = {
             reviewReports,
             errors: req.session.errors,
             pageTitle: 'Administration - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Admin reports for Deal Your Crypto.',
+            pageKeywords: 'admin, admin reports, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
     },
     async withdrawAccept (req, res) {
@@ -329,8 +329,8 @@ module.exports = {
                 applications,
                 errors,
                 pageTitle: 'Administration - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: 'Admin page for Deal Your Crypto.',
+                pageKeywords: 'admin, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
         }
         const user = await User.findById(req.body.userid);
@@ -435,8 +435,8 @@ module.exports = {
                 applications,
                 errors,
                 pageTitle: 'Administration - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: 'Admin page for Deal Your Crypto.',
+                pageKeywords: 'admin, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
         }
         const user = await User.findByIdAndUpdate(req.body.userid, {$set: {accountType: 'Partner', 'partnerApplication.status': 'Accepted'}});
@@ -490,8 +490,8 @@ module.exports = {
                 applications,
                 errors,
                 pageTitle: 'Administration - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: 'Admin page for Deal Your Crypto.',
+                pageKeywords: 'admin, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
         }
         const user = await User.findById(req.body.userid);

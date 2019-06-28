@@ -72,8 +72,8 @@ module.exports = {
             chats, 
             user: req.user,
             pageTitle: 'Messages - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Your messages on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+            pageKeywords: 'message, messages, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency'
         });
     },
     // Get Messages
@@ -100,8 +100,8 @@ module.exports = {
             buyer, 
             product,
             pageTitle: 'Messages - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Your message on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+            pageKeywords: 'message, messages, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency'
         });
     },
     // Update "read" field
@@ -327,8 +327,8 @@ module.exports = {
                 chat, 
                 errors,
                 pageTitle: `${deal.product.name} Message - Deal Your Crypto`,
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: `Message for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         }
         // Find the chat

@@ -33,14 +33,18 @@
                                         <label class="label adrlabel">Current<br/> Address</label>
                                         <input class="input smmargin adradr" name="user[btcadr]" value="<% if (user.btcadr) { %><%= user.btcadr %><% } else { %>No current withdraw address found - please add a new one below<% } %>" readonly />
                                     </div>
-                                    <form action="/dashboard/addresses" method="POST">
+                                    <form action="/dashboard/addresses" id="addressesForm" method="POST">
                                         <div class="address">
                                             <label class="label adrlabel" for="btcadr">New <br/> Address</label>
                                             <input class="input smmargin adradr" name="btcadr" id="btcadr" placeholder="Withdraw Bitcoin Address" type="text" required />
                                         </div>
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                        <button class="button is-primary">Change Address</button>
-                                    </form>    
+
+                                    </form>
+                                    <div class="buttons has-addons is-centered">
+                                        <button form="addressesForm" class="button is-primary">Change Address</button>
+                                        <a href="/buy-bitcoin" class="button is-primary">Buy Bitcoin</a>
+                                    </div>
                                     <div class="address">
                                         <label class="label adrlabel" style="margin-top: 1.2em;">Balance</label>
                                         <input class="input smmargin adradr" name="btc_value" value="<% if (user.btcbalance) { %><%= user.btcbalance.toFixed(8) %> BTC = <%= (user.btcbalance * btcrate).toFixed(3).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') %> USD <% } else { %>0.00000000 BTC <% } %>" type="text" readonly />

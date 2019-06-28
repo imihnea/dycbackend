@@ -129,8 +129,8 @@ module.exports = {
         csrfToken: req.cookies._csrf,
         csrfSecret: req.body.csrfSecret,
         pageTitle: 'Dashboard - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       premium = false;
@@ -141,8 +141,8 @@ module.exports = {
         csrfToken: req.cookies._csrf,
         csrfSecret: req.body.csrfSecret,
         pageTitle: 'Dashboard - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     }
   },
@@ -159,8 +159,8 @@ module.exports = {
       user: req.user,
       csrfToken: req.body.csrfSecret,
       pageTitle: 'Open Deals - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Open deals in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async closedProductIndex(req, res) {
@@ -174,8 +174,8 @@ module.exports = {
       products,
       user: req.user,
       pageTitle: 'Closed Deals - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Closed deals in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async purchasedProductIndex(req, res) {
@@ -189,8 +189,8 @@ module.exports = {
       deals,
       user: req.user,
       pageTitle: 'Purchases - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Purchases in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async ongoingProductIndex(req, res) {
@@ -236,8 +236,8 @@ module.exports = {
       user: req.user,
       csrfToken: req.body.csrfSecret,
       pageTitle: 'Ongoing Deals - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Ongoing deals in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async refundProductIndex(req, res) {
@@ -270,8 +270,8 @@ module.exports = {
       user: req.user,
       csrfToken: req.body.csrfSecret,
       pageTitle: 'Refunded Deals - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Refunded deals in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   // Show address page
@@ -302,8 +302,8 @@ module.exports = {
           withdrawals,
           csrfToken: req.body.csrfSecret,
           pageTitle: 'Addresses - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Addresses and balance in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         req.flash('err', 'There\'s been an error, please try again.');
@@ -422,8 +422,8 @@ module.exports = {
               errors,
               csrfToken: req.body.csrfSecret,
               pageTitle: 'Addresses - Deal Your Crypto',
-              pageDescription: 'Description',
-              pageKeywords: 'Keywords'
+              pageDescription: 'Addresses and balance in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
             });
         } else {
           req.flash('err', 'There\'s been an error, please try again.');
@@ -463,8 +463,8 @@ module.exports = {
           withdrawId: req.params.id,
           requestId: req.body.requestId,
           pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         if(result && result.status == '0') { // Success!
@@ -523,8 +523,8 @@ module.exports = {
             withdrawId: req.params.id,
             requestId: req.body.requestId,
             pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+            pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         }
       }
@@ -547,8 +547,8 @@ module.exports = {
             errors,
             csrfToken: req.body.csrfSecret,
             pageTitle: 'Addresses - Deal Your Crypto',
-            pageDescription: 'Description',
-            pageKeywords: 'Keywords'
+            pageDescription: 'Addresses and balance in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+            pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
           });
         } else {
           req.flash('err', 'There\'s been an error, please try again.');
@@ -583,8 +583,8 @@ module.exports = {
                 withdrawId: withdraw._id,
                 requestId: requestId,
                 pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-                pageDescription: 'Description',
-                pageKeywords: 'Keywords'
+                pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+                pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
                }); // Success! Now, have your user enter the PIN
             } else {
               req.flash('error', 'Something went wrong. Please try again later.');
@@ -760,8 +760,8 @@ module.exports = {
           errors: req.session.errors,
           csrfToken: req.body.csrfSecret,
           pageTitle: 'Tokens - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Tokens in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         req.flash('err', 'There\'s been an error, please try again.');
@@ -781,8 +781,8 @@ module.exports = {
           errors: errors,
           csrfToken: req.body.csrfSecret,
           pageTitle: 'Tokens - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Tokens in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         const user = await User.findById(req.user._id);
@@ -913,8 +913,8 @@ module.exports = {
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
           pageTitle: 'New Deal - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         res.render('dashboard/dashboard_new', {
@@ -925,8 +925,8 @@ module.exports = {
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
           pageTitle: 'New Deal - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       }
     });
@@ -1007,8 +1007,8 @@ module.exports = {
           csrfToken: req.params._csrf,
           csrfSecret: req.params.csrfSecret,
           pageTitle: 'New Deal - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else if(req.body.product.shipping === 'true') {
         req.body.product.name = cleanHTML(String(req.body.product.name));
@@ -1048,7 +1048,7 @@ module.exports = {
                   } else if (result.moderation[0].status === 'rejected') {
                       req.body.product.images.push({
                         // replace with a 'picture contains nudity' or something
-                        url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                        url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
                         public_id: result.public_id,
                       });
                   } else {
@@ -1253,7 +1253,7 @@ module.exports = {
               } else if (result.moderation[0].status === 'rejected') {
                   req.body.product.images.push({
                     // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
                     public_id: result.public_id,
                   });
               } else {
@@ -1455,8 +1455,8 @@ module.exports = {
       floorRating,
       csrfToken: req.body.csrfSecret,
       pageTitle: `${product.name} - Deal Your Crypto`,
-      pageDescription: 'Description',
-      pageKeywords: product.searchableTags
+      pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+      pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
     });
   },
   // Products Edit
@@ -1485,8 +1485,8 @@ module.exports = {
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
           pageTitle: `${product.name} - Deal Your Crypto`,
-          pageDescription: 'Description',
-          pageKeywords: product.searchableTags
+          pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+          pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
         });
       } else {
         res.render('dashboard/dashboard_edit', {
@@ -1498,8 +1498,8 @@ module.exports = {
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
           pageTitle: `${product.name} - Deal Your Crypto`,
-          pageDescription: 'Description',
-          pageKeywords: product.searchableTags
+          pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+          pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
         });
       }
     });
@@ -1582,8 +1582,8 @@ module.exports = {
         csrfToken: req.params._csrf,
         csrfSecret: req.params.csrfSecret,
         pageTitle: `${product.name} - Deal Your Crypto`,
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+        pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
       });
     } else if(req.body.product.shipping === 'true') {
       shippo.address.create({
@@ -1623,7 +1623,7 @@ module.exports = {
                       } else if (result.moderation[0].status === 'rejected') {
                           product.images.push({
                             // replace with a 'picture contains nudity' or something
-                            url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                            url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
                             public_id: result.public_id,
                           });
                       } else {
@@ -1784,7 +1784,7 @@ module.exports = {
               } else if (result.moderation[0].status === 'rejected') {
                   product.images.push({
                     // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/dyc/image/upload/v1542621004/samples/food/dessert.jpg',
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
                     public_id: result.public_id,
                   });
               } else {
@@ -2068,8 +2068,8 @@ module.exports = {
           errors: req.session.errors,
           csrfToken: req.body.csrfSecret,
           pageTitle: 'Subscription - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Manage your subscription in the dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'subscription, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         req.flash('err', 'There\'s been an error, please try again.');
@@ -2094,8 +2094,8 @@ module.exports = {
           premium: premium,
           errors: req.session.errors,
           pageTitle: 'Cancel Subscription - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Cancel subscription in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
     },
 	// Subscription Create
@@ -2287,8 +2287,8 @@ module.exports = {
         csrfToken: req.cookies._csrf,
         csrfSecret: req.body.csrfSecret,
         pageTitle: 'Premium - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Special premium page in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+        pageKeywords: 'premium, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     } else {
       client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
@@ -2303,8 +2303,8 @@ module.exports = {
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
           pageTitle: 'Premium - Deal Your Crypto',
-          pageDescription: 'Description',
-          pageKeywords: 'Keywords'
+          pageDescription: 'Special premium page in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+          pageKeywords: 'premium, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
       } else {
         req.flash('err', 'There\'s been an error, please try again.');
@@ -2402,8 +2402,8 @@ module.exports = {
     res.render('dashboard/dashboard_notifications', {
       user: req.user,
       pageTitle: 'Notifications - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Notifications in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'notifications, notification, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async postNotifications(req, res) {
@@ -2553,8 +2553,8 @@ module.exports = {
       lastApp,
       errors: req.session.errors,
       pageTitle: 'Partner - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Partner details on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'partner, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
   },
   async putUserPartner(req, res) {
@@ -2600,8 +2600,8 @@ module.exports = {
         lastApp,
         errors,
         pageTitle: 'Partner - Deal Your Crypto',
-        pageDescription: 'Description',
-        pageKeywords: 'Keywords'
+        pageDescription: 'Partner details on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+        pageKeywords: 'partner, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
     }      
     req.body.name = cleanHTML(String(req.body.name));
@@ -2635,8 +2635,8 @@ module.exports = {
       user: req.user,
       notifications,
       pageTitle: 'Notifications - Deal Your Crypto',
-      pageDescription: 'Description',
-      pageKeywords: 'Keywords'
+      pageDescription: 'Notifications in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'notifications, notification, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
     });
     notifProcess.send(req.user._id);
   }
