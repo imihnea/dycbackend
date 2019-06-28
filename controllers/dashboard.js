@@ -2035,6 +2035,11 @@ module.exports = {
       req.flash('error', 'The product cannot be deleted while it is the subject of ongoing deals');
       return res.redirect('back');
     }
+    const refundableDeals = await Deal.find({'product.id': product._id, refundableUntil: {$gt: Date.now()}});
+    if (refundableDeals.length > 0) {
+      req.flash('error', 'The product cannot be deleted while it can still be refunded');
+      return res.redirect('back');
+    }
     let deleteDate = new Date();
     deleteDate.setDate(deleteDate.getDate() + 30);
     await Product.findByIdAndUpdate(req.params.id, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
