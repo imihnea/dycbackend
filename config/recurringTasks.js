@@ -601,8 +601,11 @@ setInterval( () => {
                     cloudinary.v2.uploader.destroy(image.public_id);
                 });
                 const id = product._id;
-                deleteProduct(id);
-                product.remove();
+                product.remove(err => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
                 Deal.find({'product.id': id}, (err, res) => {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals for product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -654,8 +657,11 @@ setInterval( () => {
                                             cloudinary.v2.uploader.destroy(image.public_id);
                                         });
                                         const id = product._id;
-                                        deleteProduct(id);
-                                        product.remove();
+                                        product.remove(err => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
                                         if (process.env.NODE_ENV === 'production') {
                                             productLogger.info(`Message: Product ${id} was deleted\r\nMethod: Deleting old products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
