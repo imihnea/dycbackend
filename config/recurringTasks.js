@@ -169,12 +169,12 @@ setInterval( () => {
           tokenprice = 1/btcrate; // 1 USD
           User.find({$or: [{subscription1: true}, {subscription3: true}, {subscription6: true}, {subscription12: true}]}, (err, res) => {
               if (err) {
-                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Subscription - Find user\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               } else {
                   res.forEach((user) => {
                       Subscription.find({userid: user._id}, (err, sub) => {
                           if (err) {
-                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Subscription - Find sub\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           } else if (sub.length == 0) {
                               if (user.subscription1 == true) {
                                   let expireDate = moment().add(30,"days").toISOString();
@@ -187,7 +187,7 @@ setInterval( () => {
                                           expires1: today
                                       }, err => {
                                               if(err) {
-                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               } else {
                                                   // Update user's balances
                                                   user.btcbalance -= subscriptionCost;
@@ -241,7 +241,7 @@ setInterval( () => {
                                           expires3: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 3\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
@@ -295,7 +295,7 @@ setInterval( () => {
                                           expires6: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 6\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
@@ -349,7 +349,7 @@ setInterval( () => {
                                           expires12: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 12\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
@@ -534,7 +534,7 @@ setInterval( () => {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
+                                if ((['Refunded', 'Cancelled', 'Declined', 'Refund denied'].includes(deal.status)) || ((deal.status == 'Completed') && (deal.refundableUntil < Date.now()))) {
                                     deal.remove(err => {
                                         if (err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -603,6 +603,17 @@ setInterval( () => {
                 const id = product._id;
                 deleteProduct(id);
                 product.remove();
+                Deal.find({'product.id': id}, (err, res) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals for product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        res.remove(err => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                    }
+                });
                 if (process.env.NODE_ENV === 'production') {
                     productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
@@ -616,15 +627,44 @@ setInterval( () => {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             products.forEach(product => {
-                product.images.forEach(image => {
-                    cloudinary.v2.uploader.destroy(image.public_id);
+                Deal.find({status: {$nin:['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied']}, 'product.id': product._id}, (err, deals) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals that weren't completed, refunded, declined, etc for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        if (deals.length == 0) {
+                            Deal.find({'product.id': product._id, refundableUntil: {$gt: Date.now()}}, (err, refundableDeals) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find refundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    if (refundableDeals.length == 0) {
+                                        Deal.find({'product.id': product._id}, (err, nonrefundableDeals) => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find nonrefundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            } else {
+                                                nonrefundableDeals.forEach(deal => {
+                                                    deal.remove(err => {
+                                                        if (err) {
+                                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                        }
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        product.images.forEach(image => {
+                                            cloudinary.v2.uploader.destroy(image.public_id);
+                                        });
+                                        const id = product._id;
+                                        deleteProduct(id);
+                                        product.remove();
+                                        if (process.env.NODE_ENV === 'production') {
+                                            productLogger.info(`Message: Product ${id} was deleted\r\nMethod: Deleting old products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
                 });
-                const id = product._id;
-                deleteProduct(id);
-                product.remove();
-                if (process.env.NODE_ENV === 'production') {
-                    productLogger.info(`Message: Product ${id} was deleted - Product was not unindexed, check error log\r\nMethod: Deleting old products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                }
             });
         }
     });

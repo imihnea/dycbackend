@@ -2030,6 +2030,11 @@ module.exports = {
   },
   // Products Destroy
   async productDestroy(req, res) {
+    const deals = await Deal.find({status: {$nin:['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied']}, 'product.id': req.params.id});
+    if (deals.length > 0) {
+      req.flash('error', 'The product cannot be deleted while it is the subject of ongoing deals');
+      return res.redirect('back');
+    }
     let deleteDate = new Date();
     deleteDate.setDate(deleteDate.getDate() + 30);
     await Product.findByIdAndUpdate(req.params.id, {$set: {'deleteIn30.status': true, 'deleteIn30.deleteDate': deleteDate, available: 'Deleted'}});
