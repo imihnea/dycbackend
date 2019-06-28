@@ -302,6 +302,12 @@ app.use('/reviews', reviewsRoutes);
 app.use('/deals', dealsRoutes);
 app.use('/admin', adminRoutes);
 
+const middleware = require('./middleware/index');
+
+const { checkUrl } = middleware;
+
+app.all('*', checkUrl);
+
 // error 404 page
 app.get('*', (req, res) => {
   return res.status(404).redirect('/error');
