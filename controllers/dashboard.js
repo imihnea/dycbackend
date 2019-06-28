@@ -280,9 +280,18 @@ module.exports = {
       if (!error) {
         let btcrate = data.data.rates.USD;
         var maxConfirmationsBTC = 3;
-        const withdrawals = await Withdraw.find({userID: req.user._id});
-        const dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
-        const dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
+        let withdrawals = await Withdraw.find({userID: req.user._id});
+        if (withdrawals.length == 0) {
+          withdrawals = 0;
+        }
+        let dealsSold = await Deal.find({'product.author.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
+        if (dealsSold.length == 0) {
+          dealsSold = 0;
+        }
+        let dealsBought = await Deal.find({'buyer.id': req.user._id, status: 'Completed', createdAt: {$gte: new Date((new Date().getTime() - (30 * 24 * 60 * 60 * 1000)))}}).sort({createdAt: -1});
+        if (dealsBought.length == 0) {
+          dealsBought = 0;
+        }
         res.render('dashboard/dashboard_addr', { 
           user: req.user,
           btcrate,

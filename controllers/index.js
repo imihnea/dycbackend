@@ -152,12 +152,11 @@ module.exports = {
       req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
       req.check('password', 'The password must be between 8 and 64 characters').isLength({ min: 8, max: 64});
       req.check('password', 'The password must contain at least one uppercase character').matches(/[A-Z]/g);
+      req.check('password', 'The password must contain at least one lowercase character').matches(/[a-z]/g);
       req.check('password', 'The password must contain at least one number').matches(/[0-9]/g);
       req.check('password', 'The password must contain at least one special character').matches(/(`|!|@|#|\$|%|\^|&|\*|\(|\)|_|\\|-|=|\+|,|<|>|\.|\/|\?|;|:|'|\]|\[|\{|\}|\|)/g);
       req.check('password', 'The password contains an unsupported character').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+$/g);
-      // Uncomment when testing is done
-      // const password = new RegExp(req.body.password, "g");
-      // req.check('vfPassword', 'The passwords do not match.').matches(password).notEmpty();
+      req.check('vfPassword', 'The passwords do not match.').equals(`${req.body.password}`).notEmpty();
       const regErrors = req.validationErrors();
       if (regErrors) {
         res.render('index/register', {

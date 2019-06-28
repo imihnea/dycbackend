@@ -56,7 +56,18 @@
                         <label class="label" for="password" style="text-align: left !important;">Password</label>
                         <p class="control has-icons-left">
                         <input class="input" name="password" id="password" placeholder="Password" type="password" required data-parsley-minlength="8" data-parsley-maxlength="64"
-                            data-parsley-pattern="[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+" data-parsley-trigger="change"/>
+                            data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1"
+                            data-parsley-pattern="[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./?;:'\][{}\\|]+" data-parsley-trigger="change" />
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label for="verifyPassword" class="label" style="text-align: left !important;">Verify Password</label>
+                        <p class="control has-icons-left">
+                        <input id="verifyPassword" class="input" name="vfPassword" placeholder="Verify Password" type="password" required 
+                            data-parsley-equalto="#password" data-parsley-trigger="change" data-parsley-error-message="The two passwords do not match."/>
                         <span class="icon is-small is-left">
                             <i class="fas fa-key"></i>
                         </span>
@@ -68,17 +79,6 @@
                         By registering an account, you agree to Deal Your Crypto's <a class="link" href="/terms-of-service" target="_blank" rel="noreferrer">terms</a> and <a class="link" href="/privacy-policy" target="_blank" rel="noreferrer">privacy policy</a>.
                         </label>
                     </p>
-                    <!-- Uncomment when testing is done -->
-                    <!-- <div style="display: flex; justify-content: space-around;">
-                        <div class="field" style="width: 85%;">
-                            <p class="control has-icons-left">
-                            <input class="input" name="vfPassword" placeholder="Verify Password" type="password" required />
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
-                            </p>
-                        </div>
-                    </div> -->
                     <div class="control" style="margin-top: 1.5vh;">
                         <div class="g-recaptcha" data-sitekey="6LdvYJcUAAAAAEIBbmyIYek6wtGPntd950QhErrh"></div>
                         <button class="button is-primary">Register</button>
@@ -90,7 +90,8 @@
     </div>
 </div>
 
+<% include ../partials/footer %>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
 <script src="/dist/js/parsley.min.js"></script>
-<% include ../partials/footer %>
+<script src="../../dist/js/parsleyPassword.js"></script>
