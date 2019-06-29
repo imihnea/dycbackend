@@ -48,7 +48,8 @@ const DealSchema = new Schema({
             type: String,
             default: 'Unset'
         },
-        imageid: String
+        imageid: String,
+        lastUpdated: Date
     },
     price: Number,
     shippingPrice: Number,

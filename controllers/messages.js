@@ -351,7 +351,7 @@ module.exports = {
             });
             await Notification.create({
                 userid: chat.user1.id,
-                linkTo: `/messages/${chat._id}`,
+                linkTo: `/deals/${chat.deal}`,
                 imgLink: chat.product.imageUrl,
                 message: `You have received a message`
             });
@@ -363,7 +363,7 @@ module.exports = {
             });
             await Notification.create({
                 userid: chat.user2.id,
-                linkTo: `/messages/${chat._id}`,
+                linkTo: `/deals/${chat.deal}`,
                 imgLink: chat.product.imageUrl,
                 message: `You have received a message`
             });

@@ -915,6 +915,7 @@ module.exports = {
             }
             deal.proof.text = cleanHTML(req.body.textProof);
         }
+        deal.proof.lastUpdated = Date.now();
         await deal.save();
         await Notification.create({
             userid: deal.buyer._id,
