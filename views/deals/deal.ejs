@@ -13,7 +13,7 @@
     <div class="columns" style="margin-top: 5vh;">
         <% if (user._id.toString() === seller._id.toString()) { %>
             <div class="column is-one-fifth">
-                <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
+                <a href="/dashboard" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
@@ -63,12 +63,12 @@
                         </div>
                     </div>
                 </div>
-                <a href="/messages" class="button is-primary hideLater smallerCenter">To Dashboard</a>
+                <a href="/dashboard" class="button is-primary hideLater smallerCenter">To Dashboard</a>
             </div>
         <% } %>
         <% if (user._id.toString() === buyer._id.toString()) { %>
             <div class="column is-one-fifth">
-                <a href="/messages" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
+                <a href="/dashboard" class="button is-primary showLater smallerCenter" style="margin-bottom: 1vh;">To Dashboard</a>
                 <div>
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="/messages" class="button is-primary hideLater smallerCenter">To Dashboard</a>
+                <a href="/dashboard" class="button is-primary hideLater smallerCenter">To Dashboard</a>
             </div>
         <% } %>
         <% if ((user._id.toString() === buyer._id.toString()) || (user._id.toString() === seller._id.toString())) { %>
@@ -149,8 +149,8 @@
                         <% } else if (message.sender.toString() == user._id.toString()) { %>
                             <article class="message sent" style="margin-left: 55%;">
                                 <div class="message-header sentMsg">
-                                    <p>You</p>
-                                    <time class="sentDate">
+                                    <p style="color: white !important;">You</p>
+                                    <time style="color: white !important;">
                                         <%=(( message.createdAt.getMonth() + 1) < 10) ? '0' + (message.createdAt.getMonth() + 1) : (message.createdAt.getMonth() + 1) %>/<%= ((message.createdAt.getDate()) < 10) ? '0' + (message.createdAt.getDate()) : (message.createdAt.getDate()) %> -
                                         <%= ((message.createdAt.getHours()) < 10) ? '0' + (message.createdAt.getHours()) : (message.createdAt.getHours()) %>:<%= ((message.createdAt.getMinutes()) < 10) ? '0' + (message.createdAt.getMinutes()) : (message.createdAt.getMinutes()) %>
                                     </time>
@@ -179,7 +179,7 @@
                         </div>
                         <br>
                         <div class=" prod_info ">
-                            <p class="title is-5 messageProfileText">Name: <%= deal.product.name %></p>
+                            <p class="title is-5 messageProfileText">Product Name: <%= deal.product.name %></p>
                             <div class="prices openPrices frame" style="width: 80% !important;">
                                     <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
                                     <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>

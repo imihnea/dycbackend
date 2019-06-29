@@ -372,7 +372,7 @@ module.exports = {
         req.check('topic', 'The reason does not match').matches(/^(Scam|Fake|Harassment|Other)$/);
         const errors = req.validationErrors();
         if (errors) {
-            req.flash('error', 'The message must be between 3 and 250 characters long');
+            req.flash('error', 'Please select a reason and type a message.');
             return res.redirect('back');
         }
         const deal = await Deal.findById(req.params.id);        
@@ -427,15 +427,32 @@ module.exports = {
             }
             errors = req.validationErrors();
             if (errors) {
-                res.render('deals/deal_buy', { 
-                    user: req.user,
-                    errors: errors,
-                    product: product,
-                    csrfToken: req.body.csrfSecret,
-                    pageTitle: `Buy ${product.name} - Deal Your Crypto`,
-                    pageDescription: `Buy ${product.name} for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
-                    pageKeywords: `buy with bitcoin, ${product.name}, bitcoin, bitcoin market, crypto, cryptocurrency`,
-                });
+                client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+                    if (!error) {
+                        let btcrate = data.data.rates.USD;
+                        res.render('deals/deal_buy', { 
+                            user: req.user,
+                            errors: errors,
+                            product: product,
+                            btcrate,
+                            csrfToken: req.body.csrfSecret,
+                            pageTitle: `Buy ${product.name} - Deal Your Crypto`,
+                            pageDescription: `Buy ${product.name} for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `buy with bitcoin, ${product.name}, bitcoin, bitcoin market, crypto, cryptocurrency`,
+                        });
+                    } else {
+                        res.render('deals/deal_buy', { 
+                            user: req.user,
+                            errors: errors,
+                            product: product,
+                            btcrate: 0,
+                            csrfToken: req.body.csrfSecret,
+                            pageTitle: `Buy ${product.name} - Deal Your Crypto`,
+                            pageDescription: `Buy ${product.name} for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                            pageKeywords: `buy with bitcoin, ${product.name}, bitcoin, bitcoin market, crypto, cryptocurrency`,
+                        });
+                    }
+                }));
             } else {
                 const user  = await User.findById(req.user._id);
                 if ( user._id.toString() === product.author.id.toString() ) {
