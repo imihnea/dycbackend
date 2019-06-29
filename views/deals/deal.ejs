@@ -30,35 +30,36 @@
                             </div>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Report User</p>
-                                        <button class="delete deleteReport" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <form class="modal-form" action="/products/<%= deal.chat %>/report" method="POST" style="display: block;">
-                                            <input type="text" name="userid" value="<%= buyer.id %>" hidden>
-                                            <div class="field select cont-select smmargin">
-                                                <select name="topic" style="width: 100%;">
-                                                    <option value="" selected disabled>Reason</option>
-                                                    <option value="Fake">Fake product</option>
-                                                    <option value="Scam">Scamming attempt</option>
-                                                    <option value="Harassment">Harassment</option>
-                                                </select>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                    <p class="modal-card-title">Report User</p>
+                                    <button class="delete deleteReport" aria-label="close"></button>
+                                    </header>
+                                    <section class="modal-card-body">
+                                    <form class="modal-form" action="/products/<%= deal._id %>/report" method="POST" style="display: block;">
+                                        <input type="text" name="userid" value="<%= buyer.id %>" hidden>
+                                        <div class="field select cont-select smmargin">
+                                            <select name="topic" style="width: 100%;">
+                                                <option value="" selected disabled>Reason</option>
+                                                <option value="Fake">Fake product</option>
+                                                <option value="Scam">Scamming attempt</option>
+                                                <option value="Harassment">Harassment</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="field" style="margin-top: 3px;">
+                                            <div class="control">
+                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                             </div>
-                                            <div class="field" style="margin-top: 3px;">
-                                                <div class="control">
-                                                    <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                                </div>
-                                            </div>
-                                            <button class="button is-primary is-fullwidth">Send</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                            <button class="button is-danger cancelReport">Cancel</button>
-                                            <p class="subtitle">We will check the your report as soon as possible!</p>
-                                        </footer>
-                                    </div>
+                                        </div>
+                                        <button class="button is-primary is-fullwidth">Send</button>
+                                    </form>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-danger cancelReport">Cancel</button>
+                                        <p class="subtitle">We will check the your report as soon as possible!</p>
+                                    </footer>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,36 +86,36 @@
                             </div>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                        <p class="modal-card-title">Report User</p>
-                                        <button class="delete deleteReport" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                        <form class="modal-form" action="/products/<%= deal._id %>/report" method="POST" style="display: block;">
-                                            <input type="text" name="userid" value="<%= seller.id %>" hidden>
-                                            <div class="field select cont-select smmargin">
-                                                <select name="topic" style="width: 100%;">
-                                                    <option value="" selected disabled>Reason</option>
-                                                    <option value="Fake">Fake product</option>
-                                                    <option value="Scam">Scamming attempt</option>
-                                                    <option value="Harassment">Harassment</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                    <p class="modal-card-title">Report User</p>
+                                    <button class="delete deleteReport" aria-label="close"></button>
+                                    </header>
+                                    <section class="modal-card-body">
+                                    <form class="modal-form" action="/products/<%= deal._id %>/report" method="POST" style="display: block;">
+                                        <input type="text" name="userid" value="<%= seller.id %>" hidden>
+                                        <div class="field select cont-select smmargin">
+                                            <select name="topic" style="width: 100%;">
+                                                <option value="" selected disabled>Reason</option>
+                                                <option value="Fake">Fake product</option>
+                                                <option value="Scam">Scamming attempt</option>
+                                                <option value="Harassment">Harassment</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="field" style="margin-top: 3px;">
+                                            <div class="control">
+                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
                                             </div>
-                                            <div class="field" style="margin-top: 3px;">
-                                                <div class="control">
-                                                    <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                                </div>
-                                            </div>
-                                            <button class="button is-primary">Send</button>
-                                        </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                            <button class="button is-danger cancelReport">Cancel</button>
-                                            <p class="subtitle">We will check the your report as soon as possible!</p>
-                                        </footer>
-                                    </div>
+                                        </div>
+                                        <button class="button is-primary is-fullwidth">Send</button>
+                                    </form>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-danger cancelReport">Cancel</button>
+                                        <p class="subtitle">We will check the your report as soon as possible!</p>
+                                    </footer>
+                                </div>
                             </div>
                         </div>
                     </div>
