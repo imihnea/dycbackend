@@ -57,6 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    const proofOpenButton = document.querySelector('.checkProof');
+    const proofCloseButton = document.querySelector('.deleteCheckProof');
+    const proofModal = document.querySelector('.modalCheckProof');
+    if (proofOpenButton) {
+      proofOpenButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          proofModal.classList.toggle('is-active');
+      });
+      proofCloseButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          proofModal.classList.toggle('is-active');
+      });
+    }
+
     const reportOpenButtons = document.querySelectorAll('.report');
     const reportCloseButtons = document.querySelectorAll('.deleteReport');
     const reportCancelButtons = document.querySelectorAll('.cancelReport');

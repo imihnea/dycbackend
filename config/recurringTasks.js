@@ -16,6 +16,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+const request = require('request');
 
 const Client = require('coinbase').Client;
 const client = new Client({
@@ -49,11 +50,228 @@ const req = false;
 
 // Runs every 11 hours
 setInterval( () => {
-    let today = Date.now();
+    const today = Date.now();
     let monthAgo = new Date();
     monthAgo.setDate(monthAgo.getDate() - 30);
     let weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
+    const refundTimer = 14 * 24 * 60 * 60 * 1000;
+    let weeksAgo = new Date();
+    weeksAgo.setDate(weeksAgo.getDate() - 21);
+
+    // Complete deals with proof older than 21d
+    Deal.find({'status': 'Pending Delivery', 'proof.lastUpdated': {$lt: weeksAgo}}, (err, deals) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            deals.forEach(deal => {
+                deal.completedAt = Date.now();
+                deal.refundableUntil = Date.now() + refundTimer;
+                deal.status = 'Completed';
+                deal.save(err => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
+                Product.findById(deal.product.id, (err, product) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        if (!product.repeatable) {
+                            product.available = 'Closed';
+                            product.save(err => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                            deleteProduct(product._id);
+                        }
+                    }
+                });
+                User.findById(deal.product.author.id, (err, seller) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        seller.nrSold += 1;
+                        seller.unreadNotifications += 1;
+                        seller.save(err => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                        Notification.create({
+                            userid: seller._id,
+                            linkTo: `/deals/${deal._id}`,
+                            imgLink: deal.product.imageUrl,
+                            message: `Your deal request has been completed`
+                        });
+                        if(seller.email_notifications.deal === true) {
+                            ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                                link: `http://${req.headers.host}/dashboard`,
+                                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                name: deal.product.name,
+                                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                            }, function (err, data) {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                    to: `${seller.email}`, // list of receivers
+                                    subject: 'Deal Status Changed', // Subject line
+                                    html: data, // html body
+                                };
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                    }
+                                });
+                            }});
+                        }
+                    }
+                });
+                User.findById(deal.buyer.id, (err, buyer) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                    }
+                    if(buyer.email_notifications.deal === true) {
+                        ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
+                            link: `http://${req.headers.host}/deals/${deal._id}`,
+                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                            name: deal.product.name,
+                            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                        }, function (err, data) {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                            } else {
+                            const mailOptions = {
+                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                to: `${buyer.email}`, // list of receivers
+                                subject: 'Deal Status Changed', // Subject line
+                                html: data, // html body
+                            };
+                            transporter.sendMail(mailOptions, (error) => {
+                                if (error) {
+                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                        }});
+                    }
+                });
+            });
+        }
+    });
+
+    // Look for delivered goods and complete deals
+    Deal.find({'status': 'Pending Delivery', 'buyer.delivery.shipping': 'Shipping'}, (err, deals) => {
+        if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            deals.forEach(deal => {
+                request(`https://api.goshippo.com/tracks/${deal.buyer.delivery.carrier}/${deal.buyer.delivery.tracking_number}/`, function (error, response, body) {
+                    if (error) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Shippo - GET Request failed\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        if (response.tracking_history[response.tracking_history.length - 1].status == 'DELIVERED') {
+                            deal.completedAt = Date.now();
+                            deal.refundableUntil = Date.now() + refundTimer;
+                            deal.status = 'Completed';
+                            deal.save(err => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                            Product.findById(deal.product.id, (err, product) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    if (!product.repeatable) {
+                                        product.available = 'Closed';
+                                        product.save(err => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
+                                        deleteProduct(product._id);
+                                    }
+                                }
+                            });
+                            User.findById(deal.product.author.id, (err, seller) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                    seller.nrSold += 1;
+                                    seller.unreadNotifications += 1;
+                                    seller.save(err => {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                    Notification.create({
+                                        userid: seller._id,
+                                        linkTo: `/deals/${deal._id}`,
+                                        imgLink: deal.product.imageUrl,
+                                        message: `Your deal request has been completed`
+                                    });
+                                    if(seller.email_notifications.deal === true) {
+                                        ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                                            link: `http://${req.headers.host}/dashboard`,
+                                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                            name: deal.product.name,
+                                            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                                        }, function (err, data) {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            } else {
+                                            const mailOptions = {
+                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                to: `${seller.email}`, // list of receivers
+                                                subject: 'Deal Status Changed', // Subject line
+                                                html: data, // html body
+                                            };
+                                            transporter.sendMail(mailOptions, (error) => {
+                                                if (error) {
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                                }
+                                            });
+                                        }});
+                                    }
+                                }
+                            });
+                            User.findById(deal.buyer.id, (err, buyer) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                }
+                                if(buyer.email_notifications.deal === true) {
+                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
+                                        link: `http://${req.headers.host}/deals/${deal._id}`,
+                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        name: deal.product.name,
+                                        subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                                    }, function (err, data) {
+                                        if (err) {
+                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                        } else {
+                                        const mailOptions = {
+                                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                            to: `${buyer.email}`, // list of receivers
+                                            subject: 'Deal Status Changed', // Subject line
+                                            html: data, // html body
+                                        };
+                                        transporter.sendMail(mailOptions, (error) => {
+                                            if (error) {
+                                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
+                                    }});
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        }
+    });
 
     // Pay deals which cannot be refunded anymore
     Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }}, (err, deal) => {
@@ -535,6 +753,13 @@ setInterval( () => {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 if ((['Refunded', 'Cancelled', 'Declined', 'Refund denied'].includes(deal.status)) || ((deal.status == 'Completed') && (deal.refundableUntil < Date.now()))) {
+                                    if (deal.proof.imageid) {
+                                        cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            }
+                                        });
+                                    }
                                     deal.remove(err => {
                                         if (err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -564,6 +789,13 @@ setInterval( () => {
                                 } else {
                                     if (deal) {
                                         if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
+                                            if (deal.proof.imageid) {
+                                                cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                                                    if (err) {
+                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
+                                            }
                                             deal.remove(err => {
                                                 if (err) {
                                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -610,6 +842,13 @@ setInterval( () => {
                     if (err) {
                         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals for product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
+                        if (res.proof.imageid) {
+                            cloudinary.v2.uploader.destroy(res.proof.imageid, (err) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${res.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                        }
                         res.remove(err => {
                             if (err) {
                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -645,6 +884,13 @@ setInterval( () => {
                                                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find nonrefundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 nonrefundableDeals.forEach(deal => {
+                                                    if (deal.proof.imageid) {
+                                                        cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                                                            if (err) {
+                                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                            }
+                                                        });
+                                                    }
                                                     deal.remove(err => {
                                                         if (err) {
                                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

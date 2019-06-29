@@ -85,6 +85,15 @@ module.exports = {
       return res.redirect('/dashboard');
     }
   },
+  checkIfDealAuthor: async (req, res, next) => {
+    const deal = await Deal.findById(req.params.id);
+    if (req.user._id.toString() === deal.product.author.id.toString()) {
+        return next();
+    } else {
+      req.flash('error', 'There has been an error.');
+      return res.redirect('/dashboard');
+    }
+  },
   checkIfBelongsChat: async (req, res, next) => {
     const chat = await Chat.findById(req.params.id);
     if ((req.user._id.toString() === chat.user1.id.toString()) || (req.user._id.toString() === chat.user2.id.toString())) {

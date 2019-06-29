@@ -16,6 +16,12 @@ const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
   'apiSecret': process.env.COINBASE_API_SECRET,
 });
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
@@ -40,6 +46,12 @@ let transporter = nodemailer.createTransport({
         pass: EMAIL_API_KEY,
     },
 });
+
+const cleanHTML = (unclean) => {
+    return unclean
+      .replace(/</g, "")
+      .replace(/>/g, "");
+};
 
 module.exports = {
     async getDeal(req, res) {
@@ -149,6 +161,9 @@ module.exports = {
                     req.flash('error', 'There\'s been an error creating the label, please try again.');
                     return res.redirect('back');
                 } else {
+                    deal.carrier = transaction.carrier;
+                    deal.tracking_number = transaction.tracking_number;
+                    deal.transaction = transaction.transaction;
                     dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
                     await Notification.create({
@@ -284,7 +299,7 @@ module.exports = {
                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
             }, function (err, data) {
                 if (err) {
-                    console.log(err);
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                   
                 } else {
                 const mailOptions = {
                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -855,4 +870,60 @@ module.exports = {
             }
         });
     },
+    async updateProof(req, res) {
+        let deal = await Deal.findById(req.params.id);
+        if (req.file) {
+            const oldProof = deal.proof.imageid;
+            try{
+                await cloudinary.v2.uploader.upload(req.file.path, 
+                {
+                    moderation: "aws_rek:suggestive:ignore",
+                    transformation: [
+                    {quality: "jpegmini:1", sign_url: true},
+                    {width: "auto", dpr: "auto"}
+                    ]
+                }, (err, result) => {
+                    if(err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else if (result.moderation[0].status === 'rejected') {
+                        deal.proof.image = 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png';
+                        deal.proof.imageid = result.public_id;
+                    } else {
+                        deal.proof.image = result.secure_url;
+                        deal.proof.imageid = result.public_id;
+                    }
+                });
+            } catch (error) {
+                req.flash('error', error.message);
+                return res.redirect('back');
+            }
+            if (oldProof) {
+                await cloudinary.v2.uploader.destroy(oldProof, (err) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
+            }
+        }
+        if (req.body.textProof) {
+            req.check('textProof', 'The text contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./"?;:'\][{}\\|\r\n]+$/g).notEmpty();
+            req.check('textProof', 'The text must contain at most 500 characters').isLength({ max: 500 });
+            const errors = req.validationErrors();
+            if (errors) {
+                req.flash('The text contains illegal characters.');
+                return res.redirect('back');
+            }
+            deal.proof.text = cleanHTML(req.body.textProof);
+        }
+        deal.proof.lastUpdated = Date.now();
+        await deal.save();
+        await Notification.create({
+            userid: deal.buyer._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `Proof of delivery has been updated`
+        });
+        req.flash('success', 'Proof updated successfully');
+        return res.redirect('back');
+    }
 };

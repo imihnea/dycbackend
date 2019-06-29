@@ -26,6 +26,9 @@ const DealSchema = new Schema({
         avatarUrl: String,
         delivery: {
             shipping: String,
+            carrier: String,
+            tracking_number: String,
+            transaction: String,
             name: String,
             street1: String,
             city: String,
@@ -35,6 +38,18 @@ const DealSchema = new Schema({
             phone: String,
             email: String,
         } 
+    },
+    proof: {
+        text: {
+            type: String,
+            default: 'Unset'
+        },
+        image: {
+            type: String,
+            default: 'Unset'
+        },
+        imageid: String,
+        lastUpdated: Date
     },
     price: Number,
     shippingPrice: Number,
