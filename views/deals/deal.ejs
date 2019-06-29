@@ -247,6 +247,49 @@
                                 <div class="buttons" style="display: block; margin: auto;">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                     <div>
+                                        <% if (deal.buyer.delivery.shipping == 'FaceToFace') { %>
+                                            <% if ((deal.proof.image == 'Unset') && (deal.proof.text == 'Unset')) { %>
+                                                <p class="smallerCenter">The seller hasn't uploaded proof of delivery yet.</p>
+                                                <br>
+                                            <% } else { %>
+                                                <button class="button is-primary checkProof">Proof of delivery</button>
+                                                <div class="modal modalCheckProof">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-card">
+                                                        <header class="modal-card-head">
+                                                            <p class="modal-card-title">Proof of delivery</p>
+                                                            <button class="delete deleteCheckProof" aria-label="close"></button>
+                                                        </header>
+                                                        <section class="modal-card-body">
+                                                            <div class="column">
+                                                                <% if (deal.proof.image != 'Unset') { %>
+                                                                    <div class="columns">
+                                                                        <div class="column" style="align-self: center;">
+                                                                            <p>Image proof</p>
+                                                                            <p>Click to open in a new tab</p>
+                                                                        </div>
+                                                                        <div class="column">
+                                                                            <figure class="image is-128x128" style="margin: auto;">
+                                                                                <a href="<%= deal.proof.image %>" target="_blank">
+                                                                                    <img src="<%= deal.proof.image %>" class="profilepic" alt="Proof of delivery">
+                                                                                </a>
+                                                                            </figure>
+                                                                        </div>
+                                                                    </div>
+                                                                <% } %>
+                                                                <% if (deal.proof.text != 'Unset') { %>
+                                                                    <div>
+                                                                        <label for="textProof" style="color: black;">Text proof (carrier, tracking number, etc.)</label>
+                                                                        <textarea class="textarea" readonly><%= deal.proof.text %></textarea>
+                                                                    </div>    
+                                                                <% } %>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            <% } %>    
+                                        <% } %>
                                         <form action="/deals/<%= deal._id %>/complete?_method=PUT" method="POST"><button class="button is-success">Complete Deal</button></form>
                                         <button class="button is-primary refundRequest">Ask for a refund</button>
                                         <div class="modal modalrefundRequest">
@@ -399,7 +442,66 @@
                                 </div>
                             <% } %>
                             <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === seller._id.toString())) { %>
+                                <% if (deal.buyer.delivery.shipping == 'FaceToFace') { %>
+                                    <button class="button is-primary checkProof">Proof of delivery</button>
+                                    <div class="modal modalCheckProof">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Proof of delivery</p>
+                                                <button class="delete deleteCheckProof" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <div class="column">
+                                                    <form action="/deals/updateProof/<%= deal._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                                                        <div class="columns">
+                                                            <% if (deal.proof.image != 'Unset') { %>
+                                                                <div class="column">
+                                                                    <a href="<%= deal.proof.image %>" target="_blank">
+                                                                        <figure class="image is-128x128" style="margin: auto;">
+                                                                            <img src="<%= deal.proof.image %>" class="profilepic" alt="Proof of delivery">
+                                                                        </figure>    
+                                                                    </a>
+                                                                </div>
+                                                            <% } %>
+                                                            <div class="column">
+                                                                <div class="file-upload">
+                                                                    <div>
+                                                                        <label for="upload[0]" class="file-upload__label">
+                                                                            <span style="font-size: 5rem;">
+                                                                                <i class="far fa-plus-square square"></i>
+                                                                                <i class="far fa-check-square hide"></i>
+                                                                            </span>
+                                                                        </label>
+                                                                        <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="proofImage">
+                                                                        <label class="file-delete__label hide">
+                                                                            <span>
+                                                                                <i class="far fa-trash-alt"></i>
+                                                                            </span>
+                                                                        </label>
+                                                                        <p>Add proof of delivery as image</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="columns">
+                                                            <div class="column">
+                                                                <label for="textProof">Text proof (carrier, tracking number, etc.)</label>
+                                                                <textarea name="textProof" id="textProof" class="textarea" placeholder="Text proof (carrier, tracking number)"><% if (deal.proof.text != 'Unset') { %><%= deal.proof.text %><% } %></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <button class="button is-primary">Submit</button>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>  
+                                <% } %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <% if ((deal.proof.image == 'Unset') && (deal.proof.text == 'Unset')) { %>
+                                    <p class="smallerCenter">You haven't uploaded proof of delivery yet.</p>
+                                    <br>
+                                <% } %>
                             <% } %>
                         </div>
                     </div>
@@ -412,4 +514,5 @@
 </div>
 
 <script src="/dist/js/deal.js"></script>
+<script src="/dist/js/dashboard.js"></script>
 <% include ../partials/footer %>

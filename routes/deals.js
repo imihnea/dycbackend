@@ -2,12 +2,34 @@ const express = require('express');
 
 const router = express.Router();
 
+const multer = require('multer');
+
 const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal,
-        createAddress, verifyAddress, completeRefund } = require('../controllers/deals');
+        createAddress, verifyAddress, completeRefund, updateProof } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId, checkIfDealAuthor } = middleware; // destructuring assignment
+
+// Set Storage Engine
+const storage = multer.diskStorage({
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    },
+});
+
+const imageFilter = (req, file, cb) => {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: imageFilter,
+});
 
 // show deal
 router.get('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));
@@ -48,5 +70,8 @@ router.post('/create-address/:id', isLoggedIn, checkId, asyncErrorHandler(create
 
 // Verify address with shippo
 router.post('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
+
+// Add/modify proof of delivery
+router.put('/updateProof/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfDealAuthor), upload.single('proofImage'), asyncErrorHandler(updateProof));
 
 module.exports = router;
