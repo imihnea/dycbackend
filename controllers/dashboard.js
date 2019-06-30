@@ -347,7 +347,7 @@ module.exports = {
                     if (err) {
                       console.log(err);
                     } else {
-                        if(timer == 48) { // 12 hours
+                        if(timer == 96) { // 24 hours
                           return clearInterval(i);
                       } else {
                           if(status == 'completed') {
@@ -608,7 +608,7 @@ module.exports = {
       headers: 
      { 
        'x-user-ip': '1.1.1.1',
-       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'x-api-key': process.env.COINSWITCH_API_KEY,
        'content-type': 'application/json' 
      },
       body: '{"destinationCoin":"btc"}' 
@@ -632,7 +632,7 @@ module.exports = {
       headers:
      { 
        'x-user-ip': '1.1.1.1',
-       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'x-api-key': process.env.COINSWITCH_API_KEY,
        'content-type': 'application/json' 
      },
       body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` 
@@ -660,7 +660,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      'x-api-key': process.env.COINSWITCH_API_KEY,
       'content-type': 'application/json' 
     },
       body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
@@ -694,7 +694,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'
+      'x-api-key': process.env.COINSWITCH_API_KEY
     }
     };
     request(options, function (error, response, body) {
@@ -714,7 +714,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      'x-api-key': process.env.COINSWITCH_API_KEY,
       "Content-Type": "application/json",
       Accept: 'application/json'
     }
