@@ -24,6 +24,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 const { deleteProduct } = require('../config/elasticsearch');
+const { createProfit } = require('../config/profit');
 
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
