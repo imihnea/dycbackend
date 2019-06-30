@@ -378,9 +378,24 @@ module.exports = {
                 req.flash('error', 'You cannot delete the chat while a deal is ongoing');
                 return res.redirect('/messages');
             } else {
-                await chat.remove();
-                req.flash('success', 'Chat deleted successfully');
-                return res.redirect('/messages');
+                if (deal.refundableUntil) {
+                    if (deal.refundableUntil > Date.now()) {
+                        req.flash('error', 'You cannot delete the deal while it can still be refunded');
+                        return res.redirect('/messages');
+                    } else {
+                        if (deal.proof.imageid) {
+                            await cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                                if (err) {
+                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                        }
+                        await deal.remove();
+                        await chat.remove();
+                        req.flash('success', 'Chat and deal deleted successfully');
+                        return res.redirect('/messages');
+                    }
+                }
             }
         } else {
             await chat.remove();
