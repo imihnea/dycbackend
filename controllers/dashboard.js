@@ -596,7 +596,7 @@ module.exports = {
         }
       });
     }
-    const amount = Number(req.body.value) + 0.00005000;
+    const amount = Number(req.body.value) - Number(0.00005000);
     const user = await User.findById(req.user._id);
     if (amount <= user.btcbalance) {
       user.btcbalance -= amount;
