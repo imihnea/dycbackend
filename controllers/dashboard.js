@@ -347,7 +347,7 @@ module.exports = {
                     if (err) {
                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
-                        if(timer == 48) { // 12 hours
+                        if(timer == 96) { // 24 hours
                           return clearInterval(i);
                       } else {
                           if(status == 'completed') {
@@ -617,7 +617,7 @@ module.exports = {
       headers: 
      { 
        'x-user-ip': '1.1.1.1',
-       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'x-api-key': process.env.COINSWITCH_API_KEY,
        'content-type': 'application/json' 
      },
       body: '{"destinationCoin":"btc"}' 
@@ -641,7 +641,7 @@ module.exports = {
       headers:
      { 
        'x-user-ip': '1.1.1.1',
-       'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+       'x-api-key': process.env.COINSWITCH_API_KEY,
        'content-type': 'application/json' 
      },
       body: `{"depositCoin":"${deposit}","destinationCoin":"btc"}` 
@@ -669,7 +669,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      'x-api-key': process.env.COINSWITCH_API_KEY,
       'content-type': 'application/json' 
     },
       body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
@@ -703,7 +703,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO'
+      'x-api-key': process.env.COINSWITCH_API_KEY
     }
     };
     request(options, function (error, response, body) {
@@ -723,7 +723,7 @@ module.exports = {
       headers: 
     { 
       'x-user-ip': '1.1.1.1',
-      'x-api-key': 'cRbHFJTlL6aSfZ0K2q7nj6MgV5Ih4hbA2fUG0ueO',
+      'x-api-key': process.env.COINSWITCH_API_KEY,
       "Content-Type": "application/json",
       Accept: 'application/json'
     }
@@ -2634,25 +2634,60 @@ module.exports = {
         pageDescription: 'Partner details on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
         pageKeywords: 'partner, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
       });
-    }      
-    req.body.name = cleanHTML(String(req.body.name));
-    req.body.contactName = cleanHTML(String(req.body.contactName));
-    const user = await User.findById(req.user._id);
-    let lastApp = new Date(user.partnerApplication.sentOn);
-    lastApp.setDate(lastApp.getDate() + 90);
-    if (lastApp > Date.now()) {
-      req.flash('error', `You will be able to send another application on ${lastApp}`);
-      return res.redirect('back');
+    } else {
+      req.body.name = cleanHTML(String(req.body.name));
+      req.body.contactName = cleanHTML(String(req.body.contactName));
+      const user = await User.findById(req.user._id);
+      let lastApp = new Date(user.partnerApplication.sentOn);
+      lastApp.setDate(lastApp.getDate() + 90);
+      if (lastApp > Date.now()) {
+        req.flash('error', `You will be able to send another application on ${lastApp}`);
+        return res.redirect('back');
+      }
+      user.partnerApplication.sentOn = Date.now();
+      user.partnerApplication.companyName = req.body.name;
+      user.partnerApplication.contactName = req.body.contactName;
+      user.partnerApplication.contactEmail = req.body.email;
+      user.partnerApplication.contactPhone = req.body.phone;
+      user.partnerApplication.status = 'Processing';
+      await user.save();
+      let message = `Sent on: ${Date.now()}\nContact Name: ${req.body.contactName}\nContact Phone: ${req.body.phone}`;
+      ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
+        name: req.body.name,
+        email: req.body.email,
+        topic: 'Partner Application',
+        message,
+        subject: 'Deal Your Crypto - Partner Application Request',
+      }, function (err, data) {
+        if (err) {
+          if (req.user) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          } else {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          }
+        } else {
+        const mailOptions = {
+          from: `${req.body.name} <${req.body.email}>`, // sender address
+          to: 'support@dealyourcrypto.com', // list of receivers
+          subject: 'Deal Your Crypto - Partner Application Request', // Subject line
+          html: data, // html body
+        };
+        transporter.sendMail(mailOptions, (error) => {
+          if (error) {
+            if(req.user) {
+              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.body.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            } else {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email: ${req.body.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
+            req.flash('error', `${error.message}`);
+            return res.redirect('back', { error: error.message });
+          }
+          req.flash('success', 'Your application has been sent and will be reviewed as soon as possible!');
+          return res.redirect('back');
+        });
+      }
+     });
     }
-    user.partnerApplication.sentOn = Date.now();
-    user.partnerApplication.companyName = req.body.name;
-    user.partnerApplication.contactName = req.body.contactName;
-    user.partnerApplication.contactEmail = req.body.email;
-    user.partnerApplication.contactPhone = req.body.phone;
-    user.partnerApplication.status = 'Processing';
-    await user.save();
-    req.flash('success', 'Your application has been sent and will be reviewed as soon as possible');
-    return res.redirect('/dashboard');
   },
   async getNotif(req, res) {
     const notifications = await Notification.paginate({'userid': req.user._id}, {
