@@ -345,7 +345,7 @@ module.exports = {
                     let json = JSON.parse(txs);
                     const status = json.status;
                     if (err) {
-                      console.log(err);
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         if(timer == 96) { // 24 hours
                           return clearInterval(i);
@@ -353,13 +353,22 @@ module.exports = {
                           if(status == 'completed') {
                           Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
                             if(err) {
-                              console.log(err);
+                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nOrderId: ${checkout.orderId}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                               User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
                                 if(err) {
-                                  console.log(err)
+                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUsername: ${checkout.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                   clearInterval(i);
+                                  Notification.create({
+                                    userid: updatedUser._id,
+                                    linkTo: `/dashboard`,
+                                    message: `Your ${json.amount.amount} BTC has been successfully deposited`
+                                  }, (err) => {
+                                    if (err) {
+                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${updatedUser._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    }
+                                  });
                                   ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
                                     link: `http://${req.headers.host}/dashboard/addresses`,
                                     footerlink: `http://${req.headers.host}/dashboard/notifications`,
@@ -369,7 +378,7 @@ module.exports = {
                                     subject: `Deposit successfully confirmed!`,
                                   }, function (err, data) {
                                       if (err) {
-                                          console.log(err);
+                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                       } else {
                                         const mailOptions = {
                                             from: `noreply@dealyourcrypto.com`, // sender address
@@ -380,7 +389,7 @@ module.exports = {
                                         // send mail with defined transport object
                                         transporter.sendMail(mailOptions, (error) => {
                                             if (error) {
-                                            console.log(`error for sending mail confirmation === ${error}`);
+                                              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });
                                       }
@@ -801,7 +810,7 @@ module.exports = {
                   req.flash('error', 'Something went wrong when purchasing tokens. Please try again later.');
                   return res.redirect('back');
                 } else {
-                  createProfit(req, totalPrice, 'Tokens');
+                  createProfit(req.user._id, totalPrice, 'Tokens');
                   if (process.env.NODE_ENV === 'production') {
                     userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
@@ -856,7 +865,7 @@ module.exports = {
                 if (process.env.NODE_ENV === 'production') {
                   userLogger.info(`Message: User spent ${tokenCost} to buy ${tokens} tokens pack\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
-                createProfit(req, tokenCost, 'Tokens');
+                createProfit(req.user._id, tokenCost, 'Tokens');
                 switch(tokens) {
                   case 20: 
                     req.flash('success', 'Successfully purchased the basic pack! Enjoy!');
@@ -2047,7 +2056,7 @@ module.exports = {
       req.flash('error', 'The product cannot be deleted while it is the subject of ongoing deals');
       return res.redirect('back');
     }
-    const refundableDeals = await Deal.find({'product.id': product._id, refundableUntil: {$gt: Date.now()}});
+    const refundableDeals = await Deal.find({'product.id': deal.product.id, refundableUntil: {$gt: Date.now()}});
     if (refundableDeals.length > 0) {
       req.flash('error', 'The product cannot be deleted while it can still be refunded');
       return res.redirect('back');
@@ -2157,7 +2166,7 @@ module.exports = {
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       // Sell BTC
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2190,7 +2199,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                      
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2223,7 +2232,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2256,7 +2265,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }

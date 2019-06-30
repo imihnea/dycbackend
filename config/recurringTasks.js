@@ -47,6 +47,9 @@ mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
 logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 const req = false;
+const standardAccountFee = 10;
+const premiumAccountFee = 8;
+const partnerAccountFee = 8;
 
 // Runs every 11 hours
 setInterval( () => {
@@ -300,14 +303,14 @@ setInterval( () => {
                                                     seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01) - tokenprice;
                                                     // add profit to db
                                                     withdrawAmount = item.price * premiumAccountFee * 0.01 + tokenprice;
-                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                    createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                             });
                                         } else {
                                             seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
                                             // add profit to db
                                             withdrawAmount = item.price * premiumAccountFee * 0.01;
-                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
                                         }
                                     } else {
                                         switch(seller.accountType) {
@@ -320,14 +323,14 @@ setInterval( () => {
                                                             seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01) - tokenprice;
                                                             // add profit to db
                                                             withdrawAmount = item.price * standardAccountFee * 0.01 + tokenprice;
-                                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                         }
                                                     });
                                                 } else {
                                                     seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
                                                     // add profit to db
                                                     withdrawAmount = item.price * premiumAccountFee * 0.01;
-                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                    createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                                 break;
                                             case 'Partner':
@@ -339,14 +342,14 @@ setInterval( () => {
                                                             seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01) - tokenprice;
                                                             // add profit to db
                                                             withdrawAmount = item.price * partnerAccountFee * 0.01 + tokenprice;
-                                                            createProfit(req, withdrawAmount, 'Income Fee');
+                                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                         }
                                                     });
                                                 } else {
                                                     seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
                                                     // add profit to db
                                                     withdrawAmount = item.price * partnerAccountFee * 0.01;
-                                                    createProfit(req, withdrawAmount, 'Income Fee');
+                                                    createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                                 break;
                                             default:
@@ -415,7 +418,7 @@ setInterval( () => {
                                                           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       } else {
                                                           userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                          createProfit(req, subscriptionCost, 'Subscription');
+                                                          createProfit(user._id, subscriptionCost, 'Subscription');
                                                           Notification.create({
                                                               userid: user._id,
                                                               linkTo: `/dashboard`,
@@ -469,7 +472,7 @@ setInterval( () => {
                                                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      createProfit(user._id, subscriptionCost, 'Subscription');
                                                       Notification.create({
                                                           userid: user._id,
                                                           linkTo: `/dashboard`,
@@ -523,7 +526,7 @@ setInterval( () => {
                                                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      createProfit(user._id, subscriptionCost, 'Subscription');
                                                       Notification.create({
                                                           userid: user._id,
                                                           linkTo: `/dashboard`,
@@ -577,7 +580,7 @@ setInterval( () => {
                                                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                      createProfit(req, subscriptionCost, 'Subscription');
+                                                      createProfit(user._id, subscriptionCost, 'Subscription');
                                                       Notification.create({
                                                           userid: user._id,
                                                           linkTo: `/dashboard`,

@@ -2,17 +2,17 @@ const { errorLogger, logger } = require('./winston');
 const Profit = require('../models/profit');
 const moment = require('moment');
 
-function createProfit(req, cost, method) {
+function createProfit(user, cost, method) {
     Profit.create({
         amount: cost,
         acquired: method,
-        userID: req.user._id
+        userID: user
     }, err => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - Create Profit\r\n${err.message}\r\nAmount: ${amount}\r\nAcquired: ${method}\r\nIP: ${req.ip}\r\nUserID: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error - Create Profit\r\n${err.message}\r\nAmount: ${amount}\r\nAcquired: ${method}\r\nUserID: ${user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             if (process.env.NODE_ENV === 'production') {
-                logger.info(`Profit created\r\nAmount: ${cost}\r\nAcquired: ${method}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                logger.info(`Profit created\r\nAmount: ${cost}\r\nAcquired: ${method}\r\nUserId: ${user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             }
         }
     });
