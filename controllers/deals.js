@@ -22,7 +22,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-const { deleteProduct } = require('./elasticsearch');
+const { deleteProduct } = require('../config/elasticsearch');
 
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
