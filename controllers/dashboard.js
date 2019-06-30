@@ -596,13 +596,17 @@ module.exports = {
         }
       });
     }
-    const amount = Number(req.body.value) - Number(0.00005000);
+    if (Number(req.body.value) <= 0.0001) {
+      req.flash('error', 'You cannot withdraw less than 0.0001 BTC');
+      return res.redirect('back');
+    }
+    const amount = Number(req.body.value) + Number(0.00005000);
     const user = await User.findById(req.user._id);
     if (amount <= user.btcbalance) {
       user.btcbalance -= amount;
       const withdraw = await Withdraw.create({
         address: req.body.address,
-        amount,
+        amount: Number(req.body.value),
         withdrawDate: Date.now(),
         userID: user._id,
         userEmail: user.email,
