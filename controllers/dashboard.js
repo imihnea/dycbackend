@@ -345,7 +345,7 @@ module.exports = {
                     let json = JSON.parse(txs);
                     const status = json.status;
                     if (err) {
-                      console.log(err);
+                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         if(timer == 48) { // 12 hours
                           return clearInterval(i);
@@ -353,13 +353,22 @@ module.exports = {
                           if(status == 'completed') {
                           Checkout.findOneAndUpdate({ orderId: checkout.orderId}, { paid: true }, (err) => {
                             if(err) {
-                              console.log(err);
+                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nOrderId: ${checkout.orderId}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                               User.findOneAndUpdate({ username: checkout.user }, { $inc: { btcbalance: json.amount.amount }}, (err, updatedUser) => {
                                 if(err) {
-                                  console.log(err)
+                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUsername: ${checkout.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                   clearInterval(i);
+                                  Notification.create({
+                                    userid: updatedUser._id,
+                                    linkTo: `/dashboard`,
+                                    message: `Your ${json.amount.amount} BTC has been successfully deposited`
+                                  }, (err) => {
+                                    if (err) {
+                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${updatedUser._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    }
+                                  });
                                   ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
                                     link: `http://${req.headers.host}/dashboard/addresses`,
                                     footerlink: `http://${req.headers.host}/dashboard/notifications`,
@@ -369,7 +378,7 @@ module.exports = {
                                     subject: `Deposit successfully confirmed!`,
                                   }, function (err, data) {
                                       if (err) {
-                                          console.log(err);
+                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                       } else {
                                         const mailOptions = {
                                             from: `noreply@dealyourcrypto.com`, // sender address
@@ -380,7 +389,7 @@ module.exports = {
                                         // send mail with defined transport object
                                         transporter.sendMail(mailOptions, (error) => {
                                             if (error) {
-                                            console.log(`error for sending mail confirmation === ${error}`);
+                                              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });
                                       }
