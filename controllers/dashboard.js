@@ -801,7 +801,7 @@ module.exports = {
                   req.flash('error', 'Something went wrong when purchasing tokens. Please try again later.');
                   return res.redirect('back');
                 } else {
-                  createProfit(req, totalPrice, 'Tokens');
+                  createProfit(req.user._id, totalPrice, 'Tokens');
                   if (process.env.NODE_ENV === 'production') {
                     userLogger.info(`Message: User spent ${totalPrice} to buy ${tokens} tokens\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                   }
@@ -856,7 +856,7 @@ module.exports = {
                 if (process.env.NODE_ENV === 'production') {
                   userLogger.info(`Message: User spent ${tokenCost} to buy ${tokens} tokens pack\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
-                createProfit(req, tokenCost, 'Tokens');
+                createProfit(req.user._id, tokenCost, 'Tokens');
                 switch(tokens) {
                   case 20: 
                     req.flash('success', 'Successfully purchased the basic pack! Enjoy!');
@@ -2157,7 +2157,7 @@ module.exports = {
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                       // Sell BTC
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2190,7 +2190,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                      
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2223,7 +2223,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }
@@ -2256,7 +2256,7 @@ module.exports = {
                       return res.redirect('back');
                     } else {
                       userLogger.info(`Message: User subscribed for ${days} days, paid ${subscriptionCost}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      createProfit(req, subscriptionCost, 'Subscription');
+                      createProfit(req.user._id, subscriptionCost, 'Subscription');
                       req.flash('success', 'Subscription created successfully!');
                       return res.redirect(`/dashboard`);
                     }

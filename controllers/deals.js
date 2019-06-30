@@ -35,9 +35,9 @@ const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 const refundTimer = 60000;
 
 // Deal payout fees (%)
-const standardAccountFee = 15;
-const premiumAccountFee = 10;
-const partnerAccountFee = 10;
+const standardAccountFee = 10;
+const premiumAccountFee = 8;
+const partnerAccountFee = 8;
 
 let transporter = nodemailer.createTransport({
     host: EMAIL_HOST,
@@ -263,6 +263,37 @@ module.exports = {
         deal.completedAt = Date.now();
         if (deal.buyer.delivery.shipping == 'FaceToFace') {
             deal.refundableUntil = Date.now();
+            let withdrawAmount = 0;  
+            Subscription.find({userid: seller._id}, (err) => {
+                if (err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                } else {
+                    if (res.length > 0) {
+                        seller.btcbalance += deal.price - ( deal.price * premiumAccountFee * 0.01);
+                        // add profit to db
+                        withdrawAmount = deal.price * premiumAccountFee * 0.01;
+                        createProfit(seller._id, withdrawAmount, 'Income Fee');
+                    } else {
+                        switch(seller.accountType) {
+                            case 'Standard':
+                                seller.btcbalance += deal.price - ( deal.price * standardAccountFee * 0.01);
+                                // add profit to db
+                                withdrawAmount = deal.price * premiumAccountFee * 0.01;
+                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                break;
+                            case 'Partner':
+                                seller.btcbalance += deal.price - ( deal.price * partnerAccountFee * 0.01);
+                                // add profit to db
+                                withdrawAmount = deal.price * partnerAccountFee * 0.01;
+                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            });
+            deal.paid = true;
         } else if (deal.buyer.delivery.shipping == 'Shipping') {
             deal.refundableUntil = Date.now() + refundTimer;
         }
