@@ -2,7 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getChats, getMessages, newMessage, newChat, updateMessages, newOngoingChat, newMessageDeal, updateMessagesDeal } = require('../controllers/messages');
+const { getChats, getMessages, newMessage, newChat, updateMessages, newOngoingChat, newMessageDeal, updateMessagesDeal,
+        destroyChat } = require('../controllers/messages');
 
 const middleware = require('../middleware/index');
 
@@ -31,5 +32,8 @@ router.put('/:id/:dealid/createOngoing', isLoggedIn, checkId, asyncErrorHandler(
 
 // send message from deal
 router.put('/:dealid/:id/sendMessageDeal', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(newMessageDeal));
+
+// delete chat
+router.delete('/:id/delete', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(destroyChat));
 
 module.exports = router;

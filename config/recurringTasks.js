@@ -4,6 +4,7 @@ const Chat = require('../models/chat');
 const Subscription = require('../models/subscription');
 const Product = require('../models/product');
 const Notification = require('../models/notification');
+const Report = require('../models/report');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger, productLogger, userLogger } = require('./winston');
@@ -768,6 +769,7 @@ setInterval( () => {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
+                                    await Report.deleteMany({deal: chat.deal});
                                     chat.remove(err => {
                                         if (err) {
                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -804,6 +806,7 @@ setInterval( () => {
                                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 }
                                             });
+                                            await Report.deleteMany({deal: chat.deal});
                                             chat.remove(err => {
                                                 if (err) {
                                                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -899,6 +902,7 @@ setInterval( () => {
                                                             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                         }
                                                     });
+                                                    await Report.deleteMany({deal: chat.deal});
                                                 });
                                             }
                                         });

@@ -5,7 +5,7 @@ const router = express.Router();
 const multer = require('multer');
 
 const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal,
-        createAddress, verifyAddress, completeRefund, updateProof } = require('../controllers/deals');
+        createAddress, verifyAddress, completeRefund, updateProof, destroyDeal } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
@@ -73,5 +73,8 @@ router.post('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
 
 // Add/modify proof of delivery
 router.put('/updateProof/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfDealAuthor), upload.single('proofImage'), asyncErrorHandler(updateProof));
+
+// Delete deal
+router.delete('/delete/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(destroyDeal));
 
 module.exports = router;

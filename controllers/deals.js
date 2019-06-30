@@ -960,5 +960,43 @@ module.exports = {
         });
         req.flash('success', 'Proof updated successfully');
         return res.redirect('back');
-    }
+    },
+    async destroyDeal(req, res) {
+        const deal = await Deal.findById(req.params.id);
+        if (!['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied'].includes(deal.status)) {
+            req.flash('error', 'You cannot delete the deal while it is ongoing');
+            return res.redirect('/dashboard');
+        } else {
+            if (deal.refundableUntil) {
+                if (deal.refundableUntil > Date.now()) {
+                    req.flash('error', 'You cannot delete the deal while it can still be refunded');
+                    return res.redirect('/dashboard');
+                } else {
+                    await Chat.deleteOne({_id: deal.chat});
+                    if (deal.proof.imageid) {
+                        await cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                            if (err) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                    }
+                    await deal.remove();
+                    req.flash('success', 'Deal deleted successfully');
+                    return res.redirect('/dashboard');
+                }
+            } else {
+                await Chat.deleteOne({_id: deal.chat});
+                if (deal.proof.imageid) {
+                    await cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
+                        if (err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        }
+                    });
+                }
+                await deal.remove();
+                req.flash('success', 'Deal deleted successfully');
+                return res.redirect('/dashboard');
+            }
+        }
+    }   
 };

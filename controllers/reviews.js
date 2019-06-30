@@ -159,6 +159,7 @@ module.exports = {
 				await User.findByIdAndUpdate(review.user, {
 					$pull: { reviews: req.params.review_id }
 				});
+				await Report.deleteMany({review: req.params.review_id});
 				reviewLogger.info(`Review deleted ${req.params.review_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 				req.flash('success', 'Review deleted successfully!');
 				return res.redirect(`/products/${req.params.id}/view`);

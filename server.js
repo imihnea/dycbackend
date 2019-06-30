@@ -126,9 +126,15 @@ mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
 const SECRET = process.env.SECRET || 'monkaomega';
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
-app.use(require('express-session')({
+app.use(session({
   secret: SECRET,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 2 * 60 * 60
+  }),
   resave: true,
   saveUninitialized: true,
   // these need SSL

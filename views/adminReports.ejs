@@ -75,7 +75,7 @@
                     <td style="word-break: break-all;"><%= item._id %></td>
                     <td style="word-break: break-all;"><%= item.from %></td>
                     <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
-                    <td style="word-break: break-all;"><%= item.message %></td>
+                    <td style="word-break: break-all;"><%= item.reviewMessage %></td>
                     <td>
                         <form action="/admin/deleteReview/<%= item._id %>/<%= item.review %>?_method=PUT" method="POST">
                             <button class="button is-primary">Accept</button>

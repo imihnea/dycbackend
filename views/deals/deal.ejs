@@ -506,6 +506,21 @@
                                     <br>
                                 <% } %>
                             <% } %>
+                                <%
+                                    if (!['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied'].includes(deal.status)) {} else {
+                                        if (deal.refundableUntil) {
+                                            if (deal.refundableUntil > Date.now()) { %>
+                                            <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
+                                                <button class="button is-danger">Delete Deal</button>
+                                            </form>
+                                            <% } else {}
+                                        } else { %>
+                                            <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
+                                                <button class="button is-danger">Delete Deal</button>
+                                            </form>
+                                    <% }
+                                    }
+                                %>
                         </div>
                     </div>
                 </div>

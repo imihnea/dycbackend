@@ -14,6 +14,7 @@ const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
 const SearchTerm = require('../models/searchTerm');
 const Notification = require('../models/notification');
+const Report = require('../models/report');
 const request = require("request");
 const uuidv1 = require('uuid/v1');
 const Checkout = require('../models/checkout');
@@ -2130,7 +2131,7 @@ module.exports = {
       req.flash('error', 'The product cannot be deleted while it is the subject of ongoing deals');
       return res.redirect('back');
     }
-    const refundableDeals = await Deal.find({'product.id': deal.product.id, refundableUntil: {$gt: Date.now()}});
+    const refundableDeals = await Deal.find({'product.id': req.params.id, refundableUntil: {$gt: Date.now()}});
     if (refundableDeals.length > 0) {
       req.flash('error', 'The product cannot be deleted while it can still be refunded');
       return res.redirect('back');
@@ -2147,6 +2148,7 @@ module.exports = {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nProductId: ${req.params.id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
       }
     });
+    await Report.deleteMany({product: req.params.id});
     req.flash('success', 'Product deleted successfully!');
     return res.redirect('/dashboard/open');
   },

@@ -124,6 +124,9 @@
                             <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                         </div>
                         <a href="/products/<%= chat.product.id %>/view" class="button is-primary" style="margin-top: 1vh;">View Product</a>
+                        <form action="/messages/<%= chat._id %>/delete?_method=DELETE" method="POST">
+                            <button class="button is-danger">Delete Chat</button>
+                        </form>
                     </div>
                 </div>
             </div>

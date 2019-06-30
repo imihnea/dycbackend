@@ -369,5 +369,23 @@ module.exports = {
             });
         }
         return res.redirect(`/deals/${req.params.dealid}`);
-    },    
+    },
+    async destroyChat(req, res) {
+        const chat = await Chat.findById(req.params.id);
+        if (chat.deal) {
+            const deal = await Deal.findById(chat.deal);
+            if (!['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied'].includes(deal.status)) {
+                req.flash('error', 'You cannot delete the chat while a deal is ongoing');
+                return res.redirect('/messages');
+            } else {
+                await chat.remove();
+                req.flash('success', 'Chat deleted successfully');
+                return res.redirect('/messages');
+            }
+        } else {
+            await chat.remove();
+            req.flash('success', 'Chat deleted successfully');
+            return res.redirect('/messages');
+        }
+    }    
 };
