@@ -2368,7 +2368,7 @@ module.exports = {
       let result = {};
       if (req.params.firstCat === 'all') {
         result = _.countBy(searchQueries, function(obj){
-          return obj.queryFilters.category.replace('all', 'No subcategory');
+          return obj.queryFilters.category.replace('all', 'No Category');
         }); 
       } else {
         result = _.countBy(searchQueries, function(obj) {

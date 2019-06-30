@@ -905,7 +905,7 @@ module.exports = {
             search = {
               query: req.params.searchName,
               queryFilters: {
-                category: req.params.category,
+                category: req.query.category,
                 condition,
                 avgRating,
               }

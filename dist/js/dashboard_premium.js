@@ -74,7 +74,7 @@
                               yAxes: [{
                                   ticks: {
                                       beginAtZero: true,
-                                      stepSize: 10
+                                      stepSize: 50
                                   }
                               }]
                           }
@@ -103,7 +103,7 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero: true,
-                                    stepSize: 10
+                                    stepSize: 50
                                 }
                             }]
                         }
@@ -157,7 +157,7 @@
                               yAxes: [{
                                   ticks: {
                                       beginAtZero: true,
-                                      stepSize: 10
+                                      stepSize: 50
                                   }
                               }]
                           }
@@ -186,7 +186,7 @@
                               yAxes: [{
                                   ticks: {
                                       beginAtZero: true,
-                                      stepSize: 10
+                                      stepSize: 50
                                   }
                               }]
                           }
@@ -234,7 +234,7 @@
                               yAxes: [{
                                   ticks: {
                                       beginAtZero: true,
-                                      stepSize: 1
+                                      stepSize: 5
                                   }
                               }]
                           }
@@ -267,7 +267,7 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero: true,
-                                    stepSize: 1
+                                    stepSize: 5
                                 }
                             }]
                         }
@@ -317,7 +317,7 @@
                               yAxes: [{
                                   ticks: {
                                       beginAtZero: true,
-                                      stepSize: 10
+                                      stepSize: 50
                                   }
                               }]
                           }
@@ -346,7 +346,7 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero: true,
-                                    stepSize: 10
+                                    stepSize: 50
                                 }
                             }]
                         }
