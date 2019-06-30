@@ -1484,7 +1484,7 @@ module.exports = {
             email: req.body.email,
             topic: req.body.topic,
             message: req.body.message,
-            subject: 'Deal Your Crypto - Priority Contact Request',
+            subject: 'Deal Your Crypto - ⭐ Priority ⭐ Contact Request',
           }, function (err, data) {
             if (err) {
               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);              
@@ -1492,7 +1492,7 @@ module.exports = {
             const mailOptions = {
               from: `${req.body.name} <${req.body.email}>`, // sender address
               to: 'support@dealyourcrypto.com', // list of receivers
-              subject: 'Deal Your Crypto - Priority Contact Request', // Subject line
+              subject: 'Deal Your Crypto - ⭐ Priority ⭐ Contact Request', // Subject line
               html: data, // html body
             };
             transporter.sendMail(mailOptions, (error) => {
