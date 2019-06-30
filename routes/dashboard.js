@@ -5,7 +5,7 @@ const multer = require('multer');
 
 const router = express.Router();
 
-const { getDashboardIndex, getAddresses, addAddresses, withdraw, verifyWithdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
+const { getDashboardIndex, getAddresses, addAddresses, verifyWithdraw, getTokens, buyTokens, productCreate, buyTokenPacks,
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, postBTC,
@@ -66,7 +66,7 @@ router.post('/addresses/altcoins/status', asyncErrorHandler(CoinSwitchStatus));
 router.post('/addresses/altcoins/poll', asyncErrorHandler(CoinSwitchPoll));
 
 // Withdraw BTC
-router.post('/addresses/withdrawBTC/:id', isLoggedIn, checkId, asyncErrorHandler(withdraw));
+// router.post('/addresses/withdrawBTC/:id', isLoggedIn, checkId, asyncErrorHandler(withdraw));
 
 router.post('/addresses/verifyWithdraw', isLoggedIn, asyncErrorHandler(verifyWithdraw));
 

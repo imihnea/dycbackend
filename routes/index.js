@@ -30,12 +30,12 @@ const {
   getShipping,
   getTos,
   getPrivPol,
-  postVerify,
-  get2factor,
-  post2factor,
-  postDisable2FactorRequest,
-  postDisable2Factor,
-  postVerifyLogin,
+  // postVerify,
+  // get2factor,
+  // post2factor,
+  // postDisable2FactorRequest,
+  // postDisable2Factor,
+  // postVerifyLogin,
   getCategories,
   postFirstCategSearch,
   postSecondCategSearch,
@@ -82,17 +82,17 @@ router.get('/confirmation/:token', asyncErrorHandler(confirmEmail));
 
 router.post('/resend/:id', checkId, asyncErrorHandler(resendEmail));
 
-router.post('/verify', isLoggedIn, postVerify);
+// router.post('/verify', isLoggedIn, postVerify);
 
 // router.post('/login/verify', postVerifyLogin);
 
-router.get('/2factor', isLoggedIn, get2factor);
+// router.get('/2factor', isLoggedIn, get2factor);
 
-router.post('/2factor', isLoggedIn, asyncErrorHandler(post2factor));
+// router.post('/2factor', isLoggedIn, asyncErrorHandler(post2factor));
 
-router.get('/disable2factor/:token', postDisable2Factor);
+// router.get('/disable2factor/:token', postDisable2Factor);
 
-router.post('/disable2factor', isLoggedIn, postDisable2FactorRequest);
+// router.post('/disable2factor', isLoggedIn, postDisable2FactorRequest);
 
 //  show login form
 router.get('/login', getLogin);

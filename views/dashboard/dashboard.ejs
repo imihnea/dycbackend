@@ -233,37 +233,6 @@
                             <% } %>
                         <% } %>
                     </div>
-                    <div class="buttons <% if(user.twofactor !== true) { %> has-addons <% } %> is-centered">
-                        <% if(user.twofactor === true) { %> 
-                            <button class="button is-danger deactivate is-rounded">Deactivate Two-Factor Authentication</button>
-                            <div class="modal modalDeactivate">
-                                <div class="modal-background"></div>
-                                <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Deactivate Two-Factor</p>
-                                        <button class="delete deleteDeactivate" aria-label="close"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <p class="subtitle">Are you sure you want to deactivate two-factor authentication?</p>
-                                        <sub class="subWarning">This action will make your account less secure.</sub>
-                                        <br>
-                                        <form class="modal-form" action="/disable2factor" method="POST">
-                                            <div class="control">
-                                                <button class="button is-danger is-rounded">Deactivate Two-Factor Authentication</button>
-                                            </div>
-                                        </form>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-danger deactivateCancel">Cancel</button>
-                                    </footer>
-                                </div>
-                            </div>
-                        <% } else { %>
-                            <form id="activate2Factor" action="/2factor" method="GET">
-                                <button class="button is-primary is-rounded" form="activate2Factor">Activate Two-Factor Authentication</button>
-                            </form>
-                        <% } %>
-                    </div>
                     <form action="/dashboard/disable-account" method="POST">
                         <button class="button is-danger is-rounded">Delete Account</button>
                     </form>

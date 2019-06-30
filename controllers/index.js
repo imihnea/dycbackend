@@ -216,153 +216,153 @@ module.exports = {
       }
     }));
   },
-  postVerify(req, res) {
-    let pin = req.body.pin;
-    let requestId = req.body.requestId;
+  // postVerify(req, res) {
+  //   let pin = req.body.pin;
+  //   let requestId = req.body.requestId;
 
-    nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
-      if(err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        req.flash('error', err.message);
-        return res.redirect('back');
-      } else {
-        if(result && result.status == '0') { // Success!
-          req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
-          const errors = req.validationErrors();
-          if (errors) {
-            res.render('dashboard/dashboard', {
-              user: req.user,
-              errors: errors,
-              pageTitle: 'Dashboard - Deal Your Crypto',
-              pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-              pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-            });
-          } else {
-            let phoneNumber = req.body.number;
-            User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
-              if (err) {
-                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('error', err.message);
-                return res.redirect('back');
-              }
-            });
-            req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
-            return res.redirect('/dashboard');
-          }
-        } else {
-          req.flash('error', 'Wrong PIN code, please try again.');
-          return res.redirect('back');
-        }
-      }
-    });
-  },
-  get2factor(req, res) {
-    res.render('index/2factor',{
-      pageTitle: 'Two-Factor - Deal Your Crypto',
-      pageDescription: 'Enable two-factor authentication to enhance your account security!',
-      pageKeywords: 'two-factor, 2factor, security, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-    })
-  },
-  async post2factor(req, res) {
-    req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
-    const errors = req.validationErrors();
-    if (errors) {
-      res.render('dashboard/dashboard', {
-        user: req.user,
-        errors: errors,
-        pageTitle: 'Dashboard - Deal Your Crypto',
-        pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-        pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-      });
-    } else {
-      let phoneNumber = req.body.number;
-      const user = await User.findOne({number: phoneNumber});
-      if (user) {
-        req.flash('error', 'Phone number already used. Please try again using another number.');
-        return res.redirect('/2factor');
-      } else {
-        nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
-          if(err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('error', err.message);
-            return res.redirect('back');
-          } else {
-            let requestId = result.request_id;
-            if(result.status == '0') {
-              res.render('index/verify', { 
-                number: phoneNumber, 
-                requestId: requestId,
-                pageTitle: 'Verify - Deal Your Crypto',
-                pageDescription: 'Verify your phone number to activate two-factor authentication.',
-                pageKeywords: 'phone number, verify, check, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-              }); // Success! Now, have your user enter the PIN
-            } else {
-              req.flash('error', 'Something went wrong, please try again.');
-              return res.redirect('back');
-            }
-          }
-        });
-      }
-    }
-  },
-  postDisable2FactorRequest(req, res) {
-    const token = jwt.sign({
-      user: req.user._id
-    }, 
-    SECRET2, 
-    { expiresIn: '1h' });
-    ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
-      link: `http://${req.headers.host}/disable2factor/${token}`,
-      footerlink: `http://${req.headers.host}/dashboard/notifications`,
-      subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
-    }, function (err, data) {
-      if (err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-      } else {
-        const mailOptions = {
-            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
-            to: `${req.user.email}`,
-            subject: 'Disable two-factor authentication',
-            html: data,
-        };
-        transporter.sendMail(mailOptions, (error) => {
-            if (error) {
-              errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            }
-        });
-        userLogger.info(`Message: User requested 2F disable\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
-        return res.redirect('back');
-      }
-    });
-  },
-  postDisable2Factor(req, res) {
-    jwt.verify(req.params.token, SECRET2, asyncErrorHandler(async (err) => {
-      if (err) {
-        if (err.message.match(/Invalid/i)) {
-          req.flash('error', 'Invalid link.');
-          return res.redirect('/');
-        }
-        if (err.message.match(/Expired/i)) {
-          req.flash('error', 'The link has expired. Please try again.');
-          return res.redirect('/');
-        }
-      } else {
-        const user = jwt.decode(req.params.token);
-        User.findByIdAndUpdate(user.user, { number: undefined, twofactor: false }, (err) => {
-          if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('error', err.message);
-            return res.redirect('/');
-          } else {
-            userLogger.info(`Message: User disabled 2F\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('success', 'Successfully disabled 2-Factor authentication.');
-            return res.redirect('/');
-          }
-        });
-      }
-    }));
-  },
+  //   nexmo.verify.check({request_id: requestId, code: pin}, (err, result) => {
+  //     if(err) {
+  //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //       req.flash('error', err.message);
+  //       return res.redirect('back');
+  //     } else {
+  //       if(result && result.status == '0') { // Success!
+  //         req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
+  //         const errors = req.validationErrors();
+  //         if (errors) {
+  //           res.render('dashboard/dashboard', {
+  //             user: req.user,
+  //             errors: errors,
+  //             pageTitle: 'Dashboard - Deal Your Crypto',
+  //             pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+  //             pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //           });
+  //         } else {
+  //           let phoneNumber = req.body.number;
+  //           User.findByIdAndUpdate(req.user._id, { number: phoneNumber, twofactor: true }, (err) => {
+  //             if (err) {
+  //               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //               req.flash('error', err.message);
+  //               return res.redirect('back');
+  //             }
+  //           });
+  //           req.flash('success', 'Account 2-Factor enabled successfully! 🎉');
+  //           return res.redirect('/dashboard');
+  //         }
+  //       } else {
+  //         req.flash('error', 'Wrong PIN code, please try again.');
+  //         return res.redirect('back');
+  //       }
+  //     }
+  //   });
+  // },
+  // get2factor(req, res) {
+  //   res.render('index/2factor',{
+  //     pageTitle: 'Two-Factor - Deal Your Crypto',
+  //     pageDescription: 'Enable two-factor authentication to enhance your account security!',
+  //     pageKeywords: 'two-factor, 2factor, security, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //   })
+  // },
+  // async post2factor(req, res) {
+  //   req.check('number', 'Something went wrong. Please try again.').matches(/^[0-9]+$/g).notEmpty().isLength({ max: 500 });
+  //   const errors = req.validationErrors();
+  //   if (errors) {
+  //     res.render('dashboard/dashboard', {
+  //       user: req.user,
+  //       errors: errors,
+  //       pageTitle: 'Dashboard - Deal Your Crypto',
+  //       pageDescription: 'Your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+  //       pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //     });
+  //   } else {
+  //     let phoneNumber = req.body.number;
+  //     const user = await User.findOne({number: phoneNumber});
+  //     if (user) {
+  //       req.flash('error', 'Phone number already used. Please try again using another number.');
+  //       return res.redirect('/2factor');
+  //     } else {
+  //       nexmo.verify.request({number: phoneNumber, brand: 'Deal Your Crypto'}, (err, result) => {
+  //         if(err) {
+  //           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //           req.flash('error', err.message);
+  //           return res.redirect('back');
+  //         } else {
+  //           let requestId = result.request_id;
+  //           if(result.status == '0') {
+  //             res.render('index/verify', { 
+  //               number: phoneNumber, 
+  //               requestId: requestId,
+  //               pageTitle: 'Verify - Deal Your Crypto',
+  //               pageDescription: 'Verify your phone number to activate two-factor authentication.',
+  //               pageKeywords: 'phone number, verify, check, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //             }); // Success! Now, have your user enter the PIN
+  //           } else {
+  //             req.flash('error', 'Something went wrong, please try again.');
+  //             return res.redirect('back');
+  //           }
+  //         }
+  //       });
+  //     }
+  //   }
+  // },
+  // postDisable2FactorRequest(req, res) {
+  //   const token = jwt.sign({
+  //     user: req.user._id
+  //   }, 
+  //   SECRET2, 
+  //   { expiresIn: '1h' });
+  //   ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
+  //     link: `http://${req.headers.host}/disable2factor/${token}`,
+  //     footerlink: `http://${req.headers.host}/dashboard/notifications`,
+  //     subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
+  //   }, function (err, data) {
+  //     if (err) {
+  //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //     } else {
+  //       const mailOptions = {
+  //           from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
+  //           to: `${req.user.email}`,
+  //           subject: 'Disable two-factor authentication',
+  //           html: data,
+  //       };
+  //       transporter.sendMail(mailOptions, (error) => {
+  //           if (error) {
+  //             errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${req.user.email}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //           }
+  //       });
+  //       userLogger.info(`Message: User requested 2F disable\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //       req.flash('success', `An e-mail with further instructions has been sent to ${req.user.email}.`);
+  //       return res.redirect('back');
+  //     }
+  //   });
+  // },
+  // postDisable2Factor(req, res) {
+  //   jwt.verify(req.params.token, SECRET2, asyncErrorHandler(async (err) => {
+  //     if (err) {
+  //       if (err.message.match(/Invalid/i)) {
+  //         req.flash('error', 'Invalid link.');
+  //         return res.redirect('/');
+  //       }
+  //       if (err.message.match(/Expired/i)) {
+  //         req.flash('error', 'The link has expired. Please try again.');
+  //         return res.redirect('/');
+  //       }
+  //     } else {
+  //       const user = jwt.decode(req.params.token);
+  //       User.findByIdAndUpdate(user.user, { number: undefined, twofactor: false }, (err) => {
+  //         if (err) {
+  //           errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user.user}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //           req.flash('error', err.message);
+  //           return res.redirect('/');
+  //         } else {
+  //           userLogger.info(`Message: User disabled 2F\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //           req.flash('success', 'Successfully disabled 2-Factor authentication.');
+  //           return res.redirect('/');
+  //         }
+  //       });
+  //     }
+  //   }));
+  // },
   getLogin(req, res) {
     if ( req.user ) {
       res.render('index/login', { 

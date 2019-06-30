@@ -487,89 +487,89 @@ module.exports = {
     }
   },
   //Withdraw BTC from Coinbase
-  async withdraw(req, res) {
-    req.check('requestId', 'Invalid request').notEmpty().isLength({max: 1000}).matches(/^[a-z0-9.,?! -]+$/gi);
-    req.check('pin', 'Invalid pin').notEmpty().matches(/^[0-9]{4}$/g);
-    const errors = req.validationErrors();
-    if (errors) {
-      req.flash('error', 'Wrong PIN code, please try again.');
-      return res.redirect('back');
-    }
-    nexmo.verify.check({request_id: req.body.requestId, code: req.body.pin}, asyncErrorHandler(async (err, result) => {
-      if(err) {
-        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-        return res.render('index/verifyWithdraw', {
-          err: err.message,
-          withdrawId: req.params.id,
-          requestId: req.body.requestId,
-          pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-          pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-          pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-        });
-      } else {
-        if(result && result.status == '0') { // Success!
-          let CurrentUser = await User.findById(req.user._id);
-          const withdraw = await Withdraw.findById(req.params.id);
-          if (withdraw.userID.toString() == req.user._id.toString()) {
-            withdraw.verified = true;
-            await withdraw.save();
-            if(CurrentUser.email_notifications.user === true) {
-              ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-              link: `http://${req.headers.host}/dashboard/address`,
-              footerlink: `http://${req.headers.host}/dashboard/notifications`,
-              amount: withdraw.amount,
-              address: CurrentUser.btcadr,
-              subject: 'Withdraw request success - Deal Your Crypto',
-            }, 
-            function (err, data) {
-                if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
-                        to: `${CurrentUser.email}`,
-                        subject: 'Currency withdrawn successfully',
-                        html: data,
-                    };
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                        if (process.env.NODE_ENV === 'production') {
-                          userLogger.info(`Message: User withdrawed ${withdraw.amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                        req.flash('success', `${withdraw.amount} BTC successfully requested for withdrawal!`);
-                        return res.redirect('/dashboard/addresses');
-                    });
-                }
-              });
-            } else {
-                req.flash('success', `${withdraw.amount} BTC successfully requested for withdrawal!`);
-                return res.redirect('/dashboard/addresses');
-            }
-            if (process.env.NODE_ENV == 'Production') {
-              userLogger.info(`Message: Withdraw request for ${withdraw.amount} BTC created\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            }
-            req.flash('success', 'Your withdrawal request has been registered.');
-            return res.redirect('/dashboard/addresses');
-          } else {
-            req.flash('error', 'Something went wrong. Please try again');
-            return res.redirect('/dashboard/addresses');
-          }
-        } else {
-          const err = [{msg: 'Wrong PIN code, please try again.'}];
-          return res.render('index/verifyWithdraw', {
-            err,
-            withdrawId: req.params.id,
-            requestId: req.body.requestId,
-            pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-            pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-            pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-          });
-        }
-      }
-    }));
-  },
+  // async withdraw(req, res) {
+  //   req.check('requestId', 'Invalid request').notEmpty().isLength({max: 1000}).matches(/^[a-z0-9.,?! -]+$/gi);
+  //   req.check('pin', 'Invalid pin').notEmpty().matches(/^[0-9]{4}$/g);
+  //   const errors = req.validationErrors();
+  //   if (errors) {
+  //     req.flash('error', 'Wrong PIN code, please try again.');
+  //     return res.redirect('back');
+  //   }
+  //   nexmo.verify.check({request_id: req.body.requestId, code: req.body.pin}, asyncErrorHandler(async (err, result) => {
+  //     if(err) {
+  //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //       return res.render('index/verifyWithdraw', {
+  //         err: err.message,
+  //         withdrawId: req.params.id,
+  //         requestId: req.body.requestId,
+  //         pageTitle: 'Verify Withdrawal - Deal Your Crypto',
+  //         pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+  //         pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //       });
+  //     } else {
+  //       if(result && result.status == '0') { // Success!
+  //         let CurrentUser = await User.findById(req.user._id);
+  //         const withdraw = await Withdraw.findById(req.params.id);
+  //         if (withdraw.userID.toString() == req.user._id.toString()) {
+  //           withdraw.verified = true;
+  //           await withdraw.save();
+  //           if(CurrentUser.email_notifications.user === true) {
+  //             ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
+  //             link: `http://${req.headers.host}/dashboard/address`,
+  //             footerlink: `http://${req.headers.host}/dashboard/notifications`,
+  //             amount: withdraw.amount,
+  //             address: CurrentUser.btcadr,
+  //             subject: 'Withdraw request success - Deal Your Crypto',
+  //           }, 
+  //           function (err, data) {
+  //               if (err) {
+  //                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //               } else {
+  //                   const mailOptions = {
+  //                       from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
+  //                       to: `${CurrentUser.email}`,
+  //                       subject: 'Currency withdrawn successfully',
+  //                       html: data,
+  //                   };
+  //                   transporter.sendMail(mailOptions, (error) => {
+  //                       if (error) {
+  //                         errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //                       }
+  //                       if (process.env.NODE_ENV === 'production') {
+  //                         userLogger.info(`Message: User withdrawed ${withdraw.amount} BTC\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //                       }
+  //                       req.flash('success', `${withdraw.amount} BTC successfully requested for withdrawal!`);
+  //                       return res.redirect('/dashboard/addresses');
+  //                   });
+  //               }
+  //             });
+  //           } else {
+  //               req.flash('success', `${withdraw.amount} BTC successfully requested for withdrawal!`);
+  //               return res.redirect('/dashboard/addresses');
+  //           }
+  //           if (process.env.NODE_ENV == 'Production') {
+  //             userLogger.info(`Message: Withdraw request for ${withdraw.amount} BTC created\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  //           }
+  //           req.flash('success', 'Your withdrawal request has been registered.');
+  //           return res.redirect('/dashboard/addresses');
+  //         } else {
+  //           req.flash('error', 'Something went wrong. Please try again');
+  //           return res.redirect('/dashboard/addresses');
+  //         }
+  //       } else {
+  //         const err = [{msg: 'Wrong PIN code, please try again.'}];
+  //         return res.render('index/verifyWithdraw', {
+  //           err,
+  //           withdrawId: req.params.id,
+  //           requestId: req.body.requestId,
+  //           pageTitle: 'Verify Withdrawal - Deal Your Crypto',
+  //           pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+  //           pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+  //         });
+  //       }
+  //     }
+  //   }));
+  // },
   async verifyWithdraw(req, res) {
     req.check('address', 'Invalid address format').notEmpty().isLength({ min: 26, max: 80 });
     req.check('address', 'The address must be alphanumeric').matches(/^[a-zA-Z0-9]+$/g);
@@ -613,33 +613,33 @@ module.exports = {
         notify: user.email_notifications.user
       });
       await user.save();
-      if (user.twofactor === true) {
-        nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
-          if(err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('error', 'Something went wrong. Please try again later.');
-            return res.redirect('back');
-          } else {
-            let requestId = result.request_id;
-            if(result.status == '0') {
-              return res.render('index/verifyWithdraw', {
-                err: false,
-                withdrawId: withdraw._id,
-                requestId: requestId,
-                pageTitle: 'Verify Withdrawal - Deal Your Crypto',
-                pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-                pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-               }); // Success! Now, have your user enter the PIN
-            } else {
-              req.flash('error', 'Something went wrong. Please try again later.');
-              return res.redirect('back');
-            }
-          }
-        });
-      } else {
+      // if (user.twofactor === true) {
+      //   nexmo.verify.request({number: user.number, brand: 'Deal Your Crypto'}, (err, result) => {
+      //     if(err) {
+      //       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      //       req.flash('error', 'Something went wrong. Please try again later.');
+      //       return res.redirect('back');
+      //     } else {
+      //       let requestId = result.request_id;
+      //       if(result.status == '0') {
+      //         return res.render('index/verifyWithdraw', {
+      //           err: false,
+      //           withdrawId: withdraw._id,
+      //           requestId: requestId,
+      //           pageTitle: 'Verify Withdrawal - Deal Your Crypto',
+      //           pageDescription: 'Verify withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      //           pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+      //          }); // Success! Now, have your user enter the PIN
+      //       } else {
+      //         req.flash('error', 'Something went wrong. Please try again later.');
+      //         return res.redirect('back');
+      //       }
+      //     }
+      //   });
+      // } else {
         sendWithdrawVerif(req, user._id, withdraw._id, user.email);
         return res.redirect(`/dashboard/addresses/withdraw/${withdraw._id}/confirm`);
-      }
+      // }
     } else {
       req.flash('error', 'Insufficient funds.');
       return res.redirect('back');
