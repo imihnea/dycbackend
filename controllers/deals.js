@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Deal = require('../models/deal');
 const Notification = require('../models/notification');
+const Subscription = require('../models/subscription');
 const { logger, dealLogger, errorLogger } = require('../config/winston');
 const moment = require('moment');
 const ejs = require('ejs');
@@ -109,7 +110,7 @@ module.exports = {
             dealLogger.info(`Message: Deal ${deal._id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             await User.findByIdAndUpdate(deal.product.author.id, {$inc: { processingDeals: -1 }});
             await Notification.create({
-                userid: deal.buyer._id,
+                userid: deal.buyer.id,
                 linkTo: `/deals/${deal._id}`,
                 imgLink: deal.product.imageUrl,
                 message: `Your deal request has been accepted`
