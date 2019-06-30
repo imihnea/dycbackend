@@ -331,7 +331,7 @@
                                 </div>
                                 <br>
                             <% } %>
-                            <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested')) { %>
+                            <% if ((deal.status === 'Completed') && (user._id.toString() === buyer._id.toString()) && (deal.refund.status === 'Not requested') && (deal.buyer.delivery.shipping === 'Shipping')) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>                            
                                 <button class="button is-primary refundRequest">Ask for a refund</button>
                                 <div class="modal modalrefundRequest">

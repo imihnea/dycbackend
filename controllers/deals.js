@@ -22,6 +22,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+const { deleteProduct } = require('./elasticsearch');
 
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
@@ -279,15 +280,7 @@ module.exports = {
         if (!product.repeatable) {
             product.available = 'Closed';
             await product.save();
-            elasticClient.delete({
-                index: 'products',
-                type: 'products',
-                id: `${product._id}`
-            }, (err) => {
-                if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
-                  }
-            });
+            deleteProduct(product._id);
         }
         const buyer = await User.findById(deal.buyer.id);
         // Buyer email
@@ -397,6 +390,10 @@ module.exports = {
     },
     async refundDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
+        if (deal.buyer.delivery.shipping !== 'Shipping') {
+            req.flash('error', 'We do not refund seller handled deals. You must talk to them about it.');
+            return res.redirect('back');
+        }
         req.check('refundOption', 'Something went wrong. Please try again.').notEmpty().matches(/^(Money Back|New Product)$/);
         const errors = req.validationErrors();
         if (errors) {
@@ -512,6 +509,10 @@ module.exports = {
     },
     async completeRefund(req, res) {
         const deal = await Deal.findById(req.params.id);
+        if (deal.buyer.delivery.shipping !== 'Shipping') {
+            req.flash('error', 'We do not refund seller handled deals. You must talk to them about it.');
+            return res.redirect('back');
+        }
         if (deal.refund.status == 'Pending Delivery') {
             deal.status = 'Refunded';
             deal.refund.status = 'Fulfilled';
@@ -651,6 +652,11 @@ module.exports = {
     },
     // Send refund request message
     async refundRequest(req, res) {
+        const deal = await Deal.findById( req.params.id );
+        if (deal.buyer.delivery.shipping !== 'Shipping') {
+            req.flash('error', 'We do not refund seller handled deals. You must talk to them about it.');
+            return res.redirect('back');
+        }
         // Create the refund request
         req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Product hasn't arrived)$/).notEmpty();
         req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! \r\n|\r|\n]+$/gm).notEmpty();
@@ -658,8 +664,6 @@ module.exports = {
         req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
         const errors = req.validationErrors();
         if (errors) {
-            // Find the deal
-            const deal = await Deal.findById( req.params.id );
             const seller = await User.findById(deal.product.author.id);
             const buyer = await User.findById(deal.buyer.id);
             const chat = await Chat.findById(deal.chat);
@@ -675,8 +679,6 @@ module.exports = {
                 pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         } else {
-            // Find the deal
-            const deal = await Deal.findById( req.params.id );
             const seller = await User.findById(deal.product.author.id);
             if (deal.status === 'Completed') {
                 seller.nrSold -= 1;
