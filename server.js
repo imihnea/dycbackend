@@ -304,9 +304,9 @@ app.use('/admin', adminRoutes);
 
 const middleware = require('./middleware/index');
 
-const { checkUrl } = middleware;
+// const { checkUrl } = middleware;
 
-app.all('*', checkUrl);
+// app.all('*', checkUrl);
 
 // error 404 page
 app.get('*', (req, res) => {
@@ -333,9 +333,15 @@ app.use((err, req, res, next) => {
 
 const { spawn } = require("child_process");
 
-const child = spawn("node", ["./config/recurringTasks.js"]);
+const tasksChild = spawn("node", ["./config/recurringTasks.js"]);
 
-child.stdout.on('data', function(data) {
+tasksChild.stdout.on('data', function(data) {
+  console.log(data.toString()); 
+});
+
+const withdrawChild = spawn("node", ["./config/deleteWithdraws.js"]);
+
+withdrawChild.stdout.on('data', function(data) {
   console.log(data.toString()); 
 });
 

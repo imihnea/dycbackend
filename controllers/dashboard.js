@@ -87,6 +87,36 @@ const cleanHTML = (unclean) => {
     .replace(/>/g, "");
 };
 
+function sendWithdrawVerif(req, userid, withdrawid, useremail) {
+  const token = jwt.sign({
+    user: userid,
+    withdraw: withdrawid
+  }, 
+  process.env.WITHDRAW_SECRET, 
+  { expiresIn: '1h' });
+  ejs.renderFile(path.join(__dirname, "../views/email_templates/verifyWithdraw.ejs"), {
+    link: `http://${req.headers.host}/dashboard/addresses/withdraw/verify/${token}`,
+    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+    subject: 'Confirm Your Withdrawal - Deal Your Crypto',
+  }, function (err, data) {
+    if (err) {
+        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    } else {
+    const mailOptions = {
+        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`,
+        to: `${useremail}`,
+        subject: 'Withdrawal Confirmation Required',
+        html: data,
+    };
+    transporter.sendMail(mailOptions, (error) => {
+        if (error) {
+          errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email: ${useremail}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+      });
+    }
+  });
+};
+
 // Constants for quick modification
 const feature1_time = 14 * 24 * 60 * 60 * 1000;
 const feature2_time = 7 * 24 * 60 * 60 * 1000;
@@ -602,12 +632,56 @@ module.exports = {
           }
         });
       } else {
-        return res.redirect(`/dashboard/addresses/withdrawBTC/${withdraw._id}`);
+        sendWithdrawVerif(req, user._id, withdraw._id, user.email);
+        return res.redirect(`/dashboard/addresses/withdraw/${withdraw._id}/confirm`);
       }
     } else {
       req.flash('error', 'Insufficient funds.');
       return res.redirect('back');
     }
+  },
+  async getConfirmWithdraw(req, res) {
+    const withdraw = await Withdraw.findById(req.params.id);
+    res.render('dashboard/dashboard_confirmWithdraw', {
+      user: req.user,
+      withdraw,
+      pageTitle: 'Confirm Withdrawal - Deal Your Crypto',
+      pageDescription: 'Confirm withdrawal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+      pageKeywords: 'dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+    });
+  },
+  async postConfirmWithdraw(req, res) {
+    jwt.verify(req.params.token, process.env.WITHDRAW_SECRET, asyncErrorHandler(async (err) => {
+      if (err) {
+        if (err.message.match(/Invalid/i)) {
+          req.flash('error', 'Invalid link.');
+          return res.redirect('/login');
+        }
+        if (err.message.match(/Expired/i)) {
+          req.flash('error', 'The link has expired. You should receive another email shortly.');
+          const id = jwt.decode(req.params.token);
+          const user = await User.findById(id.user);
+          sendWithdrawVerif(req, user._id, id.withdraw, user.email);
+          return res.redirect('/dashboard');
+        }
+      } else {
+        const id = jwt.decode(req.params.token);
+        await Withdraw.findByIdAndUpdate(id.withdraw, { verified: true }, async (err) => {
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          } else {
+            req.flash('success', 'You have successfully confirmed your withdrawal request. It will be looked at by a member of our staff soon');
+            return res.redirect('/dashboard');
+          }
+        });
+      }
+    }));
+  },
+  async resendConfirmWithdraw(req, res) {
+    const withdraw = await Withdraw.findById(req.params.id);
+    sendWithdrawVerif(req, withdraw.userID, withdraw._id, withdraw.userEmail);
+    req.flash('success', 'Email resent successfully');
+    return res.redirect('back');
   },
   //Displays available pairs for BTC
   async CoinSwitchPair(req, res) {

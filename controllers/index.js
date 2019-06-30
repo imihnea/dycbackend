@@ -30,8 +30,8 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
-const SECRET = 'monkaMega';
-const SECRET2 = 'monkaGiga';
+const SECRET = process.env.REGISTER_SECRET;
+const SECRET2 = process.env.TWOFACTOR_SECRET;
 
 let transporter = nodemailer.createTransport({
   host: EMAIL_HOST,

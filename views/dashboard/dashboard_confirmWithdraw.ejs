@@ -1,0 +1,19 @@
+<% include ../partials/header %>
+<link rel="stylesheet" href="/dist/css/lognreg.css">
+<div class="hero-body">
+    <div class="container content">    
+        <div class="columns" style="justify-content: center">
+            <div class="column is-three-fifths frame">
+                <h1>Withdraw request created successfully!</h1>
+                <h3>You have been sent a confirmation email.</h3>
+                <br>
+                <p>Make sure to check your spam folder too.</p>
+                <br>
+                <form action="/addresses/withdraw/<%= withdraw._id %>/resend" method="POST">
+                    <button class="button is-primary">Resend confirmation email</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer %>

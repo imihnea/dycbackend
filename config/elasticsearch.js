@@ -109,7 +109,7 @@ const startElastic = () => {
                                         }
                                     });
                                 });
-                                console.log('Product indexing process complete');
+                                logger.info(`Message: Product indexing process complete\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}`);
                             }
                         });
                       }

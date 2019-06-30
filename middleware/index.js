@@ -4,6 +4,7 @@ const Deal = require('../models/deal');
 const Chat = require('../models/chat');
 const User = require('../models/user');
 const Subscription = require('../models/subscription');
+const Withdraw = require('../models/withdrawRequests');
 
 const jwt = require('jsonwebtoken');
 
@@ -199,4 +200,13 @@ module.exports = {
     }
     next();
   },
+  isWithdrawUser: async (req, res, next) => {
+    const withdraw = await Withdraw.findById(req.params.id);
+    if (withdraw.userID.toString() == req.user._id.toString()) {
+      return next();
+    } else {
+      req.flash('error', 'That page does not exist.');
+      return res.redirect('/error');
+    }
+  }
 };

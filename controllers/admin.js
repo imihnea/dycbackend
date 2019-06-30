@@ -317,7 +317,7 @@ module.exports = {
         return res.redirect('back');
     },
     async banUser (req, res) {
-        req.check('userid', 'The userid is invalid').notEmpty().isLength({max: 24}).matches(/^[a-f0-9]+$/gi);
+        req.check('userid', 'The userid is invalid').notEmpty().matches(/^[a-f0-9]{24}$/gi);
         const errors = req.validationErrors();
         if (errors) {
             const profit = await Profit.find({status: 'Unpaid'});

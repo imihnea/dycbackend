@@ -395,7 +395,7 @@
                         <% if (dealsSold.length == 0) { %>
                             <p>You haven't sold any products yet.</p>
                         <% } else { %>
-                            <table class="">
+                            <table class="table is-hoverable is-bordered new-table">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -461,6 +461,8 @@
                 <div class="columns">
                     <div class="column frame">
                         <h4 class="new-text">Withdraw history for the past 30 days</h4>
+                        <sub>Unverified requests are deleted after an hour</sub>
+                        <br>
                         <br>
                         <% if (withdrawals.length == 0) { %>
                             <p>You haven't made any withdrawals yet.</p>
@@ -469,20 +471,29 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
+                                        <th>Status</th>
                                         <th>Address</th>
                                         <th>Amount</th>
                                         <th>Request Date</th>
-                                        <th>Status</th>
+                                        <th>Verified</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% withdrawals.forEach( (withdrawal, index) => { %>
                                         <tr>
                                             <td><%= index + 1 %></td>
-                                            <td style="word-break: break-all;"><%= withdrawal.address %></td>
-                                            <td><%= withdrawal.amount %></td>
-                                            <td><%= withdrawal.withdrawDate.toUTCString() %></td>
                                             <td><%= withdrawal.status %></td>
+                                            <td style="word-break: break-all;"><%= withdrawal.address %></td>
+                                            <td><%= withdrawal.amount.toFixed(8) %></td>
+                                            <td><%= withdrawal.withdrawDate.toUTCString() %></td>
+                                            <th><% if (withdrawal.verified) { %>Yes<% } else { %>
+                                                No
+                                                <br>
+                                                <form action="/dashboard/addresses/withdraw/<%= withdrawal._id %>/resend" method="POST">
+                                                    <button class="button is-primary">Verify</button>
+                                                </form>
+                                                <% } %>
+                                            </th>
                                         </tr>
                                     <% }); %>
                                 </tbody>

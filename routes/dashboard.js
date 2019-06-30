@@ -10,13 +10,13 @@ const { getDashboardIndex, getAddresses, addAddresses, withdraw, verifyWithdraw,
         getProductViews,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, postBTC,
         CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
-        subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage,
+        subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage, getConfirmWithdraw, postConfirmWithdraw, resendConfirmWithdraw,
         getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner,
         getNotif } = require('../controllers/dashboard');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam, checkId } = middleware; // destructuring assignment
+const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam, checkId, isWithdrawUser } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -69,6 +69,12 @@ router.post('/addresses/altcoins/poll', asyncErrorHandler(CoinSwitchPoll));
 router.post('/addresses/withdrawBTC/:id', isLoggedIn, checkId, asyncErrorHandler(withdraw));
 
 router.post('/addresses/verifyWithdraw', isLoggedIn, asyncErrorHandler(verifyWithdraw));
+
+router.get('/addresses/withdraw/:id/confirm', isLoggedIn, checkId, asyncErrorHandler(isWithdrawUser), asyncErrorHandler(getConfirmWithdraw));
+
+router.get('/addresses/withdraw/verify/:token', isLoggedIn, asyncErrorHandler(postConfirmWithdraw));
+
+router.post('/addresses/withdraw/:id/resend', isLoggedIn, checkId, asyncErrorHandler(isWithdrawUser), asyncErrorHandler(resendConfirmWithdraw));
 
 // Dashboard tokens route; gets current number of tokens
 router.get('/tokens', assignCookie, isLoggedIn, asyncErrorHandler(getTokens));
