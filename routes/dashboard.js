@@ -36,6 +36,9 @@ const imageFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: imageFilter,
+  limits: {
+    fileSize: 5000000
+  },
 });
 
 // Dashboard index route

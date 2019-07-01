@@ -81,4 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
           deactivateModal.classList.toggle('is-active');
       });
     }
+
+    const updateProfileButton = document.getElementById('updateProfile');
+    if(updateProfileButton) {
+      updateProfileButton.addEventListener('click', (event) => {
+        document.body.setAttribute("class", "noscroll");
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("spinner").style.display = "block";
+      });
+    }
 });
