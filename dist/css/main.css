@@ -90,6 +90,10 @@ input{
     border-width: 0.5px;
 }
 
+.navbar.is-fixed-top{
+    z-index: 99999999999 !important;
+}
+
 .navbar-item.navbar-center{
     flex-grow: 1;
     flex-direction: column;
