@@ -718,7 +718,7 @@ setInterval( () => {
                                             subject: `You have an unread message`,
                                         }, function (err, data) {
                                             if (err) {
-                                                errorLogger.error(`Message: ${err}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 const mailOptions = {
                                                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -879,7 +879,7 @@ setInterval( () => {
                     }
                 });
                 if (process.env.NODE_ENV === 'production') {
-                    productLogger.info(`Message: Product ${id} was deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    productLogger.info(`Message: Product ${id} was deleted\r\nMethod: Deleting products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 }
             });
         }
@@ -959,7 +959,7 @@ setInterval( () => {
         }
     });
     if (process.env.NODE_ENV === 'production') {
-        logger.info(`Message: Notifications deleted\r\nURL: ${req.originalUrl}\r\nMethod: Deleting notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        logger.info(`Message: Notifications deleted\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
     logger.info(`Message: Recurring Tasks finished\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 }, 11 * 60 * 60 * 1000);
