@@ -167,7 +167,7 @@
                     </form>
                     <br>
                     <div class="buttons has-addons is-centered">
-                        <button type="submit" class="button is-primary is-rounded" form="changeDetails">Update Profile</button>
+                        <button type="submit" class="button is-primary is-rounded" form="changeDetails" id="updateProfile">Update Profile</button>
                         <a href="/profile/<%= user._id %>" class="button is-primary is-rounded">View Profile</a>
                         <% if((!user.subscription1) && (!user.subscription3) && (!user.subscription6) && (!user.subscription12) && (!premium)) { %>
                             <a href="/dashboard/subscription" class="button is-primary is-rounded">Upgrade Account</a>

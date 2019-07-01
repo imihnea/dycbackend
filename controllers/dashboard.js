@@ -1136,7 +1136,7 @@ module.exports = {
                   } else if (result.moderation[0].status === 'rejected') {
                       req.body.product.images.push({
                         // replace with a 'picture contains nudity' or something
-                        url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
+                        url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
                         public_id: result.public_id,
                       });
                   } else {
@@ -1339,7 +1339,7 @@ module.exports = {
               } else if (result.moderation[0].status === 'rejected') {
                   req.body.product.images.push({
                     // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
                     public_id: result.public_id,
                   });
               } else {
@@ -1707,7 +1707,7 @@ module.exports = {
                       } else if (result.moderation[0].status === 'rejected') {
                           product.images.push({
                             // replace with a 'picture contains nudity' or something
-                            url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
+                            url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
                             public_id: result.public_id,
                           });
                       } else {
@@ -1870,7 +1870,7 @@ module.exports = {
               } else if (result.moderation[0].status === 'rejected') {
                   product.images.push({
                     // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png',
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
                     public_id: result.public_id,
                   });
               } else {

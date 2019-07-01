@@ -425,3 +425,12 @@ button.addEventListener('click', function(e) {
     console.log(error);
   });
 });
+
+const createNewDealButton = document.getElementById('createNewDeal');
+if(createNewDealButton) {
+  createNewDealButton.addEventListener('click', (event) => {
+    document.body.setAttribute("class", "noscroll");
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("spinner").style.display = "block";
+  });
+}
