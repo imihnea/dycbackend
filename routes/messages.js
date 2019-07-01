@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { getChats, getMessages, newMessage, newChat, updateMessages, newOngoingChat, newMessageDeal, updateMessagesDeal,
-        destroyChat } = require('../controllers/messages');
+        destroyChat, checkAndRedirect } = require('../controllers/messages');
 
 const middleware = require('../middleware/index');
 
@@ -35,5 +35,8 @@ router.put('/:dealid/:id/sendMessageDeal', isLoggedIn, checkId, asyncErrorHandle
 
 // delete chat
 router.delete('/:id/delete', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(destroyChat));
+
+// email redirect link
+router.get('/:id/emailRedirect', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(checkAndRedirect));
 
 module.exports = router;

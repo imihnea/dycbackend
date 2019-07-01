@@ -402,5 +402,27 @@ module.exports = {
             req.flash('success', 'Chat deleted successfully');
             return res.redirect('/messages');
         }
-    }    
+    },
+    async checkAndRedirect(req, res) {
+        const chat = await Chat.findById(req.params.id);
+        await chat.messages.forEach(asyncErrorHandler(async (message) => {
+            let messagesRead = 0;
+            if (( message.sender.toString() !== req.user._id.toString()) && (message.read == false) ) {
+                message.read = true;
+                messagesRead += 1;
+            }
+            if (messagesRead != 0) {
+                await User.findByIdAndUpdate(req.user._id, { $inc: { unreadMessages: -messagesRead } }, (err) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
+            }
+        }));
+        await chat.save();
+        if (chat.deal) {
+            return res.redirect(`/deals/${chat.deal}`);
+        }
+        return res.redirect(`/messages/${chat._id}`);
+    }
 };

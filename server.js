@@ -337,22 +337,11 @@ app.use((err, req, res, next) => {
   return res.redirect('back');
 });
 
-const { spawn } = require("child_process");
-
-const tasksChild = spawn("node", ["./config/recurringTasks.js"]);
-
-tasksChild.stdout.on('data', function(data) {
-  console.log(data.toString()); 
-});
-
-const withdrawChild = spawn("node", ["./config/deleteWithdraws.js"]);
-
-withdrawChild.stdout.on('data', function(data) {
-  console.log(data.toString()); 
-});
+const { fork } = require("child_process");
+fork('./config/recurringTasks.js');
+fork('./config/deleteWithdraws.js');
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
-  console.log('Server started');
   if (process.env.NODE_ENV === 'production') {
     logger.info(`Server started on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
   }
