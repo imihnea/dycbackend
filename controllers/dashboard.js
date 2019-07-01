@@ -1126,10 +1126,10 @@ module.exports = {
                 await cloudinary.v2.uploader.upload(file.path, 
                 {
                   moderation: "aws_rek:suggestive:ignore",
-                  transformation: [
-                    {quality: "jpegmini:1", sign_url: true},
-                    {width: "auto", dpr: "auto"}
-                    ]
+                  // transformation: [
+                  //   {quality: "jpegmini:1", sign_url: true},
+                  //   {width: "auto", dpr: "auto"}
+                  //   ]
                 }, (err, result) => {
                   if(err) {
                     console.log(err);
@@ -1329,10 +1329,10 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore",
-              transformation: [
-                {quality: "jpegmini:1", sign_url: true},
-                {width: "auto", dpr: "auto"}
-                ]
+              // transformation: [
+              //   {quality: "jpegmini:1", sign_url: true},
+              //   {width: "auto", dpr: "auto"}
+              //   ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
@@ -1697,10 +1697,10 @@ module.exports = {
                   await cloudinary.v2.uploader.upload(file.path, 
                     {
                       moderation: "aws_rek:suggestive:ignore",
-                      transformation: [
-                        {quality: "jpegmini:1", sign_url: true},
-                        {width: "auto", dpr: "auto"}
-                        ]
+                      // transformation: [
+                      //   {quality: "jpegmini:1", sign_url: true},
+                      //   {width: "auto", dpr: "auto"}
+                      //   ]
                     }, (err, result) => {
                       if(err) {
                         console.log(err);
@@ -1860,10 +1860,10 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore",
-              transformation: [
-                {quality: "jpegmini:1", sign_url: true},
-                {width: "auto", dpr: "auto"}
-                ]
+              // transformation: [
+              //   {quality: "jpegmini:1", sign_url: true},
+              //   {width: "auto", dpr: "auto"}
+              //   ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
