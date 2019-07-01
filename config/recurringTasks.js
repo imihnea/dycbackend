@@ -5,6 +5,8 @@ const Subscription = require('../models/subscription');
 const Product = require('../models/product');
 const Notification = require('../models/notification');
 const Report = require('../models/report');
+const ejs = require('ejs');
+const path = require('path');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { logger, dealLogger, errorLogger, productLogger, userLogger } = require('./winston');
@@ -47,10 +49,12 @@ mongoose.set('useCreateIndex', true); // disables warnings
 mongoose.connect(DATABASEURL, { useNewUrlParser: true });
 
 logger.info(`Message: Tasks process started\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+
 const req = false;
 const standardAccountFee = 10;
 const premiumAccountFee = 8;
 const partnerAccountFee = 8;
+const host = 'localhost:8080';
 
 // Runs every 11 hours
 setInterval( () => {
@@ -66,7 +70,7 @@ setInterval( () => {
     // Complete deals with proof older than 21d
     Deal.find({'status': 'Pending Delivery', 'proof.lastUpdated': {$lt: weeksAgo}}, (err, deals) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             deals.forEach(deal => {
                 deal.completedAt = Date.now();
@@ -74,18 +78,18 @@ setInterval( () => {
                 deal.status = 'Completed';
                 deal.save(err => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     }
                 });
                 Product.findById(deal.product.id, (err, product) => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         if (!product.repeatable) {
                             product.available = 'Closed';
                             product.save(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });
                             deleteProduct(product._id);
@@ -94,13 +98,13 @@ setInterval( () => {
                 });
                 User.findById(deal.product.author.id, (err, seller) => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         seller.nrSold += 1;
                         seller.unreadNotifications += 1;
                         seller.save(err => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                         });
                         Notification.create({
@@ -111,13 +115,13 @@ setInterval( () => {
                         });
                         if(seller.email_notifications.deal === true) {
                             ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                link: `http://${req.headers.host}/dashboard`,
-                                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                link: `http://${host}/dashboard`,
+                                footerlink: `http://${host}/dashboard/notifications`,
                                 name: deal.product.name,
                                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                             }, function (err, data) {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                 const mailOptions = {
                                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -136,17 +140,17 @@ setInterval( () => {
                 });
                 User.findById(deal.buyer.id, (err, buyer) => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                        errorLogger.error(`Message: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
                     }
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                            link: `http://${req.headers.host}/deals/${deal._id}`,
-                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                            link: `http://${host}/deals/${deal._id}`,
+                            footerlink: `http://${host}/dashboard/notifications`,
                             name: deal.product.name,
                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                         }, function (err, data) {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                errorLogger.error(`Message: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
                             } else {
                             const mailOptions = {
                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -169,12 +173,12 @@ setInterval( () => {
     // Look for delivered goods and complete deals
     Deal.find({'status': 'Pending Delivery', 'buyer.delivery.shipping': 'Shipping'}, (err, deals) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             deals.forEach(deal => {
                 request(`https://api.goshippo.com/tracks/${deal.buyer.delivery.carrier}/${deal.buyer.delivery.tracking_number}/`, function (error, response, body) {
                     if (error) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Shippo - GET Request failed\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Shippo - GET Request failed\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         if (response.tracking_history[response.tracking_history.length - 1].status == 'DELIVERED') {
                             deal.completedAt = Date.now();
@@ -182,18 +186,18 @@ setInterval( () => {
                             deal.status = 'Completed';
                             deal.save(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });
                             Product.findById(deal.product.id, (err, product) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (!product.repeatable) {
                                         product.available = 'Closed';
                                         product.save(err => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });
                                         deleteProduct(product._id);
@@ -202,13 +206,13 @@ setInterval( () => {
                             });
                             User.findById(deal.product.author.id, (err, seller) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     seller.nrSold += 1;
                                     seller.unreadNotifications += 1;
                                     seller.save(err => {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Message: ${err.message} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
                                     Notification.create({
@@ -219,13 +223,13 @@ setInterval( () => {
                                     });
                                     if(seller.email_notifications.deal === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                            link: `http://${req.headers.host}/dashboard`,
-                                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                            link: `http://${host}/dashboard`,
+                                            footerlink: `http://${host}/dashboard/notifications`,
                                             name: deal.product.name,
                                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                         }, function (err, data) {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -244,17 +248,17 @@ setInterval( () => {
                             });
                             User.findById(deal.buyer.id, (err, buyer) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                    errorLogger.error(`Message: ${err.message} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
                                 }
                                 if(buyer.email_notifications.deal === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                                        link: `http://${req.headers.host}/deals/${deal._id}`,
-                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        link: `http://${host}/deals/${deal._id}`,
+                                        footerlink: `http://${host}/dashboard/notifications`,
                                         name: deal.product.name,
                                         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                     }, function (err, data) {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                            errorLogger.error(`Message: ${err.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
                                         } else {
                                         const mailOptions = {
                                             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -280,7 +284,7 @@ setInterval( () => {
     // Pay deals which cannot be refunded anymore
     Deal.find({"status": "Completed", "paid": "false", "refundableUntil": { $lt: Date.now() }}, (err, deal) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             let withdrawAmount;
             if (deal.length > 0) {
@@ -288,12 +292,12 @@ setInterval( () => {
                     // get user who has to be paid
                     User.findById(item.product.author.id, (err, seller) => {
                         if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            errorLogger.error(`Message: ${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         } else {
                             // pay user and create profit
                             Subscription.find({userid: seller._id}, (err, res) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (res.length > 0) {
                                         if (deal.buyer.delivery.shipping == 'Shipping') {
@@ -361,14 +365,14 @@ setInterval( () => {
                             });
                             seller.save(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Couldn't save user ${seller._id}'s currency change\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: Couldn't save user ${seller._id}'s currency change\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });
                             // set deal as paid  
                             item.paid = true;
                             item.save(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Couldn't save deal ${item._id}'s status change\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: Couldn't save deal ${item._id}'s status change\r\n${err.message} - Deals - Pay deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });
                         }
@@ -391,12 +395,12 @@ setInterval( () => {
           tokenprice = 1/btcrate; // 1 USD
           User.find({$or: [{subscription1: true}, {subscription3: true}, {subscription6: true}, {subscription12: true}]}, (err, res) => {
               if (err) {
-                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user - subscription\r\n${err.message} - Subscription - Find user\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  errorLogger.error(`Message: Error on finding user - subscription\r\n${err.message} - Subscription - Find user\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               } else {
                   res.forEach((user) => {
                       Subscription.find({userid: user._id}, (err, sub) => {
                           if (err) {
-                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on finding user's subscription - subscription\r\n${err.message} - Subscription - Find sub\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                              errorLogger.error(`Message: Error on finding user's subscription - subscription\r\n${err.message} - Subscription - Find sub\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           } else if (sub.length == 0) {
                               if (user.subscription1 == true) {
                                   let expireDate = moment().add(30,"days").toISOString();
@@ -409,14 +413,14 @@ setInterval( () => {
                                           expires1: today
                                       }, err => {
                                               if(err) {
-                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  errorLogger.error(`Message: Error on creating subscription for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               } else {
                                                   // Update user's balances
                                                   user.btcbalance -= subscriptionCost;
                                                   user.feature_tokens += 5;
                                                   user.save(err => {
                                                       if (err) {
-                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          errorLogger.error(`Message: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       } else {
                                                           userLogger.info(`Message: User subscribed for 30 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                           createProfit(user._id, subscriptionCost, 'Subscription');
@@ -426,7 +430,7 @@ setInterval( () => {
                                                               message: `Your subscription has been automatically renewed`
                                                           }, (err) => {
                                                               if (err) {
-                                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                                  errorLogger.error(`Message: Creating notification after subscription1 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                               }
                                                           });
                                                       }
@@ -437,7 +441,7 @@ setInterval( () => {
                                           user.subscription1 = false;
                                           user.save(err => {
                                               if (err) {
-                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  errorLogger.error(`Message: Update user after subscription1\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               } else {
                                                   userLogger.info(`Message: Recurring payments ended for 30 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   Notification.create({
@@ -446,7 +450,7 @@ setInterval( () => {
                                                       message: `Your subscription has been cancelled due to lack of funds`
                                                   }, (err) => {
                                                       if (err) {
-                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription1 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          errorLogger.error(`Message: Creating notification after subscription1 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       }
                                                   });
                                               }
@@ -463,14 +467,14 @@ setInterval( () => {
                                           expires3: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 3\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Message: Error on creating subscription3 for user ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 3\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
                                               user.feature_tokens += 15;
                                               user.save(err => {
                                                   if (err) {
-                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      errorLogger.error(`Message: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 90 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       createProfit(user._id, subscriptionCost, 'Subscription');
@@ -480,7 +484,7 @@ setInterval( () => {
                                                           message: `Your subscription has been automatically renewed`
                                                       }, (err) => {
                                                           if (err) {
-                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                              errorLogger.error(`Message: Creating notification after subscription3 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                           }
                                                       });
                                                   }
@@ -491,7 +495,7 @@ setInterval( () => {
                                       user.subscription3 = false;
                                       user.save(err => {
                                           if (err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Message: Update user after subscription3\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               userLogger.info(`Message: Recurring payments ended for 90 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               Notification.create({
@@ -500,7 +504,7 @@ setInterval( () => {
                                                   message: `Your subscription has been cancelled due to lack of funds`
                                               }, (err) => {
                                                   if (err) {
-                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription3 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      errorLogger.error(`Message: Creating notification after subscription3 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   }
                                               });
                                           }
@@ -517,14 +521,14 @@ setInterval( () => {
                                           expires6: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 6\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Message: Error on creating subscription6 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 6\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
                                               user.feature_tokens += 30;
                                               user.save(err => {
                                                   if (err) {
-                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      errorLogger.error(`Message: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       createProfit(user._id, subscriptionCost, 'Subscription');
@@ -534,7 +538,7 @@ setInterval( () => {
                                                           message: `Your subscription has been automatically renewed`
                                                       }, (err) => {
                                                           if (err) {
-                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                              errorLogger.error(`Message: Creating notification after subscription6 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                           }
                                                       });
                                                   }
@@ -545,7 +549,7 @@ setInterval( () => {
                                           user.subscription6 = false;
                                           user.save(err => {
                                               if (err) {
-                                                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                  errorLogger.error(`Message: Update user after subscription6\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               } else {
                                                   userLogger.info(`Message: Recurring payments ended for 180 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   Notification.create({
@@ -554,7 +558,7 @@ setInterval( () => {
                                                       message: `Your subscription has been cancelled due to lack of funds`
                                                   }, (err) => {
                                                       if (err) {
-                                                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription6 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                          errorLogger.error(`Message: Creating notification after subscription6 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       }
                                                   });
                                               }
@@ -571,14 +575,14 @@ setInterval( () => {
                                           expires12: today
                                       }, err => {
                                           if(err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 12\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Message: Error on creating subscription12 for ${user._id} - subscription\r\n${err.message} - Subscription - Create sub 12\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               // Update user's balances
                                               user.btcbalance -= subscriptionCost;
                                               user.feature_tokens += 60;
                                               user.save(err => {
                                                   if (err) {
-                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      errorLogger.error(`Message: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   } else {
                                                       userLogger.info(`Message: User subscribed for 180 days, paid ${subscriptionCost}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                       createProfit(user._id, subscriptionCost, 'Subscription');
@@ -588,7 +592,7 @@ setInterval( () => {
                                                           message: `Your subscription has been automatically renewed`
                                                       }, (err) => {
                                                           if (err) {
-                                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                              errorLogger.error(`Message: Creating notification after subscription12 refresh\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                           }
                                                       });
                                                   }
@@ -599,7 +603,7 @@ setInterval( () => {
                                       user.subscription12 = false;
                                       user.save(err => {
                                           if (err) {
-                                              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                              errorLogger.error(`Message: Update user after subscription12\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                           } else {
                                               userLogger.info(`Message: Recurring payments ended for 360 days subscription - Lack of funds\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                               Notification.create({
@@ -608,7 +612,7 @@ setInterval( () => {
                                                   message: `Your subscription has been cancelled due to lack of funds`
                                               }, (err) => {
                                                   if (err) {
-                                                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Creating notification after subscription12 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                      errorLogger.error(`Message: Creating notification after subscription12 cancel\r\n${err.message}\r\nUserId: ${user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                   }
                                               });
                                           }
@@ -621,41 +625,43 @@ setInterval( () => {
               }
           });
         } else {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: Error on getting token price and updating subscriptions\r\n${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: Error on getting token price and updating subscriptions\r\n${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
       });
 
     // Delete non-OAuth users who didn't confirm their email
     User.deleteMany({confirmed: false, googleId: { $exists: false }, facebookId: { $exists: false }}, (err) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deleting users who didn't confirm their email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Deleting users who didn't confirm their email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
     });
 
     // Remove expired feat_1
     Product.updateMany({"feat_1.status": true, "feat_1.expiry_date": { $lt: Date.now() } }, { $set: { "feat_1.status": false }}, {multi: true}, (err, result) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Removing expired feat_1\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
-            productLogger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            logger.info(`Expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            if (result.nModified > 0) {
+                productLogger.info(`${result.nModified} expired feat_1 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
         }
     });
 
     // Remove expired feat_2
     Product.updateMany({"feat_2.status": true, "feat_2.expiry_date": { $lt: Date.now() } }, { $set: { "feat_2.status": false }}, {multi: true}, (err, result) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Removing expired feat_2\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Removing expired feat_2\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
-            productLogger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            logger.info(`Expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            if (result.nModified > 0) {
+                productLogger.info(`${result.nModified} expired feat_2 removed on ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            }
         }
     });
 
     // get chats with messages
     Chat.find({"messageCount": { $gt: 0 }}, (err, chat) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding chats with messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Finding chats with messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             chat.forEach(item => {
                 // get last message and verify if it was read
@@ -665,19 +671,19 @@ setInterval( () => {
                         // send email to user2
                          User.findById(item.user2.id, (err, user2) => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - Finding user2 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 // test this and the one below
                                 if(user2.email_notifications.message === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                        link: `http://${req.headers.host}/messages/${item._id}`,
-                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        link: `http://${host}/messages/${item._id}/emailRedirect`,
+                                        footerlink: `http://${host}/dashboard/notifications`,
                                         sender: item.user1.fullname,
                                         product: item.product.name,
                                         subject: `You have an unread message`,
                                     }, function (err, data) {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Sending user2 notif email\r\nUserId: ${user2._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Message: ${err.message}\r\nMethod: Sending user2 notif email\r\nUserId: ${user2._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         } else {
                                             const mailOptions = {
                                                 from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -698,21 +704,21 @@ setInterval( () => {
                         });
                     } else {
                         // send email to user1
-                        const user1 = User.findById(item.user1.id, (err, res) => {
+                        User.findById(item.user1.id, (err, user1) => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Finding user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - Finding user1 @chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 if (user1) {
                                     if(user1.email_notifications.message === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                            link: `http://${req.headers.host}/messages/${item._id}`,
-                                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                            link: `http://${host}/messages/${item._id}/emailRedirect`,
+                                            footerlink: `http://${host}/dashboard/notifications`,
                                             sender: item.user2.fullname,
                                             product: item.product.name,
                                             subject: `You have an unread message`,
                                         }, function (err, data) {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 const mailOptions = {
                                                     from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
@@ -741,38 +747,42 @@ setInterval( () => {
     // Deleting old chats and deals
     Chat.find({'createdAt': {$lt: monthAgo}}, (err, chats) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the old chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Couldn't find the old chats\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             chats.forEach(chat => {
                 if (chat.messageCount == 0) {
                     if (!chat.deal) {
-                        chat.remove(err => {
+                        chat.deleteOne(err => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with no messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - Error while removing old chat with no messages\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                         });
                     } else {
                         Deal.findById(chat.deal, (err, deal) => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 if ((['Refunded', 'Cancelled', 'Declined', 'Refund denied'].includes(deal.status)) || ((deal.status == 'Completed') && (deal.refundableUntil < Date.now()))) {
                                     if (deal.proof.imageid) {
                                         cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });
                                     }
-                                    deal.remove(err => {
+                                    deal.deleteOne(err => {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Message: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
-                                    await Report.deleteMany({deal: chat.deal});
-                                    chat.remove(err => {
+                                    Report.deleteMany({deal: chat.deal}, (err) => {
                                         if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            errorLogger.error(`Message: ${err.message} - Error while removing reports for deal ${chat.deal}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                    chat.deleteOne(err => {
+                                        if (err) {
+                                            errorLogger.error(`Message: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
                                 }
@@ -782,41 +792,43 @@ setInterval( () => {
                 } else {
                     if (chat.messages[chat.messageCount - 1].createdAt < weekAgo) {
                         if (!chat.deal) {
-                            chat.remove(err => {
+                            chat.deleteOne(err => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 }
                             });     
                         } else {
                             Deal.findById(chat.deal, (err, deal) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Error while finding old chat deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (deal) {
                                         if (((deal.status == 'Completed') && (deal.refundableUntil < Date.now())) || (deal.status == 'Refunded') || (deal.status == 'Cancelled')) {
                                             if (deal.proof.imageid) {
                                                 cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
                                                     if (err) {
-                                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                        errorLogger.error(`Message: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                     }
                                                 });
                                             }
-                                            deal.remove(err => {
+                                            deal.deleteOne(err => {
                                                 if (err) {
-                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    errorLogger.error(`Message: ${err.message} - Error while removing old deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 }
                                             });
-                                            await Report.deleteMany({deal: chat.deal});
-                                            chat.remove(err => {
+                                            Report.deleteMany({deal: chat.deal}, (err) => {
+                                                errorLogger.error(`Message: ${err.message} - Error while removing reports for deal ${chat.deal}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            });
+                                            chat.deleteOne(err => {
                                                 if (err) {
-                                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    errorLogger.error(`Message: ${err.message} - Error while removing old chat\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                 }
                                             });
                                         }
                                     } else {
-                                        chat.remove(err => {
+                                        chat.deleteOne(err => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Error while removing old chat with messages and no deal\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });  
                                     }
@@ -832,32 +844,34 @@ setInterval( () => {
     // Deleting flagged products
     Product.find({'deleteIn30.status': true, 'deleteIn30.deleteDate': { $lt: Date.now() }}, (err, products) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             products.forEach(product => {
                 product.images.forEach(image => {
                     cloudinary.v2.uploader.destroy(image.public_id);
                 });
                 const id = product._id;
-                product.remove(err => {
+                product.deleteOne(err => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     }
                 });
                 Deal.find({'product.id': id}, (err, res) => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals for product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Couldn't find deals for product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
-                        if (res.proof.imageid) {
-                            cloudinary.v2.uploader.destroy(res.proof.imageid, (err) => {
-                                if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${res.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                }
-                            });
+                        if (res.proof) {
+                            if (res.proof.imageid) {
+                                cloudinary.v2.uploader.destroy(res.proof.imageid, (err) => {
+                                    if (err) {
+                                        errorLogger.error(`Message: ${err.message} - Cannot delete image ${res.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    }
+                                });
+                            }
                         }
-                        res.remove(err => {
+                        res.deleteOne(err => {
                             if (err) {
-                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                errorLogger.error(`Message: ${err.message} - Couldn't remove deal ${res._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
                         });
                     }
@@ -872,37 +886,39 @@ setInterval( () => {
     // Deleting products that weren't bought in a month
     Product.find({'lastBought': { $lt: monthAgo }}, (err, products) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Couldn't find the unbought products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             products.forEach(product => {
                 Deal.find({status: {$nin:['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied']}, 'product.id': product._id}, (err, deals) => {
                     if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find deals that weren't completed, refunded, declined, etc for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err.message} - Couldn't find deals that weren't completed, refunded, declined, etc for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
                         if (deals.length == 0) {
                             Deal.find({'product.id': product._id, refundableUntil: {$gt: Date.now()}}, (err, refundableDeals) => {
                                 if (err) {
-                                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find refundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    errorLogger.error(`Message: ${err.message} - Couldn't find refundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (refundableDeals.length == 0) {
                                         Deal.find({'product.id': product._id}, (err, nonrefundableDeals) => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find nonrefundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Couldn't find nonrefundable deals for product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             } else {
                                                 nonrefundableDeals.forEach(deal => {
                                                     if (deal.proof.imageid) {
                                                         cloudinary.v2.uploader.destroy(deal.proof.imageid, (err) => {
                                                             if (err) {
-                                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                                errorLogger.error(`Message: ${err.message} - Cannot delete image ${deal.proof.imageid}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                             }
                                                         });
                                                     }
-                                                    deal.remove(err => {
+                                                    deal.deleteOne(err => {
                                                         if (err) {
-                                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                            errorLogger.error(`Message: ${err.message} - Couldn't remove deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                                         }
                                                     });
-                                                    await Report.deleteMany({deal: chat.deal});
+                                                    Report.deleteMany({deal: chat.deal}, (err) => {
+                                                        errorLogger.error(`Message: ${err.message} - Error while removing reports for deal ${chat.deal}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    });
                                                 });
                                             }
                                         });
@@ -910,9 +926,9 @@ setInterval( () => {
                                             cloudinary.v2.uploader.destroy(image.public_id);
                                         });
                                         const id = product._id;
-                                        product.remove(err => {
+                                        product.deleteOne(err => {
                                             if (err) {
-                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                errorLogger.error(`Message: ${err.message} - Couldn't remove product ${id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                             }
                                         });
                                         if (process.env.NODE_ENV === 'production') {
@@ -931,10 +947,12 @@ setInterval( () => {
     // Deleting week old notifications
     Notification.find({'createdAt': { $lt: weekAgo }}, (err, notifications) => {
         if (err) {
-            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            errorLogger.error(`Message: ${err.message} - Couldn't find the notifications\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             notifications.forEach(notification => {
-                notification.remove();
+                notification.deleteOne(err => {
+                    errorLogger.error(`Message: ${err.message} - Couldn't delete notification ${notification._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                });
             });
         }
     });
@@ -943,3 +961,5 @@ setInterval( () => {
     }
     logger.info(`Message: Recurring Tasks finished\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
 }, 11 * 60 * 60 * 1000);
+// }, 30 * 1000);
+
