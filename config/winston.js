@@ -18,7 +18,7 @@ const options = {
 const logger = winston.createLogger({
     format: format.printf(info => info.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
@@ -26,7 +26,7 @@ const logger = winston.createLogger({
 const userLogger = winston.createLogger({
     format: format.printf(info => info.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
@@ -34,7 +34,7 @@ const userLogger = winston.createLogger({
 const productLogger = winston.createLogger({
     format: format.printf(info => info.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
@@ -42,7 +42,7 @@ const productLogger = winston.createLogger({
 const dealLogger = winston.createLogger({
     format: format.printf(info => info.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false
 });
@@ -50,7 +50,7 @@ const dealLogger = winston.createLogger({
 const reviewLogger = winston.createLogger({
     format: format.printf(info => info.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
@@ -59,7 +59,7 @@ const errorLogger = winston.createLogger({
     format: format.printf(error => error.message),
     transports: [
         new winston.transports.Console(options.console),
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false
 });
@@ -67,7 +67,7 @@ const errorLogger = winston.createLogger({
 const warnLogger = winston.createLogger({
     format: format.printf(warn => warn.message),
     transports: [
-        // loggingWinston,
+        loggingWinston,
     ],
     exitOnError: false
 });
