@@ -12,6 +12,7 @@ const moment = require('moment');
 const request = require("request");
 const { errorLogger, userLogger, dealLogger } = require('../config/winston');
 const middleware = require('../middleware/index');
+const { createProfit } = require('../config/profit');
 const Client = require('coinbase').Client;
 const client = new Client({
   'apiKey': process.env.COINBASE_API_KEY,
@@ -529,6 +530,7 @@ module.exports = {
                                 });
                                 // Send an email to the seller letting them know about the deal request
                                 const user2 = await User.findById(product.author.id);
+                                createProfit(user._id, shippingPrice, 'Shipping Cost');
                                 if(user2.email_notifications.deal === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
                                         link: `https://${req.headers.host}/deals/${deal._id}`,
