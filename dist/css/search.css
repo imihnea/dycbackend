@@ -142,14 +142,6 @@
   margin-bottom: 3vh;
 }
 
-.dealname{
-  color: black !important;
-}
-
-.dealname:hover{
-  color: #3273dc !important;
-}
-
 .hit {
   padding: 10px 20px 20px;
   margin-bottom: 10px;
