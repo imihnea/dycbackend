@@ -165,7 +165,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: 'https://dyc.herokuapp.com/auth/facebook/callback',
+  callbackURL: 'https://www.dealyourcrypto.com/auth/facebook/callback',
   profileFields: ['id', 'displayName', 'email'],
   passReqToCallback: true
 },
@@ -200,7 +200,7 @@ function(req, accessToken, refreshToken, profile, cb) {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://dyc.herokuapp.com/auth/google/callback',
+  callbackURL: 'https://www.dealyourcrypto.com/auth/google/callback',
   passReqToCallback: true
 },
 function(req, accessToken, refreshToken, profile, done) {
@@ -313,11 +313,11 @@ app.get('*', (req, res) => {
   return res.status(404).redirect('/error');
 });
 
-const middleware = require('./middleware/index');
+// const middleware = require('./middleware/index');
 
-const { checkUrl } = middleware;
+// const { checkUrl } = middleware;
 
-app.all('*', checkUrl);
+// app.all('*', checkUrl);
 
 // error handler
 app.use((err, req, res, next) => {
