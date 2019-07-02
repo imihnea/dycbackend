@@ -96,8 +96,8 @@ function sendWithdrawVerif(req, userid, withdrawid, useremail) {
   process.env.WITHDRAW_SECRET, 
   { expiresIn: '1h' });
   ejs.renderFile(path.join(__dirname, "../views/email_templates/verifyWithdraw.ejs"), {
-    link: `http://${req.headers.host}/dashboard/addresses/withdraw/verify/${token}`,
-    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+    link: `https://${req.headers.host}/dashboard/addresses/withdraw/verify/${token}`,
+    footerlink: `https://${req.headers.host}/dashboard/notifications`,
     subject: 'Confirm Your Withdrawal - Deal Your Crypto',
   }, function (err, data) {
     if (err) {
@@ -401,8 +401,8 @@ module.exports = {
                                     }
                                   });
                                   ejs.renderFile(path.join(__dirname, "../views/email_templates/deposit.ejs"), {
-                                    link: `http://${req.headers.host}/dashboard/addresses`,
-                                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                    link: `https://${req.headers.host}/dashboard/addresses`,
+                                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                                     invoice: checkout.invoice,
                                     amount: json.amount.amount,
                                     coin: 'BTC',
@@ -515,8 +515,8 @@ module.exports = {
   //           await withdraw.save();
   //           if(CurrentUser.email_notifications.user === true) {
   //             ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-  //             link: `http://${req.headers.host}/dashboard/address`,
-  //             footerlink: `http://${req.headers.host}/dashboard/notifications`,
+  //             link: `https://${req.headers.host}/dashboard/address`,
+  //             footerlink: `https://${req.headers.host}/dashboard/notifications`,
   //             amount: withdraw.amount,
   //             address: CurrentUser.btcadr,
   //             subject: 'Withdraw request success - Deal Your Crypto',
@@ -2598,8 +2598,8 @@ module.exports = {
     SECRET2, 
     { expiresIn: '1h' });
     ejs.renderFile(path.join(__dirname, "../views/email_templates/deleteAccount.ejs"), {
-      link: `http://${req.headers.host}/dashboard/disable-account/${token}`,
-      footerlink: `http://${req.headers.host}/dashboard/notifications`,
+      link: `https://${req.headers.host}/dashboard/disable-account/${token}`,
+      footerlink: `https://${req.headers.host}/dashboard/notifications`,
       subject: 'Delete account request - Deal Your Crypto',
     }, function (err, data) {
       if (err) {

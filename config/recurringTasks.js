@@ -115,8 +115,8 @@ setInterval( () => {
                         });
                         if(seller.email_notifications.deal === true) {
                             ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                link: `http://${host}/dashboard`,
-                                footerlink: `http://${host}/dashboard/notifications`,
+                                link: `https://${host}/dashboard`,
+                                footerlink: `https://${host}/dashboard/notifications`,
                                 name: deal.product.name,
                                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                             }, function (err, data) {
@@ -144,8 +144,8 @@ setInterval( () => {
                     }
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                            link: `http://${host}/deals/${deal._id}`,
-                            footerlink: `http://${host}/dashboard/notifications`,
+                            link: `https://${host}/deals/${deal._id}`,
+                            footerlink: `https://${host}/dashboard/notifications`,
                             name: deal.product.name,
                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                         }, function (err, data) {
@@ -223,8 +223,8 @@ setInterval( () => {
                                     });
                                     if(seller.email_notifications.deal === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                            link: `http://${host}/dashboard`,
-                                            footerlink: `http://${host}/dashboard/notifications`,
+                                            link: `https://${host}/dashboard`,
+                                            footerlink: `https://${host}/dashboard/notifications`,
                                             name: deal.product.name,
                                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                         }, function (err, data) {
@@ -252,8 +252,8 @@ setInterval( () => {
                                 }
                                 if(buyer.email_notifications.deal === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                                        link: `http://${host}/deals/${deal._id}`,
-                                        footerlink: `http://${host}/dashboard/notifications`,
+                                        link: `https://${host}/deals/${deal._id}`,
+                                        footerlink: `https://${host}/dashboard/notifications`,
                                         name: deal.product.name,
                                         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                     }, function (err, data) {
@@ -676,8 +676,8 @@ setInterval( () => {
                                 // test this and the one below
                                 if(user2.email_notifications.message === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                        link: `http://${host}/messages/${item._id}/emailRedirect`,
-                                        footerlink: `http://${host}/dashboard/notifications`,
+                                        link: `https://${host}/messages/${item._id}/emailRedirect`,
+                                        footerlink: `https://${host}/dashboard/notifications`,
                                         sender: item.user1.fullname,
                                         product: item.product.name,
                                         subject: `You have an unread message`,
@@ -711,8 +711,8 @@ setInterval( () => {
                                 if (user1) {
                                     if(user1.email_notifications.message === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                            link: `http://${host}/messages/${item._id}/emailRedirect`,
-                                            footerlink: `http://${host}/dashboard/notifications`,
+                                            link: `https://${host}/messages/${item._id}/emailRedirect`,
+                                            footerlink: `https://${host}/dashboard/notifications`,
                                             sender: item.user2.fullname,
                                             product: item.product.name,
                                             subject: `You have an unread message`,

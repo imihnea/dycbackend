@@ -87,8 +87,8 @@ module.exports = {
         });
 		if(author.email_notifications.user === true) {
 			ejs.renderFile(path.join(__dirname, "../views/email_templates/review.ejs"), {
-					link: `http://${req.headers.host}/products/${product._id}`,
-					footerlink: `http://${req.headers.host}/dashboard/notifications`,
+					link: `https://${req.headers.host}/products/${product._id}`,
+					footerlink: `https://${req.headers.host}/dashboard/notifications`,
 					name: product.name,
 					subject: `New review for ${product.name} - Deal Your Crypto`,
 			}, 

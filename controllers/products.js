@@ -531,8 +531,8 @@ module.exports = {
                                 const user2 = await User.findById(product.author.id);
                                 if(user2.email_notifications.deal === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                                        link: `http://${req.headers.host}/deals/${deal._id}`,
-                                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                        link: `https://${req.headers.host}/deals/${deal._id}`,
+                                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
                                         name: product.name,
                                         buyer: req.user.full_name,
                                         subject: `New buy request - Deal Your Crypto`,
@@ -628,8 +628,8 @@ module.exports = {
                             const user2 = await User.findById(product.author.id);
                             if(user2.email_notifications.deal === true) {
                                 ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                                    link: `http://${req.headers.host}/deals/${deal._id}`,
-                                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                    link: `https://${req.headers.host}/deals/${deal._id}`,
+                                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                                     name: product.name,
                                     buyer: req.user.full_name,
                                     subject: `New buy request - Deal Your Crypto`,

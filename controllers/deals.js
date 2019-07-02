@@ -121,8 +121,8 @@ module.exports = {
             await buyer.save();
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
-                    link: `http://${req.headers.host}/deals/${deal._id}`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
                     subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
@@ -181,7 +181,7 @@ module.exports = {
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/acceptDeal.ejs"), {
                             link: result.tracking_url_provider, // Tracking url
-                            footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                            footerlink: `https://${req.headers.host}/dashboard/notifications`,
                             name: deal.product.name,
                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                         }, function (err, data) {
@@ -230,8 +230,8 @@ module.exports = {
         await Product.findByIdAndUpdate(deal.product.id, {$set: {available: 'True'}});
         if(buyer.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/declineDeal.ejs"), {
-                link: `http://${req.headers.host}/deals/${deal._id}`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/deals/${deal._id}`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 name: deal.product.name,
                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
             }, function (err, data) {
@@ -319,8 +319,8 @@ module.exports = {
         // Buyer email
         if(buyer.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                link: `http://${req.headers.host}/deals/${deal._id}`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/deals/${deal._id}`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 name: deal.product.name,
                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
             }, function (err, data) {
@@ -343,8 +343,8 @@ module.exports = {
         // Seller email
         if(seller.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                link: `http://${req.headers.host}/dashboard`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/dashboard`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 name: deal.product.name,
                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
             }, function (err, data) {
@@ -391,8 +391,8 @@ module.exports = {
         });
         if(seller.email_notifications.deal === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/cancelDeal.ejs"), {
-                link: `http://${req.headers.host}/dashboard`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/dashboard`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 name: deal.product.name,
                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
             }, function (err, data) {
@@ -469,8 +469,8 @@ module.exports = {
                 dealLogger.info(`Message: Deal ${deal._id} refunded - money back\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 if(seller.email_notifications.deal === true) {
                     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
-                        link: `http://${req.headers.host}/dashboard`,
-                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                        link: `https://${req.headers.host}/dashboard`,
+                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
                         name: deal.product.name,
                         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                     }, function (err, data) {
@@ -512,8 +512,8 @@ module.exports = {
                 });
                 if(seller.email_notifications.deal === true) {
                     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
-                        link: `http://${req.headers.host}/dashboard`,
-                        footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                        link: `https://${req.headers.host}/dashboard`,
+                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
                         name: deal.product.name,
                         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                     }, function (err, data) {
@@ -563,8 +563,8 @@ module.exports = {
             });
             if(seller.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
-                    link: `http://${req.headers.host}/dashboard`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/dashboard`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
                     subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
@@ -587,8 +587,8 @@ module.exports = {
             }
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
-                    link: `http://${req.headers.host}/dashboard`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/dashboard`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
                     subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
@@ -657,8 +657,8 @@ module.exports = {
             });
             if(buyer.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
-                    link: `http://${req.headers.host}/deals/${deal._id}`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
                     subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
@@ -734,8 +734,8 @@ module.exports = {
             });
             if(seller.email_notifications.deal === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
-                    link: `http://${req.headers.host}/deals/${deal._id}`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/deals/${deal._id}`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
                     subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
                 }, function (err, data) {
