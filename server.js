@@ -56,28 +56,34 @@ app.use(helmet.xssFilter());
 
 // Need SSL set up for these
 
-app.use(helmet.hsts({
-  maxAge: 31536000,
-  includeSubDomains: true,
-  preload: true
-}));
+if (process.env.NODE_ENV == 'production') {
+  app.use(helmet.hsts({
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }));
 
-const hpkp = require('hpkp');
+  const hpkp = require('hpkp');
 
-const ninetyDaysInSeconds = 7776000
-app.use(hpkp({
-  maxAge: ninetyDaysInSeconds,
-  sha256s: ['AbCdEf123=', 'ZyXwVu456='],
-//   includeSubDomains: true,         // optional
-//   reportUri: 'http://example.com', // optional
-//   reportOnly: false,               // optional
+  const ninetyDaysInSeconds = 7776000
+  app.use(hpkp({
+    maxAge: ninetyDaysInSeconds,
+    sha256s: ['AbCdEf123=', 'ZyXwVu456='],
+  //   includeSubDomains: true,         // optional
+  //   reportUri: 'http://example.com', // optional
+  //   reportOnly: false,               // optional
 
-//   // Set the header based on a condition.
-//   // This is optional.
-  setIf: function (req, res) {
-    return req.secure
-  }
-}));
+  //   // Set the header based on a condition.
+  //   // This is optional.
+    setIf: function (req, res) {
+      return req.secure
+    }
+  }));
+
+  const enforce = require('express-sslify');
+  
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 const LocalStrategy = require('passport-local');
 
