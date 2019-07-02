@@ -198,11 +198,9 @@
                                         </header>
                                         <section class="modal-card-body">
                                             <% if(deal.buyer.delivery.shipping === 'FaceToFace') { %>
-                                                <p class="title is-5 modal-section-title">Face-to-Face Buyer Details</p>
+                                                <p class="title is-5 modal-section-title">Buyer Details</p>
                                                 <div style="text-align: left;">
                                                     <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
-                                                    <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
-                                                    <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
                                                 </div>
                                                 <br>
                                                 <p class="title is-5 modal-section-title">Delivery handled by you</p>
@@ -210,18 +208,9 @@
                                                     <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
                                                 </div>
                                             <% } else { %>
-                                                <p class="title is-5 modal-section-title">Shipping Details</p>
+                                                <p class="title is-5 modal-section-title">Buyer Details</p>
                                                 <div style="text-align: left;">
                                                     <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
-                                                    <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
-                                                    <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
-                                                    <p class="subtitle">Country: <%= deal.buyer.delivery.country %></p>
-                                                    <p class="subtitle">City: <%= deal.buyer.delivery.city %></p>
-                                                    <% if(deal.buyer.delivery.state) { %>
-                                                        <p class="subtitle">State: <%= deal.buyer.delivery.state %></p>
-                                                    <% } %>
-                                                    <p class="subtitle">Street: <%= deal.buyer.delivery.street1 %></p>
-                                                    <p class="subtitle">Zip: <%= deal.buyer.delivery.zip %></p>
                                                 </div>
                                                 <br>
                                                 <p class="title is-5 modal-section-title">Carrier details</p>
