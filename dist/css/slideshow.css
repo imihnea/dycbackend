@@ -214,6 +214,86 @@
     margin-right:5px;
     cursor:pointer;
   }
+
+  @media only screen and (max-width: 600px) {
+        .switch > ul > li{
+            width: 5px;
+            height: 5px;
+        }
+
+        @-webkit-keyframes on{
+            0%,100%{
+                margin-left: 0%;
+            }
+            25%{
+                margin-left: 0%;
+            }
+            50%{
+                margin-left: 10px;
+            }
+            60%{
+                margin-left: 10px;
+            }
+            75%{
+                margin-left: 20px;
+            }
+            90%{
+                margin-left: 20px;
+            }
+            100%{
+                margin-left: 0%;
+            }
+        }
+          
+        @-moz-keyframes on{
+            0%,100%{
+                margin-left: 0%;
+            }
+            25%{
+                margin-left: 0%;
+            }
+            50%{
+                margin-left: 10px;
+            }
+            60%{
+                margin-left: 10px;
+            }
+            75%{
+                margin-left: 20px;
+            }
+            90%{
+                margin-left: 20px;
+            }
+            100%{
+                margin-left: 0%;
+            }
+        }
+          
+        @keyframes on{
+            0%,100%{
+                margin-left: 0%;
+            }
+            25%{
+                margin-left: 0%;
+            }
+            50%{
+                margin-left: 10px;
+            }
+            60%{
+                margin-left: 10px;
+            }
+            75%{
+                margin-left: 20px;
+            }
+            90%{
+                margin-left: 20px;
+            }
+            100%{
+                margin-left: 0%;
+            }
+        }
+    }
+
   .switch ul{
     overflow:hidden;
   }
