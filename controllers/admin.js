@@ -111,8 +111,8 @@ module.exports = {
                         });
                         if(withdraw.notify === true) {
                                 ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-                                link: `http://${req.headers.host}/dashboard/address`,
-                                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                link: `https://${req.headers.host}/dashboard/address`,
+                                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                                 amount: withdraw.amount,
                                 address: withdraw.address,
                                 subject: 'Currency withdrawn successfully - Deal Your Crypto',
@@ -157,8 +157,8 @@ module.exports = {
         }
         if(withdraw.notify === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/withdrawDenied.ejs"), {
-                link: `http://${req.headers.host}/dashboard/address`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/dashboard/address`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 amount: withdraw.amount,
                 subject: 'Currency withdrawal denied - Deal Your Crypto',
             }, 
@@ -219,8 +219,8 @@ module.exports = {
                             });
                             if(withdraw.notify === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/withdraw.ejs"), {
-                                    link: `http://${req.headers.host}/dashboard/address`,
-                                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                                    link: `https://${req.headers.host}/dashboard/address`,
+                                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                                     amount: withdraw.amount,
                                     address: withdraw.address,
                                     subject: 'Currency withdrawn successfully - Deal Your Crypto',
@@ -264,8 +264,8 @@ module.exports = {
             await User.findByIdAndUpdate(withdraw.userID, {$inc: {btcbalance: withdraw.amount}});
             if(withdraw.notify === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/withdrawDenied.ejs"), {
-                    link: `http://${req.headers.host}/dashboard/address`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/dashboard/address`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     amount: withdraw.amount,
                     subject: 'Currency withdrawal denied - Deal Your Crypto',
                 }, 
@@ -395,8 +395,8 @@ module.exports = {
         until = until.toUTCString();
         if(user.email_notifications.user === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/ban.ejs"), {
-                link: `http://${req.headers.host}/`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 until,
                 reason,
                 subject: 'Account suspended - Deal Your Crypto',
@@ -451,8 +451,8 @@ module.exports = {
         }
         if(user.email_notifications.user === true) {
             ejs.renderFile(path.join(__dirname, "../views/email_templates/partner.ejs"), {
-                link: `http://${req.headers.host}/`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 subject: 'Partnership accepted - Deal Your Crypto',
             }, 
             function (err, data) {
@@ -511,8 +511,8 @@ module.exports = {
             let lastApp = new Date(user.partnerApplication.sentOn);
             lastApp.setDate(lastApp.getDate() + 90);
             ejs.renderFile(path.join(__dirname, "../views/email_templates/partnerDeclined.ejs"), {
-                link: `http://${req.headers.host}/`,
-                footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                link: `https://${req.headers.host}/`,
+                footerlink: `https://${req.headers.host}/dashboard/notifications`,
                 subject: 'Partnership declined - Deal Your Crypto',
                 reason: req.body.reason,
                 reapplyDate: lastApp

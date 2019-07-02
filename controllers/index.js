@@ -87,8 +87,8 @@ function sendConfirmationEmail(req, userid, useremail) {
   SECRET, 
   { expiresIn: '1h' });
   ejs.renderFile(path.join(__dirname, "../views/email_templates/register.ejs"), {
-    link: `http://${req.headers.host}/confirmation/${token}`,
-    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+    link: `https://${req.headers.host}/confirmation/${token}`,
+    footerlink: `https://${req.headers.host}/dashboard/notifications`,
     subject: 'Confirm Your Email - Deal Your Crypto',
   }, function (err, data) {
     if (err) {
@@ -312,8 +312,8 @@ module.exports = {
   //   SECRET2, 
   //   { expiresIn: '1h' });
   //   ejs.renderFile(path.join(__dirname, "../views/email_templates/disable_2factor.ejs"), {
-  //     link: `http://${req.headers.host}/disable2factor/${token}`,
-  //     footerlink: `http://${req.headers.host}/dashboard/notifications`,
+  //     link: `https://${req.headers.host}/disable2factor/${token}`,
+  //     footerlink: `https://${req.headers.host}/dashboard/notifications`,
   //     subject: 'Disable Two-Factor Authentication - Deal Your Crypto',
   //   }, function (err, data) {
   //     if (err) {
@@ -687,7 +687,7 @@ module.exports = {
           subject: 'Deal Your Crypto Password Reset',
           text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
-            + 'http://'}${req.headers.host}/reset/${token}\n\n`
+            + 'https://'}${req.headers.host}/reset/${token}\n\n`
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {
@@ -1552,7 +1552,7 @@ module.exports = {
           subject: 'Deal Your Crypto Change Email Request',
           text: `${'You are receiving this because you (or someone else) have requested to change the email for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
-            + 'http://'}${req.headers.host}/resetemail/${token}\n\n`
+            + 'https://'}${req.headers.host}/resetemail/${token}\n\n`
             + 'If you did not request this, please ignore this email and your email will remain unchanged.\n',
         };
         smtpTransport.sendMail(mailOptions, (err) => {

@@ -283,8 +283,8 @@ module.exports = {
             const user2 = await User.findById(chat.user2.id);
             if(user2.email_notifications.message === true) {
                 ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage.ejs"), {
-                    link: `http://${req.headers.host}/messages/${chat._id}`,
-                    footerlink: `http://${req.headers.host}/dashboard/notifications`,
+                    link: `https://${req.headers.host}/messages/${chat._id}`,
+                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     buyer: req.user.full_name,
                     name: chat.product.name,
                     subject: `New conversation for ${chat.product.name} - Deal Your Crypto`,
