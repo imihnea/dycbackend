@@ -54,7 +54,12 @@ const req = false;
 const standardAccountFee = 10;
 const premiumAccountFee = 8;
 const partnerAccountFee = 8;
-const host = 'localhost:8080';
+let host;
+if (process.env.NODE_ENV == 'production') {
+    host = 'https://www.dealyourcrypto.com';
+} else {
+    host = 'http://localhost:8080';
+}
 
 // Runs every 11 hours
 setInterval( () => {
@@ -115,8 +120,8 @@ setInterval( () => {
                         });
                         if(seller.email_notifications.deal === true) {
                             ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                link: `http://${host}/dashboard`,
-                                footerlink: `http://${host}/dashboard/notifications`,
+                                link: `${host}/dashboard`,
+                                footerlink: `${host}/dashboard/notifications`,
                                 name: deal.product.name,
                                 subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                             }, function (err, data) {
@@ -144,8 +149,8 @@ setInterval( () => {
                     }
                     if(buyer.email_notifications.deal === true) {
                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                            link: `http://${host}/deals/${deal._id}`,
-                            footerlink: `http://${host}/dashboard/notifications`,
+                            link: `${host}/deals/${deal._id}`,
+                            footerlink: `${host}/dashboard/notifications`,
                             name: deal.product.name,
                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                         }, function (err, data) {
@@ -176,7 +181,7 @@ setInterval( () => {
             errorLogger.error(`Message: ${err} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             deals.forEach(deal => {
-                request(`https://api.goshippo.com/tracks/${deal.buyer.delivery.carrier}/${deal.buyer.delivery.tracking_number}/`, function (error, response, body) {
+                request(`httpss://api.goshippo.com/tracks/${deal.buyer.delivery.carrier}/${deal.buyer.delivery.tracking_number}/`, function (error, response, body) {
                     if (error) {
                         errorLogger.error(`Message: ${err} - Shippo - GET Request failed\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     } else {
@@ -223,8 +228,8 @@ setInterval( () => {
                                     });
                                     if(seller.email_notifications.deal === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                            link: `http://${host}/dashboard`,
-                                            footerlink: `http://${host}/dashboard/notifications`,
+                                            link: `${host}/dashboard`,
+                                            footerlink: `${host}/dashboard/notifications`,
                                             name: deal.product.name,
                                             subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                         }, function (err, data) {
@@ -252,8 +257,8 @@ setInterval( () => {
                                 }
                                 if(buyer.email_notifications.deal === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_buyer.ejs"), {
-                                        link: `http://${host}/deals/${deal._id}`,
-                                        footerlink: `http://${host}/dashboard/notifications`,
+                                        link: `${host}/deals/${deal._id}`,
+                                        footerlink: `${host}/dashboard/notifications`,
                                         name: deal.product.name,
                                         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
                                     }, function (err, data) {
@@ -305,16 +310,16 @@ setInterval( () => {
                                                 if (!error) {
                                                     let btcrate = data.data.rates.USD;
                                                     var tokenprice = 1/btcrate; // 1 USD
-                                                    seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01) - tokenprice;
+                                                    seller.btcbalance += (item.price - ( item.price * premiumAccountFee * 0.01) - tokenprice).toFixed(8);
                                                     // add profit to db
-                                                    withdrawAmount = item.price * premiumAccountFee * 0.01 + tokenprice;
+                                                    withdrawAmount = (item.price * premiumAccountFee * 0.01 + tokenprice).toFixed(8);
                                                     createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                             });
                                         } else {
-                                            seller.btcbalance += item.price - ( item.price * premiumAccountFee * 0.01);
+                                            seller.btcbalance += (item.price - ( item.price * premiumAccountFee * 0.01)).toFixed(8);
                                             // add profit to db
-                                            withdrawAmount = item.price * premiumAccountFee * 0.01;
+                                            withdrawAmount = (item.price * premiumAccountFee * 0.01).toFixed(8);
                                             createProfit(seller._id, withdrawAmount, 'Income Fee');
                                         }
                                     } else {
@@ -325,16 +330,16 @@ setInterval( () => {
                                                         if (!error) {
                                                             let btcrate = data.data.rates.USD;
                                                             var tokenprice = 1/btcrate; // 1 USD
-                                                            seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01) - tokenprice;
+                                                            seller.btcbalance += (item.price - ( item.price * standardAccountFee * 0.01) - tokenprice).toFixed(8);
                                                             // add profit to db
-                                                            withdrawAmount = item.price * standardAccountFee * 0.01 + tokenprice;
+                                                            withdrawAmount = (item.price * standardAccountFee * 0.01 + tokenprice).toFixed(8);
                                                             createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                         }
                                                     });
                                                 } else {
-                                                    seller.btcbalance += item.price - ( item.price * standardAccountFee * 0.01);
+                                                    seller.btcbalance += (item.price - ( item.price * standardAccountFee * 0.01)).toFixed(8);
                                                     // add profit to db
-                                                    withdrawAmount = item.price * premiumAccountFee * 0.01;
+                                                    withdrawAmount = (item.price * standardAccountFee * 0.01).toFixed(8);
                                                     createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                                 break;
@@ -344,16 +349,16 @@ setInterval( () => {
                                                         if (!error) {
                                                             let btcrate = data.data.rates.USD;
                                                             var tokenprice = 1/btcrate; // 1 USD
-                                                            seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01) - tokenprice;
+                                                            seller.btcbalance += (item.price - ( item.price * partnerAccountFee * 0.01) - tokenprice).toFixed(8);
                                                             // add profit to db
-                                                            withdrawAmount = item.price * partnerAccountFee * 0.01 + tokenprice;
+                                                            withdrawAmount = (item.price * partnerAccountFee * 0.01 + tokenprice).toFixed(8);
                                                             createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                         }
                                                     });
                                                 } else {
-                                                    seller.btcbalance += item.price - ( item.price * partnerAccountFee * 0.01);
+                                                    seller.btcbalance += (item.price - ( item.price * partnerAccountFee * 0.01)).toFixed(8);
                                                     // add profit to db
-                                                    withdrawAmount = item.price * partnerAccountFee * 0.01;
+                                                    withdrawAmount = (item.price * partnerAccountFee * 0.01).toFixed(8);
                                                     createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 }
                                                 break;
@@ -676,8 +681,8 @@ setInterval( () => {
                                 // test this and the one below
                                 if(user2.email_notifications.message === true) {
                                     ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                        link: `http://${host}/messages/${item._id}/emailRedirect`,
-                                        footerlink: `http://${host}/dashboard/notifications`,
+                                        link: `${host}/messages/${item._id}/emailRedirect`,
+                                        footerlink: `${host}/dashboard/notifications`,
                                         sender: item.user1.fullname,
                                         product: item.product.name,
                                         subject: `You have an unread message`,
@@ -711,8 +716,8 @@ setInterval( () => {
                                 if (user1) {
                                     if(user1.email_notifications.message === true) {
                                         ejs.renderFile(path.join(__dirname, "../views/email_templates/newMessage2.ejs"), {
-                                            link: `http://${host}/messages/${item._id}/emailRedirect`,
-                                            footerlink: `http://${host}/dashboard/notifications`,
+                                            link: `${host}/messages/${item._id}/emailRedirect`,
+                                            footerlink: `${host}/dashboard/notifications`,
                                             sender: item.user2.fullname,
                                             product: item.product.name,
                                             subject: `You have an unread message`,

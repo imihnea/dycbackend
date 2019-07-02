@@ -916,7 +916,7 @@ module.exports = {
         const tokenprice = 1/btcrate; // 1 USD
         const tokens = Number(req.body.pack);
         if ([20, 40, 60, 100].includes(tokens)) {
-          const tokenCost = tokens * tokenprice;
+          const tokenCost = (tokens * tokenprice).toFixed(8);
           let CurrentUser = await User.findById(req.params.id);
           if(CurrentUser.btcbalance >= tokenCost) {
             CurrentUser.btcbalance -= tokenCost;
