@@ -215,7 +215,15 @@
     cursor:pointer;
   }
 
+  .sliderImg{
+      width: 100vw !important;
+  }
+
   @media only screen and (max-width: 600px) {
+        .sliderImg{
+            width: 100% !important;
+        }
+
         .switch > ul > li{
             width: 5px;
             height: 5px;
