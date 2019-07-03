@@ -171,7 +171,7 @@
                 </div>
             </div>
             <div class="column is-one-fifth">
-                <div class="buttons">
+                <div class="buttons has-addons is-centered">
                     <div class="messageProfile frame productFrame smallerCenter">
                         <div>                   
                             <div class="image is-128x128" style="margin:auto;">
@@ -187,37 +187,12 @@
                             </div>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
+                                <form action="/deals/<%= deal.id %>/accept?_method=PUT" id="acceptDeal" method="POST"></form>
+                                <form action="/deals/<%= deal._id %>/decline?_method=PUT" id="declineDeal" method="POST"></form>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
-                                <button class="button is-success accept">Accept deal</button>
-                                <div class="modal modalAccept">
-                                    <div class="modal-background"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                            <p class="modal-card-title">Your delivery details</p>
-                                            <button class="delete deleteAccept is-large" aria-label="close"></button>
-                                        </header>
-                                        <section class="modal-card-body">
-                                            <p class="title is-5 modal-section-title">Buyer Details</p>
-                                            <div style="text-align: left;">
-                                                <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
-                                            </div>
-                                            <br>
-                                            <p class="title is-5 modal-section-title">Delivery handled by you</p>
-                                            <div style="text-align: left;">
-                                                <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
-                                            </div>
-                                            <br>
-                                            <form action="/deals/<%= deal.id %>/accept?_method=PUT" method="POST">
-                                                <button class="button is-success is-fullwidth">Accept Deal</button>
-                                            </form>
-                                        </section>
-                                        <footer class="modal-card-foot">
-                                            <button class="button is-danger cancelAccept">Cancel</button>
-                                            <p class="subtitle"><% if (deal.buyer.delivery.shipping == 'FaceToFace') { %>You are free to meet the buyer after accepting the deal.<% } %></p>
-                                        </footer>
-                                    </div>
-                                </div>
-                                <form action="/deals/<%= deal._id %>/decline?_method=PUT" method="POST"><button class="button is-danger">Decline Deal</button></form>
+                                <button class="button is-success" form="acceptDeal">Accept Deal</button>
+                                <button class="button is-danger" form="declineDeal">Decline Deal</button>
+                                
                             <% } %>
                             
                             <% if ((deal.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
