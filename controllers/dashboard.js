@@ -34,6 +34,8 @@ const client = new Client({
 const { fork } = require("child_process");
 const notifProcess = fork("config/notifications.js");
 const deleteProcess = fork("config/deleteAcc.js");
+var Filter = require('bad-words'),
+    filter = new Filter();
 
 const SECRET2 = 'monkaGiga';
 const nexmo = new Nexmo({
@@ -1321,8 +1323,8 @@ module.exports = {
         //   }
         // });  
       } else {
-        req.body.product.name = cleanHTML(String(req.body.product.name));
-        req.body.product.description = cleanHTML(String(req.body.product.description));
+        req.body.product.name = filter.clean(cleanHTML(String(req.body.product.name)));
+        req.body.product.description = filter.clean(cleanHTML(String(req.body.product.description)));
         req.body.product.tags = cleanHTML(String(req.body.product.tags));
         req.body.product.images = [];
         for (const file of req.files) {
@@ -1979,8 +1981,8 @@ module.exports = {
       // Everything is stored in constants so we can protect against
       // people making fields in the DevTools
       // update the product with any new properties
-      product.name = req.body.product.name;
-      product.description = req.body.product.description;
+      product.name = filter.clean(req.body.product.name);
+      product.description = filter.clean(req.body.product.description);
       product.condition = req.body.product.condition;
       product.category[1] = req.body.product.category[0];
       product.category[2] = req.body.product.category[1];

@@ -9,6 +9,8 @@ const { errorLogger } = require('../config/winston');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 const middleware = require('../middleware/index');
+var Filter = require('bad-words'),
+    filter = new Filter();
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -248,7 +250,7 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
-        const message = escapeHTML(req.body.message);
+        const message = filter.clean(escapeHTML(req.body.message));
         const newMessage = {
             sender: req.user._id,
             message,
@@ -338,7 +340,7 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
-        const message = escapeHTML(req.body.message);
+        const message = filter.clean(escapeHTML(req.body.message));
         const newMessage = {
             sender: req.user._id,
             message
