@@ -1039,54 +1039,54 @@ module.exports = {
       req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
       // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
-      req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
-      if(req.body.product.shipping === 'true') {
-        req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
-        req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi).trim();
-        req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
-        .trim();
-        req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
-        .trim();
-        req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
-          .trim();
-        req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-          .trim();
-        if(req.body.state) {
-          req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-            .trim();
-        }
-        req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-          .trim();
-        req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
-          .trim();
-        req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
-        req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
-        req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
-        req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
-        req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
-        req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
-        if(req.body.dhl_express) {
-          req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.usps) {
-          req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.sendle) {
-          req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.parcelforce) {
-          req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.deutsche_post) {
-          req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.couriersplease) {
-          req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-        if(req.body.fastway) {
-          req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-        }
-      }
+      // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
+      // if(req.body.product.shipping === 'true') {
+      //   req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
+      //   req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi).trim();
+      //   req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
+      //   .trim();
+      //   req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
+      //   .trim();
+      //   req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+      //     .trim();
+      //   req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+      //     .trim();
+      //   if(req.body.state) {
+      //     req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+      //       .trim();
+      //   }
+      //   req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+      //     .trim();
+      //   req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+      //     .trim();
+      //   req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
+      //   req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
+      //   req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
+      //   req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
+      //   req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
+      //   req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
+      //   if(req.body.dhl_express) {
+      //     req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.usps) {
+      //     req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.sendle) {
+      //     req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.parcelforce) {
+      //     req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.deutsche_post) {
+      //     req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.couriersplease) {
+      //     req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      //   if(req.body.fastway) {
+      //     req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+      //   }
+      // }
       const errors = req.validationErrors();
       if (errors) {
         res.render('dashboard/dashboard_new', {
@@ -1098,228 +1098,228 @@ module.exports = {
           pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
           pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
-      } else if(req.body.product.shipping === 'true') {
-        req.body.product.name = cleanHTML(String(req.body.product.name));
-        req.body.product.description = cleanHTML(String(req.body.product.description));
-        req.body.product.tags = cleanHTML(String(req.body.product.tags));
-        shippo.address.create({
-          "name":req.body.name,
-          "street1":req.body.street1,
-          "city":req.body.city,
-          "state":req.body.state,
-          "zip":req.body.zip,
-          "country":req.body.country,
-          "phone":req.body.phone,
-          "email":req.body.email,
-        }, (err, address) => {
-          if(err) {
-            req.flash('error', 'Error creating address, please try again.');
-            return res.redirect('back');
-          } else {
-            shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
-                // asynchronously called
-                if(err || address1.validation_results.is_valid === false) {
-                  req.flash('error', 'Invalid address, please try again.');
-                  return res.redirect('back');
-                } else {
-                req.body.product.images = [];
-                await cloudinary.v2.uploader.upload(file.path, 
-                {
-                  moderation: "aws_rek:suggestive:ignore",
-                  // transformation: [
-                  //   {quality: "jpegmini:1", sign_url: true},
-                  //   {width: "auto", dpr: "auto"}
-                  //   ]
-                }, (err, result) => {
-                  if(err) {
-                    console.log(err);
-                  } else if (result.moderation[0].status === 'rejected') {
-                      req.body.product.images.push({
-                        // replace with a 'picture contains nudity' or something
-                        url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                        public_id: result.public_id,
-                      });
-                  } else {
-                    req.body.product.images.push({
-                      url: result.secure_url,
-                      public_id: result.public_id,
-                    });
-                  }
-                });
-                const author = {
-                  id: req.user._id,
-                  username: req.user.username,
-                  name: req.user.full_name,
-                  city: req.user.city,
-                  state: req.user.state,
-                  country: req.user.country,
-                  continent: req.user.continent,
-                  accountType: req.user.accountType
-                };
-                req.body.product.author = author;
-                const btcPrice=Number(req.body.product.btc_price);
-                const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
-                const tags = req.body.product.tags.trim().split(' ');
-                const newproduct = {
-                  name: req.body.product.name,
-                  images: req.body.product.images,
-                  category,
-                  condition: req.body.product.condition,
-                  description: req.body.product.description,
-                  btcPrice,
-                  tags,
-                  searchableTags: req.body.product.tags,
-                  author
-                };
-                if (req.body.product.repeatable === "true") {
-                  newproduct.repeatable = req.body.product.repeatable;
-                }
-                if (req.body.product.shipping === 'true') {
-                  newproduct.delivery = {
-                    shipping: true,
-                    name: req.body.name,
-                    street1: req.body.street1,
-                    city: req.body.city,
-                    state: req.body.state,
-                    zip: req.body.zip,
-                    country: req.body.country,
-                    phone: req.body.phone,
-                    email: req.body.email,
-                  };
-                  newproduct.parcel = {
-                    parcel_length: req.body.parcel_length,
-                    parcel_width: req.body.parcel_width,
-                    parcel_height: req.body.parcel_height,
-                    parcel_distance_unit: req.body.parcel_distance_unit,
-                    parcel_weight: req.body.parcel_weight,
-                    parcel_weight_unit: req.body.parcel_weight_unit,
-                  };
-                  newproduct.carrier = {
-                    dhl_express: false,
-                    usps: false,
-                    sendle: false,
-                    parcelforce: false,
-                    deutsche_post: false,
-                    couriersplease: false,
-                    fastway: false,
-                  };
-                  if(req.body.dhl_express === 'true') {
-                    newproduct.carrier.dhl_express = true;
-                  }
-                  if(req.body.usps === 'true') {
-                    newproduct.carrier.usps = true;
-                  }
-                  if(req.body.deutsche_post === 'true') {
-                    newproduct.carrier.deutsche_post = true;
-                  }
-                  if(req.body.sendle === 'true') {
-                    newproduct.carrier.sendle = true;
-                  }
-                  if(req.body.parcelforce === 'true') {
-                    newproduct.carrier.parcelforce = true;
-                  }
-                  if(req.body.fastway === 'true') {
-                    newproduct.carrier.fastway = true;
-                  }
-                  if(req.body.couriersplease === 'true') {
-                    newproduct.carrier.couriersplease = true;
-                  }
-                } else {
-                  newproduct.delivery = {
-                    shipping: false,
-                  }
-                }
-                await User.findById(req.user._id, (err, user) => {
-                  if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    req.flash('error', 'An error has occured. Please try again later');
-                    return res.redirect('back');
-                  } else {
-                    const feat_1 = {};
-                    const feat_2 = {};
-                    let k = 0;
-                    if ((req.body.product.feat_1) && ( req.body.product.feat_2 ) && ( k === 0 )) {
-                      if ( user.feature_tokens >= 20 ) {
-                        feat_1.status = true;
-                        feat_1.expiry_date = Date.now() + feature1_time;
-                        feat_2.status = true;
-                        feat_2.expiry_date = Date.now() + feature2_time;
-                        User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
-                          if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          }
-                        });
-                        newproduct.feat_1 = feat_1;
-                        newproduct.feat_2 = feat_2;
-                        k = 1;
-                      } else {
-                        req.flash('error', 'Not enough tokens to promote product.');
-                        return res.redirect('back');
-                      }
-                    }
-                    if (( req.body.product.feat_1 ) && ( k === 0 )) {
-                      if ( user.feature_tokens >= 5 ) {
-                        feat_1.status = true;
-                        feat_1.expiry_date = Date.now() + feature1_time;
-                        User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
-                          if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          }
-                        });
-                        newproduct.feat_1 = feat_1;
-                      } else {
-                        req.flash('error', 'Not enough tokens to promote product.');
-                        return res.redirect('back');
-                      }
-                    }
-                    if (( req.body.product.feat_2 ) && ( k === 0 )) {
-                      if (user.feature_tokens >= 15) {
-                        feat_2.status = true;
-                        feat_2.expiry_date = Date.now() + feature2_time;
-                        User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
-                          if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          }
-                        });
-                        newproduct.feat_2 = feat_2;
-                      } else {
-                        req.flash('error', 'Not enough tokens to promote product.');
-                        return res.redirect('back');
-                      }
-                    }
-                  }
-                });
-                const product = await Product.create(newproduct);
-                elasticClient.index({
-                  index: 'products',
-                  type: 'products',
-                  id: `${product._id}`,
-                  body: {
-                      id: product._id,
-                      feat_1: product.feat_1,
-                      image: product.images[0].url,
-                      name: product.name,
-                      author: product.author,
-                      avgRating: product.avgRating,
-                      btcPrice: product.btcPrice,
-                      condition: product.condition,
-                      category: product.category,
-                      createdAt: product.createdAt,
-                      searchableTags: product.searchableTags
-                  }
-                }, function(err, resp, status) {
-                    if (err) {
-                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't index product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
-                    }
-                });
-                if (process.env.NODE_ENV === 'production') {
-                  productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                }
-                return res.redirect(`/products/${product._id}/view`);
-              }
-            }));
-          }
-        });  
+      // } else if(req.body.product.shipping === 'true') {
+        // req.body.product.name = cleanHTML(String(req.body.product.name));
+        // req.body.product.description = cleanHTML(String(req.body.product.description));
+        // req.body.product.tags = cleanHTML(String(req.body.product.tags));
+        // shippo.address.create({
+        //   "name":req.body.name,
+        //   "street1":req.body.street1,
+        //   "city":req.body.city,
+        //   "state":req.body.state,
+        //   "zip":req.body.zip,
+        //   "country":req.body.country,
+        //   "phone":req.body.phone,
+        //   "email":req.body.email,
+        // }, (err, address) => {
+        //   if(err) {
+        //     req.flash('error', 'Error creating address, please try again.');
+        //     return res.redirect('back');
+        //   } else {
+        //     shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
+        //         // asynchronously called
+        //         if(err || address1.validation_results.is_valid === false) {
+        //           req.flash('error', 'Invalid address, please try again.');
+        //           return res.redirect('back');
+        //         } else {
+        //         req.body.product.images = [];
+        //         await cloudinary.v2.uploader.upload(file.path, 
+        //         {
+        //           moderation: "aws_rek:suggestive:ignore",
+        //           // transformation: [
+        //           //   {quality: "jpegmini:1", sign_url: true},
+        //           //   {width: "auto", dpr: "auto"}
+        //           //   ]
+        //         }, (err, result) => {
+        //           if(err) {
+        //             console.log(err);
+        //           } else if (result.moderation[0].status === 'rejected') {
+        //               req.body.product.images.push({
+        //                 // replace with a 'picture contains nudity' or something
+        //                 url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+        //                 public_id: result.public_id,
+        //               });
+        //           } else {
+        //             req.body.product.images.push({
+        //               url: result.secure_url,
+        //               public_id: result.public_id,
+        //             });
+        //           }
+        //         });
+        //         const author = {
+        //           id: req.user._id,
+        //           username: req.user.username,
+        //           name: req.user.full_name,
+        //           city: req.user.city,
+        //           state: req.user.state,
+        //           country: req.user.country,
+        //           continent: req.user.continent,
+        //           accountType: req.user.accountType
+        //         };
+        //         req.body.product.author = author;
+        //         const btcPrice=Number(req.body.product.btc_price);
+        //         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
+        //         const tags = req.body.product.tags.trim().split(' ');
+        //         const newproduct = {
+        //           name: req.body.product.name,
+        //           images: req.body.product.images,
+        //           category,
+        //           condition: req.body.product.condition,
+        //           description: req.body.product.description,
+        //           btcPrice,
+        //           tags,
+        //           searchableTags: req.body.product.tags,
+        //           author
+        //         };
+        //         if (req.body.product.repeatable === "true") {
+        //           newproduct.repeatable = req.body.product.repeatable;
+        //         }
+        //         if (req.body.product.shipping === 'true') {
+        //           newproduct.delivery = {
+        //             shipping: true,
+        //             name: req.body.name,
+        //             street1: req.body.street1,
+        //             city: req.body.city,
+        //             state: req.body.state,
+        //             zip: req.body.zip,
+        //             country: req.body.country,
+        //             phone: req.body.phone,
+        //             email: req.body.email,
+        //           };
+        //           newproduct.parcel = {
+        //             parcel_length: req.body.parcel_length,
+        //             parcel_width: req.body.parcel_width,
+        //             parcel_height: req.body.parcel_height,
+        //             parcel_distance_unit: req.body.parcel_distance_unit,
+        //             parcel_weight: req.body.parcel_weight,
+        //             parcel_weight_unit: req.body.parcel_weight_unit,
+        //           };
+        //           newproduct.carrier = {
+        //             dhl_express: false,
+        //             usps: false,
+        //             sendle: false,
+        //             parcelforce: false,
+        //             deutsche_post: false,
+        //             couriersplease: false,
+        //             fastway: false,
+        //           };
+        //           if(req.body.dhl_express === 'true') {
+        //             newproduct.carrier.dhl_express = true;
+        //           }
+        //           if(req.body.usps === 'true') {
+        //             newproduct.carrier.usps = true;
+        //           }
+        //           if(req.body.deutsche_post === 'true') {
+        //             newproduct.carrier.deutsche_post = true;
+        //           }
+        //           if(req.body.sendle === 'true') {
+        //             newproduct.carrier.sendle = true;
+        //           }
+        //           if(req.body.parcelforce === 'true') {
+        //             newproduct.carrier.parcelforce = true;
+        //           }
+        //           if(req.body.fastway === 'true') {
+        //             newproduct.carrier.fastway = true;
+        //           }
+        //           if(req.body.couriersplease === 'true') {
+        //             newproduct.carrier.couriersplease = true;
+        //           }
+        //         } else {
+        //           newproduct.delivery = {
+        //             shipping: false,
+        //           }
+        //         }
+        //         await User.findById(req.user._id, (err, user) => {
+        //           if (err) {
+        //             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        //             req.flash('error', 'An error has occured. Please try again later');
+        //             return res.redirect('back');
+        //           } else {
+        //             const feat_1 = {};
+        //             const feat_2 = {};
+        //             let k = 0;
+        //             if ((req.body.product.feat_1) && ( req.body.product.feat_2 ) && ( k === 0 )) {
+        //               if ( user.feature_tokens >= 20 ) {
+        //                 feat_1.status = true;
+        //                 feat_1.expiry_date = Date.now() + feature1_time;
+        //                 feat_2.status = true;
+        //                 feat_2.expiry_date = Date.now() + feature2_time;
+        //                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: (feature1_cost + feature2_cost) } }, (err) => {
+        //                   if (err) {
+        //                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        //                   }
+        //                 });
+        //                 newproduct.feat_1 = feat_1;
+        //                 newproduct.feat_2 = feat_2;
+        //                 k = 1;
+        //               } else {
+        //                 req.flash('error', 'Not enough tokens to promote product.');
+        //                 return res.redirect('back');
+        //               }
+        //             }
+        //             if (( req.body.product.feat_1 ) && ( k === 0 )) {
+        //               if ( user.feature_tokens >= 5 ) {
+        //                 feat_1.status = true;
+        //                 feat_1.expiry_date = Date.now() + feature1_time;
+        //                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature1_cost } }, (err) => {
+        //                   if (err) {
+        //                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        //                   }
+        //                 });
+        //                 newproduct.feat_1 = feat_1;
+        //               } else {
+        //                 req.flash('error', 'Not enough tokens to promote product.');
+        //                 return res.redirect('back');
+        //               }
+        //             }
+        //             if (( req.body.product.feat_2 ) && ( k === 0 )) {
+        //               if (user.feature_tokens >= 15) {
+        //                 feat_2.status = true;
+        //                 feat_2.expiry_date = Date.now() + feature2_time;
+        //                 User.findByIdAndUpdate(req.user._id, { $inc: { feature_tokens: feature2_cost } }, (err) => {
+        //                   if (err) {
+        //                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        //                   }
+        //                 });
+        //                 newproduct.feat_2 = feat_2;
+        //               } else {
+        //                 req.flash('error', 'Not enough tokens to promote product.');
+        //                 return res.redirect('back');
+        //               }
+        //             }
+        //           }
+        //         });
+        //         const product = await Product.create(newproduct);
+        //         elasticClient.index({
+        //           index: 'products',
+        //           type: 'products',
+        //           id: `${product._id}`,
+        //           body: {
+        //               id: product._id,
+        //               feat_1: product.feat_1,
+        //               image: product.images[0].url,
+        //               name: product.name,
+        //               author: product.author,
+        //               avgRating: product.avgRating,
+        //               btcPrice: product.btcPrice,
+        //               condition: product.condition,
+        //               category: product.category,
+        //               createdAt: product.createdAt,
+        //               searchableTags: product.searchableTags
+        //           }
+        //         }, function(err, resp, status) {
+        //             if (err) {
+        //               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't index product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+        //             }
+        //         });
+        //         if (process.env.NODE_ENV === 'production') {
+        //           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        //         }
+        //         return res.redirect(`/products/${product._id}/view`);
+        //       }
+        //     }));
+        //   }
+        // });  
       } else {
         req.body.product.name = cleanHTML(String(req.body.product.name));
         req.body.product.description = cleanHTML(String(req.body.product.description));
@@ -1378,61 +1378,61 @@ module.exports = {
         if (req.body.product.repeatable === "true") {
           newproduct.repeatable = req.body.product.repeatable;
         }
-        if (req.body.product.shipping === 'true') {
-          newproduct.delivery = {
-            shipping: true,
-            name: req.body.name,
-            street1: req.body.street1,
-            city: req.body.city,
-            state: req.body.state,
-            zip: req.body.zip,
-            country: req.body.country,
-            phone: req.body.phone,
-            email: req.body.email,
-          };
-          newproduct.parcel = {
-            parcel_length: req.body.parcel_length,
-            parcel_width: req.body.parcel_width,
-            parcel_height: req.body.parcel_height,
-            parcel_distance_unit: req.body.parcel_distance_unit,
-            parcel_weight: req.body.parcel_weight,
-            parcel_weight_unit: req.body.parcel_weight_unit,
-          };
-          newproduct.carrier = {
-            dhl_express: false,
-            usps: false,
-            sendle: false,
-            parcelforce: false,
-            deutsche_post: false,
-            couriersplease: false,
-            fastway: false,
-          };
-          if(req.body.dhl_express === 'true') {
-            newproduct.carrier.dhl_express = true;
-          }
-          if(req.body.usps === 'true') {
-            newproduct.carrier.usps = true;
-          }
-          if(req.body.deutsche_post === 'true') {
-            newproduct.carrier.deutsche_post = true;
-          }
-          if(req.body.sendle === 'true') {
-            newproduct.carrier.sendle = true;
-          }
-          if(req.body.parcelforce === 'true') {
-            newproduct.carrier.parcelforce = true;
-          }
-          if(req.body.fastway === 'true') {
-            newproduct.carrier.fastway = true;
-          }
-          if(req.body.couriersplease === 'true') {
-            newproduct.carrier.couriersplease = true;
-          }
-        } else {
+        // if (req.body.product.shipping === 'true') {
+        //   newproduct.delivery = {
+        //     shipping: true,
+        //     name: req.body.name,
+        //     street1: req.body.street1,
+        //     city: req.body.city,
+        //     state: req.body.state,
+        //     zip: req.body.zip,
+        //     country: req.body.country,
+        //     phone: req.body.phone,
+        //     email: req.body.email,
+        //   };
+        //   newproduct.parcel = {
+        //     parcel_length: req.body.parcel_length,
+        //     parcel_width: req.body.parcel_width,
+        //     parcel_height: req.body.parcel_height,
+        //     parcel_distance_unit: req.body.parcel_distance_unit,
+        //     parcel_weight: req.body.parcel_weight,
+        //     parcel_weight_unit: req.body.parcel_weight_unit,
+        //   };
+        //   newproduct.carrier = {
+        //     dhl_express: false,
+        //     usps: false,
+        //     sendle: false,
+        //     parcelforce: false,
+        //     deutsche_post: false,
+        //     couriersplease: false,
+        //     fastway: false,
+        //   };
+        //   if(req.body.dhl_express === 'true') {
+        //     newproduct.carrier.dhl_express = true;
+        //   }
+        //   if(req.body.usps === 'true') {
+        //     newproduct.carrier.usps = true;
+        //   }
+        //   if(req.body.deutsche_post === 'true') {
+        //     newproduct.carrier.deutsche_post = true;
+        //   }
+        //   if(req.body.sendle === 'true') {
+        //     newproduct.carrier.sendle = true;
+        //   }
+        //   if(req.body.parcelforce === 'true') {
+        //     newproduct.carrier.parcelforce = true;
+        //   }
+        //   if(req.body.fastway === 'true') {
+        //     newproduct.carrier.fastway = true;
+        //   }
+        //   if(req.body.couriersplease === 'true') {
+        //     newproduct.carrier.couriersplease = true;
+        //   }
+        // } else {
           newproduct.delivery = {
             shipping: false,
           }
-        }
+        // }
         await User.findById(req.user._id, (err, user) => {
           if (err) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -1609,54 +1609,54 @@ module.exports = {
     // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
-    req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
-    if(req.body.product.shipping === 'true') {
-      req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
-      req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
-      req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
-      .trim();
-      req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
-      .trim();
-      req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
-        .trim();
-      req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-        .trim();
-      if(req.body.state) {
-        req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-          .trim();
-      }
-      req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
-        .trim();
-      req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
-        .trim();
-      req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
-      req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
-      req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
-      req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
-      req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
-      req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
-      if(req.body.dhl_express) {
-        req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.usps) {
-        req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.sendle) {
-        req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.parcelforce) {
-        req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.deutsche_post) {
-        req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.couriersplease) {
-        req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-      if(req.body.fastway) {
-        req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      }
-    }
+    // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
+    // if(req.body.product.shipping === 'true') {
+    //   req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
+    //   req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
+    //   req.check('email', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
+    //   .trim();
+    //   req.check('phone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
+    //   .trim();
+    //   req.check('street1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+    //     .trim();
+    //   req.check('city', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+    //     .trim();
+    //   if(req.body.state) {
+    //     req.check('state', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+    //       .trim();
+    //   }
+    //   req.check('country', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+    //     .trim();
+    //   req.check('zip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+    //     .trim();
+    //   req.check('parcel_length', 'Invalid parcel length.').notEmpty().isNumeric().isLength({ max: 500 });
+    //   req.check('parcel_width', 'Invalid parcel width.').notEmpty().isNumeric().isLength({ max: 500 });
+    //   req.check('parcel_height', 'Invalid parcel height.').notEmpty().isNumeric().isLength({ max: 500 });
+    //   req.check('parcel_distance_unit', 'Invalid parcel distance unit.').notEmpty().isAlpha().isLength({ max: 500 });
+    //   req.check('parcel_weight', 'Invalid parcel weight.').notEmpty().isNumeric().isLength({ max: 500 });
+    //   req.check('parcel_weight_unit', 'Invalid parcel weight unit.').notEmpty().isAlpha().isLength({ max: 500 });
+    //   if(req.body.dhl_express) {
+    //     req.check('dhl_express', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.usps) {
+    //     req.check('usps', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.sendle) {
+    //     req.check('sendle', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.parcelforce) {
+    //     req.check('parcelforce', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.deutsche_post) {
+    //     req.check('deutsche_post', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.couriersplease) {
+    //     req.check('couriersplease', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    //   if(req.body.fastway) {
+    //     req.check('fastway', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
+    //   }
+    // }
     const errors = req.validationErrors();
     if (errors) {
       res.render('dashboard/dashboard_edit', {
@@ -1669,189 +1669,189 @@ module.exports = {
         pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
         pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
       });
-    } else if(req.body.product.shipping === 'true') {
-      shippo.address.create({
-        "name":req.body.name,
-        "street1":req.body.street1,
-        "city":req.body.city,
-        "state":req.body.state,
-        "zip":req.body.zip,
-        "country":req.body.country,
-        "phone":req.body.phone,
-        "email":req.body.email,
-      }, (err, address) => {
-        if(err) {
-          req.flash('error', 'Error creating address, please try again.');
-          return res.redirect('back');
-        } else {
-          shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
-            // asynchronously called
-            if(err || address1.validation_results.is_valid === false) {
-              req.flash('error', 'Invalid address, please try again.');
-              return res.redirect('back');
-            } else {
-              // check if there are any new images for upload
-              if (req.files) {
-                // upload images
-                for (const file of req.files) {
-                  await cloudinary.v2.uploader.upload(file.path, 
-                    {
-                      moderation: "aws_rek:suggestive:ignore",
-                      // transformation: [
-                      //   {quality: "jpegmini:1", sign_url: true},
-                      //   {width: "auto", dpr: "auto"}
-                      //   ]
-                    }, (err, result) => {
-                      if(err) {
-                        console.log(err);
-                      } else if (result.moderation[0].status === 'rejected') {
-                          product.images.push({
-                            // replace with a 'picture contains nudity' or something
-                            url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                            public_id: result.public_id,
-                          });
-                      } else {
-                        product.images.push({
-                          url: result.secure_url,
-                          public_id: result.public_id,
-                        });
-                      }
-                    });
-                }
-              }
+    // } else if(req.body.product.shipping === 'true') {
+    //   shippo.address.create({
+    //     "name":req.body.name,
+    //     "street1":req.body.street1,
+    //     "city":req.body.city,
+    //     "state":req.body.state,
+    //     "zip":req.body.zip,
+    //     "country":req.body.country,
+    //     "phone":req.body.phone,
+    //     "email":req.body.email,
+    //   }, (err, address) => {
+    //     if(err) {
+    //       req.flash('error', 'Error creating address, please try again.');
+    //       return res.redirect('back');
+    //     } else {
+    //       shippo.address.validate(address.object_id, asyncErrorHandler(async (err, address1) => {
+    //         // asynchronously called
+    //         if(err || address1.validation_results.is_valid === false) {
+    //           req.flash('error', 'Invalid address, please try again.');
+    //           return res.redirect('back');
+    //         } else {
+    //           // check if there are any new images for upload
+    //           if (req.files) {
+    //             // upload images
+    //             for (const file of req.files) {
+    //               await cloudinary.v2.uploader.upload(file.path, 
+    //                 {
+    //                   moderation: "aws_rek:suggestive:ignore",
+    //                   // transformation: [
+    //                   //   {quality: "jpegmini:1", sign_url: true},
+    //                   //   {width: "auto", dpr: "auto"}
+    //                   //   ]
+    //                 }, (err, result) => {
+    //                   if(err) {
+    //                     console.log(err);
+    //                   } else if (result.moderation[0].status === 'rejected') {
+    //                       product.images.push({
+    //                         // replace with a 'picture contains nudity' or something
+    //                         url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+    //                         public_id: result.public_id,
+    //                       });
+    //                   } else {
+    //                     product.images.push({
+    //                       url: result.secure_url,
+    //                       public_id: result.public_id,
+    //                     });
+    //                   }
+    //                 });
+    //             }
+    //           }
 
-              let deleteImages;
-              // check if there are images to delete
-              if (req.body.deleteImages.length) {
-                deleteImages = req.body.deleteImages.trim().split(' ');
-                if (deleteImages.length >= product.images.length) {
-                  req.flash('error', 'The product must have at least one image.');
-                  return res.redirect('back');
-                }
-                for (const public_id of deleteImages) {
-                  // delete images from cloudinary
-                  await cloudinary.v2.uploader.destroy(public_id, (err) => {
-                    if (err) {
-                      errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                      req.flash('error', 'A problem has occured. Please try again later.');
-                      return res.redirect('back');
-                    }
-                  });
-                  // delete images from DB
-                  for (const image of product.images) {
-                    if (image.public_id === public_id) {
-                      product.images.splice(product.images.indexOf(image), 1);
-                    }
-                  }
-                }
-              }
+    //           let deleteImages;
+    //           // check if there are images to delete
+    //           if (req.body.deleteImages.length) {
+    //             deleteImages = req.body.deleteImages.trim().split(' ');
+    //             if (deleteImages.length >= product.images.length) {
+    //               req.flash('error', 'The product must have at least one image.');
+    //               return res.redirect('back');
+    //             }
+    //             for (const public_id of deleteImages) {
+    //               // delete images from cloudinary
+    //               await cloudinary.v2.uploader.destroy(public_id, (err) => {
+    //                 if (err) {
+    //                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    //                   req.flash('error', 'A problem has occured. Please try again later.');
+    //                   return res.redirect('back');
+    //                 }
+    //               });
+    //               // delete images from DB
+    //               for (const image of product.images) {
+    //                 if (image.public_id === public_id) {
+    //                   product.images.splice(product.images.indexOf(image), 1);
+    //                 }
+    //               }
+    //             }
+    //           }
 
-              const btcPrice = Number(req.body.product.btc_price);
-              if (req.body.product.repeatable === "true") {
-                product.repeatable = req.body.product.repeatable;
-              } else {
-                product.repeatable = "false";
-              }
-              if (req.body.product.shipping === 'true') {
-                product.delivery = {
-                  shipping: true,
-                  name: req.body.name,
-                  street1: req.body.street1,
-                  city: req.body.city,
-                  state: req.body.state,
-                  zip: req.body.zip,
-                  country: req.body.country,
-                  phone: req.body.phone,
-                  email: req.body.email,
-                };
-                product.parcel = {
-                  parcel_length: req.body.parcel_length,
-                  parcel_width: req.body.parcel_width,
-                  parcel_height: req.body.parcel_height,
-                  parcel_distance_unit: req.body.parcel_distance_unit,
-                  parcel_weight: req.body.parcel_weight,
-                  parcel_weight_unit: req.body.parcel_weight_unit,
-                };
-                product.carrier = {
-                  dhl_express: false,
-                  usps: false,
-                  sendle: false,
-                  parcelforce: false,
-                  deutsche_post: false,
-                  couriersplease: false,
-                  fastway: false,
-                };
-                if(req.body.dhl_express === 'true') {
-                  product.carrier.dhl_express = true;
-                }
-                if(req.body.usps === 'true') {
-                  product.carrier.usps = true;
-                }
-                if(req.body.deutsche_post === 'true') {
-                  product.carrier.deutsche_post = true;
-                }
-                if(req.body.sendle === 'true') {
-                  product.carrier.sendle = true;
-                }
-                if(req.body.parcelforce === 'true') {
-                  product.carrier.parcelforce = true;
-                }
-                if(req.body.fastway === 'true') {
-                  product.carrier.fastway = true;
-                }
-                if(req.body.couriersplease === 'true') {
-                  product.carrier.couriersplease = true;
-                }
-              } else {
-                product.delivery = {
-                  shipping: false,
-                }
-                product.parcel = undefined;
-                product.carrier = undefined;
-              }
-              // Everything is stored in constants so we can protect against
-              // people making fields in the DevTools
-              // update the product with any new properties
-              product.name = req.body.product.name;
-              product.description = req.body.product.description;
-              product.condition = req.body.product.condition;
-              product.category[1] = req.body.product.category[0];
-              product.category[2] = req.body.product.category[1];
-              product.category[3] = req.body.product.category[2];
-              product.btcPrice = btcPrice;
-              const tags = req.body.product.tags.trim().split(' ');
-              product.tags = tags;
-              product.searchableTags = req.body.product.tags;
-              // save the updated product into the db
-              await product.save();
-              elasticClient.update({
-                index: 'products',
-                type: 'products',
-                id: `${product._id}`,
-                body: {
-                  doc: {
-                    name: product.name,
-                    image: product.images[0].url,
-                    btcPrice: product.btcPrice,
-                    condition: product.condition,
-                    category: product.category,
-                    searchableTags: product.searchableTags
-                  }
-                }
-              }, (err) => {
-                if (err) {
-                  if (err) {
-                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
-                  }
-                }
-              });
-              // redirect to show page
-              req.flash('success', 'Product updated successfully!');
-              return res.redirect(`/products/${product.id}/view`);
-            }
-          }));
-        }
-      });
+    //           const btcPrice = Number(req.body.product.btc_price);
+    //           if (req.body.product.repeatable === "true") {
+    //             product.repeatable = req.body.product.repeatable;
+    //           } else {
+    //             product.repeatable = "false";
+    //           }
+    //           if (req.body.product.shipping === 'true') {
+    //             product.delivery = {
+    //               shipping: true,
+    //               name: req.body.name,
+    //               street1: req.body.street1,
+    //               city: req.body.city,
+    //               state: req.body.state,
+    //               zip: req.body.zip,
+    //               country: req.body.country,
+    //               phone: req.body.phone,
+    //               email: req.body.email,
+    //             };
+    //             product.parcel = {
+    //               parcel_length: req.body.parcel_length,
+    //               parcel_width: req.body.parcel_width,
+    //               parcel_height: req.body.parcel_height,
+    //               parcel_distance_unit: req.body.parcel_distance_unit,
+    //               parcel_weight: req.body.parcel_weight,
+    //               parcel_weight_unit: req.body.parcel_weight_unit,
+    //             };
+    //             product.carrier = {
+    //               dhl_express: false,
+    //               usps: false,
+    //               sendle: false,
+    //               parcelforce: false,
+    //               deutsche_post: false,
+    //               couriersplease: false,
+    //               fastway: false,
+    //             };
+    //             if(req.body.dhl_express === 'true') {
+    //               product.carrier.dhl_express = true;
+    //             }
+    //             if(req.body.usps === 'true') {
+    //               product.carrier.usps = true;
+    //             }
+    //             if(req.body.deutsche_post === 'true') {
+    //               product.carrier.deutsche_post = true;
+    //             }
+    //             if(req.body.sendle === 'true') {
+    //               product.carrier.sendle = true;
+    //             }
+    //             if(req.body.parcelforce === 'true') {
+    //               product.carrier.parcelforce = true;
+    //             }
+    //             if(req.body.fastway === 'true') {
+    //               product.carrier.fastway = true;
+    //             }
+    //             if(req.body.couriersplease === 'true') {
+    //               product.carrier.couriersplease = true;
+    //             }
+    //           } else {
+    //             product.delivery = {
+    //               shipping: false,
+    //             }
+    //             product.parcel = undefined;
+    //             product.carrier = undefined;
+    //           }
+    //           // Everything is stored in constants so we can protect against
+    //           // people making fields in the DevTools
+    //           // update the product with any new properties
+    //           product.name = req.body.product.name;
+    //           product.description = req.body.product.description;
+    //           product.condition = req.body.product.condition;
+    //           product.category[1] = req.body.product.category[0];
+    //           product.category[2] = req.body.product.category[1];
+    //           product.category[3] = req.body.product.category[2];
+    //           product.btcPrice = btcPrice;
+    //           const tags = req.body.product.tags.trim().split(' ');
+    //           product.tags = tags;
+    //           product.searchableTags = req.body.product.tags;
+    //           // save the updated product into the db
+    //           await product.save();
+    //           elasticClient.update({
+    //             index: 'products',
+    //             type: 'products',
+    //             id: `${product._id}`,
+    //             body: {
+    //               doc: {
+    //                 name: product.name,
+    //                 image: product.images[0].url,
+    //                 btcPrice: product.btcPrice,
+    //                 condition: product.condition,
+    //                 category: product.category,
+    //                 searchableTags: product.searchableTags
+    //               }
+    //             }
+    //           }, (err) => {
+    //             if (err) {
+    //               if (err) {
+    //                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+    //               }
+    //             }
+    //           });
+    //           // redirect to show page
+    //           req.flash('success', 'Product updated successfully!');
+    //           return res.redirect(`/products/${product.id}/view`);
+    //         }
+    //       }));
+    //     }
+    //   });
     } else {
       // check if there are any new images for upload
       if (req.files) {
@@ -1915,63 +1915,63 @@ module.exports = {
       } else {
         product.repeatable = "false";
       }
-      if (req.body.product.shipping === 'true') {
-        product.delivery = {
-          shipping: true,
-          name: req.body.name,
-          street1: req.body.street1,
-          city: req.body.city,
-          state: req.body.state,
-          zip: req.body.zip,
-          country: req.body.country,
-          phone: req.body.phone,
-          email: req.body.email,
-        };
-        product.parcel = {
-          parcel_length: req.body.parcel_length,
-          parcel_width: req.body.parcel_width,
-          parcel_height: req.body.parcel_height,
-          parcel_distance_unit: req.body.parcel_distance_unit,
-          parcel_weight: req.body.parcel_weight,
-          parcel_weight_unit: req.body.parcel_weight_unit,
-        };
-        product.carrier = {
-          dhl_express: false,
-          usps: false,
-          sendle: false,
-          parcelforce: false,
-          deutsche_post: false,
-          couriersplease: false,
-          fastway: false,
-        };
-        if(req.body.dhl_express === 'true') {
-          product.carrier.dhl_express = true;
-        }
-        if(req.body.usps === 'true') {
-          product.carrier.usps = true;
-        }
-        if(req.body.deutsche_post === 'true') {
-          product.carrier.deutsche_post = true;
-        }
-        if(req.body.sendle === 'true') {
-          product.carrier.sendle = true;
-        }
-        if(req.body.parcelforce === 'true') {
-          product.carrier.parcelforce = true;
-        }
-        if(req.body.fastway === 'true') {
-          product.carrier.fastway = true;
-        }
-        if(req.body.couriersplease === 'true') {
-          product.carrier.couriersplease = true;
-        }
-      } else {
+      // if (req.body.product.shipping === 'true') {
+      //   product.delivery = {
+      //     shipping: true,
+      //     name: req.body.name,
+      //     street1: req.body.street1,
+      //     city: req.body.city,
+      //     state: req.body.state,
+      //     zip: req.body.zip,
+      //     country: req.body.country,
+      //     phone: req.body.phone,
+      //     email: req.body.email,
+      //   };
+      //   product.parcel = {
+      //     parcel_length: req.body.parcel_length,
+      //     parcel_width: req.body.parcel_width,
+      //     parcel_height: req.body.parcel_height,
+      //     parcel_distance_unit: req.body.parcel_distance_unit,
+      //     parcel_weight: req.body.parcel_weight,
+      //     parcel_weight_unit: req.body.parcel_weight_unit,
+      //   };
+      //   product.carrier = {
+      //     dhl_express: false,
+      //     usps: false,
+      //     sendle: false,
+      //     parcelforce: false,
+      //     deutsche_post: false,
+      //     couriersplease: false,
+      //     fastway: false,
+      //   };
+      //   if(req.body.dhl_express === 'true') {
+      //     product.carrier.dhl_express = true;
+      //   }
+      //   if(req.body.usps === 'true') {
+      //     product.carrier.usps = true;
+      //   }
+      //   if(req.body.deutsche_post === 'true') {
+      //     product.carrier.deutsche_post = true;
+      //   }
+      //   if(req.body.sendle === 'true') {
+      //     product.carrier.sendle = true;
+      //   }
+      //   if(req.body.parcelforce === 'true') {
+      //     product.carrier.parcelforce = true;
+      //   }
+      //   if(req.body.fastway === 'true') {
+      //     product.carrier.fastway = true;
+      //   }
+      //   if(req.body.couriersplease === 'true') {
+      //     product.carrier.couriersplease = true;
+      //   }
+      // } else {
         product.delivery = {
           shipping: false,
         }
         product.parcel = {};
         product.carrier = {};
-      }
+      // }
       // Everything is stored in constants so we can protect against
       // people making fields in the DevTools
       // update the product with any new properties
