@@ -61,10 +61,10 @@ module.exports = {
     async getDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
         console.log(deal);
-        if (deal == null) {
+        if (deal === null || deal === undefined) {
             req.flash('error', 'That page does not exist');
             return res.redirect('/error');
-        } 
+        }
         const seller = await User.findById(deal.product.author.id);
         const buyer = await User.findById(deal.buyer.id);
         const chat = await Chat.findById(deal.chat);
