@@ -215,6 +215,11 @@
                                             <input type="text" name="category" value="Vehicles" hidden>
                                             <button class="searchBtn">Vehicles</button>
                                         </form>
+                                        <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown categDropdown main-categ">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="category" value="Other" hidden>
+                                            <button class="searchBtn">Other</button>
+                                        </form>
                                         <div style="height: 1rem;">
                                             <a href="/categories" class="categBtn link">See All Categories</a>
                                         </div>
@@ -523,6 +528,21 @@
                                             <input type="text" name="searchCateg" value="Vehicles" hidden>
                                             <input type="text" name="category" value="Other Vehicles" hidden>
                                             <button class="searchBtn secCategSearchBtn">Other Vehicles</button>
+                                        </form>
+                                    </div>
+
+                                    <div class="column sec-categ" style=" display: none;" >
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Other" hidden>
+                                            <input type="text" name="category" value="Digital Goods" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Digital Goods</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Other" hidden>
+                                            <input type="text" name="category" value="Other" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Other</button>
                                         </form>
                                     </div>
                                 </div>                                               

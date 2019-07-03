@@ -81,33 +81,6 @@ module.exports = {
               req.flash('error', err.message);
               return res.redirect('back');
             } else {
-                // check if there are any new images for upload
-                if (req.file) {
-                // upload images
-                    try{
-                      await cloudinary.v2.uploader.upload(req.file.path, 
-                        {
-                          moderation: "aws_rek:suggestive:ignore",
-                          // transformation: [
-                          //   {quality: "jpegmini:1", sign_url: true},
-                          //   {width: "auto", dpr: "auto"}
-                          //   ]
-                        }, (err, result) => {
-                          if(err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          } else if (result.moderation[0].status === 'rejected') {
-                              user.avatar.url = 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png';
-                              user.avatar.public_id = result.public_id;
-                          } else {
-                            user.avatar.url = result.secure_url;
-                            user.avatar.public_id = result.public_id;
-                          }
-                        });
-                    } catch (error) {
-                        req.flash('error', error.message);
-                        return res.redirect('back');
-                    }
-                }
                 req.check('name', 'The name must be at least 3 characters long, 100 at most').notEmpty().isLength({ min: 3, max: 100 });
                 req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
                 req.check('country', 'Please select a country').notEmpty().matches(/^[a-z .\-,]+$/gi);
@@ -154,6 +127,39 @@ module.exports = {
                       });
                     }
                 } else {
+                // check if there are any new images for upload
+                if (req.file) {
+                  try{
+                      // delete old image
+                      await cloudinary.v2.uploader.destroy(user.avatar.public_id, (err) => {
+                        if (err) {
+                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        }
+                      });
+                      // upload image
+                      await cloudinary.v2.uploader.upload(req.file.path, 
+                        {
+                          moderation: "aws_rek:suggestive:ignore",
+                          // transformation: [
+                          //   {quality: "jpegmini:1", sign_url: true},
+                          //   {width: "auto", dpr: "auto"}
+                          //   ]
+                        }, (err, result) => {
+                          if(err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                          } else if (result.moderation[0].status === 'rejected') {
+                              user.avatar.url = 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png';
+                              user.avatar.public_id = result.public_id;
+                          } else {
+                            user.avatar.url = result.secure_url;
+                            user.avatar.public_id = result.public_id;
+                          }
+                        });
+                    } catch (error) {
+                        req.flash('error', error.message);
+                        return res.redirect('back');
+                    }
+                  }
                   if (process.env.NODE_ENV === 'production') {
                     const oldData = [ user.full_name, user.country, user.state, user.city, user.address1, user.address2, user.zip ];
                     const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];

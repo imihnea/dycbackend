@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Real Estate', opt: ['Apartments', 'Houses', 'Other Estates']},
     { name: 'Sports & Outdoors', opt: ['Sports & Fitness', 'Outdoor']},
     { name: 'Vehicles', opt: ['Automobiles', 'Trucks & Trailers', 'Motorcycles & ATVs', 'Boats', 'Other Vehicles']},
+    { name: 'Other', opt: ['Digital Goods', 'Other']}
   ];
 
   const secCategories = [
@@ -210,7 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Trucks & Trailers', opt: ['Semitrucks', 'Trucks', 'Trailers', 'Parts', 'Tires', 'Other'] },
     { name: 'Motorcycles & ATVs', opt: ['Motorcycles', 'Scooters', 'ATVs', 'Parts', 'Tires', 'Other'] },
     { name: 'Boats', opt: ['Leisure Boats', 'Fishing Boats', 'Parts', 'Other'] },
-    { name: 'Other Vehicles', opt: ['Other'] }
+    { name: 'Other Vehicles', opt: ['Other'] },
+    { name: 'Digital Goods', opt: ['Digital Art', 'Software license', 'Video Game Accounts', 'Cryptocurrencies', 'Other']},
+    { name: 'Other', opt: ['Gift Cards', 'Services', 'Other']}
   ];
 
   firstCat.addEventListener('change', () => {

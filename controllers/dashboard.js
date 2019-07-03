@@ -35,7 +35,7 @@ const { fork } = require("child_process");
 const notifProcess = fork("config/notifications.js");
 const deleteProcess = fork("config/deleteAcc.js");
 
-const SECRET2 = 'monkaGiga';
+const SECRET2 = process.env.DELETEACC_SECRET;
 const nexmo = new Nexmo({
   apiKey: process.env.NEXMO_API_KEY,
   apiSecret: process.env.NEXMO_API_SECRET

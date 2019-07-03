@@ -9,6 +9,7 @@ const Categories = [
     { name: 'Real Estate', opt: ['Apartments', 'Houses', 'Other Estates']},
     { name: 'Sports and Outdoors', opt: ['Sports and Fitness', 'Outdoor']},
     { name: 'Vehicles', opt: ['Automobiles', 'Trucks and Trailers', 'Motorcycles and ATVs', 'Boats', 'Other Vehicles']},
+    { name: 'Other', opt: ['Digital Goods', 'Other']}
   ];
 
   const secCategories = [
@@ -57,7 +58,9 @@ const Categories = [
     { name: 'Trucks and Trailers', opt: ['Semitrucks', 'Trucks', 'Trailers', 'Parts', 'Tires', 'Other'] },
     { name: 'Motorcycles and ATVs', opt: ['Motorcycles', 'Scooters', 'ATVs', 'Parts', 'Tires', 'Other'] },
     { name: 'Boats', opt: ['Leisure Boats', 'Fishing Boats', 'Parts', 'Other'] },
-    { name: 'Other Vehicles', opt: ['Other'] }
+    { name: 'Other Vehicles', opt: ['Other'] },
+    { name: 'Digital Goods', opt: ['Digital Art', 'Software license', 'Video Game Accounts', 'Cryptocurrencies', 'Other']},
+    { name: 'Other', opt: ['Gift Cards', 'Services', 'Other']}
   ];
 
   module.exports = { Categories, secCategories };

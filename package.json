@@ -26,6 +26,7 @@
     "@google-cloud/logging-winston": "^0.11.1",
     "archiver": "^3.0.0",
     "async": "^2.6.1",
+    "bad-words": "^3.0.2",
     "body-parser": "^1.18.3",
     "bson-objectid": "^1.2.4",
     "cloudinary": "^1.13.2",
