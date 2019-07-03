@@ -32,6 +32,10 @@ module.exports = {
           model: 'User',
         },
       });
+      if (!user) {
+        req.flash('error', 'That page does not exist');
+        return res.redirect('/error');
+    } 
       const reviews = await Review.paginate({ user: req.params.id },{
         sort: { createdAt: -1 },
         populate: ['user', 'product'],

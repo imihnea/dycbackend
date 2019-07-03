@@ -77,6 +77,10 @@ module.exports = {
               model: 'User',
             },
         });
+        if (!product) {
+            req.flash('error', 'That page does not exist');
+            return res.redirect('/error');
+        } 
         const reviews = await Review.paginate({ product: req.params.id },{
             sort: { createdAt: -1 },
             populate: 'product',
