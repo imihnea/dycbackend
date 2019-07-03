@@ -105,7 +105,7 @@ module.exports = {
                     }
                 }
                 req.check('name', 'The name must be at least 3 characters long, 100 at most').notEmpty().isLength({ min: 3, max: 100 });
-                req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi).trim();
+                req.check('name', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
                 req.check('country', 'Please select a country').notEmpty().matches(/^[a-z .\-,]+$/gi);
                 req.check('state', 'Please select a state').notEmpty().matches(/^[a-z .\-,]+$/gi);
                 req.check('city', 'Please select a city').notEmpty().matches(/^[a-z .\-,]+$/gi);

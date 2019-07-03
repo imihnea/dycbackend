@@ -187,7 +187,7 @@
                             </div>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
-                                <form action="/deals/<%= deal.id %>/accept?_method=PUT" id="acceptDeal" method="POST"></form>
+                                <form action="/deals/<%= deal._id %>/accept?_method=PUT" id="acceptDeal" method="POST"></form>
                                 <form action="/deals/<%= deal._id %>/decline?_method=PUT" id="declineDeal" method="POST"></form>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
                                 <button class="button is-success" form="acceptDeal">Accept Deal</button>

@@ -34,10 +34,10 @@
                             <img src="<%= notification.imgLink %>" style="width: 36px; height: 36px;" alt="">
                         </div>
                         <div class="column">
-                            <p style="text-align: left;"><%= notification.message %></p>
+                            <p style="text-align: left;" class="is-size-5"><%= notification.message %></p>
                             <span style="display: flex; align-items: center;">
                                 <i class="far fa-clock" style="margin-right: 0.5vw;"></i>
-                                <div style="text-align: left;">
+                                <div style="text-align: left;" class="is-size-6">
                                     <% time = Math.floor((Date.now() - notification.createdAt)/1000/60/60) %>
                                     <%
                                         const days = Math.floor(time/24);
