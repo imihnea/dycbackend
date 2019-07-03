@@ -98,7 +98,7 @@ router.get('/closed', isLoggedIn, asyncErrorHandler(closedProductIndex));
 router.get('/ongoing', isLoggedIn, asyncErrorHandler(ongoingProductIndex));
 
 // Show refunded deals
-router.get('/refunds', isLoggedIn, assignCookie, asyncErrorHandler(refundProductIndex));
+// router.get('/refunds', isLoggedIn, assignCookie, asyncErrorHandler(refundProductIndex));
 
 // Show all purchases
 router.get('/purchases', isLoggedIn, asyncErrorHandler(purchasedProductIndex));

@@ -583,17 +583,10 @@ module.exports = {
                                     avatarUrl: user.avatar.url,
                                     'delivery.shipping': req.body.deliveryShipping,
                                     'delivery.name': req.body.deliveryName,
-                                    'delivery.street1': req.body.deliveryStreet1,
-                                    'delivery.city': req.body.deliveryCity,
-                                    'delivery.state': req.body.deliveryState,
-                                    'delivery.zip': req.body.deliveryZip,
-                                    'delivery.country': req.body.deliveryCountry,
                                     'delivery.phone': req.body.deliveryPhone,
                                     'delivery.email': req.body.deliveryEmail,
                                 },
                                 price: product.btcPrice,
-                                shippingPrice: shippingPrice,
-                                rate: req.body.rate,
                             };
                             deal = await Deal.create(deal); 
                             // Update product and user
