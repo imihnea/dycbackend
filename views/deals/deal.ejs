@@ -197,6 +197,7 @@
                                             <button class="delete deleteAccept is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
+<<<<<<< HEAD
                                             <p class="title is-5 modal-section-title">Buyer Details</p>
                                             <div style="text-align: left;">
                                                 <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
@@ -206,6 +207,30 @@
                                             <div style="text-align: left;">
                                                 <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
                                             </div>
+=======
+                                            <% if(deal.buyer.delivery.shipping === 'FaceToFace') { %>
+                                                <p class="title is-5 modal-section-title">Buyer Details</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Delivery handled by you</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
+                                                </div>
+                                            <% } else { %>
+                                                <p class="title is-5 modal-section-title">Buyer Details</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
+                                                </div>
+                                                <br>
+                                                <p class="title is-5 modal-section-title">Carrier details</p>
+                                                <div style="text-align: left;">
+                                                    <p class="subtitle">You'll be contacted by the carrier regarding the pick-up of your package.</p>
+                                                    <p class="subtitle">You'll receive full details on your email after accepting the deal.</p>
+                                                </div>
+                                            <% } %>
+>>>>>>> 0ebe2c43822ea5a469aebda57b22a05d7c39d6df
                                             <br>
                                             <form action="/deals/<%= deal.id %>/accept?_method=PUT" method="POST">
                                                 <button class="button is-success is-fullwidth">Accept Deal</button>
