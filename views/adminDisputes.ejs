@@ -1,0 +1,64 @@
+<% include partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+
+<div class="hero-body">
+    <div class="column dashTop">
+        <h2 class="title dashTitle" style="color: white !important;">Disputes</h2>
+    </div>
+    <br>
+    <% include partials/adminMenu %>
+    <div class="frame smallerCenter">
+        <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>ID</th>
+                    <th>Deal</th>
+                    <th>Created At</th>
+                    <th>Refund reason</th>
+                    <th>Denial reason</th>
+                    <th>Product</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% disputes.forEach((item, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td style="word-break: break-all;"><%= item._id %></td>
+                    <td style="word-break: break-all;"><%= item.deal %></td>
+                    <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                    <td style="word-break: break-all;">
+                        <p><%= item.refund.reason %></p>
+                        <p><%= item.refund.message %></p>
+                        <% item.refund.images.forEach((img, index) => { %>
+                            <a href="<%= img.imageurl %>" class="link">Image <%= index + 1 %></a>
+                        <% }); %>
+                    </td>
+                    <td style="word-break: break-all;">
+                        <p><%= item.refund.sellerReason %></p>
+                        <p><%= item.refund.sellerMessage %></p>
+                    </td>
+                    <td>
+                        <a href="/products/<%= product.id %>/view">View</a>
+                    </td>
+                    <td>
+                        <form action="/admin/disputeAcceptRefund/<%= item._id %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Accept refund</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/admin/disputeDenyRefund/<%= item._id %>?_method=PUT" method="POST">
+                            <button class="button is-primary">Decline Refund</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<% include partials/footer %>

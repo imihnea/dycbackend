@@ -72,6 +72,116 @@ setInterval( () => {
     let weeksAgo = new Date();
     weeksAgo.setDate(weeksAgo.getDate() - 21);
 
+    // Complete refunded deals with proof older than 21d
+    Deal.find({'refund.status': 'Pending Delivery', 'refund.proof.lastUpdated': {$lt: weeksAgo}}, (err, deals) => {
+        if (err) {
+            errorLogger.error(`Message: ${err} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+            deals.forEach(deal => {
+                deal.completedAt = Date.now();
+                deal.refundableUntil = Date.now();
+                deal.status = 'Refunded';
+                deal.save(err => {
+                    if (err) {
+                        errorLogger.error(`Message: ${err} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
+                Product.findById(deal.product.id, (err, product) => {
+                    if (err) {
+                        errorLogger.error(`Message: ${err} - Product - Error finding product ${deal.product.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        if (!product.repeatable) {
+                            product.available = 'Closed';
+                            product.save(err => {
+                                if (err) {
+                                    errorLogger.error(`Message: ${err} - Product - Error saving product ${product._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                }
+                            });
+                            deleteProduct(product._id);
+                        }
+                    }
+                });
+                User.findById(deal.product.author.id, (err, seller) => {
+                    if (err) {
+                        errorLogger.error(`Message: ${err} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        seller.nrSold += 1;
+                        seller.unreadNotifications += 1;
+                        seller.save(err => {
+                            if (err) {
+                                errorLogger.error(`Message: ${err} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                        Notification.create({
+                            userid: seller._id,
+                            linkTo: `/deals/${deal._id}`,
+                            imgLink: deal.product.imageUrl,
+                            message: `Refund completed`
+                        });
+                        if(seller.email_notifications.deal === true) {
+                            ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
+                                link: `${host}/dashboard`,
+                                footerlink: `${host}/dashboard/notifications`,
+                                name: deal.product.name,
+                                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                            }, function (err, data) {
+                                if (err) {
+                                    errorLogger.error(`Message: ${err} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                } else {
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                    to: `${seller.email}`, // list of receivers
+                                    subject: 'Deal Status Changed', // Subject line
+                                    html: data, // html body
+                                };
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                    }
+                                });
+                            }});
+                        }
+                    }
+                });
+                User.findById(deal.buyer.id, (err, buyer) => {
+                    if (err) {
+                        errorLogger.error(`Message: ${err} - User - Couldn't find user ${deal.buyer._id} - Cannot send completeDeal email\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                    } else {
+                        Notification.create({
+                            userid: buyer._id,
+                            linkTo: `/deals/${deal._id}`,
+                            imgLink: deal.product.imageUrl,
+                            message: `Refund complete`
+                        });
+                        if(buyer.email_notifications.deal === true) {
+                            ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
+                                link: `${host}/deals/${deal._id}`,
+                                footerlink: `${host}/dashboard/notifications`,
+                                name: deal.product.name,
+                                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                            }, function (err, data) {
+                                if (err) {
+                                    errorLogger.error(`Message: ${err} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                            
+                                } else {
+                                const mailOptions = {
+                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                    to: `${buyer.email}`, // list of receivers
+                                    subject: 'Deal Status Changed', // Subject line
+                                    html: data, // html body
+                                };
+                                transporter.sendMail(mailOptions, (error) => {
+                                    if (error) {
+                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to buyer ${buyer._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    }
+                                });
+                            }});
+                        }
+                    }
+                });
+            });
+        }
+    });
+
     // Complete deals with proof older than 21d
     Deal.find({'status': 'Pending Delivery', 'proof.lastUpdated': {$lt: weeksAgo}}, (err, deals) => {
         if (err) {

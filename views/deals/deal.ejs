@@ -182,9 +182,9 @@
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText">Product Name: <%= deal.product.name %></p>
                             <div class="prices openPrices frame" style="width: 80% !important;">
-                                    <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
-                                    <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
-                                </div>
+                                <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
+                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                            </div>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
                                 <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
@@ -197,39 +197,15 @@
                                             <button class="delete deleteAccept is-large" aria-label="close"></button>
                                         </header>
                                         <section class="modal-card-body">
-                                            <% if(deal.buyer.delivery.shipping === 'FaceToFace') { %>
-                                                <p class="title is-5 modal-section-title">Face-to-Face Buyer Details</p>
-                                                <div style="text-align: left;">
-                                                    <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
-                                                    <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
-                                                    <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
-                                                </div>
-                                                <br>
-                                                <p class="title is-5 modal-section-title">Delivery handled by you</p>
-                                                <div style="text-align: left;">
-                                                    <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
-                                                </div>
-                                            <% } else { %>
-                                                <p class="title is-5 modal-section-title">Shipping Details</p>
-                                                <div style="text-align: left;">
-                                                    <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
-                                                    <p class="subtitle">Phone number: <%= deal.buyer.delivery.phone %></p>
-                                                    <p class="subtitle">Email: <%= deal.buyer.delivery.email %></p>
-                                                    <p class="subtitle">Country: <%= deal.buyer.delivery.country %></p>
-                                                    <p class="subtitle">City: <%= deal.buyer.delivery.city %></p>
-                                                    <% if(deal.buyer.delivery.state) { %>
-                                                        <p class="subtitle">State: <%= deal.buyer.delivery.state %></p>
-                                                    <% } %>
-                                                    <p class="subtitle">Street: <%= deal.buyer.delivery.street1 %></p>
-                                                    <p class="subtitle">Zip: <%= deal.buyer.delivery.zip %></p>
-                                                </div>
-                                                <br>
-                                                <p class="title is-5 modal-section-title">Carrier details</p>
-                                                <div style="text-align: left;">
-                                                    <p class="subtitle">You'll be contacted by the carrier regarding the pick-up of your package.</p>
-                                                    <p class="subtitle">You'll receive full details on your email after accepting the deal.</p>
-                                                </div>
-                                            <% } %>
+                                            <p class="title is-5 modal-section-title">Buyer Details</p>
+                                            <div style="text-align: left;">
+                                                <p class="subtitle">Name: <%= deal.buyer.delivery.name %></p>
+                                            </div>
+                                            <br>
+                                            <p class="title is-5 modal-section-title">Delivery handled by you</p>
+                                            <div style="text-align: left;">
+                                                <p class="subtitle">You are free to discuss with the seller if you'd like to send him the package yourself.</p>
+                                            </div>
                                             <br>
                                             <form action="/deals/<%= deal.id %>/accept?_method=PUT" method="POST">
                                                 <button class="button is-success is-fullwidth">Accept Deal</button>
@@ -237,7 +213,7 @@
                                         </section>
                                         <footer class="modal-card-foot">
                                             <button class="button is-danger cancelAccept">Cancel</button>
-                                            <p class="subtitle"><% if (deal.buyer.delivery.shipping == 'FaceToFace') { %>You are free to meet the buyer after accepting the deal.<% } else { %>Wait for the delivery company to pick-up your package after accepting the deal.<% } %></p>
+                                            <p class="subtitle"><% if (deal.buyer.delivery.shipping == 'FaceToFace') { %>You are free to meet the buyer after accepting the deal.<% } %></p>
                                         </footer>
                                     </div>
                                 </div>
@@ -303,19 +279,55 @@
                                                     </header>
                                                     <section class="modal-card-body">
                                                         <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
+                                                            <div class="file-upload">
+                                                                <div class="mobileUpload">
+                                                                    <label for="upload[0]" class="file-upload__label">
+                                                                        <span style="font-size: 5rem;">
+                                                                            <i class="far fa-plus-square square"></i>
+                                                                            <i class="far fa-check-square hide"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                                    <label class="file-delete__label hide">
+                                                                        <span>
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="mobileUpload">
+                                                                    <label for="upload[1]" class="file-upload__label">
+                                                                        <span style="font-size: 5rem;">
+                                                                            <i class="far fa-plus-square square"></i>
+                                                                            <i class="far fa-check-square hide"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                                    <label class="file-delete__label hide">
+                                                                        <span>
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="mobileUpload">
+                                                                    <label for="upload[2]" class="file-upload__label">
+                                                                        <span style="font-size: 5rem;">
+                                                                            <i class="far fa-plus-square square"></i>
+                                                                            <i class="far fa-check-square hide"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                                    <label class="file-delete__label hide">
+                                                                        <span>
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div> 
                                                             <div class="field select cont-select smmargin">
                                                                 <select name="reason" style="width: 100%;">
                                                                     <option selected disabled>Reason</option>
                                                                     <option value="Product doesn't match">The product doesn't match the listing</option>
                                                                     <option value="Faulty product">Faulty product</option>
-                                                                    <option value="Product hasn't arrived">The product hasn't arrived</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="field select cont-select smmargin">
-                                                                <select name="option" style="width: 100%;">
-                                                                    <option selected disabled>Refund option</option>
-                                                                    <option value="Money Back">Money Back</option>
-                                                                    <option value="New Product">Replace Product (if possible)</option>
                                                                 </select>
                                                             </div>
                                                             <div class="field" style="margin-top: 3px;">
@@ -338,37 +350,74 @@
                                 <button class="button is-primary refundRequest">Ask for a refund</button>
                                 <div class="modal modalrefundRequest">
                                     <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Ask for a refund</p>
-                                                <button class="delete deleteRefundRequest" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body">
-                                                <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
-                                                    <div class="field select cont-select smmargin">
-                                                        <select name="reason" style="width: 100%;">
-                                                            <option value="" selected disabled>Reason</option>
-                                                            <option value="Product doesn't match">The product doesn't match the listing</option>
-                                                            <option value="Faulty product">Faulty product</option>
-                                                            <option value="Product hasn't arrived">The product hasn't arrived</option>
-                                                        </select>
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Ask for a refund</p>
+                                            <button class="delete deleteRefundRequest" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body">
+                                            <form class="modal-form" action="/deals/<%= deal._id %>/refundRequest?_method=PUT" method="POST" style="display: block;">
+                                                <div class="file-upload">
+                                                    <div class="mobileUpload">
+                                                        <label for="upload[0]" class="file-upload__label">
+                                                            <span style="font-size: 5rem;">
+                                                                <i class="far fa-plus-square square"></i>
+                                                                <i class="far fa-check-square hide"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                        <label class="file-delete__label hide">
+                                                            <span>
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </span>
+                                                        </label>
                                                     </div>
-                                                    <div class="field select cont-select smmargin">
-                                                        <select name="option" style="width: 100%;">
-                                                            <option value="" selected disabled>Refund option</option>
-                                                            <option value="Money Back">Money Back</option>
-                                                            <option value="New Product">Replace Product (if possible)</option>
-                                                        </select>
+                                                    <div class="mobileUpload">
+                                                        <label for="upload[1]" class="file-upload__label">
+                                                            <span style="font-size: 5rem;">
+                                                                <i class="far fa-plus-square square"></i>
+                                                                <i class="far fa-check-square hide"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                        <label class="file-delete__label hide">
+                                                            <span>
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </span>
+                                                        </label>
                                                     </div>
-                                                    <div class="field" style="margin-top: 3px;">
-                                                        <div class="control">
-                                                            <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                                        </div>
+                                                    <div class="mobileUpload">
+                                                        <label for="upload[2]" class="file-upload__label">
+                                                            <span style="font-size: 5rem;">
+                                                                <i class="far fa-plus-square square"></i>
+                                                                <i class="far fa-check-square hide"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                                        <label class="file-delete__label hide">
+                                                            <span>
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </span>
+                                                        </label>
                                                     </div>
-                                                    <button class="button is-primary">Send</button>
-                                                </form>
-                                            </section>
-                                        </div>
+                                                </div> 
+                                                <div class="field select cont-select smmargin">
+                                                    <select name="reason" style="width: 100%;">
+                                                        <option selected disabled>Reason</option>
+                                                        <option value="Product doesn't match">The product doesn't match the listing</option>
+                                                        <option value="Faulty product">Faulty product</option>
+                                                        <option value="Other">Other reason</option>
+                                                    </select>
+                                                </div>
+                                                <div class="field" style="margin-top: 3px;">
+                                                    <div class="control">
+                                                        <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                                    </div>
+                                                </div>
+                                                <button class="button is-primary">Send</button>
+                                            </form>
+                                        </section>
+                                    </div>
                                 </div>
                             <% } %>
     
@@ -377,53 +426,75 @@
                                 <button class="button is-primary refundDetails">View Refund Details</button>
                                 <div class="modal modalrefundDetails">
                                     <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Refund Deal</p>
-                                                <button class="delete deleterefundDetails" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body" style="text-align: left;">
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Refund Deal</p>
+                                            <button class="delete deleterefundDetails" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body" style="text-align: left;">
+                                            <p class="title is-5">Reason: <%= deal.refund.reason %></p>
+                                            <p class="title is-5">Message: <%= deal.refund.message %></p>
+                                            <p class="title is-">Images:</p>
+                                            <div class="columns">
+                                                <% deal.refund.images.forEach(img => { %>
+                                                    <div class="column">
+                                                        <a href="<%= img.imageurl %>" target="_blank">
+                                                            <figure class="image is-128x128" style="margin: auto;">
+                                                                <img src="<%= img.imageurl %>" class="profilepic" alt="Refund image proof">
+                                                            </figure>    
+                                                        </a>
+                                                    </div>
+                                                <% }); %>
+                                            </div>
+                                            <br>
+                                            <% if (deal.refund.status === 'Not fulfilled') { %>
+                                                <p class="title is-6 refundTitle">Accept refund</p>
+                                                <div style="display: flex; justify-content: space-evenly;">
+                                                    <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
+                                                        <input type="text" name="refundOption" value="Money Back" hidden>
+                                                        <button class="button is-primary">Refund Deal</button>
+                                                    </form>
+                                                </div>
+                                                <br>
+                                                <p class="title is-6 refundTitle">Deny refund</p>
+                                                <form class="modal-form" action="/deals/<%= deal._id %>/refundDeny?_method=PUT" method="POST" style="display: block;">
+                                                    <div class="column">
+                                                        <div class="field select cont-select smmargin">
+                                                            <select name="reason" style="width: 100%;">
+                                                                <option value="" selected disabled>Reason</option>
+                                                                <option value="Fraudulent request">Fraudulent request</option>
+                                                                <option value="Scam attempt">I suspect the buyer is trying to scam me</option>
+                                                                <option value="Other">Other reason</option>
+                                                                <!-- Add more later -->
+                                                            </select>
+                                                        </div>
+                                                        <div class="field" style="margin-top: 3px;">
+                                                            <div class="control">
+                                                                <textarea class="textarea" name="message" placeholder="Your message"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <button class="button is-primary">Send</button>
+                                                    </div>
+                                                </form>
+                                            <% } else { %>                     
+                                                <p class="title is-5">Deal Refunded</p>
                                                 <p class="title is-5">Reason: <%= deal.refund.reason %></p>
                                                 <p class="title is-5">Message: <%= deal.refund.message %></p>
-                                                <p class="title is-5">Preferred method of refund: <%= deal.refund.option %></p>
-                                                <br>
-                                                <% if (deal.refund.status === 'Not fulfilled') { %>
-                                                    <p class="title is-6 refundTitle">Accept refund</p>
-                                                    <div style="display: flex; justify-content: space-evenly;">
-                                                        <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
-                                                            <input type="text" name="refundOption" value="Money Back" hidden>
-                                                            <button class="button is-primary">Refund Money</button>
-                                                        </form>
-                                                        <form class="modal-form" action="/deals/<%= deal._id %>/refund?_method=PUT" method="POST" style="display: block;">
-                                                            <input type="text" name="refundOption" value="New Product" hidden>                                                
-                                                            <button class="button is-primary">Send replacement</button>
-                                                        </form>
-                                                    </div>
-                                                    <br>
-                                                    <p class="title is-6 refundTitle">Deny refund</p>
-                                                    <form class="modal-form" action="/deals/<%= deal._id %>/refundDeny?_method=PUT" method="POST" style="display: block;">
+                                                <p class="title is-">Images:</p>
+                                                <div class="columns">
+                                                    <% deal.refund.images.forEach(img => { %>
                                                         <div class="column">
-                                                            <div class="field select cont-select smmargin">
-                                                                <select name="reason" style="width: 100%;">
-                                                                    <option value="" selected disabled>Reason</option>
-                                                                    <option value="Scam attempt">I suspect the buyer is trying to scam me</option>
-                                                                    <!-- Add more later -->
-                                                                </select>
-                                                            </div>
-                                                            <div class="field" style="margin-top: 3px;">
-                                                                <div class="control">
-                                                                    <textarea class="textarea" name="message" placeholder="Your message"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <button class="button is-primary">Send</button>
+                                                            <a href="<%= img.imageurl %>" target="_blank">
+                                                                <figure class="image is-128x128" style="margin: auto;">
+                                                                    <img src="<%= img.imageurl %>" class="profilepic" alt="Refund image proof">
+                                                                </figure>    
+                                                            </a>
                                                         </div>
-                                                    </form>
-                                                <% }  else { %>                     
-                                                    <p class="title is-5">Deal Refunded</p>
-                                                    <p class="title is-5">Refund option: <%= deal.refund.sellerOption %></p>
-                                                <% } %>
-                                            </section>
-                                        </div>
+                                                    <% }); %>
+                                                </div>
+                                            <% } %>
+                                        </section>
+                                    </div>
                                 </div>
                             <% } %>
                             
@@ -436,8 +507,134 @@
                             <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
                                 <div class="buttons has-addons is-centered">
                                     <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
-                                    <form action="/deals/<%= deal._id %>/completeRefund?_method=PUT" method="POST"><button class="button is-success">Complete Refund</button></form>
+                                    <button class="button is-primary checkProof">Delivery</button>
+                                    <div class="modal modalCheckProof">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Delivery</p>
+                                                <button class="delete deleteCheckProof" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <div class="column">
+                                                    <p class="title is-5">Delivery address: </p>
+                                                    <p class="subtitle">Name: <%= seller.full_name %></p>
+                                                    <p class="subtitle">Country: <%= seller.country %></p>
+                                                    <p class="subtitle">City: <%= seller.city %></p>
+                                                    <% if(seller.state) { %>
+                                                        <p class="subtitle">State: <%= seller.state %></p>
+                                                    <% } %>
+                                                    <p class="subtitle">Zip: <%= seller.zip %></p>
+                                                    <p class="subtitle">Additional information: <%= seller.address1 %> <% if (seller.address2) { %><%= seller.address2 %><% } %></p>
+                                                    <form action="/deals/updateRefundProof/<%= deal._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                                                        <div class="columns">
+                                                            <% if (deal.proof.image != 'Unset') { %>
+                                                                <div class="column">
+                                                                    <a href="<%= deal.proof.image %>" target="_blank">
+                                                                        <figure class="image is-128x128" style="margin: auto;">
+                                                                            <img src="<%= deal.refund.proof.image %>" class="profilepic" alt="Proof of delivery">
+                                                                        </figure>    
+                                                                    </a>
+                                                                </div>
+                                                            <% } %>
+                                                            <div class="column">
+                                                                <div class="file-upload">
+                                                                    <div>
+                                                                        <label for="upload[0]" class="file-upload__label">
+                                                                            <span style="font-size: 5rem;">
+                                                                                <i class="far fa-plus-square square"></i>
+                                                                                <i class="far fa-check-square hide"></i>
+                                                                            </span>
+                                                                        </label>
+                                                                        <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="proofImage">
+                                                                        <label class="file-delete__label hide">
+                                                                            <span>
+                                                                                <i class="far fa-trash-alt"></i>
+                                                                            </span>
+                                                                        </label>
+                                                                        <p>Add proof of delivery as image</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="columns">
+                                                            <div class="column">
+                                                                <label for="textProof">Text proof (carrier, tracking number, etc.)</label>
+                                                                <textarea name="textProof" id="textProof" class="textarea" placeholder="Text proof (carrier, tracking number)"><% if (deal.proof.text != 'Unset') { %><%= deal.proof.text %><% } %></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <button class="button is-primary">Submit</button>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
+                            <% } %>
+                            <% if ((deal.refund.status === 'Pending Delivery') && (user._id.toString() === buyer._id.toString())) { %>
+                                <button class="button is-primary checkProof">Proof of delivery</button>
+                                <div class="modal modalCheckProof">
+                                    <div class="modal-background"></div>
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Proof of delivery</p>
+                                            <button class="delete deleteCheckProof" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body">
+                                            <div class="column">
+                                                <p class="title is-5">Delivery address: </p>
+                                                <p class="subtitle">Name: <%= seller.full_name %></p>
+                                                <p class="subtitle">Country: <%= seller.country %></p>
+                                                <p class="subtitle">City: <%= seller.city %></p>
+                                                <% if(seller.state) { %>
+                                                    <p class="subtitle">State: <%= seller.state %></p>
+                                                <% } %>
+                                                <p class="subtitle">Zip: <%= seller.zip %></p>
+                                                <p class="subtitle">Additional information: <%= seller.address1 %> <% if (seller.address2) { %><%= seller.address2 %><% } %></p>
+                                                <form action="/deals/updateRefundProof/<%= deal._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                                                    <div class="columns">
+                                                        <% if (deal.proof.image != 'Unset') { %>
+                                                            <div class="column">
+                                                                <a href="<%= deal.proof.image %>" target="_blank">
+                                                                    <figure class="image is-128x128" style="margin: auto;">
+                                                                        <img src="<%= deal.refund.proof.image %>" class="profilepic" alt="Proof of delivery">
+                                                                    </figure>    
+                                                                </a>
+                                                            </div>
+                                                        <% } %>
+                                                        <div class="column">
+                                                            <div class="file-upload">
+                                                                <div>
+                                                                    <label for="upload[0]" class="file-upload__label">
+                                                                        <span style="font-size: 5rem;">
+                                                                            <i class="far fa-plus-square square"></i>
+                                                                            <i class="far fa-check-square hide"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="proofImage">
+                                                                    <label class="file-delete__label hide">
+                                                                        <span>
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <p>Add proof of delivery as image</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="columns">
+                                                        <div class="column">
+                                                            <label for="textProof">Text proof (carrier, tracking number, etc.)</label>
+                                                            <textarea name="textProof" id="textProof" class="textarea" placeholder="Text proof (carrier, tracking number)"><% if (deal.proof.text != 'Unset') { %><%= deal.proof.text %><% } %></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <button class="button is-primary">Submit</button>
+                                                </form>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <form action="/deals/<%= deal._id %>/completeRefund?_method=PUT" method="POST"><button class="button is-success">Complete Refund</button></form>
                             <% } %>
                             <% if ((deal.status === 'Processing Refund') && (user._id.toString() === buyer._id.toString())) { %>
                                 <div class="buttons has-addons is-centered">
@@ -506,21 +703,21 @@
                                     <br>
                                 <% } %>
                             <% } %>
-                                <%
-                                    if (!['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied'].includes(deal.status)) {} else {
-                                        if (deal.refundableUntil) {
-                                            if (deal.refundableUntil > Date.now()) { %>
-                                            <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
-                                                <button class="button is-danger">Delete Deal</button>
-                                            </form>
-                                            <% } else {}
-                                        } else { %>
-                                            <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
-                                                <button class="button is-danger">Delete Deal</button>
-                                            </form>
-                                    <% }
-                                    }
-                                %>
+                            <%
+                                if (!['Completed', 'Refunded', 'Declined', 'Cancelled', 'Refund denied'].includes(deal.status)) {} else {
+                                    if (deal.refundableUntil) {
+                                        if (deal.refundableUntil > Date.now()) { %>
+                                        <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
+                                            <button class="button is-danger">Delete Deal</button>
+                                        </form>
+                                        <% } else {}
+                                    } else { %>
+                                        <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
+                                            <button class="button is-danger">Delete Deal</button>
+                                        </form>
+                                <% }
+                                }
+                            %>
                         </div>
                     </div>
                 </div>

@@ -11,22 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     repeatable.classList.toggle('green');
     repeatable.classList.toggle('normal');
   });
-
-  // const newCurrency = document.querySelectorAll('.new_cccy');
-  // const newCurrencies = [].slice.call(newCurrency);
-  // newCurrencies.forEach((item) => {
-  //   item.addEventListener('click', (event) => {
-  //     event.stopPropagation();
-  //     item.classList.toggle('gray');
-  //   });
-  // });
   
   const userType = document.getElementById('userType').value;
   document.getElementById('userType').remove();
   const price = document.getElementById('btc-price');
   const payout = document.getElementById('btc-payout');
-  const labelFee = document.getElementById('btc-label');
-  const label = document.getElementById('labelField');
   const standardFee = 10;
   const partnerFee = 8;
   const premiumFee = 8;
@@ -45,9 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
       default:
         break;
     }
-    if (!label.classList.contains('hidden')) {
-      payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
-    }
   }
 
   price.addEventListener('keyup', () => {
@@ -63,9 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
       default:
         break;
-    }
-    if (!label.classList.contains('hidden')) {
-      payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
     }
   });
 
@@ -122,31 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  const radio1 = document.getElementById('shipping-yes');
-  const radio2 = document.getElementById('shipping-no');
-  radio1.addEventListener('change', () => {
-      if(radio1.checked == true) {
-        document.getElementById("carriers").style.display = "block";
-        if (label.classList.contains('hidden')) {
-          label.classList.remove('hidden');
-          if (payout.value > 0) {
-            payout.value = (payout.value - labelFee.value).toFixed(8);
-          }
-        }
-      }
-  });
-  radio2.addEventListener('change', () => {
-    if(radio2.checked == true) {
-      document.getElementById("carriers").style.display = "none";
-      if (!label.classList.contains('hidden')) {
-        label.classList.add('hidden');
-        if (payout.value > 0) {
-          payout.value = (Number(payout.value) + Number(labelFee.value)).toFixed(8);
-        }
-      }
-    }
-});
 
   const inputs = document.querySelectorAll('.file-upload__input');
   const inputItems = [].slice.call(inputs);
@@ -365,65 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   });
 
-});
-
-const button = document.getElementById('validate');
-button.addEventListener('click', function(e) {
-      // all delivery names
-      var deliveryName = document.getElementById('name').value;
-      var deliveryStreet1 = document.getElementById('street1').value;
-      var deliveryCity = document.getElementById('city').value;
-      var deliveryState = document.getElementById('state').value;
-      var deliveryZip = document.getElementById('zip').value;
-      var deliveryCountry = document.getElementById('country').value;
-      var deliveryPhone = document.getElementById('phone').value;
-      var deliveryEmail = document.getElementById('email').value;
-    // show spinner while fetching
-    document.getElementById('validateSpinner').style.display = 'inline-block';
-    document.getElementById('validate').style.display = 'none';
-  fetch(`/deals/verify-address/`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        Accept: 'application/json',
-    },
-      body: JSON.stringify({
-          deliveryName: deliveryName, 
-          deliveryStreet1: deliveryStreet1,
-          deliveryCity: deliveryCity,
-          deliveryState: deliveryState,
-          deliveryZip: deliveryZip,
-          deliveryCountry: deliveryCountry,
-          deliveryPhone: deliveryPhone,
-          deliveryEmail: deliveryEmail,
-        }),
-    })
-  .then(function(response) {
-    if(response.ok) {
-      return response.json();
-    }
-    throw new Error('Request failed.');
-  })
-  .then(function(data) {
-      document.getElementById('validateSpinner').style.display = 'none';
-      if(data.validation_results) {
-        if(data.validation_results.is_valid === true) {
-          document.getElementById('valid').style.display = 'block';
-        } else {
-          document.getElementById('not-valid').style.display = 'block';
-          document.getElementById('validate').style.display = 'block';
-          document.getElementById('validate').style = 'button is-primary is-rounded';
-        }
-      }
-      if(data.type === 'ShippoAPIError') {
-        document.getElementById('not-valid').style.display = 'block';
-        document.getElementById('validate').style.display = 'block';
-        document.getElementById('validate').style = 'button is-primary is-rounded';
-      }
-  })
-  .catch(function(error) {
-    console.log(error);
-  });
 });
 
 const createNewDealButton = document.getElementById('createNewDeal');

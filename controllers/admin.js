@@ -6,6 +6,7 @@ const Product = require('../models/product');
 const Notification = require('../models/notification');
 const Report = require('../models/report');
 const Deal = require('../models/deal');
+const Dispute = require('../models/dispute');
 
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
@@ -83,6 +84,40 @@ module.exports = {
             pageDescription: 'Admin reports for Deal Your Crypto.',
             pageKeywords: 'admin, admin reports, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
+    },
+    async getDisputes(req, res) {
+        const disputes = await Dispute.find({status: 'Processing'});
+        res.render('adminDisputes', {
+            disputes,
+            errors: req.session.errors,
+            pageTitle: 'Administration - Deal Your Crypto',
+            pageDescription: 'Admin disputes for Deal Your Crypto.',
+            pageKeywords: 'admin, admin disputes, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+        });
+    },
+    async disputeAcceptRefund(req, res) {
+        const dispute = await Dispute.findById(req.params.id);
+        const deal = await Dispute.findById(dispute.deal);
+        deal.completedAt = Date.now();
+        deal.refund.status = 'Pending Delivery'
+        deal.refund.sellerOption = 'Money back';
+        deal.status = 'Refund Pending';
+        await deal.save();
+        await Notification.create({
+            userid: deal.buyer._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `The dispute has been resolved and your refund request has been accepted. Please check the deal for more information`
+        });
+        await Notification.create({
+            userid: deal.product.author,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `The dispute has been resolved and the refund request has been accepted. Please check the deal for more information`
+        });
+        dealLogger.info(`Message: Dispute ${req.params.id} accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        req.flash('success', 'Dispute completed successfully');
+        return res.redirect('back');
     },
     async withdrawAccept (req, res) {
         const withdraw = await Withdraw.findById(req.params.id);

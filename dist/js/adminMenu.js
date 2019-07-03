@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#reports').classList.add('is-active');
         break;
       }
+      case ('/admin/disputes'): {
+        document.querySelector('#disputes').classList.add('is-active');
+        break;
+      }
       default: {
         break;
       }

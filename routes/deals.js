@@ -5,11 +5,11 @@ const router = express.Router();
 const multer = require('multer');
 
 const { getDeal, cancelDeal, acceptDeal, declineDeal, refundDeal, completeDeal, refundRequest, refundDeny, reviewProduct, getBuyDeal,
-        createAddress, verifyAddress, completeRefund, updateProof, destroyDeal } = require('../controllers/deals');
+        createAddress, verifyAddress, completeRefund, updateProof, updateRefundProof, destroyDeal } = require('../controllers/deals');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId, checkIfDealAuthor } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId, checkIfDealAuthor, checkIfDealBuyer } = middleware; // destructuring assignment
 
 // Set Storage Engine
 const storage = multer.diskStorage({
@@ -54,7 +54,7 @@ router.put('/:id/complete', isLoggedIn, checkId, asyncErrorHandler(checkIfBelong
 router.put('/:id/completeRefund', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(completeRefund));
 
 // send refund request message
-router.put('/:id/refundRequest', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundRequest));
+router.put('/:id/refundRequest', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), upload.array('images', 3), asyncErrorHandler(refundRequest));
 
 // refund deal
 router.put('/:id/refund', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(refundDeal));
@@ -73,6 +73,9 @@ router.post('/verify-address', isLoggedIn, asyncErrorHandler(verifyAddress));
 
 // Add/modify proof of delivery
 router.put('/updateProof/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfDealAuthor), upload.single('proofImage'), asyncErrorHandler(updateProof));
+
+// Add/modify proof of delivery
+router.put('/updateRefundProof/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfDealBuyer), upload.single('proofImage'), asyncErrorHandler(updateRefundProof));
 
 // Delete deal
 router.delete('/delete/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(destroyDeal));

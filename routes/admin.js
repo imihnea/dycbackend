@@ -6,6 +6,7 @@ const {
     getAdmin,
     getReports,
     getUsers,
+    getDisputes,
     withdrawAccept,
     withdrawDeny,
     withdrawAcceptAll,
@@ -34,6 +35,9 @@ router.get('/reports', asyncErrorHandler(isAdmin), asyncErrorHandler(getReports)
 
 // users page
 router.get('/users', asyncErrorHandler(isAdmin), asyncErrorHandler(getUsers));
+
+// disputes page
+router.get('/disputes', asyncErrorHandler(isAdmin), asyncErrorHandler(getDisputes));
 
 // accept single withdraw
 router.put('/accept/:id', asyncErrorHandler(isAdmin), checkId, asyncErrorHandler(withdrawAccept));

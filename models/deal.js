@@ -62,7 +62,23 @@ const DealSchema = new Schema({
         status: { 
             type: String, 
             default: 'Not requested' 
-        }, 
+        },
+        images: [{
+            imageurl: String,
+            imageid: String
+        }],
+        proof: {
+            text: {
+                type: String,
+                default: 'Unset'
+            },
+            image: {
+                type: String,
+                default: 'Unset'
+            },
+            imageid: String,
+            lastUpdated: Date
+        },
         timeOfRequest: Date, 
         sellerReason: String, 
         sellerMessage: String, 

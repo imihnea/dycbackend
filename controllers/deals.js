@@ -8,6 +8,7 @@ const ejs = require('ejs');
 const path = require('path');
 const Product = require('../models/product');
 const Chat = require('../models/chat');
+const Dispute = require('../models/dispute');
 const nodemailer = require('nodemailer');
 const request = require("request");
 const shippo = require('shippo')(`${process.env.SHIPPO_SECRET}`);
@@ -34,7 +35,7 @@ const EMAIL_API_KEY = process.env.EMAIL_API_KEY || 'Mx2qnJcNKM5mp4nrG3';
 const EMAIL_PORT = process.env.EMAIL_PORT || '587';
 const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.ethereal.email';
 
-const refundTimer = 60000;
+const refundTimer = 14 * 24 * 60 * 60 * 1000;
 
 // Deal payout fees (%)
 const standardAccountFee = 10;
@@ -424,7 +425,7 @@ module.exports = {
     async refundDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
         if (deal.buyer.delivery.shipping !== 'Shipping') {
-            req.flash('error', 'We do not refund seller handled deals. You must talk to them about it.');
+            req.flash('error', 'We do not refund seller handled deals. You must discuss it with them.');
             return res.redirect('back');
         }
         req.check('refundOption', 'Something went wrong. Please try again.').notEmpty().matches(/^(Money Back|New Product)$/);
@@ -447,18 +448,18 @@ module.exports = {
         } else {
             if (req.body.refundOption === 'Money Back') {
                 // Find user
-                const buyer = await User.findById(deal.buyer.id);
+                // const buyer = await User.findById(deal.buyer.id);
                 // Refund deal
                 deal.completedAt = Date.now();
-                deal.refund.status = 'Fulfilled'
+                deal.refund.status = 'Pending Delivery'
                 deal.refund.sellerOption = req.body.refundOption;
-                deal.status = 'Refunded';
+                deal.status = 'Refund Pending';
                 await deal.save();
-                buyer.btcbalance += deal.price;
-                buyer.unreadNotifications += 1;
-                await buyer.save();
+                // buyer.btcbalance += deal.price;
+                // buyer.unreadNotifications += 1;
+                // await buyer.save();
                 await Notification.create({
-                    userid: buyer._id,
+                    userid: deal.buyer._id,
                     linkTo: `/deals/${deal._id}`,
                     imgLink: deal.product.imageUrl,
                     message: `Your refund request has been accepted`
@@ -466,7 +467,7 @@ module.exports = {
                 const seller = await User.findById(deal.product.author.id);
                 seller.refundRequests -= 1;
                 await seller.save();
-                dealLogger.info(`Message: Deal ${deal._id} refunded - money back\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                dealLogger.info(`Message: Deal ${deal._id} refund accepted\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 if(seller.email_notifications.deal === true) {
                     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
                         link: `https://${req.headers.host}/dashboard`,
@@ -493,50 +494,6 @@ module.exports = {
                 }
                 req.flash('success', 'Refund status updated: Deal refunded successfully.');
                 return res.redirect('back');
-            } else {
-                deal.status = 'Refund Pending';
-                deal.refund.status = 'Pending Delivery';
-                deal.refund.sellerOption = req.body.refundOption;
-                await deal.save();
-                const seller = await User.findById(deal.product.author.id);
-                seller.refundRequests -= 1;
-                await seller.save();
-                const buyer = await User.findById(deal.buyer.id);
-                buyer.unreadNotifications += 1;
-                await buyer.save();
-                await Notification.create({
-                    userid: deal.buyer.id,
-                    linkTo: `/deals/${deal._id}`,
-                    imgLink: deal.product.imageUrl,
-                    message: `Your refund request has been accepted`
-                });
-                if(seller.email_notifications.deal === true) {
-                    ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
-                        link: `https://${req.headers.host}/dashboard`,
-                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                        name: deal.product.name,
-                        subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-                    }, function (err, data) {
-                        if (err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        } else {
-                        const mailOptions = {
-                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                            to: `${seller.email}`, // list of receivers
-                            subject: 'Deal Status Changed', // Subject line
-                            html: data, // html body
-                        };
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error) => {
-                            if (error) {
-                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            }
-                        });
-                    }});
-                }
-                dealLogger.info(`Message: Deal ${deal._id} refund - replacement pending delivery\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                req.flash('success', 'Refund status updated: Deal refund pending.');
-                return res.redirect('back');
             }
         }
     },
@@ -555,38 +512,47 @@ module.exports = {
             seller.nrSold += 1;
             seller.unreadNotifications += 1;
             await seller.save();
+            const buyer = await User.findById(deal.buyer.id);
+            buyer.btcbalance += deal.price;
+            await buyer.save();
             await Notification.create({
-                userid: seller._id,
+                userid: buyer._id,
                 linkTo: `/deals/${deal._id}`,
                 imgLink: deal.product.imageUrl,
                 message: `Refund complete`
             });
-            if(seller.email_notifications.deal === true) {
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
-                    link: `https://${req.headers.host}/dashboard`,
-                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                    name: deal.product.name,
-                    subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-                }, function (err, data) {
-                    if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                        to: `${seller.email}`, // list of receivers
-                        subject: 'Deal Status Changed', // Subject line
-                        html: data, // html body
-                    };
-                    // send mail with defined transport object
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                    });
-                }});
+            const product = await Product.findById(deal.product.id);
+            if (!product.repeatable) {
+                product.available = 'Closed';
+                await product.save();
+                deleteProduct(product._id);
             }
+            // if(seller.email_notifications.deal === true) {
+            //     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
+            //         link: `https://${req.headers.host}/dashboard`,
+            //         footerlink: `https://${req.headers.host}/dashboard/notifications`,
+            //         name: deal.product.name,
+            //         subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+            //     }, function (err, data) {
+            //         if (err) {
+            //             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            //         } else {
+            //         const mailOptions = {
+            //             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+            //             to: `${seller.email}`, // list of receivers
+            //             subject: 'Deal Status Changed', // Subject line
+            //             html: data, // html body
+            //         };
+            //         // send mail with defined transport object
+            //         transporter.sendMail(mailOptions, (error) => {
+            //             if (error) {
+            //                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            //             }
+            //         });
+            //     }});
+            // }
             if(buyer.email_notifications.deal === true) {
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundAccepted.ejs"), {
+                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundCompleted.ejs"), {
                     link: `https://${req.headers.host}/dashboard`,
                     footerlink: `https://${req.headers.host}/dashboard/notifications`,
                     name: deal.product.name,
@@ -619,8 +585,8 @@ module.exports = {
     // Deny Refund
     async refundDeny(req, res) {
         const deal = await Deal.findById(req.params.id);
-        req.check('reason', 'Something went wrong, please try again.').matches(/^(Scam attempt)$/).notEmpty();
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! ]+$/gm).notEmpty();
+        req.check('reason', 'Something went wrong, please try again.').matches(/^(Scam attempt|Other|Fraudulent request)$/).notEmpty();
+        req.check('message', 'The message cannot be empty.').notEmpty();
         req.check('message', 'The message needs to contain at most 500 characters').isLength({ max: 500 });
         const errors = req.validationErrors();
         if (errors) {
@@ -639,10 +605,39 @@ module.exports = {
                 pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
             });
         } else {
+            await Dispute.create({
+                deal: deal._id,
+                chat: deal.chat,
+                product: {
+                    id: deal.product.id,
+                    name: deal.product.name,
+                    imageUrl: deal.product.imageUrl,
+                    price: deal.product.price
+                },
+                buyer: {
+                    id: deal.buyer.id,
+                    name: deal.buyer.name
+                },
+                seller: {
+                    id: deal.product.author.id,
+                    name: deal.product.author.name,
+                    username: deal.product.author.username
+                },
+                refund: {
+                    reason: deal.refund.reason,
+                    message: deal.refund.message,
+                    images: deal.refund.images,
+                    timeOfRequest: deal.refund.timeOfRequest,
+                    sellerReason: req.body.reason,
+                    sellerMessage: req.body.message
+                },
+                price: deal.price,
+                shippingPrice: deal.shippingPrice,
+                rate: deal.rate
+            });
             deal.sellerReason = req.body.reason;
             deal.sellerMessage = req.body.message;
-            deal.refund.status = 'Denied';
-            deal.status = 'Refund denied';
+            deal.status = 'Processing dispute';
             const seller = await User.findById(deal.product.author.id);
             seller.refundRequests -= 1;
             await seller.save();
@@ -653,31 +648,31 @@ module.exports = {
                 userid: deal.buyer.id,
                 linkTo: `/deals/${deal._id}`,
                 imgLink: deal.product.imageUrl,
-                message: `Your refund request has been declined`
+                message: `Your refund request has been declined, a dispute has been created. A member of the staff will resolve it as soon as possible.`
             });
-            if(buyer.email_notifications.deal === true) {
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
-                    link: `https://${req.headers.host}/deals/${deal._id}`,
-                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                    name: deal.product.name,
-                    subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
-                }, function (err, data) {
-                    if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                        to: `${buyer.email}`, // list of receivers
-                        subject: 'Refund denied', // Subject line
-                        html: data, // html body
-                    };
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                    });
-                }});
-            }
+            // if(buyer.email_notifications.deal === true) {
+            //     ejs.renderFile(path.join(__dirname, "../views/email_templates/refundDenied.ejs"), {
+            //         link: `https://${req.headers.host}/deals/${deal._id}`,
+            //         footerlink: `https://${req.headers.host}/dashboard/notifications`,
+            //         name: deal.product.name,
+            //         subject: `Refund denied for ${deal.product.name} - Deal Your Crypto`,
+            //     }, function (err, data) {
+            //         if (err) {
+            //             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            //         } else {
+            //         const mailOptions = {
+            //             from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+            //             to: `${buyer.email}`, // list of receivers
+            //             subject: 'Refund denied', // Subject line
+            //             html: data, // html body
+            //         };
+            //         transporter.sendMail(mailOptions, (error) => {
+            //             if (error) {
+            //                 errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            //             }
+            //         });
+            //     }});
+            // }
             dealLogger.info(`Message: Deal ${deal._id} - refund denied\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
             req.flash('success', 'Refund status updated: A moderator will take a look as soon as possible.');
             return res.redirect('back');
@@ -691,74 +686,95 @@ module.exports = {
             return res.redirect('back');
         }
         // Create the refund request
-        req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Product hasn't arrived)$/).notEmpty();
-        req.check('message', 'The message contains illegal characters.').matches(/^[a-zA-Z0-9.,?! \r\n|\r|\n]+$/gm).notEmpty();
-        req.check('message', 'The message needs to contain at most 500 characters').isLength({ max: 500 });
-        req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
-        const errors = req.validationErrors();
-        if (errors) {
-            const seller = await User.findById(deal.product.author.id);
-            const buyer = await User.findById(deal.buyer.id);
-            const chat = await Chat.findById(deal.chat);
-            res.render('deals/deal', { 
-                deal, 
-                seller, 
-                buyer, 
-                user: req.user, 
-                chat, 
-                errors,
-                pageTitle: `${deal.product.name} - Deal Your Crypto`,
-                pageDescription: `Get the best deal for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
-                pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
-            });
+        if (req.files.length === 0){
+            req.flash('error', 'You need to upload at least one image.');
+            return res.redirect('back');
         } else {
-            const seller = await User.findById(deal.product.author.id);
-            if (deal.status === 'Completed') {
-                seller.nrSold -= 1;
-            }
-            deal.refund.status = 'Not fulfilled';
-            deal.refund.timeOfRequest = Date.now();
-            deal.refund.reason = req.body.reason;
-            deal.refund.message = req.body.message;
-            deal.refund.option = req.body.option;
-            deal.status = 'Processing Refund';
-            await deal.save();
-            seller.refundRequests += 1;
-            seller.unreadNotifications += 1;
-            await seller.save();
-            await Notification.create({
-                userid: seller._id,
-                linkTo: `/deals/${deal._id}`,
-                imgLink: deal.product.imageUrl,
-                message: `You have received a refund request`
-            });
-            if(seller.email_notifications.deal === true) {
-                ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
-                    link: `https://${req.headers.host}/deals/${deal._id}`,
-                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                    name: deal.product.name,
-                    subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
-                }, function (err, data) {
-                    if (err) {
-                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    } else {
-                    const mailOptions = {
-                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                        to: `${seller.email}`, // list of receivers
-                        subject: 'Refund Requested', // Subject line
-                        html: data, // html body
-                    };
-                    // send mail with defined transport object
-                    transporter.sendMail(mailOptions, (error) => {
-                        if (error) {
-                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
+            req.check('reason', 'Something went wrong, please try again.').matches(/^(Product doesn't match|Faulty product|Other)$/).notEmpty();
+            req.check('message', 'The message needs to contain at least 10 and at most 500 characters').isLength({ min: 10, max: 500 });
+            req.check('option', 'Something went wrong, please try again.').matches(/^(Money Back|New Product)$/).notEmpty();
+            const errors = req.validationErrors();
+            if (errors) {
+                const seller = await User.findById(deal.product.author.id);
+                const buyer = await User.findById(deal.buyer.id);
+                const chat = await Chat.findById(deal.chat);
+                res.render('deals/deal', { 
+                    deal, 
+                    seller, 
+                    buyer, 
+                    user: req.user, 
+                    chat, 
+                    errors,
+                    pageTitle: `${deal.product.name} - Deal Your Crypto`,
+                    pageDescription: `Get the best deal for ${product.name} on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+                    pageKeywords: `buy with bitcoin, ${product.name}, best deal, bitcoin, bitcoin market, crypto, cryptocurrency`,
+                });
+            } else {                
+                await cloudinary.v2.uploader.upload(file.path, {
+                  moderation: "aws_rek:suggestive:ignore",
+                }, (err, result) => {
+                  if(err) {
+                    console.log(err);
+                  } else if (result.moderation[0].status === 'rejected') {
+                      deal.refund.images.push({
+                        url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                        public_id: result.public_id,
+                      });
+                  } else {
+                    deal.refund.images.push({
+                      url: result.secure_url,
+                      public_id: result.public_id,
                     });
-                }});
+                  }
+                });
+                const seller = await User.findById(deal.product.author.id);
+                if (deal.status === 'Completed') {
+                    seller.nrSold -= 1;
+                }
+                deal.refund.status = 'Not fulfilled';
+                deal.refund.timeOfRequest = Date.now();
+                deal.refund.reason = req.body.reason;
+                deal.refund.message = cleanHTML(req.body.message);
+                deal.refund.option = req.body.option;
+                deal.status = 'Processing Refund';
+                await deal.save();
+                seller.refundRequests += 1;
+                seller.unreadNotifications += 1;
+                await seller.save();
+                await Notification.create({
+                    userid: seller._id,
+                    linkTo: `/deals/${deal._id}`,
+                    imgLink: deal.product.imageUrl,
+                    message: `You have received a refund request`
+                });
+                if(seller.email_notifications.deal === true) {
+                    ejs.renderFile(path.join(__dirname, "../views/email_templates/refundRequest.ejs"), {
+                        link: `https://${req.headers.host}/deals/${deal._id}`,
+                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
+                        name: deal.product.name,
+                        subject: `Refund requested for ${deal.product.name} - Deal Your Crypto`,
+                    }, function (err, data) {
+                        if (err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        } else {
+                        const mailOptions = {
+                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                            to: `${seller.email}`, // list of receivers
+                            subject: 'Refund Requested', // Subject line
+                            html: data, // html body
+                        };
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error) => {
+                            if (error) {
+                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            }
+                        });
+                    }});
+                }
+                dealLogger.info(`Message: Deal ${deal._id} - refund requested\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                req.flash('success', 'Refund request sent.');
+                return res.redirect(`/deals/${deal._id}`);
             }
-            dealLogger.info(`Message: Deal ${deal._id} - refund requested\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            req.flash('success', 'Refund request sent.');
-            return res.redirect(`/deals/${deal._id}`);
         }
     },
     async reviewProduct(req, res) {
@@ -913,10 +929,10 @@ module.exports = {
                 await cloudinary.v2.uploader.upload(req.file.path, 
                 {
                     moderation: "aws_rek:suggestive:ignore",
-                    transformation: [
-                    {quality: "jpegmini:1", sign_url: true},
-                    {width: "auto", dpr: "auto"}
-                    ]
+                    // transformation: [
+                    // {quality: "jpegmini:1", sign_url: true},
+                    // {width: "auto", dpr: "auto"}
+                    // ]
                 }, (err, result) => {
                     if(err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -951,6 +967,62 @@ module.exports = {
             deal.proof.text = cleanHTML(req.body.textProof);
         }
         deal.proof.lastUpdated = Date.now();
+        await deal.save();
+        await Notification.create({
+            userid: deal.buyer.id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `Proof of delivery has been updated`
+        });
+        req.flash('success', 'Proof updated successfully');
+        return res.redirect('back');
+    },
+    async updateRefundProof(req, res) {
+        let deal = await Deal.findById(req.params.id);
+        if (req.file) {
+            const oldProof = deal.refund.proof.imageid;
+            try{
+                await cloudinary.v2.uploader.upload(req.file.path, 
+                {
+                    moderation: "aws_rek:suggestive:ignore",
+                    // transformation: [
+                    // {quality: "jpegmini:1", sign_url: true},
+                    // {width: "auto", dpr: "auto"}
+                    // ]
+                }, (err, result) => {
+                    if(err) {
+                    errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else if (result.moderation[0].status === 'rejected') {
+                        deal.refund.proof.image = 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561632802/nudity_hkebe6.png';
+                        deal.refund.proof.imageid = result.public_id;
+                    } else {
+                        deal.refund.proof.image = result.secure_url;
+                        deal.refund.proof.imageid = result.public_id;
+                    }
+                });
+            } catch (error) {
+                req.flash('error', error.message);
+                return res.redirect('back');
+            }
+            if (oldProof) {
+                await cloudinary.v2.uploader.destroy(oldProof, (err) => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    }
+                });
+            }
+        }
+        if (req.body.textProof) {
+            req.check('textProof', 'The text contains illegal characters.').matches(/^[a-zA-Z0-9 `!@#$%^&*()_\-=+,<>./"?;:'\][{}\\|\r\n]+$/g).notEmpty();
+            req.check('textProof', 'The text must contain at most 500 characters').isLength({ max: 500 });
+            const errors = req.validationErrors();
+            if (errors) {
+                req.flash('The text contains illegal characters.');
+                return res.redirect('back');
+            }
+            deal.refund.proof.text = cleanHTML(req.body.textProof);
+        }
+        deal.refund.proof.lastUpdated = Date.now();
         await deal.save();
         await Notification.create({
             userid: deal.buyer._id,
