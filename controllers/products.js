@@ -464,7 +464,6 @@ module.exports = {
                     let shippingPrice = 0;
                     let productPrice = product.btcPrice;
                     if ( user.btcbalance >= totalPrice)  {
-<<<<<<< HEAD
                         // if (req.body.deliveryShipping === 'Shipping') {
                         //     client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
                         //         if (!error) {
@@ -567,111 +566,6 @@ module.exports = {
                         //         }
                         //     }));
                         /* } else */if (req.body.deliveryShipping === 'FaceToFace') {
-=======
-                        if (req.body.deliveryShipping === 'Shipping') {
-                            client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
-                                if (!error) {
-                                let btcrate = data.data.rates.USD;
-                                totalPrice += Number(1/btcrate * req.body.shippingRate);
-                                shippingPrice = Number(1/btcrate * req.body.shippingRate);
-                                let deal = {
-                                    product: {
-                                        id: product._id,
-                                        name: product.name,
-                                        imageUrl: product.images[0].url,
-                                        author: product.author,
-                                        price: product.btcPrice,
-                                    },
-                                    buyer: {
-                                        id: user._id,
-                                        username: user.username,
-                                        name: user.full_name,
-                                        avatarUrl: user.avatar.url,
-                                        'delivery.shipping': req.body.deliveryShipping,
-                                        'delivery.name': req.body.deliveryName,
-                                        'delivery.street1': req.body.deliveryStreet1,
-                                        'delivery.city': req.body.deliveryCity,
-                                        'delivery.state': req.body.deliveryState,
-                                        'delivery.zip': req.body.deliveryZip,
-                                        'delivery.country': req.body.deliveryCountry,
-                                        'delivery.phone': req.body.deliveryPhone,
-                                        'delivery.email': req.body.deliveryEmail,
-                                    },
-                                    price: product.btcPrice,
-                                    shippingPrice: shippingPrice,
-                                    rate: req.body.rate,
-                                };
-                                deal = await Deal.create(deal); 
-                                // Update product and user
-                                user.btcbalance -= totalPrice;
-                                // The product will remain available if it's repeatable
-                                if ( !product.repeatable ) {
-                                    product.available = "Closed";
-                                    elasticClient.delete({
-                                        index: 'products',
-                                        type: 'products',
-                                        id: `${product._id}`
-                                      }, (err) => {
-                                        if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
-                                          }
-                                    });   
-                                }
-                                if (product.nrBought) {
-                                    product.nrBought += 1;
-                                } else {
-                                    product.nrBought = 1;
-                                }
-                                product.markModified('buyers');
-                                await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
-                                await product.save();
-                                await user.save();
-                                await Notification.create({
-                                    userid: product.author.id,
-                                    linkTo: `/deals/${deal._id}`,
-                                    imgLink: product.images[0].url,
-                                    message: `You have received a deal request`
-                                });
-                                // Send an email to the seller letting them know about the deal request
-                                const user2 = await User.findById(product.author.id);
-                                createProfit(user._id, shippingPrice, 'Shipping Cost');
-                                if(user2.email_notifications.deal === true) {
-                                    ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                                        link: `https://${req.headers.host}/deals/${deal._id}`,
-                                        footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                                        name: product.name,
-                                        buyer: req.user.full_name,
-                                        subject: `New buy request - Deal Your Crypto`,
-                                    }, function (err, data) {
-                                        if (err) {
-                                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                        } else {
-                                            const mailOptions = {
-                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                                to: `${user2.email}`, // list of receivers
-                                                subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                                                html: data, // html body
-                                            };
-                                            // send mail with defined transport object
-                                            transporter.sendMail(mailOptions, (error) => {
-                                                if (error) {
-                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                                dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                userLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                // Link chat to deal
-                                return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
-                                } else {
-                                    req.flash('err', 'There\'s been an error with your request, please try again.');
-                                    return res.redirect('back');
-                                }
-                            }));
-                        } else if (req.body.deliveryShipping === 'FaceToFace') {
->>>>>>> 0ebe2c43822ea5a469aebda57b22a05d7c39d6df
                             // Create deal
                             let deal = {
                                 product: {
