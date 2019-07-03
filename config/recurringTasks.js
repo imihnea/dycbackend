@@ -194,20 +194,20 @@ setInterval( () => {
                                     errorLogger.error(`Message: ${err} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                 } else {
                                     if (res.length > 0) {
-                                        seller.btcbalance += (item.price - ( item.price * premiumAccountFee * 0.01)).toFixed(8);
+                                        seller.btcbalance += Number((item.price - ( item.price * premiumAccountFee * 0.01)).toFixed(8));
                                         // add profit to db
                                         withdrawAmount = (item.price * premiumAccountFee * 0.01).toFixed(8);
                                         createProfit(seller._id, withdrawAmount, 'Income Fee');
                                     } else {
                                         switch(seller.accountType) {
                                             case 'Standard':
-                                                seller.btcbalance += (item.price - ( item.price * standardAccountFee * 0.01)).toFixed(8);
+                                                seller.btcbalance += Number((item.price - ( item.price * standardAccountFee * 0.01)).toFixed(8));
                                                 // add profit to db
                                                 withdrawAmount = (item.price * standardAccountFee * 0.01).toFixed(8);
                                                 createProfit(seller._id, withdrawAmount, 'Income Fee');
                                                 break;
                                             case 'Partner':
-                                                seller.btcbalance += (item.price - ( item.price * partnerAccountFee * 0.01)).toFixed(8);
+                                                seller.btcbalance += Number((item.price - ( item.price * partnerAccountFee * 0.01)).toFixed(8));
                                                 // add profit to db
                                                 withdrawAmount = (item.price * partnerAccountFee * 0.01).toFixed(8);
                                                 createProfit(seller._id, withdrawAmount, 'Income Fee');
