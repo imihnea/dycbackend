@@ -79,6 +79,10 @@ module.exports = {
     // Get Messages
     async getMessages(req, res) {
         const chat = await Chat.findById( req.params.id );
+        if (!chat) {
+            req.flash('error', 'That page does not exist');
+            return res.redirect('/error');
+        } 
         let userid = '';
         if ( chat.user1.id.toString() !== req.user._id.toString() ) {
             userid = chat.user1.id;

@@ -1546,6 +1546,10 @@ module.exports = {
   // Products Edit
   async productEdit(req, res) {
     const product = await Product.findById(req.params.id);
+    if (!product) {
+      req.flash('error', 'That page does not exist');
+      return res.redirect('/error');
+    } 
     let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
       if(err) {
         errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
