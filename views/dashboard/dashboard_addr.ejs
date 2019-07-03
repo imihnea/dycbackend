@@ -412,7 +412,7 @@
                                             <td><%= index + 1 %></td>
                                             <td><a href="/products/<%= deal.product.id %>/view" class="link"><%= deal.product.name %></a></td>
                                             <td><a href="/profile/<%= deal.buyer.id %>" class="link"><%= deal.buyer.username %></a></td>
-                                            <td><%= deal.price %></td>
+                                            <td><%= deal.payout %></td>
                                             <td><%= deal.refundableUntil.toUTCString() %></td>
                                             <td><% if (deal.paid == true) { %><p>Paid</p><% } else { %>Payment Pending<% } %></td>
                                         </tr>
