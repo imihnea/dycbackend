@@ -264,28 +264,32 @@ module.exports = {
         const product = await Product.findById(deal.product.id);
         const seller = await User.findById(deal.product.author.id);
         deal.completedAt = Date.now();
+        let sellerPayout;
         if (deal.buyer.delivery.shipping == 'FaceToFace') {
             deal.refundableUntil = Date.now();
             let withdrawAmount = 0;  
-            Subscription.find({userid: seller._id}, (err) => {
+            await Subscription.find({userid: seller._id}, (err, res) => {
                 if (err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     if (res.length > 0) {
-                        seller.btcbalance += Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        seller.btcbalance += sellerPayout;
                         // add profit to db
                         withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
                         createProfit(seller._id, withdrawAmount, 'Income Fee');
                     } else {
                         switch(seller.accountType) {
                             case 'Standard':
-                                seller.btcbalance += Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                seller.btcbalance += sellerPayout;
                                 // add profit to db
                                 withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
                                 createProfit(seller._id, withdrawAmount, 'Income Fee');
                                 break;
                             case 'Partner':
-                                seller.btcbalance += Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                seller.btcbalance += sellerPayout;
                                 // add profit to db
                                 withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
                                 createProfit(seller._id, withdrawAmount, 'Income Fee');
@@ -300,6 +304,7 @@ module.exports = {
         // } else if (deal.buyer.delivery.shipping == 'Shipping') {
         //     deal.refundableUntil = Date.now() + refundTimer;
         }
+        deal.payout = sellerPayout;
         deal.status = 'Completed';
         await deal.save();
         seller.nrSold += 1;

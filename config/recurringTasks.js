@@ -71,8 +71,10 @@ setInterval( () => {
     const refundTimer = 14 * 24 * 60 * 60 * 1000;
     let weeksAgo = new Date();
     weeksAgo.setDate(weeksAgo.getDate() - 21);
+    let sellerPayout;
+    let withdrawAmount;
 
-    // Complete deals with proof older than 21d
+    // Complete and pay deals with proof older than 21d
     Deal.find({'status': 'Pending Delivery', 'proof.lastUpdated': {$lt: weeksAgo}}, (err, deals) => {
         if (err) {
             errorLogger.error(`Message: ${err} - Deals - Cannot find pending delivery deals\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -81,9 +83,171 @@ setInterval( () => {
                 deal.completedAt = Date.now();
                 deal.refundableUntil = Date.now();
                 deal.status = 'Completed';
-                deal.save(err => {
+                User.findById({_id: deal.product.author.id}, (err, seller) => {
                     if (err) {
-                        errorLogger.error(`Message: ${err} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                        errorLogger.error(`Message: ${err} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        Subscription.find({userid: seller._id}, (err, res) => {
+                            if (err) {
+                                errorLogger.error(`Message: ${err} - Subscription - Error finding sub for ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                            } else {
+                                if (res.length > 0) {
+                                    sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                                    seller.btcbalance += sellerPayout;
+                                    deal.paid = true;
+                                    deal.payout = sellerPayout;
+                                    deal.save(err => {
+                                        if (err) {
+                                            errorLogger.error(`Message: ${err} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                    // add profit to db
+                                    withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
+                                    createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                    seller.nrSold += 1;
+                                    seller.unreadNotifications += 1;
+                                    seller.save(err => {
+                                        if (err) {
+                                            errorLogger.error(`Message: ${err} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                        }
+                                    });
+                                    Notification.create({
+                                        userid: seller._id,
+                                        linkTo: `/deals/${deal._id}`,
+                                        imgLink: deal.product.imageUrl,
+                                        message: `Your deal request has been completed`
+                                    });
+                                    if(seller.email_notifications.deal === true) {
+                                        ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                                            link: `${host}/dashboard`,
+                                            footerlink: `${host}/dashboard/notifications`,
+                                            name: deal.product.name,
+                                            subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                                        }, function (err, data) {
+                                            if (err) {
+                                                errorLogger.error(`Message: ${err} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            } else {
+                                            const mailOptions = {
+                                                from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                to: `${seller.email}`, // list of receivers
+                                                subject: 'Deal Status Changed', // Subject line
+                                                html: data, // html body
+                                            };
+                                            transporter.sendMail(mailOptions, (error) => {
+                                                if (error) {
+                                                    errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                                }
+                                            });
+                                        }});
+                                    }
+                                } else {
+                                    switch(seller.accountType) {
+                                        case 'Standard':
+                                            sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                            seller.btcbalance += sellerPayout;
+                                            deal.paid = true;
+                                            deal.payout = sellerPayout;
+                                            deal.save(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Message: ${err} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                            // add profit to db
+                                            withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
+                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                            seller.nrSold += 1;
+                                            seller.unreadNotifications += 1;
+                                            seller.save(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Message: ${err} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                            Notification.create({
+                                                userid: seller._id,
+                                                linkTo: `/deals/${deal._id}`,
+                                                imgLink: deal.product.imageUrl,
+                                                message: `Your deal request has been completed`
+                                            });
+                                            if(seller.email_notifications.deal === true) {
+                                                ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                                                    link: `${host}/dashboard`,
+                                                    footerlink: `${host}/dashboard/notifications`,
+                                                    name: deal.product.name,
+                                                    subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                                                }, function (err, data) {
+                                                    if (err) {
+                                                        errorLogger.error(`Message: ${err} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    } else {
+                                                    const mailOptions = {
+                                                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                        to: `${seller.email}`, // list of receivers
+                                                        subject: 'Deal Status Changed', // Subject line
+                                                        html: data, // html body
+                                                    };
+                                                    transporter.sendMail(mailOptions, (error) => {
+                                                        if (error) {
+                                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                                        }
+                                                    });
+                                                }});
+                                            }
+                                            break;
+                                        case 'Partner':
+                                            sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                            seller.btcbalance += sellerPayout;
+                                            deal.paid = true;
+                                            deal.payout = sellerPayout;
+                                            deal.save(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Message: ${err} - Deals - Error saving the deal ${deal._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                            // add profit to db
+                                            withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
+                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                            seller.nrSold += 1;
+                                            seller.unreadNotifications += 1;
+                                            seller.save(err => {
+                                                if (err) {
+                                                    errorLogger.error(`Message: ${err} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                }
+                                            });
+                                            Notification.create({
+                                                userid: seller._id,
+                                                linkTo: `/deals/${deal._id}`,
+                                                imgLink: deal.product.imageUrl,
+                                                message: `Your deal request has been completed`
+                                            });
+                                            if(seller.email_notifications.deal === true) {
+                                                ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
+                                                    link: `${host}/dashboard`,
+                                                    footerlink: `${host}/dashboard/notifications`,
+                                                    name: deal.product.name,
+                                                    subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
+                                                }, function (err, data) {
+                                                    if (err) {
+                                                        errorLogger.error(`Message: ${err} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    } else {
+                                                    const mailOptions = {
+                                                        from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                        to: `${seller.email}`, // list of receivers
+                                                        subject: 'Deal Status Changed', // Subject line
+                                                        html: data, // html body
+                                                    };
+                                                    transporter.sendMail(mailOptions, (error) => {
+                                                        if (error) {
+                                                            errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
+                                                        }
+                                                    });
+                                                }});
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                } 
+                            }
+                        });
                     }
                 });
                 Product.findById(deal.product.id, (err, product) => {
@@ -98,48 +262,6 @@ setInterval( () => {
                                 }
                             });
                             deleteProduct(product._id);
-                        }
-                    }
-                });
-                User.findById(deal.product.author.id, (err, seller) => {
-                    if (err) {
-                        errorLogger.error(`Message: ${err} - User - Error finding user ${deal.product.author.id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                    } else {
-                        seller.nrSold += 1;
-                        seller.unreadNotifications += 1;
-                        seller.save(err => {
-                            if (err) {
-                                errorLogger.error(`Message: ${err} - User - Error updating seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            }
-                        });
-                        Notification.create({
-                            userid: seller._id,
-                            linkTo: `/deals/${deal._id}`,
-                            imgLink: deal.product.imageUrl,
-                            message: `Your deal request has been completed`
-                        });
-                        if(seller.email_notifications.deal === true) {
-                            ejs.renderFile(path.join(__dirname, "../views/email_templates/completeDeal_seller.ejs"), {
-                                link: `${host}/dashboard`,
-                                footerlink: `${host}/dashboard/notifications`,
-                                name: deal.product.name,
-                                subject: `Status changed for ${deal.product.name} - Deal Your Crypto`,
-                            }, function (err, data) {
-                                if (err) {
-                                    errorLogger.error(`Message: ${err} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                } else {
-                                const mailOptions = {
-                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                    to: `${seller.email}`, // list of receivers
-                                    subject: 'Deal Status Changed', // Subject line
-                                    html: data, // html body
-                                };
-                                transporter.sendMail(mailOptions, (error) => {
-                                    if (error) {
-                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message} - Email - Error sending email to seller ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                                                    
-                                    }
-                                });
-                            }});
                         }
                     }
                 });
@@ -752,6 +874,6 @@ setInterval( () => {
         logger.info(`Message: Notifications deleted\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
     logger.info(`Message: Recurring Tasks finished\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-}, 11 * 60 * 60 * 1000);
-// }, 30 * 1000);
+// }, 11 * 60 * 60 * 1000);
+}, 30 * 1000);
 
