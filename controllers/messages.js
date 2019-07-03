@@ -58,6 +58,12 @@ const escapeHTML = (unsafe) => {
         .replace(/'/g, "&#039;");
 }
 
+const cleanHTML = (unclean) => {
+    return unclean
+      .replace(/</g, "")
+      .replace(/>/g, "");
+};
+
 module.exports = {
     // Chats Indexes
     async getChats(req, res) {
@@ -250,7 +256,7 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
-        const message = filter.clean(escapeHTML(req.body.message));
+        const message = filter.clean(cleanHTML(req.body.message));
         const newMessage = {
             sender: req.user._id,
             message,
@@ -340,7 +346,7 @@ module.exports = {
         // Find the chat
         const chat = await Chat.findById( req.params.id );
         // Create the new message
-        const message = filter.clean(escapeHTML(req.body.message));
+        const message = filter.clean(cleanHTML(req.body.message));
         const newMessage = {
             sender: req.user._id,
             message

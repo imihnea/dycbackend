@@ -1366,7 +1366,7 @@ module.exports = {
           pageKeywords: 'contact page, contact, support'
         });
       } else {
-        const message = escapeHTML(req.body.message);
+        const message = cleanHTML(req.body.message);
         ejs.renderFile(path.join(__dirname, "../views/email_templates/contact.ejs"), {
           name: req.body.name,
           email: req.body.email,

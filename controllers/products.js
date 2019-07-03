@@ -66,6 +66,12 @@ const escapeHTML = (unsafe) => {
         .replace(/'/g, "&#039;");
 };
 
+const cleanHTML = (unclean) => {
+    return unclean
+      .replace(/</g, "")
+      .replace(/>/g, "");
+};
+
 module.exports = {
     async getProduct(req, res) {
         var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -386,7 +392,7 @@ module.exports = {
             return res.redirect('back');
         }
         const report = await Report.create({
-            message: escapeHTML(req.body.message),
+            message: cleanHTML(req.body.message),
             reason: req.body.topic,
             deal: deal._id,
             from: req.user._id
@@ -685,7 +691,7 @@ module.exports = {
             return res.redirect('back');
         }
         const report = await Report.create({
-            message: escapeHTML(req.body.message),
+            message: cleanHTML(req.body.message),
             reason: req.body.reason,
             product: req.params.id
         });

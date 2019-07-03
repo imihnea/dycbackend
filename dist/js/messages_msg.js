@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         reportModalItems[i].classList.toggle('is-active');
       });
 
-    const messages = document.querySelectorAll('.messageSpan');
-    messages.forEach(msg => {
-      const newText = unescapeHTML(msg.innerText);
-      msg.innerHTML = newText;
-    });
+    // const messages = document.querySelectorAll('.messageSpan');
+    // messages.forEach(msg => {
+    //   const newText = unescapeHTML(msg.innerText);
+    //   msg.innerHTML = newText;
+    // });
 });

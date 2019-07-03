@@ -167,17 +167,17 @@ module.exports = {
                     const newData = [ req.body.name, req.body.country, req.body.state, req.body.city, req.body.address1, req.body.address2, req.body.zip ];
                     userLogger.info(`Message: User details changed\r\nOld Data: ${oldData}\r\nNew Data: ${newData}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);                    
                   }
-                  user.full_name = filter.clean(req.body.name);
+                  user.full_name = filter.clean(cleanHTML(req.body.name));
                   if (user.country != req.body.country) {
-                    user.country = filter.clean(req.body.country);
+                    user.country = filter.clean(cleanHTML(req.body.country));
                     await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.country': user.country}});
                   }
                   if (user.state != req.body.state) {
-                    user.state = filter.clean(req.body.state);
+                    user.state = filter.clean(cleanHTML(req.body.state));
                     await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.state': user.state}});
                   }
                   if (user.city != req.body.city) {
-                    user.city = filter.clean(req.body.city);
+                    user.city = filter.clean(cleanHTML(req.body.city));
                     await Product.updateMany({'author.id': user._id, 'available': 'True'}, { $set: {'author.city': user.city}});
                   }
                   Regions.forEach(asyncErrorHandler(async (region) => {
@@ -199,9 +199,9 @@ module.exports = {
                       }
                     })
                   });
-                  user.address1 = filter.clean(req.body.address1);
-                  user.zip = filter.clean(req.body.zip);
-                  user.address2 = filter.clean(req.body.address2);
+                  user.address1 = filter.clean(cleanHTML(req.body.address1));
+                  user.zip = filter.clean(cleanHTML(req.body.zip));
+                  user.address2 = filter.clean(cleanHTML(req.body.address2));
                   await user.save();
                   await Deal.updateMany({'buyer.id': user._id, 'status': 'Processing'},
                   { 
