@@ -18,6 +18,8 @@ const { Categories, secCategories } = require('../dist/js/categories');
 const jwt = require('jsonwebtoken');
 const ObjectID = require("bson-objectid");
 const middleware = require('../middleware/index');
+var Filter = require('bad-words'),
+    filter = new Filter();
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -146,6 +148,10 @@ module.exports = {
           pageDescription: 'Register an account on Deal Your Crypto and start buying and selling products!',
           pageKeywords: 'register account, register, sign up, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
         });
+      }
+      if(filter.isProfane(req.body.username)) {
+        req.flash('error', 'Username contains profanity.');
+        return res.redirect('back');
       }
       req.check('email', 'The email address is invalid').isEmail().notEmpty().isLength({ max: 500 });
       req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
@@ -415,6 +421,10 @@ module.exports = {
       req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
     } else {
       req.session.cookie.expires = false; // Cookie expires at end of session
+    }
+    if(filter.isProfane(req.body.username)) {
+      req.flash('error', 'Username contains profanity.');
+      return res.redirect('back');
     }
     req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty().isLength({ max: 500 });
     const errors = req.validationErrors();
@@ -1699,6 +1709,10 @@ module.exports = {
     }
   },
   postSetUsername(req, res) {
+    if(filter.isProfane(req.body.username)) {
+      req.flash('error', 'Username contains profanity.');
+      return res.redirect('back');
+    }
     req.check('username', 'The username must contain only alphanumeric characters').matches(/^[a-zA-Z0-9]+$/g).notEmpty();
     req.check('username', 'The username must be between 6 and 32 characters').isLength({ min: 6, max: 32 });
     const regErrors = req.validationErrors();

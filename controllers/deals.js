@@ -60,7 +60,6 @@ const cleanHTML = (unclean) => {
 module.exports = {
     async getDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        console.log(deal);
         if (deal === null || deal === undefined) {
             req.flash('error', 'That page does not exist');
             return res.redirect('/error');

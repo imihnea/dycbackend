@@ -10,6 +10,8 @@ const { errorLogger, userLogger, reviewLogger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
 const { updateRating } = require('../config/elasticsearch');
+var Filter = require('bad-words'),
+    filter = new Filter();
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -44,7 +46,7 @@ module.exports = {
 			req.flash('error', 'Something went wrong or the message contains illegal characters.');
 			return res.redirect('back');
 		}
-		req.body.review.body = cleanHTML(String(req.body.review.body));
+		req.body.review.body = filter.clean(cleanHTML(String(req.body.review.body)));
 		// find the product by its id and populate reviews
 		let product = await Product.findById(req.params.id).populate('reviews').exec();
 		// filter product.reviews to see if any of the reviews were created by logged in user
@@ -125,7 +127,7 @@ module.exports = {
 				req.session.error = 'Something went wrong or the message contains illegal characters.';
 				return res.redirect(`/products/${req.params.id}/view`);
 			}
-			req.body.review.body = cleanHTML(String(req.body.review.body));
+			req.body.review.body = filter.clean(cleanHTML(String(req.body.review.body)));
 			await Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, review) => {
 				if (err) {
 					errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
