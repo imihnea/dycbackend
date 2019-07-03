@@ -874,6 +874,6 @@ setInterval( () => {
         logger.info(`Message: Notifications deleted\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
     logger.info(`Message: Recurring Tasks finished\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-// }, 11 * 60 * 60 * 1000);
-}, 30 * 1000);
+}, 11 * 60 * 60 * 1000);
+// }, 30 * 1000);
 
