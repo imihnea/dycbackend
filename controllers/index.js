@@ -561,7 +561,7 @@ module.exports = {
     return res.redirect('/');
   },
   async getIndex(req, res) {
-    await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
+    await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(56).exec((err, result) => {
         if (err) {
           if(req.user) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -584,7 +584,7 @@ module.exports = {
             products.forEach((product) => {
               ids.push(ObjectID(product._id));
             });
-            Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(20 - products.length).exec((err, result) => {
+            Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(56 - products.length).exec((err, result) => {
               if (err) {
                 if(req.user) {
                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -604,7 +604,7 @@ module.exports = {
                 Array.from(result).forEach((res) => {
                   products.push(res);
                 });
-                if ((result.length < (20 - products.length)) && (result.length != 0)) {
+                if ((result.length < (56 - products.length)) && (result.length != 0)) {
                   return res.render('index', { 
                     user: req.user, 
                     products,
