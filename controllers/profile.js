@@ -23,6 +23,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
+};
+
 module.exports = {
     // View Profile
     async getProfile(req, res){
