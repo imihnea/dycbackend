@@ -133,11 +133,13 @@ module.exports = {
                 if (req.file) {
                   try{
                       // delete old image
-                      await cloudinary.v2.uploader.destroy(user.avatar.public_id, (err) => {
-                        if (err) {
-                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                      });
+                      if (user.avatar.public_id) {
+                        await cloudinary.v2.uploader.destroy(user.avatar.public_id, (err) => {
+                          if (err) {
+                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                          }
+                        });
+                      }
                       // upload image
                       await cloudinary.v2.uploader.upload(req.file.path, 
                         {

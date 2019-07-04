@@ -168,6 +168,10 @@
                                             </header>
                                             <section class="modal-card-body">
                                                     <div class="lds-roller" id="altcoinsSpinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                    <div id="errorImage" style="display: none;">
+                                                        <p class="subtitle">There's been an error with your request, please refresh the page and try again.</p>
+                                                        <button class="button is-warning" value="Refresh Page" onClick="window.location.reload();">Refresh Page</button>
+                                                    </div>
                                                     <div class="steps" id="stepsDemo">
                                                         <div class="step-item is-active">
                                                             <div class="step-marker">1</div>
@@ -278,9 +282,33 @@
                                                                 <div class="field">
                                                                     <div class="control has-icon has-icon-right">
                                                                         <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                        <input type="hidden" id="depositCoinAmount" value="1" />
-                                                                        <input type="hidden" id="refundAddress" value="none" />
                                                                     </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Refund Address:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="refundAddress" id="refundAddress" placeholder="Your Refund Address" data-validate="require" required />
+                                                                    </div>
+                                                                    <p class="help">In case of unforseen errors, your sent coins will be refunded here.</p>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Deposit Amount:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="depositCoinAmount" id="depositCoinAmount" placeholder="Amount" type="number" step="any" data-validate="require" required />
+                                                                    </div>
+                                                                    <p class="help">How much you wish to deposit</p>
                                                                 </div>
                                                                 </div>
                                                             </div>

@@ -38,37 +38,41 @@ const startElastic = () => {
                             if (err) {
                                 errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
-                                if (!res.products.mappings) {
+                                if (!Object.keys(res.products.mappings).length) {
                                     client.indices.putMapping(
                                         {
                                             index: 'products',
+                                            includeTypeName: true,
+                                            type: 'products',
                                             body: {
-                                                "id": "text",
-                                                "feat_1": {
-                                                    "properties": {
-                                                        "status": "boolean",
-                                                        "expiryDate": "date"
-                                                    }
-                                                },
-                                                "name": "text",
-                                                "image": "text",
-                                                "author": {
-                                                    "properties": {
-                                                        "id": "text",
-                                                        "name": "text",
-                                                        "city": "text",
-                                                        "country": "text",
-                                                        "state": "text",
-                                                        "continent": "text",
-                                                        "accountType": "text"
-                                                    }
-                                                },
-                                                "avgRating": "float",
-                                                "btcPrice": "float",
-                                                "condition": "text",
-                                                "category": "text",
-                                                "createdAt": "date",
-                                                "searchableTags": "keyword"
+                                                "properties": {
+                                                    "id": {"type"  : "text"},
+                                                    "feat_1": {
+                                                        "properties": {
+                                                            "status": {"type": "boolean"},
+                                                            "expiryDate": {"type": "date"}
+                                                        }
+                                                    },
+                                                    "name": {"type": "text"},
+                                                    "image": {"type": "text"},
+                                                    "author": {
+                                                        "properties": {
+                                                            "id": {"type": "text"},
+                                                            "name": {"type": "text"},
+                                                            "city": {"type": "text"},
+                                                            "country": {"type": "text"},
+                                                            "state": {"type": "text"},
+                                                            "continent": {"type": "text"},
+                                                            "accountType": {"type": "text"}
+                                                        }
+                                                    },
+                                                    "avgRating": {"type": "float"},
+                                                    "btcPrice": {"type": "float"},
+                                                    "condition": {"type": "text"},
+                                                    "category": {"type": "text"},
+                                                    "createdAt": {"type": "date"},
+                                                    "searchableTags": {"type": "keyword"}
+                                                }
                                             }
                                         }, {
                                     }, (err, res) => {
@@ -126,38 +130,42 @@ const startElastic = () => {
                           if (err) {
                               errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                           } else {
-                              if (!res.products.mappings) {
+                              if (res.products.mappings == {}) {
                                   client.indices.putMapping(
                                       {
-                                          index: 'products',
-                                          body: {
-                                              "id": "text",
-                                              "feat_1": {
-                                                  "properties": {
-                                                      "status": "boolean",
-                                                      "expiryDate": "date"
-                                                  }
-                                              },
-                                              "name": "text",
-                                              "image": "text",
-                                              "author": {
-                                                  "properties": {
-                                                      "id": "text",
-                                                      "name": "text",
-                                                      "city": "text",
-                                                      "country": "text",
-                                                      "state": "text",
-                                                      "continent": "text",
-                                                      "accountType": "text"
-                                                  }
-                                              },
-                                              "avgRating": "float",
-                                              "btcPrice": "float",
-                                              "condition": "text",
-                                              "category": "text",
-                                              "createdAt": "date",
-                                              "searchableTags": "keyword"
-                                          }
+                                        index: 'products',
+                                        includeTypeName: true,
+                                        type: 'products',
+                                        body: {
+                                            "properties": {
+                                                "id": {"type"  : "text"},
+                                                "feat_1": {
+                                                    "properties": {
+                                                        "status": {"type": "boolean"},
+                                                        "expiryDate": {"type": "date"}
+                                                    }
+                                                },
+                                                "name": {"type": "text"},
+                                                "image": {"type": "text"},
+                                                "author": {
+                                                    "properties": {
+                                                        "id": {"type": "text"},
+                                                        "name": {"type": "text"},
+                                                        "city": {"type": "text"},
+                                                        "country": {"type": "text"},
+                                                        "state": {"type": "text"},
+                                                        "continent": {"type": "text"},
+                                                        "accountType": {"type": "text"}
+                                                    }
+                                                },
+                                                "avgRating": {"type": "float"},
+                                                "btcPrice": {"type": "float"},
+                                                "condition": {"type": "text"},
+                                                "category": {"type": "text"},
+                                                "createdAt": {"type": "date"},
+                                                "searchableTags": {"type": "keyword"}
+                                            }
+                                        }
                                       }, {
                                   }, (err, res) => {
                                       if (err) {

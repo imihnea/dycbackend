@@ -729,11 +729,13 @@ module.exports = {
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         //Add Check for isActive: true
         res.send(data);
+      } else {
+        res.send(error);
       }
     });
   },
@@ -753,11 +755,11 @@ module.exports = {
       'x-api-key': process.env.COINSWITCH_API_KEY,
       'content-type': 'application/json' 
     },
-      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
+      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "36xGQ6juqTtLChJQ6KdyL6otTnfkg3oJNN"},"refundAddress":{"address": "${refund}"}}` 
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         Checkout.create({
@@ -772,6 +774,8 @@ module.exports = {
             res.send(data);
           }
         });
+      } else {
+        res.send(error);
       }
     });
   },
@@ -1363,7 +1367,7 @@ module.exports = {
           accountType: req.user.accountType
         };
         req.body.product.author = author;
-        const btcPrice=Number(req.body.product.btc_price);
+        const btcPrice=Number(req.body.product.btc_price).toFixed(8);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const tags = req.body.product.tags.trim().split(' ');
         const newproduct = {
@@ -1915,7 +1919,7 @@ module.exports = {
         }
       }
 
-      const btcPrice = Number(req.body.product.btc_price);
+      const btcPrice = Number(req.body.product.btc_price).toFixed(8);
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
