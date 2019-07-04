@@ -660,6 +660,7 @@ hr{
     text-align: left;
     margin-top: 1vh; 
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .open-img{
@@ -952,6 +953,10 @@ hr{
     background-color: #4c3da8 !important;
     color: white;
     border-color: black !important;
+}
+
+.breadcrumb{
+    white-space: normal !important;
 }
 
 @supports (-ms-ime-align: auto) {
