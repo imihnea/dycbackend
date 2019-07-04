@@ -1363,7 +1363,7 @@ module.exports = {
           accountType: req.user.accountType
         };
         req.body.product.author = author;
-        const btcPrice=Number(req.body.product.btc_price);
+        const btcPrice=Number(req.body.product.btc_price).toFixed(8);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const tags = req.body.product.tags.trim().split(' ');
         const newproduct = {
@@ -1915,7 +1915,7 @@ module.exports = {
         }
       }
 
-      const btcPrice = Number(req.body.product.btc_price);
+      const btcPrice = Number(req.body.product.btc_price).toFixed(8);
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
