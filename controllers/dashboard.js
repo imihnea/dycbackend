@@ -1338,7 +1338,7 @@ module.exports = {
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-                  {angle: ignore}
+                  {angle: 'ignore'}
                 ]
             }, (err, result) => {
               if(err) {
@@ -1874,7 +1874,7 @@ module.exports = {
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-              {angle: ignore}
+              {angle: 'ignore'}
                 ]
             }, (err, result) => {
               if(err) {
