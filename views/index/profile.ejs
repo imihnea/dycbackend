@@ -52,7 +52,7 @@
                 %>
                     <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct <% if (product.feat_1.status == true) { %> featured <% } %>">
+                            <div class="column card feat_card frame activeDealProduct profileDeal <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg image is-5by4" style="width: auto;">
@@ -62,7 +62,7 @@
                                     <div class="card-content">
                                         <div class="media">
                                             <div class="media-content">
-                                                <p class="title productName" style="overflow: hidden;"><%= product.name %></p>
+                                                <p class="title productName dealname" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
                                         <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
@@ -141,9 +141,9 @@
                                     <img src="<%= review.avatarUrl %>" class="avatarSize" style="border-color: black;" alt="">
                                 </figure>
                             </a>
-                            <a href="/profile/<%= review.author %>" class="link"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></p></a>
+                            <a href="/profile/<%= review.author %>" class="link"><p style="text-align:center !important;" ><%= review.name %></p></a>
                             <% if (review.createdAt) { %>
-                            <p class="productDescriptionText" style="text-align:center !important;" >
+                            <p style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {
                                     case (0) : { %>
                                     Jan

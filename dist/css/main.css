@@ -959,6 +959,22 @@ hr{
     white-space: normal !important;
 }
 
+@media screen and (max-width: 768px) {
+    .profileDeal{
+        max-width: auto !important;
+    }
+
+    .similarFigure{
+        width: auto !important;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .profileDeal{
+        max-width: 20% !important;
+    }  
+}
+
 @supports (-ms-ime-align: auto) {
     .dealBuyRequest, .dealForm, .flexEvenly,
     .paginationPositioning, .indexProducts, .productPrice {

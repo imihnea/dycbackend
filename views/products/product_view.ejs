@@ -279,9 +279,9 @@
                                     <img src="<%= review.avatarUrl %>" class="avatarSize" alt="">
                                 </figure>
                             </a>
-                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></p></a>
+                            <a class="link" href="/profile/<%= review.author %>"><p style="text-align:center !important;" ><%= review.name %></p></a>
                             <% if (review.createdAt) { %>
-                            <p class="productDescriptionText" style="text-align:center !important;" >
+                            <p style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {
                                     case (0) : { %>
                                     Jan
@@ -413,7 +413,7 @@
                         <div class="column card feat_card frame smallerCenter similarProducts">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
-                                    <figure class="image featimg is-square">
+                                    <figure class="image featimg is-square similarFigure">
                                         <img src="<%= sim.images[0].url %>" class="featimgs" alt="<%= sim.name %>">
                                     </figure>
                                 </div>
