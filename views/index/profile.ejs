@@ -77,11 +77,11 @@
                 %>
                     <div class="columns indexRow" style="margin: auto; padding-left: 1vw; padding-right: 1vw;">
                         <% b.forEach(product => { %>
-                            <div class="column card feat_card frame activeDealProduct noLoad hidden <% if (product.feat_1.status == true) { %> featured <% } %>">
+                            <div class="column card feat_card frame activeDealProduct profileDeal noLoad hidden <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg image is-5by4" style="width: auto;">
-                                                <img data-src="<%= product.images[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
+                                            <img data-src="<%= product.images[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
