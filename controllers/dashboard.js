@@ -1335,10 +1335,11 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
-              // transformation: [
+              transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-              //   ]
+                  {angle: 0}
+                ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
@@ -1870,10 +1871,11 @@ module.exports = {
           await cloudinary.v2.uploader.upload(file.path, 
             {
               moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
-              // transformation: [
+              transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-              //   ]
+              {angle: 0}
+                ]
             }, (err, result) => {
               if(err) {
                 console.log(err);
