@@ -149,7 +149,7 @@ module.exports = {
                       // upload image
                       await cloudinary.v2.uploader.upload(req.file.path, 
                         {
-                          moderation: "aws_rek:suggestive:ignore",
+                          moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
                           // transformation: [
                           //   {quality: "jpegmini:1", sign_url: true},
                           //   {width: "auto", dpr: "auto"}
