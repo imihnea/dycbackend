@@ -89,8 +89,8 @@ function sendConfirmationEmail(req, userid, useremail) {
   SECRET, 
   { expiresIn: '1h' });
   ejs.renderFile(path.join(__dirname, "../views/email_templates/register.ejs"), {
-    link: `https://${req.headers.host}/confirmation/${token}`,
-    footerlink: `https://${req.headers.host}/dashboard/notifications`,
+    link: `http://${req.headers.host}/confirmation/${token}`,
+    footerlink: `http://${req.headers.host}/dashboard/notifications`,
     subject: 'Confirm Your Email - Deal Your Crypto',
   }, function (err, data) {
     if (err) {
