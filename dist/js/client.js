@@ -17,6 +17,24 @@ function populateSelect(target, min, max, data){
     }
 }
 
+function sortSelect(selElem) {
+  var tmpAry = new Array();
+  for (var i=0;i<selElem.options.length;i++) {
+      tmpAry[i] = new Array();
+      tmpAry[i][0] = selElem.options[i].text;
+      tmpAry[i][1] = selElem.options[i].value;
+  }
+  tmpAry.sort();
+  while (selElem.options.length > 0) {
+      selElem.options[0] = null;
+  }
+  for (var i=0;i<tmpAry.length;i++) {
+      var op = new Option(tmpAry[i][0], tmpAry[i][1]);
+      selElem.options[i] = op;
+  }
+  return;
+}
+
 const button = document.getElementById('myButton');
 button.addEventListener('click', function(e) {
   document.getElementById('altcoinsSpinner').style.display = 'inline-block';
@@ -32,9 +50,12 @@ button.addEventListener('click', function(e) {
     document.getElementById('altcoinsSpinner').style.display = 'none';
     document.getElementById('stepsDemo').style.display = 'flex';
     populateSelect('counter', '0', data.length-1, data)
+    sortSelect(document.getElementById('counter'))
+    button.setAttribute('disabled', 'disabled');
   })
   .catch(function(error) {
-    console.log(error);
+    document.getElementById('altcoinsSpinner').style.display = 'none';
+    document.getElementById('errorImage').style.display = 'inline-block';
   });
 });
 

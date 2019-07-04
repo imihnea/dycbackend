@@ -729,11 +729,13 @@ module.exports = {
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         //Add Check for isActive: true
         res.send(data);
+      } else {
+        res.send(error);
       }
     });
   },
@@ -753,11 +755,11 @@ module.exports = {
       'x-api-key': process.env.COINSWITCH_API_KEY,
       'content-type': 'application/json' 
     },
-      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
+      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "36xGQ6juqTtLChJQ6KdyL6otTnfkg3oJNN"},"refundAddress":{"address": "${refund}"}}` 
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         Checkout.create({
@@ -772,6 +774,8 @@ module.exports = {
             res.send(data);
           }
         });
+      } else {
+        res.send(error);
       }
     });
   },
