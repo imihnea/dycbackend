@@ -1131,7 +1131,7 @@ module.exports = {
         //         req.body.product.images = [];
         //         await cloudinary.v2.uploader.upload(file.path, 
         //         {
-        //           moderation: "aws_rek:suggestive:ignore",
+        //           moderation: "aws_rek:suggestive:ignore:nudity:0.85:graphic_male_nudity:0.85:graphic_female_nudity:0.85:sexual_activity:0.85:partial_nudity:0.85",
         //           // transformation: [
         //           //   {quality: "jpegmini:1", sign_url: true},
         //           //   {width: "auto", dpr: "auto"}
@@ -1334,7 +1334,7 @@ module.exports = {
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              moderation: "aws_rek:suggestive:ignore",
+              moderation: "aws_rek:suggestive:ignore:nudity:0.85:graphic_male_nudity:0.85:graphic_female_nudity:0.85:sexual_activity:0.85:partial_nudity:0.85",
               // transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
@@ -1706,7 +1706,7 @@ module.exports = {
     //             for (const file of req.files) {
     //               await cloudinary.v2.uploader.upload(file.path, 
     //                 {
-    //                   moderation: "aws_rek:suggestive:ignore",
+    //                   moderation: "aws_rek:suggestive:ignore:nudity:0.85:graphic_male_nudity:0.85:graphic_female_nudity:0.85:sexual_activity:0.85:partial_nudity:0.85",
     //                   // transformation: [
     //                   //   {quality: "jpegmini:1", sign_url: true},
     //                   //   {width: "auto", dpr: "auto"}
@@ -1869,7 +1869,7 @@ module.exports = {
         for (const file of req.files) {
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              moderation: "aws_rek:suggestive:ignore",
+              moderation: "aws_rek:suggestive:ignore:nudity:0.85:graphic_male_nudity:0.85:graphic_female_nudity:0.85:sexual_activity:0.85:partial_nudity:0.85",
               // transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
