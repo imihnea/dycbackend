@@ -28,6 +28,13 @@ const unescapeHTML = (safe) => {
         .replace(/&#039;/g, "'");
 }
 
+function convertText(txtData) {
+  var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  txtData = txtData.replace(urlRegex, '<a class="link" href="$1" target="_blank">$1</a>');
+
+  return txtData;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const reportOpenButton = document.querySelector('.report');
     const reportCloseButton = document.querySelector('.deleteReport');
@@ -46,9 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         reportModalItems[i].classList.toggle('is-active');
       });
 
-    // const messages = document.querySelectorAll('.messageSpan');
-    // messages.forEach(msg => {
-    //   const newText = unescapeHTML(msg.innerText);
-    //   msg.innerHTML = newText;
-    // });
+    const messages = document.querySelectorAll('.messageSpan');
+    messages.forEach(msg => {
+      msg.innerHTML = convertText(msg.innerText);
+    });
 });

@@ -28,6 +28,13 @@ const unescapeHTML = (safe) => {
         .replace(/&#039;/g, "'");
 }
 
+function convertText(txtData) {
+  var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  txtData = txtData.replace(urlRegex, '<a class="link" href="$1" target="_blank">$1</a>');
+
+  return txtData;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const acceptOpenButtons = document.querySelectorAll('.accept');
@@ -144,10 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    const message = document.querySelectorAll('.messageSpan');
-    const messageItems = [].slice.call(message);
-    messageItems.forEach((msg) => {
-      msg.innerHTML = unescapeHTML(msg.innerHTML);
+
+    const messages = document.querySelectorAll('.messageSpan');
+    messages.forEach(msg => {
+      msg.innerHTML = convertText(msg.innerText);
     });
 
 });
