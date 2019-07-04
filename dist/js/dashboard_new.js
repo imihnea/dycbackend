@@ -19,17 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const standardFee = 10;
   const partnerFee = 8;
   const premiumFee = 8;
+  const dollar = document.getElementById('oneDollar');
+  const dollarPayout = document.getElementById('usd-payout');
 
   if (price.value > 0) {
     switch(userType) {
       case 'Standard':
         payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       case 'Premium':
         payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       case 'Partner':
         payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       default:
         break;
@@ -40,12 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
     switch(userType) {
       case 'Standard':
         payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       case 'Premium':
         payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       case 'Partner':
         payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
+        dollarPayout.value = (payout.value / dollar.value).toFixed(8);
         break;
       default:
         break;
