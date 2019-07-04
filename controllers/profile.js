@@ -153,7 +153,7 @@ module.exports = {
                           transformation: [
                           //   {quality: "jpegmini:1", sign_url: true},
                           //   {width: "auto", dpr: "auto"}
-                          {angle: 'ignore'}
+                          {angle: 0}
                             ]
                         }, (err, result) => {
                           if(err) {
