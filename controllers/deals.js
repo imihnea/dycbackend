@@ -938,10 +938,12 @@ module.exports = {
                 await cloudinary.v2.uploader.upload(req.file.path, 
                 {
                     moderation: "aws_rek:suggestive:ignore",
-                    // transformation: [
+                    transformation: [
                     // {quality: "jpegmini:1", sign_url: true},
                     // {width: "auto", dpr: "auto"}
-                    // ]
+                    {angle: 0},
+                    {flags: 'progressive:semi'}
+                    ]
                 }, (err, result) => {
                     if(err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
