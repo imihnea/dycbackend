@@ -1338,7 +1338,8 @@ module.exports = {
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-                  {angle: 0}
+                  {angle: 0},
+                  {flags: 'progressive:semi'}
                 ]
             }, (err, result) => {
               if(err) {
@@ -1874,7 +1875,8 @@ module.exports = {
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-              {angle: 0}
+              {angle: 0},
+              {flags: 'progressive:semi'}
                 ]
             }, (err, result) => {
               if(err) {
