@@ -31,7 +31,7 @@
                     <i class="far fa-star" style="color: orange;"></i>
                     <% } %>
                 <% } %>
-                <p style="color: orange;"><%= `${viewedUser.avgRating} star${viewedUser.avgRating === 1 ? '' : 's'}` %></p>
+                <p style="color: orange;"><%= `${viewedUser.avgRating} star${viewedUser.avgRating === 1 ? '' : 's'}` %> from <%= viewedUser.reviews.length %> reviews</p>
                 <p class="subtitle">Country: <%= viewedUser.country %></p>
                 <p class="subtitle">Products sold: <%= viewedUser.nrSold %></p>
             </div>

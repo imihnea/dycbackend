@@ -135,7 +135,7 @@
                     <i class="far fa-star" style="color: orange;"></i>
                     <% } %>
                 <% } %>
-                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
+                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %> from <%= product.reviews.length %> reviews</p>
                 <form action="/deals/<%= product.id %>/buy" id="buyForm" method="GET" class="productBuyPrice">
                     <div class="column prod_info" style="padding: 0;">
                         <label class="img-check ">
