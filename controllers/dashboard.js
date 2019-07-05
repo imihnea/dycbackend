@@ -34,6 +34,7 @@ const client = new Client({
 const { fork } = require("child_process");
 const notifProcess = fork("config/notifications.js");
 const deleteProcess = fork("config/deleteAcc.js");
+const multipleProcess = fork("config/multipleUploader.js");
 var Filter = require('bad-words'),
     filter = new Filter();
 
@@ -1330,33 +1331,7 @@ module.exports = {
         req.body.product.name = filter.clean(cleanHTML(String(req.body.product.name)));
         req.body.product.description = filter.clean(cleanHTML(String(req.body.product.description)));
         req.body.product.tags = cleanHTML(String(req.body.product.tags));
-        req.body.product.images = [];
-        for (const file of req.files) {
-          await cloudinary.v2.uploader.upload(file.path, 
-            {
-              moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
-              transformation: [
-              //   {quality: "jpegmini:1", sign_url: true},
-              //   {width: "auto", dpr: "auto"}
-                  {angle: 0}
-                ]
-            }, (err, result) => {
-              if(err) {
-                console.log(err);
-              } else if (result.moderation[0].status === 'rejected') {
-                  req.body.product.images.push({
-                    // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                    public_id: result.public_id,
-                  });
-              } else {
-                req.body.product.images.push({
-                  url: result.secure_url,
-                  public_id: result.public_id,
-                });
-              }
-            });
-        }
+        req.body.product.images = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
         const author = {
           id: req.user._id,
           username: req.user.username,
@@ -1501,6 +1476,9 @@ module.exports = {
           }
         });
         const product = await Product.create(newproduct);
+        let filesToUpload = req.files;
+        let dataForUploader = {product: product._id, files: filesToUpload};
+        multipleProcess.send(dataForUploader);
         elasticClient.index({
           index: 'products',
           type: 'products',
@@ -1526,6 +1504,7 @@ module.exports = {
         if (process.env.NODE_ENV === 'production') {
           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
+        req.flash('success', 'Success! Your pictures will be uploaded shortly!')
         return res.redirect(`/products/${product._id}/view`);
       }
     }
@@ -1874,7 +1853,8 @@ module.exports = {
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
-              {angle: 0}
+              {angle: 0},
+              {flags: 'progressive:semi'}
                 ]
             }, (err, result) => {
               if(err) {

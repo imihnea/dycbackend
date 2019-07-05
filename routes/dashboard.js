@@ -17,11 +17,16 @@ const { getDashboardIndex, getAddresses, addAddresses, verifyWithdraw, getTokens
 const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam, checkId, isWithdrawUser } = middleware; // destructuring assignment
+const crypto = require('crypto');
 
 // Set Storage Engine
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
+    let buf = crypto.randomBytes(16);
+    buf = buf.toString('hex');
+    let uniqFileName = file.originalname.replace(/\.jpeg|\.jpg|\.png/ig, '');
+    uniqFileName += buf;
+    cb(undefined, uniqFileName);
   },
 });
 
@@ -38,6 +43,9 @@ const upload = multer({
   fileFilter: imageFilter,
   limits: {
     fileSize: 5000000
+  },
+  onError: (err, next) => {
+    next(err);
   },
 });
 
