@@ -140,9 +140,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     <% if (product.images[0]) { %> value="<%= product.images[0].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images[0]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
+                                <br>
+                                <% if(product.images[0].url) { %>
+                                    <figure class="image is-128x128">
+                                        <img src="<%= product.images[0].url %>">
+                                    </figure>
+                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
@@ -155,9 +161,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     <% if (product.images[1]) { %> value="<%= product.images[1].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images[1]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
+                                <br>
+                                <% if(product.images[1].url) { %>
+                                    <figure class="image is-128x128">
+                                        <img src="<%= product.images[1].url %>">
+                                    </figure>
+                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
@@ -170,9 +182,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     <% if (product.images[2]) { %> value="<%= product.images[2].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images[2]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
+                                <br>
+                                <% if(product.images[2].url) { %>
+                                    <figure class="image is-128x128">
+                                        <img src="<%= product.images[2].url %>">
+                                    </figure>
+                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
@@ -185,9 +203,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     <% if (product.images[3]) { %> value="<%= product.images[3].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images[3]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
+                                <br>
+                                <% if(product.images[3].url) { %>
+                                    <figure class="image is-128x128">
+                                        <img src="<%= product.images[3].url %>">
+                                    </figure>
+                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
@@ -200,9 +224,15 @@ All images are scaled to that ratio" tabindex="-1">
                                     <% if (product.images[4]) { %> value="<%= product.images[4].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images[4]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
+                                <br>
+                                <% if(product.images[4].url) { %>
+                                    <figure class="image is-128x128">
+                                        <img src="<%= product.images[4].url %>">
+                                    </figure>
+                                <% } %>
                             </div>
                         </div>                                     
                     </div>
