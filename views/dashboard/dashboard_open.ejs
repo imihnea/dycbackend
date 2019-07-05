@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
-                                        <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
+                                        <a class="is-5 dealname link" href="/products/<%= product._id %>/view"><%= product.name %></a>
                                         <p class="productRating">
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product.avgRating)) { %>
