@@ -219,6 +219,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 </span>
                             </p>
                         </div>
+                        <% if (oneDollar != null) { %>
                         <div class="field">
                             <label class="label" for="usd-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price (USD)</label>
                             <p class="control has-icons-left smmargin" style="margin: auto;">
@@ -228,7 +229,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 </span>
                             </p>
                         </div>
-
+                        <% } %>
                         <div class="field" style="width: 90%; margin: auto; margin-bottom: 0.75rem;">
                             <label class="label" for="fee" style="text-align: left;"><% if (premium) { %>Premium<%} else { %><%= user.accountType %><% } %> Account Fee</label>
                             <input type="text" class="input" value="<% if ((premium) || (user.accountType == 'Partner')) { %> 8% <% } else { %>10%<% } %>">
@@ -242,6 +243,7 @@ All images are scaled to that ratio" tabindex="-1">
                                 </span>
                             </p>
                         </div>
+                        <% if (oneDollar != null) { %>
                         <div class="field">
                             <label class="label" for="usd-payout" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Estimated Payout (USD)</label>
                             <p class="control has-icons-left smmargin" style="margin: auto;">
@@ -251,7 +253,8 @@ All images are scaled to that ratio" tabindex="-1">
                                 </span>
                             </p>
                         </div>
-                        <input style="display: none;" id="oneDollar" value="<%= oneDollar.toFixed(8) %>">
+                        <% } %>
+                        <input style="display: none;" id="oneDollar" value="<% if (oneDollar != null) { %><%= oneDollar.toFixed(8) %><% } %>">
                     </div>
                     <br>
                     <div class="control smmargin" style="margin: auto !important;">

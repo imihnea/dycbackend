@@ -1014,7 +1014,7 @@ module.exports = {
         res.render('dashboard/dashboard_new', {
           user: req.user,
           premium, 
-          oneDollar: 'BTC equivalent of $1 at payment date',
+          oneDollar: null,
           errors: req.session.errors,
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
@@ -1042,7 +1042,7 @@ module.exports = {
       req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
       req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
-      req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
+      req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
       // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
@@ -1095,14 +1095,44 @@ module.exports = {
       // }
       const errors = req.validationErrors();
       if (errors) {
-        res.render('dashboard/dashboard_new', {
-          user: req.user,
-          errors: errors,
-          csrfToken: req.params._csrf,
-          csrfSecret: req.params.csrfSecret,
-          pageTitle: 'New Deal - Deal Your Crypto',
-          pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-          pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+        let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+          if(err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          }
+        });
+        if (premium) {
+          premium = true;
+        } else {
+          premium = false;
+        }
+        client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+          if (!error) {
+            let btcrate = data.data.rates.USD;
+            const tokenprice = 1/btcrate; // 1 USD
+            res.render('dashboard/dashboard_new', {
+              user: req.user,
+              premium, 
+              oneDollar: tokenprice,
+              errors,
+              csrfToken: req.params._csrf,
+              csrfSecret: req.params.csrfSecret,
+              pageTitle: 'New Deal - Deal Your Crypto',
+              pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+            });
+          } else {
+            res.render('dashboard/dashboard_new', {
+              user: req.user,
+              premium, 
+              oneDollar: null,
+              errors,
+              csrfToken: req.params._csrf,
+              csrfSecret: req.params.csrfSecret,
+              pageTitle: 'New Deal - Deal Your Crypto',
+              pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+            });
+          }
         });
       // } else if(req.body.product.shipping === 'true') {
         // req.body.product.name = cleanHTML(String(req.body.product.name));
@@ -1589,7 +1619,7 @@ module.exports = {
           product: product, 
           user: req.user,
           premium, 
-          oneDollar: 'BTC equivalent of $1 at payment date',
+          oneDollar: null,
           errors: req.session.errors,
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
@@ -1617,7 +1647,7 @@ module.exports = {
     req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
     req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
-    req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
+    req.check('product[btc_price]', 'The price must have at most 12 characters.').isLength({max: 12});
     // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
@@ -1671,15 +1701,46 @@ module.exports = {
     // }
     const errors = req.validationErrors();
     if (errors) {
-      res.render('dashboard/dashboard_edit', {
-        user: req.user,
-        errors: errors,
-        product,
-        csrfToken: req.params._csrf,
-        csrfSecret: req.params.csrfSecret,
-        pageTitle: `${product.name} - Deal Your Crypto`,
-        pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
-        pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+        if(err) {
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+      });
+      if (premium) {
+        premium = true;
+      } else {
+        premium = false;
+      }
+      client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+        if (!error) {
+          let btcrate = data.data.rates.USD;
+          const tokenprice = 1/btcrate; // 1 USD
+          res.render('dashboard/dashboard_edit', {
+            product: product, 
+            user: req.user,
+            premium, 
+            oneDollar: tokenprice,
+            errors,
+            csrfToken: req.params._csrf,
+            csrfSecret: req.params.csrfSecret,
+            pageTitle: `${product.name} - Deal Your Crypto`,
+            pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+          });
+        } else {
+          res.render('dashboard/dashboard_edit', {
+            product: product, 
+            user: req.user,
+            premium, 
+            oneDollar: null,
+            errors,
+            csrfToken: req.params._csrf,
+            csrfSecret: req.params.csrfSecret,
+            pageTitle: `${product.name} - Deal Your Crypto`,
+            pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+          });
+        }
       });
     // } else if(req.body.product.shipping === 'true') {
     //   shippo.address.create({
