@@ -179,7 +179,7 @@ passport.use(new FacebookStrategy({
 function(req, accessToken, refreshToken, profile, cb) {
   if (req.user) {
     let user = req.user;
-    if ((user.googleId && user.facebookId) || (user.facebookId && user.salt && user.hash)) {
+    if (user.createdWith !== 'Facebook' || user.googleId) {
       user.facebookId = '';
     } else {
       user.facebookId = profile.id;
@@ -214,7 +214,7 @@ passport.use(new GoogleStrategy({
 function(req, accessToken, refreshToken, profile, done) {
   if (req.user) {
     let user = req.user;
-    if ((user.googleId && user.facebookId) || (user.googleId && user.salt && user.hash)) {
+    if (user.createdWith !== 'Google' || user.facebookId) {
       user.googleId = '';
     } else {
       user.googleId = profile.id;
