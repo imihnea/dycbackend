@@ -217,7 +217,7 @@
                         <% if (!user.googleId) { %>
                             <a href="/auth/google" class="button is-primary is-rounded">Connect your Google Account</a>
                         <% } else { %>
-                            <% if ((user.googleId && user.facebookId) || (user.googleId && user.confirmed === false)) { %>
+                            <% if (user.createdWith !== 'Google' || user.facebookId) { %>
                                 <a href="/auth/google" class="button is-danger is-rounded">Disconnect your Google Account</a>
                             <% } else { %>
                                 <a class="button is-danger is-rounded" disabled>Disconnect your Google Account</a>
@@ -226,7 +226,7 @@
                         <% if (!user.facebookId) { %>
                             <a href="/auth/facebook" class="button is-primary is-rounded">Connect your Facebook Account</a>
                         <% } else { %>
-                            <% if ((user.googleId && user.facebookId) || (user.facebookId && user.confirmed === false)) { %>
+                            <% if (user.createdWith !== 'Facebook' || user.googleId) { %>
                                 <a href="/auth/facebook" class="button is-danger is-rounded">Disconnect your Facebook Account</a>
                             <% } else { %>
                                 <a class="button is-danger is-rounded" disabled>Disconnect your Facebook Account</a>

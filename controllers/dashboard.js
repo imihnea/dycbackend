@@ -2064,6 +2064,58 @@ module.exports = {
       return res.redirect(`/products/${product.id}/view`);
     }
   },
+  async imageLeft(req, res) {
+    req.check('imageToMove', 'Something went wrong. Please try again').isNumeric();
+    const error = req.validationErrors();
+    if (error) {
+      req.flash('error', 'Something went wrong. Please try again.');
+      return res.redirect('back');
+    } else {
+      const imageToMove = Number(req.body.imageToMove);
+      const product = await Product.findById(req.params.id);
+      if (imageToMove > product.images.length - 1) {
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('back');
+      } else {
+        const oldImage = {
+          _id: product.images[imageToMove - 1]._id,
+          url: product.images[imageToMove - 1].url,
+          public_id: product.images[imageToMove - 1].public_id
+        };
+        product.images[imageToMove - 1] = product.images[imageToMove];
+        product.images[imageToMove] = oldImage;
+        await product.save();
+        req.flash('success', 'Image moved');
+        return res.redirect('back');
+      }
+    }
+  },
+  async imageRight(req, res) {
+    req.check('imageToMove', 'Something went wrong. Please try again').isNumeric();
+    const error = req.validationErrors();
+    if (error) {
+      req.flash('error', 'Something went wrong. Please try again.');
+      return res.redirect('back');
+    } else {
+      const imageToMove = Number(req.body.imageToMove);
+      const product = await Product.findById(req.params.id);
+      if (imageToMove > product.images.length - 1) {
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('back');
+      } else {
+        const oldImage = {
+          _id: product.images[imageToMove + 1]._id,
+          url: product.images[imageToMove + 1].url,
+          public_id: product.images[imageToMove + 1].public_id
+        };
+        product.images[imageToMove + 1] = product.images[imageToMove];
+        product.images[imageToMove] = oldImage;
+        await product.save();
+        req.flash('success', 'Image moved');
+        return res.redirect('back');
+      }
+    }
+  },
   // Feature product
   async productFeature(req, res) {
     req.check('feature_id', 'Something went wrong. Please try again').matches(/(1|2)/);

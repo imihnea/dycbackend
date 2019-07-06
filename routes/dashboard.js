@@ -9,7 +9,7 @@ const { getDashboardIndex, getAddresses, addAddresses, verifyWithdraw, getTokens
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, postBTC,
-        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
+        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus, imageLeft, imageRight,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage, getConfirmWithdraw, postConfirmWithdraw, resendConfirmWithdraw,
         getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner,
         getNotif } = require('../controllers/dashboard');
@@ -158,6 +158,11 @@ router.put('/:id/:_csrf/:csrfSecret', verifyParam, checkId, checkUserproduct, up
 
 // PUT - features the product
 router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, checkId, checkUserproduct, asyncErrorHandler(productFeature));
+
+// PUT - move images
+router.put('/:id/imageLeft', checkId, checkUserproduct, asyncErrorHandler(imageLeft));
+
+router.put('/:id/imageRight', checkId, checkUserproduct, asyncErrorHandler(imageRight));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', verifyCookie, checkId, asyncErrorHandler(productDestroy));

@@ -194,7 +194,8 @@ function(req, accessToken, refreshToken, profile, cb) {
           { 
             full_name: profile.displayName,
             email: profile.emails[0].value,
-            facebookId: profile.id 
+            facebookId: profile.id,
+            createdWith: 'Facebook'
           }, 
           (err, User) => {
           return cb(err, User);
@@ -228,7 +229,8 @@ function(req, accessToken, refreshToken, profile, done) {
           { 
             full_name: profile.name.familyName + ' ' + profile.name.givenName,
             email: profile.emails[0].value,
-            googleId: profile.id 
+            googleId: profile.id,
+            createdWith: 'Google'
           },
           (err, user) => {
           return done(err, user);

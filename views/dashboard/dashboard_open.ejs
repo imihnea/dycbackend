@@ -22,7 +22,7 @@
                             <% include ../partials/paginateIndex %>
                         </div>
                         <main class="productWrapper" id="hits">
-                        <% products.docs.forEach((product) => { %>
+                        <% products.docs.forEach((product, index) => { %>
                             <article class="hit columns frame">
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
@@ -50,24 +50,66 @@
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
                                     </div>
+                                    <% if (product.images.length > 1) { %>
+                                        <button class="button is-primary imageModal">Image order</button>
+                                        <div class="modal modalImage">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-card" style="width: auto;">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Modify image order</p>
+                                                <button class="delete imageDelete" aria-label="close"></button>
+                                            </header>
+                                            <footer class="modal-card-foot">
+                                                <div class="columns">
+                                                    <% product.images.forEach((img, index) => { %>
+                                                        <div class="column">
+                                                            <figure class="image is-128x128">
+                                                                <img class="product<%= index %>Img noLoad hidden noImg productImage" data-src="<%= img.url %>" alt="Image <%= index + 1 %>">
+                                                            </figure>
+                                                            <br>
+                                                            <div class="columns">
+                                                                <% if (index > 0) { %>
+                                                                    <div class="column">
+                                                                        <form action="/dashboard/<%= product._id %>/imageLeft?_method=PUT" method="POST">
+                                                                            <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                            <button class="button is-primary"><</button>    
+                                                                        </form>
+                                                                    </div>
+                                                                <% } %>
+                                                                <% if (index < 4) { %>
+                                                                    <div class="column">
+                                                                        <form action="/dashboard/<%= product._id %>/imageRight?_method=PUT" method="POST">
+                                                                            <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                            <button class="button is-primary">></button>
+                                                                        </form>
+                                                                    </div>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                    <% }); %>
+                                                </div>
+                                            </footer>
+                                            </div>
+                                        </div>
+                                    <% } %>
                                     <button class="button is-danger deleteModal">Delete</button>
                                     <div class="modal modalDelete">
                                         <div class="modal-background"></div>
-                                            <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Are you sure?</p>
-                                                <button class="delete deleteDelete" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body">
-                                                <p class="title is-5" style="text-align: center;">This is a permanent action. You will not be able to revert the status of your product.</p>
-                                            </section>
-                                            <footer class="modal-card-foot">
-                                                <form class="modal-form deleteForm" action="/dashboard/<%= product._id %>?_method=DELETE" method="POST">
-                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                    <button class="button is-danger">Delete</button>
-                                                </form>
-                                            </footer>
-                                            </div>
+                                        <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Are you sure?</p>
+                                            <button class="delete deleteDelete" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body">
+                                            <p class="title is-5" style="text-align: center;">This is a permanent action. You will not be able to revert the status of your product.</p>
+                                        </section>
+                                        <footer class="modal-card-foot">
+                                            <form class="modal-form deleteForm" action="/dashboard/<%= product._id %>?_method=DELETE" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <button class="button is-danger">Delete</button>
+                                            </form>
+                                        </footer>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="column prod_info productPrice">
