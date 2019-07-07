@@ -1507,7 +1507,8 @@ module.exports = {
         });
         const product = await Product.create(newproduct);
         let filesToUpload = req.files;
-        let dataForUploader = {product: product._id, files: filesToUpload};
+        let toUpload = 'newProduct';
+        let dataForUploader = {product: product._id, files: filesToUpload, toUpload: toUpload};
         multipleProcess.send(dataForUploader);
         elasticClient.index({
           index: 'products',

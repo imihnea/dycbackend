@@ -15,7 +15,7 @@ const { client } = require('../config/elasticsearch');
 var Filter = require('bad-words'),
     filter = new Filter();
 const { fork } = require("child_process");
-const profileUploader = fork("config/profileUploader.js");
+const cloudinaryUploader = fork("config/multipleUploader.js");
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -141,8 +141,9 @@ module.exports = {
                 if (req.file) {
                   try{
                     let fileToUpload = req.file;
-                    let dataForUploader = {user: user, file: fileToUpload};
-                    profileUploader.send(dataForUploader);
+                    let toUpload = 'avatar';
+                    let dataForUploader = {user: user, file: fileToUpload, toUpload: toUpload};
+                    cloudinaryUploader.send(dataForUploader);
                     } catch (error) {
                         req.flash('error', error.message);
                         return res.redirect('back');
