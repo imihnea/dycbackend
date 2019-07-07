@@ -46,31 +46,31 @@
             <div class="column">
                 <div class="slider">
                     <figure class="image is-square sliderFig">
-                        <img class="mainImg " src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
-                        <img class="mImg"  src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mainImg " data-src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mImg"  data-src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
                     </figure>
                     <% if (product.images[1]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg" data-src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mImg noDisp" data-src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[2]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg" data-src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mImg noDisp" data-src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[3]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg" data-src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mImg noDisp" data-src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                     <% if (product.images[4]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg" data-src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mImg noDisp" data-src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                 </div>
@@ -79,14 +79,14 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                             <label for="id1">
-                                <img class="thumbnail" src="<%= product.images[0].url %>" alt="Thumbnail 1 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" data-src="<%= product.images[0].url %>" alt="Thumbnail 1 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% if (product.images[1]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id2"/>
                             <label for="id2" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[1].url %>" alt="Thumbnail 2 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" data-src="<%= product.images[1].url %>" alt="Thumbnail 2 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -94,7 +94,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id3"/>
                             <label for="id3" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[2].url %>" alt="Thumbnail 3 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" data-src="<%= product.images[2].url %>" alt="Thumbnail 3 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -102,7 +102,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id4"/>
                             <label for="id4" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[3].url %>" alt="Thumbnail 4 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" data-src="<%= product.images[3].url %>" alt="Thumbnail 4 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
@@ -110,7 +110,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id5"/>
                             <label for="id5" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[4].url %>" alt="Thumbnail 5 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" data-src="<%= product.images[4].url %>" alt="Thumbnail 5 for <%= product.name %>"/>
                             </label>
                         </div> 
                         <% } %>                
@@ -414,7 +414,7 @@
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
                                     <figure class="image featimg is-square similarFigure">
-                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="<%= sim.name %>">
+                                        <img data-src="<%= sim.images[0].url %>" class="featimgs replaceImg" alt="<%= sim.name %>">
                                     </figure>
                                 </div>
                                 <div class="card-content">

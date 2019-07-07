@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const images = document.querySelectorAll('.featimgs');
   const imageItems = [].slice.call(images);
   imageItems.forEach(img => {
-    img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/q_auto:good/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
+    img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
   });
   const loadImages = document.querySelectorAll('.loadFirst');
   const loadItems = [].slice.call(loadImages);

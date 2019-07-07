@@ -80,10 +80,4 @@ document.addEventListener('DOMContentLoaded', () => {
       imageModalItems[i].classList.toggle('is-active');
     });
   });
-  imageCancelButtonItems.forEach((item, i) => {
-    item.addEventListener('click', (event) => {
-      event.stopPropagation();
-      imageModalItems[i].classList.toggle('is-active');
-    });
-  });
 });
