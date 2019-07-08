@@ -68,22 +68,18 @@
                                                             </figure>
                                                             <br>
                                                             <div class="columns">
-                                                                <% if (index > 0) { %>
-                                                                    <div class="column">
-                                                                        <form action="/dashboard/<%= product._id %>/imageLeft?_method=PUT" method="POST">
-                                                                            <input type="number" value="<%= index %>" name="imageToMove" hidden>
-                                                                            <button class="button is-primary"><</button>    
-                                                                        </form>
-                                                                    </div>
-                                                                <% } %>
-                                                                <% if (index < product.images.length - 1) { %>
-                                                                    <div class="column">
-                                                                        <form action="/dashboard/<%= product._id %>/imageRight?_method=PUT" method="POST">
-                                                                            <input type="number" value="<%= index %>" name="imageToMove" hidden>
-                                                                            <button class="button is-primary">></button>
-                                                                        </form>
-                                                                    </div>
-                                                                <% } %>
+                                                                <div class="column">
+                                                                    <form action="/dashboard/<%= product._id %>/imageLeft?_method=PUT" method="POST">
+                                                                        <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                        <button class="button is-primary"><</button>    
+                                                                    </form>
+                                                                </div>
+                                                                <div class="column">
+                                                                    <form action="/dashboard/<%= product._id %>/imageRight?_method=PUT" method="POST">
+                                                                        <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                        <button class="button is-primary">></button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     <% }); %>
