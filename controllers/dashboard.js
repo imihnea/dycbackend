@@ -2056,13 +2056,25 @@ module.exports = {
         req.flash('error', 'Something went wrong. Please try again.');
         return res.redirect('back');
       } else {
-        const oldImage = {
-          _id: product.images[imageToMove - 1]._id,
-          url: product.images[imageToMove - 1].url,
-          public_id: product.images[imageToMove - 1].public_id
-        };
-        product.images[imageToMove - 1] = product.images[imageToMove];
-        product.images[imageToMove] = oldImage;
+        if (imageToMove == 0) {
+          const oldImage = {
+            _id: product.images[imageToMove]._id,
+            url: product.images[imageToMove].url,
+            public_id: product.images[imageToMove].public_id
+          }
+          for (let i = 1; i <= product.images.length - 1; i += 1) {
+            product.images[i - 1] = product.images[i];
+          }
+          product.images[product.images.length - 1] = oldImage;
+        } else {
+          const oldImage = {
+            _id: product.images[imageToMove - 1]._id,
+            url: product.images[imageToMove - 1].url,
+            public_id: product.images[imageToMove - 1].public_id
+          };
+          product.images[imageToMove - 1] = product.images[imageToMove];
+          product.images[imageToMove] = oldImage;
+        }
         await product.save();
         req.flash('success', 'Image moved');
         return res.redirect('back');
@@ -2082,13 +2094,25 @@ module.exports = {
         req.flash('error', 'Something went wrong. Please try again.');
         return res.redirect('back');
       } else {
-        const oldImage = {
-          _id: product.images[imageToMove + 1]._id,
-          url: product.images[imageToMove + 1].url,
-          public_id: product.images[imageToMove + 1].public_id
-        };
-        product.images[imageToMove + 1] = product.images[imageToMove];
-        product.images[imageToMove] = oldImage;
+        if (imageToMove == product.images.length - 1) {
+          const oldImage = {
+            _id: product.images[imageToMove]._id,
+            url: product.images[imageToMove].url,
+            public_id: product.images[imageToMove].public_id
+          }
+          for (let i = product.images.length - 2; i >= 0; i -= 1) {
+            product.images[i + 1] = product.images[i]; 
+          }
+          product.images[0] = oldImage;
+        } else {
+          const oldImage = {
+            _id: product.images[imageToMove + 1]._id,
+            url: product.images[imageToMove + 1].url,
+            public_id: product.images[imageToMove + 1].public_id
+          };
+          product.images[imageToMove + 1] = product.images[imageToMove];
+          product.images[imageToMove] = oldImage;
+        }
         await product.save();
         req.flash('success', 'Image moved');
         return res.redirect('back');
