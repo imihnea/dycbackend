@@ -46,8 +46,8 @@
             <div class="column">
                 <div class="slider">
                     <figure class="image is-square sliderFig">
-                        <img class="mainImg" <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
-                        <img class="mImg"  <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mainImg" <% if (product.images[0]) { %> src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mImg"  <% if (product.images[0]) { %> src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
                     </figure>
                     <% if (product.images[1]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
