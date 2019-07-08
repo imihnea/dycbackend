@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const inputs = document.querySelectorAll('.file-upload__input');
   const inputItems = [].slice.call(inputs);
-  const labels = document.querySelectorAll('.file-upload__label');
+  const labels = document.querySelectorAll('.label');
   const labelItems = [].slice.call(labels);
   const squares = document.querySelectorAll('.square');
   const squareItems = [].slice.call(squares);

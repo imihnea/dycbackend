@@ -27,7 +27,7 @@
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img data-src="<%= product.images[0].url %>" class="productImage" alt="<%= product.name %> Image">
+                                        <img <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
                                     </figure>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -64,7 +64,7 @@
                                                     <% product.images.forEach((img, index) => { %>
                                                         <div class="column">
                                                             <figure class="image is-128x128">
-                                                                <img class="product<%= index %>Img noLoad hidden noImg productImage" data-src="<%= img.url %>" alt="Image <%= index + 1 %>">
+                                                                <img class="noLoad hidden noImg productImage" data-src="<%= img.url %>" alt="Image <%= index + 1 %>">
                                                             </figure>
                                                             <br>
                                                             <div class="columns">

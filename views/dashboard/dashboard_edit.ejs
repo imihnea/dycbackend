@@ -127,9 +127,10 @@
                             </span>
                         </div>
                         <input type="text" id="deleteImages" name="deleteImages" hidden>
+                        <input type="number" id="uploadImages" name="uploadImages" value="0" hidden>
                         <div class="file-upload">
                             <div class="mobileUpload">
-                                <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images[0]) { %> hide <% } %>"></i>
                                         <i class="far fa-check-square <% if (!product.images[0]) { %> hide <% } %>"></i>
@@ -144,13 +145,15 @@
                                 </label>
                                 <br>
                                 <% if(product.images[0]) { %>
-                                    <figure class="image is-128x128">
-                                        <img src="<%= product.images[0].url %>">
-                                    </figure>
+                                    <a href="<%= product.images[0].url %>" target="_blank" class="thumbnail">
+                                        <figure class="image is-64x64">
+                                            <img src="<%= product.images[0].url %>" style="border-radius: 10px;">
+                                        </figure>
+                                    </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images[1]) { %> hide <% } %>"></i>
                                         <i class="far fa-check-square <% if (!product.images[1]) { %> hide <% } %>"></i>
@@ -165,13 +168,15 @@
                                 </label>
                                 <br>
                                 <% if(product.images[1]) { %>
-                                    <figure class="image is-128x128">
-                                        <img src="<%= product.images[1].url %>">
-                                    </figure>
+                                    <a href="<%= product.images[1].url %>" target="_blank" class="thumbnail">
+                                        <figure class="image is-64x64">
+                                            <img src="<%= product.images[1].url %>" style="border-radius: 10px;">
+                                        </figure>
+                                    </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images[2]) { %> hide <% } %>"></i>
                                         <i class="far fa-check-square <% if (!product.images[2]) { %> hide <% } %>"></i>
@@ -186,13 +191,15 @@
                                 </label>
                                 <br>
                                 <% if(product.images[2]) { %>
-                                    <figure class="image is-128x128">
-                                        <img src="<%= product.images[2].url %>">
-                                    </figure>
+                                    <a href="<%= product.images[2].url %>" target="_blank" class="thumbnail">
+                                        <figure class="image is-64x64">
+                                            <img src="<%= product.images[2].url %>" style="border-radius: 10px;">
+                                        </figure>
+                                    </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images[3]) { %> hide <% } %>"></i>
                                         <i class="far fa-check-square <% if (!product.images[3]) { %> hide <% } %>"></i>
@@ -207,13 +214,15 @@
                                 </label>
                                 <br>
                                 <% if(product.images[3]) { %>
-                                    <figure class="image is-128x128">
-                                        <img src="<%= product.images[3].url %>">
-                                    </figure>
+                                    <a href="<%= product.images[3].url %>" target="_blank" class="thumbnail">
+                                        <figure class="image is-64x64">
+                                            <img src="<%= product.images[3].url %>" style="border-radius: 10px;">
+                                        </figure>
+                                    </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images[4]) { %> hide <% } %>"></i>
                                         <i class="far fa-check-square <% if (!product.images[4]) { %> hide <% } %>"></i>
@@ -228,9 +237,11 @@
                                 </label>
                                 <br>
                                 <% if(product.images[4]) { %>
-                                    <figure class="image is-128x128">
-                                        <img src="<%= product.images[4].url %>">
-                                    </figure>
+                                    <a href="<%= product.images[4].url %>" target="_blank" class="thumbnail">
+                                        <figure class="image is-64x64">
+                                            <img src="<%= product.images[4].url %>" style="border-radius: 10px;">
+                                        </figure>
+                                    </a>
                                 <% } %>
                             </div>
                         </div>                                     

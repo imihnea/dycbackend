@@ -1630,6 +1630,7 @@ module.exports = {
     // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
+    req.check('uploadImages', 'Something went wrong. Please try again.').matches(/^[0-9][0-9]?$|^100$/);
     // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
     // if(req.body.product.shipping === 'true') {
     //   req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
@@ -1911,7 +1912,7 @@ module.exports = {
       // check if there are images to delete
       if (req.body.deleteImages.length) {
         deleteImages = req.body.deleteImages.trim().split(' ');
-        if (deleteImages.length >= product.images.length) {
+        if ((deleteImages.length >= product.images.length) && (req.body.uploadImages == 0)) {
           req.flash('error', 'The product must have at least one image.');
           return res.redirect('back');
         }
@@ -2026,7 +2027,6 @@ module.exports = {
         body: {
           doc: {
             name: product.name,
-            image: product.images[0].url,
             btcPrice: product.btcPrice,
             condition: product.condition,
             category: product.category,
@@ -2076,6 +2076,20 @@ module.exports = {
           product.images[imageToMove] = oldImage;
         }
         await product.save();
+        elasticClient.update({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+            doc: {
+              image: product.images[0].url,
+            }
+          }
+        }, (err, res) => {
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
+        });
         req.flash('success', 'Image moved');
         return res.redirect('back');
       }
@@ -2114,6 +2128,20 @@ module.exports = {
           product.images[imageToMove] = oldImage;
         }
         await product.save();
+        elasticClient.update({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+            doc: {
+              image: product.images[0].url,
+            }
+          }
+        }, (err, res) => {
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
+        });
         req.flash('success', 'Image moved');
         return res.redirect('back');
       }

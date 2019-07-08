@@ -6,6 +6,7 @@ const { asyncErrorHandler } = middleware; // destructuring assignment
 const cloudinary = require('cloudinary');
 const Product = require('../models/product');
 const User = require('../models/user');
+const { client:elasticClient } = require('./elasticsearch');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -54,6 +55,20 @@ process.on('message', data => {
               });
           }
           await product.save();
+          elasticClient.update({
+            index: 'products',
+            type: 'products',
+            id: `${product._id}`,
+            body: {
+              doc: {
+                image: product.images[0].url,
+              }
+            }
+          }, (err, res) => {
+            if (err) {
+              errorLogger.error(`Status: ${err}\r\nCouldn't update product ${product._id} (ES)\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+            }
+          });
       }));
     } else if(data.toUpload === 'avatar') {
       User.findById({_id: data.user._id}, asyncErrorHandler(async (err, user) => {
@@ -118,6 +133,20 @@ process.on('message', data => {
             });
         }
         await product.save();
+        elasticClient.update({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+            doc: {
+              image: product.images[0].url,
+            }
+          }
+        }, (err, res) => {
+          if (err) {
+            errorLogger.error(`Status: ${err}\r\nCouldn't update product ${product._id} (ES)\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
+        });
       }));
     }
 });
