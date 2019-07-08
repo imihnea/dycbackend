@@ -76,7 +76,7 @@
                                                                         </form>
                                                                     </div>
                                                                 <% } %>
-                                                                <% if (index < 4) { %>
+                                                                <% if (index < product.images.length - 1) { %>
                                                                     <div class="column">
                                                                         <form action="/dashboard/<%= product._id %>/imageRight?_method=PUT" method="POST">
                                                                             <input type="number" value="<%= index %>" name="imageToMove" hidden>
