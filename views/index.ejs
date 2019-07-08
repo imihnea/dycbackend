@@ -87,7 +87,7 @@
                                 <a href="/products/<%= product._id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg is-square" style="width: auto;">
-                                            <img data-src="<%= product.images[0].url %>" class="featimgs loadFirst" alt="<%= product.name %>">
+                                            <img <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -109,7 +109,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img data-src="<%= product.images[0].url %>" class="featimgs loadFirst" alt="<%= product.name %>">
+                                                <img <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -138,7 +138,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
+                                                <img <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
