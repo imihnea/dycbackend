@@ -1906,36 +1906,6 @@ module.exports = {
     //   });
     } else {
       // check if there are any new images for upload
-      if (req.files) {
-        // upload images
-        for (const file of req.files) {
-          await cloudinary.v2.uploader.upload(file.path, 
-            {
-              moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
-              transformation: [
-              //   {quality: "jpegmini:1", sign_url: true},
-              //   {width: "auto", dpr: "auto"}
-              {angle: 0},
-              {flags: 'progressive:semi'}
-                ]
-            }, (err, result) => {
-              if(err) {
-                console.log(err);
-              } else if (result.moderation[0].status === 'rejected') {
-                  product.images.push({
-                    // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                    public_id: result.public_id,
-                  });
-              } else {
-                product.images.push({
-                  url: result.secure_url,
-                  public_id: result.public_id,
-                });
-              }
-            });
-        }
-      }
 
       let deleteImages;
       // check if there are images to delete
@@ -1961,6 +1931,14 @@ module.exports = {
             }
           }
         }
+      }
+
+      if (req.files) {
+        // upload images
+        let filesToUpload = req.files;
+        let toUpload = 'editProduct';
+        let dataForUploader = {product: product._id, files: filesToUpload, toUpload: toUpload};
+        multipleProcess.send(dataForUploader);
       }
 
       const btcPrice = Number(req.body.product.btc_price).toFixed(8);
@@ -2061,7 +2039,7 @@ module.exports = {
         }
       });
       // redirect to show page
-      req.flash('success', 'Product updated successfully!');
+      req.flash('success', 'Product updated successfully - images will upload shortly.');
       return res.redirect(`/products/${product.id}/view`);
     }
   },
