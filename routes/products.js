@@ -15,7 +15,7 @@ router.get('/:id/view', assignCookie, checkId, getPrice, asyncErrorHandler(getPr
 router.post('/:id/report', isLoggedIn, checkId, asyncErrorHandler(postReport));
 
 // Buy products
-router.put('/:id/buy', verifyCookie, isLoggedIn, checkId, asyncErrorHandler(buyProduct));
+router.put('/:id/buy', verifyCookie, isLoggedIn, checkId, hasCompleteProfile, asyncErrorHandler(buyProduct));
 
 // Report product
 router.put('/:id/report', verifyCookie, isLoggedIn, asyncErrorHandler(reportProduct));
