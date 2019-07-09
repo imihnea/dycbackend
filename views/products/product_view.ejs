@@ -151,11 +151,20 @@
                                 <p class="price_text">
                                     <%= product.btcPrice %>
                                 </p>
-                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                             </div>
                         </label>
                     </div>
-                    <!-- <p><sub>Transportation costs included</sub></p> Insert shipping fees here --> 
+                    <div class="column prod_info" style="padding: 0;">
+                        <label class="img-check ">
+                            <div class="prices frame openPrices">
+                                <p class="price_text">
+                                    <%= (product.btcPrice / oneDollar).toFixed(2) %>
+                                </p>
+                                <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
+                            </div>
+                        </label>
+                    </div>
                     <br>   
                 </form>
                 <% if (!user) { %> 
@@ -432,6 +441,7 @@
                                         </div>
                                     </div>
                                     <p class="curr_text"><b><%= sim.btcPrice %></b> BTC</p>
+                                    <p class="curr_text"><b><%= (sim.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
                                 </div> 
                             </a>      
                         </div>

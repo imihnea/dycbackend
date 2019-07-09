@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const images = document.querySelectorAll('.featimgs');
   const imageItems = [].slice.call(images);
   imageItems.forEach(img => {
-    img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
-  });
-  const loadImages = document.querySelectorAll('.loadFirst');
-  const loadItems = [].slice.call(loadImages);
-  loadItems.forEach(img => {
-    img.src = img.dataset.src;
+    if (img.dataset.src) {
+      img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
+      if (img.classList.contains('loadFirst')) {
+        img.src = img.dataset.src;
+      }
+    }
   });
 
   const element = document.querySelectorAll('.dealname');

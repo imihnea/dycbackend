@@ -573,6 +573,7 @@ module.exports = {
             'products.length': 0, 
             errors: false,
             onlyFeatured: false,
+            oneDollar: req.oneDollar,
             pageTitle: 'Deal Your Crypto',
             pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
             pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -596,6 +597,7 @@ module.exports = {
                   products,
                   errors: false,
                   onlyFeatured: false,
+                  oneDollar: req.oneDollar,
                   pageTitle: 'Deal Your Crypto',
                   pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                   pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -610,6 +612,7 @@ module.exports = {
                     products,
                     errors: false,
                     onlyFeatured: false,
+                    oneDollar: req.oneDollar,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                     pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -620,6 +623,7 @@ module.exports = {
                     products,
                     errors: false,
                     onlyFeatured: false,
+                    oneDollar: req.oneDollar,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                     pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -633,6 +637,7 @@ module.exports = {
               products,
               errors: false,
               onlyFeatured: true,
+              oneDollar: req.oneDollar,
               pageTitle: 'Deal Your Crypto',
               pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
               pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -963,6 +968,7 @@ module.exports = {
             continent, 
             avgRating, 
             condition,
+            oneDollar: req.oneDollar,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
             pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
             pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
@@ -1086,6 +1092,7 @@ module.exports = {
             continent, 
             avgRating, 
             condition,
+            oneDollar: req.oneDollar,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
             pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
             pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
@@ -1207,6 +1214,7 @@ module.exports = {
             continent, 
             avgRating, 
             condition,
+            oneDollar: req.oneDollar,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
             pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
             pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`

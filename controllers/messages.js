@@ -111,6 +111,7 @@ module.exports = {
             user2, 
             buyer, 
             product,
+            oneDollar: req.oneDollar,
             pageTitle: 'Messages - Deal Your Crypto',
             pageDescription: 'Your message on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
             pageKeywords: 'message, messages, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency'

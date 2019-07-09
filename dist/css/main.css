@@ -959,6 +959,11 @@ hr{
     white-space: normal !important;
 }
 
+.currencyIcon{
+    width: 30px; 
+    height: 30px;
+}
+
 @media screen and (max-width: 768px) {
     .profileDeal{
         max-width: auto !important;

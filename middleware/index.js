@@ -8,6 +8,34 @@ const Withdraw = require('../models/withdrawRequests');
 
 const jwt = require('jsonwebtoken');
 
+const Client = require('coinbase').Client;
+const client = new Client({
+  'apiKey': process.env.COINBASE_API_KEY,
+  'apiSecret': process.env.COINBASE_API_SECRET,
+});
+
+let oneDollar;
+
+client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+  if (!error) {
+    let btcrate = data.data.rates.USD;
+    oneDollar = 1/btcrate; // 1 USD
+  } else {
+    errorLogger.error(`Message: ${err.message}\r\nMethod: Getting exchange rate on server start\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+  }
+});
+
+setInterval(() => {
+  client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+    if (!error) {
+      let btcrate = data.data.rates.USD;
+      oneDollar = 1/btcrate; // 1 USD
+    } else {
+      errorLogger.error(`Message: ${err.message}\r\nMethod: Getting exchange rate on server start\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+    }
+  });
+}, 15 * 60 * 1000);
+
 module.exports = {
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -217,5 +245,9 @@ module.exports = {
       req.flash('error', 'That page does not exist.');
       return res.redirect('/error');
     }
+  },
+  getPrice: (req, res, next) => {
+    req.oneDollar = oneDollar.toFixed(8);
+    next();
   }
 };

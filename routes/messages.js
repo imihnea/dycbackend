@@ -7,13 +7,13 @@ const { getChats, getMessages, newMessage, newChat, updateMessages, newOngoingCh
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, checkIfBelongsChat, checkId } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, checkIfBelongsChat, checkId, getPrice } = middleware; // destructuring assignment
 
 // show all chats
 router.get('/', isLoggedIn, asyncErrorHandler(getChats));
 
 // show messages
-router.get('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(getMessages));
+router.get('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), getPrice, asyncErrorHandler(getMessages));
 
 // update read field
 router.put('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsChat), asyncErrorHandler(updateMessages));
