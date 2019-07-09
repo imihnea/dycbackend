@@ -32,7 +32,7 @@ process.on('message', data => {
             // Product page images
             await cloudinary.v2.uploader.upload(file.path, 
               {
-                // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+                moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
                 transformation: [
                 //   {quality: "jpegmini:1", sign_url: true},
                 //   {width: "auto", dpr: "auto"}
@@ -44,12 +44,12 @@ process.on('message', data => {
               }, (err, result) => {
                 if(err) {
                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading new product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                // } else if (result.moderation[0].status === 'rejected') {
-                //     product.images.main.push({
-                //       // replace with a 'picture contains nudity' or something
-                //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                //       public_id: result.public_id,
-                //     });
+                } else if (result.moderation[0].status === 'rejected') {
+                    product.images.main.push({
+                      // replace with a 'picture contains nudity' or something
+                      url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                      public_id: result.public_id,
+                    });
                 } else {
                   product.images.main.push({
                     url: result.secure_url,
@@ -59,7 +59,7 @@ process.on('message', data => {
               });
             // Cards and thumbnails
             await cloudinary.v2.uploader.upload(file.path, {
-              // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+              moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
@@ -72,12 +72,12 @@ process.on('message', data => {
             }, (err, result) => {
               if(err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading new product thumbnails\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              // } else if (result.moderation[0].status === 'rejected') {
-              //     product.images.sec.push({
+              } else if (result.moderation[0].status === 'rejected') {
+                  product.images.sec.push({
                     // replace with a 'picture contains nudity' or something
-                  //   url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                  //   public_id: result.public_id,
-                  // });
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                    public_id: result.public_id,
+                  });
               } else {
                 product.images.sec.push({
                   url: result.secure_url,
@@ -141,7 +141,7 @@ process.on('message', data => {
           // Product page images
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+              moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
@@ -153,12 +153,12 @@ process.on('message', data => {
             }, (err, result) => {
               if(err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading edit product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              // } else if (result.moderation[0].status === 'rejected') {
-              //     product.images.main.push({
-              //       // replace with a 'picture contains nudity' or something
-              //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-              //       public_id: result.public_id,
-              //     });
+              } else if (result.moderation[0].status === 'rejected') {
+                  product.images.main.push({
+                    // replace with a 'picture contains nudity' or something
+                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                    public_id: result.public_id,
+                  });
               } else {
                 product.images.main.push({
                   url: result.secure_url,
@@ -168,7 +168,7 @@ process.on('message', data => {
             });
           // Cards and thumbnails
           await cloudinary.v2.uploader.upload(file.path, {
-            // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+            moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
             transformation: [
             //   {quality: "jpegmini:1", sign_url: true},
             //   {width: "auto", dpr: "auto"}
@@ -181,12 +181,12 @@ process.on('message', data => {
           }, (err, result) => {
             if(err) {
               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading edit product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            // } else if (result.moderation[0].status === 'rejected') {
-            //     product.images.sec.push({
-            //       // replace with a 'picture contains nudity' or something
-            //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-            //       public_id: result.public_id,
-            //     });
+            } else if (result.moderation[0].status === 'rejected') {
+                product.images.sec.push({
+                  // replace with a 'picture contains nudity' or something
+                  url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                  public_id: result.public_id,
+                });
             } else {
               product.images.sec.push({
                 url: result.secure_url,
