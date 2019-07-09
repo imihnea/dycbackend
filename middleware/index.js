@@ -16,15 +16,6 @@ const client = new Client({
 
 let oneDollar;
 
-client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
-  if (!error) {
-    let btcrate = data.data.rates.USD;
-    oneDollar = 1/btcrate; // 1 USD
-  } else {
-    errorLogger.error(`Message: ${err.message}\r\nMethod: Getting exchange rate on server start\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-  }
-});
-
 setInterval(() => {
   client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
     if (!error) {
@@ -34,9 +25,19 @@ setInterval(() => {
       errorLogger.error(`Message: ${err.message}\r\nMethod: Getting exchange rate on server start\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
     }
   });
-}, 15 * 60 * 1000);
+},  15 * 60 * 1000);
 
 module.exports = {
+  initDollar() {
+    client.getExchangeRates({'currency': 'BTC'}, function(error, data) {
+      if (!error) {
+        let btcrate = data.data.rates.USD;
+        oneDollar = 1/btcrate; // 1 USD
+      } else {
+        errorLogger.error(`Message: ${err.message}\r\nMethod: Getting exchange rate on server start\r\nTime: ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+      }
+    });
+  },
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
       if (req.user.username) {

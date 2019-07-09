@@ -350,6 +350,10 @@ const { fork } = require("child_process");
 fork('./config/recurringTasks.js');
 fork('./config/deleteWithdraws.js');
 
+const { initDollar } = require('./middleware/index');
+
+initDollar();
+
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   if (process.env.NODE_ENV === 'production') {
     logger.info(`Server started on ${app.locals.moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
