@@ -896,7 +896,7 @@ module.exports = {
       if (errors) {
         return res.status(404).redirect('/error');
       } else {
-        req.query.searchName = cleanHTML(req.query.searchName);     
+        req.query.searchName = cleanHTML(req.query.searchName).toLowerCase();     
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -1016,7 +1016,7 @@ module.exports = {
       if (errors) {
         return res.status(404).redirect('/error');
       } else {
-        req.body.searchName = cleanHTML(req.query.searchName);
+        req.body.searchName = cleanHTML(req.query.searchName).toLowerCase();
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -1140,7 +1140,7 @@ module.exports = {
       if (errors) {
         return res.redirect('/error');
       } else {
-        req.query.searchName = cleanHTML(req.query.searchName);   
+        req.query.searchName = cleanHTML(req.query.searchName).toLowerCase();   
         if (from === 0) {
           let search = {};
           if (req.user) {
