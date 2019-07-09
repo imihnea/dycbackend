@@ -960,8 +960,8 @@ hr{
 }
 
 .currencyIcon{
-    width: 30px; 
-    height: 30px;
+    width: 30px !important; 
+    height: 30px !important;
 }
 
 @media screen and (max-width: 768px) {
