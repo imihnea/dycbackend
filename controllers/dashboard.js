@@ -9,6 +9,7 @@ const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Chat = require('../models/chat');
 const Withdraw = require('../models/withdrawRequests');
 const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
@@ -2337,6 +2338,7 @@ module.exports = {
       }
     });
     await Report.deleteMany({product: req.params.id});
+    await Chat.deleteMany({'product.id': req.params.id});
     req.flash('success', 'Product deleted successfully!');
     return res.redirect('/dashboard/open');
   },
