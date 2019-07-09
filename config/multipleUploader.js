@@ -26,33 +26,65 @@ logger.info(`Message: Multiple image uploader process started\r\nTime: ${moment(
 process.on('message', data => {
   if(data.toUpload === 'newProduct') {
       Product.findById({_id: data.product}, asyncErrorHandler(async (err, product) => {
-          product.images = [];
+          product.images.main = [];
+          product.images.sec = [];
           for (const file of data.files) {
+            // Product page images
             await cloudinary.v2.uploader.upload(file.path, 
               {
-                moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+                // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
                 transformation: [
                 //   {quality: "jpegmini:1", sign_url: true},
                 //   {width: "auto", dpr: "auto"}
-                    {angle: 0},
-                    {flags: 'progressive:semi'}
+                {angle: 0},
+                {flags: 'progressive:semi'},
+                {fetch_format: "auto"},
+                {width: "auto", dpr: "auto", crop: "scale"},
                   ]
               }, (err, result) => {
                 if(err) {
-                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading product picture\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                } else if (result.moderation[0].status === 'rejected') {
-                    req.body.product.images.push({
-                      // replace with a 'picture contains nudity' or something
-                      url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                      public_id: result.public_id,
-                    });
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading new product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                // } else if (result.moderation[0].status === 'rejected') {
+                //     product.images.main.push({
+                //       // replace with a 'picture contains nudity' or something
+                //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                //       public_id: result.public_id,
+                //     });
                 } else {
-                  product.images.push({
+                  product.images.main.push({
                     url: result.secure_url,
                     public_id: result.public_id,
                   });
                 }
               });
+            // Cards and thumbnails
+            await cloudinary.v2.uploader.upload(file.path, {
+              // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+              transformation: [
+              //   {quality: "jpegmini:1", sign_url: true},
+              //   {width: "auto", dpr: "auto"}
+              {angle: 0},
+              {flags: 'progressive:semi'},
+              {fetch_format: "auto"},
+              {width: "auto", dpr: "auto", crop: "scale"},
+              {width: "288", height: "288"}
+                ]
+            }, (err, result) => {
+              if(err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading new product thumbnails\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              // } else if (result.moderation[0].status === 'rejected') {
+              //     product.images.sec.push({
+                    // replace with a 'picture contains nudity' or something
+                  //   url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+                  //   public_id: result.public_id,
+                  // });
+              } else {
+                product.images.sec.push({
+                  url: result.secure_url,
+                  public_id: result.public_id,
+                });
+              }
+            });
           }
           await product.save();
           elasticClient.update({
@@ -61,7 +93,7 @@ process.on('message', data => {
             id: `${product._id}`,
             body: {
               doc: {
-                image: product.images[0].url,
+                image: product.images.main[0].url,
               }
             }
           }, (err, res) => {
@@ -106,31 +138,62 @@ process.on('message', data => {
     } else if(data.toUpload === 'editProduct') {
       Product.findById({_id: data.product}, asyncErrorHandler(async (err, product) => {
         for (const file of data.files) {
+          // Product page images
           await cloudinary.v2.uploader.upload(file.path, 
             {
-              moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+              // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
               transformation: [
               //   {quality: "jpegmini:1", sign_url: true},
               //   {width: "auto", dpr: "auto"}
               {angle: 0},
-              {flags: 'progressive:semi'}
+              {flags: 'progressive:semi'},
+              {fetch_format: "auto"},
+              {width: "auto", dpr: "auto", crop: "scale"},
                 ]
             }, (err, result) => {
               if(err) {
                 errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading edit product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-              } else if (result.moderation[0].status === 'rejected') {
-                  product.images.push({
-                    // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                    public_id: result.public_id,
-                  });
+              // } else if (result.moderation[0].status === 'rejected') {
+              //     product.images.main.push({
+              //       // replace with a 'picture contains nudity' or something
+              //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+              //       public_id: result.public_id,
+              //     });
               } else {
-                product.images.push({
+                product.images.main.push({
                   url: result.secure_url,
                   public_id: result.public_id,
                 });
               }
             });
+          // Cards and thumbnails
+          await cloudinary.v2.uploader.upload(file.path, {
+            // moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
+            transformation: [
+            //   {quality: "jpegmini:1", sign_url: true},
+            //   {width: "auto", dpr: "auto"}
+            {angle: 0},
+            {flags: 'progressive:semi'},
+            {fetch_format: "auto"},
+            {width: "auto", dpr: "auto", crop: "scale"},
+            {width: "288", height: "288"}
+              ]
+          }, (err, result) => {
+            if(err) {
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nMethod: Uploading edit product pictures\r\nProductId: ${data.product}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+            // } else if (result.moderation[0].status === 'rejected') {
+            //     product.images.sec.push({
+            //       // replace with a 'picture contains nudity' or something
+            //       url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
+            //       public_id: result.public_id,
+            //     });
+            } else {
+              product.images.sec.push({
+                url: result.secure_url,
+                public_id: result.public_id,
+              });
+            }
+          });
         }
         await product.save();
         elasticClient.update({
@@ -139,7 +202,7 @@ process.on('message', data => {
           id: `${product._id}`,
           body: {
             doc: {
-              image: product.images[0].url,
+              image: product.images.main[0].url,
             }
           }
         }, (err, res) => {

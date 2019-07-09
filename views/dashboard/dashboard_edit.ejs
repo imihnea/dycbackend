@@ -130,116 +130,116 @@
                         <input type="number" id="uploadImages" name="uploadImages" value="0" hidden>
                         <div class="file-upload">
                             <div class="mobileUpload">
-                                <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <label for="upload[0]" name="u" class="<% if (product.images.sec[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[0]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[0]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[0]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images.sec[0]) { %> hide <% } %>"></i>
                                     </span>
                                 </label>
                                 <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[0]) { %> value="<%= product.images[0].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[0]) { %> hide <% } %>">
+                                    <% if (product.images.sec[0]) { %> value="<%= product.images.sec[0].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[0]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                                 <br>
-                                <% if(product.images[0]) { %>
-                                    <a href="<%= product.images[0].url %>" target="_blank" class="thumbnail">
+                                <% if(product.images.sec[0]) { %>
+                                    <a href="<%= product.images.sec[0].url %>" target="_blank" class="thumbnail">
                                         <figure class="image is-64x64">
-                                            <img data-src="<%= product.images[0].url %>" class="thumbnailImg" style="border-radius: 10px;">
+                                            <img src="<%= product.images.sec[0].url %>" class="thumbnailImg" style="border-radius: 10px;">
                                         </figure>
                                     </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <label for="upload[1]" name="u" class="<% if (product.images.sec[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[1]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[1]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[1]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images.sec[1]) { %> hide <% } %>"></i>
                                     </span>
                                 </label>
                                 <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[1]) { %> value="<%= product.images[1].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[1]) { %> hide <% } %>">
+                                    <% if (product.images.sec[1]) { %> value="<%= product.images.sec[1].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[1]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                                 <br>
-                                <% if(product.images[1]) { %>
-                                    <a href="<%= product.images[1].url %>" target="_blank" class="thumbnail">
+                                <% if(product.images.sec[1]) { %>
+                                    <a href="<%= product.images.sec[1].url %>" target="_blank" class="thumbnail">
                                         <figure class="image is-64x64">
-                                            <img data-src="<%= product.images[1].url %>" class="thumbnailImg" style="border-radius: 10px;">
+                                            <img src="<%= product.images.sec[1].url %>" class="thumbnailImg" style="border-radius: 10px;">
                                         </figure>
                                     </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <label for="upload[2]" name="u" class="<% if (product.images.sec[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[2]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[2]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[2]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images.sec[2]) { %> hide <% } %>"></i>
                                     </span>
                                 </label>
                                 <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[2]) { %> value="<%= product.images[2].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[2]) { %> hide <% } %>">
+                                    <% if (product.images.sec[2]) { %> value="<%= product.images.sec[2].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[2]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                                 <br>
-                                <% if(product.images[2]) { %>
-                                    <a href="<%= product.images[2].url %>" target="_blank" class="thumbnail">
+                                <% if(product.images.sec[2]) { %>
+                                    <a href="<%= product.images.sec[2].url %>" target="_blank" class="thumbnail">
                                         <figure class="image is-64x64">
-                                            <img data-src="<%= product.images[2].url %>" class="thumbnailImg" style="border-radius: 10px;">
+                                            <img src="<%= product.images.sec[2].url %>" class="thumbnailImg" style="border-radius: 10px;">
                                         </figure>
                                     </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <label for="upload[3]" name="u" class="<% if (product.images.sec[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[3]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[3]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[3]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images.sec[3]) { %> hide <% } %>"></i>
                                     </span>
                                 </label>
                                 <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[3]) { %> value="<%= product.images[3].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[3]) { %> hide <% } %>">
+                                    <% if (product.images.sec[3]) { %> value="<%= product.images.sec[3].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[3]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                                 <br>
-                                <% if(product.images[3]) { %>
-                                    <a href="<%= product.images[3].url %>" target="_blank" class="thumbnail">
+                                <% if(product.images.sec[3]) { %>
+                                    <a href="<%= product.images.sec[3].url %>" target="_blank" class="thumbnail">
                                         <figure class="image is-64x64">
-                                            <img data-src="<%= product.images[3].url %>" class="thumbnailImg" style="border-radius: 10px;">
+                                            <img src="<%= product.images.sec[3].url %>" class="thumbnailImg" style="border-radius: 10px;">
                                         </figure>
                                     </a>
                                 <% } %>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <label for="upload[4]" name="u" class="<% if (product.images.sec[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[4]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[4]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[4]) { %> hide <% } %>"></i>
+                                        <i class="far fa-check-square <% if (!product.images.sec[4]) { %> hide <% } %>"></i>
                                     </span>
                                 </label>
                                 <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[4]) { %> value="<%= product.images[4].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[4]) { %> hide <% } %>">
+                                    <% if (product.images.sec[4]) { %> value="<%= product.images.sec[4].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[4]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                                 <br>
-                                <% if(product.images[4]) { %>
-                                    <a href="<%= product.images[4].url %>" target="_blank" class="thumbnail">
+                                <% if(product.images.sec[4]) { %>
+                                    <a href="<%= product.images.sec[4].url %>" target="_blank" class="thumbnail">
                                         <figure class="image is-64x64">
-                                            <img data-src="<%= product.images[4].url %>" class="thumbnailImg" style="border-radius: 10px;">
+                                            <img src="<%= product.images.sec[4].url %>" class="thumbnailImg" style="border-radius: 10px;">
                                         </figure>
                                     </a>
                                 <% } %>
@@ -360,7 +360,7 @@
 <script src="/dist/js/dashboard_new.js"></script>
 <script src="/dist/js/deleteImages.js"></script>
 <span id="currentImages" hidden>
-    <%= JSON.stringify(product.images) %>
+    <%= JSON.stringify(product.images.main) %>
 </span>
 <script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
 <script src="/dist/js/parsley.min.js"></script>

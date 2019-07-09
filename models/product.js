@@ -6,7 +6,16 @@ const Review = require('./review');
 
 const ProductSchema = new Schema({
   name: { type: String, es_indexed: true },
-  images: [{ url: {type: String, es_indexed: true}, public_id: String }],
+  images: {
+    main: [{
+      url: {type: String, es_indexed: true},
+      public_id: String
+    }],
+    sec: [{
+      url: {type: String, es_indexed: true},
+      public_id: String
+    }]
+  },
   category: { type: Array, es_indexed: true },
   condition: { type: String, es_indexed: true },
   description: { type: String, es_indexed: true },

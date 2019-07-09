@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (img.length > 0) {
           for (let i = 0; i < j; i += 1) {
               if (img[i].classList.contains('noImg')) {
-                  img[i].classList.remove('noImg');
                   img[i].src = img[i].dataset.src;
+                  img[i].classList.remove('noImg');
               }
           }
       }

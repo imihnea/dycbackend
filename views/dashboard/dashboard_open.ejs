@@ -27,7 +27,7 @@
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img <% if (product.images[0]) { %> data-src="<%= product.images[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
+                                        <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
                                     </figure>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -50,7 +50,7 @@
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
                                     </div>
-                                    <% if (product.images.length > 1) { %>
+                                    <% if (product.images.sec.length > 1) { %>
                                         <button class="button is-primary imageModal">Image order</button>
                                         <div class="modal modalImage">
                                             <div class="modal-background"></div>
@@ -61,10 +61,10 @@
                                             </header>
                                             <footer class="modal-card-foot">
                                                 <div class="columns">
-                                                    <% product.images.forEach((img, index) => { %>
+                                                    <% product.images.sec.forEach((img, index) => { %>
                                                         <div class="column">
                                                             <figure class="image is-128x128">
-                                                                <img class="noLoad hidden noImg productImage" data-src="<%= img.url %>" alt="Image <%= index + 1 %>">
+                                                                <img class="productImage" src="<%= img.url %>" alt="Image <%= index + 1 %>">
                                                             </figure>
                                                             <br>
                                                             <div class="columns">

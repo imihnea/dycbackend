@@ -761,7 +761,10 @@ setInterval( () => {
             errorLogger.error(`Message: ${err} - Couldn't find the flagged products\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         } else {
             products.forEach(product => {
-                product.images.forEach(image => {
+                product.images.main.forEach(image => {
+                    cloudinary.v2.uploader.destroy(image.public_id);
+                });
+                product.images.sec.forEach(image => {
                     cloudinary.v2.uploader.destroy(image.public_id);
                 });
                 const id = product._id;
@@ -836,7 +839,10 @@ setInterval( () => {
                                                 });
                                             }
                                         });
-                                        product.images.forEach(image => {
+                                        product.images.main.forEach(image => {
+                                            cloudinary.v2.uploader.destroy(image.public_id);
+                                        });
+                                        product.images.sec.forEach(image => {
                                             cloudinary.v2.uploader.destroy(image.public_id);
                                         });
                                         const id = product._id;

@@ -56,7 +56,7 @@
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img data-src="<%= product.images[0].url %>" class="featimgs loadFirst" alt="<%= product.name %>">
+                                            <img src="<%= product.images.sec[0].url %>" class="featimgs loadFirst" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -81,7 +81,7 @@
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img data-src="<%= product.images[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
+                                            <img data-src="<%= product.images.sec[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">

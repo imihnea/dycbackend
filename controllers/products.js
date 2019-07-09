@@ -591,7 +591,7 @@ module.exports = {
                                 product: {
                                     id: product._id,
                                     name: product.name,
-                                    imageUrl: product.images[0].url,
+                                    imageUrl: product.images.sec[0].url,
                                     author: product.author,
                                     price: product.btcPrice,
                                 },
@@ -635,7 +635,7 @@ module.exports = {
                             await Notification.create({
                                 userid: product.author.id,
                                 linkTo: `/deals/${deal._id}`,
-                                imgLink: product.images[0].url,
+                                imgLink: product.images.sec[0].url,
                                 message: `You have received a deal request`
                             });
                             // Send an email to the seller letting them know about the deal request

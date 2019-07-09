@@ -600,7 +600,7 @@ module.exports = {
         await Notification.create({
             userid: product.author._id,
             linkTo: `/`,
-            imgLink: product.images[0].url,
+            imgLink: product.images.sec[0].url,
             message: `${product.name} has been found to breach the guidelines and it has been removed`
         });
         let deleteDate = new Date();

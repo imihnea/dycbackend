@@ -97,7 +97,7 @@ const startElastic = () => {
                                         body: {
                                             id: product._id,
                                             feat_1: product.feat_1,
-                                            image: product.images[0].url,
+                                            image: product.images.sec[0].url,
                                             name: product.name,
                                             author: product.author,
                                             avgRating: product.avgRating,
@@ -189,7 +189,7 @@ const startElastic = () => {
                                     body: {
                                         id: product._id,
                                         feat_1: product.feat_1,
-                                        image: product.images[0].url,
+                                        image: product.images.sec[0].url,
                                         name: product.name,
                                         author: product.author,
                                         avgRating: product.avgRating,

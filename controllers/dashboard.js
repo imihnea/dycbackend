@@ -1361,7 +1361,9 @@ module.exports = {
         req.body.product.name = filter.clean(cleanHTML(String(req.body.product.name)));
         req.body.product.description = filter.clean(cleanHTML(String(req.body.product.description)));
         req.body.product.tags = cleanHTML(String(req.body.product.tags));
-        req.body.product.images = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
+        req.body.product.images = {main: [], sec: []};
+        req.body.product.images.main = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
+        req.body.product.images.sec = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
         const author = {
           id: req.user._id,
           username: req.user.username,
@@ -1517,7 +1519,7 @@ module.exports = {
           body: {
               id: product._id,
               feat_1: product.feat_1,
-              image: product.images[0].url,
+              image: product.images.sec[0].url,
               name: product.name,
               author: product.author,
               avgRating: product.avgRating,
@@ -1912,7 +1914,7 @@ module.exports = {
       // check if there are images to delete
       if (req.body.deleteImages.length) {
         deleteImages = req.body.deleteImages.trim().split(' ');
-        if ((deleteImages.length >= product.images.length) && (req.body.uploadImages == 0)) {
+        if ((deleteImages.length >= product.images.main.length) && (req.body.uploadImages == 0)) {
           req.flash('error', 'The product must have at least one image.');
           return res.redirect('back');
         }
@@ -1920,15 +1922,25 @@ module.exports = {
           // delete images from cloudinary
           await cloudinary.v2.uploader.destroy(public_id, (err) => {
             if (err) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't destroy image with public id ${public_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               req.flash('error', 'A problem has occured. Please try again later.');
               return res.redirect('back');
             }
           });
           // delete images from DB
-          for (const image of product.images) {
+          for (const image of product.images.main) {
             if (image.public_id === public_id) {
-              product.images.splice(product.images.indexOf(image), 1);
+              // delete thumbnails from cloudinary
+              const thumbnailpublic_id = product.images.sec[product.images.main.indexOf(image)].public_id;
+              await cloudinary.v2.uploader.destroy(thumbnailpublic_id, (err) => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't destroy image with public id ${thumbnailpublic_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  req.flash('error', 'A problem has occured. Please try again later.');
+                  return res.redirect('back');
+                }
+              });
+              product.images.sec.splice(product.images.main.indexOf(image), 1);
+              product.images.main.splice(product.images.main.indexOf(image), 1);
             }
           }
         }
@@ -2052,28 +2064,46 @@ module.exports = {
     } else {
       const imageToMove = Number(req.body.imageToMove);
       const product = await Product.findById(req.params.id);
-      if (imageToMove > product.images.length - 1) {
+      if (imageToMove > product.images.main.length - 1) {
         req.flash('error', 'Something went wrong. Please try again.');
         return res.redirect('back');
       } else {
         if (imageToMove == 0) {
           const oldImage = {
-            _id: product.images[imageToMove]._id,
-            url: product.images[imageToMove].url,
-            public_id: product.images[imageToMove].public_id
+            main: {
+              _id: product.images.main[imageToMove]._id,
+              url: product.images.main[imageToMove].url,
+              public_id: product.images.main[imageToMove].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove]._id,
+              url: product.images.sec[imageToMove].url,
+              public_id: product.images.sec[imageToMove].public_id
+            }
           }
-          for (let i = 1; i <= product.images.length - 1; i += 1) {
-            product.images[i - 1] = product.images[i];
+          for (let i = 1; i <= product.images.main.length - 1; i += 1) {
+            product.images.main[i - 1] = product.images.main[i];
+            product.images.sec[i - 1] = product.images.sec[i];
           }
-          product.images[product.images.length - 1] = oldImage;
+          product.images.main[product.images.main.length - 1] = oldImage.main;
+          product.images.sec[product.images.sec.length - 1] = oldImage.sec;
         } else {
           const oldImage = {
-            _id: product.images[imageToMove - 1]._id,
-            url: product.images[imageToMove - 1].url,
-            public_id: product.images[imageToMove - 1].public_id
-          };
-          product.images[imageToMove - 1] = product.images[imageToMove];
-          product.images[imageToMove] = oldImage;
+            main: {
+              _id: product.images.main[imageToMove - 1]._id,
+              url: product.images.main[imageToMove - 1].url,
+              public_id: product.images.main[imageToMove - 1].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove - 1]._id,
+              url: product.images.sec[imageToMove - 1].url,
+              public_id: product.images.sec[imageToMove - 1].public_id
+            }
+          }
+          product.images.main[imageToMove - 1] = product.images.main[imageToMove];
+          product.images.sec[imageToMove - 1] = product.images.sec[imageToMove];
+          product.images.main[imageToMove] = oldImage.main;
+          product.images.sec[imageToMove] = oldImage.sec;
         }
         await product.save();
         elasticClient.update({
@@ -2082,7 +2112,7 @@ module.exports = {
           id: `${product._id}`,
           body: {
             doc: {
-              image: product.images[0].url,
+              image: product.images.sec[0].url,
             }
           }
         }, (err, res) => {
@@ -2104,28 +2134,46 @@ module.exports = {
     } else {
       const imageToMove = Number(req.body.imageToMove);
       const product = await Product.findById(req.params.id);
-      if (imageToMove > product.images.length - 1) {
+      if (imageToMove > product.images.main.length - 1) {
         req.flash('error', 'Something went wrong. Please try again.');
         return res.redirect('back');
       } else {
-        if (imageToMove == product.images.length - 1) {
+        if (imageToMove == product.images.main.length - 1) {
           const oldImage = {
-            _id: product.images[imageToMove]._id,
-            url: product.images[imageToMove].url,
-            public_id: product.images[imageToMove].public_id
+            main: {
+              _id: product.images.main[imageToMove]._id,
+              url: product.images.main[imageToMove].url,
+              public_id: product.images.main[imageToMove].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove]._id,
+              url: product.images.sec[imageToMove].url,
+              public_id: product.images.sec[imageToMove].public_id
+            }
           }
-          for (let i = product.images.length - 2; i >= 0; i -= 1) {
-            product.images[i + 1] = product.images[i]; 
+          for (let i = product.images.main.length - 2; i >= 0; i -= 1) {
+            product.images.main[i + 1] = product.images.main[i];
+            product.images.sec[i + 1] = product.images.sec[i]; 
           }
-          product.images[0] = oldImage;
+          product.images.main[0] = oldImage.main;
+          product.images.sec[0] = oldImage.sec;
         } else {
           const oldImage = {
-            _id: product.images[imageToMove + 1]._id,
-            url: product.images[imageToMove + 1].url,
-            public_id: product.images[imageToMove + 1].public_id
-          };
-          product.images[imageToMove + 1] = product.images[imageToMove];
-          product.images[imageToMove] = oldImage;
+            main: {
+              _id: product.images.main[imageToMove + 1]._id,
+              url: product.images.main[imageToMove + 1].url,
+              public_id: product.images.main[imageToMove + 1].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove + 1]._id,
+              url: product.images.sec[imageToMove + 1].url,
+              public_id: product.images.sec[imageToMove + 1].public_id
+            }
+          }
+          product.images.main[imageToMove + 1] = product.images.main[imageToMove];
+          product.images.sec[imageToMove + 1] = product.images.sec[imageToMove];
+          product.images.main[imageToMove] = oldImage.main;
+          product.images.sec[imageToMove] = oldImage.sec;
         }
         await product.save();
         elasticClient.update({
@@ -2134,7 +2182,7 @@ module.exports = {
           id: `${product._id}`,
           body: {
             doc: {
-              image: product.images[0].url,
+              image: product.images.main[0].url,
             }
           }
         }, (err, res) => {
