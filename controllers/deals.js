@@ -379,9 +379,9 @@ module.exports = {
     },
     async cancelDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        if (deal.buyer.shipping === 'FaceToFace') {
+        if (deal.buyer.delivery.shipping === 'FaceToFace') {
             await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: deal.price }});
-        // } else if (deal.buyer.shipping === 'Shipping') {
+        // } else if (deal.buyer.delivery.shipping === 'Shipping') {
         //     await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: (deal.price + deal.shippingPrice) }});
         }
         deal.status = 'Cancelled';
@@ -395,6 +395,12 @@ module.exports = {
         await seller.save();
         await Notification.create({
             userid: seller._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `Your deal request has been cancelled`
+        });
+        await Notification.create({
+            userid: deal.buyer.id,
             linkTo: `/deals/${deal._id}`,
             imgLink: deal.product.imageUrl,
             message: `Your deal request has been cancelled`

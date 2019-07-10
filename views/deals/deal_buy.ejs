@@ -73,19 +73,6 @@
         <h2 class="subtitle">Your Details</h2>
         <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
             <div class="field">
-                <label class="label" for="deliveryPhone" style="text-align: left !important;">Phone Number</label>
-                <p class="control has-icons-left">
-                    <% if(user.number) { %>
-                        <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
-                    <% } else { %>
-                        <input class="input" name="deliveryPhone" id="telephone" type="tel" placeholder="Contact Phone Number" required/>
-                    <% } %>
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-phone"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
                 <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                 <p class="control has-icons-left">
                     <% if(user.full_name) { %>

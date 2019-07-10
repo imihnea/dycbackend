@@ -426,8 +426,6 @@ module.exports = {
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
             req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
                 .trim();
-            req.check('deliveryPhone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
-                .trim();
             // if (req.body.deliveryShipping == 'Shipping') {
             //     req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
             //         .trim();
@@ -602,7 +600,6 @@ module.exports = {
                                     avatarUrl: user.avatar.url,
                                     'delivery.shipping': req.body.deliveryShipping,
                                     'delivery.name': req.body.deliveryName,
-                                    'delivery.phone': req.body.deliveryPhone,
                                     'delivery.email': req.body.deliveryEmail,
                                 },
                                 price: product.btcPrice,

@@ -316,6 +316,12 @@
                                     <br>
                                 <% } %>
                             <% } %>
+                            <% if ((!['Completed', 'Declined', 'Cancelled', 'Processing'].includes(deal.status)) && (user._id.toString() === seller._id.toString())) { %>
+                                <div class="buttons has-addons is-centered">
+                                    <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                    <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                                </div>
+                            <% } %>
                             <% if (['Completed', 'Declined', 'Cancelled'].includes(deal.status)) { %>
                                 <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">
                                     <button class="button is-danger">Delete Deal</button>
