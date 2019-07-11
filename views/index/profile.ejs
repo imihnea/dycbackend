@@ -54,9 +54,9 @@
                         <% b.forEach(product => { %>
                             <div class="column card feat_card frame activeDealProduct profileDeal <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
-                                    <div class="card-image">
+                                    <div class="card-image imageCard">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img src="<%= product.images.sec[0].url %>" class="featimgs loadFirst" alt="<%= product.name %>">
+                                            <img src="<%= product.images.sec[0].url %>" class="featimgs loadFirst indexImg" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -66,6 +66,7 @@
                                             </div>
                                         </div>
                                         <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
+                                        <p class="curr_text"><b><%= (product.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
                                     </div> 
                                 </a>
                             </div>
@@ -79,9 +80,9 @@
                         <% b.forEach(product => { %>
                             <div class="column card feat_card frame activeDealProduct profileDeal noLoad hidden <% if (product.feat_1.status == true) { %> featured <% } %>">
                                 <a href="/products/<%= product.id %>/view">
-                                    <div class="card-image">
+                                    <div class="card-image imageCard">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img data-src="<%= product.images.sec[0].url %>" class="noImg featimgs" alt="<%= product.name %>">
+                                            <img data-src="<%= product.images.sec[0].url %>" class="noImg featimgs indexImg" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -91,6 +92,7 @@
                                             </div>
                                         </div>
                                         <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
+                                        <p class="curr_text"><b><%= (product.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
                                     </div> 
                                 </a>
                             </div>

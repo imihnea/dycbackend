@@ -11,7 +11,7 @@ const { profileUpdate, getProfile } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, verifyParam, checkId } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, verifyParam, checkId, getPrice } = middleware; // destructuring assignment
 
 const crypto = require('crypto');
 
@@ -47,7 +47,7 @@ const upload = multer({
 
 // GET Profile route
 
-router.get('/:id', checkId, asyncErrorHandler(getProfile));
+router.get('/:id', checkId, getPrice, asyncErrorHandler(getProfile));
 
 // PUT Profile route
 

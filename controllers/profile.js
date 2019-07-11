@@ -67,6 +67,7 @@ module.exports = {
           floorRating, 
           reviews,
           premium,
+          oneDollar: req.oneDollar,
           pageTitle: 'Profile - Deal Your Crypto',
           pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
           pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -78,6 +79,7 @@ module.exports = {
           floorRating, 
           reviews,
           premium: false,
+          oneDollar: req.oneDollar,
           pageTitle: 'Profile - Deal Your Crypto',
           pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
           pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
