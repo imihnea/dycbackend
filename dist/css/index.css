@@ -241,6 +241,13 @@ div.latest-details{
 
 /* Video */
 
+.video-section {
+    background: url(/dist/img/video_column.png); 
+    background-size: cover; 
+    background-attachment: fixed; 
+    margin-right: 0% !important;
+}
+
 @media screen and (max-width: 560px) {
     .video-container {
         position: relative;
