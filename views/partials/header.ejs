@@ -52,9 +52,6 @@
         <div class="container">
             <div class="navbar-brand">
                 <a id="Logo" class="navbar-item" href="/"></a>
-                <!-- <a id="Logo" class="navbar-item" href="/">
-                    <img src="/dist/img/logo.png" alt="Website Logo">
-                </a> -->
                 <% if (user) { %>
                     <p class="hidden" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
@@ -636,10 +633,9 @@
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content frame">
-                                    <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                         <div class="currency dropdown-item">
                                             <p class="curr_text"><% if (user.btcbalance) {%> <%=  user.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
-                                            <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <span class="curr_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                         </div>
                                         <hr class="dropdown-divider">
                                         <div class="dropdown-item">

@@ -292,7 +292,7 @@ a:hover {
 }
 .currency{
     display: flex !important;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
     color: black !important;
     padding-top: 3vh;
