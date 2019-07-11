@@ -17,12 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const thumbnailImgs = document.querySelectorAll('.thumbnailImg');
-    const thumbnailImgItems = [].slice.call(thumbnailImgs);
-    thumbnailImgItems.forEach(img => {
-        img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
-        img.src = img.dataset.src;
-    });
+    // const thumbnailImgs = document.querySelectorAll('.thumbnailImg');
+    // const thumbnailImgItems = [].slice.call(thumbnailImgs);
+    // thumbnailImgItems.forEach(img => {
+    //     img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
+    //     img.src = img.dataset.src;
+    // });
 
     const imageInput = document.querySelectorAll('.file-upload__input');
     const imageInputItems = [].slice.call(imageInput);

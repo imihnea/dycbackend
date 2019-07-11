@@ -23,19 +23,19 @@
                         <% if (searchCateg === 'all') { %>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                                <input type="text" name="category" value="Collectibles and Art" hidden>
+                                <input type="text" name="continent" value="<%= continent %>" hidden>
+                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                                <input type="text" name="currency" value="<%= currency %>" hidden>
+                                <button class="searchBtn searchCategBtn">Collectibles and Art</button>
+                            </form>
+                            <form action="/firstCategSearch" method="POST">
+                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
                                 <input type="text" name="category" value="Electronics" hidden>
                                 <input type="text" name="continent" value="<%= continent %>" hidden>
                                 <input type="text" name="currency" value="<%= currency %>" hidden>
                                 <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                                 <button class="searchBtn searchCategBtn">Electronics</button>
-                            </form>
-                            <form action="/firstCategSearch" method="POST">
-                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Home Improvement" hidden>
-                                <input type="text" name="continent" value="<%= continent %>" hidden>
-                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-                                <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Home Improvement</button>
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
@@ -47,35 +47,11 @@
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Pet Supplies" hidden>
+                                <input type="text" name="category" value="Home Improvement" hidden>
                                 <input type="text" name="continent" value="<%= continent %>" hidden>
                                 <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                                 <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Pet Supplies</button>
-                            </form>
-                            <form action="/firstCategSearch" method="POST">
-                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Mothers and Babies" hidden>
-                                <input type="text" name="continent" value="<%= continent %>" hidden>
-                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-                                <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Mothers and Babies</button>
-                            </form>
-                            <form action="/firstCategSearch" method="POST">
-                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Sports and Outdoors" hidden>
-                                <input type="text" name="continent" value="<%= continent %>" hidden>
-                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-                                <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Sports and Outdoors</button>
-                            </form>
-                            <form action="/firstCategSearch" method="POST">
-                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Collectibles and Art" hidden>
-                                <input type="text" name="continent" value="<%= continent %>" hidden>
-                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
-                                <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Collectibles and Art</button>
+                                <button class="searchBtn searchCategBtn">Home Improvement</button>
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
@@ -87,11 +63,19 @@
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
-                                <input type="text" name="category" value="Vehicles" hidden>
+                                <input type="text" name="category" value="Mothers and Babies" hidden>
                                 <input type="text" name="continent" value="<%= continent %>" hidden>
                                 <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                                 <input type="text" name="currency" value="<%= currency %>" hidden>
-                                <button class="searchBtn searchCategBtn">Vehicles</button>
+                                <button class="searchBtn searchCategBtn">Mothers and Babies</button>
+                            </form>
+                            <form action="/firstCategSearch" method="POST">
+                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                                <input type="text" name="category" value="Pet Supplies" hidden>
+                                <input type="text" name="continent" value="<%= continent %>" hidden>
+                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                                <input type="text" name="currency" value="<%= currency %>" hidden>
+                                <button class="searchBtn searchCategBtn">Pet Supplies</button>
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>
@@ -100,6 +84,22 @@
                                 <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
                                 <input type="text" name="currency" value="<%= currency %>" hidden>
                                 <button class="searchBtn searchCategBtn">Real Estate</button>
+                            </form>
+                            <form action="/firstCategSearch" method="POST">
+                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                                <input type="text" name="category" value="Sports and Outdoors" hidden>
+                                <input type="text" name="continent" value="<%= continent %>" hidden>
+                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                                <input type="text" name="currency" value="<%= currency %>" hidden>
+                                <button class="searchBtn searchCategBtn">Sports and Outdoors</button>
+                            </form>
+                            <form action="/firstCategSearch" method="POST">
+                                <input type="text" name="searchName" value="<%= searchName %>" hidden>
+                                <input type="text" name="category" value="Vehicles" hidden>
+                                <input type="text" name="continent" value="<%= continent %>" hidden>
+                                <input type="text" name="avgRating" value="<%= avgRating %>" hidden>
+                                <input type="text" name="currency" value="<%= currency %>" hidden>
+                                <button class="searchBtn searchCategBtn">Vehicles</button>
                             </form>
                             <form action="/firstCategSearch" method="POST">
                                 <input type="text" name="searchName" value="<%= searchName %>" hidden>

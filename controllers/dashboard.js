@@ -1526,7 +1526,10 @@ module.exports = {
               avgRating: product.avgRating,
               btcPrice: product.btcPrice,
               condition: product.condition,
-              category: product.category,
+              category0: product.category[0],
+              category1: product.category[1],
+              category2: product.category[2],
+              category3: product.category[3],
               createdAt: product.createdAt,
               searchableTags: product.searchableTags
           }
@@ -2032,6 +2035,7 @@ module.exports = {
       product.tags = tags;
       product.searchableTags = req.body.product.tags;
       // save the updated product into the db
+      product.markModified('category');
       await product.save();
       elasticClient.update({
         index: 'products',
@@ -2042,7 +2046,10 @@ module.exports = {
             name: product.name,
             btcPrice: product.btcPrice,
             condition: product.condition,
-            category: product.category,
+            category0: product.category[0],
+            category1: product.category[1],
+            category2: product.category[2],
+            category3: product.category[3],
             searchableTags: product.searchableTags
           }
         }
