@@ -965,6 +965,15 @@ hr{
 }
 
 @media screen and (max-width: 768px) {
+    .imageCard{
+        max-height: 50vh;
+    }
+
+    .indexImg{
+        max-height: 50vh;
+        margin-top: 0;
+    }
+
     .profileDeal{
         max-width: auto !important;
     }

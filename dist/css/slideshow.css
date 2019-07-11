@@ -219,7 +219,14 @@
       width: 100vw !important;
   }
 
+@media only screen and (max-width: 768px) {
+    #slider{
+        display: none;
+    }
+}
+
   @media only screen and (max-width: 600px) {
+
         .sliderImg{
             width: 100% !important;
         }
