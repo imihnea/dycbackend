@@ -48,6 +48,7 @@
                                 <option value="Mothers and Babies" <% if (product.category[1] == 'Mothers and Babies') { %> selected <% } %>>Mothers and Babies</option>
                                 <option value="Pet Supplies" <% if (product.category[1] == 'Pet Supplies') { %> selected <% } %>>Pet Supplies</option>
                                 <option value="Real Estate" <% if (product.category[1] == 'Real Estate') { %> selected <% } %>>Real Estate</option>
+                                <option value="Services" <% if (product.category[1] == 'Services') { %> selected <% } %>>Services</option>
                                 <option value="Sports and Outdoors" <% if (product.category[1] == 'Sports and Outdoors') { %> selected <% } %>>Sports and Outdoors</option>
                                 <option value="Vehicles" <% if (product.category[1] == 'Vehicles') { %> selected <% } %>>Vehicles</option>
                                 <option value="Other" <% if (product.category[1] == 'Other') { %>selectd<% } %>>Other</option>
@@ -65,10 +66,10 @@
                                 <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
                             </select>
                         </div>
-                        <div class="select cont-select" style="width: 90% !important;">
-                            <select type="text" name="product[condition]" style="width: 100%" required
+                        <div class="select cont-select <% if (product.category[1] == 'Services') { %>hidden<% } %>" id="conditionSelect" style="width: 90% !important;">
+                            <select type="text" name="product[condition]" style="width: 100%"
                             data-parsley-error-message="">
-                                <option disabled>Condition</option>
+                                <option disabled <% if (product.condition == 'Service') { %> selected <% } %>>Condition</option>
                                 <option value="Not Specified" <% if (product.condition == 'Not Specified') { %> selected <% } %> >Not Specified</option>
                                 <option value="Brand New" <% if (product.condition == 'Brand New') { %> selected <% } %> >Brand New</option>
                                 <option value="Like New" <% if (product.condition == 'Like New') { %> selected <% } %>>Like New</option>

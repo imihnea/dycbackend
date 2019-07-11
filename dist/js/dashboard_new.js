@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Mothers and Babies', opt: ['Clothes', 'Strollers', 'Baby Care', 'Safety', 'Toys', 'Other Baby Products']},
     { name: 'Pet Supplies', opt: ['Dogs', 'Cats', 'Aquatic Pets', 'Birds', 'Other Pets']},
     { name: 'Real Estate', opt: ['Apartments', 'Houses', 'Other Estates']},
+    { name: 'Services', opt: ['IT', 'Design', 'Entertainment', 'Education', 'Financial', 'Sports', 'Other Services']},
     { name: 'Sports and Outdoors', opt: ['Sports and Fitness', 'Outdoor']},
     { name: 'Vehicles', opt: ['Automobiles', 'Trucks and Trailers', 'Motorcycles and ATVs', 'Boats', 'Other Vehicles']},
     { name: 'Other', opt: ['Digital Goods', 'Other']}
@@ -264,7 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Boats', opt: ['Leisure Boats', 'Fishing Boats', 'Parts', 'Other'] },
     { name: 'Other Vehicles', opt: ['Other'] },
     { name: 'Digital Goods', opt: ['Digital Art', 'Software license', 'Video Game Accounts', 'Cryptocurrencies', 'Other']},
-    { name: 'Other', opt: ['Gift Cards', 'Services', 'Other']}
+    { name: 'Other', opt: ['Gift Cards', 'Services', 'Other']},
+    { name: 'IT', opt: ['Web', 'Security', 'Databases', 'Software', 'Computer Repairs', 'Other']},
+    { name: 'Design', opt: ['Logo', 'Video', 'Photography', 'Advertising', 'Clothing', 'Art', 'Other']},
+    { name: 'Entertainment', opt: ['Movies', 'Concerts', 'Festivals', 'Tickets', 'Other']},
+    { name: 'Education', opt: ['Tutoring', 'Homework', 'Notes', 'Books', 'Other']},
+    { name: 'Financial', opt: ['Tutoring', 'Advice', 'Predictions', 'Managing', 'Accounting', 'Other']},
+    { name: 'Sports', opt: ['Coaching', 'Training', 'Diets', 'Other']},
+    { name: 'Other Services', opt: ['Other']}
   ];
 
   if (firstCat.value) {
@@ -287,7 +295,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const condition = document.getElementById('conditionSelect');
   firstCat.addEventListener('change', () => {
+    if (firstCat.value == 'Services') {
+      if (!condition.classList.contains('hidden')) {
+        condition.classList.add('hidden');
+      }
+    } else {
+      if (condition.classList.contains('hidden')) {
+        condition.classList.remove('hidden');
+      }
+    }
     secondCat.innerHTML = '<option disabled selected>Secondary Category</option>';
     thirdCat.innerHTML = '<option disabled selected>Tertiary Category</option>';
     Categories.forEach((item) => {
