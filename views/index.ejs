@@ -71,13 +71,17 @@
             Deal Your Crypto is the perfect marketplace to buy and sell anything for Bitcoin!
         </p>
         <div class="buttons is-centered">
-            <a class="button is-warning is-large" href="#products">Buy with Bitcoin</a>
-            <a class="button is-warning is-large" href="/dashboard/new">Sell for Bitcoin</a>
+            <a class="button is-warning is-large" href="/firstCategSearch?searchName=&category=all">Buy with Bitcoin</a>
+            <% if(!user) { %>
+                <a class="button is-warning is-large" href="/register">Sell for Bitcoin</a>
+            <% } else { %>
+                <a class="button is-warning is-large" href="/dashboard/new">Sell for Bitcoin</a>
+            <% } %>
         </div>
     </div>
 </div>
 
-<div class="hero-body hero-content" id="products">
+<div class="hero-body hero-content">
 
         <% if (onlyFeatured) { %>
             <div class="column">
