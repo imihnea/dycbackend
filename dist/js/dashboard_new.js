@@ -4,6 +4,48 @@ const cleanHTML = (unclean) => {
     .replace(/>/g, "");
 };
 
+function PicturePreview(input, boxNr) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      switch(boxNr) {
+        case 0:
+          reader.onload = function (e) {
+            $('#Preview0')
+                .attr('src', e.target.result);
+          };
+          break;
+        case 1:
+            reader.onload = function (e) {
+              $('#Preview1')
+                  .attr('src', e.target.result);
+          };
+          break;
+        case 2:
+            reader.onload = function (e) {
+              $('#Preview2')
+                  .attr('src', e.target.result);
+          };
+          break;
+        case 3:
+            reader.onload = function (e) {
+              $('#Preview3')
+                  .attr('src', e.target.result);
+          };
+          break;
+        case 4:
+            reader.onload = function (e) {
+              $('#Preview4')
+                  .attr('src', e.target.result);
+          };
+          break;
+
+      }
+
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const repeatable = document.querySelector('.fa-redo');
   repeatable.addEventListener('click', (event) => {
@@ -163,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const labelItems = [].slice.call(labels);
   const squares = document.querySelectorAll('.square');
   const squareItems = [].slice.call(squares);
-  const checks = document.querySelectorAll('.fa-check-square');
+  const checks = document.querySelectorAll('.previewImage');
   const checkItems = [].slice.call(checks);
   const delLabels = document.querySelectorAll('.file-delete__label');
   const delLabelItems = [].slice.call(delLabels);

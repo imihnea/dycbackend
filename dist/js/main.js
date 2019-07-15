@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Selectors
   var cookiePolicy      = document.querySelector('.cookiePolicy');
   var closeCookiePolicy = cookiePolicy.querySelector('.cookiePolicy__close');
+  var closeCookiePolicyAccept = cookiePolicy.querySelector('.cookiePolicy__close__button');
   var hasCookie         = readCookie("visited"); 
   
   // If the 'visited' cookie isn't set, show the popunder after 2 seconds
@@ -156,6 +157,13 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // On clicking the popunder, hide it and set the cookie so we don't show it until 365 days
   closeCookiePolicy.addEventListener('click', function(e){
+    e.preventDefault();
+    cookiePolicy.classList.remove('is-active');
+    cookiePolicy.parentNode.removeChild(cookiePolicy);
+    createCookie("visited", true, 365);
+  });
+
+  closeCookiePolicyAccept.addEventListener('click', function(e){
     e.preventDefault();
     cookiePolicy.classList.remove('is-active');
     cookiePolicy.parentNode.removeChild(cookiePolicy);

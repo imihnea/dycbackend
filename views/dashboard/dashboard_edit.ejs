@@ -134,116 +134,86 @@
                                 <label for="upload[0]" name="u" class="<% if (product.images.sec[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images.sec[0]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images.sec[0]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[0]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview0" src="<% if (product.images.sec[0]) { %> <%= product.images.sec[0].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 0">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 0);"
                                     <% if (product.images.sec[0]) { %> value="<%= product.images.sec[0].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images.sec[0]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
-                                <br>
-                                <% if(product.images.sec[0]) { %>
-                                    <a href="<%= product.images.sec[0].url %>" target="_blank" class="thumbnail">
-                                        <figure class="image is-64x64">
-                                            <img src="<%= product.images.sec[0].url %>" class="thumbnailImg" style="border-radius: 10px;">
-                                        </figure>
-                                    </a>
-                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[1]" name="u" class="<% if (product.images.sec[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images.sec[1]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images.sec[1]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[1]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview1" src="<% if (product.images.sec[1]) { %> <%= product.images.sec[1].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 1">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 1);"
                                     <% if (product.images.sec[1]) { %> value="<%= product.images.sec[1].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images.sec[1]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
-                                <br>
-                                <% if(product.images.sec[1]) { %>
-                                    <a href="<%= product.images.sec[1].url %>" target="_blank" class="thumbnail">
-                                        <figure class="image is-64x64">
-                                            <img src="<%= product.images.sec[1].url %>" class="thumbnailImg" style="border-radius: 10px;">
-                                        </figure>
-                                    </a>
-                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[2]" name="u" class="<% if (product.images.sec[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images.sec[2]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images.sec[2]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[2]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview2" src="<% if (product.images.sec[2]) { %> <%= product.images.sec[2].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 2">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 2);"
                                     <% if (product.images.sec[2]) { %> value="<%= product.images.sec[2].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images.sec[2]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
-                                <br>
-                                <% if(product.images.sec[2]) { %>
-                                    <a href="<%= product.images.sec[2].url %>" target="_blank" class="thumbnail">
-                                        <figure class="image is-64x64">
-                                            <img src="<%= product.images.sec[2].url %>" class="thumbnailImg" style="border-radius: 10px;">
-                                        </figure>
-                                    </a>
-                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[3]" name="u" class="<% if (product.images.sec[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images.sec[3]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images.sec[3]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[3]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview3" src="<% if (product.images.sec[3]) { %> <%= product.images.sec[3].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 3">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 3);"
                                     <% if (product.images.sec[3]) { %> value="<%= product.images.sec[3].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images.sec[3]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
-                                <br>
-                                <% if(product.images.sec[3]) { %>
-                                    <a href="<%= product.images.sec[3].url %>" target="_blank" class="thumbnail">
-                                        <figure class="image is-64x64">
-                                            <img src="<%= product.images.sec[3].url %>" class="thumbnailImg" style="border-radius: 10px;">
-                                        </figure>
-                                    </a>
-                                <% } %>
                             </div>
                             <div class="mobileUpload">
                                 <label for="upload[4]" name="u" class="<% if (product.images.sec[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
                                         <i class="far fa-plus-square square <% if (product.images.sec[4]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images.sec[4]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[4]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview4" src="<% if (product.images.sec[4]) { %> <%= product.images.sec[4].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 4">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" 
+                                <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 4);"
                                     <% if (product.images.sec[4]) { %> value="<%= product.images.sec[4].url %>" <% } %>>
                                 <label class="file-delete__label <% if (!product.images.sec[4]) { %> hide <% } %>">
                                     <span>
                                         <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
-                                <br>
-                                <% if(product.images.sec[4]) { %>
-                                    <a href="<%= product.images.sec[4].url %>" target="_blank" class="thumbnail">
-                                        <figure class="image is-64x64">
-                                            <img src="<%= product.images.sec[4].url %>" class="thumbnailImg" style="border-radius: 10px;">
-                                        </figure>
-                                    </a>
-                                <% } %>
                             </div>
                         </div>                                     
                     </div>
