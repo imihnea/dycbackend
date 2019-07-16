@@ -277,26 +277,29 @@ module.exports = {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     if (res.length > 0) {
-                        sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        // sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        sellerPayout = Number((deal.price).toFixed(8));
                         seller.btcbalance += sellerPayout;
                         // add profit to db
-                        withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
-                        createProfit(seller._id, withdrawAmount, 'Income Fee');
+                        // withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
+                        // createProfit(seller._id, withdrawAmount, 'Income Fee');
                     } else {
                         switch(seller.accountType) {
                             case 'Standard':
-                                sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                // sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price).toFixed(8));
                                 seller.btcbalance += sellerPayout;
                                 // add profit to db
-                                withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
-                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                // withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
+                                // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                 break;
                             case 'Partner':
-                                sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                // sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price).toFixed(8));
                                 seller.btcbalance += sellerPayout;
                                 // add profit to db
-                                withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
-                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                // withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
+                                // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                 break;
                             default:
                                 break;

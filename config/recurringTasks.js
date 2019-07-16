@@ -92,7 +92,8 @@ setInterval( () => {
                                 errorLogger.error(`Message: ${err} - Subscription - Error finding sub for ${seller._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
                                 if (res.length > 0) {
-                                    sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                                    // sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                                    sellerPayout = Number((deal.price).toFixed(8));
                                     seller.btcbalance += sellerPayout;
                                     deal.paid = true;
                                     deal.payout = sellerPayout;
@@ -102,8 +103,8 @@ setInterval( () => {
                                         }
                                     });
                                     // add profit to db
-                                    withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
-                                    createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                    // withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
+                                    // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                     seller.nrSold += 1;
                                     seller.unreadNotifications += 1;
                                     seller.save(err => {
@@ -143,7 +144,8 @@ setInterval( () => {
                                 } else {
                                     switch(seller.accountType) {
                                         case 'Standard':
-                                            sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                            // sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                            sellerPayout = Number((deal.price).toFixed(8));
                                             seller.btcbalance += sellerPayout;
                                             deal.paid = true;
                                             deal.payout = sellerPayout;
@@ -153,8 +155,8 @@ setInterval( () => {
                                                 }
                                             });
                                             // add profit to db
-                                            withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
-                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                            // withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
+                                            // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                             seller.nrSold += 1;
                                             seller.unreadNotifications += 1;
                                             seller.save(err => {
@@ -193,7 +195,8 @@ setInterval( () => {
                                             }
                                             break;
                                         case 'Partner':
-                                            sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                            // sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                            sellerPayout = Number((deal.price).toFixed(8));
                                             seller.btcbalance += sellerPayout;
                                             deal.paid = true;
                                             deal.payout = sellerPayout;
@@ -203,8 +206,8 @@ setInterval( () => {
                                                 }
                                             });
                                             // add profit to db
-                                            withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
-                                            createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                            // withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
+                                            // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                             seller.nrSold += 1;
                                             seller.unreadNotifications += 1;
                                             seller.save(err => {
