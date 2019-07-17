@@ -121,8 +121,8 @@
                                                 <p class="title productName dealname" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
-                                        <p class="curr_text"><b>$<%= (product.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
+                                        <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                        <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                     </div> 
                                 </a>      
                             </div>
@@ -144,8 +144,8 @@
                                                     <p class="title productName dealname" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
-                                            <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
-                                            <p class="curr_text"><b>$<%= (product.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
+                                            <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                            <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                         </div>
                                     </a>      
                                 </div>
@@ -174,8 +174,8 @@
                                                     <p class="title productName dealname" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
-                                            <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
-                                            <p class="curr_text"><b>$<%= (product.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
+                                            <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                            <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                         </div> 
                                     </a>      
                                 </div>

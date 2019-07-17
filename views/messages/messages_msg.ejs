@@ -120,12 +120,12 @@
                     <div class=" prod_info ">  
                         <p class="title is-5 messageProfileText"><%= chat.product.name %></p>                   
                         <div class="prices openPrices frame">
-                            <p class="price_text" style="padding-left: 10px;"> <%= product.btcPrice %></p>
+                            <p class="price_text" style="padding-left: 10px;"><%= (product.usdPrice * oneDollar).toFixed(8) %></p>
                             <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                         </div>
                         <div class="prices frame openPrices">
-                            <p class="price_text">
-                                <%= (product.btcPrice / oneDollar).toFixed(2) %>
+                            <p class="price_text" style="padding-left: 10px;">
+                                <%= product.usdPrice %>
                             </p>
                             <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                         </div>

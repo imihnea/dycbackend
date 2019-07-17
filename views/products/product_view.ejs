@@ -141,7 +141,7 @@
                         <label class="img-check ">
                             <div class="prices frame openPrices">
                                 <p class="price_text">
-                                    <%= product.btcPrice %>
+                                    <%= (product.usdPrice * oneDollar).toFixed(8) %>
                                 </p>
                                 <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                             </div>
@@ -151,7 +151,7 @@
                         <label class="img-check ">
                             <div class="prices frame openPrices">
                                 <p class="price_text">
-                                    <%= (product.btcPrice / oneDollar).toFixed(2) %>
+                                    <%= product.usdPrice %>
                                 </p>
                                 <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                             </div>
@@ -432,8 +432,8 @@
                                             <p class="title productName dealname" style="overflow: hidden;"><%= sim.name %></p>
                                         </div>
                                     </div>
-                                    <p class="curr_text"><b><%= sim.btcPrice %></b> BTC</p>
-                                    <p class="curr_text"><b>$<%= (sim.btcPrice / oneDollar).toFixed(2) %></b> USD</p>
+                                    <p class="curr_text"><b><%= (sim.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                    <p class="curr_text"><b>$<%= sim.usdPrice %></b> USD</p>
                                 </div> 
                             </a>      
                         </div>

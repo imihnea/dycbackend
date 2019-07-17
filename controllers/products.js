@@ -584,29 +584,33 @@ module.exports = {
                         //         }
                         //     }));
                         /* } else */if (req.body.deliveryShipping === 'FaceToFace') {
-                            // Create deal
-                            let deal = {
-                                product: {
-                                    id: product._id,
-                                    name: product.name,
-                                    imageUrl: product.images.sec[0].url,
-                                    author: product.author,
-                                    price: product.btcPrice,
-                                },
-                                buyer: {
-                                    id: user._id,
-                                    username: user.username,
-                                    name: user.full_name,
-                                    avatarUrl: user.avatar.url,
-                                    'delivery.shipping': req.body.deliveryShipping,
-                                    'delivery.name': req.body.deliveryName,
-                                    'delivery.email': req.body.deliveryEmail,
-                                },
-                                price: product.btcPrice,
-                            };
+                            let deal;
+                            client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+                                if (!error) {
+                                    let btcrate = data.data.rates.USD;
+                                    deal = {
+                                        product: {
+                                            id: product._id,
+                                            name: product.name,
+                                            imageUrl: product.images.sec[0].url,
+                                            author: product.author,
+                                            price: product.usdPrice,
+                                        },
+                                        buyer: {
+                                            id: user._id,
+                                            username: user.username,
+                                            name: user.full_name,
+                                            avatarUrl: user.avatar.url,
+                                            'delivery.shipping': req.body.deliveryShipping,
+                                            'delivery.name': req.body.deliveryName,
+                                            'delivery.email': req.body.deliveryEmail,
+                                        },
+                                        price: (product.usdPrice / btcrate).toFixed(8),
+                                    };
+                                                                // Create deal
                             deal = await Deal.create(deal); 
                             // Update product and user
-                            user.btcbalance -= totalPrice;
+                            user.btcbalance -= deal.price;
                             // The product will remain available if it's repeatable
                             if ( !product.repeatable ) {
                                 product.available = "Closed";
@@ -666,6 +670,11 @@ module.exports = {
                             dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nDeal: ${deal._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             // Link chat to deal
                             return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                                } else {
+                                    req.flash('error', 'There has been an error. Please try again later.');
+                                    return res.redirect('back');
+                                }
+                            }));
                         } else {
                             req.flash('error', 'Please select Face to Face or Shipping.');
                             return res.redirect('back');

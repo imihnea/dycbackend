@@ -1045,8 +1045,10 @@ module.exports = {
       // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
-      req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
+      // req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+      // req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
+      req.check('product[usd_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+      req.check('product[usd_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
       // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
@@ -1381,7 +1383,7 @@ module.exports = {
         if (req.body.product.category[0] == 'Services') {
           req.body.product.condition = 'Service';
         }
-        const btcPrice=Number(req.body.product.btc_price).toFixed(8);
+        const usdPrice=Number(req.body.product.usd_price).toFixed(2);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const tags = req.body.product.tags.trim().split(' ');
         const newproduct = {
@@ -1390,7 +1392,7 @@ module.exports = {
           category,
           condition: req.body.product.condition,
           description: req.body.product.description,
-          btcPrice,
+          usdPrice,
           tags,
           searchableTags: req.body.product.tags,
           author
@@ -1529,7 +1531,7 @@ module.exports = {
               name: product.name,
               author: product.author,
               avgRating: product.avgRating,
-              btcPrice: product.btcPrice,
+              usdPrice: product.usdPrice,
               condition: product.condition,
               category0: product.category[0],
               category1: product.category[1],
@@ -1638,8 +1640,10 @@ module.exports = {
     // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
     req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
-    req.check('product[btc_price]', 'The price must have at most 12 characters.').isLength({max: 12});
+    // req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+    // req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
+    req.check('product[usd_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+    req.check('product[usd_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
     // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
@@ -1965,7 +1969,7 @@ module.exports = {
         multipleProcess.send(dataForUploader);
       }
 
-      const btcPrice = Number(req.body.product.btc_price).toFixed(8);
+      const usdPrice = Number(req.body.product.usd_price).toFixed(2);
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
@@ -2041,7 +2045,7 @@ module.exports = {
       product.category[1] = req.body.product.category[0];
       product.category[2] = req.body.product.category[1];
       product.category[3] = req.body.product.category[2];
-      product.btcPrice = btcPrice;
+      product.usdPrice = usdPrice;
       const tags = req.body.product.tags.trim().split(' ');
       product.tags = tags;
       product.searchableTags = req.body.product.tags;
@@ -2055,7 +2059,7 @@ module.exports = {
         body: {
           doc: {
             name: product.name,
-            btcPrice: product.btcPrice,
+            usdPrice: product.usdPrice,
             condition: product.condition,
             category0: product.category[0],
             category1: product.category[1],

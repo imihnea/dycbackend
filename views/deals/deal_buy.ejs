@@ -105,7 +105,7 @@
                 <label class="img-check ">
                     <div class="prices frame openPrices">
                         <p class="price_text">
-                            Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
+                            Price: <%= product.usdPrice %> USD (<%= (product.usdPrice / btcrate).toFixed(8) %> BTC est.)
                         </p>
                         <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                     </div>

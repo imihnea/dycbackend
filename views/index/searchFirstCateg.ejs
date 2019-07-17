@@ -206,11 +206,11 @@
                                             </div>
                                         <% } %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product._source.btcPrice %></p>
+                                            <p class="price_text"> <%= (product._source.usdPrice * oneDollar).toFixed(8) %></p>
                                             <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                         </div>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= (product._source.btcPrice / oneDollar).toFixed(2) %></p>
+                                            <p class="price_text"> <%= product._source.usdPrice %></p>
                                             <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                         </div>
                                     </div>

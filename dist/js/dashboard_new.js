@@ -56,14 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // const userType = document.getElementById('userType').value;
   // document.getElementById('userType').remove();
-  // const price = document.getElementById('btc-price');
-  // const dollarPrice = document.getElementById('usd-price');
+  const price = document.getElementById('btc-price');
+  const dollarPrice = document.getElementById('usd-price');
   // const payout = document.getElementById('btc-payout');
   // const standardFee = 10;
   // const partnerFee = 8;
   // const premiumFee = 8;
-  // const dollar = document.getElementById('oneDollar');
-  // const dollarPayout = document.getElementById('usd-payout');
+  const dollar = document.getElementById('oneDollar');
+
+  if (dollarPrice.value > 0) {
+    price.value = (dollarPrice.value * dollar.value).toFixed(8);
+  }
+
+  dollarPrice.addEventListener('keyup', () => {
+    price.value = (dollarPrice.value * dollar.value).toFixed(8);    
+  });
 
   // if (price.value > 0) {
   //   switch(userType) {

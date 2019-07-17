@@ -884,7 +884,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
@@ -1060,7 +1060,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
@@ -1184,7 +1184,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
