@@ -1,0 +1,51 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+
+<div class="hero-body">
+    <div class="column dashTop">
+        <h2 class="title dashTitle" style="color: white !important;">Blog</h2>
+    </div>
+    <br>
+    <% include ../partials/adminMenu %>
+    <div class="frame smallerCenter">
+        <div class="column">
+            <p class="title is-4">Posts</p>
+            <a href="/admin/blog/new" class="button is-primary">New Post</a>
+            <br>
+            <br>
+            <% if (blogposts.total == 0) { %>
+                <p>There are no blogposts</p>    
+            <% } else { %>
+                <table class="table is-hoverable is-bordered new-table" style="margin: auto;">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Created on</th>
+                            <th>Views</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% blogposts.docs.forEach((item, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td style="word-break: break-all;"><%= item._id %></td>
+                            <td style="word-break: break-all;"><%= item.title %></td>
+                            <td style="word-break: break-all;"><%= item.createdAt.toUTCString() %></td>
+                            <td style="word-break: break-all;"><%= item.views %></td>
+                            <td style="word-break: break-all;"><a href="/admin/blog/<%= item._id %>/edit" class="button is-primary">Edit</a></td>
+                            <td style="word-break: break-all;"><form action="/admin/blog/<%= item._id %>/delete?_method=DELETE" method="post"><button class="button is-danger deletePost">Delete</button></form></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

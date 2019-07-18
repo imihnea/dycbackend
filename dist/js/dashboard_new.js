@@ -54,14 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     repeatable.classList.toggle('normal');
   });
   
-  // const userType = document.getElementById('userType').value;
-  // document.getElementById('userType').remove();
   const price = document.getElementById('btc-price');
   const dollarPrice = document.getElementById('usd-price');
-  // const payout = document.getElementById('btc-payout');
-  // const standardFee = 10;
-  // const partnerFee = 8;
-  // const premiumFee = 8;
   const dollar = document.getElementById('oneDollar');
 
   if (dollarPrice.value > 0) {
@@ -71,87 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
   dollarPrice.addEventListener('keyup', () => {
     price.value = (dollarPrice.value * dollar.value).toFixed(8);    
   });
-
-  // if (price.value > 0) {
-  //   switch(userType) {
-  //     case 'Standard':
-  //       payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     case 'Premium':
-  //       payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     case 'Partner':
-  //       payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
-  // price.addEventListener('keyup', () => {
-  //   switch(userType) {
-  //     case 'Standard':
-  //       payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     case 'Premium':
-  //       payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     case 'Partner':
-  //       payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
-  //       if (dollar.value != '') {
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         dollarPrice.value = (price.value / dollar.value).toFixed(2);
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // });
-
-  // if (dollar.value != '') {
-  //   dollarPrice.addEventListener('keyup', () => {
-  //     switch(userType) {
-  //       case 'Standard':
-  //         price.value = Number((dollarPrice.value * dollar.value).toFixed(8));
-  //         payout.value = (Number(price.value - (price.value * standardFee * 0.01))).toFixed(8);
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         break;
-  //       case 'Premium':
-  //         price.value = Number((dollarPrice.value * dollar.value).toFixed(8));
-  //         payout.value = (Number(price.value - (price.value * premiumFee * 0.01))).toFixed(8);
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         break;
-  //       case 'Partner':
-  //         price.value = Number((dollarPrice.value * dollar.value).toFixed(8));
-  //         payout.value = (Number(price.value - (price.value * partnerFee * 0.01))).toFixed(8);
-  //         dollarPayout.value = (payout.value / dollar.value).toFixed(2);
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   });
-  // }
-
   
   const label1 = document.getElementById('feat1Label');
   const i1 = document.getElementById('feat1I');

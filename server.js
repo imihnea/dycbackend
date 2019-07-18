@@ -46,7 +46,8 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
     scriptSrc: ["'self'", "'unsafe-inline'",  'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions', 
     'https://www.gstatic.com', 'https://www.google.com', 'https://www.googletagmanager.com', 'https://www.google-analytics.com', 
-    'https://connect.facebook.net/', 'https://ajax.cloudflare.com','https://static.hotjar.com', 'https://script.hotjar.com']
+    'https://connect.facebook.net/', 'https://ajax.cloudflare.com','https://static.hotjar.com', 'https://script.hotjar.com',
+    'https://cdnjs.cloudflare.com']
   }
 }));
 
