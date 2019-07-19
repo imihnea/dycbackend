@@ -28,7 +28,9 @@ const {
     newBlog,
     getUpdateBlog,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    getBulkAdd,
+    postBulkAdd
   } = require('../controllers/admin');
 
 const middleware = require('../middleware/index');
@@ -40,16 +42,16 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     let buf = crypto.randomBytes(16);
     buf = buf.toString('hex');
-    let uniqFileName = file.originalname.replace(/\.jpeg|\.jpg|\.png/ig, '');
+    let uniqFileName = file.originalname.replace(/\.csv/ig, '');
     uniqFileName += buf;
     cb(undefined, uniqFileName);
   },
 });
 
 const imageFilter = (req, file, cb) => {
-  // accept image files only
-  if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
-    return cb(new Error('Only image files are allowed!'), false);
+  // accept csv files only
+  if (!file.originalname.match(/\.(csv)$/i)) {
+    return cb(new Error('Only csv files are allowed!'), false);
   }
   cb(null, true);
 };
@@ -127,5 +129,9 @@ router.get('/blog/:id/edit', asyncErrorHandler(isAdmin), asyncErrorHandler(getUp
 router.put('/blog/:id/edit', asyncErrorHandler(isAdmin), upload.array('images', 5), asyncErrorHandler(updateBlog));
 
 router.delete('/blog/:id/delete', asyncErrorHandler(isAdmin), asyncErrorHandler(deleteBlog));
+
+// add products in bulk
+router.get('/bulkAdd', asyncErrorHandler(isAdmin), getBulkAdd);
+router.post('/bulkAdd', asyncErrorHandler(isAdmin), upload.single('productData'), asyncErrorHandler(postBulkAdd));
 
 module.exports = router;

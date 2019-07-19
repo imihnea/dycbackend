@@ -9,6 +9,8 @@ const Deal = require('../models/deal');
 const Dispute = require('../models/dispute');
 const Blogpost = require('../models/blogpost');
 
+const fs = require('fs');
+const csv = require('fast-csv');
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
 const ejs = require('ejs');
@@ -772,6 +774,41 @@ module.exports = {
         await blogpost.save();
         req.flash('success', 'Blogpost edited successfully');
         return res.redirect('/admin/blog');
+    },
+    getBulkAdd(req, res) {
+        res.render('admin/adminBulkAdd', {
+            user: req.user,
+            errors: req.session.errors,
+            pageTitle: 'Bulk add products - Deal Your Crypto',
+            pageDescription: 'Add products in bulk - Deal Your Crypto',
+            pageKeywords: 'deal, deal your crypto, bulk, products'
+        });
+    },
+    async postBulkAdd(req, res) {
+        fs.createReadStream(req.file.path)
+            .pipe(csv.parse({ headers: true }))
+            .on('data', row => {
+                const product = {
+                    name: row.name,
+                    usdPrice: row.usdPrice,
+                    description: row.description,
+                    'category.0': 'all',
+                    condition: 'Brand new',
+                    author: {
+                        id: req.user._id,
+                        username: req.user.username,
+                        name: req.user.full_name,
+                        city: req.user.city,
+                        country: req.user.country,
+                        state: req.user.state,
+                        continent: req.user.continent,
+                        accountType: req.user.accountType
+                    }
+                }
+                Product.create(product);
+            });
+        req.flash('success', 'The products have been added');
+        return res.redirect('back');
     }
 
 };

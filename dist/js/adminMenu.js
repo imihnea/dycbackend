@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#blog').classList.add('is-active');
         break;
       }
+      case ('/admin/bulkAdd'): {
+        document.querySelector('#bulkadd').classList.add('is-active');
+        break;
+      }
       default: {
         break;
       }
