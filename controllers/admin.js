@@ -794,6 +794,7 @@ module.exports = {
                     description: row.description,
                     'category.0': 'all',
                     condition: 'Brand new',
+                    dropshipped: true,
                     author: {
                         id: req.user._id,
                         username: req.user.username,
