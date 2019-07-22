@@ -98,6 +98,9 @@
                     </span>
                 </p>
             </div>
+            <% if (product.dropshipped) { %>
+                
+            <% } %>
             <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="hidden" name="deliveryShipping" value="FaceToFace">

@@ -119,6 +119,8 @@ const dealsRoutes = require('./routes/deals');
 
 const adminRoutes = require('./routes/admin');
 
+const cartRoutes = require('./routes/cart');
+
 // Gzip compression
 
 app.use(compression());
@@ -318,6 +320,7 @@ app.use('/messages', messagesRoutes);
 app.use('/reviews', reviewsRoutes);
 app.use('/deals', dealsRoutes);
 app.use('/admin', adminRoutes);
+app.use('/cart', cartRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
