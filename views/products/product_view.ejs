@@ -159,6 +159,9 @@
                     </div>
                     <br>   
                 </form>
+                <form action="/cart/add/<%= product._id %>" method="post">
+                    <button class="button is-primary">Add to cart</button>
+                </form>
                 <% if (!user) { %> 
                     <a href="/login" class="button is-primary is-rounded">Login to buy</a>
                     <% } else if (user.username === product.author.username) { %>

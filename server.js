@@ -161,6 +161,11 @@ app.use('/dist', express.static(path.join(__dirname, '/dist'), {
 }));
 app.use(methodOverride('_method'));
 
+app.all('*', (req, res, next) => {
+  res.locals.cart = req.session.cart;
+  next();
+});
+
 app.locals.moment = require('moment');
 
 app.use(flash());

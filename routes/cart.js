@@ -3,14 +3,17 @@ const express = require('express');
 const router = express.Router();
 
 const {
- addToCart,
- removeFromCart,
- checkout
-  } = require('../controllers/cart');
+  getCart,
+  addToCart,
+  removeFromCart,
+  checkout
+} = require('../controllers/cart');
 
 const middleware = require('../middleware/index');
 
 const { asyncErrorHandler, checkId, getPrice } = middleware;
+
+router.get('/', getPrice, asyncErrorHandler(getCart));
 
 router.post('/add/:id', checkId, addToCart);
 

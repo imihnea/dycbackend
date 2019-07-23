@@ -24,10 +24,33 @@ const transporter = nodemailer.createTransport({
 });
 
 const { client:elasticClient } = require('../config/elasticsearch');
+const { asyncErrorHandler } = require('../middleware/index');
 
 module.exports = {
+    async getCart(req, res) {
+        const products = await Product.find({_id: {$in: req.session.cart}});
+        let shipping = false;
+        products.forEach((product, index) => {
+            if (product.available != 'True') {
+                products.splice(products[index], 1);
+                req.session.cart.splice(req.session.cart.indexOf(product._id), 1);
+            }
+            if (product.dropshipped) {
+                shipping = true;
+            }
+        });
+        res.render('cart/cart', {
+            user: req.user,
+            products,
+            oneDollar: req.oneDollar,
+            shipping,
+            pageTitle: 'Cart - Deal Your Crypto',
+            pageDescription: 'Cart Page on Deal Your Crypto',
+            pageKeywords: 'cart, page, deal, crypto, deal your crypto'
+        });
+    },
     addToCart(req, res) {
-        if (req.session.cart.length > 0) {
+        if (req.session.cart) {
             req.session.cart.push(req.params.id);
         } else {
             req.session.cart = [req.params.id];
@@ -82,8 +105,9 @@ module.exports = {
                 req.flash('error', 'You do not have enough currency');
                 return res.redirect('/dashboard/addresses');
             } else {
+                user.btcbalance -= totalPrice;
+                await user.save();
                 products.forEach(asyncErrorHandler( async product => {
-                    user.btcbalance -= (Number(product.usdPrice * req.oneDollar).toFixed(8));
                     let deal = {};
                     if (k == 0) {
                         if (req.body.deliveryState == undefined) {
@@ -137,7 +161,6 @@ module.exports = {
                     }
                     // Create deal
                     deal = await Deal.create(deal); 
-                    // Update product and user
                     // The product will remain available if it's repeatable
                     if ( !product.repeatable ) {
                         product.available = "Closed";
@@ -159,7 +182,6 @@ module.exports = {
                     product.markModified('buyers');
                     await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
                     await product.save();
-                    await user.save();
                     await Notification.create({
                         userid: product.author.id,
                         linkTo: `/deals/${deal._id}`,
@@ -196,19 +218,14 @@ module.exports = {
                     }
                     dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nDeal: ${deal._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     // Link chat to deal
-                    let chat = await Chat.find({ "user1.id": req.user._id, "product.id": req.params.id });
+                    let chat = await Chat.find({ "user1.id": req.user._id, "product.id": product._id });
                     if ( chat._id ) {
                         // Link the chat to the deal
-                        let deal = await Deal.findById(req.params.dealid);
                         deal.chat = chat._id;
-                        chat.deal = req.params.dealid;
+                        chat.deal = deal._id;
                         await deal.save();
                         await chat.save();
-                        req.flash('success', 'You have successfully sent a purchase request.');
-                        return res.redirect(`/deals/${deal._id}`);
                     } else {
-                        // Find the product
-                        const product = await Product.findById( req.params.id );
                         // Find the seller
                         const user2 = await User.findById( product.author.id );
                         const newChat = {
@@ -230,15 +247,15 @@ module.exports = {
                                 imageUrl: product.images.sec[0].url, 
                                 price: product.price,
                             },
-                                deal: req.params.dealid 
-                            };
+                            deal: deal._id
+                        };
                         chat = await Chat.create(newChat);
                         // Link the deal to the chat
-                        let deal = await Deal.findById(req.params.dealid);
                         deal.chat = chat._id;
                         await deal.save();
                     }
                 }));
+                req.session.cart = [];
                 req.flash('success', 'Your requests have been placed');
                 return res.redirect('/dashboard/ongoing');
             }

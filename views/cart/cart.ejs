@@ -1,0 +1,204 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" href="/dist/css/search.css">
+<link rel="stylesheet" href="/dist/css/categories.css">
+<link rel="stylesheet" href="/dist/css/products.css">
+
+<div class="columns wrapper">
+    <div class="column dashboard-right" >
+        <div class="dashTop column">
+            <h2 class="title dashTitle" style="color: white !important;">Cart</h2>
+        </div>
+        <br>
+        <div class="columns">
+            <% if (products.length == 0) { %>
+                <div class="column">
+                    <p class="subtitle">Your cart is empty. Click <a href="/firstCategSearch?searchName=&category=all">here</a> to start looking for deals!</p>
+                </div>   
+            <% } else { %>
+            <div class="column"></div>
+            <% if (shipping) { %>
+                <div class="column is-two-fifths">
+                    <div class="frame">
+                        <p class="subtitle">Shipping address</p>
+                        <form action="/cart/checkout" method="post" id="payForm">
+                            <div class="smallerCenter">
+                                <div class="field">
+                                    <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
+                                    <p class="control has-icons-left">
+                                        <% if(user.full_name) { %>
+                                            <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
+                                        <% } else { %>
+                                            <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user-tie"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
+                                    <p class="control has-icons-left">
+                                        <% if(user.email) { %>
+                                            <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
+                                        <% } else { %>
+                                            <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
+                                        <% } %>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryCountry" style="text-align: left !important;">Country</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" name="deliveryCountry" type="text" placeholder="Country" value="<% if (user.country) { %> <%= user.country %> <% } %>" required/>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-flag"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryState" style="text-align: left !important;">State</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" name="deliveryState" type="text" placeholder="State or County" value="<% if (user.state) { %> <%= user.state %> <% } %>" required/>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-globe-americas"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryCity" style="text-align: left !important;">City</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" name="deliveryCity" type="text" placeholder="City" value="<% if (user.city) { %> <%= user.city %> <% } %>" required/>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-city"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryStreet" style="text-align: left !important;">Street</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" name="deliveryStreet1" type="text" placeholder="Street" value="<% if (user.address1) { %> <%= user.address1 %> <% } %>" required/>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-road"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="deliveryZip" style="text-align: left !important;">Zip Code</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" value="<% if (user.zip) { %> <%= user.zip %> <% } %>" required/>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-sort-numeric-down"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </form>    
+                    </div>
+                </div>
+            <% } %>
+            <div class="column <% if (shipping) { %>is-two-fifths<% } else { %>is-three-fifths<% } %>">
+                <main class="productWrapper frame" id="hits">
+                    <% products.forEach(product => { %>
+                        <article class="hit columns" style="margin-top: 0;">
+                            <div class="product-picture-wrapper" >
+                                <figure class="image is-128x128" style="margin:auto;">
+                                    <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
+                                </figure>
+                            </div>
+                            <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                <div class="product-name">
+                                    <a class="is-5 dealname link" href="/products/<%= product._id %>/view"><%= product.name %></a>
+                                    <p class="productRating">
+                                        <% for(let i = 0; i < 5; i++) { %>
+                                            <% if(i < Math.floor(product.avgRating)) { %>
+                                            <!-- display a full star -->
+                                            <i class="fas fa-star" style="color: orange;"></i>
+                                            <% } else if((product.avgRating - i) > 0 && (product.avgRating - i) < 1) { %>
+                                            <!-- display a half star -->
+                                            <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                                            <% } else { %>
+                                            <!-- display an empty star -->
+                                            <i class="far fa-star" style="color: orange;"></i>
+                                            <% } %>
+                                        <% } %>
+                                    </p>
+                                    <div class="buttons">
+                                        <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
+                                        <form action="/cart/delete/<%= product._id%>?_method=PUT" method="POST">
+                                            <button class="button is-danger">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column prod_info productPrice">
+                                <div class="prices openPrices frame" style="width: 100%;">
+                                    <p class="price_text" style="padding-left: 2vw;"><%= (product.usdPrice * oneDollar).toFixed(8) %></p>
+                                    <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
+                                </div>
+                            </div>
+                        </article>      
+                        <% }); %>
+                        <div class="smallerCenter">
+                            <table class="table">
+                                <tr>
+                                    <td>Total Price</td>
+                                    <td><% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %><%= price.toFixed(8) %> BTC</td>
+                                </tr>
+                            </table>
+                            <% if (price > user.btcbalance) { %>
+                                <p class="subtitle is-6">You don't have enough balance.</p>
+                                <div class="productBuyForm">
+                                <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Proceed to checkout</button>
+                                <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>    
+                            <% } else { %>
+                                <% if (shipping) { %>
+                                    <button type="submit" form="payForm" class="button is-primary">Pay now</button>
+                                <% } else { %>
+                                    <form action="/cart/checkout" method="POST">
+                                        <div class="smallerCenter">
+                                            <div class="field">
+                                                <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
+                                                <p class="control has-icons-left">
+                                                    <% if(user.full_name) { %>
+                                                        <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
+                                                    <% } else { %>
+                                                        <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                                                    <% } %>
+                                                    <span class="icon is-small is-left">
+                                                        <i class="fas fa-user-tie"></i>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
+                                                <p class="control has-icons-left">
+                                                    <% if(user.email) { %>
+                                                        <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
+                                                    <% } else { %>
+                                                        <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
+                                                    <% } %>
+                                                    <span class="icon is-small is-left">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <button class="button is-primary">Pay now</button>
+                                    </form>    
+                                <% } %>
+                            <% } %>
+                        </div>  
+                    </main>
+                    <br> 
+                <% } %>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
