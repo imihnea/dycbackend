@@ -22,17 +22,17 @@
                             <% include ../partials/paginateIndex %>
                         </div>
                         <main class="productWrapper" id="hits">
-                        <% products.docs.forEach((product) => { %>
+                        <% products.docs.forEach((product, index) => { %>
                             <article class="hit columns frame">
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img src="<%= product.images[0].url %>" class="productImage" alt="">
+                                        <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
                                     </figure>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                     <div class="product-name">
-                                        <a class="is-5 dealname" href="/products/<%= product._id %>/view"><%= product.name %></a>
+                                        <a class="is-5 dealname link" href="/products/<%= product._id %>/view"><%= product.name %></a>
                                         <p class="productRating">
                                             <% for(let i = 0; i < 5; i++) { %>
                                                 <% if(i < Math.floor(product.avgRating)) { %>
@@ -50,30 +50,68 @@
                                         <a href="/products/<%= product._id %>/view" class="button is-primary">View Details</a>
                                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary">Edit</a>
                                     </div>
+                                    <% if (product.images.sec.length > 1) { %>
+                                        <button class="button is-primary imageModal">Image order</button>
+                                        <div class="modal modalImage">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-card" style="width: auto;">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Modify image order</p>
+                                                <button class="delete imageDelete" aria-label="close"></button>
+                                            </header>
+                                            <footer class="modal-card-foot">
+                                                <div class="columns">
+                                                    <% product.images.sec.forEach((img, index) => { %>
+                                                        <div class="column">
+                                                            <figure class="image is-128x128">
+                                                                <img class="productImage" src="<%= img.url %>" alt="Image <%= index + 1 %>">
+                                                            </figure>
+                                                            <br>
+                                                            <div class="columns">
+                                                                <div class="column">
+                                                                    <form action="/dashboard/<%= product._id %>/imageLeft?_method=PUT" method="POST">
+                                                                        <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                        <button class="button is-primary"><</button>    
+                                                                    </form>
+                                                                </div>
+                                                                <div class="column">
+                                                                    <form action="/dashboard/<%= product._id %>/imageRight?_method=PUT" method="POST">
+                                                                        <input type="number" value="<%= index %>" name="imageToMove" hidden>
+                                                                        <button class="button is-primary">></button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <% }); %>
+                                                </div>
+                                            </footer>
+                                            </div>
+                                        </div>
+                                    <% } %>
                                     <button class="button is-danger deleteModal">Delete</button>
                                     <div class="modal modalDelete">
                                         <div class="modal-background"></div>
-                                            <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Are you sure?</p>
-                                                <button class="delete deleteDelete" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body">
-                                                <p class="title is-5" style="text-align: center;">This is a permanent action. You will not be able to revert the status of your product.</p>
-                                            </section>
-                                            <footer class="modal-card-foot">
-                                                <form class="modal-form deleteForm" action="/dashboard/<%= product._id %>?_method=DELETE" method="POST">
-                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                    <button class="button is-danger">Delete</button>
-                                                </form>
-                                            </footer>
-                                            </div>
+                                        <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Are you sure?</p>
+                                            <button class="delete deleteDelete" aria-label="close"></button>
+                                        </header>
+                                        <section class="modal-card-body">
+                                            <p class="title is-5" style="text-align: center;">This is a permanent action. You will not be able to revert the status of your product.</p>
+                                        </section>
+                                        <footer class="modal-card-foot">
+                                            <form class="modal-form deleteForm" action="/dashboard/<%= product._id %>?_method=DELETE" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <button class="button is-danger">Delete</button>
+                                            </form>
+                                        </footer>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="column prod_info productPrice">
                                     <div class="prices openPrices frame" style="width: 100%;">
-                                        <p class="price_text" style="padding-left: 2vw;"><%= product.btcPrice %></p>
-                                        <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                        <p class="price_text" style="padding-left: 2vw;"><%= product.usdPrice %></p>
+                                        <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                     </div>
                                 </div>
                             </article>      

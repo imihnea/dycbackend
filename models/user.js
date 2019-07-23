@@ -78,6 +78,10 @@ const UserSchema = new Schema({
     type: String,
     index: true
   },
+  createdWith: {
+    type: String,
+    default: 'Manually'
+  },
   btcadr: String,
   feature_tokens: { 
     type: Number, 

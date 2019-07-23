@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const images = document.querySelectorAll('.replaceImg');
+  const imageItems = [].slice.call(images);
+  imageItems.forEach(img => {
+    if (img.dataset.src) {
+      img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/w_288,h_288/c_scale,w_auto,dpr_auto/');
+      img.src = img.dataset.src;
+    }
+  });
+
+  // const mainImages = document.querySelectorAll('.mainImg');
+  // const mainImgItems = [].slice.call(mainImages);
+  // mainImgItems.forEach(img => {
+  //   img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/c_scale,w_auto,dpr_auto/');
+  //   img.src = img.dataset.src;
+  // });
+
+  // const mImages = document.querySelectorAll('.mImg');
+  // const mItems = [].slice.call(mImages);
+  // mItems.forEach(img => {
+  //   img.dataset.src = img.dataset.src.replace('/image/upload/', '/image/upload/f_auto/c_scale,w_auto,dpr_auto/');
+  //   img.src = img.dataset.src;
+  // });
+
   const thumbnails = document.querySelectorAll('.thumbnail');
   const thumbnailItems = [].slice.call(thumbnails);
   const figure = document.querySelectorAll('.sliderFig');

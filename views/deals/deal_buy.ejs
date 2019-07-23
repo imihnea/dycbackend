@@ -18,7 +18,7 @@
         <br>
         <div class="field" style="padding: 20px;">
             <figure class="image is-square" style="overflow: hidden;">
-                <img class="mainImg dealImage" src="<%= product.images[0].url %>" alt="<%= product.name %>"/>
+                <img class="mainImg dealImage" src="<%= product.images.sec[0].url %>" alt="<%= product.name %>"/>
             </figure>
         </div>
         <div class="field">
@@ -73,19 +73,6 @@
         <h2 class="subtitle">Your Details</h2>
         <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
             <div class="field">
-                <label class="label" for="deliveryPhone" style="text-align: left !important;">Phone Number</label>
-                <p class="control has-icons-left">
-                    <% if(user.number) { %>
-                        <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
-                    <% } else { %>
-                        <input class="input" name="deliveryPhone" id="telephone" type="tel" placeholder="Contact Phone Number" required/>
-                    <% } %>
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-phone"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
                 <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                 <p class="control has-icons-left">
                     <% if(user.full_name) { %>
@@ -111,6 +98,9 @@
                     </span>
                 </p>
             </div>
+            <% if (product.dropshipped) { %>
+                
+            <% } %>
             <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="hidden" name="deliveryShipping" value="FaceToFace">
@@ -118,7 +108,7 @@
                 <label class="img-check ">
                     <div class="prices frame openPrices">
                         <p class="price_text">
-                            Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
+                            Price: <%= product.usdPrice %> USD (<%= (product.usdPrice / btcrate).toFixed(8) %> BTC est.)
                         </p>
                         <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                     </div>

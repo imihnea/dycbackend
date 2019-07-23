@@ -9,6 +9,7 @@ const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 const Deal = require('../models/deal');
+const Chat = require('../models/chat');
 const Withdraw = require('../models/withdrawRequests');
 const Deleted = require('../models/deleted');
 const Subscription = require('../models/subscription');
@@ -34,6 +35,7 @@ const client = new Client({
 const { fork } = require("child_process");
 const notifProcess = fork("config/notifications.js");
 const deleteProcess = fork("config/deleteAcc.js");
+const multipleProcess = fork("config/multipleUploader.js");
 var Filter = require('bad-words'),
     filter = new Filter();
 
@@ -598,11 +600,11 @@ module.exports = {
         }
       });
     }
-    if (Number(req.body.value) <= 0.0001) {
-      req.flash('error', 'You cannot withdraw less than 0.0001 BTC');
+    if (Number(req.body.value) <= 0.00015) {
+      req.flash('error', 'You cannot withdraw less than 0.00015 BTC');
       return res.redirect('back');
     }
-    const amount = Number(req.body.value) + Number(0.00005000);
+    const amount = Number(req.body.value) + Number(0.0001);
     const user = await User.findById(req.user._id);
     if (amount <= user.btcbalance) {
       user.btcbalance -= amount;
@@ -729,11 +731,13 @@ module.exports = {
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         //Add Check for isActive: true
         res.send(data);
+      } else {
+        res.send(error);
       }
     });
   },
@@ -753,11 +757,11 @@ module.exports = {
       'x-api-key': process.env.COINSWITCH_API_KEY,
       'content-type': 'application/json' 
     },
-      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "3HatjfqQM2gcCsLQ5ueDCKxxUbyYLzi9mp"},"refundAddress":{"address": "${refund}"}}` 
+      body: `{"depositCoin":"${deposit}","destinationCoin":"btc","depositCoinAmount":"${amount}","destinationAddress":{"address": "36xGQ6juqTtLChJQ6KdyL6otTnfkg3oJNN"},"refundAddress":{"address": "${refund}"}}` 
     };
   
     request(options, function (error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if(!error && response.statusCode == 200 && JSON.parse(body).success !== false) {
         var json = JSON.parse(body);
         var data = json.data;
         Checkout.create({
@@ -772,6 +776,8 @@ module.exports = {
             res.send(data);
           }
         });
+      } else {
+        res.send(error);
       }
     });
   },
@@ -1010,7 +1016,7 @@ module.exports = {
         res.render('dashboard/dashboard_new', {
           user: req.user,
           premium, 
-          oneDollar: 'BTC equivalent of $1 at payment date',
+          oneDollar: null,
           errors: req.session.errors,
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
@@ -1030,15 +1036,19 @@ module.exports = {
       // Look into which symbols are security threats - product name, product description
       // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
-      req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-      req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-      req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-      req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+      req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+      req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+      req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+      if (req.body.product.category[0] !== 'Services') {
+        req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+      }
       // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
       req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
       req.check('product[repeatable]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|)$/g);
-      req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
-      req.check('product[btc_price]', 'The price must have at most 30 characters.').notEmpty().isLength({max: 30});
+      // req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+      // req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
+      req.check('product[usd_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+      req.check('product[usd_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
       // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
       req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
       // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
@@ -1091,14 +1101,44 @@ module.exports = {
       // }
       const errors = req.validationErrors();
       if (errors) {
-        res.render('dashboard/dashboard_new', {
-          user: req.user,
-          errors: errors,
-          csrfToken: req.params._csrf,
-          csrfSecret: req.params.csrfSecret,
-          pageTitle: 'New Deal - Deal Your Crypto',
-          pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
-          pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+        let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+          if(err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+          }
+        });
+        if (premium) {
+          premium = true;
+        } else {
+          premium = false;
+        }
+        client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+          if (!error) {
+            let btcrate = data.data.rates.USD;
+            const tokenprice = 1/btcrate; // 1 USD
+            res.render('dashboard/dashboard_new', {
+              user: req.user,
+              premium, 
+              oneDollar: tokenprice,
+              errors,
+              csrfToken: req.params._csrf,
+              csrfSecret: req.params.csrfSecret,
+              pageTitle: 'New Deal - Deal Your Crypto',
+              pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+            });
+          } else {
+            res.render('dashboard/dashboard_new', {
+              user: req.user,
+              premium, 
+              oneDollar: null,
+              errors,
+              csrfToken: req.params._csrf,
+              csrfSecret: req.params.csrfSecret,
+              pageTitle: 'New Deal - Deal Your Crypto',
+              pageDescription: 'New deal in your personal dashboard on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
+              pageKeywords: 'new deal, deal, dashboard, personal dashboard, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+            });
+          }
         });
       // } else if(req.body.product.shipping === 'true') {
         // req.body.product.name = cleanHTML(String(req.body.product.name));
@@ -1127,7 +1167,7 @@ module.exports = {
         //         req.body.product.images = [];
         //         await cloudinary.v2.uploader.upload(file.path, 
         //         {
-        //           moderation: "aws_rek:suggestive:ignore",
+        //           moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
         //           // transformation: [
         //           //   {quality: "jpegmini:1", sign_url: true},
         //           //   {width: "auto", dpr: "auto"}
@@ -1326,32 +1366,9 @@ module.exports = {
         req.body.product.name = filter.clean(cleanHTML(String(req.body.product.name)));
         req.body.product.description = filter.clean(cleanHTML(String(req.body.product.description)));
         req.body.product.tags = cleanHTML(String(req.body.product.tags));
-        req.body.product.images = [];
-        for (const file of req.files) {
-          await cloudinary.v2.uploader.upload(file.path, 
-            {
-              moderation: "aws_rek:suggestive:ignore",
-              // transformation: [
-              //   {quality: "jpegmini:1", sign_url: true},
-              //   {width: "auto", dpr: "auto"}
-              //   ]
-            }, (err, result) => {
-              if(err) {
-                console.log(err);
-              } else if (result.moderation[0].status === 'rejected') {
-                  req.body.product.images.push({
-                    // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                    public_id: result.public_id,
-                  });
-              } else {
-                req.body.product.images.push({
-                  url: result.secure_url,
-                  public_id: result.public_id,
-                });
-              }
-            });
-        }
+        req.body.product.images = {main: [], sec: []};
+        req.body.product.images.main = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
+        req.body.product.images.sec = [{'url':'https://res.cloudinary.com/deal-your-crypto/image/upload/v1562346756/uploading_placeholder_gnns4f.png', public_id: 'uploading_placeholder_gnns4f'}];
         const author = {
           id: req.user._id,
           username: req.user.username,
@@ -1363,7 +1380,10 @@ module.exports = {
           accountType: req.user.accountType
         };
         req.body.product.author = author;
-        const btcPrice=Number(req.body.product.btc_price).toFixed(8);
+        if (req.body.product.category[0] == 'Services') {
+          req.body.product.condition = 'Service';
+        }
+        const usdPrice=Number(req.body.product.usd_price).toFixed(2);
         const category = ['all', `${req.body.product.category[0]}`, `${req.body.product.category[1]}`, `${req.body.product.category[2]}`];
         const tags = req.body.product.tags.trim().split(' ');
         const newproduct = {
@@ -1372,7 +1392,7 @@ module.exports = {
           category,
           condition: req.body.product.condition,
           description: req.body.product.description,
-          btcPrice,
+          usdPrice,
           tags,
           searchableTags: req.body.product.tags,
           author
@@ -1496,6 +1516,10 @@ module.exports = {
           }
         });
         const product = await Product.create(newproduct);
+        let filesToUpload = req.files;
+        let toUpload = 'newProduct';
+        let dataForUploader = {product: product._id, files: filesToUpload, toUpload: toUpload};
+        multipleProcess.send(dataForUploader);
         elasticClient.index({
           index: 'products',
           type: 'products',
@@ -1503,13 +1527,16 @@ module.exports = {
           body: {
               id: product._id,
               feat_1: product.feat_1,
-              image: product.images[0].url,
+              image: product.images.sec[0].url,
               name: product.name,
               author: product.author,
               avgRating: product.avgRating,
-              btcPrice: product.btcPrice,
+              usdPrice: product.usdPrice,
               condition: product.condition,
-              category: product.category,
+              category0: product.category[0],
+              category1: product.category[1],
+              category2: product.category[2],
+              category3: product.category[3],
               createdAt: product.createdAt,
               searchableTags: product.searchableTags
           }
@@ -1521,6 +1548,7 @@ module.exports = {
         if (process.env.NODE_ENV === 'production') {
           productLogger.info(`Message: A new product was created - ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
         }
+        req.flash('success', 'Success! Your pictures will be uploaded shortly!')
         return res.redirect(`/products/${product._id}/view`);
       }
     }
@@ -1583,7 +1611,7 @@ module.exports = {
           product: product, 
           user: req.user,
           premium, 
-          oneDollar: 'BTC equivalent of $1 at payment date',
+          oneDollar: null,
           errors: req.session.errors,
           csrfToken: req.cookies._csrf,
           csrfSecret: req.body.csrfSecret,
@@ -1603,18 +1631,23 @@ module.exports = {
     req.body.product.tags = cleanHTML(String(req.body.product.tags));
     // req.check('product[name]', 'The name of the product contains invalid characters.').matches(/^[a-zA-Z0-9 .,!?]+$/g);
     req.check('product[name]', 'The name of the product must contain between 3 and 200 characters.').notEmpty().isLength({ min: 3, max: 200 });
-    req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-    req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-    req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z& ]+$/g);
-    req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+    req.check('product[category][0]', 'Please choose a main category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+    req.check('product[category][1]', 'Please choose a secondary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+    req.check('product[category][2]', 'Please choose a tertiary category.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+    if (req.body.product.category[0] !== 'Services') {
+      req.check('product[condition]', 'Please select a product condition.').notEmpty().isLength({max: 100}).matches(/^[a-zA-Z ]+$/g);
+    }
     // req.check('product[description]', "The product's description contains invalid characters").matches(/^[a-zA-Z0-9 .,!?]+$/g);
     req.check('product[description]', 'The description must contain between 3 and 500 characters.').notEmpty().isLength({min: 3, max: 500});
     req.check('product[repeatable]', 'Something went wrong. Please try again.').matches(/^(true|)$/g);
-    req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/).notEmpty().isLength({ max: 500 });
-    req.check('product[btc_price]', 'The price must have at most 30 characters.').isLength({max: 30});
+    // req.check('product[btc_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+    // req.check('product[btc_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
+    req.check('product[usd_price]', 'You must input a price.').matches(/^[0-9.]+$/);
+    req.check('product[usd_price]', 'The price must have at most 12 characters.').notEmpty().isLength({max: 12});
     // req.check('product[tags]', 'The tags must not contain special characters besides the hyphen (-)').matches(/^[a-z0-9 -]+$/gi);
     req.check('product[tags]', 'The tags must have a total maximum of 500 characters').isLength({ max: 500 });
     req.check('deletedImages', 'Something went wrong. Please try again.').isLength({max: 2000}).matches(/(^[a-z0-9 ]+$|)/i);
+    req.check('uploadImages', 'Something went wrong. Please try again.').matches(/^[0-9][0-9]?$|^100$/);
     // req.check('product[shipping]', 'Something went wrong. Please try again.').isLength({ max: 500 }).matches(/^(true|false)$/g);
     // if(req.body.product.shipping === 'true') {
     //   req.check('name', 'The name must be at least 3 characters long').notEmpty().isLength({ min: 3, max: 500 }).trim();
@@ -1665,15 +1698,46 @@ module.exports = {
     // }
     const errors = req.validationErrors();
     if (errors) {
-      res.render('dashboard/dashboard_edit', {
-        user: req.user,
-        errors: errors,
-        product,
-        csrfToken: req.params._csrf,
-        csrfSecret: req.params.csrfSecret,
-        pageTitle: `${product.name} - Deal Your Crypto`,
-        pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
-        pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+      let premium = await Subscription.findOne({userid: req.user._id}, (err, sub) => {
+        if(err) {
+          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Failed to retrieve subscription\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+      });
+      if (premium) {
+        premium = true;
+      } else {
+        premium = false;
+      }
+      client.getExchangeRates({'currency': 'BTC'}, (error, data) => {
+        if (!error) {
+          let btcrate = data.data.rates.USD;
+          const tokenprice = 1/btcrate; // 1 USD
+          res.render('dashboard/dashboard_edit', {
+            product: product, 
+            user: req.user,
+            premium, 
+            oneDollar: tokenprice,
+            errors,
+            csrfToken: req.params._csrf,
+            csrfSecret: req.params.csrfSecret,
+            pageTitle: `${product.name} - Deal Your Crypto`,
+            pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+          });
+        } else {
+          res.render('dashboard/dashboard_edit', {
+            product: product, 
+            user: req.user,
+            premium, 
+            oneDollar: null,
+            errors,
+            csrfToken: req.params._csrf,
+            csrfSecret: req.params.csrfSecret,
+            pageTitle: `${product.name} - Deal Your Crypto`,
+            pageDescription: `Edit ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+            pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
+          });
+        }
       });
     // } else if(req.body.product.shipping === 'true') {
     //   shippo.address.create({
@@ -1702,7 +1766,7 @@ module.exports = {
     //             for (const file of req.files) {
     //               await cloudinary.v2.uploader.upload(file.path, 
     //                 {
-    //                   moderation: "aws_rek:suggestive:ignore",
+    //                   moderation: "aws_rek:suggestive:ignore:explicit_nudity:0.95",
     //                   // transformation: [
     //                   //   {quality: "jpegmini:1", sign_url: true},
     //                   //   {width: "auto", dpr: "auto"}
@@ -1860,40 +1924,12 @@ module.exports = {
     //   });
     } else {
       // check if there are any new images for upload
-      if (req.files) {
-        // upload images
-        for (const file of req.files) {
-          await cloudinary.v2.uploader.upload(file.path, 
-            {
-              moderation: "aws_rek:suggestive:ignore",
-              // transformation: [
-              //   {quality: "jpegmini:1", sign_url: true},
-              //   {width: "auto", dpr: "auto"}
-              //   ]
-            }, (err, result) => {
-              if(err) {
-                console.log(err);
-              } else if (result.moderation[0].status === 'rejected') {
-                  product.images.push({
-                    // replace with a 'picture contains nudity' or something
-                    url: 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png',
-                    public_id: result.public_id,
-                  });
-              } else {
-                product.images.push({
-                  url: result.secure_url,
-                  public_id: result.public_id,
-                });
-              }
-            });
-        }
-      }
 
       let deleteImages;
       // check if there are images to delete
       if (req.body.deleteImages.length) {
         deleteImages = req.body.deleteImages.trim().split(' ');
-        if (deleteImages.length >= product.images.length) {
+        if ((deleteImages.length >= product.images.main.length) && (req.body.uploadImages == 0)) {
           req.flash('error', 'The product must have at least one image.');
           return res.redirect('back');
         }
@@ -1901,21 +1937,39 @@ module.exports = {
           // delete images from cloudinary
           await cloudinary.v2.uploader.destroy(public_id, (err) => {
             if (err) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't destroy image with public id ${public_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
               req.flash('error', 'A problem has occured. Please try again later.');
               return res.redirect('back');
             }
           });
           // delete images from DB
-          for (const image of product.images) {
+          for (const image of product.images.main) {
             if (image.public_id === public_id) {
-              product.images.splice(product.images.indexOf(image), 1);
+              // delete thumbnails from cloudinary
+              const thumbnailpublic_id = product.images.sec[product.images.main.indexOf(image)].public_id;
+              await cloudinary.v2.uploader.destroy(thumbnailpublic_id, (err) => {
+                if (err) {
+                  errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't destroy image with public id ${thumbnailpublic_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                  req.flash('error', 'A problem has occured. Please try again later.');
+                  return res.redirect('back');
+                }
+              });
+              product.images.sec.splice(product.images.main.indexOf(image), 1);
+              product.images.main.splice(product.images.main.indexOf(image), 1);
             }
           }
         }
       }
 
-      const btcPrice = Number(req.body.product.btc_price).toFixed(8);
+      if (req.files) {
+        // upload images
+        let filesToUpload = req.files;
+        let toUpload = 'editProduct';
+        let dataForUploader = {product: product._id, files: filesToUpload, toUpload: toUpload};
+        multipleProcess.send(dataForUploader);
+      }
+
+      const usdPrice = Number(req.body.product.usd_price).toFixed(2);
       if (req.body.product.repeatable === "true") {
         product.repeatable = req.body.product.repeatable;
       } else {
@@ -1983,15 +2037,20 @@ module.exports = {
       // update the product with any new properties
       product.name = filter.clean(req.body.product.name);
       product.description = filter.clean(req.body.product.description);
-      product.condition = req.body.product.condition;
+      if (req.body.product.category[0] == 'Services') {
+        product.condition = 'Service';
+      } else {
+        product.condition = req.body.product.condition;
+      }
       product.category[1] = req.body.product.category[0];
       product.category[2] = req.body.product.category[1];
       product.category[3] = req.body.product.category[2];
-      product.btcPrice = btcPrice;
+      product.usdPrice = usdPrice;
       const tags = req.body.product.tags.trim().split(' ');
       product.tags = tags;
       product.searchableTags = req.body.product.tags;
       // save the updated product into the db
+      product.markModified('category');
       await product.save();
       elasticClient.update({
         index: 'products',
@@ -2000,10 +2059,12 @@ module.exports = {
         body: {
           doc: {
             name: product.name,
-            image: product.images[0].url,
-            btcPrice: product.btcPrice,
+            usdPrice: product.usdPrice,
             condition: product.condition,
-            category: product.category,
+            category0: product.category[0],
+            category1: product.category[1],
+            category2: product.category[2],
+            category3: product.category[3],
             searchableTags: product.searchableTags
           }
         }
@@ -2013,8 +2074,148 @@ module.exports = {
         }
       });
       // redirect to show page
-      req.flash('success', 'Product updated successfully!');
+      req.flash('success', 'Product updated successfully - images will upload shortly.');
       return res.redirect(`/products/${product.id}/view`);
+    }
+  },
+  async imageLeft(req, res) {
+    req.check('imageToMove', 'Something went wrong. Please try again').isNumeric();
+    const error = req.validationErrors();
+    if (error) {
+      req.flash('error', 'Something went wrong. Please try again.');
+      return res.redirect('back');
+    } else {
+      const imageToMove = Number(req.body.imageToMove);
+      const product = await Product.findById(req.params.id);
+      if (imageToMove > product.images.main.length - 1) {
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('back');
+      } else {
+        if (imageToMove == 0) {
+          const oldImage = {
+            main: {
+              _id: product.images.main[imageToMove]._id,
+              url: product.images.main[imageToMove].url,
+              public_id: product.images.main[imageToMove].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove]._id,
+              url: product.images.sec[imageToMove].url,
+              public_id: product.images.sec[imageToMove].public_id
+            }
+          }
+          for (let i = 1; i <= product.images.main.length - 1; i += 1) {
+            product.images.main[i - 1] = product.images.main[i];
+            product.images.sec[i - 1] = product.images.sec[i];
+          }
+          product.images.main[product.images.main.length - 1] = oldImage.main;
+          product.images.sec[product.images.sec.length - 1] = oldImage.sec;
+        } else {
+          const oldImage = {
+            main: {
+              _id: product.images.main[imageToMove - 1]._id,
+              url: product.images.main[imageToMove - 1].url,
+              public_id: product.images.main[imageToMove - 1].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove - 1]._id,
+              url: product.images.sec[imageToMove - 1].url,
+              public_id: product.images.sec[imageToMove - 1].public_id
+            }
+          }
+          product.images.main[imageToMove - 1] = product.images.main[imageToMove];
+          product.images.sec[imageToMove - 1] = product.images.sec[imageToMove];
+          product.images.main[imageToMove] = oldImage.main;
+          product.images.sec[imageToMove] = oldImage.sec;
+        }
+        await product.save();
+        elasticClient.update({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+            doc: {
+              image: product.images.sec[0].url,
+            }
+          }
+        }, (err, res) => {
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
+        });
+        req.flash('success', 'Image moved');
+        return res.redirect('back');
+      }
+    }
+  },
+  async imageRight(req, res) {
+    req.check('imageToMove', 'Something went wrong. Please try again').isNumeric();
+    const error = req.validationErrors();
+    if (error) {
+      req.flash('error', 'Something went wrong. Please try again.');
+      return res.redirect('back');
+    } else {
+      const imageToMove = Number(req.body.imageToMove);
+      const product = await Product.findById(req.params.id);
+      if (imageToMove > product.images.main.length - 1) {
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('back');
+      } else {
+        if (imageToMove == product.images.main.length - 1) {
+          const oldImage = {
+            main: {
+              _id: product.images.main[imageToMove]._id,
+              url: product.images.main[imageToMove].url,
+              public_id: product.images.main[imageToMove].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove]._id,
+              url: product.images.sec[imageToMove].url,
+              public_id: product.images.sec[imageToMove].public_id
+            }
+          }
+          for (let i = product.images.main.length - 2; i >= 0; i -= 1) {
+            product.images.main[i + 1] = product.images.main[i];
+            product.images.sec[i + 1] = product.images.sec[i]; 
+          }
+          product.images.main[0] = oldImage.main;
+          product.images.sec[0] = oldImage.sec;
+        } else {
+          const oldImage = {
+            main: {
+              _id: product.images.main[imageToMove + 1]._id,
+              url: product.images.main[imageToMove + 1].url,
+              public_id: product.images.main[imageToMove + 1].public_id
+            },
+            sec: {
+              _id: product.images.sec[imageToMove + 1]._id,
+              url: product.images.sec[imageToMove + 1].url,
+              public_id: product.images.sec[imageToMove + 1].public_id
+            }
+          }
+          product.images.main[imageToMove + 1] = product.images.main[imageToMove];
+          product.images.sec[imageToMove + 1] = product.images.sec[imageToMove];
+          product.images.main[imageToMove] = oldImage.main;
+          product.images.sec[imageToMove] = oldImage.sec;
+        }
+        await product.save();
+        elasticClient.update({
+          index: 'products',
+          type: 'products',
+          id: `${product._id}`,
+          body: {
+            doc: {
+              image: product.images.main[0].url,
+            }
+          }
+        }, (err, res) => {
+          if (err) {
+            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't update product ${product._id} (ES)\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+          }
+        });
+        req.flash('success', 'Image moved');
+        return res.redirect('back');
+      }
     }
   },
   // Feature product
@@ -2159,6 +2360,7 @@ module.exports = {
       }
     });
     await Report.deleteMany({product: req.params.id});
+    await Chat.deleteMany({'product.id': req.params.id});
     req.flash('success', 'Product deleted successfully!');
     return res.redirect('/dashboard/open');
   },

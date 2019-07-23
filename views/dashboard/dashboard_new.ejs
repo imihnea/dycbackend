@@ -29,11 +29,9 @@
                             <h4 class="new-text" style="margin-bottom: 3vh;">General Information</h4>
                             <div class="inputWrapper">
                                 <input class="input" name="product[name]" placeholder="Name" type="text" required maxlength="100" minlength="3"
-                                 
                                     data-parsley-error-message=""	 data-parsley-trigger="change" autofocus required/>
                                 <div class="label" style="margin-left: 1vw;">
-                                    <span class="registerTooltip" aria-label="Length: 3 - 100 characters
-Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                    <span class="registerTooltip" aria-label="Length: 3 - 100 characters" tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                     </span>
                                 </div>
@@ -42,15 +40,16 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 <select name="product[category][0]" id="firstCat" style="width: 100%;" required
                                 data-parsley-error-message="">
                                     <option disabled selected>Main Category</option>
-                                    <option value="Collectibles & Art">Collectibles & Art</option>
+                                    <option value="Collectibles and Art">Collectibles and Art</option>
                                     <option value="Electronics">Electronics</option>
-                                    <option value="Fashion & Beauty">Fashion & Beauty</option>
+                                    <option value="Fashion and Beauty">Fashion and Beauty</option>
                                     <option value="Home Improvement">Home Improvement</option>
                                     <option value="Leisure Time">Leisure Time</option>
-                                    <option value="Mothers & Babies">Mothers & Babies</option>
+                                    <option value="Mothers and Babies">Mothers and Babies</option>
                                     <option value="Pet Supplies">Pet Supplies</option>
                                     <option value="Real Estate">Real Estate</option>
-                                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                                    <option value="Services">Services</option>
+                                    <option value="Sports and Outdoors">Sports and Outdoors</option>
                                     <option value="Vehicles">Vehicles</option>
                                     <option value="Other">Other</option>
                                 </select>
@@ -67,8 +66,8 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                     <option disabled selected>Tertiary Category</option>
                                 </select>
                             </div>
-                            <div class="select cont-select" style="width: 90% !important;">
-                                <select name="product[condition]" style="width: 100%" required
+                            <div class="select cont-select" id="conditionSelect" style="width: 90% !important;">
+                                <select name="product[condition]" style="width: 100%"
                                 data-parsley-error-message="">
                                     <option value="Not Specified" disabled selected>Condition</option>
                                     <option value="Brand New">Brand New</option>
@@ -83,8 +82,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                     maxlength="500"
                                     data-parsley-error-message="" data-parsley-trigger="keyup"></textarea>
                                 <div class="label tooltipLabel">
-                                    <span class="newTooltip" aria-label="Length: 3 - 100 characters
-Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                    <span class="newTooltip" aria-label="Length: 3 - 500 characters" tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                     </span>
                                 </div>
@@ -94,7 +92,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 <input type="text" id="tagInput" class="input" placeholder="Tags">
                                 <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                                 <div class="label" style="margin-left: 1vw;">
-                                    <span class="registerTooltip" aria-label="Characters: Alphanumeric, including the hyphen (-). Maximum 10 tags." tabindex="-1">
+                                    <span class="registerTooltip" aria-label="Maximum 10 tags." tabindex="-1">
                                         <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                     </span>
                                 </div>
@@ -117,80 +115,88 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                         <div class="frame">
                             <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
                             <div class="label">
-                                <span class="newTooltip" aria-label="The recommended aspect ratio is 16:9
-All images are scaled to that ratio
-Max filesize is 5MB" tabindex="-1">
+                                <span class="newTooltip" aria-label="Max filesize is 5MB" tabindex="-1">
                                     <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                 </span>
                             </div>
                             <div class="file-upload">
                                 <div class="mobileUpload">
-                                    <label for="upload[0]" class="file-upload__label">
+                                    <label for="upload[0]" class="file-upload__label label">
                                         <span style="font-size: 5rem;">
                                             <i class="far fa-plus-square square"></i>
-                                            <i class="far fa-check-square hide"></i>
+                                            <figure class="image previewImage hide is-128x128">
+                                                <img id="Preview0" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 0">
+                                            </figure>
                                         </span>
                                     </label>
-                                    <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                    <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 0);">
                                     <label class="file-delete__label hide">
                                         <span>
-                                            <i class="far fa-trash-alt"></i>
+                                            <i class="far fa-trash-alt fa-2x"></i>
                                         </span>
                                     </label>
                                 </div>
                                 <div class="mobileUpload">
-                                    <label for="upload[1]" class="file-upload__label">
+                                    <label for="upload[1]" class="file-upload__label label">
                                         <span style="font-size: 5rem;">
                                             <i class="far fa-plus-square square"></i>
-                                            <i class="far fa-check-square hide"></i>
+                                            <figure class="image previewImage hide is-128x128">
+                                                <img id="Preview1" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 1">
+                                            </figure>
                                         </span>
                                     </label>
-                                    <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                    <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 1);">
                                     <label class="file-delete__label hide">
                                         <span>
-                                            <i class="far fa-trash-alt"></i>
+                                            <i class="far fa-trash-alt fa-2x"></i>
                                         </span>
                                     </label>
                                 </div>
                                 <div class="mobileUpload">
-                                    <label for="upload[2]" class="file-upload__label">
+                                    <label for="upload[2]" class="file-upload__label label">
                                         <span style="font-size: 5rem;">
                                             <i class="far fa-plus-square square"></i>
-                                            <i class="far fa-check-square hide"></i>
+                                            <figure class="image previewImage hide is-128x128">
+                                                <img id="Preview2" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 2">
+                                            </figure>
                                         </span>
                                     </label>
-                                    <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                    <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 2);">
                                     <label class="file-delete__label hide">
                                         <span>
-                                            <i class="far fa-trash-alt"></i>
+                                            <i class="far fa-trash-alt fa-2x"></i>
                                         </span>
                                     </label>
                                 </div>
                                 <div class="mobileUpload">
-                                    <label for="upload[3]" class="file-upload__label">
+                                    <label for="upload[3]" class="file-upload__label label">
                                         <span style="font-size: 5rem;">
                                             <i class="far fa-plus-square square"></i>
-                                            <i class="far fa-check-square hide"></i>
+                                            <figure class="image previewImage hide is-128x128">
+                                                <img id="Preview3" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 3">
+                                            </figure>
                                         </span>
                                     </label>
-                                    <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                    <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 3);">
                                     <label class="file-delete__label hide">
                                         <span>
-                                            <i class="far fa-trash-alt"></i>
+                                            <i class="far fa-trash-alt fa-2x"></i>
                                         </span>
                                     </label>
                                 </div>
                                 <div class="mobileUpload">
-                                    <label for="upload[4]" class="file-upload__label">
+                                    <label for="upload[4]" class="file-upload__label label">
                                         <span style="font-size: 5rem;">
                                             <i class="far fa-plus-square square"></i>
-                                            <i class="far fa-check-square hide"></i>
+                                            <figure class="image previewImage hide is-128x128">
+                                                <img id="Preview4" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 4">
+                                            </figure>
                                         </span>
                                     </label>
-                                    <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images">
+                                    <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 4);">
                                     <label class="file-delete__label hide">
                                         <span>
-                                            <i class="far fa-trash-alt"></i>
+                                            <i class="far fa-trash-alt fa-2x"></i>
                                         </span>
                                     </label>
                                 </div>
@@ -199,29 +205,28 @@ Max filesize is 5MB" tabindex="-1">
                         <br>
                         <div class="frame">
                             <input type="text" id="userType" value="<% if (premium == true) { %>Premium<% } else { %><%= user.accountType %><% } %>" hidden>
-                            <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
+                            <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>                            
                             <div class="field">
-                                <label class="label" for="btc-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price</label>
+                                <label class="label" for="usd-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price (USD)</label>
                                 <p class="control has-icons-left smmargin" style="margin: auto;">
-                                    <input class="input" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step="0.00000001" min="0.00000001" />
+                                    <input class="input" id="usd-price" name="product[usd_price]" placeholder="Price (USD)" type="number" step="0.01" min="0.01" />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-dollar-sign" style="color: green;"></i>
+                                    </span>
+                                </p>
+                            </div>
+                            <% if (oneDollar != null) { %>
+                            <div class="field">
+                                <label class="label" for="btc-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price (BTC Estimate)</label>
+                                <p class="control has-icons-left smmargin" style="margin: auto;">
+                                    <input class="input" id="btc-price" placeholder="Price (BTC)" type="number" step="0.00000001" min="0.00000001" readonly/>
                                     <span class="icon is-small is-left">
                                         <i class="fab fa-bitcoin" style="color: orange;"></i>
                                     </span>
                                 </p>
                             </div>
-                            <div class="field" style="width: 90%; margin: auto; margin-bottom: 0.75rem;">
-                                <label class="label" for="fee" style="text-align: left;"><% if (premium) { %>Premium<%} else { %><%= user.accountType %><% } %> Account Fee</label>
-                                <input type="text" class="input" value="<% if ((premium) || (user.accountType == 'Partner')) { %> 8% <% } else { %>10%<% } %>">
-                            </div>
-                            <div class="field">
-                                <label class="label" for="btc-payout" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Estimated Payout</label>
-                                <p class="control has-icons-left smmargin" style="margin: auto;">
-                                    <input class="input" id="btc-payout" placeholder="Payout (BTC)" type="number" step="0.00000001" min="0.00000001" readonly />
-                                    <span class="icon is-small is-left">
-                                        <i class="fab fa-bitcoin" style="color: orange;"></i>
-                                    </span>
-                                </p>
-                            </div>
+                            <% } %>
+                            <input style="display: none;" id="oneDollar" value="<% if (oneDollar != null) { %><%= oneDollar.toFixed(8) %><% } %>">
                         </div>
                         <br>
                         <div class="frame">

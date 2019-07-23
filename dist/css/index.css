@@ -238,3 +238,32 @@ div.latest-details{
       justify-content: space-around;
     }
 }
+
+/* Video */
+
+.video-section {
+    background: url(/dist/img/video_column.png); 
+    background-size: cover; 
+    background-attachment: fixed; 
+    margin-right: 0% !important;
+}
+
+@media screen and (max-width: 560px) {
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px; height: 0; overflow: hidden;
+        }
+        
+        .video-container iframe,
+        .video-container object,
+        .video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* End Video */

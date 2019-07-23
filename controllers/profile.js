@@ -14,6 +14,8 @@ const middleware = require('../middleware/index');
 const { client } = require('../config/elasticsearch');
 var Filter = require('bad-words'),
     filter = new Filter();
+const { fork } = require("child_process");
+const cloudinaryUploader = fork("config/multipleUploader.js");
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -22,6 +24,12 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+const cleanHTML = (unclean) => {
+  return unclean
+    .replace(/</g, "")
+    .replace(/>/g, "");
+};
 
 module.exports = {
     // View Profile
@@ -59,6 +67,7 @@ module.exports = {
           floorRating, 
           reviews,
           premium,
+          oneDollar: req.oneDollar,
           pageTitle: 'Profile - Deal Your Crypto',
           pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
           pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -70,6 +79,7 @@ module.exports = {
           floorRating, 
           reviews,
           premium: false,
+          oneDollar: req.oneDollar,
           pageTitle: 'Profile - Deal Your Crypto',
           pageDescription: 'User profile on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
           pageKeywords: 'user profile, user, profile, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -132,31 +142,10 @@ module.exports = {
                 // check if there are any new images for upload
                 if (req.file) {
                   try{
-                      // delete old image
-                      await cloudinary.v2.uploader.destroy(user.avatar.public_id, (err) => {
-                        if (err) {
-                          errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                        }
-                      });
-                      // upload image
-                      await cloudinary.v2.uploader.upload(req.file.path, 
-                        {
-                          moderation: "aws_rek:suggestive:ignore",
-                          // transformation: [
-                          //   {quality: "jpegmini:1", sign_url: true},
-                          //   {width: "auto", dpr: "auto"}
-                          //   ]
-                        }, (err, result) => {
-                          if(err) {
-                            errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                          } else if (result.moderation[0].status === 'rejected') {
-                              user.avatar.url = 'https://res.cloudinary.com/deal-your-crypto/image/upload/v1561981652/nudity_etvikx.png';
-                              user.avatar.public_id = result.public_id;
-                          } else {
-                            user.avatar.url = result.secure_url;
-                            user.avatar.public_id = result.public_id;
-                          }
-                        });
+                    let fileToUpload = req.file;
+                    let toUpload = 'avatar';
+                    let dataForUploader = {user: user, file: fileToUpload, toUpload: toUpload};
+                    cloudinaryUploader.send(dataForUploader);
                     } catch (error) {
                         req.flash('error', error.message);
                         return res.redirect('back');
@@ -215,7 +204,7 @@ module.exports = {
                       'product.author.address.zip': user.zip
                     } 
                   });
-                  req.flash('success', 'Successfully updated your profile!');
+                  req.flash('success', 'Successfully updated your profile - avatar will take a few seconds.');
                   return res.redirect(`/profile/${user._id}`);
                 }
             }

@@ -7,6 +7,7 @@ const Categories = [
     { name: 'Mothers and Babies', opt: ['Clothes', 'Strollers', 'Baby Care', 'Safety', 'Toys', 'Other Baby Products']},
     { name: 'Pet Supplies', opt: ['Dogs', 'Cats', 'Aquatic Pets', 'Birds', 'Other Pets']},
     { name: 'Real Estate', opt: ['Apartments', 'Houses', 'Other Estates']},
+    { name: 'Services', opt: ['IT', 'Design', 'Entertainment', 'Education', 'Financial', 'Sports', 'Other Services']},
     { name: 'Sports and Outdoors', opt: ['Sports and Fitness', 'Outdoor']},
     { name: 'Vehicles', opt: ['Automobiles', 'Trucks and Trailers', 'Motorcycles and ATVs', 'Boats', 'Other Vehicles']},
     { name: 'Other', opt: ['Digital Goods', 'Other']}
@@ -60,7 +61,14 @@ const Categories = [
     { name: 'Boats', opt: ['Leisure Boats', 'Fishing Boats', 'Parts', 'Other'] },
     { name: 'Other Vehicles', opt: ['Other'] },
     { name: 'Digital Goods', opt: ['Digital Art', 'Software license', 'Video Game Accounts', 'Cryptocurrencies', 'Other']},
-    { name: 'Other', opt: ['Gift Cards', 'Services', 'Other']}
+    { name: 'Other', opt: ['Gift Cards', 'Other']},
+    { name: 'IT', opt: ['Web', 'Security', 'Databases', 'Software', 'Computer Repairs', 'Other']},
+    { name: 'Design', opt: ['Logo', 'Video', 'Photography', 'Advertising', 'Clothing', 'Art', 'Other']},
+    { name: 'Entertainment', opt: ['Movies', 'Concerts', 'Festivals', 'Tickets', 'Other']},
+    { name: 'Education', opt: ['Tutoring', 'Homework', 'Notes', 'Books', 'Other']},
+    { name: 'Financial', opt: ['Tutoring', 'Advice', 'Predictions', 'Managing', 'Accounting', 'Other']},
+    { name: 'Sports', opt: ['Coaching', 'Training', 'Diets', 'Other']},
+    { name: 'Other Services', opt: ['Other']}
   ];
 
   module.exports = { Categories, secCategories };

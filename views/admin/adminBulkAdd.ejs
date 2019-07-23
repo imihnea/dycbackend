@@ -1,0 +1,26 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/jodit.min.css">
+
+<div class="hero-body">
+    <div class="column dashTop">
+        <h2 class="title dashTitle" style="color: white !important;">Bulk add products</h2>
+    </div>
+    <br>
+    <% include ../partials/adminMenu %>
+    <div class="columns">
+        <div class="column"></div>
+        <div class="column frame is-three-fifths">
+            <form action="/admin/bulkAdd" method="post" enctype="multipart/form-data">
+                <div class="field">
+                    <input type="file" class="input" name="productData">
+                </div>
+                <button class="button is-primary">Submit</button>
+            </form>
+        </div>
+        <div class="column"></div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

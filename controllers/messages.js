@@ -111,6 +111,7 @@ module.exports = {
             user2, 
             buyer, 
             product,
+            oneDollar: req.oneDollar,
             pageTitle: 'Messages - Deal Your Crypto',
             pageDescription: 'Your message on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
             pageKeywords: 'message, messages, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency'
@@ -187,7 +188,7 @@ module.exports = {
                     product: { 
                         id: product._id, 
                         name: product.name, 
-                        imageUrl: product.images[0].url, 
+                        imageUrl: product.images.sec[0].url, 
                         price: product.btcPrice
                     }
                 };
@@ -230,7 +231,7 @@ module.exports = {
                 product: { 
                     id: product._id, 
                     name: product.name, 
-                    imageUrl: product.images[0].url, 
+                    imageUrl: product.images.sec[0].url, 
                     price: product.price,
                 },
                     deal: req.params.dealid 

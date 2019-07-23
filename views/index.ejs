@@ -10,7 +10,7 @@
             <form action="/firstCategSearch" method="POST">
                 <input type="text" name="searchName" value="" hidden>
                 <input type="text" name="category" value="Fashion and Beauty" hidden>
-                <button aria-label="Slider Button 1" class="sliderBtn"><div class="slider-image"><img src="/dist/img/slider1.jpg" alt="Slider image 1" class="sliderImg"></div></button>
+                <button aria-label="Slider Button 1" class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/deal-your-crypto/image/upload/q_auto:good/v1562347470/slider1_kfdgmb.jpg" alt="Slider image 1" class="sliderImg"></div></button>
             </form>
         </div>
         </div>
@@ -20,7 +20,7 @@
                 <form action="/firstCategSearch" method="POST">
                     <input type="text" name="searchName" value="" hidden>
                     <input type="text" name="category" value="Collectibles and Art" hidden>
-                    <button aria-label="Slider Button 2" class="sliderBtn"><div class="slider-image"><img src="/dist/img/slider2.jpg" alt="Slider image 2" class="sliderImg"></div></button>
+                    <button aria-label="Slider Button 2" class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/deal-your-crypto/image/upload/q_auto:good/v1562347470/slider2_uiociv.jpg" alt="Slider image 2" class="sliderImg"></div></button>
                 </form>
             </div>
         </div>
@@ -30,7 +30,7 @@
                 <form action="/firstCategSearch" method="POST">
                     <input type="text" name="searchName" value="" hidden>
                     <input type="text" name="category" value="Electronics" hidden>
-                    <button aria-label="Slider Button 3" class="sliderBtn"><div class="slider-image"><img src="/dist/img/slider3.jpg" alt="Slider image 3" class="sliderImg"></div></button>
+                    <button aria-label="Slider Button 3" class="sliderBtn"><div class="slider-image"><img src="https://res.cloudinary.com/deal-your-crypto/image/upload/q_auto:good/v1562347470/slider3_awesxn.jpg" alt="Slider image 3" class="sliderImg"></div></button>
                 </form>
             </div>
         </div>
@@ -54,6 +54,31 @@
         <% }) %>
         </div>
     <% } %>
+</div>
+
+<div class="columns frame is-vcentered is-desktop is-gapless video-section">
+    <div class="column">
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/S7G3Udf5CXc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        </div>
+    </div>
+    <div class="column has-text-centered">
+        <h1 class="title is-1 has-text-white">Cryptocurrency should have a purpose</h1>
+        <br>
+        <p class="subtitle is-3 smallerCenter has-text-white">
+            Already have Bitcoin or other coins and you don't know what to do with them? Perhaps you would like to earn some Bitcoin by selling your goods or services?
+        </p>
+        <p class="subtitle is-3 smallerCenter has-text-white">
+            Deal Your Crypto is the perfect marketplace to buy and sell anything for Bitcoin!
+        </p>
+        <div class="buttons is-centered">
+            <a class="button is-warning is-large" href="/firstCategSearch?searchName=&category=all">Buy with Bitcoin</a>
+            <% if(!user) { %>
+                <a class="button is-warning is-large" href="/register">Sell for Bitcoin</a>
+            <% } else { %>
+                <a class="button is-warning is-large" href="/dashboard/new">Sell for Bitcoin</a>
+            <% } %>
+        </div>
+    </div>
 </div>
 
 <div class="hero-body hero-content">
@@ -85,9 +110,9 @@
                         <% b.forEach(product => { %>
                             <div class="column card feat_card frame activeDealProduct <% if ((product.feat_2.status == true) && (!onlyFeatured)) { %>featured<% } %>">
                                 <a href="/products/<%= product._id %>/view">
-                                    <div class="card-image">
+                                    <div class="card-image imageCard">
                                         <figure class="image featimg is-square" style="width: auto;">
-                                            <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
+                                            <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst indexImg" alt="<%= product.name %>">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -96,7 +121,8 @@
                                                 <p class="title productName dealname" style="overflow: hidden;"><%= product.name %></p>
                                             </div>
                                         </div>
-                                        <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
+                                        <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                        <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                     </div> 
                                 </a>      
                             </div>
@@ -109,7 +135,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img src="<%= product.images[0].url %>" class="featimgs" alt="<%= product.name %>">
+                                                <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -118,7 +144,8 @@
                                                     <p class="title productName dealname" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
-                                            <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
+                                            <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                            <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                         </div>
                                     </a>      
                                 </div>
@@ -138,7 +165,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img data-src="<%= product.images[0].url %>" class="featimgs lazyLoadImg" alt="<%= product.name %>">
+                                                <img <% if (product.images.sec[0]) { %> data-src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs lazyLoadImg" alt="<%= product.name %>">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -147,7 +174,8 @@
                                                     <p class="title productName dealname" style="overflow: hidden;"><%= product.name %> </p>
                                                 </div>
                                             </div>
-                                            <p class="curr_text"><b><%= product.btcPrice %></b> BTC</p>
+                                            <p class="curr_text"><b><%= (product.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                            <p class="curr_text"><b>$<%= product.usdPrice %></b> USD</p>
                                         </div> 
                                     </a>      
                                 </div>
@@ -161,7 +189,7 @@
                     <% } %>
                 <% } %>
             </div>
-            <% if (k > 20) { %>
+            <% if (k > 21) { %>
                 <div class="buttons column">
                     <button class="button is-primary showMore is-large">Show More</button>
                     <button class="button is-primary showLess is-large hidden">Show Less</button>

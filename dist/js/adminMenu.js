@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#disputes').classList.add('is-active');
         break;
       }
+      case ('/admin/blog'): {
+        document.querySelector('#blog').classList.add('is-active');
+        break;
+      }
+      case ('/admin/bulkAdd'): {
+        document.querySelector('#bulkadd').classList.add('is-active');
+        break;
+      }
       default: {
         break;
       }

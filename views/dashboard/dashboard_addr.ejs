@@ -24,7 +24,7 @@
                     <div class="column frame">  
                         <div class="adr">
                             <div class="currency"> 
-                                <img src="/dist/img/bitcoin.png" class="adr_img" alt="Bitcoin">
+                                <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                 <p class="title"> = $<%= btcrate %> USD</p>
                             </div>
                             <div class="columns">
@@ -115,7 +115,7 @@
                                                 <div style="text-align: left;">
                                                     <p class="subtitle">1. Input how much you wish to withdraw</p>
                                                     <p class="subtitle">2. Add a withdrawal address (if you haven't already)</p>
-                                                    <p class="subtitle">3. Bear in mind there will be 0.00005 BTC subtracted to cover transaction fee.</p>
+                                                    <p class="subtitle">3. Bear in mind there will be 0.0001 BTC subtracted to cover transaction fee.</p>
                                                     <p class="subtitle">4. Click continue to start the transaction</p>
                                                     <p class="subtitle">5. If you've received a succes message, check your wallet for your funds.</p>
                                                 </div>
@@ -129,7 +129,7 @@
                                                         <div class="field-body">
                                                         <div class="field">
                                                             <div class="control">
-                                                                <input class="input" name="value" id="withdrawValue" placeholder="0.00000000 BTC" type="number" step="0.00000001" min="0.00005" required/>
+                                                                <input class="input" name="value" id="withdrawValue" placeholder="0.00000000 BTC" type="number" step="0.00000001" min="0.0001" required/>
                                                             </div>
                                                         </div>
                                                         </div>
@@ -155,7 +155,7 @@
                                             </section>
                                             <footer class="modal-card-foot">
                                                 <button class="button is-danger cancelWithdraw">Cancel</button>
-                                                <p class="subtitle">Your withdrawal will also have 0.00005000 (BTC) subtracted to cover the transaction fee.</p>
+                                                <p class="subtitle">Your withdrawal will also have 0.0001000 (BTC) subtracted to cover the transaction fee.</p>
                                             </footer>
                                         </div>
                                     </div>
@@ -168,6 +168,10 @@
                                             </header>
                                             <section class="modal-card-body">
                                                     <div class="lds-roller" id="altcoinsSpinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                    <div id="errorImage" style="display: none;">
+                                                        <p class="subtitle">There's been an error with your request, please refresh the page and try again.</p>
+                                                        <button class="button is-warning" value="Refresh Page" onClick="window.location.reload();">Refresh Page</button>
+                                                    </div>
                                                     <div class="steps" id="stepsDemo">
                                                         <div class="step-item is-active">
                                                             <div class="step-marker">1</div>
@@ -278,9 +282,33 @@
                                                                 <div class="field">
                                                                     <div class="control has-icon has-icon-right">
                                                                         <input class="input" name="fee" id="fee" placeholder="Loading..." type="number" step="any" readonly data-validate="require" />
-                                                                        <input type="hidden" id="depositCoinAmount" value="1" />
-                                                                        <input type="hidden" id="refundAddress" value="none" />
                                                                     </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Refund Address:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="refundAddress" id="refundAddress" placeholder="Your Refund Address" data-validate="require" required />
+                                                                    </div>
+                                                                    <p class="help">In case of unforseen errors, your sent coins will be refunded here.</p>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field is-horizontal">
+                                                                <div class="field-label is-normal">
+                                                                <label class="label">Deposit Amount:</label>
+                                                                </div>
+                                                                <div class="field-body">
+                                                                <div class="field">
+                                                                    <div class="control has-icon has-icon-right">
+                                                                        <input class="input" name="depositCoinAmount" id="depositCoinAmount" placeholder="Amount" type="number" step="any" data-validate="require" required />
+                                                                    </div>
+                                                                    <p class="help">How much you wish to deposit</p>
                                                                 </div>
                                                                 </div>
                                                             </div>

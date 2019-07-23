@@ -63,7 +63,7 @@
                     <%  if (products.length > 0) {
                             products.forEach((product) => { %>
                                 <article class="hit hitFrame columns frame <% if (product._source.feat_1.status == true) { %>featured<% } %>">
-                                    <form action="/products/<%= product._source.id %>/view" method="GET" class="updMsg">
+                                    <form action="/products/<%= product._source.id %>/view" method="GET" class="updMsg" target="_blank">
                                         <button class="chatBtn">
                                             <span class="chatSpan"></span>
                                         </button>
@@ -101,8 +101,12 @@
                                             </div>
                                         <% } %>
                                         <div class="prices openPrices frame">
-                                            <p class="price_text"> <%= product._source.btcPrice %></p>
-                                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <p class="price_text"> <%= (product._source.usdPrice * oneDollar).toFixed(8) %></p>
+                                            <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
+                                        </div>
+                                        <div class="prices openPrices frame">
+                                            <p class="price_text"> <%= product._source.usdPrice %></p>
+                                            <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                         </div>
                                     </div>
                                 </article>

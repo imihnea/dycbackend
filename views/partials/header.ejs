@@ -28,6 +28,17 @@
     <link rel="stylesheet" type="text/css" href="/dist/css/animate.css" />
     <!-- JavaScript links -->
     <script src="/dist/js/bulma-toast.min.js"></script>
+    <!-- Hotjar Tracking Code for https://www.dealyourcrypto.com/ -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:1400475,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
     <!-- Facebook Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
@@ -47,40 +58,11 @@
     <!-- End Facebook Pixel Code -->
 </head>
 <body class="has-navbar-fixed-top">
-        <div id="overlay"></div>
-        <div id="spinner">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            width="200px" height="200px" viewBox="100 100 400 400" xml:space="preserve">
-            <filter id="dropshadow" height="130%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-            <feOffset dx="0" dy="0" result="offsetblur"/>
-            <feFlood flood-color="red"/>
-           <feComposite in2="offsetblur" operator="in"/>
-           <feMerge>
-           <feMergeNode/>
-           <feMergeNode in="SourceGraphic"/>
-           </feMerge>
-           </filter>          
-           <path class="path" style="filter:url(#dropshadow)" fill="#000000" d="M446.089,261.45c6.135-41.001-25.084-63.033-67.769-77.735l13.844-55.532l-33.801-8.424l-13.48,54.068
-               c-8.896-2.217-18.015-4.304-27.091-6.371l13.568-54.429l-33.776-8.424l-13.861,55.521c-7.354-1.676-14.575-3.328-21.587-5.073
-               l0.034-0.171l-46.617-11.64l-8.993,36.102c0,0,25.08,5.746,24.549,6.105c13.689,3.42,16.159,12.478,15.75,19.658L208.93,357.23
-               c-1.675,4.158-5.925,10.401-15.494,8.031c0.338,0.485-24.579-6.134-24.579-6.134l-9.631,40.468l36.843,9.188
-               c8.178,2.051,16.209,4.19,24.098,6.217l-13.978,56.17l33.764,8.424l13.852-55.571c9.235,2.499,18.186,4.813,26.948,6.995
-               l-13.802,55.309l33.801,8.424l13.994-56.061c57.648,10.902,100.998,6.502,119.237-45.627c14.705-41.979-0.731-66.193-31.06-81.984
-               C425.008,305.984,441.655,291.455,446.089,261.45z M368.859,369.754c-10.455,41.983-81.128,19.285-104.052,13.589l18.562-74.404
-               C306.28,314.65,379.774,325.975,368.859,369.754z M379.302,260.846c-9.527,38.187-68.358,18.781-87.442,14.023l16.828-67.489
-               C327.767,212.14,389.234,221.02,379.302,260.846z"/>
-           </svg>
-           <br>
-        </div>
 <div class="hero-head">
     <nav class="level navi navbar is-fixed-top" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a id="Logo" class="navbar-item" href="/"></a>
-                <!-- <a id="Logo" class="navbar-item" href="/">
-                    <img src="/dist/img/logo.png" alt="Website Logo">
-                </a> -->
                 <% if (user) { %>
                     <p class="hidden" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
@@ -221,6 +203,11 @@
                                             <input type="text" name="searchName" value="" hidden>
                                             <input type="text" name="category" value="Real Estate" hidden>
                                             <button class="searchBtn">Real Estate</button>
+                                        </form>
+                                        <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="category" value="Services" hidden>
+                                            <button class="searchBtn">Services</button>
                                         </form>
                                         <form action="/firstCategSearch" method="POST" class="dropdown-item categDropdown main-categ">
                                             <input type="text" name="searchName" value="" hidden>
@@ -503,6 +490,51 @@
                                     <div class="column sec-categ" style=" display: none;" >
                                         <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
                                             <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Design" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Design</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Education" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Education</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Entertainment" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Entertainment</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Financial" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Financial</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="IT" hidden>
+                                            <button class="searchBtn secCategSearchBtn">IT</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Sports" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Sports</button>
+                                        </form>
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
+                                            <input type="text" name="searchCateg" value="Services" hidden>
+                                            <input type="text" name="category" value="Other Services" hidden>
+                                            <button class="searchBtn secCategSearchBtn">Other Services</button>
+                                        </form>
+                                    </div>
+
+                                    <div class="column sec-categ" style=" display: none;" >
+                                        <form action="/secondCategSearch" method="POST" class="dropdown-item categDropdown secCategDropdown">
+                                            <input type="text" name="searchName" value="" hidden>
                                             <input type="text" name="searchCateg" value="Sports and Outdoors" hidden>
                                             <input type="text" name="category" value="Sports and Fitness" hidden>
                                             <button class="searchBtn secCategSearchBtn">Sports and Fitness</button>
@@ -612,10 +644,9 @@
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content frame">
-                                    <!-- https://github.com/Coinomi/crypto-icons Creative Commons Attribution  -->
                                         <div class="currency dropdown-item">
                                             <p class="curr_text"><% if (user.btcbalance) {%> <%=  user.btcbalance.toFixed(8) %> <%  } else { %>0.00000<% } %></p>
-                                            <span class="curr_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <span class="curr_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                         </div>
                                         <hr class="dropdown-divider">
                                         <div class="dropdown-item">
@@ -626,7 +657,7 @@
                             </div>
                         </div>
                         <div class="navbar-item showOnBurger">
-                            <a href="/categories" class="white-text showOnBurger">Browse Categories</a>
+                            <a href="/categories" class="white-text buttonShadow showOnBurger">Browse Categories</a>
                         </div>
                         <div class="navbar-item">
                             <a href="/contact" class="white-text buttonShadow">Contact</a>
@@ -755,17 +786,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script>
-    document.body.setAttribute("class", "noscroll");
-
-document.getElementById("overlay").style.display = "block";
-document.getElementById("spinner").style.display = "block";
-
-
-window.onload = function() {
-  document.getElementById("spinner").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-
-  document.body.className = document.body.className.replace(/\bnoscroll\b/,'has-navbar-fixed-top');
-}
-</script>
