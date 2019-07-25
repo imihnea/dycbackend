@@ -791,10 +791,16 @@ module.exports = {
                 const product = {
                     name: row.name,
                     usdPrice: row.usdPrice,
-                    description: row.description,
+                    description: row.description.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ").replace(/\ufffd/g, ''),
                     'category.0': 'all',
+                    'category.1': row.category1,
+                    'category.2': row.category2,
+                    'category.3': row.category3,
+                    'images.main.0.url': row.mainImg,
+                    'images.sec.0.url': row.mainImg,
                     condition: 'Brand new',
                     dropshipped: true,
+                    link: row.link,
                     author: {
                         id: req.user._id,
                         username: req.user.username,
