@@ -162,7 +162,11 @@ app.use('/dist', express.static(path.join(__dirname, '/dist'), {
 app.use(methodOverride('_method'));
 
 app.all('*', (req, res, next) => {
-  res.locals.cart = req.session.cart;
+  if (req.session.cart) {
+    res.locals.cart = req.session.cart;
+  } else {
+    res.locals.cart = [];
+  }
   next();
 });
 

@@ -15,7 +15,7 @@ const { asyncErrorHandler, checkId, getPrice } = middleware;
 
 router.get('/', getPrice, asyncErrorHandler(getCart));
 
-router.post('/add/:id', checkId, addToCart);
+router.post('/add/:id', checkId, asyncErrorHandler(addToCart));
 
 router.put('/delete/:id', checkId, removeFromCart);
 

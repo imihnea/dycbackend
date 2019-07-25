@@ -23,6 +23,7 @@ const ProductSchema = new Schema({
   btcPrice: {type: Number, default: 0, es_indexed: true },
   usdPrice: Number,
   dropshipped: Boolean,
+  link: String,
   available: { type: String, default: "True", es_indexed: true },
   repeatable: { type: Boolean, default: false },
   tags: [ String ],

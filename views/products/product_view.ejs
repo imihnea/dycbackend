@@ -159,9 +159,7 @@
                     </div>
                     <br>   
                 </form>
-                <form action="/cart/add/<%= product._id %>" method="post">
-                    <button class="button is-primary">Add to cart</button>
-                </form>
+
                 <% if (!user) { %> 
                     <a href="/login" class="button is-primary is-rounded">Login to buy</a>
                     <% } else if (user.username === product.author.username) { %>
@@ -171,13 +169,17 @@
                         <form action="/messages/<%= dealExists[1] %>/<%= dealExists[0] %>?_method=PUT" method="POST">
                             <button class="button view-btn is-primary">View Deal</button>
                         </form>
-                    <% } else if (user.btcbalance >= product.btcPrice) { %>
+                    <% } else if (user.btcbalance >= (product.usdPrice * oneDollar).toFixed(8)) { %>
                         <div class="productBuyForm">
-                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
-                            <form action="/messages/<%= product._id %>/createChat" method="POST">
-                                <button class="productContactLink button is-primary">Contact Seller</button>
+                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>                
+                            <form action="/cart/add/<%= product._id %>" method="post">
+                                <button class="button is-primary">Add to cart</button>
                             </form>
                         </div>
+                        <br>
+                        <form action="/messages/<%= product._id %>/createChat" method="POST">
+                            <button class="productContactLink button is-primary">Contact Seller</button>
+                        </form>
                     <% } else { %>
                         <p class="subtitle is-6">You don't have enough balance.</p>
                         <div class="productBuyForm">
