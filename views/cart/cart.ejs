@@ -118,7 +118,9 @@
                         <article class="hit columns" style="margin-top: 0;">
                             <div class="product-picture-wrapper" >
                                 <figure class="image is-128x128" style="margin:auto;">
-                                    <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
+                                    <a href="/products/<%= product._id %>/view">
+                                        <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="productImage" alt="<%= product.name %> Image">
+                                    </a>
                                 </figure>
                             </div>
                             <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -148,9 +150,10 @@
                             </div>
                             <div class="column prod_info productPrice">
                                 <div class="prices openPrices frame" style="width: 100%;">
-                                    <p class="price_text" style="padding-left: 2vw;"><%= (product.usdPrice * oneDollar).toFixed(8) %></p>
+                                    <p class="price_text" style="padding-left: 2vw;">$<%= product.usdPrice %> USD</p>
                                     <input type="number" class="priceVal" value="<%= (product.usdPrice * oneDollar).toFixed(8) %>" hidden>
-                                    <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
+                                    <input type="number" class="usdPriceVal" value="<%= product.usdPrice %>" hidden>
+                                    <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                 </div>
                                 <% if (product.repeatable) { %>
                                     <br>
@@ -163,54 +166,68 @@
                         </article>      
                         <% }); %>
                         <div class="smallerCenter">
-                                <% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %>
-                                <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <label class="label" for="totalPrice" style="text-align: left !important;">Total Price (BTC)</label>
-                                    <input type="number" class="input" id="totalPrice" placeholder="Total Price" style="width: 50%;" value="<%= price.toFixed(8) %>">
-                                </div>
-                                <br>
-                            <% if (price > user.btcbalance) { %>
-                                <p class="subtitle is-6">You don't have enough balance.</p>
-                                <div class="productBuyForm">
-                                <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Proceed to checkout</button>
-                                <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>    
-                            <% } else { %>
-                                <% if (shipping) { %>
-                                    <button type="submit" form="payForm" class="button is-primary">Pay now</button>
+                            <% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %>
+                            <% let totalUsdPrice = 0; products.forEach(product => { totalUsdPrice += Number(product.usdPrice)}); %>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label class="label" for="totalPrice" style="text-align: left !important;">Total Price (BTC)</label>
+                                <input type="number" class="input" id="totalPrice" placeholder="Total Price" style="width: 50%;" value="<%= price.toFixed(8) %>">
+                            </div>
+                            <br>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label class="label" for="totalPriceUSD" style="text-align: left !important;">Total Price (USD)</label>
+                                <input type="number" class="input" id="totalPriceUSD" placeholder="Total Price" style="width: 50%;" value="<%= totalUsdPrice.toFixed(2) %>">
+                            </div>
+                            <br>
+                            <% if(user) { %>
+                                <% if (price > user.btcbalance) { %>
+                                    <p class="subtitle is-5">You don't have enough balance.</p>
+                                    <div class="productBuyForm">
+                                    <a href="/dashboard/addresses" class="button is-primary is-medium">Add Balance</a>    
                                 <% } else { %>
-                                    <form action="/cart/checkout" method="POST">
-                                        <div class="smallerCenter">
-                                            <div class="field">
-                                                <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
-                                                <p class="control has-icons-left">
-                                                    <% if(user.full_name) { %>
-                                                        <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
-                                                    <% } else { %>
-                                                        <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
-                                                    <% } %>
-                                                    <span class="icon is-small is-left">
-                                                        <i class="fas fa-user-tie"></i>
-                                                    </span>
-                                                </p>
+                                    <% if (shipping) { %>
+                                        <button type="submit" form="payForm" class="button is-primary">Pay now</button>
+                                    <% } else { %>
+                                        <form action="/cart/checkout" method="POST">
+                                            <div class="smallerCenter">
+                                                <div class="field">
+                                                    <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
+                                                    <p class="control has-icons-left">
+                                                        <% if(user.full_name) { %>
+                                                            <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
+                                                        <% } else { %>
+                                                            <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                                                        <% } %>
+                                                        <span class="icon is-small is-left">
+                                                            <i class="fas fa-user-tie"></i>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
+                                                    <p class="control has-icons-left">
+                                                        <% if(user.email) { %>
+                                                            <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
+                                                        <% } else { %>
+                                                            <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
+                                                        <% } %>
+                                                        <span class="icon is-small is-left">
+                                                            <i class="fas fa-envelope"></i>
+                                                        </span>
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="field">
-                                                <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
-                                                <p class="control has-icons-left">
-                                                    <% if(user.email) { %>
-                                                        <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
-                                                    <% } else { %>
-                                                        <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
-                                                    <% } %>
-                                                    <span class="icon is-small is-left">
-                                                        <i class="fas fa-envelope"></i>
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <button class="button is-primary">Pay now</button>
-                                    </form>    
+                                            <br>
+                                            <button class="button is-primary">Pay now</button>
+                                        </form>    
+                                    <% } %>
                                 <% } %>
+                            <% } else { %>
+                                <a class="button is-primary is-medium" href="/login">
+                                    <span class="icon is-medium">
+                                        <i class="fas fa-shopping-cart has-text-light"></i>
+                                    </span>
+                                    <span class="has-text-white">Login to Checkout</span>
+                                </a>
                             <% } %>
                         </div>  
                     </main>

@@ -67,6 +67,7 @@ module.exports = {
         } else {
             req.session.cart = [req.params.id];
         }
+        req.flash('success', 'Successfully added to cart!');
         return res.redirect('/cart');
     },
     removeFromCart(req, res) {
