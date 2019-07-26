@@ -51,15 +51,18 @@ module.exports = {
     },
     async addToCart(req, res) {
         const product = await Product.findById(req.params.id);
-        if (req.user._id.toString() == product.author.id.toString()) {
-            req.flash('error', 'You cannot purchase your own product.');
-            return res.redirect('back');
+        if(req.user) {
+            if (req.user._id.toString() == product.author.id.toString()) {
+                req.flash('error', 'You cannot purchase your own product.');
+                return res.redirect('back');
+            }
         }
         if (req.session.cart) {
             req.session.cart.push(req.params.id);
         } else {
             req.session.cart = [req.params.id];
         }
+        req.flash('success', 'Successfully added to cart!');
         return res.redirect('/cart');
     },
     removeFromCart(req, res) {

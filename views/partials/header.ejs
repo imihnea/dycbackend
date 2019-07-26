@@ -64,7 +64,6 @@
             <div class="navbar-brand">
                 <a id="Logo" class="navbar-item" href="/"></a>
                 <% if (user) { %>
-                    <p class="hidden" id="hiddenUsername"><%= user.username %></p>
                     <div class="dropdown is-hoverable navbar-dropdown">
                         <div class="dropdown-trigger">
                             <div class="button balance-btn" style="align-items: baseline; margin-left: 1vw;" aria-haspopup="true" aria-controls="dropdown-menu4">
@@ -631,6 +630,17 @@
                         <div class="navbar-item">
                             <a href="/contact" class="white-text buttonShadow">Contact</a>
                         </div>
+                        <div class="navbar-item">
+                            <a class="white-text buttonShadow" href="/cart">
+                                <span class="icon white-text buttonShadow">
+                                    <i class="fas fa-shopping-cart white-text buttonShadow"></i>
+                                </span>
+                                <span class="white-text buttonShadow">Cart</span>
+                                <% if(cart.length > 0) { %>
+                                    <span class="cartNr"><%= cart.length %></span>
+                                <% } %>
+                            </a>
+                        </div>
                     <% } else { %>
                         <div class="navbar-item">
                             <div class="dropdown categ is-hoverable hideOnBurger">
@@ -660,10 +670,18 @@
                             <a href="/categories" class="white-text buttonShadow showOnBurger">Browse Categories</a>
                         </div>
                         <div class="navbar-item">
-                            <a href="/contact" class="white-text buttonShadow">Contact</a>
+                            <a href="/dashboard/new" class="white-text buttonShadow">New Deal</a>
                         </div>
                         <div class="navbar-item">
-                            <a href="/dashboard/new" class="white-text buttonShadow">New Deal</a>
+                            <a class="white-text buttonShadow" href="/cart">
+                                <span class="icon white-text buttonShadow">
+                                    <i class="fas fa-shopping-cart white-text buttonShadow"></i>
+                                </span>
+                                <span class="white-text buttonShadow">Cart</span>
+                                <% if(cart.length > 0) { %>
+                                    <span class="cartNr"><%= cart.length %></span>
+                                <% } %>
+                            </a>
                         </div>
                         <div class="navbar-item">
                             <div class="dropdown is-right is-hoverable hideOnBurger">
@@ -690,9 +708,6 @@
                                     <div class="dropdown-content">
                                         <div class="dropdown-item">
                                             <a href="/dashboard" class="dropdown-item link"><strong>Dashboard</strong></a>
-                                        </div>
-                                        <div class="dropdown-item">
-                                            <a href="/cart" class="dropdown-item link"><div style="display: flex; justify-content: space-between;"><strong>Cart</strong><%= cart.length %></div></a>
                                         </div>
                                         <div class="dropdown-item">
                                             <a href="/dashboard/ongoing" class="dropdown-item link">
@@ -735,6 +750,9 @@
                                         </div>
                                         <div class="dropdown-item">
                                             <a href="/dashboard/premium" class="dropdown-item link"><strong>Premium</strong></a>
+                                        </div>
+                                        <div class="dropdown-item">
+                                            <a href="/contact" class="dropdown-item link"><strong>Contact</strong></a>
                                         </div>
                                         <hr class="dropdown-divider">
                                         <div class="dropdown-item">
