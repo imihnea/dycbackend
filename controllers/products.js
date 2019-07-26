@@ -425,6 +425,20 @@ module.exports = {
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
             req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
                 .trim();
+            if (product.dropshipped) {
+                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                if(req.body.deliveryState) {
+                    req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                        .trim();
+                }
+                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+            }
             // if (req.body.deliveryShipping == 'Shipping') {
             //     req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
             //         .trim();
@@ -606,7 +620,7 @@ module.exports = {
                                         },
                                         price: (product.usdPrice / btcrate).toFixed(8),
                                     };
-                                                                // Create deal
+                            // Create deal
                             deal = await Deal.create(deal); 
                             // Update product and user
                             user.btcbalance -= deal.price;

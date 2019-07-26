@@ -51,7 +51,7 @@ module.exports = {
     },
     async addToCart(req, res) {
         const product = await Product.findById(req.params.id);
-        if(req.user) {
+        if (req.user) {
             if (req.user._id.toString() == product.author.id.toString()) {
                 req.flash('error', 'You cannot purchase your own product.');
                 return res.redirect('back');
@@ -66,7 +66,7 @@ module.exports = {
         return res.redirect('/cart');
     },
     removeFromCart(req, res) {
-        if (req.session.cart.contains(req.params.id)) {
+        if (req.session.cart.includes(req.params.id)) {
             req.session.cart.splice(req.session.cart.indexOf(req.params.id), 1);
             req.flash('success', 'Product removed from cart');
             return res.redirect('back');

@@ -2,11 +2,31 @@
     <% if(deals.page - 1) { %>
         <a class="button page" href="?page=<%= deals.page - 1 %>">Prev</a>
     <% } %>
-    <% for(let i = 1; i <= deals.pages; i++) { %>
-        <a class="button page %>" href="?page=<%= i %>"
-                <%= i === deals.page ? 'style=color:#000;' : '' %>
-            ><%= i %></a>
+    <% if (deals.page > 4) { %>
+        <button class="button page">...</button>
     <% } %>
+        <% 
+            let k = 0;
+            if (deals.pages > 10) { 
+                k = deals.page + 3;
+                while (k > deals.pages) {
+                    k -= 1;
+                }
+            } else { 
+                k = deals.pages; 
+            } 
+        %>
+        <% for(let i = deals.page - 3; i <= k; i++) { %>
+            <% if (i > 0) { %>
+                <a class="button page" href="?page=<%= i %>"
+                        <%= i === deals.page ? 'style=color:#000;' : '' %>
+                    ><%= i %></a>
+            <% } %>
+        <% } %>
+        <% if ((deals.pages > deals.page) && (k < deals.pages)) { %>
+            <button class="button page">...</button>
+        <% } %>
+   
     <% if((deals.page + 1) <= deals.pages) { %>
         <a class="button page" href="?page=<%= deals.page + 1 %>">Next</a>
     <% } %>
