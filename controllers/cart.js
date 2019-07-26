@@ -44,6 +44,7 @@ module.exports = {
             products,
             oneDollar: req.oneDollar,
             shipping,
+            errors: false,
             pageTitle: 'Cart - Deal Your Crypto',
             pageDescription: 'Cart Page on Deal Your Crypto',
             pageKeywords: 'cart, page, deal, crypto, deal your crypto'
@@ -58,7 +59,11 @@ module.exports = {
             }
         }
         if (req.session.cart) {
-            req.session.cart.push(req.params.id);
+            if (req.session.cart.includes(req.params.id)) {
+                return res.redirect('/cart');
+            } else {
+                req.session.cart.push(req.params.id);
+            }
         } else {
             req.session.cart = [req.params.id];
         }
@@ -100,19 +105,52 @@ module.exports = {
             req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
                 .trim();
         }
-        const errors = req.validationErrors();
+        let errors = req.validationErrors();
+        req.body.qty.forEach((item, i) => {
+            if (!item.match(/^\d+$/)){
+                if (errors) {
+                    errors.push({msg: 'Something went wrong. Please try again.'});
+                } else {
+                    errors = [{msg: 'Something went wrong. Please try again.'}];
+                }
+            }
+            if (item.toString().length > 2) {
+                if (errors) {
+                    errors.push({msg: 'You cannot purchase more than 99 of the same item at once.'});
+                } else {
+                    errors = [{msg: 'You cannot purchase more than 99 of the same item at once.'}];
+                }
+            }
+        });
         if (errors) {
-            res.render('cart/checkout', {
+            const products = await Product.find({_id: {$in: req.session.cart}});
+            let shipping = false;
+            products.forEach((product, index) => {
+                if (product.available != 'True') {
+                    products.splice(products[index], 1);
+                    req.session.cart.splice(req.session.cart.indexOf(product._id), 1);
+                }
+                if (product.dropshipped) {
+                    shipping = true;
+                }
+            });
+            res.render('cart/cart', {
                 user: req.user,
+                products,
+                oneDollar: req.oneDollar,
+                shipping,
                 errors,
-                products
+                pageTitle: 'Cart - Deal Your Crypto',
+                pageDescription: 'Cart Page on Deal Your Crypto',
+                pageKeywords: 'cart, page, deal, crypto, deal your crypto'
             });
         } else {
             const user = await User.findById(req.user._id);
             let totalPrice = 0;
-            products.forEach(product => {
+            products.forEach((product, i) => {
                 if (product.available == 'True') {
-                    totalPrice += (Number(product.usdPrice * req.oneDollar).toFixed(8));
+                    totalPrice = Number(totalPrice) + Number(Number(product.usdPrice * req.oneDollar * Number(req.body.qty[i])).toFixed(8));
+                    totalPrice = Number(parseFloat(totalPrice).toFixed(8));
                 }
             });
             if (totalPrice > user.btcbalance) {
@@ -121,7 +159,7 @@ module.exports = {
             } else {
                 user.btcbalance -= totalPrice;
                 await user.save();
-                products.forEach(asyncErrorHandler( async product => {
+                products.forEach(asyncErrorHandler( async (product, i) => {
                     if (product.available == 'True') {
                         let deal = {};
                         if (k == 0) {
@@ -135,6 +173,7 @@ module.exports = {
                                     imageUrl: product.images.sec[0].url,
                                     author: product.author,
                                     price: product.usdPrice,
+                                    qty: Number(req.body.qty[i])
                                 },
                                 buyer: {
                                     id: user._id,
@@ -150,7 +189,7 @@ module.exports = {
                                     'delivery.state': req.body.deliveryState,
                                     'delivery.zip': req.body.deliveryZip
                                 },
-                                price: (product.usdPrice * req.oneDollar).toFixed(8),
+                                price: (product.usdPrice * req.oneDollar * Number(req.body.qty[i])).toFixed(8),
                             };              
                         } else {
                             deal = {
@@ -160,6 +199,7 @@ module.exports = {
                                     imageUrl: product.images.sec[0].url,
                                     author: product.author,
                                     price: product.usdPrice,
+                                    qty: Number(req.body.qty[i])
                                 },
                                 buyer: {
                                     id: user._id,
@@ -171,7 +211,7 @@ module.exports = {
                                     'delivery.email': req.body.deliveryEmail,
     
                                 },
-                                price: (product.usdPrice * req.oneDollar).toFixed(8),
+                                price: (product.usdPrice * req.oneDollar * Number(req.body.qty[i])).toFixed(8),
                             }
                         }
                         // Create deal
@@ -190,9 +230,9 @@ module.exports = {
                             });
                         }
                         if (product.nrBought) {
-                            product.nrBought += 1;
+                            product.nrBought += Number(req.body.qty[i]);
                         } else {
-                            product.nrBought = 1;
+                            product.nrBought = Number(req.body.qty[i]);
                         }
                         product.markModified('buyers');
                         await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});

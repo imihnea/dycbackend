@@ -800,6 +800,7 @@ module.exports = {
                     'images.sec.0.url': row.mainImg,
                     condition: 'Brand new',
                     dropshipped: true,
+                    repeatable: true,
                     author: {
                         id: req.user._id,
                         username: req.user.username,

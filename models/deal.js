@@ -18,6 +18,7 @@ const DealSchema = new Schema({
             name: String
         },
         price: Number,
+        qty: Number,
     },
     buyer: { 
         id: Schema.Types.ObjectId, 

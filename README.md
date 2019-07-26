@@ -6,6 +6,9 @@ Frontend:
 
     High Priority:
 
+         Cart - QTY
+         Deal - QTY
+
          Edge & Safari CSS       - Requires testing
 
     Low Priority:
@@ -18,17 +21,18 @@ Backend:
 
    High Priority:
 
+      Cart => Qty 
+
       Security => Validate and sanitize every user input
                => Anti DDOS
       Elasticsearch => Test more in depth
    Low Priority:
 
+      Cart => save in db (on login, add/remove/checkout)
+
       Categories => Add more in future
 
 Optimization:
-
-   Index (research more before doing this) => Users
-                                           => Products
 
    Caching => Redis
 

@@ -10,6 +10,16 @@
             <h2 class="title dashTitle" style="color: white !important;">Cart</h2>
         </div>
         <br>
+        <div class="container is-fluid errors">
+            <% if(errors){ %>
+                <div class="notification is-danger" role="alert"> 
+                <% errors.forEach(function( err){ %>
+                    <%= err.msg %><br>
+                <% }) %>
+                </div>
+            <% } %>
+        </div>
+        <br>
         <div class="columns">
             <% if (products.length == 0) { %>
                 <div class="column">
@@ -95,13 +105,16 @@
                                     </p>
                                 </div>
                             </div>
+                            <% products.forEach((product, i) => { %>
+                                <input type="number" name="qty[<%= i %>]" id="qty<%= i %>" value="1" hidden>
+                            <% }); %>
                         </form>    
                     </div>
                 </div>
             <% } %>
             <div class="column <% if (shipping) { %>is-two-fifths<% } else { %>is-three-fifths<% } %>">
                 <main class="productWrapper frame" id="hits">
-                    <% products.forEach(product => { %>
+                    <% products.forEach((product, i) => { %>
                         <article class="hit columns" style="margin-top: 0;">
                             <div class="product-picture-wrapper" >
                                 <figure class="image is-128x128" style="margin:auto;">
@@ -136,18 +149,26 @@
                             <div class="column prod_info productPrice">
                                 <div class="prices openPrices frame" style="width: 100%;">
                                     <p class="price_text" style="padding-left: 2vw;"><%= (product.usdPrice * oneDollar).toFixed(8) %></p>
+                                    <input type="number" class="priceVal" value="<%= (product.usdPrice * oneDollar).toFixed(8) %>" hidden>
                                     <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                 </div>
+                                <% if (product.repeatable) { %>
+                                    <br>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <label class="label" for="qty" style="text-align: left !important;">Qty.</label>
+                                        <input type="number" class="input qty" id="qty" name="qty[<%= i %>]" placeholder="Quantity" style="width: 50%;" value="1">
+                                    </div>
+                                <% } %>
                             </div>
                         </article>      
                         <% }); %>
                         <div class="smallerCenter">
-                            <table class="table">
-                                <tr>
-                                    <td>Total Price</td>
-                                    <td><% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %><%= price.toFixed(8) %> BTC</td>
-                                </tr>
-                            </table>
+                                <% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <label class="label" for="totalPrice" style="text-align: left !important;">Total Price (BTC)</label>
+                                    <input type="number" class="input" id="totalPrice" placeholder="Total Price" style="width: 50%;" value="<%= price.toFixed(8) %>">
+                                </div>
+                                <br>
                             <% if (price > user.btcbalance) { %>
                                 <p class="subtitle is-6">You don't have enough balance.</p>
                                 <div class="productBuyForm">
@@ -201,4 +222,5 @@
     </div>
 </div>
 
+<script src="/dist/js/cart.js"></script>
 <% include ../partials/footer %>
