@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const qtyItems = [].slice.call(qty);
     let formQty = [];
     qtyItems.forEach((item, i) => {
-        formQty.push(document.getElementById(`qty${i}`));
+        formQty.push(document.getElementById(`qty[${i}]`)); //eventual getElementsByName, i-am pus paranteze patrate
+        // id trebuie sa fie unic in frontend, era doar qty inainte la toate repeatable
     });
     const prices = document.querySelectorAll('.priceVal');
     const priceItems = [].slice.call(prices);
@@ -13,14 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalUsdPrice = document.getElementById('totalPriceUSD');
     qtyItems.forEach((item, index) => {
         item.addEventListener('change', () => {
-            formQty[index].value = item.value;
+            formQty[index].value = item.value; // iti da null formQty
             totalPrice.value = 0;
             totalUsdPrice.value = 0;
             for (let i = 0; i < qtyItems.length; i += 1) {
                 totalPrice.value = Number(totalPrice.value) + Number((priceItems[i].value * qtyItems[i].value).toFixed(8));
-                totalPrice.value = Number(parseFloat(totalPrice.value).toFixed(8));
+                totalPrice.value = `${Number(parseFloat(totalPrice.value).toFixed(8))} BTC`;
                 totalUsdPrice.value = Number(totalUsdPrice.value) + Number((usdPriceItems[i].value * qtyItems[i].value).toFixed(8));
-                totalUsdPrice.value = Number(parseFloat(totalUsdPrice.value).toFixed(8));
+                totalUsdPrice.value = `$${Number(parseFloat(totalUsdPrice.value).toFixed(8))} USD`;
             }
         });
     });
