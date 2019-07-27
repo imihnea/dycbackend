@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalUsdPrice.value = Number(totalUsdPrice.value) + Number((usdPriceItems[i].value * qtyItems[i].value).toFixed(8));
             }
             totalPrice.value = `${Number(parseFloat(totalPrice.value).toFixed(8))} BTC`;
-            totalUsdPrice.value = `$${Number(parseFloat(totalUsdPrice.value).toFixed(8))} USD`;
+            totalUsdPrice.value = `$${Number(parseFloat(totalUsdPrice.value).toFixed(2))} USD`;
         });
     });
 });
