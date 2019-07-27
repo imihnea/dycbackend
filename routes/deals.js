@@ -11,25 +11,37 @@ const middleware = require('../middleware/index');
 
 const { isLoggedIn, asyncErrorHandler, checkIfBelongsDeal, assignCookie, checkId, checkIfDealAuthor, checkIfDealBuyer } = middleware; // destructuring assignment
 
+const crypto = require('crypto');
+
 // Set Storage Engine
 const storage = multer.diskStorage({
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-    },
+  filename: (req, file, cb) => {
+    let buf = crypto.randomBytes(16);
+    buf = buf.toString('hex');
+    let uniqFileName = file.originalname.replace(/\.jpeg|\.jpg|\.png/ig, '');
+    uniqFileName += buf;
+    cb(undefined, uniqFileName);
+  },
 });
 
 const imageFilter = (req, file, cb) => {
     // accept image files only
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
-        return cb(new Error('Only image files are allowed!'), false);
+      return cb(new Error('Only image files are allowed!'), false);
     }
     cb(null, true);
-};
-
-const upload = multer({
+  };
+  
+  const upload = multer({
     storage: storage,
     fileFilter: imageFilter,
-});
+    limits: {
+      fileSize: 5000000
+    },
+    onError: (err, next) => {
+      next(err);
+    },
+  });
 
 // show deal
 router.get('/:id', isLoggedIn, checkId, asyncErrorHandler(checkIfBelongsDeal), asyncErrorHandler(getDeal));

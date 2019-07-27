@@ -277,26 +277,29 @@ module.exports = {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message} - Deals - Pay deals - subscription\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                 } else {
                     if (res.length > 0) {
-                        sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        // sellerPayout = Number((deal.price - ( deal.price * premiumAccountFee * 0.01)).toFixed(8));
+                        sellerPayout = Number((deal.price).toFixed(8));
                         seller.btcbalance += sellerPayout;
                         // add profit to db
-                        withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
-                        createProfit(seller._id, withdrawAmount, 'Income Fee');
+                        // withdrawAmount = (deal.price * premiumAccountFee * 0.01).toFixed(8);
+                        // createProfit(seller._id, withdrawAmount, 'Income Fee');
                     } else {
                         switch(seller.accountType) {
                             case 'Standard':
-                                sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                // sellerPayout = Number((deal.price - ( deal.price * standardAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price).toFixed(8));
                                 seller.btcbalance += sellerPayout;
                                 // add profit to db
-                                withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
-                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                // withdrawAmount = (deal.price * standardAccountFee * 0.01).toFixed(8);
+                                // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                 break;
                             case 'Partner':
-                                sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                // sellerPayout = Number((deal.price - ( deal.price * partnerAccountFee * 0.01)).toFixed(8));
+                                sellerPayout = Number((deal.price).toFixed(8));
                                 seller.btcbalance += sellerPayout;
                                 // add profit to db
-                                withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
-                                createProfit(seller._id, withdrawAmount, 'Income Fee');
+                                // withdrawAmount = (deal.price * partnerAccountFee * 0.01).toFixed(8);
+                                // createProfit(seller._id, withdrawAmount, 'Income Fee');
                                 break;
                             default:
                                 break;
@@ -379,9 +382,9 @@ module.exports = {
     },
     async cancelDeal(req, res) {
         const deal = await Deal.findById(req.params.id);
-        if (deal.buyer.shipping === 'FaceToFace') {
+        if (deal.buyer.delivery.shipping === 'FaceToFace') {
             await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: deal.price }});
-        // } else if (deal.buyer.shipping === 'Shipping') {
+        // } else if (deal.buyer.delivery.shipping === 'Shipping') {
         //     await User.findByIdAndUpdate(deal.buyer.id, {$inc: { btcbalance: (deal.price + deal.shippingPrice) }});
         }
         deal.status = 'Cancelled';
@@ -395,6 +398,12 @@ module.exports = {
         await seller.save();
         await Notification.create({
             userid: seller._id,
+            linkTo: `/deals/${deal._id}`,
+            imgLink: deal.product.imageUrl,
+            message: `Your deal request has been cancelled`
+        });
+        await Notification.create({
+            userid: deal.buyer.id,
             linkTo: `/deals/${deal._id}`,
             imgLink: deal.product.imageUrl,
             message: `Your deal request has been cancelled`
@@ -938,10 +947,12 @@ module.exports = {
                 await cloudinary.v2.uploader.upload(req.file.path, 
                 {
                     moderation: "aws_rek:suggestive:ignore",
-                    // transformation: [
+                    transformation: [
                     // {quality: "jpegmini:1", sign_url: true},
                     // {width: "auto", dpr: "auto"}
-                    // ]
+                    {angle: 0},
+                    {flags: 'progressive:semi'}
+                    ]
                 }, (err, result) => {
                     if(err) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);

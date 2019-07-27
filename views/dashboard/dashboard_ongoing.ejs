@@ -23,7 +23,7 @@
                             <article class="hit columns frame">
                                     <div class="product-picture-wrapper" >
                                         <figure class="image is-128x128" style="margin:auto;">
-                                            <img src="<%= deal.product.imageUrl %>" class="productImage" alt="">
+                                            <img src="<%= deal.product.imageUrl %>" class="productImage" alt="<%= deal.product.name %> Image">
                                         </figure>
                                     </div>
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -38,7 +38,7 @@
                                     <div class="column prod_info productPrice">
                                         <div class="prices openPrices frame" style="width: 100%;">
                                             <p class="price_text" style="padding-left: 2vw;"><%= deal.price %></p>
-                                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                            <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                         </div>
                                     </div>
                                 </article>                                          

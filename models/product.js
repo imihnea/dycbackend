@@ -6,12 +6,23 @@ const Review = require('./review');
 
 const ProductSchema = new Schema({
   name: { type: String, es_indexed: true },
-  images: [{ url: {type: String, es_indexed: true}, public_id: String }],
+  images: {
+    main: [{
+      url: {type: String, es_indexed: true},
+      public_id: String
+    }],
+    sec: [{
+      url: {type: String, es_indexed: true},
+      public_id: String
+    }]
+  },
   category: { type: Array, es_indexed: true },
   condition: { type: String, es_indexed: true },
   description: { type: String, es_indexed: true },
   status: { type: String, es_indexed: true },
   btcPrice: {type: Number, default: 0, es_indexed: true },
+  usdPrice: Number,
+  dropshipped: Boolean,
   available: { type: String, default: "True", es_indexed: true },
   repeatable: { type: Boolean, default: false },
   tags: [ String ],

@@ -9,7 +9,7 @@
                 <div class="messageProfile frame smallerCenter profileMessage">
                     <div>
                         <figure class="image is-128x128" style="margin:auto;">
-                            <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                            <img data-src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                                 <%= chat.user1.avatarUrl %>
                             <% } else { %>
                                 <%= chat.user2.avatarUrl %>
@@ -18,7 +18,7 @@
                     </div>
                     <br>
                     <div class="prod_info ">
-                        <p class="title is-5 messageProfileText">Name: <%= user2.username %></p>
+                        <p class="title is-5 messageProfileText"><%= user2.username %></p>
                         <p class="title is-5 messageProfileText">Country: <%= user2.country %></p>
                         <p class="title is-5 messageProfileText">City: <%= user2.city %></p>
                         <a href="/profile/<%= user2.id %>" class="button is-primary" style="margin-top: 1vh;">View Profile</a>
@@ -118,13 +118,19 @@
                     </div>
                     <br>
                     <div class=" prod_info ">  
-                        <p class="title is-5 messageProfileText">Name: <%= chat.product.name %></p>                   
-                        <div class="prices openPrices frame" style="width: 80% !important;">
-                            <p class="price_text" style="padding-left: 10px;"> <%= product.btcPrice %></p>
-                            <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                        <p class="title is-5 messageProfileText"><%= chat.product.name %></p>                   
+                        <div class="prices openPrices frame">
+                            <p class="price_text" style="padding-left: 10px;"><%= (product.usdPrice * oneDollar).toFixed(8) %></p>
+                            <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
+                        </div>
+                        <div class="prices frame openPrices">
+                            <p class="price_text" style="padding-left: 10px;">
+                                $<%= product.usdPrice %> USD
+                            </p>
+                            <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                         </div>
                         <a href="/products/<%= chat.product.id %>/view" class="button is-primary" style="margin-top: 1vh;">View Product</a>
-                        <form action="/messages/<%= chat._id %>/delete?_method=DELETE" method="POST">
+                        <form action="/messages/<%= chat._id %>/delete?_method=DELETE" method="POST" style="margin-top: 1vh;">
                             <button class="button is-danger">Delete Chat</button>
                         </form>
                     </div>

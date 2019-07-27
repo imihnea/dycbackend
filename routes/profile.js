@@ -11,12 +11,18 @@ const { profileUpdate, getProfile } = require('../controllers/profile');
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, verifyParam, checkId } = middleware; // destructuring assignment
+const { isLoggedIn, asyncErrorHandler, verifyParam, checkId, getPrice } = middleware; // destructuring assignment
+
+const crypto = require('crypto');
 
 // Set Storage Engine
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
+    let buf = crypto.randomBytes(16);
+    buf = buf.toString('hex');
+    let uniqFileName = file.originalname.replace(/\.jpeg|\.jpg|\.png/ig, '');
+    uniqFileName += buf;
+    cb(undefined, uniqFileName);
   },
 });
 
@@ -41,7 +47,7 @@ const upload = multer({
 
 // GET Profile route
 
-router.get('/:id', checkId, asyncErrorHandler(getProfile));
+router.get('/:id', checkId, getPrice, asyncErrorHandler(getProfile));
 
 // PUT Profile route
 

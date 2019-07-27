@@ -7,7 +7,10 @@ const Notification = require('../models/notification');
 const Report = require('../models/report');
 const Deal = require('../models/deal');
 const Dispute = require('../models/dispute');
+const Blogpost = require('../models/blogpost');
 
+const fs = require('fs');
+const csv = require('fast-csv');
 const nodemailer = require('nodemailer');
 const Client = require('coinbase').Client;
 const ejs = require('ejs');
@@ -16,6 +19,13 @@ const { errorLogger, userLogger, logger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
 const { client:elasticClient } = require('../config/elasticsearch');
+const cloudinary = require('cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const { asyncErrorHandler } = middleware; // destructuring assignment
 
@@ -42,7 +52,7 @@ module.exports = {
     async getAdmin (req, res) {
         const profit = await Profit.find({status: 'Unpaid'});
         const withdrawals = await Withdraw.find({status: 'Processing'});
-        res.render('admin', {
+        res.render('admin/admin', {
           profit,
           withdrawals,
           errors: req.session.errors,
@@ -53,7 +63,7 @@ module.exports = {
     },
     async getUsers(req, res) {
         const applications = await User.find({'partnerApplication.status': 'Processing'});
-        res.render('adminUsers', {
+        res.render('admin/adminUsers', {
             applications,
             errors: req.session.errors,
             pageTitle: 'Administration - Deal Your Crypto',
@@ -75,7 +85,7 @@ module.exports = {
                 reviewReports.push(report);
             }
         });
-        res.render('adminReports', {
+        res.render('admin/adminReports', {
             productReports,
             dealReports,
             reviewReports,
@@ -87,7 +97,7 @@ module.exports = {
     },
     async getDisputes(req, res) {
         const disputes = await Dispute.find({status: 'Processing'});
-        res.render('adminDisputes', {
+        res.render('admin/adminDisputes', {
             disputes,
             errors: req.session.errors,
             pageTitle: 'Administration - Deal Your Crypto',
@@ -358,7 +368,7 @@ module.exports = {
             const profit = await Profit.find({status: 'Unpaid'});
             const withdrawals = await Withdraw.find({status: 'Processing'});
             const applications = await User.find({'partnerApplication.status': 'Processing'});
-            return res.render('admin', {
+            return res.render('admin/admin', {
                 profit,
                 withdrawals,
                 applications,
@@ -464,7 +474,7 @@ module.exports = {
             const profit = await Profit.find({status: 'Unpaid'});
             const withdrawals = await Withdraw.find({status: 'Processing'});
             const applications = await User.find({'partnerApplication.status': 'Processing'});
-            return res.render('admin', {
+            return res.render('admin/admin', {
                 profit,
                 withdrawals,
                 applications,
@@ -519,7 +529,7 @@ module.exports = {
             const profit = await Profit.find({status: 'Unpaid'});
             const withdrawals = await Withdraw.find({status: 'Processing'});
             const applications = await User.find({'partnerApplication.status': 'Processing'});
-            return res.render('admin', {
+            return res.render('admin/admin', {
                 profit,
                 withdrawals,
                 applications,
@@ -600,7 +610,7 @@ module.exports = {
         await Notification.create({
             userid: product.author._id,
             linkTo: `/`,
-            imgLink: product.images[0].url,
+            imgLink: product.images.sec[0].url,
             message: `${product.name} has been found to breach the guidelines and it has been removed`
         });
         let deleteDate = new Date();
@@ -639,6 +649,172 @@ module.exports = {
         });
         await Report.deleteMany({deal: req.params.dealid});
         req.flash('success', 'Deal deleted successfully');
+        return res.redirect('back');
+    },
+    async getBlogs(req, res) {
+        const blogposts = await Blogpost.paginate({}, {
+            page: req.query.page || 1,
+            limit: 10,
+            sort: {createdAt: -1}
+        });
+        blogposts.page = Number(blogposts.page);
+        res.render('admin/adminBlog', {
+            blogposts,
+            user: req.user,
+            pageTitle: 'Admin - Blog page',
+            pageDescription: 'Admin blog page for Deal Your Crypto',
+            pageKeywords: 'deal your crypto, dealyourcrypto, crypto deal, deal crypto'
+        });
+    },
+    getNewBlog(req, res) {
+        res.render('admin/adminBlogNew', {
+            user: req.user,
+            errors: req.session.errors,
+            pageTitle: 'Create blog post - Deal Your Crypto',
+            pageDescription: 'Create a blog post on Deal Your Crypto',
+            pageKeywords: 'deal, deal your crypto, blog, blogpost'
+        });
+    },
+    async newBlog(req, res) {
+        const tags = req.body.tags.split(' ');
+        let blogpost = {
+            title: req.body.title,
+            subtitle: req.body.subtitle,
+            content: req.body.editor,
+            images: [],
+            tags
+        };
+        // upload images
+        if (req.files.length > 0) {
+            for (file of req.files) {
+                await cloudinary.v2.uploader.upload(file.path, {
+                    transformation: [
+                        {angle: 0},
+                        {flags: 'progressive:semi'}
+                    ]
+                }, (err, result) => {
+                    if(err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        blogpost.images.push({ 
+                            url: result.secure_url,
+                            public_id: result.public_id 
+                        });
+                    }
+                });
+            }
+        }
+        await Blogpost.create(blogpost);
+        req.flash('success', 'Blogpost created successfully');
+        res.redirect('/admin/blog');
+    },
+    async deleteBlog(req, res) {
+        await Blogpost.deleteOne({_id: req.params.id});
+        req.flash('success', 'Blogpost removed successfully');
+        return res.redirect('back');
+    },
+    async getUpdateBlog(req, res) {
+        const blogpost = await Blogpost.findById(req.params.id);
+        res.render('admin/adminBlogEdit', {
+            user: req.user,
+            blogpost,
+            errors: req.session.errors,
+            pageTitle: 'Edit blog post - Deal Your Crypto',
+            pageDescription: 'Edit a blog post on Deal Your Crypto',
+            pageKeywords: 'deal, deal your crypto, blog, blogpost'
+        });
+    },
+    async updateBlog(req, res) {
+        const blogpost = await Blogpost.findById(req.params.id);
+        let deleteImages;
+        // check if there are images to delete
+        if (req.body.deleteImages) {
+          deleteImages = req.body.deleteImages.trim().split(' ');
+          for (const public_id of deleteImages) {
+            // delete images from cloudinary
+            await cloudinary.v2.uploader.destroy(public_id, (err) => {
+              if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't destroy image with public id ${public_id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                req.flash('error', 'A problem has occured. Please try again later.');
+                return res.redirect('back');
+              }
+            });
+            // delete images from DB
+            for (const image of blogpost.images) {
+              if (image.public_id === public_id) {
+                blogpost.images.splice(blogpost.images.indexOf(image), 1);
+              }
+            }
+          }
+        }
+        // upload new images
+        if (req.files) {
+            for (file of req.files) {
+                await cloudinary.v2.uploader.upload(file.path, {
+                    transformation: [
+                        {angle: 0},
+                        {flags: 'progressive:semi'}
+                    ]
+                }, (err, result) => {
+                    if(err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                    } else {
+                        blogpost.images.push({ 
+                            url: result.secure_url,
+                            public_id: result.public_id 
+                        });
+                    }
+                });
+            }
+        }
+        blogpost.title = req.body.title;
+        blogpost.subtitle = req.body.subtitle;
+        blogpost.content = req.body.editor;
+        blogpost.tags = req.body.tags.split(' ');
+        await blogpost.save();
+        req.flash('success', 'Blogpost edited successfully');
+        return res.redirect('/admin/blog');
+    },
+    getBulkAdd(req, res) {
+        res.render('admin/adminBulkAdd', {
+            user: req.user,
+            errors: req.session.errors,
+            pageTitle: 'Bulk add products - Deal Your Crypto',
+            pageDescription: 'Add products in bulk - Deal Your Crypto',
+            pageKeywords: 'deal, deal your crypto, bulk, products'
+        });
+    },
+    async postBulkAdd(req, res) {
+        fs.createReadStream(req.file.path)
+            .pipe(csv.parse({ headers: true }))
+            .on('data', row => {
+                const product = {
+                    name: row.name,
+                    usdPrice: row.usdPrice,
+                    description: row.description.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ").replace(/\ufffd/g, ''),
+                    'category.0': 'all',
+                    'category.1': row.category1,
+                    'category.2': row.category2,
+                    'category.3': row.category3,
+                    'images.main.0.url': row.mainImg,
+                    'images.sec.0.url': row.mainImg,
+                    condition: 'Brand new',
+                    dropshipped: true,
+                    repeatable: true,
+                    author: {
+                        id: req.user._id,
+                        username: req.user.username,
+                        name: req.user.full_name,
+                        city: req.user.city,
+                        country: req.user.country,
+                        state: req.user.state,
+                        continent: req.user.continent,
+                        accountType: req.user.accountType
+                    }
+                }
+                Product.create(product);
+            });
+        req.flash('success', 'The products have been added');
         return res.redirect('back');
     }
 

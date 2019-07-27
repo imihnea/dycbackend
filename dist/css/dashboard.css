@@ -900,6 +900,11 @@ body {
   background-color: #2b47c5 !important;
 }
 
+.thumbnail{
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
 /* Edge */
 @supports (-ms-ime-align: auto) {
   .address, .productPrice, .inputWrapper, .repeatable, .address, .view_curr, 

@@ -9,7 +9,7 @@ const { getDashboardIndex, getAddresses, addAddresses, verifyWithdraw, getTokens
         productDestroy, productEdit, productUpdate, productFeature, getPremium, getSearchData, getProductData, getProductSoldData,
         getProductViews,
         openProductIndex, closedProductIndex, purchasedProductIndex, ongoingProductIndex, refundProductIndex, newProduct, postBTC,
-        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus,
+        CoinSwitchPair, CoinSwitchPoll, CoinSwitchDeposit, CoinSwitchRate, CoinSwitchStatus, imageLeft, imageRight,
         subscriptionCreate, subscriptionCancel, subscriptionPage, subscriptionCancelPage, getConfirmWithdraw, postConfirmWithdraw, resendConfirmWithdraw,
         getNotifications, postNotifications, deleteAccount, deleteAccountRequest, getPartner, putBusinessPartner, putUserPartner,
         getNotif } = require('../controllers/dashboard');
@@ -17,11 +17,16 @@ const { getDashboardIndex, getAddresses, addAddresses, verifyWithdraw, getTokens
 const middleware = require('../middleware/index');
 
 const { isLoggedIn, checkUserproduct, asyncErrorHandler, hasCompleteProfile, assignCookie, verifyCookie, verifyParam, checkId, isWithdrawUser } = middleware; // destructuring assignment
+const crypto = require('crypto');
 
 // Set Storage Engine
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
+    let buf = crypto.randomBytes(16);
+    buf = buf.toString('hex');
+    let uniqFileName = file.originalname.replace(/\.jpeg|\.jpg|\.png/ig, '');
+    uniqFileName += buf;
+    cb(undefined, uniqFileName);
   },
 });
 
@@ -38,6 +43,9 @@ const upload = multer({
   fileFilter: imageFilter,
   limits: {
     fileSize: 5000000
+  },
+  onError: (err, next) => {
+    next(err);
   },
 });
 
@@ -150,6 +158,11 @@ router.put('/:id/:_csrf/:csrfSecret', verifyParam, checkId, checkUserproduct, up
 
 // PUT - features the product
 router.put('/:id/edit/:feature_id/:_csrf/:csrfSecret', verifyParam, isLoggedIn, checkId, checkUserproduct, asyncErrorHandler(productFeature));
+
+// PUT - move images
+router.put('/:id/imageLeft', checkId, checkUserproduct, asyncErrorHandler(imageLeft));
+
+router.put('/:id/imageRight', checkId, checkUserproduct, asyncErrorHandler(imageRight));
 
 // DELETE - deletes product from database - don't forget to add "are you sure" on frontend
 router.delete('/:id', verifyCookie, checkId, asyncErrorHandler(productDestroy));

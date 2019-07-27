@@ -18,7 +18,7 @@
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <div class="image is-128x128" style="margin:auto;">
-                                <img src="<%= buyer.avatar.url %>" class="open-img messageImage" alt="">
+                                <img data-src="<%= buyer.avatar.url %>" class="open-img productImage" alt="">
                             </div>
                         </div>
                         <br>
@@ -74,7 +74,7 @@
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <div class="image is-128x128" style="margin:auto;">
-                                <img src="<%= seller.avatar.url %>" class="open-img messageImage" alt="">
+                                <img data-src="<%= seller.avatar.url %>" class="open-img productImage" alt="">
                             </div>
                         </div>
                         <br>
@@ -175,7 +175,7 @@
                     <div class="messageProfile frame productFrame smallerCenter">
                         <div>                   
                             <div class="image is-128x128" style="margin:auto;">
-                                <img src="<%= deal.product.imageUrl %>" class="open-img messageImage" alt="">
+                                <img data-src="<%= deal.product.imageUrl %>" class="open-img productImage" alt="">
                             </div>
                         </div>
                         <br>
@@ -310,11 +310,17 @@
                                         </div>
                                     </div>  
                                 <% } %>
-                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <!-- <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a> -->
                                 <% if ((deal.proof.image == 'Unset') && (deal.proof.text == 'Unset')) { %>
                                     <p class="smallerCenter">You haven't uploaded proof of delivery yet.</p>
                                     <br>
                                 <% } %>
+                            <% } %>
+                            <% if ((!['Completed', 'Declined', 'Cancelled', 'Processing'].includes(deal.status)) && (user._id.toString() === seller._id.toString())) { %>
+                                <div class="buttons has-addons is-centered">
+                                    <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                    <form action="/deals/<%= deal._id %>/cancel?_method=PUT" method="POST"><button class="button is-danger">Cancel Deal</button></form>
+                                </div>
                             <% } %>
                             <% if (['Completed', 'Declined', 'Cancelled'].includes(deal.status)) { %>
                                 <form action="/deals/delete/<%= deal._id %>?_method=DELETE" method="post">

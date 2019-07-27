@@ -45,7 +45,9 @@ app.use(helmet.contentSecurityPolicy({
     // defaultSrc: ["'self'"],
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'use.fontawesome.com', 'res.cloudinary.com'],
     scriptSrc: ["'self'", "'unsafe-inline'",  'cdn.polyfill.io', 'ajax.googleapis.com', 'geodata.solutions', 
-    'https://www.gstatic.com', 'https://www.google.com', 'https://www.googletagmanager.com', 'https://www.google-analytics.com', 'https://connect.facebook.net/', 'https://ajax.cloudflare.com']
+    'https://www.gstatic.com', 'https://www.google.com', 'https://www.googletagmanager.com', 'https://www.google-analytics.com', 
+    'https://connect.facebook.net/', 'https://ajax.cloudflare.com','https://static.hotjar.com', 'https://script.hotjar.com',
+    'https://cdnjs.cloudflare.com']
   }
 }));
 
@@ -117,6 +119,8 @@ const dealsRoutes = require('./routes/deals');
 
 const adminRoutes = require('./routes/admin');
 
+const cartRoutes = require('./routes/cart');
+
 // Gzip compression
 
 app.use(compression());
@@ -157,6 +161,15 @@ app.use('/dist', express.static(path.join(__dirname, '/dist'), {
 }));
 app.use(methodOverride('_method'));
 
+app.all('*', (req, res, next) => {
+  if (req.session.cart) {
+    res.locals.cart = req.session.cart;
+  } else {
+    res.locals.cart = [];
+  }
+  next();
+});
+
 app.locals.moment = require('moment');
 
 app.use(flash());
@@ -179,7 +192,7 @@ passport.use(new FacebookStrategy({
 function(req, accessToken, refreshToken, profile, cb) {
   if (req.user) {
     let user = req.user;
-    if ((user.googleId && user.facebookId) || (user.facebookId && user.salt && user.hash)) {
+    if (user.createdWith !== 'Facebook' || user.googleId) {
       user.facebookId = '';
     } else {
       user.facebookId = profile.id;
@@ -194,7 +207,8 @@ function(req, accessToken, refreshToken, profile, cb) {
           { 
             full_name: profile.displayName,
             email: profile.emails[0].value,
-            facebookId: profile.id 
+            facebookId: profile.id,
+            createdWith: 'Facebook'
           }, 
           (err, User) => {
           return cb(err, User);
@@ -213,7 +227,7 @@ passport.use(new GoogleStrategy({
 function(req, accessToken, refreshToken, profile, done) {
   if (req.user) {
     let user = req.user;
-    if ((user.googleId && user.facebookId) || (user.googleId && user.salt && user.hash)) {
+    if (user.createdWith !== 'Google' || user.facebookId) {
       user.googleId = '';
     } else {
       user.googleId = profile.id;
@@ -228,7 +242,8 @@ function(req, accessToken, refreshToken, profile, done) {
           { 
             full_name: profile.name.familyName + ' ' + profile.name.givenName,
             email: profile.emails[0].value,
-            googleId: profile.id 
+            googleId: profile.id,
+            createdWith: 'Google'
           },
           (err, user) => {
           return done(err, user);
@@ -314,6 +329,7 @@ app.use('/messages', messagesRoutes);
 app.use('/reviews', reviewsRoutes);
 app.use('/deals', dealsRoutes);
 app.use('/admin', adminRoutes);
+app.use('/cart', cartRoutes);
 
 // error 404 page
 app.get('*', (req, res) => {
@@ -347,6 +363,10 @@ app.use((err, req, res, next) => {
 const { fork } = require("child_process");
 fork('./config/recurringTasks.js');
 fork('./config/deleteWithdraws.js');
+
+const { initDollar } = require('./middleware/index');
+
+initDollar();
 
 app.listen(process.env.PORT || 8080, process.env.IP, () => {
   if (process.env.NODE_ENV === 'production') {

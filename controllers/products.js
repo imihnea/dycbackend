@@ -148,6 +148,7 @@ module.exports = {
                     fullUrl,
                     dealExists,
                     user: req.user,
+                    oneDollar: req.oneDollar,
                     csrfToken: req.body.csrfSecret,
                     pageTitle: `${product.name} - Deal Your Crypto`,
                     pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -164,7 +165,6 @@ module.exports = {
                     }
                     Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
-                            console.log(err);
                             if (req.user) {
                               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
@@ -180,6 +180,7 @@ module.exports = {
                                     fullUrl,
                                     dealExists,
                                     user: req.user,
+                                    oneDollar: req.oneDollar,
                                     csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -195,6 +196,7 @@ module.exports = {
                                     fullUrl,
                                     dealExists,
                                     user: req.user,
+                                    oneDollar: req.oneDollar,
                                     csrfToken: req.body.csrfSecret,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -214,6 +216,7 @@ module.exports = {
                                 fullUrl,
                                 dealExists,
                                 user: req.user,
+                                oneDollar: req.oneDollar,
                                 csrfToken: req.body.csrfSecret,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -232,6 +235,7 @@ module.exports = {
                             fullUrl,
                             dealExists,
                             user: req.user,
+                            oneDollar: req.oneDollar,
                             csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -247,6 +251,7 @@ module.exports = {
                             fullUrl,
                             dealExists,
                             user: req.user,
+                            oneDollar: req.oneDollar,
                             csrfToken: req.body.csrfSecret,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
@@ -264,7 +269,6 @@ module.exports = {
                     } else {
                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                     }
-                    console.log(err);
                     res.render('products/product_view', { 
                         product, 
                         similar: false, 
@@ -274,6 +278,7 @@ module.exports = {
                         dealExists,
                         reviewed: true, 
                         user: false,
+                        oneDollar: req.oneDollar,
                         pageTitle: `${product.name} - Deal Your Crypto`,
                         pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                         pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -294,7 +299,6 @@ module.exports = {
                             } else {
                               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             }
-                            console.log(err);
                             if (similar.length > 0) {
                                 res.render('products/product_view', { 
                                     product, 
@@ -305,6 +309,7 @@ module.exports = {
                                     dealExists,
                                     reviewed: true, 
                                     user: false,
+                                    oneDollar: req.oneDollar,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                                     pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -319,6 +324,7 @@ module.exports = {
                                     dealExists,
                                     reviewed: true, 
                                     user: false,
+                                    oneDollar: req.oneDollar,
                                     pageTitle: `${product.name} - Deal Your Crypto`,
                                     pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                                     pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -337,6 +343,7 @@ module.exports = {
                                 dealExists,
                                 reviewed: true, 
                                 user: false,
+                                oneDollar: req.oneDollar,
                                 pageTitle: `${product.name} - Deal Your Crypto`,
                                 pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                                 pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -354,6 +361,7 @@ module.exports = {
                             dealExists,
                             reviewed: true, 
                             user: false,
+                            oneDollar: req.oneDollar,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                             pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -368,6 +376,7 @@ module.exports = {
                             dealExists,
                             reviewed: true, 
                             user: false,
+                            oneDollar: req.oneDollar,
                             pageTitle: `${product.name} - Deal Your Crypto`,
                             pageDescription: `Get the best deal for ${product.name} and many more on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
                             pageKeywords: `${product.name}, buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency`
@@ -416,8 +425,20 @@ module.exports = {
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
             req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
                 .trim();
-            req.check('deliveryPhone', 'Please specify a valid phone number').notEmpty().matches(/^[()0-9+ -]+$/g).isLength({ max: 500 })
-                .trim();
+            if (product.dropshipped) {
+                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                if(req.body.deliveryState) {
+                    req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                        .trim();
+                }
+                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+            }
             // if (req.body.deliveryShipping == 'Shipping') {
             //     req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
             //         .trim();
@@ -576,30 +597,33 @@ module.exports = {
                         //         }
                         //     }));
                         /* } else */if (req.body.deliveryShipping === 'FaceToFace') {
+                            let deal;
+                            client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
+                                if (!error) {
+                                    let btcrate = data.data.rates.USD;
+                                    deal = {
+                                        product: {
+                                            id: product._id,
+                                            name: product.name,
+                                            imageUrl: product.images.sec[0].url,
+                                            author: product.author,
+                                            price: product.usdPrice,
+                                        },
+                                        buyer: {
+                                            id: user._id,
+                                            username: user.username,
+                                            name: user.full_name,
+                                            avatarUrl: user.avatar.url,
+                                            'delivery.shipping': req.body.deliveryShipping,
+                                            'delivery.name': req.body.deliveryName,
+                                            'delivery.email': req.body.deliveryEmail,
+                                        },
+                                        price: (product.usdPrice / btcrate).toFixed(8),
+                                    };
                             // Create deal
-                            let deal = {
-                                product: {
-                                    id: product._id,
-                                    name: product.name,
-                                    imageUrl: product.images[0].url,
-                                    author: product.author,
-                                    price: product.btcPrice,
-                                },
-                                buyer: {
-                                    id: user._id,
-                                    username: user.username,
-                                    name: user.full_name,
-                                    avatarUrl: user.avatar.url,
-                                    'delivery.shipping': req.body.deliveryShipping,
-                                    'delivery.name': req.body.deliveryName,
-                                    'delivery.phone': req.body.deliveryPhone,
-                                    'delivery.email': req.body.deliveryEmail,
-                                },
-                                price: product.btcPrice,
-                            };
                             deal = await Deal.create(deal); 
                             // Update product and user
-                            user.btcbalance -= totalPrice;
+                            user.btcbalance -= deal.price;
                             // The product will remain available if it's repeatable
                             if ( !product.repeatable ) {
                                 product.available = "Closed";
@@ -625,7 +649,7 @@ module.exports = {
                             await Notification.create({
                                 userid: product.author.id,
                                 linkTo: `/deals/${deal._id}`,
-                                imgLink: product.images[0].url,
+                                imgLink: product.images.sec[0].url,
                                 message: `You have received a deal request`
                             });
                             // Send an email to the seller letting them know about the deal request
@@ -659,6 +683,11 @@ module.exports = {
                             dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nDeal: ${deal._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             // Link chat to deal
                             return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                                } else {
+                                    req.flash('error', 'There has been an error. Please try again later.');
+                                    return res.redirect('back');
+                                }
+                            }));
                         } else {
                             req.flash('error', 'Please select Face to Face or Shipping.');
                             return res.redirect('back');

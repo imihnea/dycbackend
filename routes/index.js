@@ -49,10 +49,10 @@ const {
 
 const middleware = require('../middleware/index');
 
-const { asyncErrorHandler, isLoggedIn, checkId, isAdmin } = middleware; // destructuring assignment
+const { asyncErrorHandler, isLoggedIn, checkId, isAdmin, getPrice } = middleware; // destructuring assignment
 
 // index route
-router.get('/', asyncErrorHandler(getIndex));
+router.get('/', getPrice, asyncErrorHandler(getIndex));
 
 // For web crawlers
 router.get('/robots.txt', function (req, res) {
@@ -141,11 +141,11 @@ router.get('/categories', getCategories);
 
 // POST Search
 
-router.get('/firstCategSearch', asyncErrorHandler(firstCategSearch));
+router.get('/firstCategSearch', getPrice, asyncErrorHandler(firstCategSearch));
 
-router.get('/secondCategSearch', asyncErrorHandler(secondCategSearch));
+router.get('/secondCategSearch', getPrice, asyncErrorHandler(secondCategSearch));
 
-router.get('/thirdCategSearch', asyncErrorHandler(thirdCategSearch));
+router.get('/thirdCategSearch', getPrice, asyncErrorHandler(thirdCategSearch));
 
 router.post('/firstCategSearch', postFirstCategSearch);
 

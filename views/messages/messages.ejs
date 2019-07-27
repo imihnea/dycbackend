@@ -46,14 +46,14 @@
                             <% } %>
                             <div class="card-image">
                                 <figure class="image featimg is-4by3" style="width: auto; margin: auto;">
-                                    <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                    <img class="chatImg" data-src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                                         <%= chat.user1.avatarUrl %>
                                     <% } else { %>
                                         <%= chat.user2.avatarUrl %>
-                                    <% } %>" alt="">
+                                    <% } %>" alt="User image">
                                 </figure>
                                 <figure class="image featimg is-64x64 prodImage">
-                                    <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
+                                    <img class="chatImg" data-src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -105,14 +105,14 @@
                                 <% } %>
                                 <div class="card-image">
                                     <figure class="image featimg is-4by3" style="width: auto; margin: auto;">
-                                        <img src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
+                                        <img class="chatImg" data-src="<% if (chat.user1.id.toString() !== user._id.toString()) { %> 
                                             <%= chat.user1.avatarUrl %>
                                         <% } else { %>
                                             <%= chat.user2.avatarUrl %>
-                                        <% } %>" alt="">
+                                        <% } %>" alt="User Image">
                                     </figure>
                                     <figure class="image featimg is-64x64 prodImage">
-                                        <img src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
+                                        <img class="chatImg" data-src="<%= chat.product.imageUrl %>" alt="<%= chat.product.name %>">
                                     </figure>
                                 </div>
                                 <div class="card-content">

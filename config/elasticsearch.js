@@ -67,9 +67,12 @@ const startElastic = () => {
                                                         }
                                                     },
                                                     "avgRating": {"type": "float"},
-                                                    "btcPrice": {"type": "float"},
+                                                    "usdPrice": {"type": "float"},
                                                     "condition": {"type": "text"},
-                                                    "category": {"type": "text"},
+                                                    "category0": {"type": "text"},
+                                                    "category1": {"type": "text"},
+                                                    "category2": {"type": "text"},
+                                                    "category3": {"type": "text"},
                                                     "createdAt": {"type": "date"},
                                                     "searchableTags": {"type": "keyword"}
                                                 }
@@ -97,13 +100,16 @@ const startElastic = () => {
                                         body: {
                                             id: product._id,
                                             feat_1: product.feat_1,
-                                            image: product.images[0].url,
+                                            image: product.images.sec[0].url,
                                             name: product.name,
                                             author: product.author,
                                             avgRating: product.avgRating,
-                                            btcPrice: product.btcPrice,
+                                            usdPrice: product.usdPrice,
                                             condition: product.condition,
-                                            category: product.category,
+                                            category0: product.category[0],
+                                            category1: product.category[1],
+                                            category2: product.category[2],
+                                            category3: product.category[3],
                                             createdAt: product.createdAt,
                                             searchableTags: product.searchableTags
                                         }
@@ -159,9 +165,12 @@ const startElastic = () => {
                                                     }
                                                 },
                                                 "avgRating": {"type": "float"},
-                                                "btcPrice": {"type": "float"},
+                                                "usdPrice": {"type": "float"},
                                                 "condition": {"type": "text"},
-                                                "category": {"type": "text"},
+                                                "category0": {"type": "text"},
+                                                "category1": {"type": "text"},
+                                                "category2": {"type": "text"},
+                                                "category3": {"type": "text"},
                                                 "createdAt": {"type": "date"},
                                                 "searchableTags": {"type": "keyword"}
                                             }
@@ -189,13 +198,16 @@ const startElastic = () => {
                                     body: {
                                         id: product._id,
                                         feat_1: product.feat_1,
-                                        image: product.images[0].url,
+                                        image: product.images.sec[0].url,
                                         name: product.name,
                                         author: product.author,
                                         avgRating: product.avgRating,
-                                        btcPrice: product.btcPrice,
+                                        usdPrice: product.usdPrice,
                                         condition: product.condition,
-                                        category: product.category,
+                                        category0: product.category[0],
+                                        category1: product.category[1],
+                                        category2: product.category[2],
+                                        category3: product.category[3],
                                         createdAt: product.createdAt,
                                         searchableTags: product.searchableTags
                                     }

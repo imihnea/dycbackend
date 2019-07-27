@@ -6,10 +6,10 @@ const { getProduct, postReport, buyProduct, reportProduct } = require('../contro
 
 const middleware = require('../middleware/index');
 
-const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, verifyCookie, checkId, assignCookie } = middleware;
+const { isLoggedIn, asyncErrorHandler, hasCompleteProfile, verifyCookie, checkId, assignCookie, getPrice } = middleware;
 
 // Get product
-router.get('/:id/view', assignCookie, checkId, asyncErrorHandler(getProduct));
+router.get('/:id/view', assignCookie, checkId, getPrice, asyncErrorHandler(getProduct));
 
 // Report product/user
 router.post('/:id/report', isLoggedIn, checkId, asyncErrorHandler(postReport));

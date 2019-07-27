@@ -31,8 +31,7 @@
                             <input class="input" name="product[name]" value="<%= product.name %>" type="text" required maxlength="100"
                             data-parsley-error-message=""	 data-parsley-trigger="change"/>
                             <div class="label" style="margin-left: 1vw;">
-                                <span class="registerTooltip" aria-label="Length: 3 - 100 characters
-Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                <span class="registerTooltip" aria-label="Length: 3 - 100 characters" tabindex="-1">
                                     <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                 </span>
                             </div>
@@ -41,16 +40,18 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             <select name="product[category][0]" id="firstCat" style="width: 100%;" required
                             data-parsley-error-message="">
                                 <option disabled>Main Category</option>
-                                <option value="Collectibles & Art" <% if (product.category[1] == 'Collectibles & Art') { %> selected <% } %>>Collectibles & Art</option>
+                                <option value="Collectibles and Art" <% if (product.category[1] == 'Collectibles and Art') { %> selected <% } %>>Collectibles and Art</option>
                                 <option value="Electronics" <% if (product.category[1] == 'Electronics') { %> selected <% } %>>Electronics</option>
-                                <option value="Fashion & Beauty" <% if (product.category[1] == 'Fashion & Beauty') { %> selected <% } %>>Fashion & Beauty</option>
+                                <option value="Fashion and Beauty" <% if (product.category[1] == 'Fashion and Beauty') { %> selected <% } %>>Fashion and Beauty</option>
                                 <option value="Home Improvement" <% if (product.category[1] == 'Home Improvement') { %> selected <% } %>>Home Improvement</option>
                                 <option value="Leisure Time" <% if (product.category[1] == 'Leisure Time') { %> selected <% } %>>Leisure Time</option>
-                                <option value="Mothers & Babies" <% if (product.category[1] == 'Mothers & Babies') { %> selected <% } %>>Mothers & Babies</option>
+                                <option value="Mothers and Babies" <% if (product.category[1] == 'Mothers and Babies') { %> selected <% } %>>Mothers and Babies</option>
                                 <option value="Pet Supplies" <% if (product.category[1] == 'Pet Supplies') { %> selected <% } %>>Pet Supplies</option>
                                 <option value="Real Estate" <% if (product.category[1] == 'Real Estate') { %> selected <% } %>>Real Estate</option>
-                                <option value="Sports & Outdoors" <% if (product.category[1] == 'Sports & Outdoors') { %> selected <% } %>>Sports & Outdoors</option>
+                                <option value="Services" <% if (product.category[1] == 'Services') { %> selected <% } %>>Services</option>
+                                <option value="Sports and Outdoors" <% if (product.category[1] == 'Sports and Outdoors') { %> selected <% } %>>Sports and Outdoors</option>
                                 <option value="Vehicles" <% if (product.category[1] == 'Vehicles') { %> selected <% } %>>Vehicles</option>
+                                <option value="Other" <% if (product.category[1] == 'Other') { %>selectd<% } %>>Other</option>
                             </select>
                         </div>
                         <div class="select cont-select catSelectCenter">
@@ -65,10 +66,10 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 <option value="<%= product.category[3] %>" selected><%= product.category[3] %></option>
                             </select>
                         </div>
-                        <div class="select cont-select" style="width: 90% !important;">
-                            <select type="text" name="product[condition]" style="width: 100%" required
+                        <div class="select cont-select <% if (product.category[1] == 'Services') { %>hidden<% } %>" id="conditionSelect" style="width: 90% !important;">
+                            <select type="text" name="product[condition]" style="width: 100%"
                             data-parsley-error-message="">
-                                <option disabled>Condition</option>
+                                <option disabled <% if (product.condition == 'Service') { %> selected <% } %>>Condition</option>
                                 <option value="Not Specified" <% if (product.condition == 'Not Specified') { %> selected <% } %> >Not Specified</option>
                                 <option value="Brand New" <% if (product.condition == 'Brand New') { %> selected <% } %> >Brand New</option>
                                 <option value="Like New" <% if (product.condition == 'Like New') { %> selected <% } %>>Like New</option>
@@ -82,22 +83,20 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                                 maxlength="500"
                                 data-parsley-pattern-message="The description contains invalid characters" data-parsley-trigger="change"><%= product.description %></textarea>
                             <div class="label tooltipLabel">
-                                <span class="newTooltip" aria-label="Length: 3 - 100 characters
-Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" tabindex="-1">
+                                <span class="newTooltip" aria-label="Length: 3 - 500 characters" tabindex="-1">
                                     <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                 </span>
                             </div>
                         </div>
                         <br>
                         <div class="inputWrapper">
-                            <input type="text" id="tagInput" class="input" placeholder="Tags (Max 10)" style="width: 90%;"
-                            data-parsley-error-message="" data-parsley-trigger="keyup">
+                            <input type="text" id="tagInput" class="input" placeholder="Tags" style="width: 90%;">
                             <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
                             <div class="label" style="margin-left: 1vw;">
-                                <span class="registerTooltip" aria-label="Characters: Alphanumeric and the hyphen (-)" tabindex="-1">
+                                <span class="registerTooltip" aria-label="Maximum 10 tags" tabindex="-1">
                                     <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                                 </span>
-                        </div>
+                            </div>
                         </div>
                         <input type="text" name="product[tags]" id="tags" value="<% product.tags.forEach(tag => { %><%= tag %> <%});%>" hidden  required>
                         <div class="tags tagsWrapper" id="tagsControl">
@@ -109,7 +108,7 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                             <% }); %>
                         </div>
                         <br>     
-                        <div class="repeatable">
+                        <div class="repeatable frame smallerCenter" id="repeatablaLabel">
                             <div>
                                 <label id="repeatableLabel" for="repeatable"><i class="fas fa-redo fa-5x <% if (product.repeatable) { %>green<% } else { %>normal<% } %>"></i></label>
                                 <input id="repeatable" name="product[repeatable]" type="checkbox" value="true" <% if (product.repeatable) { %>checked<% } %> hidden>
@@ -124,85 +123,95 @@ Valid Characters: Alphanumeric, comma, dot, question mark and exclamation mark" 
                     <div class="frame">
                         <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
                         <div class="label">
-                            <span class="newTooltip" aria-label="The recommended aspect ratio is 16:9
-All images are scaled to that ratio" tabindex="-1">
+                            <span class="newTooltip" aria-label="Max filesize is 5MB" tabindex="-1">
                                 <i class="fas fa-info-circle fa-2x" style="color: #3269ca;"></i>
                             </span>
                         </div>
                         <input type="text" id="deleteImages" name="deleteImages" hidden>
+                        <input type="number" id="uploadImages" name="uploadImages" value="0" hidden>
                         <div class="file-upload">
                             <div class="mobileUpload">
-                                <label for="upload[0]" name="u" class="<% if (product.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[0]" name="u" class="<% if (product.images.sec[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[0]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[0]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[0]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[0]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview0" src="<% if (product.images.sec[0]) { %> <%= product.images.sec[0].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 0">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[0]) { %> value="<%= product.images[0].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[0]) { %> hide <% } %>">
+                                <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 0);"
+                                    <% if (product.images.sec[0]) { %> value="<%= product.images.sec[0].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[0]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[1]" name="u" class="<% if (product.images[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[1]" name="u" class="<% if (product.images.sec[1]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[1]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[1]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[1]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[1]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview1" src="<% if (product.images.sec[1]) { %> <%= product.images.sec[1].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 1">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[1]) { %> value="<%= product.images[1].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[1]) { %> hide <% } %>">
+                                <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 1);"
+                                    <% if (product.images.sec[1]) { %> value="<%= product.images.sec[1].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[1]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[2]" name="u" class="<% if (product.images[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[2]" name="u" class="<% if (product.images.sec[2]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[2]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[2]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[2]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[2]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview2" src="<% if (product.images.sec[2]) { %> <%= product.images.sec[2].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 2">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[2]) { %> value="<%= product.images[2].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[2]) { %> hide <% } %>">
+                                <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 2);"
+                                    <% if (product.images.sec[2]) { %> value="<%= product.images.sec[2].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[2]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[3]" name="u" class="<% if (product.images[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[3]" name="u" class="<% if (product.images.sec[3]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[3]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[3]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[3]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[3]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview3" src="<% if (product.images.sec[3]) { %> <%= product.images.sec[3].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 3">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[3]) { %> value="<%= product.images[3].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[3]) { %> hide <% } %>">
+                                <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 3);"
+                                    <% if (product.images.sec[3]) { %> value="<%= product.images.sec[3].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[3]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                             </div>
                             <div class="mobileUpload">
-                                <label for="upload[4]" name="u" class="<% if (product.images[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %>">
+                                <label for="upload[4]" name="u" class="<% if (product.images.sec[4]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
                                     <span style="font-size: 5rem;">
-                                        <i class="far fa-plus-square square <% if (product.images[4]) { %> hide <% } %>"></i>
-                                        <i class="far fa-check-square <% if (!product.images[4]) { %> hide <% } %>"></i>
+                                        <i class="far fa-plus-square square <% if (product.images.sec[4]) { %> hide <% } %>"></i>
+                                        <figure class="image previewImage <% if (!product.images.sec[4]) { %> hide <% } %> is-128x128">
+                                            <img id="Preview4" src="<% if (product.images.sec[4]) { %> <%= product.images.sec[4].url %> <% } else { %>https://bulma.io/images/placeholders/128x128.png<% } %>" alt="Picture 4">
+                                        </figure>
                                     </span>
                                 </label>
-                                <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" 
-                                    <% if (product.images[4]) { %> value="<%= product.images[4].url %>" <% } %>>
-                                <label class="file-delete__label <% if (!product.images[4]) { %> hide <% } %>">
+                                <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 4);"
+                                    <% if (product.images.sec[4]) { %> value="<%= product.images.sec[4].url %>" <% } %>>
+                                <label class="file-delete__label <% if (!product.images.sec[4]) { %> hide <% } %>">
                                     <span>
-                                        <i class="far fa-trash-alt"></i>
+                                        <i class="far fa-trash-alt fa-2x"></i>
                                     </span>
                                 </label>
                             </div>
@@ -211,29 +220,28 @@ All images are scaled to that ratio" tabindex="-1">
                     <br>
                     <div class="frame">
                         <input type="text" id="userType" value="<% if (premium == true) { %>Premium<% } else { %><%= user.accountType %><% } %>" hidden>
-                        <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>
+                        <h4 class="new-text" style="margin-bottom: 3vh;">Price</h4>                        
                         <div class="field">
-                            <label class="label" for="btc-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price</label>
+                            <label class="label" for="usd-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price (USD)</label>
                             <p class="control has-icons-left smmargin" style="margin: auto;">
-                                <input class="input" id="btc-price" name="product[btc_price]" placeholder="Price (BTC)" type="number" step="0.00000001" min="0.00000001" value="<%= product.btcPrice %>" />
+                                <input class="input" id="usd-price" name="product[usd_price]" placeholder="Price (USD)" type="number" step="0.01" min="0.01" value="<%= product.usdPrice %>" />
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-dollar-sign" style="color: green;"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <% if (oneDollar != null) { %>
+                        <div class="field">
+                            <label class="label" for="btc-price" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Listing Price (BTC Estimate)</label>
+                            <p class="control has-icons-left smmargin" style="margin: auto;">
+                                <input class="input" id="btc-price" placeholder="Price (BTC)" type="number" step="0.00000001" min="0.00000001" readonly />
                                 <span class="icon is-small is-left">
                                     <i class="fab fa-bitcoin" style="color: orange;"></i>
                                 </span>
                             </p>
                         </div>
-                        <div class="field" style="width: 90%; margin: auto; margin-bottom: 0.75rem;">
-                            <label class="label" for="fee" style="text-align: left;"><% if (premium) { %>Premium<%} else { %><%= user.accountType %><% } %> Account Fee</label>
-                            <input type="text" class="input" value="<% if ((premium) || (user.accountType == 'Partner')) { %> 8% <% } else { %>10%<% } %>">
-                        </div>
-                        <div class="field">
-                            <label class="label" for="btc-payout" style="text-align: left; width: 90%; margin: auto; margin-bottom: 0.5em;">Estimated Payout</label>
-                            <p class="control has-icons-left smmargin" style="margin: auto;">
-                                <input class="input" id="btc-payout" placeholder="Payout (BTC)" type="number" step="0.00000001" min="0.00000001" readonly/>
-                                <span class="icon is-small is-left">
-                                    <i class="fab fa-bitcoin" style="color: orange;"></i>
-                                </span>
-                            </p>
-                        </div>
+                        <% } %>
+                        <input style="display: none;" id="oneDollar" value="<% if (oneDollar != null) { %><%= oneDollar.toFixed(8) %><% } %>">
                     </div>
                     <br>
                     <div class="control smmargin" style="margin: auto !important;">
@@ -299,7 +307,7 @@ All images are scaled to that ratio" tabindex="-1">
 <script src="/dist/js/dashboard_new.js"></script>
 <script src="/dist/js/deleteImages.js"></script>
 <span id="currentImages" hidden>
-    <%= JSON.stringify(product.images) %>
+    <%= JSON.stringify(product.images.main) %>
 </span>
 <script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
 <script src="/dist/js/parsley.min.js"></script>

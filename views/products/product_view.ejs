@@ -46,31 +46,31 @@
             <div class="column">
                 <div class="slider">
                     <figure class="image is-square sliderFig">
-                        <img class="mainImg " src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
-                        <img class="mImg"  src="<%= product.images[0].url %>" alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mainImg" <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mImg"  <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
                     </figure>
-                    <% if (product.images[1]) { %>
+                    <% if (product.images.main[1]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[1].url %>" alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>"/>
                         </figure>
                     <% } %>
-                    <% if (product.images[2]) { %>
+                    <% if (product.images.main[2]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[2].url %>" alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mImg noDisp replaceMe"<% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>"/>
                         </figure>
                     <% } %>
-                    <% if (product.images[3]) { %>
+                    <% if (product.images.main[3]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[3].url %>" alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>"/>
                         </figure>
                     <% } %>
-                    <% if (product.images[4]) { %>
+                    <% if (product.images.main[4]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
-                            <img class="mImg noDisp" src="<%= product.images[4].url %>" alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>"/>
                         </figure>
                     <% } %>
                 </div>
@@ -79,38 +79,38 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                             <label for="id1">
-                                <img class="thumbnail" src="<%= product.images[0].url %>" alt="Thumbnail 1 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 1 for <%= product.name %>"/>
                             </label>
                         </div>
-                        <% if (product.images[1]) { %>
+                        <% if (product.images.sec[1]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id2"/>
                             <label for="id2" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[1].url %>" alt="Thumbnail 2 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[1]) { %> src="<%= product.images.sec[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 2 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
-                        <% if (product.images[2]) { %>
+                        <% if (product.images.sec[2]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id3"/>
                             <label for="id3" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[2].url %>" alt="Thumbnail 3 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[2]) { %> src="<%= product.images.sec[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 3 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
-                        <% if (product.images[3]) { %>
+                        <% if (product.images.sec[3]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id4"/>
                             <label for="id4" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[3].url %>" alt="Thumbnail 4 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[3]) { %> src="<%= product.images.sec[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 4 for <%= product.name %>"/>
                             </label>
                         </div>
                         <% } %>
-                        <% if (product.images[4]) { %>
+                        <% if (product.images.sec[4]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id5"/>
                             <label for="id5" class="thumbnailLabelPast1">
-                                <img class="thumbnail" src="<%= product.images[4].url %>" alt="Thumbnail 5 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[4]) { %> src="<%= product.images.sec[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 5 for <%= product.name %>"/>
                             </label>
                         </div> 
                         <% } %>                
@@ -135,46 +135,68 @@
                     <i class="far fa-star" style="color: orange;"></i>
                     <% } %>
                 <% } %>
-                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %></p>
+                <p><%= `${product.avgRating} star${product.avgRating === 1 ? '' : 's'}` %> from <%= product.reviews.length %> reviews</p>
                 <form action="/deals/<%= product.id %>/buy" id="buyForm" method="GET" class="productBuyPrice">
                     <div class="column prod_info" style="padding: 0;">
                         <label class="img-check ">
                             <div class="prices frame openPrices">
                                 <p class="price_text">
-                                    <%= product.btcPrice %>
+                                    <%= (product.usdPrice * oneDollar).toFixed(8) %>
                                 </p>
-                                <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
+                                <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                             </div>
                         </label>
                     </div>
-                    <!-- <p><sub>Transportation costs included</sub></p> Insert shipping fees here --> 
+                    <div class="column prod_info" style="padding: 0;">
+                        <label class="img-check ">
+                            <div class="prices frame openPrices">
+                                <p class="price_text">
+                                    $<%= product.usdPrice %> USD
+                                </p>
+                                <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
+                            </div>
+                        </label>
+                    </div>
                     <br>   
                 </form>
-                <% if (!user) { %> 
-                    <a href="/login" class="button is-primary is-rounded">Login to buy</a>
+
+                <% if (!user) { %>
+                    <form action="/cart/add/<%= product._id %>" method="post">
+                        <button class="button is-primary is-large">
+                            <span class="icon is-medium">
+                                <i class="fas fa-cart-plus has-text-light"></i>
+                            </span>
+                            <span class="has-text-white">Add to cart</span>
+                        </button>
+                    </form>
                     <% } else if (user.username === product.author.username) { %>
                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary is-rounded">Update</a>
-                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
                     <% } else if (dealExists) { %>
                         <form action="/messages/<%= dealExists[1] %>/<%= dealExists[0] %>?_method=PUT" method="POST">
                             <button class="button view-btn is-primary">View Deal</button>
                         </form>
-                    <% } else if (user.btcbalance >= product.btcPrice) { %>
+                    <% } else if (user.btcbalance >= (product.usdPrice * oneDollar).toFixed(8)) { %>
                         <div class="productBuyForm">
-                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
+                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>                
+                            <form action="/cart/add/<%= product._id %>" method="post">
+                                <button class="button is-primary">Add to cart</button>
+                            </form>
+                        </div>
+                        <br>
+                        <form action="/messages/<%= product._id %>/createChat" method="POST">
+                            <button class="productContactLink button is-primary">Contact Seller</button>
+                        </form>
+                    <% } else { %>
+                        <p class="subtitle is-6">You don't have enough balance.</p>
+                        <div class="productBuyForm">
+                            <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
+                            <form action="/cart/add/<%= product._id %>" method="post">
+                                <button class="button is-primary">Add to cart</button>
+                            </form>
                             <form action="/messages/<%= product._id %>/createChat" method="POST">
                                 <button class="productContactLink button is-primary">Contact Seller</button>
                             </form>
                         </div>
-                    <% } else { %>
-                        <p class="subtitle is-6">You don't have enough balance.</p>
-                        <div class="productBuyForm">
-                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
-                        <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
-                        <form action="/messages/<%= product._id %>/createChat" method="POST">
-                            <button class="productContactLink button is-primary">Contact Seller</button>
-                        </form>
-                    </div>
                     <% } %>
                     <hr>
                     <h1 class="subtitle">Share</h1>
@@ -279,9 +301,9 @@
                                     <img src="<%= review.avatarUrl %>" class="avatarSize" alt="">
                                 </figure>
                             </a>
-                            <a class="link" href="/profile/<%= review.author %>"><p class="productDescriptionText" style="text-align:center !important;" ><%= review.name %></p></a>
+                            <a class="link" href="/profile/<%= review.author %>"><p style="text-align:center !important;" ><%= review.name %></p></a>
                             <% if (review.createdAt) { %>
-                            <p class="productDescriptionText" style="text-align:center !important;" >
+                            <p style="text-align:center !important;" >
                                 <% switch(review.createdAt.getMonth()) {
                                     case (0) : { %>
                                     Jan
@@ -413,17 +435,18 @@
                         <div class="column card feat_card frame smallerCenter similarProducts">
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
-                                    <figure class="image featimg is-square">
-                                        <img src="<%= sim.images[0].url %>" class="featimgs" alt="<%= sim.name %>">
+                                    <figure class="image featimg is-square similarFigure">
+                                        <img src="<%= sim.images.main[0].url %>" class="featimgs replaceImg" alt="<%= sim.name %>">
                                     </figure>
                                 </div>
                                 <div class="card-content">
                                     <div class="media">
                                         <div class="media-content">
-                                            <p class="title productName" style="overflow: hidden;"><%= sim.name %></p>
+                                            <p class="title productName dealname" style="overflow: hidden;"><%= sim.name %></p>
                                         </div>
                                     </div>
-                                    <p class="curr_text"><b><%= sim.btcPrice %></b> BTC</p>
+                                    <p class="curr_text"><b><%= (sim.usdPrice * oneDollar).toFixed(8) %></b> BTC</p>
+                                    <p class="curr_text"><b>$<%= sim.usdPrice %></b> USD</p>
                                 </div> 
                             </a>      
                         </div>

@@ -371,13 +371,7 @@ module.exports = {
   // },
   getLogin(req, res) {
     if ( req.user ) {
-      res.render('index/login', { 
-        user: req.user, 
-        errors: false,
-        pageTitle: 'Login - Deal Your Crypto',
-        pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
-        pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-      });
+      return res.redirect('/');
     } else {
       res.render('index/login', { 
         errors: false,
@@ -561,7 +555,7 @@ module.exports = {
     return res.redirect('/');
   },
   async getIndex(req, res) {
-    await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(50).exec((err, result) => {
+    await Product.aggregate().match({$and: [{"feat_2.status": true}, {available: "True"}]}).sample(56).exec((err, result) => {
         if (err) {
           if(req.user) {
             errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -573,6 +567,7 @@ module.exports = {
             'products.length': 0, 
             errors: false,
             onlyFeatured: false,
+            oneDollar: req.oneDollar,
             pageTitle: 'Deal Your Crypto',
             pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
             pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -584,7 +579,7 @@ module.exports = {
             products.forEach((product) => {
               ids.push(ObjectID(product._id));
             });
-            Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(20 - products.length).exec((err, result) => {
+            Product.aggregate().match({$and: [{available: "True"}, {_id: {$nin: ids}}]}).sample(56 - products.length).exec((err, result) => {
               if (err) {
                 if(req.user) {
                   errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -596,6 +591,7 @@ module.exports = {
                   products,
                   errors: false,
                   onlyFeatured: false,
+                  oneDollar: req.oneDollar,
                   pageTitle: 'Deal Your Crypto',
                   pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                   pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -604,12 +600,13 @@ module.exports = {
                 Array.from(result).forEach((res) => {
                   products.push(res);
                 });
-                if ((result.length < (20 - products.length)) && (result.length != 0)) {
+                if ((result.length < (56 - products.length)) && (result.length != 0)) {
                   return res.render('index', { 
                     user: req.user, 
                     products,
                     errors: false,
                     onlyFeatured: false,
+                    oneDollar: req.oneDollar,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                     pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -620,6 +617,7 @@ module.exports = {
                     products,
                     errors: false,
                     onlyFeatured: false,
+                    oneDollar: req.oneDollar,
                     pageTitle: 'Deal Your Crypto',
                     pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
                     pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -633,6 +631,7 @@ module.exports = {
               products,
               errors: false,
               onlyFeatured: true,
+              oneDollar: req.oneDollar,
               pageTitle: 'Deal Your Crypto',
               pageDescription: 'Buy and sell art, jewelry, electronics, fashion apparel, sporting goods and everything else for Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.',
               pageKeywords: 'buy with bitcoin, sell for bitcoin, bitcoin, bitcoin market, crypto, cryptocurrency, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
@@ -879,7 +878,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
@@ -891,7 +890,7 @@ module.exports = {
       if (errors) {
         return res.status(404).redirect('/error');
       } else {
-        req.query.searchName = cleanHTML(req.query.searchName);     
+        req.query.searchName = cleanHTML(req.query.searchName).toLowerCase();     
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -923,58 +922,115 @@ module.exports = {
           }
           searchTerm.create(search);
         }
-        client.search({
-          index: 'products',
-          type: 'products',
-          body: {
-              from: from,
-              size: 10,
-              "track_scores": true,
-              sort,
-              query: {
-                bool: {
-                  must: [
-                    { "match": { "category": `${req.query.category}` }},
-                    { "wildcard": { "author.continent": `*${continent}*`}},
-                    { "wildcard": {"condition": `*${condition}*`}}
-                  ],
-                  "should": [
-                    { "wildcard": { "searchableTags": `*${req.query.searchName}*` }},
-                    { "wildcard": { "name": `*${req.query.searchName}*` }}
-                  ],
-                  "minimum_should_match": 1
+        if (req.query.category == 'all') {
+          client.search({
+            index: 'products',
+            type: 'products',
+            body: {
+                from: from,
+                size: 10,
+                "track_scores": true,
+                sort,
+                query: {
+                  bool: {
+                    must: [
+                      { "match": { "category0": `${req.query.category}` }},
+                      { "wildcard": { "author.continent": `*${continent}*`}},
+                      { "wildcard": {"condition": `*${condition}*`}}
+                    ],
+                    "should": [
+                      { "wildcard": { "searchableTags": `*${req.query.searchName}*` }},
+                      { "wildcard": { "name": `*${req.query.searchName}*` }}
+                    ],
+                    "minimum_should_match": 1
+                  }
                 }
+            }
+          }).then(function(products) {
+            Categories.forEach((item) => {
+              if (req.query.category == item.name) {
+                secCat = item.opt;
               }
-          }
-        }).then(function(products) {
-          Categories.forEach((item) => {
-            if (req.query.category == item.name) {
-              secCat = item.opt;
-            }
+            });
+            res.render('index/searchFirstCateg', { 
+              products: products.hits.hits, 
+              total: products.hits.total.value, 
+              from, 
+              searchName: req.query.searchName, 
+              searchCateg: req.query.category, 
+              secCat, 
+              currency: req.query.currency, 
+              continent, 
+              avgRating, 
+              condition,
+              oneDollar: req.oneDollar,
+              pageTitle: `${req.query.searchName} - Deal Your Crypto`,
+              pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+              pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
+            });
+          }, function(err) {
+              console.trace(err.message);
+              if(req.user) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
           });
-          res.render('index/searchFirstCateg', { 
-            products: products.hits.hits, 
-            total: products.hits.total.value, 
-            from, 
-            searchName: req.query.searchName, 
-            searchCateg: req.query.category, 
-            secCat, 
-            currency: req.query.currency, 
-            continent, 
-            avgRating, 
-            condition,
-            pageTitle: `${req.query.searchName} - Deal Your Crypto`,
-            pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
-            pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
-          });
-        }, function(err) {
-            console.trace(err.message);
-            if(req.user) {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-            } else {
-              errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        } else {
+          client.search({
+            index: 'products',
+            type: 'products',
+            body: {
+                from: from,
+                size: 10,
+                "track_scores": true,
+                sort,
+                query: {
+                  bool: {
+                    must: [
+                      { "match_phrase": { "category1": `${req.query.category}` }},
+                      { "wildcard": { "author.continent": `*${continent}*`}},
+                      { "wildcard": {"condition": `*${condition}*`}}
+                    ],
+                    "should": [
+                      { "wildcard": { "searchableTags": `*${req.query.searchName}*` }},
+                      { "wildcard": { "name": `*${req.query.searchName}*` }}
+                    ],
+                    "minimum_should_match": 1
+                  }
+                }
             }
-        });
+          }).then(function(products) {
+            Categories.forEach((item) => {
+              if (req.query.category == item.name) {
+                secCat = item.opt;
+              }
+            });
+            res.render('index/searchFirstCateg', { 
+              products: products.hits.hits, 
+              total: products.hits.total.value, 
+              from, 
+              searchName: req.query.searchName, 
+              searchCateg: req.query.category, 
+              secCat, 
+              currency: req.query.currency, 
+              continent, 
+              avgRating, 
+              condition,
+              oneDollar: req.oneDollar,
+              pageTitle: `${req.query.searchName} - Deal Your Crypto`,
+              pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
+              pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
+            });
+          }, function(err) {
+              console.trace(err.message);
+              if(req.user) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              } else {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+              }
+          });
+        }
       }
     },
     async secondCategSearch(req, res) {
@@ -998,7 +1054,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
@@ -1010,7 +1066,7 @@ module.exports = {
       if (errors) {
         return res.status(404).redirect('/error');
       } else {
-        req.body.searchName = cleanHTML(req.query.searchName);
+        req.body.searchName = cleanHTML(req.query.searchName).toLowerCase();
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -1055,8 +1111,8 @@ module.exports = {
               query: {
                 bool: {
                   must: [
-                    { "match": { "category": `${req.query.searchCateg}`}},
-                    { "match": { "category": `${req.query.category}`}},
+                    { "match_phrase": { "category1": `${req.query.searchCateg}`}},
+                    { "match_phrase": { "category2": `${req.query.category}`}},
                     { "wildcard": { "author.continent": `*${continent}*`}},
                     { "wildcard": {"condition": `*${condition}*`}}
                   ],
@@ -1086,6 +1142,7 @@ module.exports = {
             continent, 
             avgRating, 
             condition,
+            oneDollar: req.oneDollar,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
             pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
             pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`
@@ -1121,7 +1178,7 @@ module.exports = {
       }
       if (req.query.currency) {
         currency = req.query.currency;
-        sort.unshift({'btcPrice': {'order': `${currency}`}});
+        sort.unshift({'usdPrice': {'order': `${currency}`}});
       }
       if (req.query.condition) {
         condition = req.query.condition;
@@ -1133,7 +1190,7 @@ module.exports = {
       if (errors) {
         return res.redirect('/error');
       } else {
-        req.query.searchName = cleanHTML(req.query.searchName);   
+        req.query.searchName = cleanHTML(req.query.searchName).toLowerCase();   
         if (from === 0) {
           let search = {};
           if (req.user) {
@@ -1180,9 +1237,9 @@ module.exports = {
               query: {
                 bool: {
                   must: [
-                    { "match": { "category": `${req.query.searchCateg}`}},
-                    { "match": { "category": `${req.query.secondSearchCateg}`}},
-                    { "match": { "category": `${req.query.category}`}},
+                    { "match_phrase": { "category1": `${req.query.searchCateg}`}},
+                    { "match_phrase": { "category2": `${req.query.secondSearchCateg}`}},
+                    { "match_phrase": { "category3": `${req.query.category}`}},
                     { "wildcard": { "author.continent": `*${continent}*`}},
                     { "wildcard": {"condition": `*${condition}*`}}
                   ],
@@ -1207,6 +1264,7 @@ module.exports = {
             continent, 
             avgRating, 
             condition,
+            oneDollar: req.oneDollar,
             pageTitle: `${req.query.searchName} - Deal Your Crypto`,
             pageDescription: `Get the best deal for ${req.query.searchName} paid with Bitcoin on Deal Your Crypto, the first marketplace dedicated to cryptocurrency.`,
             pageKeywords: `${req.query.searchName}, buy ${req.query.searchName} with bitcoin, sell ${req.query.searchName} for bitcoin, bitcoin, bitcoin market, crypto`

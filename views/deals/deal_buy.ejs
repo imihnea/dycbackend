@@ -18,7 +18,7 @@
         <br>
         <div class="field" style="padding: 20px;">
             <figure class="image is-square" style="overflow: hidden;">
-                <img class="mainImg dealImage" src="<%= product.images[0].url %>" alt="<%= product.name %>"/>
+                <img class="mainImg dealImage" src="<%= product.images.sec[0].url %>" alt="<%= product.name %>"/>
             </figure>
         </div>
         <div class="field">
@@ -37,16 +37,18 @@
                 </span>
             </p>
         </div>
-        <div class="field">
-            <p class="control has-icons-left">
-                <input type="text" class="input" value="Location: <%= product.author.country %>, <%= product.author.state %>, <%= product.author.city %>" required readonly>
-                <span class="icon is-small is-left">
-                    <i class="fas fa-map-marked-alt"></i>
-                </span>
-            </p>
-        </div>
+        <% if (!product.dropshipped) { %>
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input type="text" class="input" value="Location: <%= product.author.country %>, <%= product.author.state %>, <%= product.author.city %>" required readonly>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </span>
+                </p>
+            </div>
+        <% } %>
         <% let x = 0; 
-            if (product.delivery.shipping === false) { %>
+            if ((product.delivery.shipping === false) || (product.delivery.shipping == undefined)) { %>
                 <% x = 1; %>
             <% } %>
         <div class="frame" style="display: flex; justify-content: space-around;">
@@ -73,19 +75,6 @@
         <h2 class="subtitle">Your Details</h2>
         <form action="/products/<%= product.id %>/buy?_method=PUT" method="POST" class="dealForm">
             <div class="field">
-                <label class="label" for="deliveryPhone" style="text-align: left !important;">Phone Number</label>
-                <p class="control has-icons-left">
-                    <% if(user.number) { %>
-                        <input class="input" name="deliveryPhone" type="tel" value="<%= user.number %>" required/>
-                    <% } else { %>
-                        <input class="input" name="deliveryPhone" id="telephone" type="tel" placeholder="Contact Phone Number" required/>
-                    <% } %>
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-phone"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
                 <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                 <p class="control has-icons-left">
                     <% if(user.full_name) { %>
@@ -111,6 +100,53 @@
                     </span>
                 </p>
             </div>
+            <% if (product.dropshipped) { %>
+                <div class="field">
+                    <label class="label" for="deliveryCountry" style="text-align: left !important;">Country</label>
+                    <p class="control has-icons-left">
+                        <input class="input" name="deliveryCountry" type="text" placeholder="Country" value="<% if (user.country) { %> <%= user.country %> <% } %>" required/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label" for="deliveryState" style="text-align: left !important;">State</label>
+                    <p class="control has-icons-left">
+                        <input class="input" name="deliveryState" type="text" placeholder="State or County" value="<% if (user.state) { %> <%= user.state %> <% } %>" required/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-globe-americas"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label" for="deliveryCity" style="text-align: left !important;">City</label>
+                    <p class="control has-icons-left">
+                        <input class="input" name="deliveryCity" type="text" placeholder="City" value="<% if (user.city) { %> <%= user.city %> <% } %>" required/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-city"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label" for="deliveryStreet" style="text-align: left !important;">Street</label>
+                    <p class="control has-icons-left">
+                        <input class="input" name="deliveryStreet1" type="text" placeholder="Street" value="<% if (user.address1) { %> <%= user.address1 %> <% } %>" required/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-road"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label" for="deliveryZip" style="text-align: left !important;">Zip Code</label>
+                    <p class="control has-icons-left">
+                        <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" value="<% if (user.zip) { %> <%= user.zip %> <% } %>" required/>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-sort-numeric-down"></i>
+                        </span>
+                    </p>
+                </div>
+            <% } %>
             <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="hidden" name="deliveryShipping" value="FaceToFace">
@@ -118,7 +154,7 @@
                 <label class="img-check ">
                     <div class="prices frame openPrices">
                         <p class="price_text">
-                            Price: <%= product.btcPrice %> Bitcoin (<%= (product.btcPrice * btcrate).toFixed(2) %> USD)
+                            Price: $<%= product.usdPrice %> USD (<%= (product.usdPrice / btcrate).toFixed(8) %> BTC est.)
                         </p>
                         <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                     </div>

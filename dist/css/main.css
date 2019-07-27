@@ -292,7 +292,7 @@ a:hover {
 }
 .currency{
     display: flex !important;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
     color: black !important;
     padding-top: 3vh;
@@ -660,6 +660,7 @@ hr{
     text-align: left;
     margin-top: 1vh; 
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .open-img{
@@ -952,6 +953,40 @@ hr{
     background-color: #4c3da8 !important;
     color: white;
     border-color: black !important;
+}
+
+.breadcrumb{
+    white-space: normal !important;
+}
+
+.currencyIcon{
+    width: 30px !important; 
+    height: 30px !important;
+}
+
+@media screen and (max-width: 768px) {
+    .imageCard{
+        max-height: 50vh;
+    }
+
+    .indexImg{
+        max-height: 50vh;
+        margin-top: 0;
+    }
+
+    .profileDeal{
+        max-width: auto !important;
+    }
+
+    .similarFigure{
+        width: auto !important;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .profileDeal{
+        max-width: 20% !important;
+    }  
 }
 
 @supports (-ms-ime-align: auto) {
