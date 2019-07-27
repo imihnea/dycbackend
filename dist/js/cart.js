@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
             totalUsdPrice.value = 0;
             for (let i = 0; i < qtyItems.length; i += 1) {
                 totalPrice.value = Number(totalPrice.value) + Number((priceItems[i].value * qtyItems[i].value).toFixed(8));
-                totalPrice.value = Number(parseFloat(totalPrice.value).toFixed(8));
                 totalUsdPrice.value = Number(totalUsdPrice.value) + Number((usdPriceItems[i].value * qtyItems[i].value).toFixed(8));
-                totalUsdPrice.value = Number(parseFloat(totalUsdPrice.value).toFixed(8));
             }
+            totalPrice.value = `${Number(parseFloat(totalPrice.value).toFixed(8))} BTC`;
+            totalUsdPrice.value = `$${Number(parseFloat(totalUsdPrice.value).toFixed(8))} USD`;
         });
     });
 });
