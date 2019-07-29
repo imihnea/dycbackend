@@ -158,8 +158,8 @@
                                 <% if (product.repeatable) { %>
                                     <br>
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <label class="label" for="qty" style="text-align: left !important;">Qty.</label>
-                                        <input type="number" class="input qty" id="qty[<%= i %>]" name="qty[<%= i %>]" placeholder="Quantity" style="width: 50%;" value="1">
+                                        <label class="label" for="qty<%= i %>" style="text-align: left !important;">Qty.</label>
+                                        <input type="number" class="input qty" placeholder="Quantity" style="width: 50%;" value="1">
                                     </div>
                                 <% } %>
                             </div>
@@ -169,12 +169,12 @@
                             <% let price = 0; products.forEach(product => { price += Number((product.usdPrice * oneDollar).toFixed(8))}); %>
                             <% let totalUsdPrice = 0; products.forEach(product => { totalUsdPrice += Number(product.usdPrice)}); %>
                             <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <label class="label" for="totalPrice" style="text-align: left !important;">Total Price (BTC): </label>
+                                <label class="label" for="totalPrice" style="text-align: left !important;">Total Price (BTC):</label>
                                 <input type="text" class="input" id="totalPrice" placeholder="Total Price" style="width: 50%;" value="<%= price.toFixed(8) %> BTC" readonly>
                             </div>
                             <br>
                             <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <label class="label" for="totalPriceUSD" style="text-align: left !important;">Total Price (USD): </label>
+                                <label class="label" for="totalPriceUSD" style="text-align: left !important;">Total Price (USD):</label>
                                 <input type="text" class="input" id="totalPriceUSD" placeholder="Total Price" style="width: 50%;" value="$<%= totalUsdPrice.toFixed(2) %> USD" readonly>
                             </div>
                             <br>
@@ -217,6 +217,9 @@
                                                 </div>
                                             </div>
                                             <br>
+                                            <% products.forEach((product, i) => { %>
+                                                <input type="number" name="qty[<%= i %>]" id="qty<%= i %>" value="1" hidden>
+                                            <% }); %>
                                             <button class="button is-primary">Pay now</button>
                                         </form>    
                                     <% } %>
