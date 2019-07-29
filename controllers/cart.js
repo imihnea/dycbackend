@@ -181,7 +181,7 @@ module.exports = {
                                     username: user.username,
                                     name: user.full_name,
                                     avatarUrl: user.avatar.url,
-                                    'delivery.shipping': req.body.deliveryShipping,
+                                    'delivery.shipping': 'FaceToFace',
                                     'delivery.name': req.body.deliveryName,
                                     'delivery.email': req.body.deliveryEmail,
                                     'delivery.street1': req.body.deliveryStreet1,
@@ -200,14 +200,15 @@ module.exports = {
                                     imageUrl: product.images.sec[0].url,
                                     author: product.author,
                                     price: product.usdPrice,
-                                    qty: Number(req.body.qty[i])
+                                    qty: Number(req.body.qty[i]),
+                                    dropshipped: product.dropshipped
                                 },
                                 buyer: {
                                     id: user._id,
                                     username: user.username,
                                     name: user.full_name,
                                     avatarUrl: user.avatar.url,
-                                    'delivery.shipping': req.body.deliveryShipping,
+                                    'delivery.shipping': 'FaceToFace',
                                     'delivery.name': req.body.deliveryName,
                                     'delivery.email': req.body.deliveryEmail,
     
@@ -314,7 +315,9 @@ module.exports = {
                 }));
                 req.session.cart = [];
                 req.flash('success', 'Your requests have been placed');
-                return res.redirect('/dashboard/ongoing');
+                setTimeout(() => {
+                    return res.redirect('/dashboard/ongoing');
+                }, 1000);
             }
         }
     }
