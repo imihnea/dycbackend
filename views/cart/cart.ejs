@@ -36,7 +36,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
                                     <p class="control has-icons-left">
-                                        <% if(user.full_name) { %>
+                                        <% if ( user && user.full_name) { %>
                                             <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
                                         <% } else { %>
                                             <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
@@ -49,7 +49,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryEmail" style="text-align: left !important;">Email</label>
                                     <p class="control has-icons-left">
-                                        <% if(user.email) { %>
+                                        <% if (user && user.email) { %>
                                             <input class="input" name="deliveryEmail" type="tel" value="<%= user.email %>" required/>
                                         <% } else { %>
                                             <input class="input" name="deliveryEmail" type="tel" placeholder="Contact Email" required/>
@@ -62,7 +62,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryCountry" style="text-align: left !important;">Country</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" name="deliveryCountry" type="text" placeholder="Country" value="<% if (user.country) { %> <%= user.country %> <% } %>" required/>
+                                        <input class="input" name="deliveryCountry" type="text" placeholder="Country" value="<% if (user) { %><% if (user.country) { %> <%= user.country %> <% } } %>" required/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-flag"></i>
                                         </span>
@@ -71,7 +71,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryState" style="text-align: left !important;">State</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" name="deliveryState" type="text" placeholder="State or County" value="<% if (user.state) { %> <%= user.state %> <% } %>" required/>
+                                        <input class="input" name="deliveryState" type="text" placeholder="State or County" value="<% if (user) { %><% if (user.state) { %> <%= user.state %> <% }} %>" required/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-globe-americas"></i>
                                         </span>
@@ -80,7 +80,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryCity" style="text-align: left !important;">City</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" name="deliveryCity" type="text" placeholder="City" value="<% if (user.city) { %> <%= user.city %> <% } %>" required/>
+                                        <input class="input" name="deliveryCity" type="text" placeholder="City" value="<% if (user) { %><% if (user.city) { %> <%= user.city %> <% }} %>" required/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-city"></i>
                                         </span>
@@ -89,7 +89,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryStreet" style="text-align: left !important;">Street</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" name="deliveryStreet1" type="text" placeholder="Street" value="<% if (user.address1) { %> <%= user.address1 %> <% } %>" required/>
+                                        <input class="input" name="deliveryStreet1" type="text" placeholder="Street" value="<% if (user) { %><% if (user.address1) { %> <%= user.address1 %> <% }} %>" required/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-road"></i>
                                         </span>
@@ -98,7 +98,7 @@
                                 <div class="field">
                                     <label class="label" for="deliveryZip" style="text-align: left !important;">Zip Code</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" value="<% if (user.zip) { %> <%= user.zip %> <% } %>" required/>
+                                        <input class="input" name="deliveryZip" type="text" placeholder="Zip Code" value="<% if (user) { %><% if (user.zip) { %> <%= user.zip %> <% }} %>" required/>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-sort-numeric-down"></i>
                                         </span>

@@ -19,6 +19,7 @@ const DealSchema = new Schema({
         },
         price: Number,
         qty: Number,
+        dropshipped: Boolean,
     },
     buyer: { 
         id: Schema.Types.ObjectId, 
