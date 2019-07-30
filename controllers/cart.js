@@ -174,6 +174,7 @@ module.exports = {
                                     imageUrl: product.images.sec[0].url,
                                     author: product.author,
                                     price: product.usdPrice,
+                                    btcPrice: (product.usdPrice * req.oneDollar).toFixed(8),
                                     qty: Number(req.body.qty[i])
                                 },
                                 buyer: {
@@ -201,6 +202,7 @@ module.exports = {
                                     author: product.author,
                                     price: product.usdPrice,
                                     qty: Number(req.body.qty[i]),
+                                    btcPrice: (product.usdPrice * req.oneDollar).toFixed(8),
                                     dropshipped: product.dropshipped
                                 },
                                 buyer: {

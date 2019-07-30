@@ -18,6 +18,7 @@ const DealSchema = new Schema({
             name: String
         },
         price: Number,
+        btcPrice: Number,
         qty: Number,
         dropshipped: Boolean,
     },

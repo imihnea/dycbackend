@@ -275,6 +275,9 @@
                 <thead>
                     <td><p class="productDescriptionText" style="font-weight: 600;">Additional Information</p></td>
                     <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                    <% if (product.dropshipped) { %>
+                        <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                    <% } %>
                 </thead>
                 <tbody>
                     <tr>
@@ -283,8 +286,14 @@
                     </tr>
                     <tr>
                         <td>Continent of origin</td>
-                        <td><%= product.author.continent %></td>
+                        <td><% if (product.dropshipped) { %><%= product.from %><% } else { %><%= product.author.continent %><% } %></td>
                     </tr>
+                    <% if (product.dropshipped) { %>
+                        <tr>
+                            <td>Delivery</td>
+                            <td><%= product.deliversTo %></td>
+                        </tr>    
+                    <% } %>
                 </tbody>
             </table>
         </div> 

@@ -185,9 +185,11 @@
                                 <p class="price_text" style="padding-left: 10px;"><%= deal.price %> BTC</p>
                                 <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
-                            <div class="prices openPrices frame" style="width: 80% !important; padding-bottom: 10px !important;">
-                                <p class="price_text" style="margin: auto;">Quantity: <%= deal.product.qty %></p>
-                            </div>
+                            <% if (deal.product.qty) { %>
+                                <div class="prices openPrices frame" style="width: 80% !important; padding-bottom: 10px !important;">
+                                    <p class="price_text" style="margin: auto;">Quantity: <%= deal.product.qty %></p>
+                                </div>
+                            <% } %>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
                                 <form action="/deals/<%= deal._id %>/accept?_method=PUT" id="acceptDeal" method="POST"></form>

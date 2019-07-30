@@ -39,7 +39,7 @@
                                         <% if ( user && user.full_name) { %>
                                             <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
                                         <% } else { %>
-                                            <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                                            <input class="input" name="deliveryName" type="tel" placeholder="Full Name" required/>
                                         <% } %>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user-tie"></i>
@@ -195,7 +195,7 @@
                                                         <% if(user.full_name) { %>
                                                             <input class="input" name="deliveryName" type="tel" value="<%= user.full_name %>" required/>
                                                         <% } else { %>
-                                                            <input class="input" name="deliveryName" type="tel" placeholder="Contact Person Name" required/>
+                                                            <input class="input" name="deliveryName" type="tel" placeholder="Full Name" required/>
                                                         <% } %>
                                                         <span class="icon is-small is-left">
                                                             <i class="fas fa-user-tie"></i>
