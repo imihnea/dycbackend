@@ -29,26 +29,49 @@ const { asyncErrorHandler } = require('../middleware/index');
 module.exports = {
     async getCart(req, res) {
         const products = await Product.find({_id: {$in: req.session.cart}});
+        let activeDeals = [];
+        if (req.user) {
+            activeDeals = await Deal.find({'buyer.id': req.user._id, 'product.id': {$in: req.session.cart}});
+        }
         let shipping = false;
         products.forEach((product, index) => {
             if (product.available != 'True') {
                 products.splice(products[index], 1);
                 req.session.cart.splice(req.session.cart.indexOf(product._id), 1);
             }
+            activeDeals.forEach(deal => {
+                if (deal.product.id.toString() == product._id.toString()) {
+                    products.splice(products[index], 1);
+                    req.session.cart.splice(req.session.cart.indexOf(product._id), 1);
+                }
+            });
             if (product.dropshipped) {
                 shipping = true;
             }
         });
-        res.render('cart/cart', {
-            user: req.user,
-            products,
-            oneDollar: req.oneDollar,
-            shipping,
-            errors: false,
-            pageTitle: 'Cart - Deal Your Crypto',
-            pageDescription: 'Cart Page on Deal Your Crypto',
-            pageKeywords: 'cart, page, deal, crypto, deal your crypto'
-        });
+        if (products.length > 0) {
+            res.render('cart/cart', {
+                user: req.user,
+                products,
+                oneDollar: req.oneDollar,
+                shipping,
+                errors: false,
+                pageTitle: 'Cart - Deal Your Crypto',
+                pageDescription: 'Cart Page on Deal Your Crypto',
+                pageKeywords: 'cart, page, deal, crypto, deal your crypto'
+            });
+        } else {
+            res.render('cart/cart', {
+                user: req.user,
+                products: [],
+                oneDollar: req.oneDollar,
+                shipping: false,
+                errors: false,
+                pageTitle: 'Cart - Deal Your Crypto',
+                pageDescription: 'Cart Page on Deal Your Crypto',
+                pageKeywords: 'cart, page, deal, crypto, deal your crypto'
+            });
+        }
     },
     async addToCart(req, res) {
         const product = await Product.findById(req.params.id);

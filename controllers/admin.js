@@ -18,7 +18,7 @@ const path = require('path');
 const { errorLogger, userLogger, logger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
-const { client:elasticClient } = require('../config/elasticsearch');
+const { client:elasticClient, batchIndex } = require('../config/elasticsearch');
 const cloudinary = require('cloudinary');
 
 cloudinary.config({
@@ -785,37 +785,57 @@ module.exports = {
         });
     },
     async postBulkAdd(req, res) {
-        fs.createReadStream(req.file.path)
+        let k = 0;
+        let products = [];
+        await fs.createReadStream(req.file.path)
             .pipe(csv.parse({ headers: true }))
             .on('data', row => {
-                const product = {
-                    name: row.name,
-                    usdPrice: row.usdPrice,
-                    description: row.description.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ").replace(/\ufffd/g, ''),
-                    'category.0': 'all',
-                    'category.1': row.category1,
-                    'category.2': row.category2,
-                    'category.3': row.category3,
-                    'images.main.0.url': row.mainImg,
-                    'images.sec.0.url': row.mainImg,
-                    condition: 'Brand new',
-                    dropshipped: true,
-                    from: req.body.from,
-                    deliversTo: req.body.deliversTo,
-                    supplier: req.body.supplier,
-                    repeatable: true,
-                    author: {
-                        id: req.user._id,
-                        username: req.user.username,
-                        name: req.user.full_name,
-                        city: req.user.city,
-                        country: req.user.country,
-                        state: req.user.state,
-                        continent: req.user.continent,
-                        accountType: req.user.accountType
+                if (row.category1 && row.category2 && row.category3) {
+                    const newproduct = {
+                        name: row.name,
+                        usdPrice: Number(row.usdPrice).toFixed(2),
+                        description: row.description.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ").replace(/\ufffd/g, ''),
+                        'category.0': 'all',
+                        'category.1': row.category1,
+                        'category.2': row.category2,
+                        'category.3': row.category3,
+                        'images.main.0.url': row.mainImg,
+                        'images.sec.0.url': row.mainImg,
+                        condition: 'Brand new',
+                        searchableTags: row.name,
+                        tags: row.name.split(" "),
+                        dropshipped: true,
+                        from: req.body.from,
+                        deliversTo: req.body.deliversTo,
+                        supplier: req.body.supplier,
+                        repeatable: true,
+                        author: {
+                            id: req.user._id,
+                            username: req.user.username,
+                            name: req.user.full_name,
+                            city: req.user.city,
+                            country: req.user.country,
+                            state: req.user.state,
+                            continent: req.user.continent,
+                            accountType: req.user.accountType
+                        }
                     }
+                    Product.create(newproduct, (err, res) => {
+                        if (err) {
+                            if (k == 0) {
+                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't create product\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+                                k = 1;
+                            }
+                        } else {
+                            products.push(res);
+                        }
+                    });
                 }
-                Product.create(product);
+            })
+            .on('end', () => {
+                setTimeout(() => {
+                    batchIndex(products);
+                }, 30000);
             });
         req.flash('success', 'The products have been added');
         return res.redirect('back');

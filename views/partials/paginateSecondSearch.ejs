@@ -84,7 +84,7 @@
                 <% break;
             default:
                 if (currentPage > 5) { %>
-                    <button class="button page">...</button>
+                    <button class="button page paginationBtn">...</button>
                 <% }
                 for (let i = currentPage - 3; i < currentPage; i += 1) { %>
                     <form action="/secondCategSearch" method="GET">
@@ -135,7 +135,7 @@
                 nr += 1;
         } 
         if (page + 1 < totalPages) { %>
-            <button class="button page">...</button>
+            <button class="button page paginationBtn">...</button>
         <% }
     %>
     <% if (total > 10) { %>

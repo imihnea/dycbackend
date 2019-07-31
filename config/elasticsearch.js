@@ -92,33 +92,38 @@ const startElastic = () => {
                             if (err) {
                                 errorLogger.error(`Elasticsearch Mongoose Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
+                                let bulk = [];
                                 res.forEach(product => {
-                                    client.index({
+                                    let action = { index: { _id: `${product._id}`, _index: 'products', _type: 'products' }};
+                                    bulk.push(action, {
+                                        id: product._id,
+                                        feat_1: product.feat_1,
+                                        image: product.images.sec[0].url,
+                                        name: product.name,
+                                        author: product.author,
+                                        avgRating: product.avgRating,
+                                        usdPrice: product.usdPrice,
+                                        condition: product.condition,
+                                        category0: product.category[0],
+                                        category1: product.category[1],
+                                        category2: product.category[2],
+                                        category3: product.category[3],
+                                        createdAt: product.createdAt,
+                                        searchableTags: product.searchableTags
+                                    });
+                                });
+                                if (res.length > 0) {
+                                    client.bulk({
+                                        maxRetries: 5,
                                         index: 'products',
                                         type: 'products',
-                                        id: `${product._id}`,
-                                        body: {
-                                            id: product._id,
-                                            feat_1: product.feat_1,
-                                            image: product.images.sec[0].url,
-                                            name: product.name,
-                                            author: product.author,
-                                            avgRating: product.avgRating,
-                                            usdPrice: product.usdPrice,
-                                            condition: product.condition,
-                                            category0: product.category[0],
-                                            category1: product.category[1],
-                                            category2: product.category[2],
-                                            category3: product.category[3],
-                                            createdAt: product.createdAt,
-                                            searchableTags: product.searchableTags
-                                        }
-                                    }, function(err, resp, status) {
+                                        body: bulk
+                                    }, (err) => {
                                         if (err) {
                                             errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                         }
                                     });
-                                });
+                                }
                                 logger.info(`Message: Product indexing process complete\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}`);
                             }
                         });
@@ -190,33 +195,38 @@ const startElastic = () => {
                         if (err) {
                             errorLogger.error(`Elasticsearch Mongoose Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                         } else {
+                            let bulk = [];
                             res.forEach(product => {
-                                client.index({
+                                let action = { index: { _id: `${product._id}`, _index: 'products', _type: 'products' }};
+                                bulk.push(action, {
+                                    id: product._id,
+                                    feat_1: product.feat_1,
+                                    image: product.images.sec[0].url,
+                                    name: product.name,
+                                    author: product.author,
+                                    avgRating: product.avgRating,
+                                    usdPrice: product.usdPrice,
+                                    condition: product.condition,
+                                    category0: product.category[0],
+                                    category1: product.category[1],
+                                    category2: product.category[2],
+                                    category3: product.category[3],
+                                    createdAt: product.createdAt,
+                                    searchableTags: product.searchableTags
+                                });
+                            });
+                            if (res.length > 0) {
+                                client.bulk({
+                                    maxRetries: 5,
                                     index: 'products',
                                     type: 'products',
-                                    id: `${product._id}`,
-                                    body: {
-                                        id: product._id,
-                                        feat_1: product.feat_1,
-                                        image: product.images.sec[0].url,
-                                        name: product.name,
-                                        author: product.author,
-                                        avgRating: product.avgRating,
-                                        usdPrice: product.usdPrice,
-                                        condition: product.condition,
-                                        category0: product.category[0],
-                                        category1: product.category[1],
-                                        category2: product.category[2],
-                                        category3: product.category[3],
-                                        createdAt: product.createdAt,
-                                        searchableTags: product.searchableTags
-                                    }
-                                }, function(err, resp, status) {
+                                    body: bulk
+                                }, (err) => {
                                     if (err) {
                                         errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                                     }
                                 });
-                            });
+                            }
                             logger.info(`Message: Product indexing process complete\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}`);
                         }
                     });
@@ -256,4 +266,37 @@ const deleteProduct = (id) => {
     });
 };
 
-module.exports = { client, updateRating, deleteProduct, startElastic };
+const batchIndex = (products) => {
+    let bulk = [];
+    products.forEach(product => {
+        let action = { index: { _id: `${product._id}`, _index: 'products', _type: 'products' }};
+        bulk.push(action, {
+            id: product._id,
+            feat_1: product.feat_1,
+            image: product.images.sec[0].url,
+            name: product.name,
+            author: product.author,
+            avgRating: product.avgRating,
+            usdPrice: product.usdPrice,
+            condition: product.condition,
+            category0: product.category[0],
+            category1: product.category[1],
+            category2: product.category[2],
+            category3: product.category[3],
+            createdAt: product.createdAt,
+            searchableTags: product.searchableTags
+        });
+    });
+    client.bulk({
+        maxRetries: 5,
+        index: 'products',
+        type: 'products',
+        body: bulk
+    }, (err) => {
+        if (err) {
+            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+    });
+}
+
+module.exports = { client, updateRating, deleteProduct, startElastic, batchIndex };
