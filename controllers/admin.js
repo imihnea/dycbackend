@@ -8,6 +8,7 @@ const Report = require('../models/report');
 const Deal = require('../models/deal');
 const Dispute = require('../models/dispute');
 const Blogpost = require('../models/blogpost');
+const Supplier = require('../models/supplier');
 
 const fs = require('fs');
 const csv = require('fast-csv');
@@ -18,7 +19,7 @@ const path = require('path');
 const { errorLogger, userLogger, logger } = require('../config/winston');
 const moment = require('moment');
 const middleware = require('../middleware/index');
-const { client:elasticClient, batchIndex } = require('../config/elasticsearch');
+const { client:elasticClient, batchIndex, batchDelete } = require('../config/elasticsearch');
 const cloudinary = require('cloudinary');
 
 cloudinary.config({
@@ -775,9 +776,11 @@ module.exports = {
         req.flash('success', 'Blogpost edited successfully');
         return res.redirect('/admin/blog');
     },
-    getBulkAdd(req, res) {
+    async getBulkAdd(req, res) {
+        const suppliers = await Supplier.find({}).select('name -_id');
         res.render('admin/adminBulkAdd', {
             user: req.user,
+            suppliers,
             errors: req.session.errors,
             pageTitle: 'Bulk add products - Deal Your Crypto',
             pageDescription: 'Add products in bulk - Deal Your Crypto',
@@ -835,9 +838,30 @@ module.exports = {
             .on('end', () => {
                 setTimeout(() => {
                     batchIndex(products);
+                    Supplier.create({
+                        name: req.body.supplier,
+                        products: products.length
+                    });
                 }, 30000);
             });
         req.flash('success', 'The products have been added');
+        return res.redirect('back');
+    },
+    async postBulkDelete(req, res) {
+        const products = await Product.find({supplier: req.body.supplier});
+        batchDelete(products);
+        Product.deleteMany({supplier: req.body.supplier}, err => {
+            if (err) {
+                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete ${req.body.supplier} products\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+            } else {
+                Supplier.deleteOne({name: req.body.supplier}, err => {
+                    if (err) {
+                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't create ${req.body.supplier} supplier\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
+                    }
+                });
+            }
+        });
+        req.flash('success', 'The products have been removed');
         return res.redirect('back');
     }
 

@@ -31,7 +31,7 @@ module.exports = {
         const products = await Product.find({_id: {$in: req.session.cart}});
         let activeDeals = [];
         if (req.user) {
-            activeDeals = await Deal.find({'buyer.id': req.user._id, 'product.id': {$in: req.session.cart}});
+            activeDeals = await Deal.find({'buyer.id': req.user._id, 'product.id': {$in: req.session.cart}, status: {$nin: ['Completed', 'Declined', 'Cancelled']}});
         }
         let shipping = false;
         products.forEach((product, index) => {
@@ -186,7 +186,7 @@ module.exports = {
                 products.forEach(asyncErrorHandler( async (product, i) => {
                     if (product.available == 'True') {
                         let deal = {};
-                        if (k == 0) {
+                        if (product.dropshipped) {
                             if (req.body.deliveryState == undefined) {
                                 req.body.deliveryState = '';
                             }
@@ -198,7 +198,8 @@ module.exports = {
                                     author: product.author,
                                     price: product.usdPrice,
                                     btcPrice: (product.usdPrice * req.oneDollar).toFixed(8),
-                                    qty: Number(req.body.qty[i])
+                                    qty: Number(req.body.qty[i]),
+                                    dropshipped: true
                                 },
                                 buyer: {
                                     id: user._id,
@@ -226,7 +227,7 @@ module.exports = {
                                     price: product.usdPrice,
                                     qty: Number(req.body.qty[i]),
                                     btcPrice: (product.usdPrice * req.oneDollar).toFixed(8),
-                                    dropshipped: product.dropshipped
+                                    dropshipped: false
                                 },
                                 buyer: {
                                     id: user._id,

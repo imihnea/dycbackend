@@ -30,7 +30,8 @@ const {
     updateBlog,
     deleteBlog,
     getBulkAdd,
-    postBulkAdd
+    postBulkAdd,
+    postBulkDelete
   } = require('../controllers/admin');
 
 const middleware = require('../middleware/index');
@@ -131,7 +132,10 @@ router.put('/blog/:id/edit', asyncErrorHandler(isAdmin), upload.array('images', 
 router.delete('/blog/:id/delete', asyncErrorHandler(isAdmin), asyncErrorHandler(deleteBlog));
 
 // add products in bulk
-router.get('/bulkAdd', asyncErrorHandler(isAdmin), getBulkAdd);
+router.get('/bulk', asyncErrorHandler(isAdmin), asyncErrorHandler(getBulkAdd));
 router.post('/bulkAdd', asyncErrorHandler(isAdmin), upload.single('productData'), asyncErrorHandler(postBulkAdd));
+
+// remove products in bulk
+router.post('/bulkDelete',asyncErrorHandler(isAdmin), asyncErrorHandler(postBulkDelete));
 
 module.exports = router;

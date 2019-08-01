@@ -299,4 +299,22 @@ const batchIndex = (products) => {
     });
 }
 
-module.exports = { client, updateRating, deleteProduct, startElastic, batchIndex };
+const batchDelete = products => {
+    let bulk = [];
+    products.forEach(product => {
+        let action = { delete: { _id: `${product._id}`, _index: 'products', _type: 'products' }};
+        bulk.push(action);
+    });
+    client.bulk({
+        maxRetries: 5,
+        index: 'products',
+        type: 'products',
+        body: bulk
+    }, (err) => {
+        if (err) {
+            errorLogger.error(`Elasticsearch Error\r\nStatus: ${err.status || 500}\r\nMessage: ${err.message}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+        }
+    });
+}
+
+module.exports = { client, updateRating, deleteProduct, startElastic, batchIndex, batchDelete };

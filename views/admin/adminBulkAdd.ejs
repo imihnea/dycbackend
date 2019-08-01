@@ -5,13 +5,14 @@
 
 <div class="hero-body">
     <div class="column dashTop">
-        <h2 class="title dashTitle" style="color: white !important;">Bulk add products</h2>
+        <h2 class="title dashTitle" style="color: white !important;">Bulk products</h2>
     </div>
     <br>
     <% include ../partials/adminMenu %>
     <div class="columns">
         <div class="column"></div>
         <div class="column frame is-three-fifths">
+            <p class="title">Bulk add products</p>
             <form action="/admin/bulkAdd" method="post" enctype="multipart/form-data">
                 <div class="field">
                     <input type="file" class="input" name="productData">
@@ -45,6 +46,21 @@
                             <option value="South America">South America</option>
                             <option value="Oceania">Oceania</option>
                             <option value="Worldwide">Worldwide</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="button is-primary">Submit</button>
+            </form>
+            <br>
+            <p class="title">Bulk remove products</p>
+            <form action="/admin/bulkDelete" method="post">
+                <div class="field">
+                    <div class="select">
+                        <select name="supplier" style="width: 100%;" required>
+                            <option disabled selected>Supplier</option>
+                            <% suppliers.forEach(supplier => { %>
+                                <option value="<%= supplier.name %>"><%= supplier.name %></option>
+                            <% }); %>
                         </select>
                     </div>
                 </div>

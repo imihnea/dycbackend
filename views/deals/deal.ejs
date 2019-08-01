@@ -28,6 +28,13 @@
                                 <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
                                 <button class="button is-danger report">Report</button>
                             </div>
+                            <% if (deal.product.dropshipped) { %>
+                                <p class="title is-5 messageProfileText">Country: <%= deal.buyer.delivery.country %></p>
+                                <p class="title is-5 messageProfileText">State: <%= deal.buyer.delivery.state %></p>
+                                <p class="title is-5 messageProfileText">City: <%= deal.buyer.delivery.city %></p>
+                                <p class="title is-5 messageProfileText">Street: <%= deal.buyer.delivery.street1 %></p>
+                                <p class="title is-5 messageProfileText">Zip: <%= deal.buyer.delivery.zip %></p>
+                            <% } %>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
@@ -189,6 +196,7 @@
                                 <div class="prices openPrices frame" style="width: 80% !important; padding-bottom: 10px !important;">
                                     <p class="price_text" style="margin: auto;">Quantity: <%= deal.product.qty %></p>
                                 </div>
+                                <br>
                             <% } %>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
