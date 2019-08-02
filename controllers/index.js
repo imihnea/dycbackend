@@ -509,7 +509,7 @@ module.exports = {
             passport.authenticate('local',
             {
               successFlash: 'Welcome to Deal Your Crypto!',
-              successRedirect: '/dashboard',
+              successRedirect: '/',
               failureRedirect: '/login',
               failureFlash: true,
             })(req, res, next);
