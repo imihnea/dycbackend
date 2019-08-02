@@ -56,6 +56,7 @@ module.exports = {
                 oneDollar: req.oneDollar,
                 shipping,
                 errors: false,
+                csrfToken: req.body.csrfSecret,
                 pageTitle: 'Cart - Deal Your Crypto',
                 pageDescription: 'Cart Page on Deal Your Crypto',
                 pageKeywords: 'cart, page, deal, crypto, deal your crypto'
@@ -67,6 +68,7 @@ module.exports = {
                 oneDollar: req.oneDollar,
                 shipping: false,
                 errors: false,
+                csrfToken: req.body.csrfSecret,
                 pageTitle: 'Cart - Deal Your Crypto',
                 pageDescription: 'Cart Page on Deal Your Crypto',
                 pageKeywords: 'cart, page, deal, crypto, deal your crypto'

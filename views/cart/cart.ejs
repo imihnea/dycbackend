@@ -32,6 +32,7 @@
                     <div class="frame">
                         <p class="subtitle">Shipping address</p>
                         <form action="/cart/checkout" method="post" id="payForm">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="smallerCenter">
                                 <div class="field">
                                     <label class="label" for="deliveryName" style="text-align: left !important;">Full Name</label>
@@ -220,6 +221,7 @@
                                             <% products.forEach((product, i) => { %>
                                                 <input type="number" name="qty[<%= i %>]" id="qty<%= i %>" value="1" hidden>
                                             <% }); %>
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                             <button class="button is-primary is-medium">Pay now</button>
                                         </form>    
                                     <% } %>
