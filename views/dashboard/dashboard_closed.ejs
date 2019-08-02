@@ -25,7 +25,7 @@
                                 <div class="product-picture-wrapper" >
                                     <% if (product.feat_1.status === true) { %><span class="featured"></span><% } %>
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img data-src="<%= product.images.sec[0].url %>" class="productImage" alt="<%= product.name %> Image">
+                                        <img src="<%= product.images.sec[0].url %>" class="productImage" alt="<%= product.name %> Image">
                                     </figure>                                  
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="column prod_info productPrice">
                                     <div class="prices openPrices frame" style="width: 100%;">
-                                        <p class="price_text" style="padding-left: 2vw;"><%= product.usdPrice %></p>
+                                        <p class="price_text" style="padding-left: 2vw;">$<%= product.usdPrice %> USD</p>
                                         <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                     </div>
                                 </div>

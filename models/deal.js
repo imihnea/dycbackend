@@ -18,6 +18,9 @@ const DealSchema = new Schema({
             name: String
         },
         price: Number,
+        btcPrice: Number,
+        qty: Number,
+        dropshipped: Boolean,
     },
     buyer: { 
         id: Schema.Types.ObjectId, 

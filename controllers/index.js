@@ -371,13 +371,7 @@ module.exports = {
   // },
   getLogin(req, res) {
     if ( req.user ) {
-      res.render('index/login', { 
-        user: req.user, 
-        errors: false,
-        pageTitle: 'Login - Deal Your Crypto',
-        pageDescription: 'Login on Deal Your Crypto and start buying and selling products!',
-        pageKeywords: 'login account, login, log in, deal your crypto, dealyourcrypto, crypto deal, deal crypto'
-      });
+      return res.redirect('/');
     } else {
       res.render('index/login', { 
         errors: false,

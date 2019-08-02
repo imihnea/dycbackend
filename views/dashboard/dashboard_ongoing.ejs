@@ -21,27 +21,27 @@
                         <main class="productWrapper" id="hits">
                         <% deals.docs.forEach((deal) => { %>
                             <article class="hit columns frame">
-                                    <div class="product-picture-wrapper" >
-                                        <figure class="image is-128x128" style="margin:auto;">
-                                            <img data-src="<%= deal.product.imageUrl %>" class="productImage" alt="<%= deal.product.name %> Image">
-                                        </figure>
+                                <div class="product-picture-wrapper" >
+                                    <figure class="image is-128x128" style="margin:auto;">
+                                        <img src="<%= deal.product.imageUrl %>" class="productImage" alt="<%= deal.product.name %> Image">
+                                    </figure>
+                                </div>
+                                <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
+                                    <div class="product-name">
+                                        <p class="title is-6"><%= deal.product.name %></p>
+                                        <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub <% if (deal.status == 'Processing') { %>style="color: red;" <% } %>>Status: <%= deal.status %></sub></p>
+                                        <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
+                                            <button class="button view-btn is-primary">View Deal</button>
+                                        </form>
                                     </div>
-                                    <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
-                                        <div class="product-name">
-                                            <p class="title is-6"><%= deal.product.name %></p>
-                                            <p class="subtitle is-6" style="margin-bottom: 1vh;"><sub <% if (deal.status == 'Processing') { %>style="color: red;" <% } %>>Status: <%= deal.status %></sub></p>
-                                            <form action="/messages/<%= deal.chat %>/<%= deal._id %>?_method=PUT" method="POST">
-                                                <button class="button view-btn is-primary">View Deal</button>
-                                            </form>
-                                        </div>
+                                </div>
+                                <div class="column prod_info productPrice">
+                                    <div class="prices openPrices frame" style="width: 100%;">
+                                        <p class="price_text" style="padding-left: 2vw;"><%= deal.price %></p>
+                                        <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
                                     </div>
-                                    <div class="column prod_info productPrice">
-                                        <div class="prices openPrices frame" style="width: 100%;">
-                                            <p class="price_text" style="padding-left: 2vw;"><%= deal.price %></p>
-                                            <span class="price_img"><i class="fab fa-bitcoin fa-lg currencyIcon" style="color: orange;"></i></span>
-                                        </div>
-                                    </div>
-                                </article>                                          
+                                </div>
+                            </article>
                         <% }); %>         
                     </main>
                     <div class="pagination paginationD">

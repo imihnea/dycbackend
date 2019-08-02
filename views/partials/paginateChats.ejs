@@ -2,11 +2,31 @@
     <% if(chats.page - 1) { %>
         <a class="button page" href="?page=<%= chats.page - 1 %>">Prev</a>
     <% } %>
-    <% for(let i = 1; i <= chats.pages; i++) { %>
-        <a class="button page %>" href="?page=<%= i %>"
-                <%= i === chats.page ? 'style=color:#000;' : '' %>
-            ><%= i %></a>
+    <% if (chats.page > 4) { %>
+        <button class="button page">...</button>
     <% } %>
+        <% 
+            let k = 0;
+            if (chats.pages > 10) { 
+                k = chats.page + 3;
+                while (k > chats.pages) {
+                    k -= 1;
+                }
+            } else { 
+                k = chats.pages; 
+            } 
+        %>
+        <% for(let i = chats.page - 3; i <= k; i++) { %>
+            <% if (i > 0) { %>
+                <a class="button page" href="?page=<%= i %>"
+                        <%= i === chats.page ? 'style=color:#000;' : '' %>
+                    ><%= i %></a>
+            <% } %>
+        <% } %>
+        <% if ((chats.pages > chats.page) && (k < chats.pages)) { %>
+            <button class="button page">...</button>
+        <% } %>
+   
     <% if((chats.page + 1) <= chats.pages) { %>
         <a class="button page" href="?page=<%= chats.page + 1 %>">Next</a>
     <% } %>

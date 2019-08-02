@@ -28,6 +28,13 @@
                                 <a href="/profile/<%= buyer.id %>" class="button is-primary">View Profile</a>
                                 <button class="button is-danger report">Report</button>
                             </div>
+                            <% if (deal.product.dropshipped) { %>
+                                <p class="title is-5 messageProfileText">Country: <%= deal.buyer.delivery.country %></p>
+                                <p class="title is-5 messageProfileText">State: <%= deal.buyer.delivery.state %></p>
+                                <p class="title is-5 messageProfileText">City: <%= deal.buyer.delivery.city %></p>
+                                <p class="title is-5 messageProfileText">Street: <%= deal.buyer.delivery.street1 %></p>
+                                <p class="title is-5 messageProfileText">Zip: <%= deal.buyer.delivery.zip %></p>
+                            <% } %>
                             <div class="modal modalReport">
                                 <div class="modal-background"></div>
                                 <div class="modal-card">
@@ -182,9 +189,15 @@
                         <div class=" prod_info ">
                             <p class="title is-5 messageProfileText smallerCenter"><%= deal.product.name %></p>
                             <div class="prices openPrices frame" style="width: 80% !important;">
-                                <p class="price_text" style="padding-left: 10px;"> <%= deal.price %></p>
+                                <p class="price_text" style="padding-left: 10px;"><%= deal.price %> BTC</p>
                                 <span class="price_img"><img src="/dist/img/bitcoin.png" alt="Bitcoin"></span>
                             </div>
+                            <% if (deal.product.qty) { %>
+                                <div class="prices openPrices frame" style="width: 80% !important; padding-bottom: 10px !important;">
+                                    <p class="price_text" style="margin: auto;">Quantity: <%= deal.product.qty %></p>
+                                </div>
+                                <br>
+                            <% } %>
                             <p class="title is-5 messageProfileText" style="margin-top: 1vh;">Status: <span id="status"><%= deal.status %></span></p>
                             <% if ((deal.status === 'Processing') && (user._id.toString() === seller._id.toString())) { %>
                                 <form action="/deals/<%= deal._id %>/accept?_method=PUT" id="acceptDeal" method="POST"></form>
@@ -310,7 +323,7 @@
                                         </div>
                                     </div>  
                                 <% } %>
-                                <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a>
+                                <!-- <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a> -->
                                 <% if ((deal.proof.image == 'Unset') && (deal.proof.text == 'Unset')) { %>
                                     <p class="smallerCenter">You haven't uploaded proof of delivery yet.</p>
                                     <br>
@@ -336,6 +349,7 @@
         <% } %>
     </div>
 </div>
+<br>
 
 <script src="/dist/js/deal.js"></script>
 <script src="/dist/js/dashboard.js"></script>

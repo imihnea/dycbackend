@@ -1,0 +1,149 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/bulma-steps.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/dist/css/jodit.min.css">
+
+<div class="hero-body">
+    <div class="column dashTop">
+        <h2 class="title dashTitle" style="color: white !important;">Create a blogpost</h2>
+    </div>
+    <br>
+    <% include ../partials/adminMenu %>
+    <div class="columns">
+        <div class="column"></div>
+        <div class="column frame is-three-fifths">
+            <form action="/admin/blog/<%= blogpost._id %>/edit?_method=PUT" method="post" enctype="multipart/form-data">
+                <div class="field smallerCenter">
+                    <input type="text" name="title" class="input" placeholder="Title" value="<%= blogpost.title %>">
+                </div>
+                <div class="field smallerCenter">
+                    <input type="text" name="subtitle" class="input" placeholder="Subtitle" value="<%= blogpost.subtitle %>">
+                </div>
+                <div class="inputWrapper">
+                    <input type="text" id="tagInput" class="input" placeholder="Tags">
+                    <p class="button is-primary" id="addTag" style="margin-left: 1vw;">Add tag</p>
+                </div>
+                <input type="text" name="tags" id="tags" value="<% blogpost.tags.forEach(tag => { %><%= tag %> <%});%>" hidden>
+                <div class="tags tagsWrapper" id="tagsControl">
+                    <% blogpost.tags.forEach(tag => { %>
+                        <span class="tag is-link is-medium">
+                            <%= tag %>
+                            <button type="button" class="delete deleteTag is-small"></button>
+                        </span>
+                    <% }); %>
+                </div>
+                <div class="field">
+                    <textarea id="editor" name="editor"><%= blogpost.content %></textarea>
+                </div>
+                <div class="frame smallerCenter">
+                    <input type="text" id="deleteImages" name="deleteImages" hidden>
+                    <input type="number" id="uploadImages" name="uploadImages" value="0" hidden>
+                    <h4 class="new-text" style="margin-bottom: 3vh;">Images</h4>
+                    <div class="file-upload">
+                        <div class="mobileUpload">
+                            <label for="upload[0]" class="<% if (blogpost.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <span style="font-size: 5rem;">
+                                    <i class="far fa-plus-square square <% if (blogpost.images[0]) { %> hide <% } %>"></i>
+                                    <figure class="image previewImage <% if (!blogpost.images[0]) { %> hide <% } %> is-128x128">
+                                        <img id="Preview0" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 0">
+                                    </figure>
+                                </span>
+                            </label>
+                            <input id="upload[0]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 0);"
+                                <% if (blogpost.images[0]) { %> value="<%= blogpost.images[0].url %>" <% } %>>
+                            <label class="file-delete__label <% if (!blogpost.images[0]) { %> hide <% } %>">
+                                <span>
+                                    <i class="far fa-trash-alt fa-2x"></i>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="mobileUpload">
+                            <label for="upload[1]" class="<% if (blogpost.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <span style="font-size: 5rem;">
+                                    <i class="far fa-plus-square square <% if (blogpost.images[1]) { %> hide <% } %>"></i>
+                                    <figure class="image previewImage <% if (!blogpost.images[1]) { %> hide <% } %> is-128x128">
+                                        <img id="Preview1" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 1">
+                                    </figure>
+                                </span>
+                            </label>
+                            <input id="upload[1]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 1);"
+                                <% if (blogpost.images[0]) { %> value="<%= blogpost.images[1].url %>" <% } %>>
+                            <label class="file-delete__label <% if (!blogpost.images[1]) { %> hide <% } %>">
+                                <span>
+                                    <i class="far fa-trash-alt fa-2x"></i>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="mobileUpload">
+                            <label for="upload[2]" class="<% if (blogpost.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <span style="font-size: 5rem;">
+                                    <i class="far fa-plus-square square <% if (blogpost.images[2]) { %> hide <% } %>"></i>
+                                    <figure class="image previewImage <% if (!blogpost.images[2]) { %> hide <% } %> is-128x128">
+                                        <img id="Preview2" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 2">
+                                    </figure>
+                                </span>
+                            </label>
+                            <input id="upload[2]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 2);"
+                                <% if (blogpost.images[2]) { %> value="<%= blogpost.images[2].url %>" <% } %>>
+                            <label class="file-delete__label <% if (!blogpost.images[2]) { %> hide <% } %>">
+                                <span>
+                                    <i class="far fa-trash-alt fa-2x"></i>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="mobileUpload">
+                            <label for="upload[3]" class="<% if (blogpost.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <span style="font-size: 5rem;">
+                                    <i class="far fa-plus-square square <% if (blogpost.images[3]) { %> hide <% } %>"></i>
+                                    <figure class="image previewImage <% if (!blogpost.images[3]) { %> hide <% } %> is-128x128">
+                                        <img id="Preview3" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 3">
+                                    </figure>
+                                </span>
+                            </label>
+                            <input id="upload[3]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 3);"
+                                <% if (blogpost.images[3]) { %> value="<%= blogpost.images[3].url %>" <% } %>>
+                            <label class="file-delete__label <% if (!blogpost.images[3]) { %> hide <% } %>">
+                                <span>
+                                    <i class="far fa-trash-alt fa-2x"></i>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="mobileUpload">
+                            <label for="upload[4]" class="<% if (blogpost.images[0]) { %> file-upload__label-green <% } else { %> file-upload__label <% } %> label">
+                                <span style="font-size: 5rem;">
+                                    <i class="far fa-plus-square square <% if (blogpost.images[4]) { %> hide <% } %>"></i>
+                                    <figure class="image previewImage <% if (!blogpost.images[4]) { %> hide <% } %> is-128x128">
+                                        <img id="Preview4" src="https://bulma.io/images/placeholders/128x128.png" alt="Picture 4">
+                                    </figure>
+                                </span>
+                            </label>
+                            <input id="upload[4]" class="file-upload__input" accept="image/*" type="file" name="images" onchange="PicturePreview(this, 4);"
+                                <% if (blogpost.images[4]) { %> value="<%= blogpost.images[4].url %>" <% } %>>
+                            <label class="file-delete__label <% if (!blogpost.images[4]) { %> hide <% } %>">
+                                <span>
+                                    <i class="far fa-trash-alt fa-2x"></i>
+                                </span>
+                            </label>
+                        </div>
+                    </div>                                     
+                </div>
+                <br>
+                <button class="button is-primary">Submit</button>
+            </form>
+        </div>
+        <div class="column"></div>
+    </div>
+</div>
+
+<script src="/dist/js/jquery-3.4.1.slim.min.js"></script>
+<script src="/dist/js/adminBlogNew.js"></script>
+<script src="/dist/js/jodit.min.js"></script>
+<input id="content" value="<%= blogpost.content %>" hidden>
+<script>
+    var editor = new Jodit('#editor');
+    editor.value = document.getElementById('content').value;
+</script>
+<span id="currentImages" hidden>
+    <%= JSON.stringify(blogpost.images) %>
+</span>
+<% include ../partials/footer %>

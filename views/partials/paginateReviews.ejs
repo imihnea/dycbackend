@@ -2,11 +2,31 @@
     <% if(reviews.page - 1) { %>
         <a class="button page" href="?page=<%= reviews.page - 1 %>">Prev</a>
     <% } %>
-    <% for(let i = 1; i <= reviews.pages; i++) { %>
-        <a class="button page %>" href="?page=<%= i %>"
-                <%= i === reviews.page ? 'style=color:#000;' : '' %>
-            ><%= i %></a>
+    <% if (reviews.page > 4) { %>
+        <button class="button page">...</button>
     <% } %>
+        <% 
+            let k = 0;
+            if (reviews.pages > 10) { 
+                k = reviews.page + 3;
+                while (k > reviews.pages) {
+                    k -= 1;
+                }
+            } else { 
+                k = reviews.pages; 
+            } 
+        %>
+        <% for(let i = reviews.page - 3; i <= k; i++) { %>
+            <% if (i > 0) { %>
+                <a class="button page" href="?page=<%= i %>"
+                        <%= i === reviews.page ? 'style=color:#000;' : '' %>
+                    ><%= i %></a>
+            <% } %>
+        <% } %>
+        <% if ((reviews.pages > reviews.page) && (k < reviews.pages)) { %>
+            <button class="button page">...</button>
+        <% } %>
+   
     <% if((reviews.page + 1) <= reviews.pages) { %>
         <a class="button page" href="?page=<%= reviews.page + 1 %>">Next</a>
     <% } %>

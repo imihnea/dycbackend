@@ -1,6 +1,5 @@
 <% include ../partials/header %>
 <link rel="stylesheet" type="text/css" media="screen" href="/dist/css/dashboard.css" />
-<link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
 <link rel="stylesheet" href="/dist/css/search.css">
 <link rel="stylesheet" href="/dist/css/tooltips.css">
 <div class="columns wrapper">
@@ -110,7 +109,7 @@
                                 </div>
                                 <div class="column prod_info productPrice">
                                     <div class="prices openPrices frame" style="width: 100%;">
-                                        <p class="price_text" style="padding-left: 2vw;"><%= product.usdPrice %></p>
+                                        <p class="price_text" style="padding-left: 2vw;">$<%= product.usdPrice %> USD</p>
                                         <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                                     </div>
                                 </div>

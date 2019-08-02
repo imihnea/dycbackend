@@ -151,7 +151,7 @@
                         <label class="img-check ">
                             <div class="prices frame openPrices">
                                 <p class="price_text">
-                                    <%= product.usdPrice %>
+                                    $<%= product.usdPrice %> USD
                                 </p>
                                 <span class="price_img"><i class="fas fa-dollar-sign fa-lg currencyIcon" style="color: green;"></i></span>
                             </div>
@@ -159,31 +159,44 @@
                     </div>
                     <br>   
                 </form>
-                <% if (!user) { %> 
-                    <a href="/login" class="button is-primary is-rounded">Login to buy</a>
+
+                <% if (!user) { %>
+                    <form action="/cart/add/<%= product._id %>" method="post">
+                        <button class="button is-primary is-large">
+                            <span class="icon is-medium">
+                                <i class="fas fa-cart-plus has-text-light"></i>
+                            </span>
+                            <span class="has-text-white">Add to cart</span>
+                        </button>
+                    </form>
                     <% } else if (user.username === product.author.username) { %>
                         <a href="/dashboard/<%= product._id %>/edit" class="button is-primary is-rounded">Update</a>
-                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
                     <% } else if (dealExists) { %>
                         <form action="/messages/<%= dealExists[1] %>/<%= dealExists[0] %>?_method=PUT" method="POST">
                             <button class="button view-btn is-primary">View Deal</button>
                         </form>
-                    <% } else if (user.btcbalance >= Number((product.usdPrice * oneDollar).toFixed(8))) { %>
+                    <% } else if (user.btcbalance >= (product.usdPrice * oneDollar).toFixed(8)) { %>
                         <div class="productBuyForm">
-                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>
+                            <button class="button is-primary" form="buyForm" id="buyBtn">Buy</button>                
+                            <form action="/cart/add/<%= product._id %>" method="post">
+                                <button class="button is-primary">Add to cart</button>
+                            </form>
+                        </div>
+                        <br>
+                        <form action="/messages/<%= product._id %>/createChat" method="POST">
+                            <button class="productContactLink button is-primary">Contact Seller</button>
+                        </form>
+                    <% } else { %>
+                        <p class="subtitle is-6">You don't have enough balance.</p>
+                        <div class="productBuyForm">
+                            <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
+                            <form action="/cart/add/<%= product._id %>" method="post">
+                                <button class="button is-primary">Add to cart</button>
+                            </form>
                             <form action="/messages/<%= product._id %>/createChat" method="POST">
                                 <button class="productContactLink button is-primary">Contact Seller</button>
                             </form>
                         </div>
-                    <% } else { %>
-                        <p class="subtitle is-6">You don't have enough balance.</p>
-                        <div class="productBuyForm">
-                        <button class="button is-primary hidden" form="buyForm" id="buyBtn" disabled>Buy</button>
-                        <a href="/dashboard/addresses" class="button is-primary">Add Balance</a>
-                        <form action="/messages/<%= product._id %>/createChat" method="POST">
-                            <button class="productContactLink button is-primary">Contact Seller</button>
-                        </form>
-                    </div>
                     <% } %>
                     <hr>
                     <h1 class="subtitle">Share</h1>
@@ -262,6 +275,9 @@
                 <thead>
                     <td><p class="productDescriptionText" style="font-weight: 600;">Additional Information</p></td>
                     <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                    <% if (product.dropshipped) { %>
+                        <td><p class="productDescriptionText" style="font-weight: 600;"></p></td>
+                    <% } %>
                 </thead>
                 <tbody>
                     <tr>
@@ -270,8 +286,14 @@
                     </tr>
                     <tr>
                         <td>Continent of origin</td>
-                        <td><%= product.author.continent %></td>
+                        <td><% if (product.dropshipped) { %><%= product.from %><% } else { %><%= product.author.continent %><% } %></td>
                     </tr>
+                    <% if (product.dropshipped) { %>
+                        <tr>
+                            <td>Delivery</td>
+                            <td><%= product.deliversTo %></td>
+                        </tr>    
+                    <% } %>
                 </tbody>
             </table>
         </div> 

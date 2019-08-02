@@ -165,7 +165,6 @@ module.exports = {
                     }
                     Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
-                            console.log(err);
                             if (req.user) {
                               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
                             } else {
@@ -426,6 +425,20 @@ module.exports = {
             req.check('deliveryName', 'The name must not contain any special characters besides the hyphen (-)').matches(/^[a-z -]+$/gi).trim();
             req.check('deliveryEmail', 'Please specify a valid email address').isEmail().normalizeEmail().isLength({ max: 500 })
                 .trim();
+            if (product.dropshipped) {
+                req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryCity', 'The city name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                if(req.body.deliveryState) {
+                    req.check('deliveryState', 'The state name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                        .trim();
+                }
+                req.check('deliveryCountry', 'The country name must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+                req.check('deliveryZip', 'The zip code must not contain special characters besides the dot, hyphen and comma').notEmpty().matches(/^[a-z0-9 .\-,]+$/gi).isLength({ max: 500 })
+                    .trim();
+            }
             // if (req.body.deliveryShipping == 'Shipping') {
             //     req.check('deliveryStreet1', 'Please input a valid address').notEmpty().matches(/^[a-z0-9., -]+$/gi).isLength({ max: 500 })
             //         .trim();
@@ -478,10 +491,10 @@ module.exports = {
                     req.flash('error', 'You cannot purchase your own product.');
                     return res.redirect('back');
                 } else {
-                    let totalPrice = product.btcPrice;
+                    let totalPrice = (product.usdPrice * req.oneDollar).toFixed(8);
                     let shippingPrice = 0;
-                    let productPrice = product.btcPrice;
-                    if ( user.btcbalance >= totalPrice)  {
+                    let productPrice = (product.usdPrice * req.oneDollar).toFixed(8);
+                    if ( user.btcbalance >= Number(totalPrice))  {
                         // if (req.body.deliveryShipping === 'Shipping') {
                         //     client.getExchangeRates({'currency': 'BTC'}, asyncErrorHandler(async (error, data) => {
                         //         if (!error) {
@@ -607,69 +620,69 @@ module.exports = {
                                         },
                                         price: (product.usdPrice / btcrate).toFixed(8),
                                     };
-                                                                // Create deal
-                            deal = await Deal.create(deal); 
-                            // Update product and user
-                            user.btcbalance -= deal.price;
-                            // The product will remain available if it's repeatable
-                            if ( !product.repeatable ) {
-                                product.available = "Closed";
-                                elasticClient.delete({
-                                    index: 'products',
-                                    type: 'products',
-                                    id: `${product._id}`
-                                  }, (err) => {
-                                    if (err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
-                                      }
-                                });
-                            }
-                            if (product.nrBought) {
-                                product.nrBought += 1;
-                            } else {
-                                product.nrBought = 1;
-                            }
-                            product.markModified('buyers');
-                            await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
-                            await product.save();
-                            await user.save();
-                            await Notification.create({
-                                userid: product.author.id,
-                                linkTo: `/deals/${deal._id}`,
-                                imgLink: product.images.sec[0].url,
-                                message: `You have received a deal request`
-                            });
-                            // Send an email to the seller letting them know about the deal request
-                            const user2 = await User.findById(product.author.id);
-                            if(user2.email_notifications.deal === true) {
-                                ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
-                                    link: `https://${req.headers.host}/deals/${deal._id}`,
-                                    footerlink: `https://${req.headers.host}/dashboard/notifications`,
-                                    name: product.name,
-                                    buyer: req.user.full_name,
-                                    subject: `New buy request - Deal Your Crypto`,
-                                }, function (err, data) {
-                                    if (err) {
-                                        errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                                    } else {
-                                        const mailOptions = {
-                                            from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
-                                            to: `${user2.email}`, // list of receivers
-                                            subject: `New Deal Request - Deal Your Crypto`, // Subject line
-                                            html: data, // html body
-                                        };
-                                        // send mail with defined transport object
-                                        transporter.sendMail(mailOptions, (error) => {
-                                            if (error) {
-                                                errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    // Create deal
+                                    deal = await Deal.create(deal); 
+                                    // Update product and user
+                                    user.btcbalance -= deal.price;
+                                    // The product will remain available if it's repeatable
+                                    if ( !product.repeatable ) {
+                                        product.available = "Closed";
+                                        elasticClient.delete({
+                                            index: 'products',
+                                            type: 'products',
+                                            id: `${product._id}`
+                                        }, (err) => {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nCouldn't delete product ${product._id}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);          
                                             }
                                         });
                                     }
-                                });
-                            }
-                            dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nDeal: ${deal._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
-                            // Link chat to deal
-                            return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
+                                    if (product.nrBought) {
+                                        product.nrBought += 1;
+                                    } else {
+                                        product.nrBought = 1;
+                                    }
+                                    product.markModified('buyers');
+                                    await User.findByIdAndUpdate(product.author.id, {$inc: { processingDeals: 1, unreadNotifications: 1 }});
+                                    await product.save();
+                                    await user.save();
+                                    await Notification.create({
+                                        userid: product.author.id,
+                                        linkTo: `/deals/${deal._id}`,
+                                        imgLink: product.images.sec[0].url,
+                                        message: `You have received a deal request`
+                                    });
+                                    // Send an email to the seller letting them know about the deal request
+                                    const user2 = await User.findById(product.author.id);
+                                    if(user2.email_notifications.deal === true) {
+                                        ejs.renderFile(path.join(__dirname, "../views/email_templates/buyRequest.ejs"), {
+                                            link: `https://${req.headers.host}/deals/${deal._id}`,
+                                            footerlink: `https://${req.headers.host}/dashboard/notifications`,
+                                            name: product.name,
+                                            buyer: req.user.full_name,
+                                            subject: `New buy request - Deal Your Crypto`,
+                                        }, function (err, data) {
+                                            if (err) {
+                                                errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                            } else {
+                                                const mailOptions = {
+                                                    from: `Deal Your Crypto <noreply@dealyourcrypto.com>`, // sender address
+                                                    to: `${user2.email}`, // list of receivers
+                                                    subject: `New Deal Request - Deal Your Crypto`, // Subject line
+                                                    html: data, // html body
+                                                };
+                                                // send mail with defined transport object
+                                                transporter.sendMail(mailOptions, (error) => {
+                                                    if (error) {
+                                                        errorLogger.error(`Status: ${error.status || 500}\r\nMessage: ${error.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                    dealLogger.info(`Message: User sent a buy request\r\nProduct: ${product._id}\r\nDeal: ${deal._id}\r\nTotal Price: ${totalPrice}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
+                                    // Link chat to deal
+                                    return res.redirect(307, `/messages/${product._id}/${deal._id}/createOngoing?_method=PUT`);
                                 } else {
                                     req.flash('error', 'There has been an error. Please try again later.');
                                     return res.redirect('back');
