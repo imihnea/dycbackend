@@ -86,6 +86,8 @@
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">
                                         <div class="product-name">
                                             <p class="is-5"><a class="link" href="/products/<%= product._source.id %>/view"><%= product._source.name %></a></p>
+                                            <p class="is-5">From: <% if (product._source.dropshipped) { %><%= product._source.from %><% } else { %><%= product._source.author.continent %><% } %></p>
+                                            <% if (product._source.dropshipped) { %><p class="is-5">Delivery: <%= product._source.deliversTo %> (FREE)</p><% } %>
                                             <p>
                                                 <% for(let i = 0; i < 5; i++) { %>
                                                     <% if(i < Math.floor(product._source.avgRating)) { %>

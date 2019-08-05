@@ -1515,6 +1515,7 @@ module.exports = {
             }
           }
         });
+        newproduct.from = newproduct.author.continent;
         const product = await Product.create(newproduct);
         let filesToUpload = req.files;
         let toUpload = 'newProduct';
@@ -1538,7 +1539,10 @@ module.exports = {
               category2: product.category[2],
               category3: product.category[3],
               createdAt: product.createdAt,
-              searchableTags: product.searchableTags
+              searchableTags: product.searchableTags,
+              from: product.from,
+              dropshipped: product.dropshipped,
+              deliversTo: product.deliversTo
           }
         }, function(err, resp, status) {
           if (err) {
@@ -2065,7 +2069,10 @@ module.exports = {
             category1: product.category[1],
             category2: product.category[2],
             category3: product.category[3],
-            searchableTags: product.searchableTags
+            searchableTags: product.searchableTags,
+            from: product.from,
+            dropshipped: product.dropshipped,
+            deliversTo: product.deliversTo
           }
         }
       }, (err, res) => {

@@ -74,7 +74,10 @@ const startElastic = () => {
                                                     "category2": {"type": "text"},
                                                     "category3": {"type": "text"},
                                                     "createdAt": {"type": "date"},
-                                                    "searchableTags": {"type": "keyword"}
+                                                    "searchableTags": {"type": "keyword"},
+                                                    "from": {"type": "text"},
+                                                    "deliversTo": {"type": "text"},
+                                                    "dropshipped": {"type": "boolean"}
                                                 }
                                             }
                                         }, {
@@ -109,7 +112,10 @@ const startElastic = () => {
                                         category2: product.category[2],
                                         category3: product.category[3],
                                         createdAt: product.createdAt,
-                                        searchableTags: product.searchableTags
+                                        searchableTags: product.searchableTags,
+                                        from: product.from,
+                                        dropshipped: product.dropshipped,
+                                        deliversTo: product.deliversTo
                                     });
                                 });
                                 if (res.length > 0) {
@@ -177,7 +183,10 @@ const startElastic = () => {
                                                 "category2": {"type": "text"},
                                                 "category3": {"type": "text"},
                                                 "createdAt": {"type": "date"},
-                                                "searchableTags": {"type": "keyword"}
+                                                "searchableTags": {"type": "keyword"},
+                                                "from": {"type": "text"},
+                                                "deliversTo": {"type": "text"},
+                                                "dropshipped": {"type": "boolean"}
                                             }
                                         }
                                       }, {
@@ -212,7 +221,10 @@ const startElastic = () => {
                                     category2: product.category[2],
                                     category3: product.category[3],
                                     createdAt: product.createdAt,
-                                    searchableTags: product.searchableTags
+                                    searchableTags: product.searchableTags,
+                                    from: product.from,
+                                    dropshipped: product.dropshipped,
+                                    deliversTo: product.deliversTo
                                 });
                             });
                             if (res.length > 0) {
@@ -284,7 +296,10 @@ const batchIndex = (products) => {
             category2: product.category[2],
             category3: product.category[3],
             createdAt: product.createdAt,
-            searchableTags: product.searchableTags
+            searchableTags: product.searchableTags,
+            from: product.from,
+            dropshipped: product.dropshipped,
+            deliversTo: product.deliversTo
         });
     });
     client.bulk({

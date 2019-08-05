@@ -157,6 +157,9 @@
                             </div>
                         </label>
                     </div>
+                    <% if (product.dropshipped) { %>
+                        <sub style="color: black;">Free delivery</sub>    
+                    <% } %>
                     <br>   
                 </form>
 
@@ -291,7 +294,7 @@
                     <% if (product.dropshipped) { %>
                         <tr>
                             <td>Delivery</td>
-                            <td><%= product.deliversTo %></td>
+                            <td><%= product.deliversTo %> (FREE)</td>
                         </tr>    
                     <% } %>
                 </tbody>

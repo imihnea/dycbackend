@@ -935,7 +935,7 @@ module.exports = {
                   bool: {
                     must: [
                       { "match": { "category0": `${req.query.category}` }},
-                      { "wildcard": { "author.continent": `*${continent}*`}},
+                      { "wildcard": { "from": `*${continent}*`}},
                       { "wildcard": {"condition": `*${condition}*`}}
                     ],
                     "should": [
@@ -989,7 +989,7 @@ module.exports = {
                   bool: {
                     must: [
                       { "match_phrase": { "category1": `${req.query.category}` }},
-                      { "wildcard": { "author.continent": `*${continent}*`}},
+                      { "wildcard": { "from": `*${continent}*`}},
                       { "wildcard": {"condition": `*${condition}*`}}
                     ],
                     "should": [
@@ -1113,7 +1113,7 @@ module.exports = {
                   must: [
                     { "match_phrase": { "category1": `${req.query.searchCateg}`}},
                     { "match_phrase": { "category2": `${req.query.category}`}},
-                    { "wildcard": { "author.continent": `*${continent}*`}},
+                    { "wildcard": { "from": `*${continent}*`}},
                     { "wildcard": {"condition": `*${condition}*`}}
                   ],
                   "should": [
@@ -1240,7 +1240,7 @@ module.exports = {
                     { "match_phrase": { "category1": `${req.query.searchCateg}`}},
                     { "match_phrase": { "category2": `${req.query.secondSearchCateg}`}},
                     { "match_phrase": { "category3": `${req.query.category}`}},
-                    { "wildcard": { "author.continent": `*${continent}*`}},
+                    { "wildcard": { "from": `*${continent}*`}},
                     { "wildcard": {"condition": `*${condition}*`}}
                   ],
                   "should": [
