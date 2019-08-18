@@ -145,7 +145,7 @@ module.exports = {
   assignCookie: (req, res, next) => {
     if (req.user) {
       const secret = `${process.env.CSRF_SECRET_1}`;
-      // res.cookie('_csrf', jwt.sign({ user: req.user._id }, secret, { expiresIn: '1h' }));
+      res.cookie('_csrf', jwt.sign({ user: req.user._id }, secret, { expiresIn: '1h' }));
       req.cookies._csrf = jwt.sign({ user: req.user._id }, secret, { expiresIn: '1h' });
       // make a jwt out of the secret to confuse hackers
       const secret2 = `${process.env.CSRF_SECRET_2}`;

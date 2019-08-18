@@ -71,7 +71,7 @@
                                     <div class="product-picture-wrapper">
                                         <% if (product._source.feat_1.status === true) { %><span class="featured"></span><% } %>
                                         <figure class="image is-128x128" style="margin:auto;">
-                                            <img src="<%= product._source.image %>" class="productImage" alt="">
+                                            <img src="<%= product._source.image %>" class="productImage" alt="<%= product._source.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                         </figure>
                                     </div>
                                     <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">

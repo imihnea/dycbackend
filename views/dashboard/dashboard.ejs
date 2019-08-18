@@ -134,9 +134,9 @@
                                     <!-- Every user will have a default profile pic  -->
                                     <figure class="image is-128x128" style="margin: auto;">
                                         <% if(premium !== true) { %>
-                                            <img src="<%= user.avatar.url %>" class="profilepic" alt="">
+                                            <img src="<%= user.avatar.url %>" class="profilepic" alt="Profile image" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                         <% } else { %>
-                                            <img src="<%= user.avatar.url %>" class="premiumImg" alt="">
+                                            <img src="<%= user.avatar.url %>" class="premiumImg" alt="Profile image" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                             <span class="premium"></span>
                                         <% } %>
                                     </figure>

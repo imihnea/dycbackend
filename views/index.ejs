@@ -112,7 +112,7 @@
                                 <a href="/products/<%= product._id %>/view">
                                     <div class="card-image imageCard">
                                         <figure class="image featimg is-square" style="width: auto;">
-                                            <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst indexImg" alt="<%= product.name %>">
+                                            <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst indexImg" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -135,7 +135,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst" alt="<%= product.name %>">
+                                                <img <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs loadFirst" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                             </figure>
                                         </div>
                                         <div class="card-content">
@@ -165,7 +165,7 @@
                                     <a href="/products/<%= product._id %>/view">
                                         <div class="card-image">
                                             <figure class="image featimg is-square" style="width: auto;">
-                                                <img <% if (product.images.sec[0]) { %> data-src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs lazyLoadImg" alt="<%= product.name %>">
+                                                <img <% if (product.images.sec[0]) { %> data-src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %>  class="featimgs lazyLoadImg" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                             </figure>
                                         </div>
                                         <div class="card-content">

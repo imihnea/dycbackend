@@ -7,7 +7,7 @@
         <div class="messageProfile dealReview">
             <div>
                 <p class="title is-2" style="margin-bottom: 4vh;"><%= deal.product.name %></p>                      
-                <img src="<%= deal.product.imageUrl %>" class="open-img" alt="">
+                <img src="<%= deal.product.imageUrl %>" class="open-img" alt="<%= deal.product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
             </div>
             <hr>
             <div class=" prod_info ">

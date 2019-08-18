@@ -18,7 +18,7 @@
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <div class="image is-128x128" style="margin:auto;">
-                                <img data-src="<%= buyer.avatar.url %>" class="open-img productImage" alt="">
+                                <img data-src="<%= buyer.avatar.url %>" class="open-img productImage" alt="" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                             </div>
                         </div>
                         <br>
@@ -81,7 +81,7 @@
                     <div class="messageProfile frame smallerCenter profileMessage">
                         <div>
                             <div class="image is-128x128" style="margin:auto;">
-                                <img data-src="<%= seller.avatar.url %>" class="open-img productImage" alt="">
+                                <img data-src="<%= seller.avatar.url %>" class="open-img productImage" alt="" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                             </div>
                         </div>
                         <br>
@@ -182,7 +182,7 @@
                     <div class="messageProfile frame productFrame smallerCenter">
                         <div>                   
                             <div class="image is-128x128" style="margin:auto;">
-                                <img data-src="<%= deal.product.imageUrl %>" class="open-img productImage" alt="">
+                                <img data-src="<%= deal.product.imageUrl %>" class="open-img productImage" alt="<%= deal.product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                             </div>
                         </div>
                         <br>
@@ -323,7 +323,6 @@
                                         </div>
                                     </div>  
                                 <% } %>
-                                <!-- <a href="/products/<%= deal.product.id %>/view" class="button is-primary">View Product</a> -->
                                 <% if ((deal.proof.image == 'Unset') && (deal.proof.text == 'Unset')) { %>
                                     <p class="smallerCenter">You haven't uploaded proof of delivery yet.</p>
                                     <br>

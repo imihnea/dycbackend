@@ -46,31 +46,31 @@
             <div class="column">
                 <div class="slider">
                     <figure class="image is-square sliderFig">
-                        <img class="mainImg" <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
-                        <img class="mImg"  <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>"/>
+                        <img class="mainImg" <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
+                        <img class="mImg"  <% if (product.images.main[0]) { %> src="<%= product.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 1 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                     </figure>
                     <% if (product.images.main[1]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>"/>
-                            <img class="mImg noDisp replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[1]) { %> src="<%= product.images.main[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 2 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                         </figure>
                     <% } %>
                     <% if (product.images.main[2]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>"/>
-                            <img class="mImg noDisp replaceMe"<% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
+                            <img class="mImg noDisp replaceMe"<% if (product.images.main[2]) { %> src="<%= product.images.main[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 3 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                         </figure>
                     <% } %>
                     <% if (product.images.main[3]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>"/>
-                            <img class="mImg noDisp replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[3]) { %> src="<%= product.images.main[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 4 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                         </figure>
                     <% } %>
                     <% if (product.images.main[4]) { %>
                         <figure class="image is-square sliderFig hiddenFig">
-                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>"/>
-                            <img class="mImg noDisp replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>"/>
+                            <img class="mainImg hiddenImg replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
+                            <img class="mImg noDisp replaceMe" <% if (product.images.main[4]) { %> src="<%= product.images.main[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Picture 5 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                         </figure>
                     <% } %>
                 </div>
@@ -79,14 +79,14 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id1" checked="checked"/>
                             <label for="id1">
-                                <img class="thumbnail replaceImg" <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 1 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[0]) { %> src="<%= product.images.sec[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 1 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                             </label>
                         </div>
                         <% if (product.images.sec[1]) { %>
                         <div class="">
                             <input type="radio" name="slide_switch" id="id2"/>
                             <label for="id2" class="thumbnailLabelPast1">
-                                <img class="thumbnail replaceImg" <% if (product.images.sec[1]) { %> src="<%= product.images.sec[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 2 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[1]) { %> src="<%= product.images.sec[1].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 2 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                             </label>
                         </div>
                         <% } %>
@@ -94,7 +94,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id3"/>
                             <label for="id3" class="thumbnailLabelPast1">
-                                <img class="thumbnail replaceImg" <% if (product.images.sec[2]) { %> src="<%= product.images.sec[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 3 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[2]) { %> src="<%= product.images.sec[2].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 3 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                             </label>
                         </div>
                         <% } %>
@@ -102,7 +102,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id4"/>
                             <label for="id4" class="thumbnailLabelPast1">
-                                <img class="thumbnail replaceImg" <% if (product.images.sec[3]) { %> src="<%= product.images.sec[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 4 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[3]) { %> src="<%= product.images.sec[3].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 4 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                             </label>
                         </div>
                         <% } %>
@@ -110,7 +110,7 @@
                         <div class="">
                             <input type="radio" name="slide_switch" id="id5"/>
                             <label for="id5" class="thumbnailLabelPast1">
-                                <img class="thumbnail replaceImg" <% if (product.images.sec[4]) { %> src="<%= product.images.sec[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 5 for <%= product.name %>"/>
+                                <img class="thumbnail replaceImg" <% if (product.images.sec[4]) { %> src="<%= product.images.sec[4].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> alt="Thumbnail 5 for <%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
                             </label>
                         </div> 
                         <% } %>                
@@ -448,7 +448,7 @@
                             <a href="/products/<%= sim._id %>/view">
                                 <div class="card-image">
                                     <figure class="image featimg is-square similarFigure">
-                                        <img src="<%= sim.images.main[0].url %>" class="featimgs replaceImg" alt="<%= sim.name %>">
+                                        <img <% if (sim.images.main[0].url) { %> src="<%= sim.images.main[0].url %>" <% } else { %> src="/dist/img/uploading_placeholder.png" <% } %> class="featimgs replaceImg" alt="<%= sim.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                     </figure>
                                 </div>
                                 <div class="card-content">

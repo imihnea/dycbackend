@@ -56,7 +56,7 @@
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image imageCard">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img src="<%= product.images.sec[0].url %>" class="featimgs loadFirst indexImg" alt="<%= product.name %>">
+                                            <img src="<%= product.images.sec[0].url %>" class="featimgs loadFirst indexImg" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                         </figure>
                                     </div>
                                     <div class="card-content">
@@ -82,7 +82,7 @@
                                 <a href="/products/<%= product.id %>/view">
                                     <div class="card-image imageCard">
                                         <figure class="image featimg image is-square" style="width: auto;">
-                                            <img data-src="<%= product.images.sec[0].url %>" class="noImg featimgs indexImg" alt="<%= product.name %>">
+                                            <img data-src="<%= product.images.sec[0].url %>" class="noImg featimgs indexImg" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                         </figure>
                                     </div>
                                     <div class="card-content">

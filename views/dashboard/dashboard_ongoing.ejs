@@ -23,7 +23,7 @@
                             <article class="hit columns frame">
                                 <div class="product-picture-wrapper" >
                                     <figure class="image is-128x128" style="margin:auto;">
-                                        <img src="<%= deal.product.imageUrl %>" class="productImage" alt="<%= deal.product.name %> Image">
+                                        <img src="<%= deal.product.imageUrl %>" class="productImage" alt="<%= deal.product.name %> Image" onError="this.onerror=null;this.src='/dist/img/missing_image.png';">
                                     </figure>
                                 </div>
                                 <div class="column prod_info product-desc-wrapper" style="text-align: left !important;">

@@ -18,7 +18,7 @@
         <br>
         <div class="field" style="padding: 20px;">
             <figure class="image is-square" style="overflow: hidden;">
-                <img class="mainImg dealImage" src="<%= product.images.sec[0].url %>" alt="<%= product.name %>"/>
+                <img class="mainImg dealImage" src="<%= product.images.sec[0].url %>" alt="<%= product.name %>" onError="this.onerror=null;this.src='/dist/img/missing_image.png';"/>
             </figure>
         </div>
         <div class="field">
