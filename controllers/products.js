@@ -132,7 +132,7 @@ module.exports = {
                 }
             });
             // Find similar products
-            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }, { 'category.2': product.category[2] }, { 'category.1': product.category[1] }] }).sample(4).exec((err, result) => {
                 if (err) {
                   if (req.user) {
                     errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -163,7 +163,7 @@ module.exports = {
                             ids.push(ObjectID(sim._id));
                         });
                     }
-                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }, { 'category.1': product.category[1] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
                             if (req.user) {
                               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -262,7 +262,7 @@ module.exports = {
                 }
             });
         } else {
-            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }] }).sample(4).exec((err, result) => {
+            Product.aggregate().match({ $and:[{ _id: { $ne: ObjectID(req.params.id) }}, { 'category.3': product.category[3] }, { 'category.2': product.category[2] }, { 'category.1': product.category[1] }] }).sample(4).exec((err, result) => {
                 if (err) {
                     if (req.user) {
                       errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
@@ -292,7 +292,7 @@ module.exports = {
                             ids.push(ObjectID(sim._id));
                         });
                     }
-                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }] }).sample(4 - similar.length).exec((err, result) => {
+                    Product.aggregate().match({ $and:[{ _id: { $nin: ids } }, { 'category.2': product.category[2] }, { 'category.1': product.category[1] }] }).sample(4 - similar.length).exec((err, result) => {
                         if (err) {
                             if (req.user) {
                               errorLogger.error(`Status: ${err.status || 500}\r\nMessage: ${err.message}\r\nURL: ${req.originalUrl}\r\nMethod: ${req.method}\r\nIP: ${req.ip}\r\nUserId: ${req.user._id}\r\nTime: ${moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')}\r\n`);
